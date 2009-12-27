@@ -19,7 +19,7 @@ MapCoordinate  getNeighbouringFieldCoordinate( const MapCoordinate& pos, int dir
 
 Object* placeObject( GameMap* map, const MapCoordinate& pos, const ObjectType* obj, bool force = false );
 Building* placeBuilding( GameMap* map, const MapCoordinate& pos, const BuildingType* bld, int owner );
-Vehicle* placeUnit( GameMap* map, const MapCoordinate& pos, const Vehicletype* veh, int owner );
+Vehicle* placeUnit( GameMap* map, const MapCoordinate& pos, const VehicleType* veh, int owner );
 bool placeTerrain( GameMap* map, const MapCoordinate& pos, const TerrainType* terrain, int weather = 0 );
 
 //! opens a dialog and let the user select a player from the list of players on the map

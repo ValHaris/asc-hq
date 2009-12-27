@@ -20,15 +20,21 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2008-05-01 16:18:12 $
+    Update Date:      $Date: 2009-12-27 15:39:02 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/src/widgets/pglineedit.cpp,v $
-    CVS/RCS Revision: $Revision: 1.3 $
+    CVS/RCS Revision: $Revision: 1.4 $
     Status:           $State: Exp $
 */
+
+#if 0
+#include <wx/dataobj.h>
+#include <wx/clipbrd.h>
+#endif
 
 #include "pglineedit.h"
 #include "pgapplication.h"
 #include "pgtheme.h"
+
 
 PG_LineEdit::PG_LineEdit(PG_Widget* parent, const PG_Rect& r, const std::string& style, int _my_maximumLength) : PG_ThemeWidget(parent, r, style) {
 
@@ -254,6 +260,10 @@ bool PG_LineEdit::eventKeyDown(const SDL_KeyboardEvent* key) {
 				SendDel();
 				return true;
 
+			case SDLK_v:
+			   PasteFromClipBoard(my_cursorPosition);
+			   return true;
+
 			default:
 				return false;
 		}
@@ -461,6 +471,15 @@ void PG_LineEdit::CopyText(bool del) {
 		len   = my_endMark - start;
 	}
 	my_buffer = my_text.substr(start, len);
+
+#if 0
+	if (wxTheClipboard->Open()) {
+	    wxString clipString(my_buffer.c_str(), wxConvISO8859_1);
+	    wxTheClipboard->SetData( new wxTextDataObject( clipString ) );
+	    wxTheClipboard->Close();
+	}
+#endif
+
 	if(del) {
 		my_text.erase(start, len);
 		SetCursorPos(my_cursorPosition); // If end was > start
@@ -479,6 +498,30 @@ void PG_LineEdit::PasteText(Uint16 pos) {
 	my_startMark = my_endMark = -1;
 	Update();
 }
+
+void PG_LineEdit::PasteFromClipBoard(Uint16 pos)
+{
+#if 0
+   if (wxTheClipboard->Open()) {
+      std::string my_buffer;
+      if (wxTheClipboard->IsSupported(wxDF_TEXT)) {
+         wxTextDataObject data;
+         wxTheClipboard->GetData(data);
+         my_buffer = std::string( data.GetText().mb_str() );
+      }
+      wxTheClipboard->Close();
+
+      if(!my_buffer.length()) {
+          return;
+      }
+      my_text.insert(pos, my_buffer);
+      my_cursorPosition += my_buffer.length();
+      my_startMark = my_endMark = -1;
+      Update();
+   }
+#endif
+}
+
 
 void PG_LineEdit::SetText(const std::string& new_text) {
 	my_cursorPosition = 0;

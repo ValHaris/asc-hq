@@ -77,7 +77,7 @@ class ContainerBaseType {
 class BuildingType : public ContainerBaseType {
 };
 
-class Vehicletype : public ContainerBaseType {
+class VehicleType : public ContainerBaseType {
 };
 
 class TerrainType {
@@ -89,9 +89,9 @@ class TerrainType {
 
 class ContainerBase {
    public:         
-      void deleteProductionLine( const Vehicletype* type );
+      void deleteProductionLine( const VehicleType* type );
       void deleteAllProductionLines();
-      void addProductionLine( const Vehicletype* type  );
+      void addProductionLine( const VehicleType* type  );
       
       int getCargoCount();
       
@@ -121,7 +121,7 @@ class Vehicle : public ContainerBase {
    protected:       
       Vehicle();
    public:
-      const Vehicletype* getType();
+      const VehicleType* getType();
       Resources getTank() const;
 };
 
@@ -139,7 +139,7 @@ class ObjectType {
       std::string getName();
 };
 
-class tfield {
+class MapField {
    public:
       Building* getBuildingEntrance();
       Vehicle* getVehicle();
@@ -185,7 +185,7 @@ class tfield {
      
      
    protected:
-      tfield();
+      MapField();
 };
 
 
@@ -200,8 +200,8 @@ class GameMap {
    public:
 #ifdef mapeditor
       // in ASC, the scripts are not able to access all fields, as they are running in a user context
-      tfield* getField( int x, int y );
-      tfield* getField( const MapCoordinate& pos );
+      MapField* getField( int x, int y );
+      MapField* getField( const MapCoordinate& pos );
 #endif      
       int width() const;
       int height() const;

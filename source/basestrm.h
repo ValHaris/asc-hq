@@ -140,7 +140,11 @@ class dynamic_array {
 ////////////        Streams
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
+/**
+ * Buffers the complete contents of a stream in memory.
+ * May be useful when the original stream doesn't support seeking, but the
+ * consumer needs it.
+ */
 class MemoryStreamCopy : public tnstream {
                void* buf;
                int size;
@@ -513,7 +517,7 @@ class tfindfile {
         /** Searches for files matching the wildcard name in all search paths specified for ASC and inside the ASC archive files.
 
             If name contains a relative directory entry ( like music / *.mp3 ), searchPosition specifies, which directories
-            will be searched for the file. Note that "Current" may be problemativ in unix environments, because the program may be
+            will be searched for the file. Note that "Current" may be problematic in Unix environments, because the program may be
             started from any directory.
         */
         tfindfile ( ASCString name, SearchPosition searchPosition = DefaultDir, SearchTypes searchTypes = All);

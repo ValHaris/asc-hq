@@ -56,6 +56,7 @@ class ClipBoardBase {
       void place ( const MapCoordinate& pos );
 
       void writeProperties( PropertyContainer& pc ) const;
+      void readProperties( PropertyContainer& pc );
       
       void write( tnstream& stream );
       void read( tnstream& stream );
@@ -64,6 +65,7 @@ class ClipBoardBase {
 typedef Loki::SingletonHolder< ClipBoardBase > ClipBoard;
 
 extern const char* clipboardFileExtension;
+extern const char* oldClipboardFileExtension;
 
 
 #endif

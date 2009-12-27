@@ -38,6 +38,7 @@ class FileSelectionWindow : public ASC_PG_Dialog {
       void fileNameSelected( const ASCString& filename );
       void fileNameEntered( ASCString filename );
    public:
+      /*! \param wildcard may be several wildcards concatenated by ';' */
       FileSelectionWindow( PG_Widget *parent, const PG_Rect &r, const ASCString& fileWildcard, bool save, bool overwriteMessage );
       ASCString getFilename() { return filename; };
 };
@@ -52,6 +53,7 @@ class FileSelectionItemFactory: public SelectionItemFactory  {
       Items items;
       
    public:
+      /** \param wildcard may be several wildcards concatenated by ';' */
       FileSelectionItemFactory( const ASCString& wildcard );
       
       static bool comp ( const FileInfo* i1, const FileInfo* i2 );

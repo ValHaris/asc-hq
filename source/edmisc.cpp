@@ -57,7 +57,7 @@
 #include "pgeventsupplier.h"
 #include "dialogs/edittechadapter.h"
 #include "spfst-legacy.h"
-
+#include "textfile_evaluation.h"
 #include "lua/luarunner.h"
 #include "lua/luastate.h"
 
@@ -3383,10 +3383,24 @@ void resourceComparison ( )
 
 void readClipboard()
 {
-   ASCString filename = selectFile(clipboardFileExtension, true);
+   ASCString filename = selectFile( ASCString(clipboardFileExtension) + ";" + oldClipboardFileExtension, true);
    if ( !filename.empty() ) {
-      tnfilestream stream ( filename, tnstream::reading );
-      ClipBoard::Instance().read( stream );
+      try {
+         if ( patimat( oldClipboardFileExtension, filename )) {
+            tnfilestream stream ( filename, tnstream::reading );
+            ClipBoard::Instance().read( stream );
+         } else {
+            tnfilestream stream ( filename, tnstream::reading );
+            TextFormatParser parser(&stream);
+            PropertyReadingContainer pc ( "ClipboardInfo", parser.run() );
+            ClipBoard::Instance().readProperties( pc );
+         }
+      } catch ( ASCmsgException me ) {
+         errorMessage( "Error reading clipboard file:\n" + me.getMessage());
+      } catch ( ... ) {
+         errorMessage( "Error reading clipboard file" );
+      }
+
    }
 }
 
@@ -3394,10 +3408,7 @@ void saveClipboard()
 {
    ASCString filename = selectFile( clipboardFileExtension, false);
    if ( !filename.empty() ) {
-      tnfilestream stream ( filename, tnstream::writing );
-      ClipBoard::Instance().write( stream );
-      
-      tn_file_buf_stream txtstream ( filename + ".txt", tnstream::writing );
+      tn_file_buf_stream txtstream ( filename, tnstream::writing );
       PropertyWritingContainer pc ( "ClipboardInfo", txtstream );
       ClipBoard::Instance().writeProperties( pc );
    }

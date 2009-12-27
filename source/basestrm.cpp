@@ -1164,7 +1164,7 @@ void CompressionStreamAdapter::writecmpdata ( const void* buf, int size )
 
 int CompressionStreamAdapter::readcmpdata ( void* buf, int size, bool excpt  )
 {
-   stream->readdata( buf, size, excpt );
+   return stream->readdata( buf, size, excpt );
 }
 
 
@@ -1760,7 +1760,7 @@ void ASCIIEncodingStream::put( char c )
        buf |= (c << 4) & 63;
        result += asciiCodingTable[buf];
        shift = 0;
-       result += asciiCodingTable[(c>>2) & 63];
+       result += asciiCodingTable[int((c>>2) & 63)];
     }
  }
  void ASCIIEncodingStream::flush() {
@@ -1786,7 +1786,7 @@ void ASCIIDecodingStream :: generateTable()
 int ASCIIDecodingStream :: get()
 {
    if ( length < data.length() ) {
-      char c = data.at(length);
+      int c = data.at(length);
       if ( c == '#' )
          throw treadafterend("ASCIIDecodingStream");
       ++length;
@@ -1883,7 +1883,7 @@ void StreamDecompressionFilter  :: writedata ( const void* buf, int size )
 
 int StreamDecompressionFilter :: readdata  ( void* buf, int size, bool excpt )
 {
-   decompressor.readdata(buf,size,excpt);
+   return decompressor.readdata(buf,size,excpt);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////

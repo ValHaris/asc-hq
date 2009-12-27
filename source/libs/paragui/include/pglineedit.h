@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2009-04-18 13:48:39 $
+    Update Date:      $Date: 2009-12-27 15:39:02 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/include/pglineedit.h,v $
-    CVS/RCS Revision: $Revision: 1.3 $
+    CVS/RCS Revision: $Revision: 1.4 $
     Status:           $State: Exp $
 */
 
@@ -175,6 +175,9 @@ protected:
 
 	/** */
 	void PasteText(Uint16 pos);
+
+    /** */
+    void PasteFromClipBoard(Uint16 pos);
 
 	/** */
 	void StartMark(Uint16 pos);

@@ -33,7 +33,8 @@
 #include "spfst-legacy.h"
 
 
-const char* clipboardFileExtension = "*.ascclipboard";
+const char* clipboardFileExtension = "*.asc2clipboard";
+const char* oldClipboardFileExtension = "*.ascclipboard";
 
 
 ClipBoardBase::ClipBoardBase()
@@ -69,13 +70,7 @@ void ClipBoardBase::setProperties( const ContainerBase* unit )
    ASCIIEncodingStream outerStream;
    {
       StreamCompressionFilter stream( &outerStream );
-
-	   stream.writeInt( clipboardVersion );
-	   if ( unit->isBuilding() )
-	      stream.writeInt( ClipBuilding );
-	   else
-          stream.writeInt( ClipVehicle );
-	   unit->write( stream );
+      buf.writetostream( &stream );
    }
    properties["data"] = outerStream.getResult();
 }
@@ -204,5 +199,16 @@ void ClipBoardBase::writeProperties( PropertyContainer& pc ) const
       ASCString temp = i->second;
       pc.addString( i->first, temp );
    }
+}
+
+void ClipBoardBase::readProperties( PropertyContainer& pc )
+{
+   ASCString data;
+   pc.addString("data", data);
+
+   ASCIIDecodingStream outerStream ( data );
+   StreamDecompressionFilter stream( &outerStream );
+
+   buf.readfromstream( &stream );
 }
 
