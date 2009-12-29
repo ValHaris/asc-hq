@@ -46,7 +46,7 @@ GameMap* getActiveMap();
 
 const ObjectType* getObjectType( int id );
 const BuildingType* getBuildingType( int id );
-const Vehicletype* getUnitType( int id );
+const VehicleType* getUnitType( int id );
 const TerrainType* getTerrainType( int id );
 
 void errorMessage ( std::string s );
