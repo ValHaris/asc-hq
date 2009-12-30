@@ -43,6 +43,7 @@ ID 102/294  Armadillo2       siege tank
 
 --Air Defence--
 ID  18/217  Swatter          AA-Tank              ID  61/222  SAM Turret       air defence turret   ID  64/220  Spike            air defence vehicle  ID  73/221  Spear            anti aircraft train
+ID  61      SAM Turret       SAM-Turret
 ID  74/216  CAD              air defence Mech
 ID  98/215  SAM Trooper      air defence trooper
 ID 107/118  Swatter2         Anti Aircraft Tank

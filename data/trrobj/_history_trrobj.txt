@@ -3,6 +3,10 @@ Advanced Strategic Command
 Specifications by GAMER
 Grafics by GAMER, Snuggels, ValHaris, Xyphagoroszh, Havanna Club, Uranius und Grom
 ________________________
+Beta-09-19
+-Tiefseepipeline wird nicht mehr vom DeepCore abgebaut
+-Laserzaun von den SY integriert, neue Grafik
+________________________
 12.12.2009 z79 (GAMER)
 Beta-09-17
 -Beton filtert River
