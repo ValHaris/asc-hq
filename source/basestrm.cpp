@@ -1780,7 +1780,7 @@ void ASCIIDecodingStream :: generateTable()
    for ( int i = 0; i< 256; ++i )
       reverse[i] = -1;
    for ( int i = 0; i < sizeof(asciiCodingTable); ++i )
-      reverse[ asciiCodingTable[i]] = i;
+      reverse[ int(asciiCodingTable[i])] = i;
 }
 
 int ASCIIDecodingStream :: get()
