@@ -1,0 +1,55 @@
+ObjectType {
+   ID = 2658
+   SecondaryIDs = 1300
+   Name = energy barrier
+   NamingMethod = replaceterrain
+   Description =
+   Infotext =
+
+   TechAdapterRequired = o2658
+   RequireAllListedTechAdapter = true
+
+   Armor = 1200
+   Height = 119
+   visible_in_fogOfWar = false
+   LinkableObjects = 
+   NetBehaviour = NetToSelf AutoBorder
+
+   AttackBonus_abs = 0
+   AttackBonus_plus = 0
+   DefenseBonus_abs = 0
+   DefenseBonus_plus = 0
+   Jamming_abs = -1
+   Jammming_plus = 1
+
+   ConstructionCost { 
+      Energy = 0
+      Material = 800
+      fuel = 100
+      Movement = 30
+   } ConstructionCost
+   RemovalCost { 
+      Energy = 0
+      Material = -400
+      fuel = 60
+      Movement = 20
+   } RemovalCost
+
+   Weather = dry 
+   dry { 
+      UseGFXpics = false
+      picture = obj_laserzaun.png 64
+      flippicture = -1
+
+      Movemalus_plus = 
+      Movemalus_abs = 19
+      TerrainAccess { 
+         terrain_any = road runway Lowland Hard_sand Soft_sand Very_shallow_water Hillside shallow_water
+         terrain_all = 
+         terrain_not = forest large_rocks swamp installation
+         terrain_kill = swamp river Water Deep_water Lava 
+      } TerrainAccess
+      TerrainProperties_Filter = Road Lowland Turret_foundation Forest High_mountains Railroad Runway Shallow_water Very_shallow_water Water Deep_water Hard_sand Soft_sand Small_rocks Mud Snow Deep_snow Mountains Large_rocks Ditch Hillside Morass Installation Frozen_water 
+      TerrainProperties_Add =  
+   } dry
+} ObjectType
