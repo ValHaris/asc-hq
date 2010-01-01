@@ -103,7 +103,6 @@ VehicleType {
          Ammo = 10
          Punch@MaxRange = 100
          Punch@MinRange = 100
-         Sound = groundmissile_s.ogg
          LaserRechargeRate = 0
          laserRechargeCost { 
             Energy = 0
@@ -191,7 +190,6 @@ VehicleType {
          Ammo = 4
          Punch@MaxRange = 70
          Punch@MinRange = 70
-         Sound = weapon03_s.ogg
          LaserRechargeRate = 0
          laserRechargeCost { 
             Energy = 0

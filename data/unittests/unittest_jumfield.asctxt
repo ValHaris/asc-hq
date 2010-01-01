@@ -1,0 +1,59 @@
+ObjectType { 
+   ID = 1000015002
+   SecondaryIDs = 
+   GroupID = 0
+   Weather = dry 
+   visible_in_fogOfWar = false
+   LinkableObjects = 
+   LinkableTerrain = 
+   canExistBeneathBuildings = false
+   Armor = 200
+   AttackBonus_abs = -1
+   AttackBonus_plus = 0
+   DefenseBonus_abs = -1
+   DefenseBonus_plus = 0
+   Jamming_abs = -1
+   Jamming_plus = 0
+   Height = 118
+   PhysicalHeight = 3
+   ViewBonus_abs = -1
+   ViewBonus_plus = 0
+   ConstructionCost { 
+      Energy = 0
+      Material = 100
+      fuel = 2000
+      Movement = 17
+   } ConstructionCost
+   RemovalCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+      Movement = 0
+   } RemovalCost
+   Name = Unittest JumpField
+   NamingMethod = 
+   GrowthRate = 0.000000
+   MaxChildSpawnNumber = -1
+   LifeTime = 3
+   GrowOnUnits = false
+   NetBehaviour = NetToSelf 
+   dry { 
+      UseGFXpics = false
+      picture = unittest_jumpfield.png 1
+      FlipPictures = 0 
+      ImageReference = 0 
+      DisplayMethod = Translation
+      Movemalus_plus = 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 0.000000 
+      Movemalus_abs = -1.000000 -1.000000 -1.000000 -1.000000 -1.000000 -1.000000 -1.000000 -1.000000 -1.000000 -1.000000 -1.000000 -1.000000 -1.000000 -1.000000 -1.000000 -1.000000 -1.000000 -1.000000 
+      TerrainAccess { 
+         terrain_any = Lowland Road Runway Hard_sand Soft_sand Turret_foundation spaceport 
+         terrain_all = 
+         terrain_not = Swamp bridge 
+         terrain_kill = Shallow_water Swamp Water Deep_water Lava 
+      } TerrainAccess
+      TerrainProperties_Filter = 
+      TerrainProperties_Add = beacon 
+   } dry
+   TechAdapterRequired = 
+   RequireAllListedTechAdapter = true
+} ObjectType

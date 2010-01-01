@@ -99,7 +99,6 @@ VehicleType {
          Ammo = 4
          Punch@MaxRange = 100
          Punch@MinRange = 120
-         Sound = lasercannon.ogg
          LaserRechargeRate = 1
          laserRechargeCost { 
             Energy = 0
