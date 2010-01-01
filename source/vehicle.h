@@ -365,10 +365,10 @@ class UnitHooveringLogic {
   public:
 
     //! For the AI: calculating the ValueType if the unit was on the height uheight
-    int getValueType ( int uheight ) const { return log2(uheight); };
+    int getValueType ( int uheight ) const { return getFirstBit(uheight); };
 
     //! For the AI: calculating the ValueType
-    int getValueType ( ) const { return log2(height); };
+    int getValueType ( ) const { return getFirstBit(height); };
 
 
     //! to be used with EXTREME caution, and only in the mapeditor !!

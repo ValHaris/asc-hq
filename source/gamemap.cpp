@@ -2063,7 +2063,7 @@ void AiThreat :: reset ( void )
       threat[i] = 0;
 }
 
-AiParameter :: AiParameter ( Vehicle* _unit ) : AiValue ( log2( _unit->height ))
+AiParameter :: AiParameter ( Vehicle* _unit ) : AiValue ( getFirstBit( _unit->height ))
 {
    reset( _unit );
 }
@@ -2109,7 +2109,7 @@ bool AiParameter::hasJob ( AiParameter::Job j )
 
 void AiParameter :: setNewHeight()
 {
-   AiValue::reset ( log2( unit->height ) );
+   AiValue::reset ( getFirstBit( unit->height ) );
 }
 
 
@@ -2117,7 +2117,7 @@ void AiParameter :: reset ( Vehicle* _unit )
 {
    unit = _unit;
    lastDamage = unit->damage;
-   AiValue::reset ( log2( _unit->height ) );
+   AiValue::reset ( getFirstBit( _unit->height ) );
    data = 0;
 
    clearJobs();

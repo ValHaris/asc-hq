@@ -100,7 +100,7 @@ void         CalculateThreat_VehicleType :: calc_threat_vehicletype ( const Vehi
 
 
    if ( !fzt->aiparam[ai->getPlayerNum()] )
-      fzt->aiparam[ ai->getPlayerNum() ] = new AiValue ( log2 ( fzt->height ));
+      fzt->aiparam[ ai->getPlayerNum() ] = new AiValue ( getFirstBit ( fzt->height ));
 
    for ( int l = 0; l < 8; l++ )
       fzt->aiparam[ ai->getPlayerNum() ]->threat.threat[l] = weapthreat[l];
@@ -265,7 +265,7 @@ void  AI :: calculateThreat ( Building* bld )
 void  AI :: calculateThreat ( Building* bld, int player )
 {
    if ( !bld->aiparam[ player ] )
-      bld->aiparam[ player ] = new AiValue ( log2 ( bld->typ->height ) );
+      bld->aiparam[ player ] = new AiValue ( getFirstBit ( bld->typ->height ) );
 
    int b;
 
@@ -432,8 +432,8 @@ void     AI :: calculateAllThreats( void )
          VehicleType* fzt = vehicleTypeRepository.getObject_byPos( v );
          if ( fzt )
             if ( fzt->hasFunction( ContainerBaseType::ConquerBuildings  ) )
-               if ( fzt->movement[log2(chfahrend)] > maxTrooperMove )   // buildings can only be conquered on ground level, or by moving to adjecent field which is less
-                  maxTrooperMove = fzt->movement[log2(chfahrend)];
+               if ( fzt->movement[getFirstBit(chfahrend)] > maxTrooperMove )   // buildings can only be conquered on ground level, or by moving to adjecent field which is less
+                  maxTrooperMove = fzt->movement[getFirstBit(chfahrend)];
       }
    }
    if ( maxTransportMove == 0 ) {

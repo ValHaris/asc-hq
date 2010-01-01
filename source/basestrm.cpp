@@ -2052,11 +2052,11 @@ tfindfile :: tfindfile ( ASCString name, SearchPosition searchPosition, SearchTy
       } else {
          ASCString strippedPath;
          strippedPath.assign ( name, 0, ppos );
-         if ( name.find ( ASCString(".") + pathdelimitterstring ) == 0 )
+         if ( strippedPath.find ( ASCString(".") + pathdelimitterstring ) == 0 )
             strippedPath.erase( 0, 2);
 
          int upDir = 0;
-         while ( name.find ( ASCString("..") + pathdelimitterstring ) == 0 ) {
+         while ( strippedPath.find ( ASCString("..") + pathdelimitterstring ) == 0 ) {
             upDir++;
             strippedPath.erase ( 0, 3 );
          }

@@ -886,7 +886,7 @@ AttackWeap*  attackpossible( const Vehicle*     attacker, int x, int y)
                               if (d <= attacker->typ->weapons.weapon[i].maxdistance)
                                  if (d >= attacker->typ->weapons.weapon[i].mindistance) {
                                     if (attacker->height & attacker->typ->weapons.weapon[i].sourceheight)
-                                       if ( attacker->typ->weapons.weapon[i].efficiency[6 + getheightdelta ( log2( attacker->height), log2(tm))] )
+                                       if ( attacker->typ->weapons.weapon[i].efficiency[6 + getheightdelta ( getFirstBit( attacker->height), getFirstBit(tm))] )
                                           if (attacker->ammo[i] > 0) {
                                              atw->strength[atw->count ] = attacker->weapstrength[i];
                                              atw->typ[atw->count ] = 1 << attacker->typ->weapons.weapon[i].getScalarWeaponType() ;
@@ -925,7 +925,7 @@ AttackWeap*  attackpossible( const Vehicle*     attacker, int x, int y)
                                     if (d >= attacker->typ->weapons.weapon[i].mindistance) {
                                        if (attacker->height & attacker->typ->weapons.weapon[i].sourceheight )
                                           if ( attacker->typ->weapons.weapon[i].targ & j->typ->getEffectiveHeight() )
-                                             if ( attacker->typ->weapons.weapon[i].efficiency[6 + getheightdelta ( log2( attacker->height), log2(j->typ->getEffectiveHeight()))] )
+                                             if ( attacker->typ->weapons.weapon[i].efficiency[6 + getheightdelta ( getFirstBit( attacker->height), getFirstBit(j->typ->getEffectiveHeight()))] )
                                                 if (attacker->ammo[i] > 0) {
                                                    atw->strength[atw->count ] = attacker->weapstrength[i];
                                                    atw->num[atw->count ] = i;
@@ -977,7 +977,7 @@ bool attackpossible2u( const Vehicle* attacker, const Vehicle* target, AttackWea
                      if ( (1<<h) & attacker->typ->weapons.weapon[i].targ )
                         if (attacker->height & attacker->typ->weapons.weapon[i].sourceheight )
                            if ( attacker->typ->weapons.weapon[i].targetingAccuracy[ target->typ->movemalustyp] > 0 )
-                              if ( attacker->typ->weapons.weapon[i].efficiency[6 + getheightdelta ( log2( attacker->height), h)] )
+                              if ( attacker->typ->weapons.weapon[i].efficiency[6 + getheightdelta ( getFirstBit( attacker->height), h)] )
                                  if (attacker->ammo[i] > 0) {
                                     result = true;
                                     if ( atw ) {
@@ -1021,7 +1021,7 @@ bool attackpossible28( const Vehicle* attacker, const Vehicle* target, AttackWea
                      if (minmalq >= attacker->typ->weapons.weapon[i].mindistance)
                         if (attacker->height & attacker->typ->weapons.weapon[i].sourceheight )
                            if ( attacker->typ->weapons.weapon[i].targetingAccuracy[ target->typ->movemalustyp ] > 0)
-                              if ( attacker->typ->weapons.weapon[i].efficiency[6 + getheightdelta ( log2( attacker->height), log2(targetHeight))] )
+                              if ( attacker->typ->weapons.weapon[i].efficiency[6 + getheightdelta ( getFirstBit( attacker->height), getFirstBit(targetHeight))] )
                                  if (attacker->ammo[i] > 0) {
                                     result =  true;
                                     if ( atw ) {
@@ -1063,7 +1063,7 @@ bool attackpossible2n( const Vehicle* attacker, const Vehicle* target, AttackWea
                         if (dist <= attacker->typ->weapons.weapon[i].maxdistance)
                            if (dist >= attacker->typ->weapons.weapon[i].mindistance)
                               if (attacker->height & attacker->typ->weapons.weapon[i].sourceheight )
-                                 if ( attacker->typ->weapons.weapon[i].efficiency[6 + getheightdelta ( log2( attacker->height), log2(target->height))] )
+                                 if ( attacker->typ->weapons.weapon[i].efficiency[6 + getheightdelta ( getFirstBit( attacker->height), getFirstBit(target->height))] )
                                     if ( attacker->typ->weapons.weapon[i].targetingAccuracy[ target->typ->movemalustyp ] > 0)
                                        if (attacker->ammo[i] > 0) {
                                           result = true;
@@ -1164,11 +1164,11 @@ float WeapDist::getWeaponStrength ( const SingleWeapon* weap, int weather, int d
    float weatherFactor = 1;
    int heightEff = 100;
    if ( attacker_height != -1 && defender_height != -1 ) {
-      int hd = getheightdelta ( log2 ( attacker_height ), log2 ( defender_height ));
+      int hd = getheightdelta ( getFirstBit ( attacker_height ), getFirstBit ( defender_height ));
       heightEff = weap->efficiency[6+hd];
 
       if ( attacker_height >= chtieffliegend && weather != 0 && defender_height != -1) {
-         int weatherRelevantHeightDelta = min( abs( getheightdelta ( log2 ( attacker_height ), log2 ( defender_height ))), 3);
+         int weatherRelevantHeightDelta = min( abs( getheightdelta ( getFirstBit ( attacker_height ), getFirstBit ( defender_height ))), 3);
          if ( weather == 1 || weather == 3  )
             weatherFactor = 1 - 0.07*weatherRelevantHeightDelta;
          else
@@ -1184,7 +1184,7 @@ float WeapDist::getWeaponStrength ( const SingleWeapon* weap, int weather, int d
    return relstrength * heightEff * weatherFactor / float(weap->maxstrength * 100) ;
 
 /*   if ( attacker_height != -1 && defender_height!= -1 ) {
-      int hd = getheightdelta ( log2 ( attacker_height ), log2 ( defender_height ));
+      int hd = getheightdelta ( getFirstBit ( attacker_height ), getFirstBit ( defender_height ));
       return relstrength * weap->efficiency[6+hd] / 100 ;
    } else
       return relstrength ;

@@ -92,7 +92,7 @@ GameActionID ChangeUnitMovement::getID() const
 void ChangeUnitMovement::decreaseMovement( Vehicle* veh, float fraction, const Context& context )
 {
    if ( recursive != NONE )
-      if ( veh->typ->movement[ log2 ( veh->height ) ] ) {
+      if ( veh->typ->movement[ getFirstBit ( veh->height ) ] ) {
          float cargoFraction = fraction;
          if ( veh->cargoNestingDepth() == 0 && veh->typ->cargoMovementDivisor != 0 && recursive == NORMAL )
             cargoFraction /= veh->typ->cargoMovementDivisor;

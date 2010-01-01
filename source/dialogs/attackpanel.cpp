@@ -151,11 +151,11 @@ void AttackPanel::painter ( const PG_Rect &src, const ASCString& name, const PG_
       return;
    }
    if ( name  == "attacker_level" && engine.av.height ) {
-      s.Blit( IconRepository::getIcon("height-a" + ASCString::toString(log2(engine.av.height)) + ".png"), SPoint(dst.x, dst.y) );
+      s.Blit( IconRepository::getIcon("height-a" + ASCString::toString(getFirstBit(engine.av.height)) + ".png"), SPoint(dst.x, dst.y) );
       return;
    }
    if ( name  == "defender_level" && engine.dv.height ) {
-      s.Blit( IconRepository::getIcon("height-a" + ASCString::toString(log2(engine.dv.height)) + ".png"), SPoint(dst.x, dst.y) );
+      s.Blit( IconRepository::getIcon("height-a" + ASCString::toString(getFirstBit(engine.dv.height)) + ".png"), SPoint(dst.x, dst.y) );
       return;
    }
 

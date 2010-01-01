@@ -148,7 +148,7 @@ void Vehicle :: init ( void )
    attacked = false;
 
    if ( typ ) {
-      height = 1 << log2( typ->height );
+      height = 1 << getFirstBit( typ->height );
 
       // These are the preferred levels of height
       if (typ->height & chfahrend )
@@ -160,7 +160,7 @@ void Vehicle :: init ( void )
       for ( int m = 0; m < typ->weapons.count ; m++)
          weapstrength[m] = typ->weapons.weapon[m].maxstrength;
 
-      setMovement ( typ->movement[log2(height)], 0 );
+      setMovement ( typ->movement[getFirstBit(height)], 0 );
    } else {
       height = 0;
 
@@ -414,7 +414,7 @@ void Vehicle :: endOwnTurn()
 
 void Vehicle :: resetMovement ( void )
 {
-    int move = typ->movement[log2(height)];
+    int move = typ->movement[getFirstBit(height)];
     setMovement ( move, 0 );
 }
 
@@ -431,16 +431,16 @@ void Vehicle :: setMovement ( int newmove, double cargoDivisor )
       newmove = 0;
 
    if ( cargoDivisor > 0 && typ)
-      if ( typ->movement[ log2 ( height ) ] ) {
+      if ( typ->movement[ getFirstBit ( height ) ] ) {
          double diff = _movement - newmove;
-         double perc = diff / typ->movement[ log2 ( height ) ] ;
+         double perc = diff / typ->movement[ getFirstBit ( height ) ] ;
          for ( Cargo::iterator i = cargo.begin(); i != cargo.end(); ++i )
             if ( *i ) {
                double lperc = perc;
                if ( cargoDivisor && cargoNestingDepth() == 0 )
                   lperc /= cargoDivisor;
 
-               (*i)->decreaseMovement ( max( 1, int( ceil( lperc * double( (*i)->typ->movement[ log2 ( (*i)->height)] )))));
+               (*i)->decreaseMovement ( max( 1, int( ceil( lperc * double( (*i)->typ->movement[ getFirstBit ( (*i)->height)] )))));
             }
    }
    _movement = newmove;
@@ -448,7 +448,7 @@ void Vehicle :: setMovement ( int newmove, double cargoDivisor )
 
 bool Vehicle::hasMoved ( void ) const
 {
-   return _movement != typ->movement[ log2 ( height )];
+   return _movement != typ->movement[ getFirstBit ( height )];
 }
 
 
@@ -471,8 +471,8 @@ void Vehicle :: decreaseMovement ( int amount )
   int newMovement = _movement - amount;
   if ( newMovement < 0 )
     newMovement = 0;
-  if ( newMovement > typ->movement[log2(height)] )
-    newMovement = typ->movement[log2(height)];
+  if ( newMovement > typ->movement[getFirstBit(height)] )
+    newMovement = typ->movement[getFirstBit(height)];
   setMovement ( newMovement );
 }
 
@@ -682,7 +682,7 @@ const VehicleType::HeightChangeMethod* Vehicle::getHeightChange( int dir, int he
    for ( int i = 0; i < typ->heightChangeMethodNum; i++ )
       if ( typ->heightChangeMethod[i].startHeight & height )
          if ( ( dir > 0 && typ->heightChangeMethod[i].heightDelta > 0) || ( dir < 0 && typ->heightChangeMethod[i].heightDelta < 0))
-            if ( (1 << (log2(height) + typ->heightChangeMethod[i].heightDelta)) & typ->height )
+            if ( (1 << (getFirstBit(height) + typ->heightChangeMethod[i].heightDelta)) & typ->height )
                return &typ->heightChangeMethod[i];
 
    return NULL;
@@ -770,7 +770,7 @@ bool  Vehicle :: vehicleconstructable ( const VehicleType* tnk, int x, int y )
    if( (tnk->height & height ) || (( tnk->height & (chfahrend | chschwimmend)) && (height & (chfahrend | chschwimmend)))) {
       int hgt = height;
       if ( !(tnk->height & height))
-         hgt = 1 << log2(tnk->height);
+         hgt = 1 << getFirstBit(tnk->height);
       if ( terrainaccessible2( gamemap->getField(x,y), tnk->terrainaccess, hgt ) > 0 )
          if ( getResource( getExternalVehicleConstructionCost( tnk ), true ) == getExternalVehicleConstructionCost( tnk ) )
             if ( beeline (x, y, xpos, ypos) <= maxmalq )
@@ -811,7 +811,7 @@ bool Vehicle :: buildingconstructable ( const BuildingType* building, bool check
    if ( !ff )
       ff = 100;
 
-   int hd = getheightdelta ( log2 ( height ), log2 ( building->height ));
+   int hd = getheightdelta ( getFirstBit ( height ), getFirstBit ( building->height ));
 
    if ( hd != 0 ) // && !(hd ==-1 && (height == chschwimmend || height == chfahrend)) ???  what was that ??
       return 0;
@@ -952,7 +952,7 @@ void Vehicle::setAttacked( bool recursive, const Context& context )
 
 int Vehicle::maxMovement ( void ) const
 {
-   return typ->movement[log2(height)];
+   return typ->movement[getFirstBit(height)];
 }
 
 
@@ -1039,7 +1039,7 @@ void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits ) const
     if ( height != chfahrend )
        bm |= cem_height;
 
-//    if ( _movement < typ->movement[log2(height)] )
+//    if ( _movement < typ->movement[getFirstBit(height)] )
     bm |= cem_movement;
 
     if ( direction )
@@ -1271,7 +1271,7 @@ void   Vehicle::readData ( tnstream& stream )
        height = chfahrend;
 
     if ( ! (height & typ->height) )
-       height = 1 << log2 ( typ->height );
+       height = 1 << getFirstBit ( typ->height );
 
     if ( bm & cem_movement ) {
        int m;
@@ -1280,9 +1280,9 @@ void   Vehicle::readData ( tnstream& stream )
        else
           m = stream.readInt();
        
-       setMovement ( min( m,typ->movement [ log2 ( height ) ]), 0 );
+       setMovement ( min( m,typ->movement [ getFirstBit ( height ) ]), 0 );
     } else
-       setMovement ( typ->movement [ log2 ( height ) ], 0 );
+       setMovement ( typ->movement [ getFirstBit ( height ) ], 0 );
 
     if ( bm & cem_direction )
        direction = stream.readChar();
@@ -1330,7 +1330,7 @@ void   Vehicle::readData ( tnstream& stream )
 
     if ( reactionfirestatus >= 8 && reactionfireenemiesAttackable <= 4 ) { // for transition from the old reactionfire system ( < ASC1.2.0 ) to the new one ( >= ASC1.2.0 )
        reactionfire.status = ReactionFire::Status ( reactionfireenemiesAttackable );
-       setMovement ( typ->movement [ log2 ( height ) ], 0 );
+       setMovement ( typ->movement [ getFirstBit ( height ) ], 0 );
     } else
        reactionfire.status = ReactionFire::Status ( reactionfirestatus );
 

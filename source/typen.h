@@ -229,10 +229,10 @@ class MapCoordinate3D : public MapCoordinate {
             void setNumericalHeight ( int nh ) { z = nh; };
             // MapCoordinate3D& operator= ( const MapCoordinate& mc ) { x = mc.x; y = mc.y; z = -1 );
             MapCoordinate3D ( ) : MapCoordinate(), z(-1) {};
-            MapCoordinate3D ( int _x, int _y, int bitmappedz) : MapCoordinate ( _x, _y ), z ( log2(bitmappedz) ) {};
+            MapCoordinate3D ( int _x, int _y, int bitmappedz) : MapCoordinate ( _x, _y ), z ( getFirstBit(bitmappedz) ) {};
             bool operator< ( const MapCoordinate3D& mc ) const { return y < mc.y || ( y == mc.y && x < mc.x ) || (y == mc.y && x == mc.x && z < mc.z);};
             // MapCoordinate3D ( const MapCoordinate& mc ) : MapCoordinate ( mc ), z ( -2 ) {};
-            MapCoordinate3D ( const MapCoordinate& mc, int bitmappedHeight ) : MapCoordinate ( mc ), z ( log2(bitmappedHeight) ) {};
+            MapCoordinate3D ( const MapCoordinate& mc, int bitmappedHeight ) : MapCoordinate ( mc ), z ( getFirstBit(bitmappedHeight) ) {};
             void setnum ( int _x, int _y, int numericalz ) { x = _x; y = _y; z = numericalz; };
             bool operator== ( const MapCoordinate3D& mc ) const { return y == mc.y && x == mc.x && (z == mc.z || z == -2 || mc.z == -2);};
             bool operator!= ( const MapCoordinate3D& mc ) const { return (mc.x != x) || (mc.y != y) || (mc.z != z); };

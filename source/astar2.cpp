@@ -308,7 +308,7 @@ int AStar::getTravelTime( )
    if ( dist < 0 )
       return dist;
    else
-      return dist / _veh->typ->movement[ log2 ( _veh->height ) ];
+      return dist / _veh->typ->movement[ getFirstBit ( _veh->height ) ];
 }
 
 bool AStar::fieldVisited ( int x, int y)

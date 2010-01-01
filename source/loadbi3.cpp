@@ -632,7 +632,7 @@ void  tloadBImap ::  ReadMISSPart(void)
 
 int tloadBImap :: convcol ( int c )
 {
-   int cl = log2 ( c );
+   int cl = getFirstBit ( c );
    if ( cl == 6 )
       return 8;
    else
@@ -782,7 +782,7 @@ void  stu_height ( Vehicle* vehicle )
       if (vehicle->typ->terrainaccess.accessible ( fld->bdt ) > 0 )
          vehicle->height = chfahrend;
 
-   vehicle->setMovement ( vehicle->typ->movement[log2( vehicle->height )] );
+   vehicle->setMovement ( vehicle->typ->movement[getFirstBit( vehicle->height )] );
 }
 
 

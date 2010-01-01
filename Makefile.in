@@ -278,7 +278,7 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 zipfound = @zipfound@
 MAINTAINERCLEANFILES = Makefile.in
-SUBDIRS = source data doc installer 
+SUBDIRS = source data doc installer unittester
 EXTRA_DIST = asc.kdevelop AUTHORS COPYING ChangeLog INSTALL README TODO asc.lsm bootstrap
 AUTOMAKE_OPTIONS = foreign
 all: config.h
@@ -812,6 +812,7 @@ cvspbptag:
 dist-hook:
 	rm -rf `find $(distdir) -name CVS -o -name "*.ascdat" -o -name asc2_dlg.zip -o -name "*~" -o -name .cvsignore -o -name ".#*"`
 	rm -rf `find $(distdir)/data/music -name "*.ogg" `
+	chmod ugo-x doc/manpages/* doc/unitguide/output/*.gif doc/unitguide/output/*.html doc/unitguide/output/*.txt
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

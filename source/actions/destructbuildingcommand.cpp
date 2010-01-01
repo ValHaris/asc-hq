@@ -76,7 +76,7 @@ vector<MapCoordinate> DestructBuildingCommand::getFields()
       MapCoordinate pos = getNeighbouringFieldCoordinate( veh->getPosition(), d );
       MapField* fld = getMap()->getField(pos);
       if ( fld )
-         if ( fld->building && getheightdelta( log2(veh->height), log2(fld->building->typ->height)) == 0 && !fld->building->typ->buildingNotRemovable ) 
+         if ( fld->building && getheightdelta( getFirstBit(veh->height), getFirstBit(fld->building->typ->height)) == 0 && !fld->building->typ->buildingNotRemovable ) 
             fields.push_back( pos );
    }
 

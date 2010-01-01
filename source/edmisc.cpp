@@ -788,7 +788,7 @@ void tfillpolygonunit::setpointabs    ( int x,  int y  )
                         delete ffield->vehicle;
                         ffield->vehicle = NULL;
                      }
-                     else ffield->vehicle->setMovement ( ffield->vehicle->typ->movement[log2(ffield->vehicle->height)] );
+                     else ffield->vehicle->setMovement ( ffield->vehicle->typ->movement[getFirstBit(ffield->vehicle->height)] );
                      ffield->vehicle->direction = auswahld;
                   }
             }
@@ -1720,7 +1720,7 @@ void         UnitPropertyEditor::buttonpressed(int         id)
         if ( ht == h ) bar(x1 + 25+( i * w2),y1 + heightxs-5,x1 + w2 * (i +1 ) - 5,y1 + heightxs-3,red);
      } /* endfor */
      unit->height = h;
-     unit->setMovement ( unit->typ->movement[ log2 ( unit->height ) ], 0 );
+     unit->setMovement ( unit->typ->movement[ getFirstBit ( unit->height ) ], 0 );
    }
    break;
    case 12: /* temp = unit->tank.fuel;
@@ -2475,7 +2475,7 @@ void tbuildingcargo :: checkforadditionalkeys ( tkey ch )
       if ( building->vehicleFit( veh ))
          for ( int i = 0; i < 32; i++ )
             if ( !building->loading[i] ) {
-               veh->convert( log2(building->color) );
+               veh->convert( getFirstBit(building->color) );
                building->loading[i] = veh;
                redraw();
                return;

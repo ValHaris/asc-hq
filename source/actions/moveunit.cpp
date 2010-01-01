@@ -352,15 +352,15 @@ ActionResult MoveUnit::runAction( const Context& context )
 
       vehicle->setnewposition( *pos, context );
 
-      if ( vehicle->typ->movement[log2(orgHeight)] ) {
+      if ( vehicle->typ->movement[getFirstBit(orgHeight)] ) {
          if ( orgHeight != vehicle->height )  {
             // first we are converting the original movement to the new height
-            int move = int(floor(vehicle->maxMovement() * float(orgMovement) / float(vehicle->typ->movement[log2(orgHeight)]) + 0.5));
+            int move = int(floor(vehicle->maxMovement() * float(orgMovement) / float(vehicle->typ->movement[getFirstBit(orgHeight)]) + 0.5));
             (new ChangeUnitMovement( vehicle, move, false, ChangeUnitMovement::NONE ))->execute(context);
          }
          
          
-         int nm = int(floor(vehicle->maxMovement() * float(newMovement) / float(vehicle->typ->movement[log2(orgHeight)]) + 0.5));
+         int nm = int(floor(vehicle->maxMovement() * float(newMovement) / float(vehicle->typ->movement[getFirstBit(orgHeight)]) + 0.5));
          
          (new ChangeUnitMovement( vehicle, nm, false, ChangeUnitMovement::NORMAL))->execute(context);
          

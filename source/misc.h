@@ -33,22 +33,11 @@
    #define dblue lightgray
    //153
    
-  #ifdef UseMemAvail 
-   extern int memavail ( void );       // dummy function
-  #endif
 
-
-   extern int firstBit(int i);
-  
-  
    //! Count the number of zero bits on the LSB side of "zahl"
-   inline int log2(int i) { return firstBit(i);};
+   extern int getFirstBit(int i);
 
-   /** converts a to a string.
-      \returns a pointer to a newly allocated array of characters, which must be freed with delete[]
-    */
-   extern char* strr ( int a ) ;
-   
+  
    extern const char* digit[] ; 
    extern const char* letter[] ;
 
@@ -62,8 +51,6 @@
       \returns a pointer to a static array, which will be overwritten in the next call
     */
    extern char* strrr ( double a ) ;
-
-   extern void beep( void );
 
    extern int  crc32buf( const void *vbuf, int len);
    

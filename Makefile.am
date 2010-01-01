@@ -1,6 +1,6 @@
 MAINTAINERCLEANFILES	= Makefile.in
 
-SUBDIRS 		= source data doc installer 
+SUBDIRS 		= source data doc installer unittester
 EXTRA_DIST 		= asc.kdevelop AUTHORS COPYING ChangeLog INSTALL README TODO asc.lsm bootstrap
 AUTOMAKE_OPTIONS 	= foreign
 
@@ -33,3 +33,4 @@ cvspbptag:
 dist-hook:
 	rm -rf `find $(distdir) -name CVS -o -name "*.ascdat" -o -name asc2_dlg.zip -o -name "*~" -o -name .cvsignore -o -name ".#*"`
 	rm -rf `find $(distdir)/data/music -name "*.ogg" `
+	chmod ugo-x doc/manpages/* doc/unitguide/output/*.gif doc/unitguide/output/*.html doc/unitguide/output/*.txt

@@ -391,7 +391,7 @@ MapCoordinate3D AI :: findServiceBuilding ( const ServiceOrder& so, int* distanc
          buildingPos.setnum ( buildingPos.x, buildingPos.y, -1 );
          /*
          if ( !(bld->typ->loadcapability & buildingPos.z))
-            buildingPos.z = 1 << log2 ( astar.getFieldAccess(bld->getEntry()) & bld->typ->loadcapability );
+            buildingPos.z = 1 << getFirstBit ( astar.getFieldAccess(bld->getEntry()) & bld->typ->loadcapability );
          */
 
          bool loadable = true;

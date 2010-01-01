@@ -165,7 +165,7 @@ void tsearchreactionfireingunits :: init ( Vehicle* vehicle, const AStar3D::Path
       if ( i->y < y1 )
          y1 = i->y ;
    }
-   findOffensiveUnits ( vehicle, log2 ( vehicle->height ), x1,y1,x2,y2);
+   findOffensiveUnits ( vehicle, getFirstBit ( vehicle->height ), x1,y1,x2,y2);
           
 }
 

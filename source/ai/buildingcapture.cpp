@@ -129,7 +129,7 @@ void         SearchReconquerBuilding :: testfield(const MapCoordinate& mc)
                for ( int w = 0; w <= 31; w++)
                   if ( bld->loading[w] )
                      if ( canUnitCapture ( bld->loading[w] ))
-                        if ( bld->loading[w]->typ->movement[log2(bld->loading[w]->height)] <= beeline(xp,yp,startx,starty))
+                        if ( bld->loading[w]->typ->movement[getFirstBit(bld->loading[w]->height)] <= beeline(xp,yp,startx,starty))
                            unitfound ( bld->loading[w] );
 
 */

@@ -280,7 +280,7 @@ class ColorConverter<1,4>
          if ( targetSurface.GetPixelFormat().Amask() )
             ashift = targetSurface.GetPixelFormat().Ashift();
          else
-            ashift = firstBit( ~( targetSurface.GetPixelFormat().Rmask() | targetSurface.GetPixelFormat().Gmask() | targetSurface.GetPixelFormat().Bmask()));
+            ashift = getFirstBit( ~( targetSurface.GetPixelFormat().Rmask() | targetSurface.GetPixelFormat().Gmask() | targetSurface.GetPixelFormat().Bmask()));
 
       };
 
@@ -726,7 +726,7 @@ class ColorMerger_AlphaHandler<4>
                ashift = srf.GetPixelFormat().Ashift();
             } else {
                amask = ~( srf.GetPixelFormat().Rmask() | srf.GetPixelFormat().Gmask() | srf.GetPixelFormat().Bmask() );
-               ashift = firstBit(amask);
+               ashift = getFirstBit(amask);
             }
          }
       };

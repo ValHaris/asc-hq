@@ -163,7 +163,7 @@ ActionResult MoveUnitCommand::searchFields(int height, int capabilities)
 
    int h;
    if ( getMap()->getField(veh->getPosition())->unitHere(veh) )
-      h = log2(veh->height); // != height-change: true
+      h = getFirstBit(veh->height); // != height-change: true
    else 
       h = -1; // height-change = false
       

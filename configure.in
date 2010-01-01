@@ -343,12 +343,12 @@ CPPFLAGS=$OLDCPPFLAGS
 #AC_MSG_RESULT("yes")
 
 
-AC_CHECK_LIB( boost_regex, main, BOOST_LIBS="-lboost_regex", BOOSTERR=yes)
+AC_CHECK_LIB( boost_regex-mt, main, BOOST_LIBS="-lboost_regex-mt", BOOSTERR=yes)
 
 if test x$BOOSTERR = xyes ; then
-  AC_CHECK_LIB( boost_regex-gcc, 
+  AC_CHECK_LIB( boost_regex-gcc-mt, 
                 main, 
-                BOOST_LIBS="-lboost_regex-gcc", 
+                BOOST_LIBS="-lboost_regex-gcc-mt", 
                 AC_LIB_MISSING( Boost, http://www.boost.org/, [( which may be splitted into several distinct libraries)]))
 fi
 
@@ -729,7 +729,8 @@ AC_CONFIG_FILES( [ Makefile \
        data/dialog/Makefile \
        data/music/Makefile \
        installer/Makefile \
-       installer/asc.nsi ]) 
+       installer/asc.nsi \
+       unittester/Makefile ]) 
        
 AC_OUTPUT
 

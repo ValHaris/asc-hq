@@ -20,13 +20,13 @@ void testJumpdrive()
 {
    auto_ptr<GameMap> game ( startMap("testjump.map"));
    
-   Vehicle* veh = game->getField(0,4)->vehicle;
+   Vehicle* veh = game->getField(5,14)->vehicle;
    assertOrThrow( veh != NULL );
    assertOrThrow( veh->damage == 0 );
    
    JumpDriveCommand* jdc = new JumpDriveCommand( veh );
    
-   jdc->setDestination( MapCoordinate( 6, 9));
+   jdc->setDestination( MapCoordinate( 5, 4));
    ActionResult res = jdc->execute( createTestingContext( game.get() ));
    
    assertOrThrow( veh->attacked );

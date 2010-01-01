@@ -42,7 +42,7 @@ const char* letter[] = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", 
 char strstring[1000];
 
 
-int firstBit(int zahl)
+int getFirstBit(int zahl)
 {
    if (zahl != 0) {
       int log = 0;
@@ -55,13 +55,6 @@ int firstBit(int zahl)
       return 0;
 }
 
-
-char* strr ( int a ) {
-   char* s;
-   s = new char [33];
-   itoa ( a, s, 10 );
-   return s;
-}
 
 
 char* strrr ( int a ) {
@@ -77,12 +70,6 @@ char* strrr ( Uint32 a ) {
 char* strrr ( double f ) {
    sprintf(strstring,"%f",f);
    return strstring;
-}
-
-
-void beep ( void )
-{
-   printf("\a");
 }
 
 

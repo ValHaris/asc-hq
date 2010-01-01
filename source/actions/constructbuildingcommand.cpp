@@ -84,7 +84,7 @@ ConstructBuildingCommand::Lack ConstructBuildingCommand::buildingProductionPrere
       l |= Lack::Research;
 
 
-   int hd = getheightdelta ( log2 ( getUnit()->height ), log2 ( type->height ));
+   int hd = getheightdelta ( getFirstBit ( getUnit()->height ), getFirstBit ( type->height ));
 
    if ( hd != 0 )
       l |= Lack::Level;

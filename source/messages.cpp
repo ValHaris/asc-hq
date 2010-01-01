@@ -77,7 +77,7 @@ ASCString Message::getFromText( const GameMap* gamemap ) const
    if ( from == (1<<9))
       return "system";
    
-   return gamemap->player[log2(from)].getName();
+   return gamemap->player[getFirstBit(from)].getName();
 }
 
 

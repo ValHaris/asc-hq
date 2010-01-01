@@ -810,7 +810,7 @@ SingleWeapon::SingleWeapon()
 int SingleWeapon::getScalarWeaponType(void) const
 {
    if ( typ & (cwweapon | cwmineb) )
-      return log2 ( typ & (cwweapon | cwmineb) );
+      return getFirstBit ( typ & (cwweapon | cwmineb) );
    else
       return -1;
 }

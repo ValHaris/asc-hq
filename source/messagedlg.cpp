@@ -367,7 +367,7 @@ class MessageLineWidget: public SelectionWidget
       ASCString getName() const
       {
          if ( message->from > 0 && message->from <= 255 )
-            return map->getPlayer(log2(message->from)).getName();
+            return map->getPlayer(getFirstBit(message->from)).getName();
          else
             if ( message->from & ( 1 << 9 ))
                return "system";

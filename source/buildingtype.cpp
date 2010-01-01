@@ -302,7 +302,7 @@ void BuildingType :: read ( tnstream& stream )
       }
 
 
-      height = 1 << log2 ( stream.readInt() );
+      height = 1 << getFirstBit ( stream.readInt() );
       stream.readInt( ); // was: unitheight_forbidden =
       externalloadheight = stream.readInt( );
 

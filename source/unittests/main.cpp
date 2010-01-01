@@ -1,3 +1,6 @@
+// The main program for running the unit tests
+
+
 
 
 #include "ai/ai.h"
@@ -36,6 +39,7 @@
 #include "gameeventsystem.h"
 #include "jumptest.h"
 #include "testversionidentifier.h"
+#include "streamencoding.h"
 
 
 void viewcomp( Player& player )
@@ -82,84 +86,9 @@ Context createContext( GameMap* gamemap )
 }
 
 
-void testStreamEncoding()
-{
-   const int maxsize = 100000;
-   char buffer[maxsize];
-
-   int size;
-
-   {
-      tnfilestream stream ( "asc2_dlg.zip", tnstream::reading );
-      size = stream.readdata(buffer, maxsize, false );
-   }
-
-   ASCString encodedData;
-
-   {
-      ASCIIEncodingStream stream;
-      stream.writedata(buffer, size);
-      encodedData = stream.getResult();
-   }
-
-   {
-      char buffer2[maxsize];
-
-      ASCIIDecodingStream stream ( encodedData );
-
-      int size2 = stream.readdata( buffer2, size, true);
-      assertOrThrow( size2 == size );
-
-      for ( int i = 0; i < size; ++i )
-         if ( buffer[i] != buffer2[i] )
-            throw ASCmsgException( "ASCII Encoding/Decoding failed at offset " + ASCString::toString(i));
-   }
-}
-
-void testStreamEncoding2()
-{
-   const int maxsize = 100000;
-   char buffer[maxsize];
-
-   int size;
-
-   {
-      tnfilestream stream ( "asc2_dlg.zip", tnstream::reading );
-      size = stream.readdata(buffer, maxsize, false );
-   }
-
-   ASCString encodedData;
-
-   {
-      ASCIIEncodingStream outerStream;
-      StreamCompressionFilter stream( &outerStream );
-      stream.writedata(buffer, size);
-      stream.close();
-
-      encodedData = outerStream.getResult();
-   }
-
-   {
-      char buffer2[maxsize];
-
-      ASCIIDecodingStream outerStream ( encodedData );
-      StreamDecompressionFilter stream( &outerStream );
-
-     int size2 = stream.readdata( buffer2, size, true);
-     assertOrThrow( size2 == size );
-
-      for ( int i = 0; i < size; ++i )
-         if ( buffer[i] != buffer2[i] )
-            throw ASCmsgException( "ASCII Encoding/Decoding failed at offset " + ASCString::toString(i));
-   }
-
-}
-
-
 void runUnitTests()
 {
    testStreamEncoding();
-   testStreamEncoding2();
    testVersionIdentifier();
    testJumpdrive();
    testEvents();
@@ -315,6 +244,6 @@ int main(int argc, char *argv[] )
       return 2;  
    }
 
-   cout << "exiting successfully \n";
+   cout << "unittests completed successfully \n";
    return 0;
 }

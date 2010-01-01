@@ -258,7 +258,7 @@ int ContainerBase::calcShadowDist( int binaryHeight )
    if ( binaryHeight <= 3 )
       return 1;
 
-   return 6 * ( binaryHeight - log2 ( chfahrend ));
+   return 6 * ( binaryHeight - getFirstBit ( chfahrend ));
 }
 
 
@@ -300,7 +300,7 @@ void ContainerBase::paintField ( const Surface& img, Surface& dest, SPoint pos, 
    } else {
       if ( height >= chfahrend && shadowDist ) {
          if ( shadowDist == -1 )
-            shadowDist = calcShadowDist( log2( height ));
+            shadowDist = calcShadowDist( getFirstBit( height ));
 
          megaBlitter< ColorTransform_None,
          ColorMerger_AlphaShadow,
@@ -449,7 +449,7 @@ bool  ContainerBase :: vehicleLoadable ( const Vehicle* vehicle, int uheight, co
       for ( ContainerBaseType::EntranceSystems::const_iterator i = baseType->entranceSystems.begin(); i != baseType->entranceSystems.end(); i++ )
          if ( (i->height_abs & uheight) || (i->height_abs == 0 ))
             if ( i->mode & ContainerBaseType::TransportationIO::In )
-               if ( i->height_rel == -100 || i->height_rel == getheightdelta ( getPosition().getNumericalHeight(), log2(uheight)  ) )
+               if ( i->height_rel == -100 || i->height_rel == getheightdelta ( getPosition().getNumericalHeight(), getFirstBit(uheight)  ) )
                   if ( (i->container_height & getPosition().getBitmappedHeight()) || (i->container_height == 0))
                      if ( vehicle->typ->hasAnyFunction(i->requiresUnitFeature) || i->requiresUnitFeature.none() )
                         if ( i->vehicleCategoriesLoadable & (1<<vehicle->typ->movemalustyp)) {

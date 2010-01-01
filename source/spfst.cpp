@@ -173,7 +173,7 @@ int         fieldAccessible( const MapField*        field,
               if (vehicleplattfahrbar(vehicle,field))
                  return 2;
                else {
-                  if ( getheightdelta(log2(field->vehicle->height), log2(vehicle->height)) || (attackpossible28(field->vehicle,vehicle) == false) || ( vehicle->getMap()->getPlayer(vehicle).diplomacy.getState( field->vehicle->getOwner()) >= PEACE ))
+                  if ( getheightdelta(getFirstBit(field->vehicle->height), getFirstBit(vehicle->height)) || (attackpossible28(field->vehicle,vehicle) == false) || ( vehicle->getMap()->getPlayer(vehicle).diplomacy.getState( field->vehicle->getOwner()) >= PEACE ))
                     return 1;
                }
            }
@@ -334,7 +334,7 @@ int  getmaxwindspeedforunit ( const Vehicle* eht )
    MapField* field = eht->getMap()->getField(eht->xpos,eht->ypos);
    if ( field->vehicle == eht) {
       if (eht->height >= chtieffliegend && eht->height <= chhochfliegend ) //    || ((eht->height == chfahrend) && ( field->typ->art & cbwater ))) ) 
-         return eht->typ->movement[log2(eht->height)] * 256 ;
+         return eht->typ->movement[getFirstBit(eht->height)] * 256 ;
 
       if ( (field->bdt & getTerrainBitType(cbfestland)).none() && eht->height <= chfahrend && eht->height >= chschwimmend && (field->bdt & getTerrainBitType(cbharbour)).none() && (field->bdt & getTerrainBitType(cbwater0)).none())
          return eht->typ->maxwindspeedonwater * maxwindspeed;
@@ -392,7 +392,7 @@ void EllipseOnScreen :: write ( tnstream& stream )
 
 int getheightdelta ( const ContainerBase* c1, const ContainerBase* c2 )
 {
-   return getheightdelta( log2(c1->getHeight()), log2(c2->getHeight() ));
+   return getheightdelta( getFirstBit(c1->getHeight()), getFirstBit(c2->getHeight() ));
 }
 
 
