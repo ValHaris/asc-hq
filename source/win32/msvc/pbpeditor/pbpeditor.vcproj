@@ -203,6 +203,10 @@
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm"
 			>
 			<File
+				RelativePath="..\..\..\accessconstraints-editor.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\ascstring.cpp"
 				>
 			</File>

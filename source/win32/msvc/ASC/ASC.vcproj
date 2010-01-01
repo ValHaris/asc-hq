@@ -208,6 +208,10 @@
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm"
 			>
 			<File
+				RelativePath="..\..\..\accessconstraints-game.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\applicationstarter.cpp"
 				>
 			</File>

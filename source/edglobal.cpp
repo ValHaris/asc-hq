@@ -984,7 +984,7 @@ void execaction_pg(int code)
                                              tn_file_buf_stream stream ( "object" + ASCString::toString( i ) + ".dump", tnstream::writing );
                                              PropertyWritingContainer pc ( "objectDump", stream );
                                              bld->runTextIO( pc );
-                                             smw.SetText( text + ": " + ASCString::toString( i * 100 / objectTypeRepository.getNum() ) + "%" );
+                                             smw.SetText( text + ": " + ASCString::toString( int(i * 100 / objectTypeRepository.getNum() )) + "%" );
                                           }
                                         };
        break;
