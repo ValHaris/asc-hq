@@ -21,18 +21,18 @@ message = [[The oil tower extracts oil from the ground and needs energy to opera
 asc.setLocalizedEventMessage( map, 4, message )
 
 --- ===== Event 5  ======= 
-message = [[The small oil platform extracts oil and relies on extern energy supply. It can be build shallow water and up to medium depth. ]]
+message = [[The small oil platform extracts oil and relies on external energy supply. It can be built in shallow water and up to medium depth. ]]
 asc.setLocalizedEventMessage( map, 5, message )
 
 --- ===== Event 6  ======= 
-message = [[The big oil platform also extracts oil, and significantly more of it than the other oil extraction facilities. It also has its own internal energy supply and can therefore operate completely self-sustaining. It features quite spacious storage facility for the extracted oil]]
+message = [[The big oil platform also extracts oil, and significantly more of it than the other oil extraction facilities. It also has its own internal energy supply and can therefore operate completely self-sustaining. It features a quite spacious storage facility for the extracted oil]]
 asc.setLocalizedEventMessage( map, 6, message )
 
 --- ===== Event 166  ======= 
-message = [[We distinguish between two ways retrieving material and fuel: subterranean mining and collection on the surface.
-Resources on a plant's surface can easily be seen: forests, rape, wreckage, stones.  Subterranean resources can not be seen as easily. And these are the ones we are focusing on in this tutorial.
+message = [[We distinguish between two ways of retrieving material and fuel: subterranean mining and collection on the surface.
+Resources on a planet's surface can easily be seen: forests, rape, wreckage, stones.  Subterranean resources can not be seen as easily. And these are the ones we are focusing on in this tutorial.
 
-ASC offers a special view for that which can be enabled and disabled through the menu "View -> Toggle Resourceview" or by pressing the key '1'.
+ASC offers a special view, which can be enabled and disabled through the menu "View -> Toggle Resourceview" or by pressing the key '1'.
 
 The bars that appear will indicate 4 things:
 - red bars show the availability of mineral material
@@ -48,15 +48,15 @@ asc.setLocalizedEventMessage( map, 166, message )
 message = [[Every building operates when a turn is ended. You can see that at the big oil platform which operates self-sustained. 
 
 You can see the extraction process by the increasing of the available fuel, as well as by the reduction of the available crude oil (green bars on map).
-Extraction starts at the buildings entrance and advanced in ever growing circles around it, up to a maximum distance of 10 fields.
+Extraction starts at the building's entrance and advances in ever growing circles around it, up to a maximum distance of 10 fields.
 
 End the turn for more information.]]
 asc.setLocalizedEventMessage( map, 188, message )
 
 --- ===== Event 197  ======= 
-message = [[The buildings that don't have the necessary consumable don't operate right now. As don't buildings that have been switched of, that have exceeded their storage capacity or that have run out of ground resources.
+message = [[The buildings that don't have the necessary consumables don't operate right now. Neither do buildings that have been switched off, that have exceeded their storage capacity or that have run out of ground resources.
 
-If you want to test this, you can do this with the 3 generator vehicles that will now placed on the map.
+If you want to test this, you can do this with the 3 generator vehicles that will now be placed on the map.
 
 For more information, end your turn.]]
 asc.setLocalizedEventMessage( map, 197, message )
@@ -64,7 +64,7 @@ asc.setLocalizedEventMessage( map, 197, message )
 --- ===== Event 208  ======= 
 message = [[The mining graph in the building dialog looks like this:
 #image=tut024-mining-bars.png#
-You see two columns right now. The first column show the amount of resources that are on the building entrance, the second column indicates the average resource availability on the fields with a distance of 1 field to the entrance.
+You see two columns right now. The first column shows the amount of resources that are on the building entrance, the second column indicates the average resource availability on the fields with a distance of 1 field to the entrance.
 
 This image is from the oil tower. As the oiltower operates, the first green column will decrease as the crude oil is extracted from the ground. When it's zero, the fuel will be extracted from the neighboring fields that the second column represents. At that point a third column will be shown about the fields that are further out.
 
@@ -76,7 +76,7 @@ To continue, end the turn again.]]
 asc.setLocalizedEventMessage( map, 208, message )
 
 --- ===== Event 240  ======= 
-message = [[You have now been given 5 depot buildings, so you have enough storage capacity. Additionally, you have been given a surveyor unit which specialized in finding resource deposits in the ground. You should enable the resource view (key '1') and move the unit across the map to see the effects of its survey. 
+message = [[You have now been given 5 depot buildings, so you have enough storage capacity. Additionally, you have been given a surveyor unit which specializes in finding resource deposits in the ground. You should enable the resource view (key '1') and move the unit across the map to see the effects of its survey. 
 
 If you want to continue watching the mines operate, drive onto the floor plate to connect them with pipelines. The extended storage allows them to operate longer.
 

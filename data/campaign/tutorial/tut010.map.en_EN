@@ -8,7 +8,7 @@ Information about a specific building is presented when stepping onto the grey f
 
 Entering the green fields will lead you back to the base camp.
 
-All buildings can accommodate units, with the maximum number, size and type of unit varying with the different kinds of buildings. All buildings have the cargo dialog, available with the "view loaded units" button, to access the units parked inside. The cargo dialog also gives access to non-cargo related functions and information, like resource production. Inside any building units can be refueled and equipped with ammo, if these supplies are available or can be produced by the buildings. You can also disband units in any building.]]
+All buildings can accommodate units, with the maximum number, size and type of unit varying with the different kinds of buildings. All buildings have the cargo dialog, available with the "view loaded units" button, to access the units parked inside. The cargo dialog also gives access to non-cargo related functions and information, like resource production. Inside any building, units can be refueled and equipped with ammo, if these supplies are available or can be produced by the buildings. You can also disband units in any building.]]
 asc.setLocalizedEventMessage( map, 1, message )
 
 --- ===== Event 3  ======= 
@@ -36,7 +36,7 @@ message = [[The Crystal Processing produces material from harvesting crystals an
 asc.setLocalizedEventMessage( map, 8, message )
 
 --- ===== Event 9  ======= 
-message = [[The Headquarter can generate both fuel, material and energy. The actual amount is dependent on the map. 
+message = [[The Headquarters can generate both fuel, material and energy. The actual amount is dependent on the map. 
 
 The objectives of many maps involve Headquarters to be conquered or to be defended.]]
 asc.setLocalizedEventMessage( map, 9, message )
@@ -46,7 +46,7 @@ message = [[A town creates a little bit of energy, material and fuel, the actual
 asc.setLocalizedEventMessage( map, 10, message )
 
 --- ===== Event 11  ======= 
-message = [[The mine extracts mineral resources from the ground. This of course requires the ground to contain mineral resources, so a geological survey is very recommended before constructing a mine at some spot. A mine requires energy to operate. The rate of extraction can be changed by the player. As the fields that are minded get further away from the building because of depletion of the nearer fields, the efficiency of the mine declines.]]
+message = [[The mine extracts mineral resources from the ground. This of course requires the ground to contain mineral resources, so a geological survey is very recommended before constructing a mine at some spot. A mine requires energy to operate. The rate of extraction can be changed by the player. As the fields that are mined get further away from the building, because of depletion of the nearer fields, the efficiency of the mine declines.]]
 asc.setLocalizedEventMessage( map, 11, message )
 
 --- ===== Event 12  ======= 
@@ -76,7 +76,7 @@ Just like any factory, the great vehicle plant can also refuel, rearm and repair
 asc.setLocalizedEventMessage( map, 29, message )
 
 --- ===== Event 30  ======= 
-message = [[The shipyard can produce and service ships of all kinds, including submarines. It's usually build at the coast, so that it's accessible from the land and sea. ]]
+message = [[The shipyard can produce and service ships of all kinds, including submarines. It's usually built at the coast, so that it's accessible from the land and sea. ]]
 asc.setLocalizedEventMessage( map, 30, message )
 
 --- ===== Event 31  ======= 
@@ -88,7 +88,7 @@ message = [[The spaceport is responsible for the production and maintenance of s
 asc.setLocalizedEventMessage( map, 32, message )
 
 --- ===== Event 33  ======= 
-message = [[The gas station is used to refuel any kind of passing unit, so unlike most other buildings the units don't have to enter and don't waste any time for doing so.]]
+message = [[The gas station is used to refuel any kind of passing unit, so unlike most other buildings, the units don't have to enter and don't waste any time for doing so.]]
 asc.setLocalizedEventMessage( map, 33, message )
 
 --- ===== Event 34  ======= 
@@ -96,13 +96,13 @@ message = [[The Depot can store significant amounts of material, fuel and ammo. 
 asc.setLocalizedEventMessage( map, 34, message )
 
 --- ===== Event 35  ======= 
-message = [[The training center is used for training units, so they already have some experience before being deployed on the battle field. The training center requires energy to operate. Since training requires ammo, the training center has its own production facilities for that and can therefore also rearm units who that don't need any training.]]
+message = [[The training center is used for training units, so they already have some experience before being deployed on the battle field. The training center requires energy to operate. Since training requires ammo, the training center has its own production facilities for that and can therefore also rearm units that don't need any training.]]
 asc.setLocalizedEventMessage( map, 35, message )
 
 --- ===== Event 36  ======= 
-message = [[The research lib consumes resources to do research and discover new technology. The technologies are the prerequisites for the production of new types of units. 
+message = [[The research lab consumes resources to do research and discover new technology. The technologies are the prerequisites for the production of new types of units. 
 
-The amount of research that a training center can do is adjustable. If raising the amount research beyond a certain point, the resource consumption increases exponentially. So you can do a lot of research with a single lab, but it's usually more efficient to have several of them.]]
+The amount of research that a lab can do is adjustable. When raising the amount of research beyond a certain point, the resource consumption increases exponentially. So you can do a lot of research with a single lab, but it's usually more efficient to have several of them.]]
 asc.setLocalizedEventMessage( map, 36, message )
 
 --- ===== Event 37  ======= 
@@ -116,6 +116,6 @@ message = [[The radar station provides radar coverage and provides early detecti
 asc.setLocalizedEventMessage( map, 38, message )
 
 --- ===== Event 39  ======= 
-message = [[The jamming  station jams enemy radar and make own units and buildings significantly more difficult for the enemy to detect.]]
+message = [[The jamming  station jams enemy radar and makes its own units and buildings significantly more difficult for the enemy to detect.]]
 asc.setLocalizedEventMessage( map, 39, message )
 

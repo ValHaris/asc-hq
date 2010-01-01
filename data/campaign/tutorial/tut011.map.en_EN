@@ -14,7 +14,7 @@ asc.setLocalizedEventMessage( map, 1, message )
 --- ===== Event 10  ======= 
 message = [[In the research lab, you can setup how much research shall be done. This affects the amount of resources that you need.
 
-This lab can produce between 0 and 100 research points. If you set the rate to a value above 40 then the cost of the research will increasingly more expensive.
+This lab can produce between 0 and 100 research points. If you set the rate to a value above 40 then the cost of the research will be increasingly more expensive.
 
 In this map you don't need to hesitate going to full power, we have enough resources to afford that. ]]
 asc.setLocalizedEventMessage( map, 10, message )

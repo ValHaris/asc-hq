@@ -22,9 +22,9 @@ message = [[The wind power plant is another source of renewable power, but relie
 asc.setLocalizedEventMessage( map, 4, message )
 
 --- ===== Event 5  ======= 
-message = [[The nuclear power plant operates independently of the weather, but it requires resources to run: Material and Fuel. These are not use for the electricity generation itself, but for the maintenance of the power plant. 
+message = [[The nuclear power plant operates independently of the weather, but it requires resources to run: Material and Fuel. These are not used for the electricity generation itself, but for the maintenance of the power plant. 
 
-In the depot that is connected are enough resources to operate the nuclear power plant for quite some time. You can adjust the output of the nuclear power plant yourself by going to the cargo window ('show loaded units') and there to the power generation tab. There you have a control to change the power between 0% and 100%.
+In the depot that is connected are enough resources to operate the nuclear power plant for quite some time. You can adjust the output of the nuclear power plant yourself by going to the cargo window ('show loaded units') and then to the power generation tab. There you have a control to change the power between 0% and 100%.
 ]]
 asc.setLocalizedEventMessage( map, 5, message )
 
@@ -50,7 +50,7 @@ asc.setLocalizedEventMessage( map, 30, message )
 --- ===== Event 33  ======= 
 message = [[The storm has subsided, affecting the output of the wind turbine. 
 
-But it got colder, while it's snowing a bit, the cloud cover is not as thick as before, so the solar plant generates more electricity than the turn before.]]
+But it has gotten colder. While it's snowing a bit, the cloud cover is not as thick as before, so the solar plant generates more electricity than the turn before.]]
 asc.setLocalizedEventMessage( map, 33, message )
 
 --- ===== Event 51  ======= 

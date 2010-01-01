@@ -6,7 +6,7 @@ A short introduction to the different types of troopers will be presented when s
 
 To go back to the base camp, enter the green field.
 
-Tip: Keep the mouse button pressed when selecting targets to chose between the different weapon types. If you run out of ammo, use the supply vehicle]]
+Tip: Keep the mouse button pressed when selecting targets to choose between the different weapon types. If you run out of ammo, use the supply vehicle]]
 asc.setLocalizedEventMessage( map, 1, message )
 
 --- ===== Event 2  ======= 
@@ -20,7 +20,7 @@ asc.setLocalizedEventMessage( map, 2, message )
 --- ===== Event 3  ======= 
 message = [[The SAM Trooper has an assault rifle and anti-air missiles at his disposal and therefore the only infantry unit that can effectively fight enemy aircraft. 
 
-Because of carrying the missiles, he is slower than a shock trooper or a sniper.
+Because of carrying the missiles, he is slower than a Shock Trooper or a Sniper.
 
 More information and technical data is available in the unit information window that can be accessed after selecting the trooper.]]
 asc.setLocalizedEventMessage( map, 3, message )
@@ -28,7 +28,7 @@ asc.setLocalizedEventMessage( map, 3, message )
 --- ===== Event 4  ======= 
 message = [[The Paratrooper is a versatile unit. He can not only parachute from aircraft, place and defuse mines, but also fight lightly armored units.
 
-But he is lower than both shock troopers and snipers.
+But he is lower than both Shock Troopers and Snipers.
 
 More information and technical data is available in the unit information window that can be accessed after selecting the trooper.]]
 asc.setLocalizedEventMessage( map, 4, message )
@@ -36,21 +36,21 @@ asc.setLocalizedEventMessage( map, 4, message )
 --- ===== Event 5  ======= 
 message = [[The Gunner carries a grenade launcher together with his assault rifle. With the grenades he can attack other infantry or even armored vehicles from a safe distance of two fields, avoiding immediate retaliation from the attacked unit.
 
-But, as all troopers carrying heavy weapons, he can't keep pace with shock troopers or snipers.
+But, as all troopers carrying heavy weapons, he can't keep pace with Shock Troopers or Snipers.
 
 More information and technical data is available in the unit information window that can be accessed after selecting the Gunner.]]
 asc.setLocalizedEventMessage( map, 5, message )
 
 --- ===== Event 6  ======= 
-message = [[The assault trooper carries a bazooka, which allows him to attack armored units.
+message = [[The Assault Trooper carries a bazooka, which allows him to attack armored units.
 
-But, as all troopers carrying heavy weapons, he can't keep pace with shock troopers or snipers.
+But, as all troopers carrying heavy weapons, he can't keep pace with Shock Troopers or Snipers.
 
-More information and technical data is available in the unit information window that can be accessed after selecting the Trooper.]]
+More information and technical data is available in the unit information window that can be accessed after selecting the trooper.]]
 asc.setLocalizedEventMessage( map, 6, message )
 
 --- ===== Event 7  ======= 
-message = [[The sniper's specialty is his high-precision rifle and his ability to shoot targets from a distance of up to 3 fields. Even without any training, he is a deadly threat to all enemy infantry units. 
+message = [[The Sniper's specialty is his high-precision rifle and his ability to shoot targets from a distance of up to 3 fields. Even without any training, he is a deadly threat to all enemy infantry units. 
 
 He is also faster than most other troopers, only to be surpassed by the Shock Trooper.
 

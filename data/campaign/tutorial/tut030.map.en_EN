@@ -8,29 +8,29 @@ asc.setLocalizedEventMessage( map, 1, message )
 --- ===== Event 3  ======= 
 message = [[Come in, don't hesitate. You haven't seen such a thing. Build a Sam Bunker in this factory!
 
-Try to load the Bunker into the Vesuvius or MBV. Both vehicles will be first choice to build turrets, installations and buildings. Loading into theses vehicles is not working? Perhaps you should try to use the transport train Flux.
-Thats not working, too?
+Try to load the Bunker into the Vesuvius or MBV. Both vehicles will be first choice to build turrets, installations and buildings. Loading into these vehicles is not working? Perhaps you should try to use the transport train Flux.
+That's not working either?
 
 Perhaps you ask yourself, why should there be a production line for Sam Bunker in a factory but you can't transport them?
-There is an easy answer: Not always the options make sense.]]
+There is an easy answer: Not always do the options make sense.]]
 asc.setLocalizedEventMessage( map, 3, message )
 
 --- ===== Event 13  ======= 
-message = [[Surprise! How did we get the bomber into the towny?
+message = [[Surprise! How did we get the bomber into the town?
 
 It doesn't work? Well, but we got a bomber into a heli train and the heli train could enter the town. To do that, we just need a super carrier, on which the bomber can land. Then a harbor, where the bomber can be loaded onto the heli train, which could then enter the town.
 
-What, this isn't amazing? The heli train can just transport the bomber? Then I ask you, why can't the helitrain transport is simple weasel too? :-)]]
+What, this isn't amazing? The heli train can just transport the bomber? Then I ask you, why can't the helitrain transport the simple weasel too? :-)]]
 asc.setLocalizedEventMessage( map, 13, message )
 
 --- ===== Event 18  ======= 
 message = [[Let's continue in our world of wonder! Try to get the shock trooper onto a super carrier! What, this isn't possible, because you can't climb up?
 
-Then try to transfer with a trooper from one carrier to another. This isn't possible. Because... well... because the carrier are to far apart and there is water between them. Infantry can only enter and leave in a harbor.
+Then try to transfer with a trooper from one carrier to another. This isn't possible. Because... well... because the carriers are too far apart and there is water between them. Infantry can only enter and leave in a harbor.
 
 But what is the point of having infantry on a carrier, if it can't even transfer to other ships?
 
-Yeah, right, it protects the carrier from enemy aircraft the try to land :-)]]
+Yeah, right, it protects the carrier from enemy aircraft that try to land :-)]]
 asc.setLocalizedEventMessage( map, 18, message )
 
 --- ===== Event 54  ======= 
@@ -38,12 +38,12 @@ message = [[Let's build a super-flux!
 
 You need a Flux and 2 MBV. For smaller gun emplacements two Vesuvius would be sufficient.
 
-We want to setup 4 Rocket Launcher in a single turn. To do that, we need 4 pre-fabricated foundations.
+We want to setup 4 Rocket Launchers in a single turn. To do that, we need 4 pre-fabricated foundations.
 
 Without foundations available, we can just setup two launchers and another two next turn.
 
 Where the wonder is? Do wonders always have to divide the sea? Isn't enough that you can quickly deploy 4 launchers with this inconspicuous train? And, additionally, a bunch of MG Nests as well?
 
-Edit: Ok, I admit, the Flux is overloaded. This can be done to some degree with the map editor. But in the game it would still be possible to setup 3 launcher and maybe a smaller turret.]]
+Edit: Ok, I admit, the Flux is overloaded. This can be done to some degree with the map editor. But in the game it would still be possible to setup 3 launchers and maybe a smaller turret.]]
 asc.setLocalizedEventMessage( map, 54, message )
 

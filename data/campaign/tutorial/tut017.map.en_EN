@@ -1,12 +1,12 @@
 map = asc.getLoadingMap() 
 --- ===== Event 1  ======= 
-message = [[Welcome to the tank museum. We have everything here, from tank and artillery to all kinds of supply vehicles. Take a look around. But don't anything, unless you want to polish the vehicles next week.
+message = [[Welcome to the tank museum. We have everything here, from tank and artillery to all kinds of supply vehicles. Take a look around. But don't touch anything, unless you want to polish the vehicles next week.
 
 Information about the vehicle can be read when stepping onto the grey floor plates. To leave the museum and return to base camp, enter one of the green fields.]]
 asc.setLocalizedEventMessage( map, 1, message )
 
 --- ===== Event 9  ======= 
-message = [[The generator vehicle can provide energy and runs with fuel. It can be very useful to kickstart your economy or as power supply when your regular power plants are not operating]]
+message = [[The generator vehicle can provide energy and runs with fuel. It can be very useful to kickstart your economy or as a power supply when your regular power plants are not operating]]
 asc.setLocalizedEventMessage( map, 9, message )
 
 --- ===== Event 10  ======= 
@@ -26,15 +26,15 @@ message = [[The COBRA anti infantry tank has been created to effectively fight h
 asc.setLocalizedEventMessage( map, 13, message )
 
 --- ===== Event 14  ======= 
-message = [[The Weasel is a small armored personnel carrier. Its light armor and small machine gun don't make suitable for real battles. Its strength is its speed with which it can transport infantry and the ability to be parachuted from aircraft.]]
+message = [[The Weasel is a small armored personnel carrier. Its light armor and small machine gun don't make it suitable for real battles. Its strength is its speed with which it can transport infantry and the ability to be parachuted from aircraft.]]
 asc.setLocalizedEventMessage( map, 14, message )
 
 --- ===== Event 15  ======= 
-message = [[Armored personnel carrier is capable to transport 8 infantry units to and from the battle field]]
+message = [[Armored personnel carrier is capable of transporting 8 infantry units to and from the battle field]]
 asc.setLocalizedEventMessage( map, 15, message )
 
 --- ===== Event 16  ======= 
-message = [[This transport with very heavy armor provides cover for units even in fierce fighting. It's also very useful to transport damaged units at front.]]
+message = [[This transport with very heavy armor provides cover for units even in fierce fighting. It's also very useful to transport damaged units at the front.]]
 asc.setLocalizedEventMessage( map, 16, message )
 
 --- ===== Event 17  ======= 
@@ -58,7 +58,7 @@ message = [[The ARMADILLO is an upgraded version of the standard tank with still
 asc.setLocalizedEventMessage( map, 21, message )
 
 --- ===== Event 22  ======= 
-message = [[The heavy combat tank combines impressive armor with really big guns. Its twin guns make very good well suited for defending your positions against an enemy attack.]]
+message = [[The heavy combat tank combines impressive armor with really big guns. Its twin guns make it well suited for defending your positions against an enemy attack.]]
 asc.setLocalizedEventMessage( map, 22, message )
 
 --- ===== Event 23  ======= 
@@ -90,15 +90,15 @@ message = [[The Coma III has further increased range. Its twin guns can deliver 
 asc.setLocalizedEventMessage( map, 29, message )
 
 --- ===== Event 30  ======= 
-message = [[The fast and cheap answer to any enemy air force. Only SAM Infantry can fight aircraft cheaper than the SWATTER does. With its cannon can attack and defend against aircraft at a distance of up to 3 fields. Additionally it can defend itself against infantry and lightly armored units with its MG.]]
+message = [[The fast and cheap answer to any enemy air force. Only SAM Infantry can fight aircraft cheaper than the SWATTER does. With its cannon it can attack and defend against aircraft at a distance of up to 3 fields. Additionally it can defend itself against infantry and lightly armored units with its MG.]]
 asc.setLocalizedEventMessage( map, 30, message )
 
 --- ===== Event 31  ======= 
-message = [[In the development of the SWATTER II the MG was sacrificed to install more powerful cannons that also have higher range.]]
+message = [[In the development of the SWATTER II the MG was sacrificed to install more powerful cannons that also have a higher range.]]
 asc.setLocalizedEventMessage( map, 31, message )
 
 --- ===== Event 32  ======= 
-message = [[The nightmare of enemy aircraft, the SPIKE combines high range and high firepower. It is even capable to attack aircraft flying at high altitude.]]
+message = [[The nightmare of enemy aircraft, the SPIKE combines high range and high firepower. It is even capable of attacking aircraft flying at high altitude.]]
 asc.setLocalizedEventMessage( map, 32, message )
 
 --- ===== Event 85  ======= 
@@ -110,7 +110,7 @@ message = [[The Main Builder Vehicle is specialized in constructing the biggest 
 asc.setLocalizedEventMessage( map, 86, message )
 
 --- ===== Event 87  ======= 
-message = [[The Vesuvius is the unit for constructing and destructing buildings. It can also build turrets up to standard size, together with their installations. Its function to completely tear down a building and claim some of its resources have as a nasty surprise to many enemy commander that failed to provide adequate defense for their infrastructure.]]
+message = [[The Vesuvius is the unit for constructing and destructing buildings. It can also build turrets up to standard size, together with their installations. Its function is to completely tear down a building and claim some of its resources, is a nasty surprise to many enemy commander that failed to provide adequate defense for their infrastructure.]]
 asc.setLocalizedEventMessage( map, 87, message )
 
 --- ===== Event 88  ======= 
@@ -126,7 +126,7 @@ message = [[The big transport of type ATUIN can carry all kinds of stuff. Even b
 asc.setLocalizedEventMessage( map, 90, message )
 
 --- ===== Event 91  ======= 
-message = [[The servicing vehicle can repair damaged units in the field. Even big repair task can be handled by it, provided that a steady supply of fuel and material is provided.]]
+message = [[The servicing vehicle can repair damaged units in the field. Even a big repair task can be handled by it, provided that a steady supply of fuel and material is provided.]]
 asc.setLocalizedEventMessage( map, 91, message )
 
 --- ===== Event 92  ======= 
@@ -134,6 +134,6 @@ message = [[The ammo transport is vital to run engagements for an extended time.
 asc.setLocalizedEventMessage( map, 92, message )
 
 --- ===== Event 93  ======= 
-message = [[The mobile tanker vehicles can refuel not only tanks, but also helicopter that have landed and even ships.]]
+message = [[The mobile tanker vehicles can refuel not only tanks, but also helicopters that have landed and even ships.]]
 asc.setLocalizedEventMessage( map, 93, message )
 

@@ -2,7 +2,7 @@ map = asc.getLoadingMap()
 --- ===== Event 1  ======= 
 message = [[Repairs and Service.
 
-To see and experience all aspects of repairing and servicing units we recommend going through all examples along the path, beginning at the upper left. Drive onto the floor plates with the units.
+To see and experience all aspects of repairing and servicing units, we recommend going through all examples along the path, beginning at the upper left. Drive onto the floor plates with the units.
 
 The green field will return you to the base camp.]]
 asc.setLocalizedEventMessage( map, 1, message )
@@ -10,7 +10,7 @@ asc.setLocalizedEventMessage( map, 1, message )
 --- ===== Event 12  ======= 
 message = [[Standard building functions
 
-This Weasel doesn't have any ammo left, it has only very little fuel and it is slightly damaged. 
+This Weasel doesn't have any ammo left, it has very little fuel and it is slightly damaged. 
 
 Drive the Weasel into the radar station nearby. No worries, the Weasel is small enough to fit in there. The radar station is connected to the resource network, so you can at least refuel the weasel in the radar building.
 
@@ -37,7 +37,7 @@ After you have driven the tank there, use the 'repair' function to repair the ta
 To repair a unit the depot needs energy and material. But repairing is significantly cheaper than producing a new unit.
 
 
-Tip: Apart from the depot all kinds of factories like small and big vehicle plant, airport, shipyard and spaceport can repair units.]]
+Tip: Apart from the depot, all kinds of factories like small and big vehicle plant, airport, shipyard and spaceport can repair units.]]
 asc.setLocalizedEventMessage( map, 17, message )
 
 --- ===== Event 18  ======= 
@@ -85,7 +85,7 @@ asc.setLocalizedEventMessage( map, 28, message )
 --- ===== Event 29  ======= 
 message = [[Refuelling at the depot
 
-This tanker vehicle is loaded with fuel. Go to the depot and unload the fuel. Use the refuel dialog so you can leave some in the tanker to allow it driving back.]]
+This tanker vehicle is loaded with fuel. Go to the depot and unload the fuel. Use the refuel dialog so you can leave some in the tanker to allow driving back.]]
 asc.setLocalizedEventMessage( map, 29, message )
 
 --- ===== Event 30  ======= 

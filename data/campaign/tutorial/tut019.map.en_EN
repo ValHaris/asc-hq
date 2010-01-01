@@ -5,7 +5,7 @@ message = [[In the bulldozer driving school you'll learn how to use bulldozer, w
 The upper part of the map focuses on the different construction options of the bulldozer, which are from left to right:
 tracks, roads, runways, railroad, above ground pipelines, subsurface pipelines, ditches and anti-tank obstacles.
 
-Below that we are looking at bridges for roads and railroads as well as the possibility to continue subsurface pipelines underwater. The differences between small and large bridges will be pointed out, together between the effect that differing water depth has on your construction. Here you will be assisted by a construction train and a service ship, which also has construction capabilities.
+Below that we are looking at bridges for roads and railroads as well as the possibility to continue subsurface pipelines underwater. The differences between small and large bridges will be pointed out, together with the effect that differing water depth has on your construction. Here you will be assisted by a construction train and a service ship, which also has construction capabilities.
 
 Finally, in the lower right corner, you can practice the usage of the bulldozer's dismantling abilities, which can provide noticeable amounts of material.
 
@@ -16,7 +16,7 @@ Select a bulldozer and drive onto the adjacent concrete plate to get more inform
 
 To leave this tutorial and return to base camp, step onto the green field.
 
-Tip: if the bulldozer cannot construct the desired object, that may have different causes. Either the bulldozer doesn't have enough movement points left, or he may lack some required resources. Another reason may be that the target field in unsuitable.]]
+Tip: if the bulldozer cannot construct the desired object, that may have different causes. Either the bulldozer doesn't have enough movement points left, or he may lack some required resources. Another reason may be that the target field is unsuitable.]]
 asc.setLocalizedEventMessage( map, 1, message )
 
 --- ===== Event 12  ======= 

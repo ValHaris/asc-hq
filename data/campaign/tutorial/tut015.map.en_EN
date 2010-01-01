@@ -40,7 +40,7 @@ message = [[Barbed wire. blocks infantry]]
 asc.setLocalizedEventMessage( map, 17, message )
 
 --- ===== Event 18  ======= 
-message = [[High turret foundation, give offensive bonus]]
+message = [[High turret foundation, gives offensive bonus]]
 asc.setLocalizedEventMessage( map, 18, message )
 
 --- ===== Event 19  ======= 

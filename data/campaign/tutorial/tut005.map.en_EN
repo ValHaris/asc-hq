@@ -34,7 +34,7 @@ message = [['Very well, soldier. Mines are not intended to be used in direct com
 asc.setLocalizedEventMessage( map, 1236, message )
 
 --- ===== Event 1323  ======= 
-message = [['Soldier, have your orders! Destroy the weasel! If necessary, get further mines in the depot and fulfill your task!]]
+message = [['Soldier, you have your orders! Destroy the weasel! If necessary, get further mines in the depot and fulfill your task!]]
 asc.setLocalizedEventMessage( map, 1323, message )
 
 --- ===== Event 1376  ======= 

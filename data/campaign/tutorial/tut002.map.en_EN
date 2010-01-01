@@ -11,7 +11,7 @@ asc.setLocalizedEventMessage( map, 1, message )
 message = [[To attack there is a button called, you won't guess it, "Attack".
 Press it and then select your target. It will take several rounds to destroy the dummy.
 
-Tip: After your unit has shot, it can't move any more for the remainder of the turn.]]
+Tip: After your unit shoots, it can't move any more for the remainder of the turn.]]
 asc.setLocalizedEventMessage( map, 545, message )
 
 --- ===== Event 625  ======= 
@@ -21,7 +21,7 @@ asc.setLocalizedEventMessage( map, 625, message )
 --- ===== Event 656  ======= 
 message = [[Now destroy this one too!
 
-Tip: With every attack your unit will gain experience. For eliminating enemy units there is an extra poinnt if experience. Please pay attention to your soldier's experience symbol next to its image in the information frame on the right.]]
+Tip: With every attack your unit will gain experience. For eliminating enemy units there is an extra point of experience. Please pay attention to your soldier's experience symbol next to its image in the information frame on the right.]]
 asc.setLocalizedEventMessage( map, 656, message )
 
 --- ===== Event 674  ======= 

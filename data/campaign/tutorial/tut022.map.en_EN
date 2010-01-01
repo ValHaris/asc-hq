@@ -15,14 +15,14 @@ message = [["Resource Network Info" has three sections called Local, Network and
 
 Local is always just the building that you are currently looking at.
 
-Global is the total of all buildings and you own
+Global is the total of all buildings and you own.
 
-Network is the set of buildings that are port of the same resource network. 
+Network is the set of buildings that are part of the same resource network. 
 Resource networks are formed by connecting buildings through pipelines. In this example all buildings on the right side of the channel are connected by pipelines and thus form one resource network. 
 
 The buildings on the left side of the channel are not connected with each other. So you can see them as 4 distinct networks of just one building each.
 Together, we have 5 resource networks on the map (4 small on the left and 1 big on the right).
-Depending on which building you have opened, you will the information about the network that it belongs to. 
+Depending on which building you have opened, you will see the information about the network that it belongs to. 
 
 Take a look at the different buildings.
 The buildings on the right side all show the same information at network. While for the left buildings network and local are always identical.
@@ -44,7 +44,7 @@ To continue, drive onto the next plate.]]
 asc.setLocalizedEventMessage( map, 5, message )
 
 --- ===== Event 12  ======= 
-message = [[Finally you have the four values Avail, Capacity, Plus and Usage.
+message = [[Finally you have the four values: Avail, Capacity, Plus and Usage.
 
 Avail is the amount of resources that you have available right now.
 
@@ -52,7 +52,7 @@ Capacity is the total storage capacity that you have, of which a part is used to
 
 Plus is the income that you have every turn
 
-And Usage is the amount of resources that are consumed by automatic processes, like power plants. The resources that you use for constructing units or buildings are not recorded here.
+Usage is the amount of resources that are consumed by automatic processes, like power plants. The resources that you use for constructing units or buildings are not recorded here.
 
 
 Take a look at the different buildings again - or head straight to the next floor plate.
@@ -60,7 +60,7 @@ Take a look at the different buildings again - or head straight to the next floo
 asc.setLocalizedEventMessage( map, 12, message )
 
 --- ===== Event 13  ======= 
-message = [[Now its time to end the turn. We need resources. And only at end of a turn do the buildings produce some. 
+message = [[Now its time to end the turn. We need resources. And only at the end of a turn do the buildings produce some. 
 
 So you can take a look at the resources currently available (it's 0), then end your turn and after that look again at the available resources. Some will have been produced.
 ]]
@@ -102,7 +102,7 @@ Please end your turn again.]]
 asc.setLocalizedEventMessage( map, 115, message )
 
 --- ===== Event 135  ======= 
-message = [[Now the oil tower has also been connected, so that from next turn it, all resources will be available in the left network.
+message = [[Now the oil tower has also been connected, so that from next turn on, all resources will be available in the left network.
 
 This allows the depot to refuel units and repair them.
 
@@ -116,7 +116,7 @@ If you now compare the 'global' and 'network' columns of the resource info scree
 
 By comparing 'network' and global, you can quickly find out if you have any buildings that are not connected to your network.
 
-In this map you can see the pipelines quite clearly. This will not always be the case, since vegetation, roads and other stuff may obstruct the view to the pipelines. To still analyze your network, you can highlight all pipelines by selecting "View -> show pipeline net" from the menu or just press the key '9'
+In this map you can see the pipelines quite clearly. This will not always be the case, since vegetation, roads and other stuff may obstruct the view to the pipelines. To further still analyze your network, you can highlight all pipelines by selecting "View -> show pipeline net" from the menu or just press the key '9'
 
 Please end your turn yet another time. ]]
 asc.setLocalizedEventMessage( map, 159, message )

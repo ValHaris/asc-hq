@@ -1,8 +1,8 @@
 map = asc.getLoadingMap() 
 --- ===== Event 1  ======= 
-message = [[In ASC you can find two different ways to create build turrets. You can build turrets right at their final destination, or build them in a factory and then transport them to their deployment site.
+message = [[In ASC you can find two different ways to build turrets. You can build turrets right at their final destination, or build them in a factory and then transport them to their deployment site.
 
-For this task we have two units that manage both on-site construction as well as transport and deployment. These are the Vesuvius and the MBV, with the MBV being the one responsible for the more advanced and expensive turrets.
+For this task we have two units that manage both on-site construction, as well as transport and deployment. These are the Vesuvius and the MBV, with the MBV being the one responsible for the more advanced and expensive turrets.
 
 More information will be presented when entering the floor plates, ideally from left to right.
 
