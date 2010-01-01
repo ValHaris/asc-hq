@@ -101,7 +101,7 @@ class PropertyContainer {
         #ifdef ParserLoadImages
          void addImage ( const ASCString& name, Surface& property, ASCString& fileName, bool applyFieldMask );
          // void addImageArray ( const ASCString& name, vector<void*> &property, const ASCString& fileName );
-         void addImageArray ( const ASCString& name, vector<Surface> &property, const ASCString& fileName );
+         void addImageArray ( const ASCString& name, vector<Surface> &property, ASCString& fileName );
         #endif
          void addBool  ( const ASCString& name, bool &property );
          void addBool  ( const ASCString& name, bool &property, bool defaultValue  );

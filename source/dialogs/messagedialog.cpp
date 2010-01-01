@@ -159,6 +159,12 @@ void MessageDialog::Init(const std::string& windowtext, int textalign, const std
    LoadThemeStyle(style);
 }
 
+void MessageDialog::SetText( const std::string& text ) 
+{
+   if ( my_textbox && my_textbox->GetText() != text )
+      my_textbox->SetText( text );
+}
+
 void MessageDialog::LoadThemeStyle(const std::string& widgettype) {
    PG_Window::LoadThemeStyle(widgettype);
 

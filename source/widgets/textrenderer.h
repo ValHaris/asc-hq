@@ -92,6 +92,7 @@ class TextRenderer : public PG_ScrollWidget {
       TextRenderer (PG_Widget *parent, const PG_Rect &r, const std::string& text, const std::string &style="ScrollWidget");
       TextRenderer (PG_Widget *parent, const PG_Rect &r=PG_Rect::null );
       void SetText( const std::string& text );
+      virtual const PG_String& GetText();
 
       void saveText( bool stripFormatting );
       

@@ -615,6 +615,12 @@ PG_StatusWindowData::PG_StatusWindowData( const ASCString& msg )
    md->Show();
 };
 
+void PG_StatusWindowData::SetText( const ASCString& text )
+{
+   md->SetText( text );
+}
+
+
 PG_StatusWindowData::~PG_StatusWindowData() 
 {
    delete md;

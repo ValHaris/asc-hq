@@ -167,7 +167,7 @@ TerrainType::Weather::~Weather()
 }
 
 
-const int terrain_version = 4;
+const int terrain_version = 5;
 
 
 void TerrainType::MoveMalus::read( tnstream& stream, int defaultValue, int moveMalusCount )
@@ -255,6 +255,9 @@ void TerrainType::Weather::read ( tnstream& stream, int version )
 
    move_malus.read( stream, minmalq, move_maluscount );
 
+   if ( version >= 5 )
+      originalImageFilename = stream.readString();
+   
 /*
    for ( j=0; j<8 ;j++ )
       if ( pgbt->picture[j] )
@@ -290,6 +293,8 @@ void TerrainType::Weather::write ( tnstream& stream ) const
 
    move_malus.write ( stream );
 
+   stream.writeString( originalImageFilename );
+   
    if ( bi_pict == -1 )
       image.write ( stream );
 }
@@ -498,6 +503,13 @@ void TerrainType::Weather::runTextIO ( PropertyContainer& pc )
       }
       s += weatherAbbrev[w];
       pc.addImage ( "picture", image, s, true );
+      
+      if ( pc.isReading() ) {
+         originalImageFilename = s;
+      } else {
+         pc.addString( "OriginalImageFilename", originalImageFilename );
+      }
+      
       // applyFieldMask( image );
 
       if ( pc.isReading() ) {

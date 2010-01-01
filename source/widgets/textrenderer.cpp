@@ -446,6 +446,11 @@ void TextRenderer::clear()
 }
 
 
+const PG_String&  TextRenderer::GetText()
+{
+   return my_text;
+}
+
 void TextRenderer::SetText( const string& text )
 {
    clear();

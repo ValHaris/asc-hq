@@ -533,7 +533,7 @@ void BuildingType :: runTextIO ( PropertyContainer& pc )
       ASCString fieldNames;
       for ( int a = 0; a < 4; a++ )
          for ( int b = 0; b < 6; b++ )
-            if ( w_picture[0][0][a][b].valid() ) {
+            if ( w_picture[0][0][a][b].valid() || bi_picture[0][0][a][b] > 0 ) {
                fieldNames += LocalCoordinate( a, b).toString();
                fieldNames += " ";
             }

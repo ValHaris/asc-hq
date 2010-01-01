@@ -243,12 +243,12 @@
          typedef PropertyTemplate< vector<Surface> > PTIMGA2;
          class ASCImageArrayProperty : public PTIMGA2 {
                typedef vector<Surface> PropertyType;
-               ASCString fileName;
+               ASCString& fileName;
             protected:
                PropertyType operation_eq ( const TextPropertyGroup::Entry& entry ) const ;
                ASCString toString ( ) const;
             public:
-               ASCImageArrayProperty ( PropertyType &property_, const ASCString& fileName_ ) : PTIMGA2 ( property_ ), fileName ( fileName_ ) {};
+               ASCImageArrayProperty ( PropertyType &property_, ASCString& fileName_ ) : PTIMGA2 ( property_ ), fileName ( fileName_ ) {};
          };
 
 
@@ -522,7 +522,7 @@ bool PropertyContainer::restoreContext( const ASCString& label )
 
 #ifdef ParserLoadImages
 
-void PropertyContainer::addImageArray ( const ASCString& name, vector<Surface> &property, const ASCString& filename )
+void PropertyContainer::addImageArray ( const ASCString& name, vector<Surface> &property, ASCString& filename )
 {
    ASCImageArrayProperty* ip = new ASCImageArrayProperty ( property, filename );
    setup ( ip, name );
@@ -1208,6 +1208,9 @@ ASCImageArrayProperty::PropertyType ASCImageArrayProperty::operation_eq ( const 
          ASCString imgNumS;
          imgNumS.assign( what[2].first, what[2].second );
          int imgNum = atoi ( imgNumS.c_str() );
+         
+         fileName = entry.value;
+         
          return loadASCFieldImageArray ( imgName, imgNum );
       } else 
          propertyContainer->error( name + ": invalid format. Syntax is <ImageName> <ImageNum>" );

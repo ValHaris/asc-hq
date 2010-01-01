@@ -97,6 +97,7 @@
       class  Weather: public LoadableItemType {
           //! the color information for the small map
           OverviewMapImage* quickView;
+          ASCString originalImageFilename;
         public:
           //! the image of the field
           Surface        image;

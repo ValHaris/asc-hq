@@ -39,6 +39,7 @@
           public:
              UserData() : counter(1) {};
              virtual ~UserData() {};
+             virtual void SetText( const ASCString& text ) {};
        
        };
     private:   
@@ -52,6 +53,7 @@
        StatusMessageWindowHolder( const StatusMessageWindowHolder& smw );
        StatusMessageWindowHolder& operator=( const StatusMessageWindowHolder& smw );    
        void close();
+       void SetText( const ASCString& text );
        virtual ~StatusMessageWindowHolder();
  };
 

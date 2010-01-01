@@ -842,7 +842,7 @@ int ObjectType :: getMemoryFootprint() const
 
 
 
-const int object_version = 21;
+const int object_version = 22;
 
 void ObjectType :: read ( tnstream& stream )
 {
@@ -969,6 +969,8 @@ void ObjectType :: read ( tnstream& stream )
                      weatherPicture[ww].flip[n] = 0;
                }
             }
+            if ( version >= 22 )
+               weatherPicture[ww].originalFilename = stream.readString();
          }
 
       if ( version >= 16 )
@@ -1068,6 +1070,7 @@ void ObjectType :: write ( tnstream& stream ) const
              }
              stream.writeInt ( weatherPicture[ww].flip.at(l) );
           }
+          stream.writeString( weatherPicture[ww].originalFilename );
        }
 
     stream.writeInt( namingMethod );
@@ -1218,30 +1221,38 @@ void ObjectType :: runTextIO ( PropertyContainer& pc )
                s = "object";
                s += strrr(id);
             }
-            pc.addImageArray ( "picture",   weatherPicture[i].images, s + weatherAbbrev[i] );
+            ASCString filename = s + weatherAbbrev[i];
+            pc.addImageArray ( "picture",   weatherPicture[i].images, filename );
+            if ( pc.isReading() )
+               weatherPicture[i].originalFilename = filename;
+            else
+               pc.addString( "OriginalImageFilename", weatherPicture[i].originalFilename );
+            
             weatherPicture[i].bi3pic.resize( weatherPicture[i].images.size() );
             weatherPicture[i].flip.resize( weatherPicture[i].images.size() );
 
-            if ( pc.find ( "FlipPictures" ) ) {
+            if ( pc.find ( "FlipPictures" ) || !pc.isReading() ) {
                vector<int>   imgReferences;
                imgReferences.resize ( weatherPicture[i].images.size() );
 
-               for ( int j = 0; j < weatherPicture[i].images.size(); j++ ) {
-                  weatherPicture[i].bi3pic[j] = -1;
-                  weatherPicture[i].flip[j] = 0;
-                  imgReferences[j] = -1;
-               }
+               if ( pc.isReading() )
+                  for ( int j = 0; j < weatherPicture[i].images.size(); j++ ) {
+                     weatherPicture[i].bi3pic[j] = -1;
+                     weatherPicture[i].flip[j] = 0;
+                     imgReferences[j] = -1;
+                  }
 
                pc.addIntegerArray ( "FlipPictures", weatherPicture[i].flip );
                pc.addIntegerArray ( "ImageReference", imgReferences );
 
-               for ( int j = 0; j < weatherPicture[i].images.size(); j++ )
-                  if ( j < imgReferences.size() && imgReferences[j] >= 0 && imgReferences[j] < weatherPicture[i].images.size() )
-                     weatherPicture[i].images[j] = weatherPicture[i].images[imgReferences[j]];
-
-               while ( weatherPicture[i].flip.size() < weatherPicture[i].images.size() )
-                  weatherPicture[i].flip.push_back(0);
-
+               if ( pc.isReading() ) {
+                  for ( int j = 0; j < weatherPicture[i].images.size(); j++ )
+                     if ( j < imgReferences.size() && imgReferences[j] >= 0 && imgReferences[j] < weatherPicture[i].images.size() )
+                        weatherPicture[i].images[j] = weatherPicture[i].images[imgReferences[j]];
+   
+                  while ( weatherPicture[i].flip.size() < weatherPicture[i].images.size() )
+                     weatherPicture[i].flip.push_back(0);
+               }
             } else {
                for ( int u = 0; u < weatherPicture[i].images.size(); u++ ) {
                   weatherPicture[i].bi3pic[u] = -1;
@@ -1272,7 +1283,7 @@ void ObjectType :: runTextIO ( PropertyContainer& pc )
 
          }
          
-         if ( pc.find ( "DisplayMethod" ) ) {
+         if ( pc.find ( "DisplayMethod" ) || !pc.isReading() ) {
             pc.addNamedInteger( "DisplayMethod", displayMethod, objectDisplayingMethodNum, objectDisplayingMethodTags );
             if ( displayMethod == 2 && pc.isReading() && weatherPicture[i].images[0].GetPixelFormat().BitsPerPixel() != 8 )
                pc.error("Error parsing object " + name + " (ID=" + ASCString::toString(id)+"): invalid image; displaymethod=translation is only a available for 8 Bit images");

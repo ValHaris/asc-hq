@@ -224,6 +224,7 @@ class PG_StatusWindowData : public StatusMessageWindowHolder::UserData {
       MessageDialog* md;
    public:
       PG_StatusWindowData( const ASCString& msg );
+      void SetText( const ASCString& text );
       ~PG_StatusWindowData() ;
 };
 

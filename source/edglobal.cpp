@@ -977,12 +977,14 @@ void execaction_pg(int code)
                                         };
        break;
     case act_dumpAllObjects: {
-                                          StatusMessageWindowHolder smw = MessagingHub::Instance().infoMessageWindow( "dumping all objects" );
+                                          ASCString text = "dumping all objects";
+                                          StatusMessageWindowHolder smw = MessagingHub::Instance().infoMessageWindow( text );
                                           for ( int i = 0; i < objectTypeRepository.getNum(); ++i ) {
                                              ObjectType* bld = objectTypeRepository.getObject_byPos( i );
                                              tn_file_buf_stream stream ( "object" + ASCString::toString( i ) + ".dump", tnstream::writing );
                                              PropertyWritingContainer pc ( "objectDump", stream );
                                              bld->runTextIO( pc );
+                                             smw.SetText( text + ": " + ASCString::toString( i * 100 / objectTypeRepository.getNum() ) + "%" );
                                           }
                                         };
        break;

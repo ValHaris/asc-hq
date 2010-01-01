@@ -150,6 +150,7 @@
         vector<int>   bi3pic;
         vector<int>   flip;
         void resize(int i) { flip.resize(i); bi3pic.resize(i); images.resize(i); };
+        ASCString originalFilename;
      } weatherPicture [cwettertypennum];
 
      //! displays the objecttype at x/y on the screen

@@ -82,6 +82,9 @@ class  MessageDialog : public ASC_PG_Dialog {
 
       void EnableDefaultKeys( bool enable );
 
+      void SetText( const std::string& text ) ;
+      
+      
       bool remberChoice();
 
    protected:

@@ -51,6 +51,12 @@ void StatusMessageWindowHolder::close()
    unlink();
 }   
 
+void StatusMessageWindowHolder::SetText( const ASCString& text )
+{
+   if ( userData )
+      userData->SetText( text );
+}
+
 
 StatusMessageWindowHolder& StatusMessageWindowHolder::operator=( const StatusMessageWindowHolder& smw )
 {
