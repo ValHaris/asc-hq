@@ -1,0 +1,11 @@
+#!/bin/sh
+
+set -e
+
+rm -rf unittest-data
+mkdir unittest-data
+cd unittest-data
+ln -s ../../data/main.ascdat .
+ln -s ../../data/dialog/asc2_dlg.zip .
+cd ..
+../source/unix/asc/unittester -c asc2rc
