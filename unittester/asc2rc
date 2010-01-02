@@ -1,0 +1,73 @@
+config { 
+   XResolution = 1024
+   YResolution = 768
+   GraphicsDriver = default
+   HardwareSurface = false
+   MapEditor_XResolution = 1024
+   MapEditor_YResolution = 740
+   Sound { 
+      MuteEffects = false
+      MuteMusic = false
+      Sound.Off = false
+      EffectsVolume = 100
+      MusicVolume = 100
+   } Sound
+   FastMove = true
+   MovementSpeed = 15
+   ReplayMoveSpeedFactor = 150
+   EndTurnPrompt = false
+   UnitsGrayAfterMove = false
+   MapZoom = 75
+   MapZoomEditor = 60
+   AttackSpeed1 = 30
+   AttackSpeed2 = 50
+   AttackSpeed3 = 30
+   ForceWindowedMode = false
+   MapeditWindowedMode = true
+   MapeditModalSelectionWindow = true
+   AutomaticTraining = true
+   Mouse { 
+      SelectFieldButton = left
+      MapCenterButton = center
+      DragNdrop = right
+      ZoomOut = 4
+      ZoomIn = 5
+      SingleClickAction = false
+      HideOnScreenUpdates = true
+   } Mouse
+   AmmoProductionOnRefuelling = false
+   DefaultPassword = 
+   DefaultSupervisorPassword = 
+   ReplayDelay = 0
+   StartupMap = asc001.map
+   DebugReplay = false
+   RecordCampaignMaps = false
+   BI3.path = 
+   UnitProduction { 
+      fillResources = true
+      fillAmmo = true
+   } UnitProduction
+   replayVideo { 
+      FrameRate = 15
+      Quality = 100
+   } replayVideo
+   VisibleMapLayer = 
+   PBEMServer { 
+      hostname = terdon.asc-hq.org
+      username = 
+      port = 8080
+   } PBEMServer
+   SearchPathNum = 2
+   SearchPath0 = unittest-data
+   SearchPath1 = ../data/unittests/
+   cacheASCGUI = true
+   Panels = 
+   DialogMemory { 
+      dialogs = 
+   } DialogMemory
+   PanelColumns = 2
+   mailProgram = 
+   AircraftCrashWarnTime = 1
+   SaveEventMessagesExternal = false
+   LanguageOverride = 
+} config
