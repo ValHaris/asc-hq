@@ -344,12 +344,23 @@ CPPFLAGS=$OLDCPPFLAGS
 
 
 AC_CHECK_LIB( boost_regex-mt, main, BOOST_LIBS="-lboost_regex-mt", BOOSTERR=yes)
-
 if test x$BOOSTERR = xyes ; then
-  AC_CHECK_LIB( boost_regex-gcc-mt, 
-                main, 
-                BOOST_LIBS="-lboost_regex-gcc-mt", 
-                AC_LIB_MISSING( Boost, http://www.boost.org/, [( which may be splitted into several distinct libraries)]))
+
+  BOOSTERR=none
+  AC_CHECK_LIB( boost_regex-gcc-mt, main, BOOST_LIBS="-lboost_regex-gcc-mt", BOOSTERR=yes)
+  if test x$BOOSTERR = xyes ; then
+
+    BOOSTERR=none
+    AC_CHECK_LIB( boost_regex, main, BOOST_LIBS="-lboost_regex", BOOSTERR=yes)
+    if test x$BOOSTERR = xyes ; then
+
+      BOOSTERR=none
+      AC_CHECK_LIB( boost_regex-gcc, main, BOOST_LIBS="-lboost_regex-gcc", BOOSTERR=yes)
+      if test x$BOOSTERR = xyes ; then
+         AC_LIB_MISSING( Boost, http://www.boost.org/, [( which may be splitted into several distinct libraries)])
+      fi
+    fi
+  fi
 fi
 
 
