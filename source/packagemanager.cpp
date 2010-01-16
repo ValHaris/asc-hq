@@ -67,8 +67,6 @@ void PackageManager::processContainer( const ContainerBase* container, std::set<
    for ( ContainerBase::Production::const_iterator i = container->getProduction().begin(); i != container->getProduction().end(); ++i )
       if ( *i ) {
          archives.insert( (*i)->archive );
-         if ( (*i)->id ==22301 )
-            printf("Hello World");
       }
 }
 

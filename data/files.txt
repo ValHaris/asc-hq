@@ -38,7 +38,8 @@ buildings/legacy/*.asctxt
 buildings/legacy/*.png
 buildings/legacy/*.pcx
 buildings/parents/*.asctxt
-icons/cargodialog/*.ascgui
+icons/cargodialog/var1/*.ascgui
+icons/cargodialog/var1/*.png
 icons/*.png
 icons/*.ascgui
 sounds/*.wav

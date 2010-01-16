@@ -70,7 +70,7 @@ void ClipBoardBase::setProperties( const ContainerBase* unit )
    ASCIIEncodingStream outerStream;
    {
       StreamCompressionFilter stream( &outerStream );
-      buf.writetostream( &stream );
+      write( stream );
    }
    properties["data"] = outerStream.getResult();
 }
@@ -209,6 +209,6 @@ void ClipBoardBase::readProperties( PropertyContainer& pc )
    ASCIIDecodingStream outerStream ( data );
    StreamDecompressionFilter stream( &outerStream );
 
-   buf.readfromstream( &stream );
+   read( stream );
 }
 
