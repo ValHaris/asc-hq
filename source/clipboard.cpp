@@ -55,6 +55,8 @@ void ClipBoardBase::clear()
 
 static int clipboardVersion = 1;
 
+static const int clipboardToken = 0x574f0769;
+
 void ClipBoardBase::setProperties( const ContainerBase* unit )
 {
    properties["strength"] = ASCString::toString( StatisticsCalculator::strength( unit, true ) );
@@ -70,6 +72,7 @@ void ClipBoardBase::setProperties( const ContainerBase* unit )
    ASCIIEncodingStream outerStream;
    {
       StreamCompressionFilter stream( &outerStream );
+	  stream.writeInt( clipboardToken );
       write( stream );
    }
    properties["data"] = outerStream.getResult();
@@ -208,6 +211,10 @@ void ClipBoardBase::readProperties( PropertyContainer& pc )
 
    ASCIIDecodingStream outerStream ( data );
    StreamDecompressionFilter stream( &outerStream );
+
+   int token = stream.readInt();
+   if ( token != clipboardToken )
+	   throw ASCmsgException("Invalid clipboard file");
 
    read( stream );
 }
