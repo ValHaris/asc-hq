@@ -307,6 +307,8 @@ class EditGameOptions : public ASC_PG_Dialog {
             new PG_PropertyField_String<ASCString>( propertyEditor, "PBEM server hostname", &o->pbemServer.hostname );
             new PG_PropertyField_String<ASCString>( propertyEditor, "PBEM server username", &o->pbemServer.username );
             new PG_PropertyField_Integer<int>( propertyEditor, "PBEM server port", &o->pbemServer.port);
+            
+            new PG_PropertyField_Checkbox<bool>( propertyEditor, "Log kills to console", &o->logKillsToConsole );
          }
          
          (new PG_PropertyField_String<ASCString>( propertyEditor , "Language Override", &o->languageOverride ));

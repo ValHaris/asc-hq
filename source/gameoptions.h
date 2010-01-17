@@ -255,6 +255,8 @@ class CGameOptions
       //! will save all Immediate Game Event messages into a seperate file for doing translations
       bool saveEventMessagesExternal;
       
+      bool logKillsToConsole;
+      
    private:
       bool _changed;
 };

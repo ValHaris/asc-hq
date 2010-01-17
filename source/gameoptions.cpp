@@ -247,6 +247,8 @@ void CGameOptions::runTextIO ( PropertyContainer& pc )
    
    pc.addBool("SaveEventMessagesExternal", saveEventMessagesExternal, false );
    pc.addString("LanguageOverride", languageOverride, "" );
+   
+   pc.addBool("LogKillsToConsole", logKillsToConsole, false );
 }
 
 CGameOptions::CGameOptions()
@@ -343,6 +345,8 @@ void CGameOptions::setDefaults ( void )
    
    replayMoveSpeedFactor= 150;
    
+   logKillsToConsole = false;
+   
    setChanged();
 }
 
@@ -376,66 +380,6 @@ ASCString CGameOptions::Mouse::getButtonName(int button)
       return ASCString::toString( button );
 }
 
-
-/*
-void CGameOptions::copy ( const CGameOptions& cgo )
-{
-   fastmove              = cgo.fastmove;
-   movespeed             = cgo.movespeed;
-   endturnquestion       = cgo.endturnquestion;
-   smallmapactive        = cgo.smallmapactive;
-   units_gray_after_move = cgo.units_gray_after_move;
-   mapzoom               = cgo.mapzoom;
-   mapzoomeditor         = cgo.mapzoomeditor;
-   startupcount          = cgo.startupcount;
-   debugReplay           = cgo.debugReplay;
-   // dontMarkFieldsNotAccessible_movement=cgo.dontMarkFieldsNotAccessible_movement;
-   attackspeed1          = cgo.attackspeed1;
-   attackspeed2          = cgo.attackspeed2;
-   attackspeed3          = cgo.attackspeed3;
-   sound.off             = cgo.sound.off;
-   sound.muteEffects     = cgo.sound.muteEffects;
-   sound.muteMusic       = cgo.sound.muteMusic;
-   sound.soundVolume     = cgo.sound.soundVolume;
-   sound.musicVolume     = cgo.sound.musicVolume;
-
-   mouse.scrollbutton    = cgo.mouse.scrollbutton;
-   mouse.fieldmarkbutton = cgo.mouse.fieldmarkbutton;
-   mouse.smallguibutton  = cgo.mouse.smallguibutton;
-   mouse.largeguibutton  = cgo.mouse.largeguibutton;
-   mouse.smalliconundermouse = cgo.mouse.smalliconundermouse;
-   mouse.centerbutton    = cgo.mouse.centerbutton;
-   mouse.unitweaponinfo  = cgo.mouse.unitweaponinfo;
-   mouse.dragndropmovement=cgo.mouse.dragndropmovement;
-   mouse.singleClickAction=cgo.mouse.singleClickAction;
-
-   container.autoproduceammunition = cgo.container.autoproduceammunition;
-   container.filleverything = cgo.container.filleverything;
-
-   onlinehelptime            = cgo.onlinehelptime;
-   smallguiiconopenaftermove = cgo.smallguiiconopenaftermove;
-   defaultPassword           = cgo.defaultPassword;
-   defaultSuperVisorPassword = cgo.defaultSuperVisorPassword;
-
-   replayspeed               = cgo.replayspeed;
-   showUnitOwner             = cgo.showUnitOwner;
-
-   xresolution               = cgo.xresolution;
-   yresolution               = cgo.yresolution;
-   automaticTraining         = cgo.automaticTraining;
-
-   bi3.dir.setName( cgo.bi3.dir.getName() );
-   bi3.interpolate.terrain = cgo.bi3.interpolate.terrain;
-   bi3.interpolate.units   = cgo.bi3.interpolate.units;
-   bi3.interpolate.objects = cgo.bi3.interpolate.objects;
-   bi3.interpolate.buildings = cgo.bi3.interpolate.buildings;
-   for ( int i = 0; i < getSearchPathNum(); i++ )
-      searchPath[i].setName ( cgo.searchPath[i].getName() );
-
-   startupMap = cgo.startupMap;
-   setChanged();
-}
-*/
 
 int CGameOptions :: getSearchPathNum ( void )
 {

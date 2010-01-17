@@ -28,97 +28,97 @@
 
 
 class VehicleCounterFactory: public SelectionItemFactory, public SigC::Object  {
-   public:
-      typedef vector<const VehicleType*> Container;
-   protected:
-      Container::iterator it;
-      Container items;
-      
-      typedef map<const VehicleType*,int> Counter;
-      Counter counter;
-      GameMap* gamemap;
+public:
+    typedef vector<const VehicleType*> Container;
+protected:
+    Container::iterator it;
+    Container items;
 
-      void calcCargoSummary( const ContainerBase* cb, Counter& summary )
-      {
-         for ( ContainerBase::Cargo::const_iterator i = cb->getCargo().begin(); i != cb->getCargo().end(); ++i )
+    typedef map<const VehicleType*,int> Counter;
+    Counter counter;
+    GameMap* gamemap;
+
+    void calcCargoSummary( const ContainerBase* cb, Counter& summary )
+    {
+        for ( ContainerBase::Cargo::const_iterator i = cb->getCargo().begin(); i != cb->getCargo().end(); ++i )
             if ( *i ) {
-               calcCargoSummary( *i, summary );
-               if ( (*i)->getOwner() == cb->getMap()->actplayer )
-                  summary[ (*i)->typ] += 1;
+                calcCargoSummary( *i, summary );
+                if ( (*i)->getOwner() == cb->getMap()->actplayer )
+                    summary[ (*i)->typ] += 1;
             }
-      }
+    }
 
-      
-   public:
-      VehicleCounterFactory( GameMap* actmap );
-      VehicleCounterFactory( const ContainerBase* container );
-        
-      ASCString toString();
-      
-      void restart();
-      SelectionWidget* spawnNextItem( PG_Widget* parent, const PG_Point& pos );
-      void itemSelected( const SelectionWidget* widget, bool mouse ) {}
+
+public:
+    VehicleCounterFactory( GameMap* actmap );
+    VehicleCounterFactory( const ContainerBase* container );
+
+    ASCString toString();
+
+    void restart();
+    SelectionWidget* spawnNextItem( PG_Widget* parent, const PG_Point& pos );
+    void itemSelected( const SelectionWidget* widget, bool mouse ) {}
 };
 
 VehicleCounterFactory :: VehicleCounterFactory( GameMap* actmap ) : gamemap ( actmap )
 {
-   for ( int y = 0; y < actmap->ysize; ++y )
-      for ( int x = 0; x < actmap->xsize; ++x ) {
-         MapField* fld = actmap->getField(x,y);
-         if ( fld ) {
-            if ( fld->vehicle ) {
-               calcCargoSummary( fld->vehicle, counter );
-               if ( fld->vehicle->getOwner() == actmap->actplayer )
-                  counter[ fld->vehicle->typ] += 1;
+    for ( int y = 0; y < actmap->ysize; ++y )
+        for ( int x = 0; x < actmap->xsize; ++x ) {
+            MapField* fld = actmap->getField(x,y);
+            if ( fld ) {
+                if ( fld->vehicle ) {
+                    calcCargoSummary( fld->vehicle, counter );
+                    if ( fld->vehicle->getOwner() == actmap->actplayer )
+                        counter[ fld->vehicle->typ] += 1;
+                }
+                if ( fld->building && (fld->bdt & getTerrainBitType(cbbuildingentry)).any() )
+                    calcCargoSummary( fld->getContainer(), counter );
             }
-            if ( fld->building && (fld->bdt & getTerrainBitType(cbbuildingentry)).any() )
-               calcCargoSummary( fld->getContainer(), counter );
-          }
-      }
+        }
 
-   for ( Counter::iterator i = counter.begin(); i != counter.end(); ++i )
-      items.push_back( i->first );
-      
-   sort( items.begin(), items.end(), vehicleComp );
-   restart();
+    for ( Counter::iterator i = counter.begin(); i != counter.end(); ++i )
+        items.push_back( i->first );
+
+    sort( items.begin(), items.end(), vehicleComp );
+    restart();
 };
 
 
 VehicleCounterFactory::VehicleCounterFactory( const ContainerBase* container ) : gamemap( container->getMap() )
 {
-   calcCargoSummary( container, counter );
-   for ( Counter::iterator i = counter.begin(); i != counter.end(); ++i )
-      items.push_back( i->first );
-      
-   sort( items.begin(), items.end(), vehicleComp );
-   restart();
+    calcCargoSummary( container, counter );
+    for ( Counter::iterator i = counter.begin(); i != counter.end(); ++i )
+        items.push_back( i->first );
+
+    sort( items.begin(), items.end(), vehicleComp );
+    restart();
 }
 
 
 
 void VehicleCounterFactory::restart()
 {
-   it = items.begin();
+    it = items.begin();
 };
 
 
 SelectionWidget* VehicleCounterFactory::spawnNextItem( PG_Widget* parent, const PG_Point& pos )
 {
-   if ( it != items.end() ) {
-      const VehicleType* v = *(it++);
-      return new VehicleTypeCountWidget( parent, pos, parent->Width() - 15, v, gamemap->getCurrentPlayer(), counter[v] );
-   } else
-      return NULL;
+    if ( it != items.end() ) {
+        const VehicleType* v = *(it++);
+        return new VehicleTypeCountWidget( parent, pos, parent->Width() - 15, v, gamemap->getCurrentPlayer(), counter[v] );
+    } else
+        return NULL;
 };
 
-ASCString VehicleCounterFactory::toString() 
+ASCString VehicleCounterFactory::toString()
 {
-   ASCString t;
-   for ( Counter::const_iterator i = counter.begin(); i != counter.end(); ++i ) {
-      const VehicleType* v = i->first;
-      t += v->getName() + "\t" + ASCString::toString(i->second) + "\n";
-   }
-   return t;
+    ASCString t;
+    for ( Counter::const_iterator i = counter.begin(); i != counter.end(); ++i ) {
+        const VehicleType* v = i->first;
+        t += v->getName() + "\t" + ASCString::toString(i->second) + "\n";
+    }
+    return t;
 }
 
 
@@ -135,74 +135,86 @@ void VehicleCounterFactory::itemSelected( const SelectionWidget* widget, bool mo
 
 #include "fieldmarker.h"
 
-void showAllUnitPositions( const VehicleType* vt, GameMap* gamemap ) 
+struct CursorDistSorter : public binary_function<const MapCoordinate&, const MapCoordinate&, bool> {
+    CursorDistSorter( const MapCoordinate& cursorPos) : cursor( cursorPos ) {};
+    bool operator()(const MapCoordinate& x, const MapCoordinate& y) {
+        return beeline(x,cursor) < beeline(y,cursor);
+    }
+private:
+    MapCoordinate cursor;
+};
+
+
+void showAllUnitPositions( const VehicleType* vt, GameMap* gamemap )
 {
-   Player& player = gamemap->getPlayer( gamemap->actplayer );
-   
-   SelectFromMap::CoordinateList coordinates;
-   
-   for ( Player::VehicleList::iterator i = player.vehicleList.begin(); i != player.vehicleList.end(); ++i ) {
-      if ( (*i)->typ == vt )
-         if ( find ( coordinates.begin(), coordinates.end(),(*i)->getPosition() ) == coordinates.end() ) 
-            coordinates.push_back ( (*i)->getPosition() );
-   }
-   
-   SelectFromMap sfm( coordinates, gamemap, false, true );
-   sfm.Show();
-   sfm.RunModal();
+    Player& player = gamemap->getPlayer( gamemap->actplayer );
+
+    SelectFromMap::CoordinateList coordinates;
+
+    for ( Player::VehicleList::iterator i = player.vehicleList.begin(); i != player.vehicleList.end(); ++i ) {
+        if ( (*i)->typ == vt )
+            if ( find ( coordinates.begin(), coordinates.end(),(*i)->getPosition() ) == coordinates.end() )
+                coordinates.push_back ( (*i)->getPosition() );
+    }
+
+    sort( coordinates.begin(), coordinates.end(), CursorDistSorter( gamemap->getCursor()) );
+
+    SelectFromMap sfm( coordinates, gamemap, false, true );
+    sfm.Show();
+    sfm.RunModal();
 }
 
 class UnitSummaryWindow : public ItemSelectorWindow {
-   private:
-      GameMap* gamemap;
-      VehicleCounterFactory* factory;
-      
-      virtual void itemSelected( const SelectionWidget* sw) {
-         const VehicleTypeCountWidget* vtcw = dynamic_cast<const VehicleTypeCountWidget*>(sw);
-         assert( vtcw );
-         
-         if ( gamemap ) {
+private:
+    GameMap* gamemap;
+    VehicleCounterFactory* factory;
+
+    virtual void itemSelected( const SelectionWidget* sw) {
+        const VehicleTypeCountWidget* vtcw = dynamic_cast<const VehicleTypeCountWidget*>(sw);
+        assert( vtcw );
+
+        if ( gamemap ) {
             Hide();
             showAllUnitPositions( vtcw->getVehicletype(), gamemap );
             Show();
-         }
-      };
+        }
+    };
 
 
-      void saveText()
-      {
-         ASCString name = selectFile( "*.txt", false );
-         if ( !name.empty() ) {
+    void saveText()
+    {
+        ASCString name = selectFile( "*.txt", false );
+        if ( !name.empty() ) {
             tn_file_buf_stream s( name, tnstream::writing );
             s.writeString( factory->toString(), true );
-         }
-      }
+        }
+    }
 
-      bool eventKeyDown(const SDL_KeyboardEvent* key) {
-         int mod = SDL_GetModState() & ~(KMOD_NUM | KMOD_CAPS | KMOD_MODE);
-         if ( mod & KMOD_CTRL ) 
+    bool eventKeyDown(const SDL_KeyboardEvent* key) {
+        int mod = SDL_GetModState() & ~(KMOD_NUM | KMOD_CAPS | KMOD_MODE);
+        if ( mod & KMOD_CTRL )
             if ( key->keysym.sym == SDLK_s )
-               saveText();
+                saveText();
 
-         return ItemSelectorWindow::eventKeyDown( key );
-      }
+        return ItemSelectorWindow::eventKeyDown( key );
+    }
 
-   public:
-      UnitSummaryWindow ( PG_Widget *parent, const PG_Rect &r , const ASCString& title, VehicleCounterFactory* itemFactory, GameMap* actmap ) : ItemSelectorWindow( parent, r, title, itemFactory ), gamemap( actmap ), factory( itemFactory ) {};
-};      
-      
+public:
+    UnitSummaryWindow ( PG_Widget *parent, const PG_Rect &r , const ASCString& title, VehicleCounterFactory* itemFactory, GameMap* actmap ) : ItemSelectorWindow( parent, r, title, itemFactory ), gamemap( actmap ), factory( itemFactory ) {};
+};
+
 
 void showUnitCargoSummary( ContainerBase* cb )
 {
-   UnitSummaryWindow isw( NULL, PG_Rect( -1, -1, 500, 700 ),  "cargo summary", new VehicleCounterFactory( cb ), NULL );
-   isw.Show();
-   isw.RunModal();
+    UnitSummaryWindow isw( NULL, PG_Rect( -1, -1, 500, 700 ),  "cargo summary", new VehicleCounterFactory( cb ), NULL );
+    isw.Show();
+    isw.RunModal();
 }
 
 
 void showUnitSummary( GameMap* actmap )
 {
-   UnitSummaryWindow isw( NULL, PG_Rect( -1, -1, 500, 700 ),  "unit summary", new VehicleCounterFactory( actmap ), actmap );
-   isw.Show();
-   isw.RunModal();
+    UnitSummaryWindow isw( NULL, PG_Rect( -1, -1, 500, 700 ),  "unit summary", new VehicleCounterFactory( actmap ), actmap );
+    isw.Show();
+    isw.RunModal();
 }

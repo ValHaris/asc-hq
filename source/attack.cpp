@@ -27,12 +27,14 @@
 
 #include <stdio.h>
 #include <math.h>
+#include <iostream>
 
 #include "typen.h"
 #include "buildingtype.h"
 #include "vehicletype.h"
 #include "attack.h"
 #include "spfst.h"
+#include "gameoptions.h"
 
 #include "actions/changeunitproperty.h"
 #include "actions/consumeammo.h"
@@ -405,6 +407,13 @@ void tunitattacksunit :: setresult ( void )
    gamemap->time.set ( gamemap->time.turn(), gamemap->time.move()+1);
 }
 
+void log( const Vehicle* attacker, const Vehicle* attackee )
+{
+   if( CGameOptions::Instance()->logKillsToConsole ) 
+      std::cout << attackee->getOwner() << ";" << attacker->getOwner() << ";" << attackee->typ->id  << ";"
+            << attackee->typ->name  << ";" << attackee->experience << ";" << attacker->getMap()->time.turn() <<  "\n" ;
+}
+
 void tunitattacksunit :: setresult( const Context& context )
 {
    int nwid = _attackingunit->networkid;
@@ -431,11 +440,16 @@ void tunitattacksunit :: setresult( const Context& context )
    
    GameAction* f = new InflictDamage( _attackingunit, av.damage - _attackingunit->damage );
    f->execute ( context );
+   
+   if( av.damage >= 100 )
+      log ( _attackedunit, _attackingunit );
 
    GameAction* g = new InflictDamage( _attackedunit, dv.damage - _attackedunit->damage  );
    g->execute ( context );
    
-   
+   if( dv.damage >= 100 )
+      log ( _attackingunit, _attackedunit );
+
    /* If the attacking vehicle was destroyed, remove it */
    if ( av.damage >= 100 ) {
      *_pattackingunit = NULL;
