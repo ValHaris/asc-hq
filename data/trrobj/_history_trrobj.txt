@@ -3,6 +3,14 @@ Advanced Strategic Command
 Specifications by GAMER
 Grafics by GAMER, Snuggels, ValHaris, Xyphagoroszh, Havanna Club, Uranius und Grom
 ________________________
+Beta-10-01
+-Hafenbeton und Kai baubar ab Tech5 (ISG Builder)
+-Rohstoffe automatisch anbaubar
+--Raps ab Tech2
+--Pilze+Wald ab Tech 3
+--Kristalle ab Tech 4
+--Tiefseekristalle ab Tech 5
+
 Beta-09-19
 -Tiefseepipeline wird nicht mehr vom DeepCore abgebaut
 -Laserzaun von den SY integriert, neue Grafik

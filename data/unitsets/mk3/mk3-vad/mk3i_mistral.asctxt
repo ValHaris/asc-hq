@@ -8,6 +8,45 @@ VehicleType {
    Picture = mk3i_mistral.png
    InfoImage = mk3i_mistral.jpg
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+   InfoText = [Bei der Mistral handelt es sich um eine mobile Infanterie-Flugabwehreinheit,
+die den terranischen Bodentruppen Schutz vor tieffliegenden feindlichen
+Luftstreitkräften bietet. Die Bewaffnung besteht aus einer
+Abschussvorrichtung für kleine Feststoffraketen sowie einem Maschinengewehr zur
+Selbstverteidigung.
+
+Die verschossenen Raketen gehören zur Kategorie "Fire-and-forget". Dies
+bedeutet, dass der Schütze nach erfolreicher Zielerfassung und Betätigung des
+Abzuges dem Ziel keine weitere Aufmerksamkeit mehr schenken muss.
+Ein Infrarotsuchkopf steuert die Rakete in Richtung der größten
+Wärmequelle und somit normalerweise zu den Triebwerken des Zieles.
+Bei ausreichend kleiner Distanz verwandelt ein Annäherungszünder den
+Raketensprengkopf in eine ausgedehnte Splitterwolke, die dann den Kurs
+des Zieles mit mehrfacher Schallgeschwindigkeit kreuzt. Durch die hohe
+kinetische Energie durchschlagen die auftreffenden Splitter in der Regel
+auch starke Panzerungen und Schutzschilde.
+
+Verständlicherweise können von einer tragbaren Waffe aufgrund der
+beschränkten Größe des Sprengkopfes keine Wunder erwartet werden. Es
+sind in der Regel mehrere Treffer erforderlich, um eine gegnerische Einheit
+endgültig vom Himmel zu holen. In der Hand von trainierten Schützen steigt der
+pro Treffer angerichtete Schaden allerdings schnell an, da diese durch
+geschickte Wahl des Abschusszeitpunktes die Flugzeit der Rakete derart
+mimimieren, dass dem angegriffenen Ziel kaum Zeit zur Ergreifung von
+Abwehrmaßnahmen (wie dem Abwerfen von Täuschkörpern) bleibt.
+
+Der recht geringe Anschaffungspreis in Verbindung mit einen geringen Gewicht
+sorgt dafür, dass dieser Einheitentyp sehr verbreitet zum Einsatz kommt.
+In den meisten Transportern findet sich nach dem Einladen der
+Hauptkampftruppen noch Platz für eine oder sogar mehrere Mistral-Einheiten.
+Diese sichern dann z.B. bei einer Luftlandeoperation einen Brückenkopf solange,
+bis kampfstärkere Luftabwehreinheiten zur Stelle sind.
+
+Nachteilig ist allerdings auch die geringe Reichweite der Mistral-Raketen,
+die deren Wirkung auf die Bekämpfung von Zielen in niedriger und mittlerer
+Höhe beschränkt. Hochfliegende Lufteinheiten sind vor der Mistral sicher,
+so dass sich diese nicht zum dauerhaften Schutz wichtiger Einrichtungen z.B.
+vor Höhenbombern eignet! Hierzu ist der Einsatz von Luftabwehreinheiten
+grösserer Reichweite und Einsatzhöhe dringend zu empfehlen.]
 
    Armor -= 10
 

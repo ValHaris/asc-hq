@@ -3,6 +3,10 @@ Spezifikationen: GAMER
 
 BUILDINGS HISTORY
 ______________________
+Beta-10-01
+-MK4 U-BootWerft und Hafen Überarbeitet
+-Grafik Bohrturm, Spaceport_Nord überarbeitet
+______________________
 08.11.2009 z78 (GAMER)
 Beta-09-15 z77.2
 -Neuberechnung Kosten radar/Störgebäude

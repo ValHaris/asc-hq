@@ -1,0 +1,23 @@
+BuildingType {
+   Name = Werft
+   ID = 50
+   parent = 16
+
+   ConstructionStages = 1
+;   Weather = dry much_snow snow_and_ice
+;   Weather = dry 
+   Fields = A1 A2 A3 B1 B3 
+   UseGFXpics = false
+   pictures { 
+      dry = bld_mk4_port.png
+   } pictures
+   RubbleObjects = false
+;   rubble {
+;      A1 = 76
+;      A2 = 77
+;      A3 = 78
+;      B1 = 76
+;      B3 = 77
+;   } rubble
+   Entry = A2
+} BuildingType

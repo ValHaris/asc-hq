@@ -31,6 +31,8 @@ campaign/tutorial/*.*_*
 buildings/*.txt
 buildings/*.asctxt
 buildings/*.version
+buildings/mk4/*.asctxt
+buildings/mk4/*.png
 buildings/asc/*.asctxt
 buildings/asc/*.png
 buildings/asc/*.pcx

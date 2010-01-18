@@ -5,6 +5,9 @@ InfoImage: GAMER
 Spezifikationen: GAMER
 
 ______________________
+Beta-10-01
+-InfoText: Mistral
+______________________
 12.12.2009 z79 (GAMER)
 Beta-09-18
 InfoText: Harrier, AMX

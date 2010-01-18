@@ -1,28 +1,37 @@
 BuildingType {
    Name = submarine base
    ID = 61
-   Armor = 1000
+   parent = 499
+
+   Features = Vehicle_Production Ammo_Production Repair_Facility NoObjectChaining
+   ExternalLoading = submerged
+   CategoriesProduceable = default trooper light_ship medium_ship heavy_ship
+   Armor = 2000
    View = 30
    Jamming = 0
-   parent = 499
+   MaxResearch = 0
+   Techlevel = 3
+
    ConstructionStages = 1
    Weather = dry 
    Fields = A1 
-   UseGFXpics = true
-   GFXpictures { 
-      dry { 
-         Stage1 { 
-            A1 = 63
-         } Stage1
-      } dry
-   } GFXpictures
+   UseGFXpics = false
+   pictures { 
+      dry = bld_mk4_subbase.png
+   } pictures
    RubbleObjects = false
    Entry = A1
+   ConstructionCost { 
+      Energy = 0
+      Material = 15000
+      fuel = 15000
+   } ConstructionCost
+
    Transportation { 
       MaxLoadableUnits = 10
-      MaxLoadableUnitSize = 10000
+      MaxLoadableUnitSize = 6500
       MaxLoadableMass = 10000
-      CategoriesNOT = hoovercraft Medium_tracked_vehicle Heavy_tracked_vehicle Medium_wheeled_vehicle Heavy_wheeled_vehicle Light_aircraft Medium_aircraft Heavy_aircraft Helicopter Rail_vehicle
+      CategoriesNOT = hoovercraft Heavy_tracked_vehicle Heavy_wheeled_vehicle Light_aircraft Medium_aircraft Heavy_aircraft Helicopter Rail_vehicle
       EntranceSystemNum = 1
       EntranceSystem0 {
         Mode = In out docking
@@ -34,25 +43,21 @@ BuildingType {
         DockingHeightRel = -100 
       } EntranceSystem0
    } Transportation
-   Functions = Vehicle_Production Ammo_Production Repair_Facility NoObjectChaining
-   Techlevel = 0
+
+   Height = submerged 
    TerrainAccess { 
-      terrain_any = Water 
+      terrain_any = hard_sand shallow_water mountains Water 
       terrain_all = 
       terrain_not = 
       terrain_kill = lava
    } TerrainAccess
-   MaxResearch = 0
-   ConstructionCost { 
-      Energy = 0
-      Material = 15000
-      fuel = 15000
-   } ConstructionCost
+
    MaxResourceProduction { 
       Energy = 0
       Material = 0
       fuel = 0
    } MaxResourceProduction
+
    StorageCapacity { 
       BImode { 
          Energy = 100000
@@ -65,6 +70,4 @@ BuildingType {
          fuel = 2000
       } ASCmode
    } StorageCapacity
-   Height = submerged 
-   ExternalLoading = 
 } BuildingType
