@@ -1339,7 +1339,7 @@ Part VII -malus
 
 
 
-Resources Vehicletype :: calcProductionsCost()
+Resources VehicleType :: calcProductionsCost()
 {
    Resources res;
    // Anfang -> Abschluss

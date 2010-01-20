@@ -525,7 +525,6 @@ const double productionLineConstructionCostFactor = 0.5;
 const double productionLineRemovalCostFactor = 0.2;
 
 
-
 extern const int csolarkraftwerkleistung[];
 
 //! The number of netcontrol actions ; see #cnetcontrol 
