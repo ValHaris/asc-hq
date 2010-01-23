@@ -3,6 +3,7 @@ Advanced Strategic Command
 Specifications by GAMER
 Grafics by GAMER, Snuggels, ValHaris, Xyphagoroszh, Havanna Club, Uranius und Grom
 ________________________
+23.01.2010 z80 (GAMER)
 Beta-10-01
 -Hafenbeton und Kai baubar ab Tech5 (ISG Builder)
 -Rohstoffe automatisch anbaubar

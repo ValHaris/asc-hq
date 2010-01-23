@@ -3,6 +3,11 @@ Grafiken: GAMER, Uranius
 InfoTexte: BananaJoe
 InfoImages: GAMER, Schicksal(3D), BananaJoe(3D)
 Spezifikationen: GAMER
+
+_______________________
+23.01.2010 z80 (GAMER)
+Beta-10-02
+-InfoText: Predator
 _______________________
 12.12.2009 z79 (GAMER)
 Beta-09-18

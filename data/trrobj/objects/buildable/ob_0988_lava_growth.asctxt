@@ -4,6 +4,6 @@ ObjectType {
    ID = 0988
    GroupID = 14
 
-   growthRate = 0.10
+   growthRate = 0.11
 
 } ObjectType

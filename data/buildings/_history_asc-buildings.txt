@@ -3,6 +3,7 @@ Spezifikationen: GAMER
 
 BUILDINGS HISTORY
 ______________________
+23.01.2010 z80 (GAMER)
 Beta-10-01
 -MK4 U-BootWerft und Hafen Überarbeitet
 -Grafik Bohrturm, Spaceport_Nord überarbeitet

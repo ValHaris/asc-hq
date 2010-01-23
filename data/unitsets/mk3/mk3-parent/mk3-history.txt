@@ -5,6 +5,7 @@ InfoImage: GAMER
 Spezifikationen: GAMER
 
 ______________________
+23.01.2010 z80 (GAMER)
 Beta-10-01
 -InfoText: Mistral
 ______________________
