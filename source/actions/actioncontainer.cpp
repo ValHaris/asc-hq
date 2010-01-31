@@ -269,8 +269,10 @@ void ActionContainer::setActive( const Command* action, bool active )
 void ActionContainer::getCommands( AbstractCommandWriter& writer)
 {
    for ( Actions::iterator i = actions.begin(); i != actions.end(); ++i ) {
-      writer.printComment( (*i)->getDescription() );
-      writer.printCommand( (*i)->getCommandString() );
+      if ( isActive_map( *i )) {
+         writer.printComment( (*i)->getDescription() );
+         writer.printCommand( (*i)->getCommandString() );
+      }
    }
 }
 
