@@ -119,11 +119,13 @@ ActionResult TrainUnitCommand::go ( const Context& context )
    
    
    for (int i = 0; i < unit->typ->weapons.count; i++ ) {
-      if ( unit->typ->weapons.weapon[i].shootable() ) {
+      if ( unit->typ->weapons.weapon[i].shootable() && (unit->typ->weapons.weapon[i].count > 0 )) {
          auto_ptr<ConsumeAmmo> consumer ( new ConsumeAmmo( unit, unit->typ->weapons.weapon[i].getScalarWeaponType(), i, 1 ));
          res = consumer->execute( context );
          if ( res.successful() )
             consumer.release();
+         else 
+            break;
       }
    }
    
