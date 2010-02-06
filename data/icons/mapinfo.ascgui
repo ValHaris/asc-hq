@@ -21,7 +21,7 @@ panel {
          x2 = 0
          height = 15
          text = Show Pipelines
-         ToolTipHelp = hotkey: 9
+         ToolTipHelp = shortcut: 9
       } Widget0
       
       Widget1 {
@@ -32,7 +32,7 @@ panel {
          x2 = 0
          height = 15
          text = Show Cargo
-         ToolTipHelp = Ctrl 2
+         ToolTipHelp = shortcut: 5
       } Widget1
 
       Widget2 {
@@ -43,7 +43,7 @@ panel {
          x2 = 0
          height = 15
          text = Mineral Resources
-         ToolTipHelp = 1
+         ToolTipHelp = shortcut: 1
       } Widget2
 
       Widget6 {
@@ -54,7 +54,7 @@ panel {
          x2 = 0
          height = 15
          text = visibility
-         ToolTipHelp = 0
+         ToolTipHelp = shortcut: 0
       } Widget6
 
       Widget7 {
@@ -76,7 +76,7 @@ panel {
          x2 = 0
          height = 15
          text = show weapon range
-         ToolTipHelp = Ctrl 5
+         ToolTipHelp = shortcut: 3
       } Widget3
       
       Widget4 {
@@ -87,7 +87,7 @@ panel {
          x2 = 0
          height = 15
          text = show movement range
-         ToolTipHelp = Ctrl 6
+         ToolTipHelp = shortcut: 4
       } Widget4
    
       Widget5 {
@@ -119,9 +119,5 @@ panel {
        } widget5
    
    } Widget0
-      
-      
-   
 
-  
 } panel

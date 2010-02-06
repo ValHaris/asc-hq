@@ -989,7 +989,7 @@ class RepairUnit : public GuiFunction
          if (!commandPending()) {
             if ( fld && fld->vehicle )
                if (fld->vehicle->getOwner() == actmap->actplayer )
-                  if ( RepairUnitCommand::avail ( fld->vehicle ) )
+                  if ( RepairUnitCommand::availExternally ( fld->vehicle ) )
                      return true;
          } else {
             if ( NewGuiHost::pendingCommand ) {
