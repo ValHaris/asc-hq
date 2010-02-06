@@ -9,7 +9,7 @@ ObjectType {
    TerrainAccess { 
       terrain_any = Lowland Road Railroad Runway Hard_sand Soft_sand ditch installation
       terrain_kill = water deep_water river
-   } TerrainAccess { 
+   } TerrainAccess 
 
    dry { 
       UseGFXpics = false
