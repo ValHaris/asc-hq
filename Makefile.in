@@ -36,10 +36,10 @@ host_triplet = @host@
 subdir = .
 DIST_COMMON = README $(am__configure_deps) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in $(srcdir)/asc.spec.in \
-	$(srcdir)/config.h.in $(srcdir)/getmusic.in \
-	$(top_srcdir)/configure AUTHORS COPYING ChangeLog INSTALL TODO \
-	config.guess config.sub depcomp install-sh ltmain.sh missing \
-	mkinstalldirs ylwrap
+	$(srcdir)/asc.suse.spec.in $(srcdir)/config.h.in \
+	$(srcdir)/getmusic.in $(top_srcdir)/configure AUTHORS COPYING \
+	ChangeLog INSTALL TODO config.guess config.sub depcomp \
+	install-sh ltmain.sh missing mkinstalldirs ylwrap
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/acinclude.m4 \
 	$(top_srcdir)/configure.in
@@ -49,7 +49,7 @@ am__CONFIG_DISTCLEAN_FILES = config.status config.cache config.log \
  configure.lineno config.status.lineno
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
 CONFIG_HEADER = config.h
-CONFIG_CLEAN_FILES = asc.spec getmusic
+CONFIG_CLEAN_FILES = asc.spec asc.suse.spec getmusic
 CONFIG_CLEAN_VPATH_FILES =
 SOURCES =
 DIST_SOURCES =
@@ -279,7 +279,7 @@ top_srcdir = @top_srcdir@
 zipfound = @zipfound@
 MAINTAINERCLEANFILES = Makefile.in
 SUBDIRS = source data doc installer unittester
-EXTRA_DIST = asc.kdevelop AUTHORS COPYING ChangeLog INSTALL README TODO asc.lsm bootstrap
+EXTRA_DIST = asc.kdevelop AUTHORS COPYING ChangeLog INSTALL README TODO asc.lsm bootstrap asc.suse.spec
 AUTOMAKE_OPTIONS = foreign
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-recursive
@@ -337,6 +337,8 @@ $(srcdir)/config.h.in: @MAINTAINER_MODE_TRUE@ $(am__configure_deps)
 distclean-hdr:
 	-rm -f config.h stamp-h1
 asc.spec: $(top_builddir)/config.status $(srcdir)/asc.spec.in
+	cd $(top_builddir) && $(SHELL) ./config.status $@
+asc.suse.spec: $(top_builddir)/config.status $(srcdir)/asc.suse.spec.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@
 getmusic: $(top_builddir)/config.status $(srcdir)/getmusic.in
 	cd $(top_builddir) && $(SHELL) ./config.status $@

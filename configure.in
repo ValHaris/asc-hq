@@ -688,6 +688,7 @@ perl -e 'print "main.d: "; @a=<>; chomp @a; print join(" \\\n\t", map ( $_ = "\$
 
 AC_CONFIG_FILES( [ Makefile \
        asc.spec \
+       asc.suse.spec \
        getmusic \
        doc/Makefile \
        doc/manpages/Makefile \

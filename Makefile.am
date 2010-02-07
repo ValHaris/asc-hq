@@ -1,7 +1,7 @@
 MAINTAINERCLEANFILES	= Makefile.in
 
 SUBDIRS 		= source data doc installer unittester
-EXTRA_DIST 		= asc.kdevelop AUTHORS COPYING ChangeLog INSTALL README TODO asc.lsm bootstrap
+EXTRA_DIST 		= asc.kdevelop AUTHORS COPYING ChangeLog INSTALL README TODO asc.lsm bootstrap asc.suse.spec
 AUTOMAKE_OPTIONS 	= foreign
 
 .PHONY: htmldoc installer tarball pbpinstaller unitguide cvstag SWIG
