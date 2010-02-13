@@ -238,7 +238,7 @@ int Vehicle :: getResource ( int amount, int resourcetype, bool queryonly, int s
       if ( player < 0 )
          player = getMap()->actplayer;
       
-      if ( player != getOwner() && !getMap()->getPlayer(getOwner()).diplomacy.isAllied(player) && !queryonly)
+      if ( player != getOwner() && (!getMap()->getPlayer(getOwner()).diplomacy.getState(player) >= PEACE) && !queryonly)
          return 0;
       
       
