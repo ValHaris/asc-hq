@@ -563,6 +563,9 @@ AI::AiResult AI::tactics( void )
    for ( Player::VehicleList::iterator vi = getPlayer().vehicleList.begin(); vi != getPlayer().vehicleList.end(); vi++ ) {
       Vehicle* veh = *vi;
 
+      if ( !veh->aiparam[ getPlayerNum() ] )
+          calculateThreat( veh );
+      
       bool unitUsable = false;
       if ( veh->aiparam[ getPlayerNum() ]->getJob() == AiParameter::job_fight
         || veh->aiparam[ getPlayerNum() ]->getJob() == AiParameter::job_undefined
