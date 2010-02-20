@@ -2,24 +2,24 @@ TerrainType {
    Name = green ocean
    ID = 2009
    parent = 517
+
    dry { 
       UseGFXpics = false
       Picture = trr_water_green_ocean.png
-;      GFX_Picture = 387
       TerrainProperties = deep_Water 
    } dry
    light_rain ->* TerrainType.dry
    heavy_rain ->* TerrainType.dry
-   few_snow ->* TerrainType.dry
-   much_snow ->* TerrainType.dry 
-;      GFX_Picture = 1700
-;      TerrainProperties = deep_Water pack_ice 
-;   } much_snow
-   snow_and_ice { 
-      UseGFXpics = true
-      GFX_Picture = 1700
-      TerrainProperties = deep_Water pack_ice 
-;      GFX_Picture = 1701
-;      TerrainProperties = deep_Water Track_possible frozen_water 
+   few_snow { 
+      UseGFXpics = false
+      Picture = trr_water_green_ocean.png gfx_winterwater_fs.png
+   } few_snow
+   much_snow { 
+      UseGFXpics = false
+      Picture = trr_water_green_ocean.png gfx_winterwater_ms.png
+   } much_snow
+   snow_and_ice {
+     UseGFXpics = false
+      Picture = trr_water_green_ocean.png gfx_packice_blue_w.png
    } snow_and_ice
 } TerrainType

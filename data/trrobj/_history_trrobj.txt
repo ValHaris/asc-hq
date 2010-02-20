@@ -2,6 +2,13 @@ ASC terrain System
 Advanced Strategic Command
 Specifications by GAMER
 Grafics by GAMER, Snuggels, ValHaris, Xyphagoroszh, Havanna Club, Uranius und Grom
+
+________________________
+Beta-10-02
+Grauer und Brauner Beton überarbeitet.
+Betonfeld mit Inst (Terrain) in Turret Foundation umgewandelt.
+Wasserfelder überarbeitet, mit neuen Wettergrafiken versehen.
+Graben mit Sperre (MK5), Baubarkeit korrigiert
 ________________________
 23.01.2010 z80 (GAMER)
 Beta-10-01

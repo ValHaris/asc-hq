@@ -5,6 +5,12 @@ InfoImages: GAMER, Schicksal(3D), BananaJoe(3D)
 Spezifikationen: GAMER
 
 _______________________
+Beta-10-02
+BASIS:Turrets werden in Swamp, vsw zerstört
+BASIS:Turrets keine Behinderung durch Schienen
+BASIS:Turrets verbot auf Morass, Hillside, Installation
+BASIS: fahrende Bunker 50 Fuelconsumption
+_______________________
 23.01.2010 z80 (GAMER)
 Beta-10-02
 -InfoText: Predator

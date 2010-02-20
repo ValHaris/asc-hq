@@ -4,12 +4,18 @@ TerrainType {
    Parent = 517
    ID = 2003
 
-   Weather = dry much_snow snow_and_ice
+;   Weather = dry much_snow snow_and_ice
 
    dry { 
       UseGFXpics = false
       Picture = trr_water_4_deep.png
    } dry
+   light_rain ->* TerrainType.dry 
+   heavy_rain ->* TerrainType.dry 
+   few_snow { 
+      UseGFXpics = false
+      Picture = trr_water_4_deep.png gfx_winterwater_fs.png
+   } few_snow
    much_snow { 
       UseGFXpics = false
       Picture = trr_water_4_deep_ms.png

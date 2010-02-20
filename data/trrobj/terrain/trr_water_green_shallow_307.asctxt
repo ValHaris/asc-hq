@@ -5,20 +5,16 @@ TerrainType {
    dry { 
       UseGFXpics = false
       Picture = trr_water_green_shallow.png
-;      GFX_Picture = 385
-      TerrainProperties = Shallow_water
    } dry
    light_rain ->* TerrainType.dry
    heavy_rain ->* TerrainType.dry
-   few_snow ->* TerrainType.dry 
+   few_snow { 
+      UseGFXpics = false
+      Picture = trr_water_green_shallow.png gfx_packice50_blue.png
+   } few_snow
    much_snow { 
-      UseGFXpics = true
-      GFX_Picture = 885
-      TerrainProperties = Shallow_water pack_ice 
+      UseGFXpics = false
+      Picture = trr_water_green_shallow.png gfx_ice90_blue_sw.png
    } much_snow
-   snow_and_ice { 
-      UseGFXpics = true
-      GFX_Picture = 968
-      TerrainProperties = Shallow_water Track_possible frozen_water 
-   } snow_and_ice
+   snow_and_ice ->* TerrainType.much_snow 
 } TerrainType

@@ -1,0 +1,42 @@
+TerrainType { 
+   Name = Concrete Turret Foundation
+   ID = 318
+   Parent = 512
+
+   dry { 
+      DefenseBonus = 1
+      AttackBonus = 1
+      BasicJamming = 1
+      ;               def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      Movemalus_abs =  20  20  20  20  20  20  20  20  30  20  30  20  20  20  30  30  15  30
+      TerrainProperties = turret_foundation 
+      UseGFXpics = false
+      picture = trr_concrete_brown_0318_tf_dry.png
+   } dry
+
+   light_rain ->* TerrainType.dry
+   heavy_rain ->* TerrainType.dry
+
+   few_snow { 
+      DefenseBonus = 1
+      AttackBonus = 1
+      ;               def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      Movemalus_abs =  20  20  20  20  20  20  20  20  30  20  30  20  20  20  30  30  15  30
+      TerrainProperties = turret_foundation 
+      UseGFXpics = false
+      picture = trr_concrete_brown_0318_tf_fs.png
+   } few_snow
+
+   much_snow { 
+      DefenseBonus = 1
+      AttackBonus = 1
+      ;               def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      Movemalus_abs =  20  20  20  20  20  20  20  20  30  20  30  20  20  20  30  30  15  30
+      TerrainProperties = turret_foundation 
+      UseGFXpics = false
+      picture = trr_concrete_brown_0318_tf_ms.png
+   } much_snow
+
+   snow_and_ice ->* TerrainType.much_snow 
+
+} TerrainType

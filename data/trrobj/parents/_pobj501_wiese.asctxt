@@ -28,7 +28,6 @@ ObjectType {
 
    ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
    MoveMalus_abs = 11  11  11  11  11  12  12  11  10  20  20  16  20  20  20  20  20  10
-   MoveMalus_plus =  
 
    AttackBonus_abs = -1
    AttackBonus_plus = 
@@ -72,6 +71,7 @@ ObjectType {
    ;                         def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
    light_rain.MoveMalus_abs = 12  11  11  11  11  13  13  12  10  20  20  16  20  20  20  20  20  10
    light_rain.Jamming_abs = 1
+   TerrainProperties_Add = lowland track_possible mud
 
    heavy_rain ->* ObjectType.dry
    ;                         def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov

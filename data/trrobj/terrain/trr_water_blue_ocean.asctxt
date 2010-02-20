@@ -2,17 +2,22 @@ TerrainType {
    Name = BLUE Ocean
    ID = 2007
    parent = 516
-   Weather = dry snow_and_ice
+   Weather = dry few_snow much_snow snow_and_ice
 
    dry { 
       UseGFXpics = false
       Picture = trr_water_blue_ocean.png
-;      GFX_Picture = 97
-;      TerrainProperties = Deep_water 
    } dry
+   few_snow { 
+      UseGFXpics = false
+      Picture = trr_water_blue_ocean.png gfx_winterwater_fs.png
+   } few_snow
+   much_snow { 
+      UseGFXpics = false
+      Picture = trr_water_blue_ocean.png gfx_winterwater_ms.png
+   } much_snow
    snow_and_ice {
-      UseGFXpics = true
-      GFX_Picture = 1885
-;     TerrainProperties = Deep_water pack_ice 
+     UseGFXpics = false
+      Picture = trr_water_blue_ocean.png gfx_packice_blue_w.png
    } snow_and_ice
 } TerrainType

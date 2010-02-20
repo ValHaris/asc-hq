@@ -16,7 +16,7 @@ VehicleType {
       Material = 1000
       fuel = 4000
    } Tank
-   FuelConsumption = 100
+   FuelConsumption = 50
    Movement = 0 0 0 20 0 0 0 0 
    MovementSound = tankmove_s.ogg
 

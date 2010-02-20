@@ -5,6 +5,9 @@ InfoImage: GAMER
 Spezifikationen: GAMER
 
 ______________________
+Beta-10-02
+-SS37 300 Gewicht
+______________________
 23.01.2010 z80 (GAMER)
 Beta-10-01
 -InfoText: Mistral
