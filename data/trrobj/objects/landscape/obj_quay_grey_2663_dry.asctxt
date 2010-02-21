@@ -1,0 +1,24 @@
+ObjectType { 
+
+   Name = Quay
+   Parent = 524
+   ID = 2663
+
+   namingMethodNames = AddToTerrain
+   Weather = dry few_snow much_snow snow_and_ice 
+
+   dry { 
+      UseGFXpics = false
+      picture = obj_quay_grey_2663_dry.png 1
+   } dry
+   few_snow { 
+      UseGFXpics = false
+      picture = obj_quay_grey_2663_fs.png 1
+   } few_snow
+   much_snow { 
+      UseGFXpics = false
+      picture = obj_quay_grey_2663_ms.png 1
+   } much_snow
+   snow_and_ice ->* ObjectType.much_snow 
+
+} ObjectType

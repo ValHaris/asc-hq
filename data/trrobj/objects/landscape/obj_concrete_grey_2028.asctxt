@@ -1,0 +1,25 @@
+ObjectType { 
+
+   Name = Concrete
+   Parent = 500
+   ID = 2028
+
+   namingMethodNames = ReplaceTerrain
+   Weather = dry few_snow much_snow snow_and_ice 
+
+   dry { 
+      UseGFXpics = false
+      picture = obj_concrete_grey_2028_dry.png 1
+   } dry
+   few_snow { 
+      UseGFXpics = false
+      picture = obj_concrete_grey_2028_fs.png 1
+   } few_snow
+   much_snow { 
+      UseGFXpics = false
+      picture = obj_concrete_grey_2028_ms.png 1
+   } much_snow
+   snow_and_ice ->* ObjectType.much_snow 
+
+
+} ObjectType
