@@ -256,6 +256,34 @@ bool ContainerBaseType :: vehicleFit ( const VehicleType* fzt ) const
    return false;
 }
 
+int  ContainerBaseType :: vehicleUnloadable ( const VehicleType* vehicleType, int carrierHeight ) const
+{
+   int height = 0;
+
+   int carrierBinHeight = 1 << carrierHeight;
+
+   if ( vehicleFit ( vehicleType ))
+      for ( ContainerBaseType::EntranceSystems::const_iterator i = entranceSystems.begin(); i != entranceSystems.end(); i++ )
+         if ( i->mode & ContainerBaseType::TransportationIO::Out )
+            if ( (i->container_height & carrierBinHeight) || (i->container_height == 0))
+               if ( i->vehicleCategoriesLoadable & (1<<vehicleType->movemalustyp))
+                  if ( vehicleType->hasAnyFunction(i->requiresUnitFeature) || i->requiresUnitFeature.none() ) {
+                     if ( i->height_abs != 0 && i->height_rel != -100 ) {
+                        int h = 0;
+                        for ( int hh = 0; hh < 8; ++hh)
+                           if ( getheightdelta(carrierHeight, hh) == i->height_rel )
+                              h += 1 << hh;
+                        height |= i->height_abs & h;
+                     } else
+                        if ( i->height_rel != -100 )
+                           height |= 1 << (carrierHeight + i->height_rel) ;
+                        else
+                           height |= i->height_abs ;
+                  }
+   return height & vehicleType->height;
+}
+
+
 const int containerBaseTypeVersion = 7;
 
 

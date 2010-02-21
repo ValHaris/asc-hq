@@ -187,6 +187,14 @@ class ContainerBaseType: public MapItemType, public LoadableItemType, public Mem
      //! can units of the given type be moved into this buildtype? This is a prerequisite - but not the only requirement - for a real unit to move into a real building
      bool vehicleFit ( const VehicleType* type ) const ;
 
+     /** checks the unloading of a unit type
+         \param vehicleType the vehicletype for which the unloading is checked
+         \param carrierHeight assume the carrier was on this height (numerical: 0 - 7).
+         \return the levels of height on which this unit can be unloaded; or 0 if no unloading is possible
+     */
+     int  vehicleUnloadable ( const VehicleType* vehicleType, int carrierHeight ) const;
+
+
      void read ( tnstream& stream ) ;
      void write ( tnstream& stream ) const ;
 

@@ -396,20 +396,6 @@ int getheightdelta ( const ContainerBase* c1, const ContainerBase* c2 )
 }
 
 
-int getheightdelta ( int height1, int height2 )
-{
-   int ah = height1;
-   int dh = height2;
-   int hd = dh - ah;
-
-   if ( ah >= 3 && dh <= 2 )
-      hd++;
-   if (dh >= 3 && ah <= 2 )
-      hd--;
-
-   return hd;
-}
-
 bool fieldvisiblenow( const MapField* pe, Vehicle* veh, int player )
 {
    GameMap* gamemap = pe->getMap();

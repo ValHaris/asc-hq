@@ -58,6 +58,11 @@ class BuildProductionLineCommand : public ContainerCommand {
             
       void setProduction( const VehicleType* vehicleType );
       
+      /*
+      static bool productionLineBuyable( const ContainerBase* factory, const VehicleType* unit );
+      static bool productionLineBuyable( const ContainerBaseType* factory, const VehicleType* unit );
+      static bool productionLineBuyable( const ContainerBase* factory, const VehicleType* unit );
+      */
       ActionResult go ( const Context& context ); 
       ASCString getCommandString() const;
 };

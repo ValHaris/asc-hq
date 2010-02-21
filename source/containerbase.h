@@ -91,6 +91,7 @@ class ContainerBase {
       void deleteProductionLine( const VehicleType* type );
       void deleteAllProductionLines();
       void addProductionLine( const VehicleType* type  );
+      bool hasProductionLine( const VehicleType* type );
       void setProductionLines( const Production& production  );
    private:
       mutable Production productionCache;

@@ -92,6 +92,22 @@ const int csolarkraftwerkleistung[cwettertypennum] = { 1024, 512, 256, 756, 384,
 
 
 
+int getheightdelta ( int height1, int height2 )
+{
+   int ah = height1;
+   int dh = height2;
+   int hd = dh - ah;
+
+   if ( ah >= 3 && dh <= 2 )
+      hd++;
+   if (dh >= 3 && ah <= 2 )
+      hd--;
+
+   return hd;
+}
+
+
+
 ResourceMatrix :: ResourceMatrix (  )
 {
    for ( int i = 0; i < resourceTypeNum; i++ )

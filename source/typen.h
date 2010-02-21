@@ -244,6 +244,15 @@ class MapCoordinate3D : public MapCoordinate {
             };
       };
 
+
+/*!
+  \brief calculate the height difference between two levels of height.
+
+  Since floating and ground based are assumed to be the same effective height, a simple subtraction isn't sufficient.
+  Height is a numeric (and not bitmapped) value
+ */
+extern int getheightdelta ( int height1, int height2 );
+
       
 //! a class for storing general key/values pairs. Intended as a mechanism to persist data from Lua scripts      
 class Properties {      

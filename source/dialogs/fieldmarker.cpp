@@ -65,8 +65,11 @@ SelectFromMap::SelectFromMap( CoordinateList& list, GameMap* map, bool justOne, 
    
 
    showFieldMarking( coordinateList );
-   if ( !list.empty() )
+   if ( !list.empty() ) {
       md->cursor.goTo( *list.begin() );
+      actmap->getCursor() =  *list.begin();
+      cursorMoved();
+   }
 
    updateList();
 };
@@ -165,7 +168,8 @@ bool SelectFromMap::listItemClicked( PG_ListBoxBaseItem* item )
       CoordinateItem* i = dynamic_cast<CoordinateItem*>(item);
       if ( i ) {
          md->cursor.goTo( i->getPos() );
-         updateFieldInfo();
+         actmap->getCursor() =  i->getPos();
+         cursorMoved();
       }
    }
    return true;

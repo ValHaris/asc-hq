@@ -32,6 +32,8 @@ bool 	TargetCoordinateLocator :: eventMouseButtonDown (const SDL_MouseButtonEven
    if ( button->button == 1 ) {
       MapDisplayPG* md = getMainScreenWidget()->getMapDisplay();
       md->cursor.goTo( *positions.begin() );
+      actmap->getCursor() = *positions.begin();
+      cursorMoved();
    }
 
    return true;

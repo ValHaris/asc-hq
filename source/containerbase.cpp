@@ -471,32 +471,11 @@ bool  ContainerBase :: vehicleLoadable ( const Vehicle* vehicle, int uheight, co
 
 int  ContainerBase :: vehicleUnloadable ( const VehicleType* vehicleType, int carrierHeight ) const
 {
-   int height = 0;
-
-   if ( carrierHeight == -1 )
-      carrierHeight = getPosition().getBitmappedHeight();
+   if (carrierHeight == -1 )
+      return baseType->vehicleUnloadable( vehicleType, getPosition().getNumericalHeight());
    else
-      carrierHeight = 1 << carrierHeight;
-   
-   if ( baseType->vehicleFit ( vehicleType ))
-      for ( ContainerBaseType::EntranceSystems::const_iterator i = baseType->entranceSystems.begin(); i != baseType->entranceSystems.end(); i++ )
-         if ( i->mode & ContainerBaseType::TransportationIO::Out )
-            if ( (i->container_height & carrierHeight) || (i->container_height == 0))
-               if ( i->vehicleCategoriesLoadable & (1<<vehicleType->movemalustyp))
-                  if ( vehicleType->hasAnyFunction(i->requiresUnitFeature) || i->requiresUnitFeature.none() ) {
-                     if ( i->height_abs != 0 && i->height_rel != -100 ) {
-                        int h = 0;
-                        for ( int hh = 0; hh < 8; ++hh)
-                           if ( getheightdelta(getPosition().getNumericalHeight(), hh) == i->height_rel )
-                              h += 1 << hh;
-                        height |= i->height_abs & h;
-                     } else
-                        if ( i->height_rel != -100 )
-                           height |= 1 << (getPosition().getNumericalHeight() + i->height_rel) ;
-                        else
-                           height |= i->height_abs ;
-                  }
-   return height & vehicleType->height;
+      return baseType->vehicleUnloadable( vehicleType, carrierHeight );
+
 }
 
 const ContainerBaseType::TransportationIO* ContainerBase::vehicleUnloadSystem ( const VehicleType* vehicleType, int height )
@@ -583,6 +562,12 @@ void ContainerBase :: addProductionLine( const VehicleType* type )
       internalUnitProduction.push_back( type );
    productionCache.clear();
 }
+
+bool ContainerBase :: hasProductionLine( const VehicleType* type )
+{
+   return find ( internalUnitProduction.begin(), internalUnitProduction.end(), type ) != internalUnitProduction.end();
+}
+
 
 void ContainerBase :: setProductionLines( const Production& production  )
 {
