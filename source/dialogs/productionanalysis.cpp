@@ -69,8 +69,9 @@ int evaluateProduction( const ContainerBaseType* potentialFactory, const Vehicle
                if ( potentialFactory->vehicleUnloadable(vt,h) || potentialFactory->hasFunction( ContainerBaseType::ProduceNonLeavableUnits ))
                   if ( !potentialFactory->hasFunction( ContainerBaseType::NoProductionCustomization) || factoryProductionInstanceExists( potentialFactory, vt, gamemap ))
                      return 1;
-   } else
-      return 0;
+   } 
+   
+   return 0;
 }
 
 int evaluateProduction( const VehicleType* potentialFactory, const VehicleType* vt, GameMap* gamemap )
