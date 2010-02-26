@@ -1,0 +1,19 @@
+BuildingType { 
+   Name = oiltower
+   ID = 1212
+   TechAdapterRequired = B1212
+   parent = 4
+
+   Weather = dry few_snow much_snow snow_and_ice
+   ConstructionStages = 1
+   Fields = A1 A2 
+   UseGFXpics = false
+   Pictures { 
+      dry = bld_mk4_oiltower_dry.png
+      few_snow = bld_mk4_oiltower_fs.png
+      much_snow = bld_mk4_oiltower_ms.png
+      snow_and_ice = bld_mk4_oiltower_ms.png
+   } Pictures
+   RubbleObjects = false
+   Entry = A2
+} BuildingType

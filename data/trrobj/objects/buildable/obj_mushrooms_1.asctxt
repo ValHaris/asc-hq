@@ -15,8 +15,8 @@ ObjectType {
    TerrainAccess { 
       terrain_any = mud morass swamp very_shallow_water
       terrain_all = 
-      terrain_not = railroad runway bridge mountains high_mountains lava
-      terrain_kill = water deep_water river lava soft_sand turret_foundation
+      terrain_not = railroad road runway spaceport bridge high_mountains lava pack_ice frozen_water snow deep_snow
+      terrain_kill = shallow_water water deep_water river pack_ice frozen_water lava soft_sand turret_foundation road runway railroad spaceport
    } TerrainAccess
    TerrainProperties_Filter = 
    TerrainProperties_Add = small_rocks

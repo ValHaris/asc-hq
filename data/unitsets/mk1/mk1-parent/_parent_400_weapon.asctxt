@@ -880,10 +880,57 @@
       smSSM.Punch@MaxRange = 60
       smSSM.Punch@MinRange = 60
 ; medium attack trooper
-      Panzerfaust ->* VehicleType.smSSM
-      Panzerfaust.Type = ground_missile shootable
-      Panzerfaust.Punch@MaxRange = 75
-      Panzerfaust.Punch@MinRange = 75
+      Panzerfaust {
+         Name = Panzerfaust 
+         Type = ground_missile shootable 
+         Sound = airmissile_g.ogg
+         targets = floating ground_level 
+         shotFrom = floating ground_level 
+         MaxRange = 10
+         MinRange = 10
+         Ammo = 4
+         Punch@MaxRange = 75
+         Punch@MinRange = 75
+         HitAccuracy { 
+            d6 = 
+            d5 = 
+            d4 = 
+            d3 = 
+            d2 = 
+            d1 = 
+            0 = 100
+            u1 = 
+            u2 = 
+            u3 = 
+            u4 = 
+            u5 = 
+            u6 = 
+         } HitAccuracy
+     	 WeaponEffectiveness {
+            default = 0
+            trooper = 50
+            rail_vehicle = 120
+            building|turret|object = 100
+            hoovercraft = 100
+            helicopter = 100
+
+            light_tracked_vehicle = 100
+            medium_tracked_vehicle = 120
+            heavy_tracked_vehicle = 130
+
+            light_wheeled_vehicle = 100
+            medium_wheeled_vehicle = 120
+            heavy_wheeled_vehicle = 130
+         
+            light_ship = 100
+            medium_ship  = 120
+            heavy_ship = 130
+
+            light_aircraft = 100
+            medium_aircraft  = 100
+            heavy_aircraft = 100
+	 } WeaponEffectiveness
+      } Panzerfaust
 
 ; surface-ship missile
       ShM ->* VehicleType.SSM 

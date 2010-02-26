@@ -16,6 +16,7 @@ VehicleType {
               InfoImage = BananaJoe]
 
    Armor -= 100
+   Weight = 65
    Features = construct_vehicles construct_specific_buildings leaves_tracks NoProductionCustomization
 
    Transportation ->* VehicleType.TransTurretBig 

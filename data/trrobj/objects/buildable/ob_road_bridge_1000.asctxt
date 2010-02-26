@@ -30,10 +30,10 @@ ObjectType {
    } RemovalCost
    NetBehaviour = NetToBuildingEntry NetToSelf Autoborder 
    TerrainAccess { 
-      terrain_any = Shallow_water Very_shallow_water swamp morass river
+      terrain_any = Shallow_water Very_shallow_water swamp morass
       terrain_all = 
-      terrain_not = Forest Road runway bridge railroad hillside
-      terrain_kill = river water deep_water lava
+      terrain_not = Road runway bridge railroad hillside installation
+      terrain_kill = water deep_water lava
    } TerrainAccess
    TerrainProperties_Filter = hillside swamp snow deep_snow morass mud small_rocks large_rocks forest hillside
    TerrainProperties_Add = Road bridge

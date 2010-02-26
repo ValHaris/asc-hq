@@ -9,7 +9,7 @@ BuildingType {
    Fields = A1
    UseGFXpics = false
    Pictures { 
-      dry = bld_asc_deepcore.pcx
+      dry = bld_asc_deepcore.png
    } Pictures
    Entry = A1
    RubbleObjects = false

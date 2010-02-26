@@ -1,0 +1,44 @@
+BuildingType { 
+   Name = wind power plant
+   ID = 39
+   parent = 5
+
+   Infotext = [Windnergiekraftwerk]
+   Armor = 800
+
+   Transportation { 
+      MaxLoadableUnits = 1
+      MaxLoadableUnitSize = 5
+      MaxLoadableMass = 6
+      CategoriesNOT = Default hoovercraft Medium_tracked_vehicle Heavy_tracked_vehicle Medium_wheeled_vehicle Heavy_wheeled_vehicle Light_aircraft Medium_aircraft Heavy_aircraft Helicopter Light_ship Medium_ship Heavy_Ship Building|turret|object Rail_vehicle
+   } Transportation
+
+   MaxResourceProduction { 
+      Energy = 3000
+   } MaxResourceProduction
+   defaultProduction {
+      energy = 3000
+   } defaultProduction
+   StorageCapacity { 
+      ASCmode { 
+         Energy = 2000
+      } ASCmode
+   } StorageCapacity
+
+   ConstructionStages = 1
+   Weather = dry
+   Fields = A1 
+   UseGFXpics = false
+   Pictures { 
+      dry = bld_asc_windrad.png
+   } Pictures
+   RubbleObjects = false
+   Entry = A1
+
+   ConstructionCost { 
+      Energy = 0
+      Material = 9000
+      fuel = 9000
+   } ConstructionCost
+
+} BuildingType

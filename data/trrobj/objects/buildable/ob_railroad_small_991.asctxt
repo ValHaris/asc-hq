@@ -20,7 +20,7 @@ ObjectType {
       Movement = 10
    } RemovalCost
    TerrainAccess { 
-      terrain_not = Forest railroad road Runway hillside Mountains high_mountains Large_rocks Ditch Turret_foundation Installation swamp morass lava
+      terrain_not = railroad road Runway hillside Mountains high_mountains Large_rocks Ditch Turret_foundation Installation swamp morass mud lava deep_snow
       terrain_kill = large_rocks very_shallow_water shallow_water Water Deep_water lava swamp morass 
    } TerrainAccess
    TerrainProperties_Filter = forest small_rocks 

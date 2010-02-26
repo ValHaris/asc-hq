@@ -5,6 +5,8 @@ InfoImage: GAMER
 Spezifikationen: GAMER
 
 ______________________
+Beza-10-03
+-BuildPio, LST baut Windrad
 Beta-10-02
 -SS37 300 Gewicht
 ______________________

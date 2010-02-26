@@ -42,6 +42,7 @@ ID 35 ASC CrystalProcessing
 ID 36 ASC Farm
 ID 37 ASC Lumbercamp
 ID 38 ASC DeepCore
+ID 39 ASC Windrad
 
 MK4
 ID 61 Subbase
