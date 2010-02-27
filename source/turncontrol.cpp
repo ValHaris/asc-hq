@@ -108,7 +108,7 @@ void runai( GameMap* actmap, int playerView, MapDisplayInterface* display )
 }
 
 
-int findNextPlayer( const GameMap* actmap )
+int findNextPlayer( GameMap* actmap, AbstractPlayerProcessing* playerProcessor )
 {
    int p = actmap->actplayer;
    bool found = false;
@@ -127,40 +127,43 @@ int findNextPlayer( const GameMap* actmap )
          if ( actmap->player[p].stat != Player::off )
             found = true;
       
+      if ( !found && playerProcessor )
+         playerProcessor->playerSkipped( actmap->player[p] );
+      
    } while ( !found );
    return p;
 }
 
 
-//! deactivates the replays of non-active or deleted players
-void clearReplays( GameMap* actmap )
-{
-   if ( actmap->replayinfo )
-      for ( int i = 0; i < actmap->getPlayerCount(); ++i )
-         if ( !actmap->player[i].exist() )
-            if ( actmap->replayinfo->map[i] && actmap->replayinfo->guidata[i] ) {
-               delete actmap->replayinfo->map[i];
-               actmap->replayinfo->map[i] = NULL;
-
-               delete actmap->replayinfo->guidata[i];
-               actmap->replayinfo->guidata[i] = NULL;
-            }
-}
-
+class ReplayClearer : public AbstractPlayerProcessing {
+   
+   virtual void playerSkipped( Player& player ) {
+      if ( !player.exist() || player.stat == Player::off || player.stat == Player::suspended ) {
+         int i = player.getPosition();
+         if ( player.getParentMap()->replayinfo->map[i] && player.getParentMap()->replayinfo->guidata[i] ) {
+            delete player.getParentMap()->replayinfo->map[i];
+            player.getParentMap()->replayinfo->map[i] = NULL;
+   
+            delete player.getParentMap()->replayinfo->guidata[i];
+            player.getParentMap()->replayinfo->guidata[i] = NULL;
+         }
+      }
+   };
+   
+};
 
 void iterateToNextPlayer( GameMap* actmap, bool saveNetwork, int lastPlayer, int lastTurn, MapDisplayInterface* display  )
 {
    int loop = 0;
    bool closeLoop = false;
 
-   clearReplays( actmap );
-
+   ReplayClearer replayClearing;
+   
    do {
 
-      
       int currentPlayer= actmap->actplayer;
       
-      int nextPlayer = findNextPlayer( actmap );
+      int nextPlayer = findNextPlayer( actmap, &replayClearing );
       
       if ( nextPlayer <= currentPlayer ) {
          actmap->endRound();

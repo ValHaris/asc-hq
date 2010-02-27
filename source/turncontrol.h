@@ -71,8 +71,13 @@ extern GameMap* continueNetworkGame ( const ASCString& filename );
 //! this checks if one player has been using a new ASC version than the current player. If this is the case, the current player is notified and asked to upgrade
 extern void checkUsedASCVersions( Player& currentPlayer );
 
+class AbstractPlayerProcessing {
+   public:
+       virtual void playerSkipped( Player& player ) = 0;
+       virtual ~AbstractPlayerProcessing(){};
+};
     
-extern int findNextPlayer( const GameMap* actmap );
+extern int findNextPlayer( GameMap* actmap, AbstractPlayerProcessing* playerProcessor = NULL );
 
 //! skips the next player. This is for administrative use, for example if a player does not react
 extern void skipTurn( GameMap* gamemap );
