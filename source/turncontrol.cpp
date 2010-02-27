@@ -140,13 +140,14 @@ class ReplayClearer : public AbstractPlayerProcessing {
    virtual void playerSkipped( Player& player ) {
       if ( !player.exist() || player.stat == Player::off || player.stat == Player::suspended ) {
          int i = player.getPosition();
-         if ( player.getParentMap()->replayinfo->map[i] && player.getParentMap()->replayinfo->guidata[i] ) {
-            delete player.getParentMap()->replayinfo->map[i];
-            player.getParentMap()->replayinfo->map[i] = NULL;
-   
-            delete player.getParentMap()->replayinfo->guidata[i];
-            player.getParentMap()->replayinfo->guidata[i] = NULL;
-         }
+         if ( player.getParentMap()->replayinfo )
+            if ( player.getParentMap()->replayinfo->map[i] && player.getParentMap()->replayinfo->guidata[i] ) {
+               delete player.getParentMap()->replayinfo->map[i];
+               player.getParentMap()->replayinfo->map[i] = NULL;
+      
+               delete player.getParentMap()->replayinfo->guidata[i];
+               player.getParentMap()->replayinfo->guidata[i] = NULL;
+            }
       }
    };
    
