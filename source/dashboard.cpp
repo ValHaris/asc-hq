@@ -196,7 +196,7 @@ void DashboardPanel::registerSpecialDisplay( const ASCString& name )
 
 void DashboardPanel::painter ( const PG_Rect &src, const ASCString& name, const PG_Rect &dst)
 {
-   if ( !actmap )
+   if ( !actmap || actmap->actplayer < 0 || actmap->actplayer > 8  )
       return;
 
    Surface screen = Surface::Wrap( PG_Application::GetScreen() );
