@@ -5,7 +5,9 @@ InfoImage: GAMER
 Spezifikationen: GAMER
 
 ______________________
-Beza-10-03
+27.02.2010 z81 (GAMER)
+-Grafikupdate Kornuta
+Beta-10-03
 -BuildPio, LST baut Windrad
 Beta-10-02
 -SS37 300 Gewicht

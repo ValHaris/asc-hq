@@ -41,4 +41,11 @@ BuildingType {
       fuel = 9000
    } ConstructionCost
 
+   TerrainAccess { 
+      terrain_any = lowland hard_sand soft_sand mountains
+      terrain_all = 
+      terrain_not = railroad large_rocks bridge morass 
+      terrain_kill = lava deep_water river shallow_water very_shallow_water swamp
+   } TerrainAccess
+
 } BuildingType

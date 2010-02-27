@@ -3,7 +3,7 @@ VehicleType {
    parent = 249
    ID = 119
 
-   Picture = MK1B_BOJE.pcx
+   Picture = mk1b_boje.png
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
 
 } VehicleType

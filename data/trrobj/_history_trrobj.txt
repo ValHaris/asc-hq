@@ -3,12 +3,12 @@ Advanced Strategic Command
 Specifications by GAMER
 Grafics by GAMER, Snuggels, ValHaris, Xyphagoroszh, Havanna Club, Uranius und Grom
 ________________________
+27.02.2010 z81 (GAMER)
 Beta-10-03
 -Pfad, wird durch "ditch" zerstört, aus optischen Gründen auch unter Straße und Landebahn baubar
 -Ditch wird durch Sumpf zerstört", nicht mehr im Schlamm baubar
 -Wald wird zerstört durch road, runway, railroad, ditch, turret, swamp
 -Raps wird zerstört durch road, runway, railroad, ditch, turret, swamp, installationen, wasser
-________________________
 Beta-10-02
 Grauer und Brauner Beton überarbeitet.
 Betonfeld mit Inst (Terrain) in Turret Foundation umgewandelt.
