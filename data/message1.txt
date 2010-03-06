@@ -286,6 +286,8 @@ Target carrier does not exist
 Assertion failed: Sequencing error
 22001
 Failed to set transferable amount 
+22002
+Destination not available
 22100
 Unit for destruction not available
 22101

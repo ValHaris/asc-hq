@@ -95,7 +95,7 @@ TransferHandler& ServiceCommand::getTransferHandler()
    delete transferHandler;
    transferHandler = NULL;
    if ( !getDestination() ) 
-      throw ActionResult( 22000 );
+      throw ActionResult( 22002 );
       
    transferHandler = new TransferHandler( getContainer(), getDestination() );
    return *transferHandler;
