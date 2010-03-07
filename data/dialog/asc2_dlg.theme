@@ -708,7 +708,7 @@
             <property name="backmode0" value="TILE"/>
             <property name="backmode1" value="TILE"/>
             <property name="backmode2" value="TILE"/>
-            <gradient name="gradient1" color0="0x00DBDBDB" color1="0x00DBDBDB" color2="0x00DBDBDB" color3="0x00DBDBDB"/>
+            <gradient name="gradient1" color0="0x0081d7a4" color1="0x0081d7a4" color2="0x0081d7a4" color3="0x0081d7a4"/>
             <gradient name="gradient2" color0="0x00808080" color1="0x00808080" color2="0x00808080" color3="0x00808080"/>
             <property name="blend0" value="0"/>
             <property name="blend1" value="0"/>

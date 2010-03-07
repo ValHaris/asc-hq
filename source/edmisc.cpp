@@ -60,6 +60,7 @@
 #include "textfile_evaluation.h"
 #include "lua/luarunner.h"
 #include "lua/luastate.h"
+#include "widgets/multilistbox.h"
 
    bool       mapsaved;
 
@@ -2608,128 +2609,74 @@ void movebuilding ( void )
 }
 
 
-#if 0
-class SelectUnitSet : public tdialogbox {
-               int* active;
-               int action;
-           public :
-               SelectUnitSet() : active(NULL) {};
-               void init(void);
-               virtual void run(void);
-               virtual void buttonpressed(int id);
-               ~SelectUnitSet() { delete[] active; };
-           };
+class SelectUnitSetFilter : public ASC_PG_Dialog {
+   
+   PG_ListBox* listbox;
+   
+   PG_Button* okButton;
+   vector<PG_ListBoxItem*> items;
+   
+   public:
+      SelectUnitSetFilter() : ASC_PG_Dialog( NULL, PG_Rect( -1, -1, 300, 500 ), "Visible UnitSet Filter" ) {
+         
+         listbox = (new MultiListBox( this, PG_Rect( 10, 30, Width()-30, Height()-80)))->getListBox();
+         
+         
+         for ( int i = 0; i < ItemFiltrationSystem::itemFilters.size(); i++ ) {
+            PG_ListBoxItem* item = new PG_ListBoxItem( listbox, 20, ItemFiltrationSystem::itemFilters[i]->name );
+            items.push_back( item );
+            item->Select( !ItemFiltrationSystem::itemFilters[i]->isActive() );
+         }
+         
+         okButton = AddStandardButton( "OK" );
+         okButton->sigClick.connect( SigC::slot( *this, &SelectUnitSetFilter::ok ));
+      };
+      
+      bool ok() {
+         for ( int i = 0; i < items.size(); ++i )
+            ItemFiltrationSystem::itemFilters[i]->setActive( !items[i]->IsSelected() );
+         
+         QuitModal();
+         return true;
+      }
+   
+      bool eventKeyDown(const SDL_KeyboardEvent* key) {
+         
+         if ( key->keysym.sym == SDLK_RETURN   ) 
+            return ok();
+         
+         if ( key->keysym.sym == SDLK_ESCAPE   ) {
+            QuitModal();  
+            return true;
+         }
+         
+         if ( key->keysym.sym == 'a' ) {
+            for ( vector<PG_ListBoxItem*>::const_iterator i = items.begin(); i != items.end(); ++i )
+               (*i)->Select( true );
+            listbox->Update();
+            return true;
+         }
+         
+         if ( key->keysym.sym == 'n' ) {
+            for ( vector<PG_ListBoxItem*>::const_iterator i = items.begin(); i != items.end(); ++i )
+               (*i)->Select( false );
+            
+            listbox->Update();
+            return true;
+         }
+         
+         return false;
+      }
+};
 
-
-void         SelectUnitSet::init(void)
-{
-
-   tdialogbox::init();
-   action = 0;
-   title = "Disable Items";
-   x1 = 90;
-   xsize = 445;
-   ysize = 580;
-   int w = (xsize - 60) / 2;
-   action = 0;
-
-   windowstyle = windowstyle ^ dlg_in3d;
-
-
-   active = new int[ItemFiltrationSystem::itemFilters.size()];
-
-   for ( int i = 0; i < ItemFiltrationSystem::itemFilters.size(); i++ ) {
-     active[i]=  ItemFiltrationSystem::itemFilters[i]->isActive() ;
-
-     addbutton ( ItemFiltrationSystem::itemFilters[i]->name.c_str(), 30, 60 + i * 20, xsize - 50, 80 + i * 20, 3, 0, 10 + i, 1 );
-     addeingabe ( 10 + i, &active[i], black, dblue );
-   }
-
-   addbutton("~O~k",20,ysize - 40,20 + w,ysize - 10,0,1,7,true);
-   addkey(7,ct_enter );
-
-   addbutton("~C~ancel",40 + w,ysize - 40,40 + 2 * w,ysize - 10,0,1,8,true);
-   addkey(8, ct_esc );
-
-   buildgraphics();
-
-   mousevisible(true);
-}
-
-
-void         SelectUnitSet::run(void)
-{
-   do {
-      tdialogbox::run();
-   }  while ( action == 0 );
-}
-
-
-void         SelectUnitSet::buttonpressed(int         id)
-{
-   switch(id) {
-       case 7: {
-                  action = 1;
-                  for ( int i = 0; i < ItemFiltrationSystem::itemFilters.size(); i++ )
-                      ItemFiltrationSystem::itemFilters[i]->setActive( active[i] );
-
-                  resetvehicleselector();
-                  resetbuildingselector();
-                  resetterrainselector();
-                  resetobjectselector();
-          }
-          break;
-       case 8: action = 2;
-          break;
-  }
-}
-#endif
 
 void selectunitsetfilter ( void )
 {
+   
    if ( ItemFiltrationSystem::itemFilters.size() > 0 ) {
-
-      vector<ASCString> buttons;
-      buttons.push_back ( "~H~ide set" );
-      buttons.push_back ( "~S~how set" );
-      buttons.push_back ( "~S~how set only");
-      buttons.push_back ( "~S~how all sets");
-      buttons.push_back ( "~O~k" );
-
-      pair<int,int> playerRes;
-      do {
-         vector<ASCString> filter;
-
-         for ( int i = 0; i < ItemFiltrationSystem::itemFilters.size(); i++ ) {
-            ASCString s;
-            if ( ItemFiltrationSystem::itemFilters[i]->isActive() )
-               s = "! ";
-
-            s += ItemFiltrationSystem::itemFilters[i]->name;
-
-            filter.push_back ( s );
-         }
-
-         playerRes = chooseString ( "Filter", filter, buttons );
-         if ( playerRes.first == 0 && playerRes.second >= 0)
-            ItemFiltrationSystem::itemFilters[playerRes.second]->setActive( true );
-
-         if ( playerRes.first == 1 && playerRes.second >= 0)
-            ItemFiltrationSystem::itemFilters[playerRes.second]->setActive( false );
-
-         if ( playerRes.first == 2 && playerRes.second >= 0)
-            for ( int i = 0; i < ItemFiltrationSystem::itemFilters.size(); i++ )
-               if ( i == playerRes.second )
-                  ItemFiltrationSystem::itemFilters[i]->setActive(false);
-               else
-                  ItemFiltrationSystem::itemFilters[i]->setActive(true);
-
-         if ( playerRes.first == 3 )
-            for ( int i = 0; i < ItemFiltrationSystem::itemFilters.size(); i++ )
-               ItemFiltrationSystem::itemFilters[i]->setActive(false);
-
-
-      } while ( playerRes.first != 4 );
+      SelectUnitSetFilter susf;
+      susf.Show();
+      susf.RunModal();
 
       filtersChangedSignal();
    } else
