@@ -27,8 +27,12 @@
 
 #include "../basestreaminterface.h"
 
-typedef int TaskID;
+#include "taskids.h"
 
+
+typedef TaskID::TaskIDs TaskIdentifier;
+ 
+class Player;
 
 /** T task is a operation that the user (or the AI) initiates.
     Tasks may take several turns to complete.
@@ -39,16 +43,20 @@ typedef int TaskID;
 class Task {
    private:
       GameMap* gamemap;
+      int player;
    public:
-      enum State { Planned, Evaluated, SetUp, Completed, Failed };
+      enum State { Planned, Evaluated, SetUp, Worked, Completed, Failed };
    private:
       State state;
    public:
       State getState() const { return state; };
       
-      virtual TaskID getID() const = 0;
+      //! returns the completion of the task, range is 0 - 100
+      virtual int getCompletion();
       
-      virtual ActionResult go ( Context& context ) = 0; 
+      virtual TaskIdentifier getID() const = 0;
+      
+      virtual ActionResult go ( const Context& context ); 
       
       void read ( tnstream& stream );
       void write ( tnstream& stream );
@@ -57,11 +65,20 @@ class Task {
       
       ASCString getCommandString();
       
+      Player& getPlayer();
+      
+      void rearm();
+      
    protected:
-      Task( GameMap* gamemap );
+      Task( Player& player );
+      Task( GameMap* map, int player );
+      
+      virtual ActionResult run ( const Context& context ) = 0; 
       
       virtual void readData ( tnstream& stream ) = 0;
       virtual void writeData ( tnstream& stream ) = 0;
+      
+      void setState( State state );
       
       GameMap* getMap();
 };

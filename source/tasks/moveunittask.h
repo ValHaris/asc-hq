@@ -1,6 +1,6 @@
 /*
-     This file is part of Advanced Strategic Command; http://www.asc-hq.de
-     Copyright (C) 1994-2008  Martin Bickel  and  Marc Schellenberger
+     This file is part of Advanced Strategic Command; http://www.asc-hq.org
+     Copyright (C) 1994-2009  Martin Bickel 
  
      This program is free software; you can redistribute it and/or modify
      it under the terms of the GNU General Public License as published by
@@ -18,38 +18,29 @@
      Boston, MA  02111-1307  USA
 */
 
+#ifndef moveunittaskH
+#define moveunittaskH
 
 #include "unittask.h"
-
 #include "../gamemap.h"
 
-Vehicle* UnitTask::getUnit()
-{
-   return getMap()->getUnit( unitNetworkID );
-}
-
-
-UnitTask::UnitTask( Vehicle* unit )
-   : Task( unit->getMap()->getPlayer( unit ) )
-{
-   unitNetworkID = unit->networkid;
-}
-
-UnitTask::UnitTask( GameMap* gamemap, int unitID )
-   : Task( gamemap, gamemap->getUnit(unitID)->getOwner() ), unitNetworkID ( unitID )
-{
+class MoveUnitTask : public UnitTask {
+      MapCoordinate3D destination;
+      bool enterContainer;
+      bool allowInterrupts;
+   public:
+      static bool available( const Vehicle* unit, const MapCoordinate& destination );
+      
+      MoveUnitTask( Vehicle* unit, const MapCoordinate3D& pos );
+   
+      TaskIdentifier getID() const;
+      
+      ActionResult run ( const Context& context ); 
+      
+   protected:
+      virtual void readData ( tnstream& stream );
+      virtual void writeData ( tnstream& stream );
+      
 };
 
-
-void UnitTask::readData ( tnstream& stream )
-{
-   Task::read( stream );
-   unitNetworkID = stream.readInt();
-}
-
-void UnitTask::writeData ( tnstream& stream )
-{
-   Task::write( stream );
-   stream.writeInt( unitNetworkID );
-}
-
+#endif

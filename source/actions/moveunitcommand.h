@@ -64,7 +64,6 @@ class MoveUnitCommand : public UnitCommand {
       
       ActionResult go ( const Context& context ); 
       
-      
    public:
       MoveUnitCommand ( Vehicle* unit );
       
@@ -113,6 +112,11 @@ class MoveUnitCommand : public UnitCommand {
           These functions are geared towards the 2D user interface and are not well suited to AI usage */
       const set<MapCoordinate3D>& getReachableFields() { return reachableFields; };
       const set<MapCoordinate3D>& getReachableFieldsIndirect() { return reachableFieldsIndirect; };
+      
+      const Vehicle* getUnit() const { return UnitCommand::getUnit(); };
+      Vehicle* getUnit() { return UnitCommand::getUnit(); };
+      
+      
 };
 
 #endif

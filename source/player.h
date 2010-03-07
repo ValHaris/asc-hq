@@ -222,6 +222,8 @@ class Player : public SigC::Object {
       void resetTribute();
       void resetPassword();
 
+      bool operator==( const Player& otherPlayer) const;
+      
    private:   
       ASCString       name;
       DI_Color        color;

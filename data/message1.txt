@@ -370,4 +370,14 @@ Action not available
 Invalid map 
 23501
 Invalid diplomatic state
+30001
+Movement not available
+30002
+Movement failed
+30003
+No way to destination
+30004
+No progress made
+30005
+Unit destroyed during movement
 

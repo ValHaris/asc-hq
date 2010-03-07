@@ -47,7 +47,8 @@ CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 libtasks_la_DEPENDENCIES =
-am_libtasks_la_OBJECTS = task.lo unittask.lo task_generator.lo
+am_libtasks_la_OBJECTS = task.lo unittask.lo task_generator.lo \
+	moveunittask.lo taskcontainer.lo taskcontainer.lo
 libtasks_la_OBJECTS = $(am_libtasks_la_OBJECTS)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -243,7 +244,7 @@ zipfound = @zipfound@
 MAINTAINERCLEANFILES = Makefile.in
 AM_CXXFLAGS = $(SDL_CFLAGS) $(SIGC_CFLAGS)  @LokiInclude@ 
 noinst_LTLIBRARIES = libtasks.la
-libtasks_la_SOURCES = task.cpp unittask.cpp task_generator.cpp 
+libtasks_la_SOURCES = task.cpp unittask.cpp task_generator.cpp moveunittask.cpp taskcontainer.cpp taskcontainer.cpp
 libtasks_la_LIBADD = @SDL_LIBS@
 EXTRA_DIST = $(srcdir)/*.h
 all: all-am
@@ -298,8 +299,10 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/moveunittask.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/task.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/task_generator.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/taskcontainer.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unittask.Plo@am__quote@
 
 .cpp.o:

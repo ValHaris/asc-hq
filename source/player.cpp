@@ -515,3 +515,8 @@ void Player::resetPassword()
 {
    passwordcrc.reset();
 }
+
+bool Player::operator==( const Player& otherPlayer) const
+{
+   return parentMap == otherPlayer.parentMap && player == otherPlayer.player;
+}

@@ -65,7 +65,7 @@ pfont load_font(const char* name)
 }
 
 
-void loaddata( void ) 
+void loadEditordata( void ) 
 {
    loadmessages();
 
@@ -111,7 +111,7 @@ int mapeditorMainThread ( void* _mapname )
       StartupScreen sus( "title_mapeditor.jpg", dataLoaderTicker );
       
       GraphicSetManager::Instance().loadData();
-      loaddata();
+      loadEditordata();
 
       if ( mapname && mapname[0] ) {
          /*

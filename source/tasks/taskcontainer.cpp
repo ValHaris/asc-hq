@@ -1,6 +1,6 @@
 /*
-     This file is part of Advanced Strategic Command; http://www.asc-hq.de
-     Copyright (C) 1994-2008  Martin Bickel  and  Marc Schellenberger
+     This file is part of Advanced Strategic Command; http://www.asc-hq.org
+     Copyright (C) 1994-2009  Martin Bickel
  
      This program is free software; you can redistribute it and/or modify
      it under the terms of the GNU General Public License as published by
@@ -18,38 +18,23 @@
      Boston, MA  02111-1307  USA
 */
 
+#include "taskcontainer.h"
 
-#include "unittask.h"
-
+#include "task.h"
 #include "../gamemap.h"
-
-Vehicle* UnitTask::getUnit()
+            
+void TaskContainer::submit( Task* task )
 {
-   return getMap()->getUnit( unitNetworkID );
+   tasks.push_back( task );
 }
 
-
-UnitTask::UnitTask( Vehicle* unit )
-   : Task( unit->getMap()->getPlayer( unit ) )
+TaskContainer::~TaskContainer()
 {
-   unitNetworkID = unit->networkid;
+   for ( Tasks::iterator i = tasks.begin(); i != tasks.end(); ++i )
+      delete *i;
 }
 
-UnitTask::UnitTask( GameMap* gamemap, int unitID )
-   : Task( gamemap, gamemap->getUnit(unitID)->getOwner() ), unitNetworkID ( unitID )
+void TaskContainer::hook( GameMap& gamemap )
 {
-};
-
-
-void UnitTask::readData ( tnstream& stream )
-{
-   Task::read( stream );
-   unitNetworkID = stream.readInt();
+   gamemap.tasks = new TaskContainer();
 }
-
-void UnitTask::writeData ( tnstream& stream )
-{
-   Task::write( stream );
-   stream.writeInt( unitNetworkID );
-}
-

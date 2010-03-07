@@ -124,6 +124,7 @@
 #include "gamedialog.h"
 #include "unitset.h"
 #include "applicationstarter.h"
+#include "replaymapdisplay.h"
 
 #ifdef WEATHERGENERATOR
 # include "weathercast.h"
@@ -169,6 +170,9 @@
 #include "dialogs/actionmanager.h"
 #include "dialogs/gotoposition.h"
 #include "loggingoutput.h"
+
+#include "tasks/task.h"
+#include "tasks/taskcontainer.h"
 
 #include "autotraining.h"
 #include "spfst-legacy.h"
@@ -349,7 +353,46 @@ void saveGame( bool as )
 }
 
 
+class ReplayContext : public Context {
+      ReplayMapDisplay repDisplay;
+   public:
+      ReplayContext() : Context(), repDisplay( &getDefaultMapDisplay() )
+      {
+         display= &repDisplay;
+      }
+};
 
+/** creates a context that will move the map so that any action can be seen by the user */
+ReplayContext createFollowerContext( GameMap* gamemap )
+{
+   ReplayContext context;
+   // Context context;
+   // context.display = new ReplayMapDisplay( &getDefaultMapDisplay() );
+   
+   context.gamemap = gamemap;
+   context.actingPlayer = &gamemap->getPlayer( gamemap->actplayer );
+   context.parentAction = NULL;
+   context.viewingPlayer = gamemap->getPlayerView(); 
+   context.actionContainer = &gamemap->actions;
+   return context;   
+}
+
+
+void runOpenTasks()
+{
+   if ( !CGameOptions::Instance()->enableTasks ) 
+      return;
+   
+   GameMap* map = actmap;
+   
+   Player& player = map->getCurrentPlayer();
+   
+   if ( map->tasks )
+      for ( TaskContainer::Tasks::iterator i = map->tasks->tasks.begin(); i != map->tasks->tasks.end(); ++i ) {
+         if ( (*i)->getState() == Task::SetUp && (*i)->getPlayer() == player )
+            (*i)->go ( createFollowerContext( map ));
+      }
+}
 
 
 
@@ -1232,6 +1275,9 @@ void execuseraction2 ( tuseractions action )
       case ua_showUsedPackages: showUsedPackages();
          break;
          
+      case ua_runOpenTasks: runOpenTasks();
+         break;
+         
       default:
          break;
    }
@@ -1378,6 +1424,8 @@ int gamethread ( void* data )
 
    GameMap::sigMapDeletion.connect( SigC::slot( &resetActions ));
    GameMap::sigMapDeletion.connect( SigC::slot( &resetActmap ));
+   GameMap::sigMapCreation.connect( SigC::slot( &TaskContainer::hook ));
+   
    GameMap::sigPlayerTurnEndsStatic.connect( SigC::slot( automaticTrainig ));
 
 //   ActionContainer::postActionExecution.connect( SigC::slot( &checkGameEvents ));
@@ -1479,6 +1527,13 @@ int gamethread ( void* data )
 }
 
 
+void rearmTasks ( Player& player )
+{
+   for ( TaskContainer::Tasks::iterator i = player.getParentMap()->tasks->tasks.begin(); i != player.getParentMap()->tasks->tasks.end(); ++i ) {
+      if ( (*i)->getState() == Task::Worked && (*i)->getPlayer() == player )
+         (*i)->rearm();
+   }
+}
 
 static void __runResearch( Player& player ){
    runResearch( player, NULL, NULL );  
@@ -1489,6 +1544,7 @@ void deployMapPlayingHooks ( GameMap* map )
    map->sigPlayerTurnBegins.connect( SigC::slot( initReplayLogging ));
    map->sigPlayerTurnBegins.connect( SigC::slot( transfer_all_outstanding_tribute ));   
    map->sigPlayerTurnBegins.connect( SigC::slot( __runResearch ));
+   map->sigPlayerTurnBegins.connect( SigC::slot( rearmTasks ));
 }
 
 

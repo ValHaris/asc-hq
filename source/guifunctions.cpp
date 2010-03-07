@@ -62,6 +62,8 @@
 #include "actions/powergenerationswitchcommand.h"
 #include "actions/internalammotransfercommand.h"
 
+#include "tasks/moveunittask.h"
+
 bool commandPending()
 {
    return NewGuiHost::pendingCommand;
@@ -320,6 +322,7 @@ ASCString Movement::getName( const MapCoordinate& pos, ContainerBase* subject, i
 };
 
 
+
 bool MovementBase::available( const MapCoordinate& pos, ContainerBase* subject, int num )
 {
    if ( !commandPending() ) {
@@ -346,6 +349,27 @@ bool MovementBase::available( const MapCoordinate& pos, ContainerBase* subject, 
 void Movement::parametrizePathFinder( AStar3D& pathFinder )
 {
 
+}
+
+
+bool Movement::available( const MapCoordinate& pos, ContainerBase* subject, int num )
+{
+   if ( !commandPending() ) {
+      return MovementBase::available( pos, subject, num );
+   } else {
+      MoveUnitCommand* moveCommand = dynamic_cast<MoveUnitCommand*>(NewGuiHost::pendingCommand);
+      if ( moveCommand && moveCommand->getVerticalDirection() == getVerticalDirection() ) {
+         bool avail = MovementBase::available( pos, subject, num );
+         if ( avail )
+            return true;
+         else {
+            if ( CGameOptions::Instance()->enableTasks ) {
+               return MoveUnitTask::available( moveCommand->getUnit(), pos );
+            }
+         }
+      }
+   }
+   return false;
 }
 
 
@@ -387,26 +411,42 @@ void MovementBase::execute( const MapCoordinate& pos, ContainerBase* subject, in
       if ( !move || move->getVerticalDirection() != getVerticalDirection() )
          return;
 
-      move->setDestination( pos );
-
-      if ( CGameOptions::Instance()->fastmove || move->getPath().size() ) {
-         move->calcPath();
-         actmap->cleartemps(7);
-         displaymap();
-         MapDisplayPG::CursorHiding ch;
-         ActionResult res = move->execute( createContext(actmap));
-         NewGuiHost::pendingCommand = NULL;
-         if ( !res.successful() ) {
-            delete move;
-            dispmessage2(res);
-            updateFieldInfo();
-            return;
+      if ( MovementBase::available( pos, subject, num )) {
+      
+         move->setDestination( pos );
+   
+         if ( CGameOptions::Instance()->fastmove || move->getPath().size() ) {
+            move->calcPath();
+            actmap->cleartemps(7);
+            displaymap();
+            MapDisplayPG::CursorHiding ch;
+            ActionResult res = move->execute( createContext(actmap));
+            NewGuiHost::pendingCommand = NULL;
+            if ( !res.successful() ) {
+               delete move;
+               dispmessage2(res);
+               updateFieldInfo();
+               return;
+            }
+         } else {
+            move->calcPath();
+            actmap->cleartemps(7);
+            for ( AStar3D::Path::const_iterator i = move->getPath().begin(); i != move->getPath().end(); ++i )
+               actmap->getField( *i ) ->a.temp = 1;
+            displaymap();
          }
       } else {
-         move->calcPath();
+         Vehicle* unit = move->getUnit();
+         delete NewGuiHost::pendingCommand;
+         NewGuiHost::pendingCommand = NULL;
+
+         MapCoordinate3D dest ( pos, unit->getPosition().getBitmappedHeight() );
+         
+         MoveUnitTask* mut = new MoveUnitTask( unit, dest );
+         ActionResult res = mut->go( createContext(actmap) );
+         if ( !res.successful() )
+            displayActionError(res);
          actmap->cleartemps(7);
-         for ( AStar3D::Path::const_iterator i = move->getPath().begin(); i != move->getPath().end(); ++i )
-            actmap->getField( *i ) ->a.temp = 1;
          displaymap();
       }
       updateFieldInfo();

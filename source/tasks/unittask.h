@@ -30,9 +30,13 @@ class UnitTask : public Task {
    private:
       int unitNetworkID;
    protected:
-      Vehicle* getVehicle();
+      Vehicle* getUnit();
       
       UnitTask( GameMap* gamemap, int unitID );
+      UnitTask( Vehicle* unit );
+      
+      virtual void readData ( tnstream& stream );
+      virtual void writeData ( tnstream& stream );
       
 };
 

@@ -44,6 +44,8 @@
  
  #include "actions/actioncontainer.h"
  
+ class TaskContainer;
+ 
  class RandomGenerator{
    public:
 
@@ -368,6 +370,8 @@ class GameMap {
       ActionRecorder* actionRecorder;
 
       
+      TaskContainer* tasks;
+      
       ReplayInfo*  replayinfo;
 
       //! a helper variable to store some information during the loading process. No usage outside.
@@ -468,6 +472,7 @@ class GameMap {
       SigC::Signal1<void,Player&> sigPlayerTurnHasEnded;
       SigC::Signal1<void,Player&> sigMapWon;
 
+      static SigC::Signal1<void,GameMap&> sigMapCreation;
       static SigC::Signal1<void,GameMap&> sigMapDeletion;
       static SigC::Signal2<void,GameMap*,Player&> sigPlayerTurnEndsStatic;
       

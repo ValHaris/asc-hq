@@ -1,4 +1,4 @@
-//     $Id: guifunctions-interface.h,v 1.4 2008-12-20 14:25:47 mbickel Exp $
+//     $Id: guifunctions-interface.h,v 1.5 2010-03-07 19:52:44 mbickel Exp $
 //
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -52,6 +52,7 @@ class Movement : public MovementBase
       Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num );
       ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num );
       int getVerticalDirection() { return 0; };
+      bool available( const MapCoordinate& pos, ContainerBase* subject, int num );
 };
 
 

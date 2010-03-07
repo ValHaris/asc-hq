@@ -40,6 +40,7 @@
 #include "jumptest.h"
 #include "testversionidentifier.h"
 #include "streamencoding.h"
+#include "tasks/taskcontainer.h"
 
 
 void viewcomp( Player& player )
@@ -221,6 +222,7 @@ int main(int argc, char *argv[] )
    SoundSystem soundSystem ( true, true, true );
 
    tspfldloaders::mapLoaded.connect( SigC::slot( deployMapPlayingHooks ));
+   GameMap::sigMapCreation.connect( SigC::slot( &TaskContainer::hook ));
 
    PG_FileArchive archive( argv[0] );
 

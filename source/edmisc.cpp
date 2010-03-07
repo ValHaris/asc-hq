@@ -2619,7 +2619,7 @@ class SelectUnitSetFilter : public ASC_PG_Dialog {
    public:
       SelectUnitSetFilter() : ASC_PG_Dialog( NULL, PG_Rect( -1, -1, 300, 500 ), "Visible UnitSet Filter" ) {
          
-         listbox = (new MultiListBox( this, PG_Rect( 10, 30, Width()-30, Height()-80)))->getListBox();
+         listbox = (new MultiListBox( this, PG_Rect( 10, 30, Width()-20, Height()-80)))->getListBox();
          
          
          for ( int i = 0; i < ItemFiltrationSystem::itemFilters.size(); i++ ) {
@@ -2672,7 +2672,6 @@ class SelectUnitSetFilter : public ASC_PG_Dialog {
 
 void selectunitsetfilter ( void )
 {
-   
    if ( ItemFiltrationSystem::itemFilters.size() > 0 ) {
       SelectUnitSetFilter susf;
       susf.Show();

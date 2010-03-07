@@ -275,6 +275,9 @@ GameMap :: GameMap ( void )
    
    
    nativeMessageLanguage = "en_US";
+   
+   sigMapCreation( *this );
+   
 }
 
 GameMap::Campaign::Campaign()
@@ -1480,6 +1483,7 @@ void GameMap::objectGrowth()
 }
 
 SigC::Signal1<void,GameMap&> GameMap::sigMapDeletion;
+SigC::Signal1<void,GameMap&> GameMap::sigMapCreation;
 SigC::Signal2<void,GameMap*,Player&> GameMap::sigPlayerTurnEndsStatic;
 
 GameMap :: ~GameMap ()
@@ -1537,6 +1541,9 @@ GameMap :: ~GameMap ()
       field = NULL;
    }
 
+   delete tasks;
+   tasks = NULL;
+   
 }
 
 /*

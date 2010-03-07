@@ -20,19 +20,51 @@
 
 
 #include "task.h"
+#include "taskcontainer.h"
 #include "../util/messaginghub.h"
 #include "../basestrm.h"
 
-Task::Task( GameMap* gamemap ) 
+#include "../player.h"
+#include "../gamemap.h"
+
+Task::Task( GameMap* map, int player )
+{
+   this->gamemap = map;
+   this->player = player;
+}
+
+Task::Task( Player& player ) 
 {
    state = Planned;
-   this->gamemap = gamemap;
+   this->gamemap = player.getParentMap();
+   this->player = player.getPosition();
 }
    
 GameMap* Task::getMap()
 {
    return gamemap;
 }
+
+Player& Task::getPlayer()
+{
+   return gamemap->getPlayer( player );
+}
+
+      
+int Task::getCompletion()
+{
+   if ( state == Failed )
+      return 0;
+   
+   if ( state < SetUp )
+      return 0;
+   
+   if ( state == Completed )
+      return 100;
+   
+   return 50;
+}
+
 
 const int currentTaskVersion = 1;
 const int gameTaskToken = 0x9812a0c3;
@@ -45,6 +77,7 @@ void Task::read ( tnstream& stream )
    if ( version > currentTaskVersion )
       throw tinvalidversion ( "GameAction", currentTaskVersion, version );
 
+   player = stream.readInt();
    readData( stream );
    
    int token = stream.readInt();
@@ -57,7 +90,32 @@ void Task::write ( tnstream& stream )
 {
    stream.writeInt( getID() );
    stream.writeInt( currentTaskVersion );
+   stream.writeInt( player );
    writeData( stream );
    stream.writeInt( gameTaskToken );
-  
+}
+
+void Task::setState( State state )
+{
+   this->state = state;
+}
+
+ActionResult Task::go ( const Context& context )
+{
+   ActionResult res = run( context );
+   if ( !res.successful() )
+      setState( Failed );
+   else {
+      if  ( getState() == SetUp )
+         setState( Worked );
+      if ( find ( getMap()->tasks->tasks.begin(), getMap()->tasks->tasks.end(), this ) == getMap()->tasks->tasks.end() )
+         getMap()->tasks->tasks.push_back( this );
+   }
+   return res;
+}
+
+void Task::rearm()
+{
+   if ( state == Worked )
+      state = SetUp;
 }
