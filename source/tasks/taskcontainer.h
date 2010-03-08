@@ -25,6 +25,7 @@
 
 class Task;
 class GameMap;
+class tnstream;
 
 class TaskContainer {
    public:
@@ -33,6 +34,9 @@ class TaskContainer {
    
       void submit( Task* task );
       ~TaskContainer();
+      
+      void read ( tnstream& stream );
+      void write ( tnstream& stream );
       
       static void hook( GameMap& gamemap );
 };

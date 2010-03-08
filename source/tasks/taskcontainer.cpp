@@ -38,3 +38,28 @@ void TaskContainer::hook( GameMap& gamemap )
 {
    gamemap.tasks = new TaskContainer();
 }
+
+
+static const int taskMagic = 0xda5cda5c;
+
+void TaskContainer::write ( tnstream& stream )
+{            
+   stream.writeInt( tasks.size() );
+   for ( Tasks::iterator i = tasks.begin(); i != tasks.end(); ++i ) {
+      stream.writeInt( taskMagic );
+      tmemorystreambuf buffer;
+      {
+         tmemorystream memstream( &buffer, tnstream::writing);
+         (*i)->write( memstream );
+      }
+      
+      buffer.writetostream( &stream );
+      stream.writeInt( taskMagic );
+   }
+}
+
+
+void read ( tnstream& stream )
+{
+   
+}

@@ -39,6 +39,7 @@
 #include "campaignactionrecorder.h"
 
 #include "packagemanager.h"
+#include "tasks/taskcontainer.h"
 
 
 RandomGenerator::RandomGenerator(int seedValue){

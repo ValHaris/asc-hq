@@ -46,9 +46,11 @@ CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
+libtaskcore_la_DEPENDENCIES =
+am_libtaskcore_la_OBJECTS = task.lo taskcontainer.lo
+libtaskcore_la_OBJECTS = $(am_libtaskcore_la_OBJECTS)
 libtasks_la_DEPENDENCIES =
-am_libtasks_la_OBJECTS = task.lo unittask.lo task_generator.lo \
-	moveunittask.lo taskcontainer.lo taskcontainer.lo
+am_libtasks_la_OBJECTS = unittask.lo task_generator.lo moveunittask.lo
 libtasks_la_OBJECTS = $(am_libtasks_la_OBJECTS)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -63,8 +65,8 @@ CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
-SOURCES = $(libtasks_la_SOURCES)
-DIST_SOURCES = $(libtasks_la_SOURCES)
+SOURCES = $(libtaskcore_la_SOURCES) $(libtasks_la_SOURCES)
+DIST_SOURCES = $(libtaskcore_la_SOURCES) $(libtasks_la_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -243,8 +245,10 @@ top_srcdir = @top_srcdir@
 zipfound = @zipfound@
 MAINTAINERCLEANFILES = Makefile.in
 AM_CXXFLAGS = $(SDL_CFLAGS) $(SIGC_CFLAGS)  @LokiInclude@ 
-noinst_LTLIBRARIES = libtasks.la
-libtasks_la_SOURCES = task.cpp unittask.cpp task_generator.cpp moveunittask.cpp taskcontainer.cpp taskcontainer.cpp
+noinst_LTLIBRARIES = libtasks.la libtaskcore.la
+libtaskcore_la_SOURCES = task.cpp taskcontainer.cpp 
+libtaskcore_la_LIBADD = @SDL_LIBS@
+libtasks_la_SOURCES = unittask.cpp task_generator.cpp moveunittask.cpp 
 libtasks_la_LIBADD = @SDL_LIBS@
 EXTRA_DIST = $(srcdir)/*.h
 all: all-am
@@ -290,6 +294,8 @@ clean-noinstLTLIBRARIES:
 	  echo "rm -f \"$${dir}/so_locations\""; \
 	  rm -f "$${dir}/so_locations"; \
 	done
+libtaskcore.la: $(libtaskcore_la_OBJECTS) $(libtaskcore_la_DEPENDENCIES) 
+	$(CXXLINK)  $(libtaskcore_la_OBJECTS) $(libtaskcore_la_LIBADD) $(LIBS)
 libtasks.la: $(libtasks_la_OBJECTS) $(libtasks_la_DEPENDENCIES) 
 	$(CXXLINK)  $(libtasks_la_OBJECTS) $(libtasks_la_LIBADD) $(LIBS)
 
