@@ -1,0 +1,68 @@
+ObjectType { 
+   Name = Küste Wasser
+   ID = 2690
+   SecondaryIDs = 19101
+
+   visible_in_fogOfWar = true
+   LinkableObjects = 2689
+   LinkableTerrain = 
+
+   Armor = 0
+
+   Weather = dry few_snow much_snow snow_and_ice
+   ;                def lTr mTr hvT lWh mWh hWh tro rlv mAC mSh BTO lAC hAC lSh hSh Hli hov
+   Movemalus_plus = 0
+   Movemalus_abs =  20  18  17 16   20  20  20  15  11  20  20  20  20  20  20  20  20  10 
+   AttackBonus_abs = 0
+   AttackBonus_plus = 0
+   DefenseBonus_abs = 0
+   DefenseBonus_plus = 0
+   Jamming_abs = 0
+   Jammming_plus = 0
+   Height = 1
+   ConstructionCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+      Movement = 0
+   } ConstructionCost
+   RemovalCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+      Movement = 0
+   } RemovalCost
+   NetBehaviour = 
+   TerrainAccess { 
+      terrain_any = very_shallow_water shallow_water  
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = 
+   } TerrainAccess
+   TerrainProperties_Filter = road railroad runway lowland hard_sand ditch very_shallow_water shallow_water water river deep_water mountains high_mountains installation turret_foundation
+   TerrainProperties_Add = soft_sand
+   dry { 
+      UseGFXpics = false
+      picture = obj_coastuni_w_dry.png 65
+      ImageReference =  -1 
+      FlipPictures   =  0 
+   } dry
+   light_rain { 
+      UseGFXpics = false
+      picture = obj_sand_net.png 64 pfuetze-1a.png 1
+   } light_rain
+   heavy_rain { 
+      UseGFXpics = false
+      picture = onj_sand_net.png 64 pfuetze-1b.png 1
+   } heavy_rain
+   few_snow { 
+      UseGFXpics = false
+      picture = obj_coastuni_w_fs.png 65
+   } few_snow
+   much_snow { 
+      UseGFXpics = false
+      picture = obj_coastuni_w_ms.png 65
+      GraphicOperations = snow
+   } much_snow
+   snow_and_ice ->* ObjectType.much_snow
+} ObjectType
