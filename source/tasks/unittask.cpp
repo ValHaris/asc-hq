@@ -28,6 +28,12 @@ Vehicle* UnitTask::getUnit()
    return getMap()->getUnit( unitNetworkID );
 }
 
+UnitTask::UnitTask( GameMap* gamemap )
+   : Task( gamemap, -1 ), unitNetworkID( -1 )
+{
+   
+}
+
 
 UnitTask::UnitTask( Vehicle* unit )
    : Task( unit->getMap()->getPlayer( unit ) )
@@ -43,13 +49,13 @@ UnitTask::UnitTask( GameMap* gamemap, int unitID )
 
 void UnitTask::readData ( tnstream& stream )
 {
-   Task::read( stream );
+   Task::readData( stream );
    unitNetworkID = stream.readInt();
 }
 
 void UnitTask::writeData ( tnstream& stream )
 {
-   Task::write( stream );
+   Task::writeData( stream );
    stream.writeInt( unitNetworkID );
 }
 

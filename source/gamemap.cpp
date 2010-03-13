@@ -39,7 +39,7 @@
 #include "campaignactionrecorder.h"
 
 #include "packagemanager.h"
-#include "tasks/taskcontainer.h"
+#include "tasks/abstracttaskcontainer.h"
 
 
 RandomGenerator::RandomGenerator(int seedValue){
@@ -294,7 +294,7 @@ void GameMap :: guiHooked()
    dialogsHooked = true;
 }
 
-const int tmapversion = 32;
+const int tmapversion = 33;
 
 void GameMap :: read ( tnstream& stream )
 {
@@ -700,6 +700,9 @@ void GameMap :: read ( tnstream& stream )
     if( version >= 31 )
        properties.read( stream );
     
+    if ( version >= 33 ) 
+       tasks->read( stream );
+    
 }
 
 
@@ -908,7 +911,7 @@ void GameMap :: write ( tnstream& stream )
     
     properties.write( stream );
     
-   
+   tasks->write( stream );
 }
 
 

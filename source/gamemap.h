@@ -44,7 +44,7 @@
  
  #include "actions/actioncontainer.h"
  
- class TaskContainer;
+ class AbstractTaskContainer;
  
  class RandomGenerator{
    public:
@@ -370,7 +370,7 @@ class GameMap {
       ActionRecorder* actionRecorder;
 
       
-      TaskContainer* tasks;
+      AbstractTaskContainer* tasks;
       
       ReplayInfo*  replayinfo;
 

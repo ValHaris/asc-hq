@@ -18,34 +18,28 @@
      Boston, MA  02111-1307  USA
 */
 
-#ifndef moveunittaskH
-#define moveunittaskH
+#ifndef hibernatingtaskcontainerH
+#define hibernatingtaskcontainerH
 
-#include "unittask.h"
-#include "../gamemap.h"
+#include "abstracttaskcontainer.h"
+#include "../typen.h"
 
-class MoveUnitTask : public UnitTask {
-      MapCoordinate3D destination;
-      bool enterContainer;
-      bool allowInterrupts;
-      
-   private:
-      MoveUnitTask( GameMap* map ) : UnitTask( map ) {};
-      template<class Child> friend Task* TaskCreator( GameMap* map);
-      
+class Task;
+class GameMap;
+class tnstream;
+class tmemorystreambuf;
+
+class TaskHibernatingContainer : public AbstractTaskContainer {
+      typedef deallocating_vector<tmemorystreambuf*> Buffer;
+      Buffer buffer;
+
    public:
-      static bool available( const Vehicle* unit, const MapCoordinate& destination );
+      void read ( tnstream& stream );
+      void write ( tnstream& stream );
+      void add( Task* task ){};
       
-      MoveUnitTask( Vehicle* unit, const MapCoordinate3D& pos );
-   
-      TaskIdentifier getID() const;
-      
-      ActionResult run ( const Context& context ); 
-      
-   protected:
-      virtual void readData ( tnstream& stream );
-      virtual void writeData ( tnstream& stream );
-      
+      static void hook( GameMap& gamemap );
+      ~TaskHibernatingContainer ();
 };
 
 #endif

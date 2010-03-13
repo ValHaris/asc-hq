@@ -78,6 +78,7 @@ void Task::read ( tnstream& stream )
       throw tinvalidversion ( "GameAction", currentTaskVersion, version );
 
    player = stream.readInt();
+   state = (State)stream.readInt();
    readData( stream );
    
    int token = stream.readInt();
@@ -91,9 +92,19 @@ void Task::write ( tnstream& stream )
    stream.writeInt( getID() );
    stream.writeInt( currentTaskVersion );
    stream.writeInt( player );
+   stream.writeInt( state );
    writeData( stream );
    stream.writeInt( gameTaskToken );
 }
+
+Task* Task::readFromStream( tnstream& stream, GameMap* map )
+{
+   TaskIdentifier id = TaskIdentifier( stream.readInt() );
+   Task* task= taskFactory::Instance().createObject( id, map );
+   task->read( stream );
+   return task;
+}
+
 
 void Task::setState( State state )
 {
@@ -108,8 +119,9 @@ ActionResult Task::go ( const Context& context )
    else {
       if  ( getState() == SetUp )
          setState( Worked );
-      if ( find ( getMap()->tasks->tasks.begin(), getMap()->tasks->tasks.end(), this ) == getMap()->tasks->tasks.end() )
-         getMap()->tasks->tasks.push_back( this );
+      
+      if ( getMap()->tasks )
+         getMap()->tasks->add( this );
    }
    return res;
 }

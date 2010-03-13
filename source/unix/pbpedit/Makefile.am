@@ -36,6 +36,7 @@ $(SIGC_LIBS) $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
 $(top_builddir)/source/util/libutil.la  \
 $(top_builddir)/source/actions/libactions.la  \
 $(top_builddir)/source/actions/libdirectunitactions.la  \
+$(top_builddir)/source/tasks/libtaskcore.la \
 $(top_builddir)/source/actions/libmapactions.la  \
 $(top_builddir)/source/graphics/libgraphics.la $(top_builddir)/source/dialogs/libdialogs.la \
 $(top_builddir)/source/dialogs/libmapeddialogs.la  $(top_builddir)/source/widgets/libwidgets.la \

@@ -18,80 +18,47 @@
      Boston, MA  02111-1307  USA
 */
 
-#include "taskcontainer.h"
+#include "taskhibernatingcontainer.h"
 
 #include "task.h"
 #include "../gamemap.h"
             
-            
-TaskContainer::TaskContainer( GameMap* gamemap )
-{
-   this->gamemap = gamemap;
-}            
-            
-void TaskContainer::submit( Task* task )
-{
-   tasks.push_back( task );
-}
 
-TaskContainer::~TaskContainer()
+void TaskHibernatingContainer::hook( GameMap& gamemap )
 {
-   for ( Tasks::iterator i = tasks.begin(); i != tasks.end(); ++i )
-      delete *i;
-}
-
-void TaskContainer::hook( GameMap& gamemap )
-{
-   gamemap.tasks = new TaskContainer( &gamemap );
+   gamemap.tasks = new TaskHibernatingContainer();
 }
 
 
-
-void TaskContainer::write ( tnstream& stream )
-{            
-   stream.writeInt( tasks.size() );
-   for ( Tasks::iterator i = tasks.begin(); i != tasks.end(); ++i ) {
+void TaskHibernatingContainer::write ( tnstream& stream )
+{
+   stream.writeInt( buffer.size() );
+   for ( Buffer::iterator i = buffer.begin(); i != buffer.end(); ++i ) {
       stream.writeInt( taskMagic );
-      tmemorystreambuf buffer;
-      {
-         tmemorystream memstream( &buffer, tnstream::writing);
-         (*i)->write( memstream );
-      }
-      
-      buffer.writetostream( &stream );
+      (*i)->writetostream( &stream );
       stream.writeInt( taskMagic );
    }
 }
 
 
-void TaskContainer::read ( tnstream& stream )
+void TaskHibernatingContainer::read ( tnstream& stream )
 {
    int size = stream.readInt();
    assertOrThrow( size >= 0 );
+   buffer.clear();
    
    for ( int i = 0; i < size; ++i ) {
       int magic = stream.readInt();
       if ( magic != taskMagic ) 
          throw new tinvalidversion( stream.getLocation(), taskMagic, magic );
       
-      tmemorystreambuf buf;
-      buf.readfromstream( &stream );
-      
-      tmemorystream bufstream( &buf, tnstream::reading );
-      
-      Task* t = Task::readFromStream( bufstream, gamemap );
-      tasks.push_back ( t );
-      
+      tmemorystreambuf* buf = new tmemorystreambuf();
+      buf->readfromstream( &stream );
+      buffer.push_back( buf );
       
       magic = stream.readInt();
       if ( magic != taskMagic ) 
          throw new tinvalidversion( stream.getLocation(), taskMagic, magic );
    }
-}
-
-void TaskContainer::add( Task* task )
-{
-   if ( find ( tasks.begin(), tasks.end(), task ) == tasks.end() )
-      tasks.push_back( task );
 }
 

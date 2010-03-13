@@ -32,6 +32,7 @@ class UnitTask : public Task {
    protected:
       Vehicle* getUnit();
       
+      UnitTask( GameMap* gamemap );
       UnitTask( GameMap* gamemap, int unitID );
       UnitTask( Vehicle* unit );
       

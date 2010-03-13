@@ -22,13 +22,17 @@
 #define taskcontainerH
 
 #include <list>
+#include "abstracttaskcontainer.h"
 
 class Task;
 class GameMap;
 class tnstream;
 
-class TaskContainer {
+class TaskContainer : public AbstractTaskContainer {
+      GameMap* gamemap;
    public:
+      
+      TaskContainer( GameMap* gamemap );
       typedef std::list<Task*> Tasks;
       Tasks tasks;
    
@@ -39,6 +43,9 @@ class TaskContainer {
       void write ( tnstream& stream );
       
       static void hook( GameMap& gamemap );
+      void add( Task* task );
+      
+      virtual void foo() {};
 };
 
 #endif

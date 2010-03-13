@@ -29,6 +29,7 @@
 
 #include "taskids.h"
 
+#include "../util/factorywithnames.h"
 
 typedef TaskID::TaskIDs TaskIdentifier;
  
@@ -61,6 +62,8 @@ class Task {
       void read ( tnstream& stream );
       void write ( tnstream& stream );
       
+      static Task* readFromStream( tnstream& stream, GameMap* map );
+      
       virtual ~Task(){};
       
       ASCString getCommandString();
@@ -75,13 +78,29 @@ class Task {
       
       virtual ActionResult run ( const Context& context ) = 0; 
       
-      virtual void readData ( tnstream& stream ) = 0;
-      virtual void writeData ( tnstream& stream ) = 0;
+      virtual void readData ( tnstream& stream ) {};
+      virtual void writeData ( tnstream& stream ) {};
       
       void setState( State state );
       
       GameMap* getMap();
 };
+
+
+typedef Loki::SingletonHolder< Factory1< Task, TaskIdentifier, GameMap*  > > taskFactory;
+
+template<class Derived>
+Task* TaskCreator( GameMap* map )
+{
+   return new Derived( map );
+}
+
+template <typename TaskType > 
+bool registerTask( TaskIdentifier id )
+{
+   return taskFactory::Instance().registerClass( id, TaskCreator<TaskType> );
+}
+
 
 #endif
 

@@ -18,34 +18,19 @@
      Boston, MA  02111-1307  USA
 */
 
-#ifndef moveunittaskH
-#define moveunittaskH
+#ifndef abstracttaskcontainerH
+#define abstracttaskcontainerH
 
-#include "unittask.h"
-#include "../gamemap.h"
+class tnstream;
+class Task;
 
-class MoveUnitTask : public UnitTask {
-      MapCoordinate3D destination;
-      bool enterContainer;
-      bool allowInterrupts;
-      
-   private:
-      MoveUnitTask( GameMap* map ) : UnitTask( map ) {};
-      template<class Child> friend Task* TaskCreator( GameMap* map);
-      
-   public:
-      static bool available( const Vehicle* unit, const MapCoordinate& destination );
-      
-      MoveUnitTask( Vehicle* unit, const MapCoordinate3D& pos );
-   
-      TaskIdentifier getID() const;
-      
-      ActionResult run ( const Context& context ); 
-      
+class AbstractTaskContainer {
    protected:
-      virtual void readData ( tnstream& stream );
-      virtual void writeData ( tnstream& stream );
-      
+      static const int taskMagic = 0xda5cda5c;
+   public:
+      virtual void read ( tnstream& stream ) = 0; 
+      virtual void write ( tnstream& stream ) = 0;
+      virtual void add( Task* task ) = 0;
 };
 
 #endif

@@ -55,13 +55,13 @@ MoveUnitTask::MoveUnitTask( Vehicle* unit, const MapCoordinate3D& destination )
 
 void MoveUnitTask::readData ( tnstream& stream )
 {
-   UnitTask::read( stream );
+   UnitTask::readData( stream );
    destination.read( stream );
 }
 
 void MoveUnitTask::writeData ( tnstream& stream )
 {
-   UnitTask::write( stream );
+   UnitTask::writeData( stream );
    destination.write( stream );
 }
 
@@ -128,3 +128,7 @@ ActionResult MoveUnitTask::run (const Context& context )
    
    return res;
 };
+
+namespace {
+   const bool r1 = registerTask<MoveUnitTask> ( TaskID::MoveUnit );
+}

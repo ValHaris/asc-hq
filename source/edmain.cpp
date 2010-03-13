@@ -46,6 +46,7 @@
 #include "widgets/textrenderer-addons.h"
 #include "spfst-legacy.h"
 #include "dataversioncheck.h"
+#include "tasks/taskhibernatingcontainer.h"
 
 #ifdef WIN32
 # include "win32/win32-errormsg.h"
@@ -277,6 +278,8 @@ int main(int argc, char *argv[] )
    mapChanged.connect( SigC::hide<GameMap*>( repaintMap.slot() ) );
    mapChanged.connect( SigC::hide<GameMap*>( updateFieldInfo.slot() ) );
    mapChanged.connect( SigC::hide<GameMap*>( SigC::slot( setSaveNotification) ));
+   GameMap::sigMapCreation.connect( SigC::slot( &TaskHibernatingContainer::hook ));
+
    
    char* buf = new char[cl->l().length()+10];
    strcpy ( buf, cl->l().c_str() );

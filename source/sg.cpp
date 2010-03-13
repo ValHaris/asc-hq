@@ -387,11 +387,15 @@ void runOpenTasks()
    
    Player& player = map->getCurrentPlayer();
    
-   if ( map->tasks )
-      for ( TaskContainer::Tasks::iterator i = map->tasks->tasks.begin(); i != map->tasks->tasks.end(); ++i ) {
-         if ( (*i)->getState() == Task::SetUp && (*i)->getPlayer() == player )
-            (*i)->go ( createFollowerContext( map ));
+   if ( map->tasks ) {
+      TaskContainer* tc = dynamic_cast<TaskContainer*>( map->tasks );
+      if ( tc ) {
+         for ( TaskContainer::Tasks::iterator i = tc->tasks.begin(); i != tc->tasks.end(); ++i ) {
+            if ( (*i)->getState() == Task::SetUp && (*i)->getPlayer() == player )
+               (*i)->go ( createFollowerContext( map ));
+         }
       }
+   }
 }
 
 
@@ -1378,6 +1382,8 @@ void checkGameEvents( GameMap* map,const Command& command )
 
 int gamethread ( void* data )
 {
+   GameMap::sigMapCreation.connect( SigC::slot( &TaskContainer::hook ));
+   
    GameThreadParams* gtp = (GameThreadParams*) data;
 
    std::auto_ptr<StartupScreen> startupScreen;
@@ -1529,9 +1535,14 @@ int gamethread ( void* data )
 
 void rearmTasks ( Player& player )
 {
-   for ( TaskContainer::Tasks::iterator i = player.getParentMap()->tasks->tasks.begin(); i != player.getParentMap()->tasks->tasks.end(); ++i ) {
-      if ( (*i)->getState() == Task::Worked && (*i)->getPlayer() == player )
-         (*i)->rearm();
+   if ( player.getParentMap()->tasks ) {
+      TaskContainer* tc = dynamic_cast<TaskContainer*>( player.getParentMap()->tasks );
+      if ( tc ) {
+         for ( TaskContainer::Tasks::iterator i = tc->tasks.begin(); i != tc->tasks.end(); ++i ) {
+            if ( (*i)->getState() == Task::Worked && (*i)->getPlayer() == player )
+               (*i)->rearm();
+         }
+      }
    }
 }
 
