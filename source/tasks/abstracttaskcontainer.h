@@ -31,6 +31,7 @@ class AbstractTaskContainer {
       virtual void read ( tnstream& stream ) = 0; 
       virtual void write ( tnstream& stream ) = 0;
       virtual void add( Task* task ) = 0;
+      virtual ~AbstractTaskContainer() {};
 };
 
 #endif
