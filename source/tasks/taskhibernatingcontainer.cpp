@@ -62,3 +62,6 @@ void TaskHibernatingContainer::read ( tnstream& stream )
    }
 }
 
+TaskHibernatingContainer::~TaskHibernatingContainer()
+{
+}
