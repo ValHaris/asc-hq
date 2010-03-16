@@ -106,33 +106,33 @@
    smallship_terrain {
       terrain_any = shallow_water water deep_water river
       terrain_all =
-      terrain_not = small_rocks large_rocks frozen_water installation
+      terrain_not = small_rocks large_rocks frozen_water installation very_shallow_water
       terrain_kill = lava
    } smallship_terrain
 
    mediumship_terrain {
       terrain_any = shallow_water water deep_water river
       terrain_all =
-      terrain_not = forest small_rocks large_rocks frozen_water installation
+      terrain_not = forest small_rocks large_rocks frozen_water installation very_shallow_water shallow_water
       terrain_kill = lava
    } mediumship_terrain
 
    bigship_terrain {
       terrain_any = water deep_water river
       terrain_all =
-      terrain_not = forest small_rocks large_rocks frozen_water installation
+      terrain_not = forest small_rocks large_rocks frozen_water installation very_shallow_water shallow_water
       terrain_kill = lava
    } bigship_terrain
 
    very_bigship_terrain {
       terrain_any = water deep_water
       terrain_all =
-      terrain_not = forest small_rocks large_rocks frozen_water installation
+      terrain_not = forest small_rocks large_rocks frozen_water installation very_shallow_water shallow_water
       terrain_kill = lava
    } very_bigship_terrain
 
    icebreaker_terrain {
-      terrain_not = forest small_rocks large_rocks installation
+      terrain_not = forest small_rocks large_rocks installation very_shallow_water
    } icebreaker_terrain
 
 ; ----------------------------------------------------------------------------------------------------------------
@@ -257,8 +257,8 @@
    Turret_only {
       terrain_any = turret_foundation
       terrain_all =
-      terrain_not = 
-      terrain_kill = shallow_water Water Deep_water lava river
+      terrain_not = swamp
+      terrain_kill = swamp very_shalow_water shallow_water Water Deep_water lava river
    } Turret_only
 
    Turret_lowland {
