@@ -258,7 +258,7 @@
       terrain_any = turret_foundation
       terrain_all =
       terrain_not = swamp
-      terrain_kill = swamp very_shalow_water shallow_water Water Deep_water lava river
+      terrain_kill = swamp very_shallow_water shallow_water Water Deep_water lava river
    } Turret_only
 
    Turret_lowland {
