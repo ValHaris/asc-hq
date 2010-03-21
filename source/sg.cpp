@@ -244,6 +244,43 @@ void viewcomp( Player& player )
 }
 
 
+void runOpenTasks()
+{
+   GameMap* map = actmap;
+   
+   if ( map->tasks ) {
+      TaskContainer* tc = dynamic_cast<TaskContainer*>( map->tasks );
+      if ( tc ) {
+         while ( tc->pendingCommands.begin() != tc->pendingCommands.end() ) {
+            Command* c = tc->pendingCommands.front();
+            TaskInterface* ti = dynamic_cast<TaskInterface*>( c );
+            
+            if ( ti->operatable() ) {
+               ActionResult res = c->execute( createFollowerContext( map ));
+               if ( !res.successful() )
+                  dispmessage2(res);
+            }
+            
+            tc->pendingCommands.erase( tc->pendingCommands.begin() );
+         }
+      }
+   }
+}
+
+
+void runPendingTasks( Player& player )
+{
+   GameMap* map = player.getParentMap();
+   if ( map->tasks ) {
+      TaskContainer* tc = dynamic_cast<TaskContainer*>( map->tasks );
+      if ( tc ) 
+         if( tc->pendingCommands.begin() != tc->pendingCommands.end() ) 
+            if (choice_dlg("run pending tasks ?","~y~es","~n~o") == 1)
+               runOpenTasks(); 
+   }
+}
+
+
 
 void hookGuiToMap( GameMap* map )
 {
@@ -259,6 +296,8 @@ void hookGuiToMap( GameMap* map )
       map->sigPlayerUserInteractionBegins.connect( SigC::slot( &checkJournal ));
       map->sigPlayerUserInteractionBegins.connect( SigC::slot( &checkUsedASCVersions ));
       map->sigPlayerUserInteractionBegins.connect( SigC::hide<Player&>( updateFieldInfo.slot() ));
+
+      map->sigPlayerUserInteractionEnds.connect( SigC::slot( &runPendingTasks ));
 
       map->sigPlayerTurnHasEnded.connect( SigC::slot( viewOwnReplay));
       map->guiHooked();
@@ -352,32 +391,6 @@ void saveGame( bool as )
    }
 }
 
-
-
-
-void runOpenTasks()
-{
-   GameMap* map = actmap;
-   
-   if ( map->tasks ) {
-      TaskContainer* tc = dynamic_cast<TaskContainer*>( map->tasks );
-      if ( tc ) {
-         while ( tc->pendingCommands.begin() != tc->pendingCommands.end() ) {
-            Command* c = tc->pendingCommands.front();
-            TaskInterface* ti = dynamic_cast<TaskInterface*>( c );
-            
-            if ( ti->operatable() ) {
-               ActionResult res = c->execute( createFollowerContext( map ));
-               if ( !res.successful() )
-                  dispmessage2(res);
-            }
-            
-            tc->pendingCommands.erase( tc->pendingCommands.begin() );
-         }
-      }
-   }
-   
-}
 
 
 
