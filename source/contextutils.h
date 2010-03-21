@@ -1,6 +1,6 @@
 /*
-     This file is part of Advanced Strategic Command; http://www.asc-hq.de
-     Copyright (C) 1994-2008  Martin Bickel  and  Marc Schellenberger
+     This file is part of Advanced Strategic Command; http://www.asc-hq.org
+     Copyright (C) 1994-2009  Martin Bickel 
  
      This program is free software; you can redistribute it and/or modify
      it under the terms of the GNU General Public License as published by
@@ -18,26 +18,22 @@
      Boston, MA  02111-1307  USA
 */
 
+#ifndef contextutilsH
+#define contextutilsH
 
-#ifndef taskGeneratorH
-#define taskGeneratorH
+#include "actions/context.h"
+#include "replaymapdisplay.h"
 
-#include "../ascstring.h"
-
-class Task;
-
-class TaskGenerator {
-   
+class ReplayContext : public Context {
+      ReplayMapDisplay repDisplay;
    public:
-      virtual ASCString getID() = 0;
-      
-      virtual Task* generate() = 0;
-      
-      virtual ~TaskGenerator(){};
+      ReplayContext();
 };
 
+/** creates a context that will move the map so that any action can be seen by the user */
+extern ReplayContext createFollowerContext( GameMap* gamemap );
 
-// typedef Loki::SingletonHolder< FactoryWithNames< TaskGenerator , ASCString > > gameActionFactory;
+extern Context createContext( GameMap* gamemap );
+
 
 #endif
-
