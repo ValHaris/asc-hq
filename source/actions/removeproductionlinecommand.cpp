@@ -101,7 +101,7 @@ ActionResult RemoveProductionLineCommand::go ( const Context& context )
    getContainer()->deleteProductionLine( vt );
    
    cr.release();
-   setState( Completed );
+   setState( Finished );
 
    return res;
 }

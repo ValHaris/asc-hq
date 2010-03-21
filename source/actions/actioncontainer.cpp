@@ -27,7 +27,7 @@
 #include "../util/messaginghub.h"
 
 SigC::Signal2<void,GameMap*,const Command&> ActionContainer::postActionExecution;
-SigC::Signal2<void,GameMap*,const Command&> ActionContainer::commitCommand;
+SigC::Signal2<void,GameMap*,Command&> ActionContainer::commitCommand;
 SigC::Signal1<void,GameMap*> ActionContainer::actionListChanged;
 
 

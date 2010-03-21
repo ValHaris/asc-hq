@@ -49,8 +49,6 @@ class GameAction {
    
       GameMap* gamemap;
       
-      bool done;
-      
       int sequenceNumber;
       
       ActionResult undoChildren( const Context& context );
@@ -100,6 +98,7 @@ class GameAction {
       
       void read ( tnstream& stream );
       void write ( tnstream& stream ) const;
+      void write ( tnstream& stream, bool persistChildren ) const;
    
       virtual ASCString getDescription() const = 0;
       

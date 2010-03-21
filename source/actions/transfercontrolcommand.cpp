@@ -108,7 +108,7 @@ ActionResult TransferControlCommand::go ( const Context& context )
    
    if ( res.successful() ) {
       cc.release();
-      setState( Completed );
+      setState( Finished );
       
       computeview( getMap(), 0, false, &context );
       

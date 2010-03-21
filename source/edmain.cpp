@@ -278,7 +278,8 @@ int main(int argc, char *argv[] )
    mapChanged.connect( SigC::hide<GameMap*>( repaintMap.slot() ) );
    mapChanged.connect( SigC::hide<GameMap*>( updateFieldInfo.slot() ) );
    mapChanged.connect( SigC::hide<GameMap*>( SigC::slot( setSaveNotification) ));
-   GameMap::sigMapCreation.connect( SigC::slot( &TaskHibernatingContainer::hook ));
+   
+   TaskHibernatingContainer::registerHooks();
 
    
    char* buf = new char[cl->l().length()+10];

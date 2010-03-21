@@ -119,7 +119,7 @@ ActionResult InternalAmmoTransferCommand::go ( const Context& context )
       }
    }
          
-   setState( Completed );
+   setState( Finished );
    
    return ActionResult(0);
 }

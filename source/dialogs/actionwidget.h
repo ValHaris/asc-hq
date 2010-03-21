@@ -1,6 +1,6 @@
 /*
-     This file is part of Advanced Strategic Command; http://www.asc-hq.de
-     Copyright (C) 1994-2008  Martin Bickel  and  Marc Schellenberger
+     This file is part of Advanced Strategic Command; http://www.asc-hq.org
+     Copyright (C) 1994-2009  Martin Bickel 
  
      This program is free software; you can redistribute it and/or modify
      it under the terms of the GNU General Public License as published by
@@ -18,24 +18,27 @@
      Boston, MA  02111-1307  USA
 */
 
+#ifndef actionselectionwidgetH
+#define actionselectionwidgetH
 
-#ifndef unitAttackGeneratorH
-#define unitAttackGeneratorH
+#include "selectionwindow.h"
 
-#include "unittask_generator.h"
-#include "../ascstring.h"
-#include "task.h"
+class Command;
+class GameMap;
 
-class UnitAttackGenerator : public UnitTaskGenerator {
+class ActionWidget: public SelectionWidget
+{
+      
    public:
-      UnitAttackGenerator();
+      ActionWidget( PG_Widget* parent, const PG_Point& pos, int width, const Command& action, GameMap* map );
       
-      ASCString getID();
+      ASCString getName() const;
+      vector<MapCoordinate> getCoordinates() const;
+   protected:
+
+      const Command& act;
       
-      bool available( Vehicle* unit );
-      
-      Task* generate( Vehicle* unit, const MapCoordinate& target );
+      void display( SDL_Surface * surface, const PG_Rect & src, const PG_Rect & dst );
 };
 
 #endif
-

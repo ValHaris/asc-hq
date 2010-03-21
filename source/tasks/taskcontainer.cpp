@@ -20,24 +20,39 @@
 
 #include "taskcontainer.h"
 
-#include "task.h"
 #include "../gamemap.h"
+#include "../actions/command.h"
+#include "../actions/taskinterface.h"
             
             
-TaskContainer::TaskContainer( GameMap* gamemap )
+static const int yetAnotherTask = 0xbd14cff9;
+static const int noOtherTasks = 0x339fbb40;
+
+            
+            
+TaskContainer::TaskContainer( GameMap* gamemap ) 
 {
    this->gamemap = gamemap;
+   for ( int i = 0; i < GameMap::maxTotalPlayers; ++i )
+      playerTasks[i] = NULL;
+   
+   
+   gamemap->sigPlayerTurnHasEnded.connect( SigC::slot( *this, &TaskContainer::endTurn ));
+   gamemap->sigPlayerTurnBegins.connect( SigC::slot( *this, &TaskContainer::startTurn ));
 }            
-            
-void TaskContainer::submit( Task* task )
-{
-   tasks.push_back( task );
-}
 
 TaskContainer::~TaskContainer()
 {
-   for ( Tasks::iterator i = tasks.begin(); i != tasks.end(); ++i )
+   for ( int i = 0; i < GameMap::maxTotalPlayers; ++i ) {
+      delete playerTasks[i];
+      playerTasks[i] = NULL;
+   }
+   
+   for ( CommandContainer::iterator i = pendingCommands.begin(); i != pendingCommands.end(); ++i )
       delete *i;
+   
+   delete newTasks;
+   newTasks = NULL;
 }
 
 void TaskContainer::hook( GameMap& gamemap )
@@ -45,53 +60,120 @@ void TaskContainer::hook( GameMap& gamemap )
    gamemap.tasks = new TaskContainer( &gamemap );
 }
 
+void TaskContainer::registerHooks()
+{
+   GameMap::sigMapCreation.connect( SigC::slot( &TaskContainer::hook ));
+   ActionContainer::commitCommand.connect( SigC::slot( &TaskContainer::getCommand ));
+   
+}
+
+void TaskContainer::endTurn( Player& player )
+{
+   for ( CommandContainer::iterator i = pendingCommands.begin(); i != pendingCommands.end(); ++i )
+      delete *i;
+   pendingCommands.clear();
+}
 
 
-void TaskContainer::write ( tnstream& stream )
-{            
-   stream.writeInt( tasks.size() );
-   for ( Tasks::iterator i = tasks.begin(); i != tasks.end(); ++i ) {
-      stream.writeInt( taskMagic );
-      tmemorystreambuf buffer;
+void TaskContainer::startTurn( Player& player )
+{
+   
+   if ( lastPlayer >= 0 ) {
+      /* a player's tasks are submitted at the beginning of the next player's turn, 
+         to avoid any timing problems which could cause a task submit happening
+         before the actions are transferred */
+      
       {
-         tmemorystream memstream( &buffer, tnstream::writing);
-         (*i)->write( memstream );
+         tmemorystream memstream( newTasks, tnstream::appending );
+         memstream.writeInt( noOtherTasks );
       }
       
-      buffer.writetostream( &stream );
-      stream.writeInt( taskMagic );
+      delete playerTasks[lastPlayer];
+      playerTasks[lastPlayer] = newTasks;
+      newTasks = NULL;
+      lastPlayer = -1;  
    }
+   
+   int p = player.getPosition();
+   if ( playerTasks[p] ) {
+      
+      pendingCommands.clear();
+      
+      tmemorystream stream ( playerTasks[p], tnstream::reading );
+      int token = stream.readInt();
+      while ( token == yetAnotherTask ) {
+         Command* cmd = dynamic_cast<Command*>( GameAction::readFromStream( stream, gamemap ) );
+         assertOrThrow( cmd != NULL );
+         
+         TaskInterface* ti = dynamic_cast<TaskInterface*>( cmd );
+         if ( !ti )
+            fatalError( "Found a task that does not implement the TaskInterface");
+         
+         ti->rearm();
+         
+         pendingCommands.push_back( cmd );
+         token = stream.readInt();
+      }
+   }
+   delete playerTasks[p];
+   playerTasks[p] = NULL;
+}
+
+
+
+void TaskContainer::store( const Command& command )
+{
+   if ( command.getState() == Command::Run ) {
+      if ( newTasks == NULL )
+         newTasks = new tmemorystreambuf();
+      
+      tmemorystream memstream( newTasks, tnstream::appending );
+      memstream.writeInt( yetAnotherTask );
+      command.write( memstream, false);
+      lastPlayer = gamemap->actplayer;
+   }
+}
+                         
+void TaskContainer::remove( Command* cmd )
+{
+   CommandContainer::iterator i = find ( pendingCommands.begin(), pendingCommands.end(), cmd );
+   if ( i != pendingCommands.end() )
+      pendingCommands.erase( i );
+}
+
+
+void TaskContainer::getCommand( GameMap* gamemap, Command& command )
+{
+   if ( gamemap->tasks ) {
+      TaskContainer* t = dynamic_cast<TaskContainer*>(gamemap->tasks);
+      t->store( command );
+   }
+}
+
+
+void TaskContainer::write ( tnstream& stream ) const
+{            
+   writeStorage( stream );
+   stream.writeInt( pendingCommands.size() );
+   for ( CommandContainer::const_iterator i = pendingCommands.begin(); i != pendingCommands.end(); ++i )
+      (*i)->write( stream );   
+   stream.writeInt( taskMagic );
 }
 
 
 void TaskContainer::read ( tnstream& stream )
 {
-   int size = stream.readInt();
-   assertOrThrow( size >= 0 );
+   readStorage( stream );
    
-   for ( int i = 0; i < size; ++i ) {
-      int magic = stream.readInt();
-      if ( magic != taskMagic ) 
-         throw new tinvalidversion( stream.getLocation(), taskMagic, magic );
-      
-      tmemorystreambuf buf;
-      buf.readfromstream( &stream );
-      
-      tmemorystream bufstream( &buf, tnstream::reading );
-      
-      Task* t = Task::readFromStream( bufstream, gamemap );
-      tasks.push_back ( t );
-      
-      
-      magic = stream.readInt();
-      if ( magic != taskMagic ) 
-         throw new tinvalidversion( stream.getLocation(), taskMagic, magic );
-   }
-}
-
-void TaskContainer::add( Task* task )
-{
-   if ( find ( tasks.begin(), tasks.end(), task ) == tasks.end() )
-      tasks.push_back( task );
+   
+   pendingCommands.clear();
+   int count = stream.readInt();
+   for ( int i = 0; i < count; ++i )
+      pendingCommands.push_back( dynamic_cast<Command*>( GameAction::readFromStream( stream, gamemap )));
+   
+   int magic = stream.readInt();
+   if ( magic != taskMagic ) 
+      throw new tinvalidversion( stream.getLocation(), taskMagic, magic );
+   
 }
 

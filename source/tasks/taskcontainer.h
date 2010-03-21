@@ -23,27 +23,35 @@
 
 #include <list>
 #include "abstracttaskcontainer.h"
+#include "../gamemap.h"
 
-class Task;
-class GameMap;
 class tnstream;
+class Command;
+class tmemorystreambuf;
 
-class TaskContainer : public AbstractTaskContainer {
+class TaskContainer : public AbstractTaskContainer, public SigC::Object {
       GameMap* gamemap;
+      static void hook( GameMap& gamemap );
+      static void getCommand( GameMap* gamemap, Command& command );
+      
+      void store( const Command& command );
+      
+      void startTurn( Player& player );
+      void endTurn( Player& player );
+      
    public:
+      typedef list<Command*> CommandContainer;
+      CommandContainer pendingCommands;
+      
+      void remove( Command* cmd );
       
       TaskContainer( GameMap* gamemap );
-      typedef std::list<Task*> Tasks;
-      Tasks tasks;
-   
-      void submit( Task* task );
       ~TaskContainer();
       
       void read ( tnstream& stream );
-      void write ( tnstream& stream );
-      
-      static void hook( GameMap& gamemap );
-      void add( Task* task );
+      void write ( tnstream& stream ) const;
+     
+      static void registerHooks();
       
       virtual void foo() {};
 };

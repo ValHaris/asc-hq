@@ -25,13 +25,14 @@
 #include <set>
 
 #include "unitcommand.h"
+#include "taskinterface.h"
 
 #include "../typen.h"
 #include "../attack.h"
 #include "../astar2.h"
 
 
-class MoveUnitCommand : public UnitCommand {
+class MoveUnitCommand : public UnitCommand, public TaskInterface {
    
    public:
       static bool avail ( Vehicle* eht );
@@ -51,6 +52,7 @@ class MoveUnitCommand : public UnitCommand {
       
       int flags;
       int verticalDirection;
+      bool multiTurnMovement;
       
       MoveUnitCommand( GameMap* map ) : UnitCommand( map ) {};
       template<class Child> friend GameAction* GameActionCreator( GameMap* map);
@@ -116,6 +118,13 @@ class MoveUnitCommand : public UnitCommand {
       const Vehicle* getUnit() const { return UnitCommand::getUnit(); };
       Vehicle* getUnit() { return UnitCommand::getUnit(); };
       
+      bool longDistAvailable( const MapCoordinate& pos );
+      
+      virtual vector<MapCoordinate> getCoordinates() const;
+      
+      int getCompletion();
+      bool operatable();
+      void rearm();
       
 };
 

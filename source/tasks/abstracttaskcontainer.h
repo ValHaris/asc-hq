@@ -21,16 +21,26 @@
 #ifndef abstracttaskcontainerH
 #define abstracttaskcontainerH
 
+#include "../gamemap.h"
+
 class tnstream;
 class Task;
+
 
 class AbstractTaskContainer {
    protected:
       static const int taskMagic = 0xda5cda5c;
+      tmemorystreambuf* playerTasks[GameMap::maxTotalPlayers];
+      tmemorystreambuf* newTasks;
+      
+      void writeStorage( tnstream& stream ) const;
+      void readStorage( tnstream& stream );
+      
+      int lastPlayer;
+      AbstractTaskContainer();
    public:
       virtual void read ( tnstream& stream ) = 0; 
-      virtual void write ( tnstream& stream ) = 0;
-      virtual void add( Task* task ) = 0;
+      virtual void write ( tnstream& stream ) const = 0;
       virtual ~AbstractTaskContainer() {};
 };
 

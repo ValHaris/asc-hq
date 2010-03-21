@@ -82,7 +82,7 @@ ActionResult CancelResearchCommand::go ( const Context& context )
    research.activetechnology = NULL;
    research.goal = NULL;
 
-   setState( Completed );
+   setState( Finished );
    
    return ActionResult(0);
 }
@@ -115,7 +115,7 @@ ActionResult CancelResearchCommand::preCheck()
 
 ActionResult CancelResearchCommand::undoAction( const Context& context )
 {
-   if ( getState() != Completed )
+   if ( getState() != Finished )
       return ActionResult(22000);
    
    Research& research = getMap()->getPlayer( player ).research;

@@ -131,7 +131,7 @@ ActionResult TrainUnitCommand::go ( const Context& context )
    
    
    if ( res.successful() )
-      setState( Completed );
+      setState( Finished );
    else
       setState( Failed );
    

@@ -136,7 +136,7 @@ ActionResult DirectResearchCommand::go ( const Context& context )
       immediatelyResearchedTechnologies.push_back( (*i)->id );
    
 
-   setState( Completed );
+   setState( Finished );
    
    return ActionResult(0);
 }
@@ -144,7 +144,7 @@ ActionResult DirectResearchCommand::go ( const Context& context )
 
 ActionResult DirectResearchCommand::undoAction( const Context& context )
 {
-   if ( getState() != Completed )
+   if ( getState() != Finished )
       return ActionResult(22000);
    
    Research& research = getMap()->getPlayer( player ).research;

@@ -35,68 +35,33 @@
 #include "selectionwindow.h"
 #include "../mainscreenwidget.h"
 #include "../spfst.h"
+#include "actionwidget.h"
 
-class ActionSelectionWidget: public SelectionWidget
+
+class ActionSelectionWidget: public ActionWidget
 {
-      const Command& act;
+      
       ActionContainer& actions;
       PG_CheckButton* check;
       
+   public:
+      ActionSelectionWidget( PG_Widget* parent, const PG_Point& pos, int width, const Command& action, ActionContainer& actionContainer, GameMap* map ) 
+         : ActionWidget( parent,pos, width, action, map ) ,  actions( actionContainer )
+      {
+         check = new PG_CheckButton( this, PG_Rect( 5, (Height()-15)/2, 15, 15 ));
+         if ( actions.isActive_req( &action ) )
+            check->SetPressed();
+         
+         check->sigClick.connect( SigC::slot( *this, &ActionSelectionWidget::click ));
+      }
+   protected:
       bool click( )
       {
          actions.setActive( &act, check->GetPressed() );
          return true;
       }
-      
-   public:
-      ActionSelectionWidget( PG_Widget* parent, const PG_Point& pos, int width, const Command& action, ActionContainer& actionContainer, GameMap* map ) 
-                : SelectionWidget( parent, PG_Rect( pos.x, pos.y, width, fieldsizey )), 
-                  act( action ), 
-                  actions( actionContainer )
-      {
 
-         check = new PG_CheckButton( this, PG_Rect( 5, (Height()-15)/2, 15, 15 ));
-         if ( actions.isActive_req( &action ) )
-            check->SetPressed();
-         
-         int offset = 0;
-         
-         const UnitCommand* uc = dynamic_cast<const UnitCommand*>(&action);
-         if ( uc != NULL && uc->getUnitTypeID() > 0 ) {
-            VehicleType* vt = vehicleTypeRepository.getObject_byID( uc->getUnitTypeID() );
-            if ( vt ) {
-               PG_Widget* w = new VehicleTypeImage( this, PG_Point( 25, 0), vt, map->getCurrentPlayer() );
-               offset += w->Width() + 5;
-            }
-         }
-         PG_Label* lbl1 = new PG_Label( this, PG_Rect( 25 + offset, 0, Width()-30, Height() ), action.getDescription() );
-         lbl1->SetFontSize( lbl1->GetFontSize() -2 );
-         
-         
-         
-         check->sigClick.connect( SigC::slot( *this, &ActionSelectionWidget::click ));
-         
-         SetTransparency( 255 );
-      };
-
-      ASCString getName() const
-      {
-         return act.getDescription();
-      };
-
-      vector<MapCoordinate> getCoordinates() const
-      {
-         return act.getCoordinates();  
-      }
-      
-   protected:
-
-      void display( SDL_Surface * surface, const PG_Rect & src, const PG_Rect & dst )
-      {
-      }
-      ;
 };
-
 
 
 class ActionFactory : public SelectionItemFactory {

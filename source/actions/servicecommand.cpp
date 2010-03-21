@@ -132,7 +132,7 @@ ActionResult ServiceCommand::go ( const Context& context )
          }
    }
    
-   setState( Completed );
+   setState( Finished );
       
 /*   
    ActionResult res = (new ConsumeResource(getContainer(), cost ))->execute( context );

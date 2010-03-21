@@ -20,9 +20,13 @@
 
 #include "taskhibernatingcontainer.h"
 
-#include "task.h"
 #include "../gamemap.h"
             
+
+void TaskHibernatingContainer::registerHooks()
+{
+   GameMap::sigMapCreation.connect( SigC::slot( &TaskHibernatingContainer::hook ));
+}
 
 void TaskHibernatingContainer::hook( GameMap& gamemap )
 {
@@ -30,36 +34,25 @@ void TaskHibernatingContainer::hook( GameMap& gamemap )
 }
 
 
-void TaskHibernatingContainer::write ( tnstream& stream )
+void TaskHibernatingContainer::write ( tnstream& stream ) const
 {
-   stream.writeInt( buffer.size() );
-   for ( Buffer::iterator i = buffer.begin(); i != buffer.end(); ++i ) {
-      stream.writeInt( taskMagic );
-      (*i)->writetostream( &stream );
-      stream.writeInt( taskMagic );
-   }
+   writeStorage( stream );
+   stream.writeInt( 0 );
+   stream.writeInt( taskMagic );
 }
 
 
 void TaskHibernatingContainer::read ( tnstream& stream )
 {
-   int size = stream.readInt();
-   assertOrThrow( size >= 0 );
-   buffer.clear();
+   readStorage( stream );
+   int tasks = stream.readInt();
+   if ( tasks != 0 )
+      throw tfileerror( "pending tasks in game");
    
-   for ( int i = 0; i < size; ++i ) {
-      int magic = stream.readInt();
-      if ( magic != taskMagic ) 
-         throw new tinvalidversion( stream.getLocation(), taskMagic, magic );
-      
-      tmemorystreambuf* buf = new tmemorystreambuf();
-      buf->readfromstream( &stream );
-      buffer.push_back( buf );
-      
-      magic = stream.readInt();
-      if ( magic != taskMagic ) 
-         throw new tinvalidversion( stream.getLocation(), taskMagic, magic );
-   }
+   int magic = stream.readInt();
+   if ( magic != taskMagic ) 
+      throw new tinvalidversion( stream.getLocation(), taskMagic, magic );
+
 }
 
 TaskHibernatingContainer::~TaskHibernatingContainer()

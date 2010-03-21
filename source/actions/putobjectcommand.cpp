@@ -251,7 +251,7 @@ ActionResult PutObjectCommand::go ( const Context& context )
    if ( res.successful() ) {
       if ( context.display )
          context.display->repaintDisplay();
-      setState( Completed );
+      setState( Finished );
    } else
       setState( Failed );
    return res;

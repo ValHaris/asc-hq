@@ -170,10 +170,10 @@
 #include "dialogs/actionmanager.h"
 #include "dialogs/gotoposition.h"
 #include "loggingoutput.h"
-
-#include "tasks/task.h"
+#include "contextutils.h"
+#include "actions/taskinterface.h"
 #include "tasks/taskcontainer.h"
-
+#include "dialogs/taskmanager.h"
 #include "autotraining.h"
 #include "spfst-legacy.h"
 
@@ -353,49 +353,30 @@ void saveGame( bool as )
 }
 
 
-class ReplayContext : public Context {
-      ReplayMapDisplay repDisplay;
-   public:
-      ReplayContext() : Context(), repDisplay( &getDefaultMapDisplay() )
-      {
-         display= &repDisplay;
-      }
-};
-
-/** creates a context that will move the map so that any action can be seen by the user */
-ReplayContext createFollowerContext( GameMap* gamemap )
-{
-   ReplayContext context;
-   // Context context;
-   // context.display = new ReplayMapDisplay( &getDefaultMapDisplay() );
-   
-   context.gamemap = gamemap;
-   context.actingPlayer = &gamemap->getPlayer( gamemap->actplayer );
-   context.parentAction = NULL;
-   context.viewingPlayer = gamemap->getPlayerView(); 
-   context.actionContainer = &gamemap->actions;
-   return context;   
-}
 
 
 void runOpenTasks()
 {
-   if ( !CGameOptions::Instance()->enableTasks ) 
-      return;
-   
    GameMap* map = actmap;
-   
-   Player& player = map->getCurrentPlayer();
    
    if ( map->tasks ) {
       TaskContainer* tc = dynamic_cast<TaskContainer*>( map->tasks );
       if ( tc ) {
-         for ( TaskContainer::Tasks::iterator i = tc->tasks.begin(); i != tc->tasks.end(); ++i ) {
-            if ( (*i)->getState() == Task::SetUp && (*i)->getPlayer() == player )
-               (*i)->go ( createFollowerContext( map ));
+         while ( tc->pendingCommands.begin() != tc->pendingCommands.end() ) {
+            Command* c = tc->pendingCommands.front();
+            TaskInterface* ti = dynamic_cast<TaskInterface*>( c );
+            
+            if ( ti->operatable() ) {
+               ActionResult res = c->execute( createFollowerContext( map ));
+               if ( !res.successful() )
+                  dispmessage2(res);
+            }
+            
+            tc->pendingCommands.erase( tc->pendingCommands.begin() );
          }
       }
    }
+   
 }
 
 
@@ -586,18 +567,6 @@ void helpAbout()
 }
 
 
-Context createContext( GameMap* gamemap )
-{
-   Context context;
-   
-   context.gamemap = gamemap;
-   context.actingPlayer = &gamemap->getPlayer( gamemap->actplayer );
-   context.parentAction = NULL;
-   context.display = &getDefaultMapDisplay();
-   context.viewingPlayer = gamemap->getPlayerView(); 
-   context.actionContainer = &gamemap->actions;
-   return context;   
-}
 
 void undo()
 {
@@ -1282,6 +1251,9 @@ void execuseraction2 ( tuseractions action )
       case ua_runOpenTasks: runOpenTasks();
          break;
          
+      case ua_taskManager: taskManager( actmap );
+         break;
+         
       default:
          break;
    }
@@ -1382,7 +1354,11 @@ void checkGameEvents( GameMap* map,const Command& command )
 
 int gamethread ( void* data )
 {
-   GameMap::sigMapCreation.connect( SigC::slot( &TaskContainer::hook ));
+   GameMap::sigMapDeletion.connect( SigC::slot( &resetActions ));
+   GameMap::sigMapDeletion.connect( SigC::slot( &resetActmap ));
+   GameMap::sigPlayerTurnEndsStatic.connect( SigC::slot( automaticTrainig ));
+   
+   TaskContainer::registerHooks();
    
    GameThreadParams* gtp = (GameThreadParams*) data;
 
@@ -1428,11 +1404,7 @@ int gamethread ( void* data )
    }
 #endif
 
-   GameMap::sigMapDeletion.connect( SigC::slot( &resetActions ));
-   GameMap::sigMapDeletion.connect( SigC::slot( &resetActmap ));
-   GameMap::sigMapCreation.connect( SigC::slot( &TaskContainer::hook ));
-   
-   GameMap::sigPlayerTurnEndsStatic.connect( SigC::slot( automaticTrainig ));
+
 
 //   ActionContainer::postActionExecution.connect( SigC::slot( &checkGameEvents ));
             
@@ -1533,19 +1505,6 @@ int gamethread ( void* data )
 }
 
 
-void rearmTasks ( Player& player )
-{
-   if ( player.getParentMap()->tasks ) {
-      TaskContainer* tc = dynamic_cast<TaskContainer*>( player.getParentMap()->tasks );
-      if ( tc ) {
-         for ( TaskContainer::Tasks::iterator i = tc->tasks.begin(); i != tc->tasks.end(); ++i ) {
-            if ( (*i)->getState() == Task::Worked && (*i)->getPlayer() == player )
-               (*i)->rearm();
-         }
-      }
-   }
-}
-
 static void __runResearch( Player& player ){
    runResearch( player, NULL, NULL );  
 }
@@ -1555,7 +1514,6 @@ void deployMapPlayingHooks ( GameMap* map )
    map->sigPlayerTurnBegins.connect( SigC::slot( initReplayLogging ));
    map->sigPlayerTurnBegins.connect( SigC::slot( transfer_all_outstanding_tribute ));   
    map->sigPlayerTurnBegins.connect( SigC::slot( __runResearch ));
-   map->sigPlayerTurnBegins.connect( SigC::slot( rearmTasks ));
 }
 
 

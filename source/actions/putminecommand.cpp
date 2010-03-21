@@ -203,9 +203,9 @@ ActionResult PutMineCommand::go ( const Context& context )
    if ( res.successful() )
       res = (new ChangeUnitMovement( getUnit(), mineputmovedecrease, true ))->execute(context);
    
-   if ( res.successful() ) {
-      setState( Completed );
-   } else
+   if ( res.successful() ) 
+      setState( Finished );
+   else
       setState( Failed );
       
    if( context.display && fieldvisiblenow( getMap()->getField(target), context.viewingPlayer ))

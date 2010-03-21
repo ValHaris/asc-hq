@@ -257,8 +257,6 @@ class CGameOptions
       
       bool logKillsToConsole;
       
-      bool enableTasks;
-      
    private:
       bool _changed;
 };

@@ -72,21 +72,6 @@ bool loadGameFromFile( const ASCString& filename )
 }
 
 
-
-Context createContext( GameMap* gamemap )
-{
-   Context context;
-   
-   context.gamemap = gamemap;
-   context.actingPlayer = &gamemap->getPlayer( gamemap->actplayer );
-   context.parentAction = NULL;
-   context.display = &getDefaultMapDisplay();
-   context.viewingPlayer = gamemap->getPlayerView(); 
-   context.actionContainer = &gamemap->actions;
-   return context;   
-}
-
-
 void runUnitTests()
 {
    testStreamEncoding();
@@ -222,8 +207,8 @@ int main(int argc, char *argv[] )
    SoundSystem soundSystem ( true, true, true );
 
    tspfldloaders::mapLoaded.connect( SigC::slot( deployMapPlayingHooks ));
-   GameMap::sigMapCreation.connect( SigC::slot( &TaskContainer::hook ));
-
+   TaskContainer::registerHooks();
+   
    PG_FileArchive archive( argv[0] );
 
    try {

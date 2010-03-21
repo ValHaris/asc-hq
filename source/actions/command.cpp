@@ -64,7 +64,7 @@ ActionResult Command::undoAction( const Context& context )
 
 ActionResult Command::redo( const Context& context )
 {
-   if ( getState() == Completed )
+   if ( getState() == Finished || getState() == Run )
       setState( SetUp );
    
    deleteChildren();

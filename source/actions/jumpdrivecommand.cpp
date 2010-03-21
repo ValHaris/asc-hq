@@ -191,7 +191,7 @@ ActionResult JumpDriveCommand::go ( const Context& context )
       context.display->repaintDisplay();
    
    if ( res.successful() )
-      setState( Completed );
+      setState( Finished );
    else
       setState( Failed );
    

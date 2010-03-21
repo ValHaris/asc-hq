@@ -765,7 +765,7 @@ class LogActionIntoReplayInfo  {
       }
 };
 
-void logActionToReplay( GameMap* map, const Command& command)
+static void logActionToReplay( GameMap* map, Command& command)
 {
    LogActionIntoReplayInfo lairi( map );
    lairi.saveCommand( command );

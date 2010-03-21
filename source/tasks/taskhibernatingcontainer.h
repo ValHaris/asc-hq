@@ -24,7 +24,6 @@
 #include "abstracttaskcontainer.h"
 #include "../typen.h"
 
-class Task;
 class GameMap;
 class tnstream;
 class tmemorystreambuf;
@@ -32,13 +31,13 @@ class tmemorystreambuf;
 class TaskHibernatingContainer : public AbstractTaskContainer {
       typedef deallocating_vector<tmemorystreambuf*> Buffer;
       Buffer buffer;
+      static void hook( GameMap& gamemap );
 
    public:
       void read ( tnstream& stream );
-      void write ( tnstream& stream );
-      void add( Task* task ){};
+      void write ( tnstream& stream ) const;
       
-      static void hook( GameMap& gamemap );
+      static void registerHooks();
       ~TaskHibernatingContainer ();
 };
 

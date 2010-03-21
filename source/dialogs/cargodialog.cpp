@@ -2725,7 +2725,7 @@ void RefuelUnitDialogCommand :: execute( const MapCoordinate& pos, ContainerBase
    ser->setDestination( subject );
    ammoTransferWindow( parent.getContainer(), subject, ser.get() );
    parent.cargoChanged();
-   if ( ser->getState() == Command::Completed )
+   if ( ser->getState() == Command::Finished )
       ser.release();
 }
 

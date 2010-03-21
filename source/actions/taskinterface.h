@@ -1,6 +1,6 @@
 /*
-     This file is part of Advanced Strategic Command; http://www.asc-hq.de
-     Copyright (C) 1994-2008  Martin Bickel  and  Marc Schellenberger
+     This file is part of Advanced Strategic Command; http://www.asc-hq.org
+     Copyright (C) 1994-2009  Martin Bickel 
  
      This program is free software; you can redistribute it and/or modify
      it under the terms of the GNU General Public License as published by
@@ -18,34 +18,21 @@
      Boston, MA  02111-1307  USA
 */
 
+#ifndef taskInterfaceH
+#define taskInterfaceH
 
-#include "unitattack_generator.h"
+class Context;
 
-#include "../vehicle.h"
-#include "unitattack.h"
-
-UnitAttackGenerator::UnitAttackGenerator()
-{
+class TaskInterface {
+   public:
+      virtual int getCompletion() = 0;
+      
+      /** checks if the task can still be operated.
+          If the task's unit was shot down for example, this would be the method to detect it and return false */
+      virtual bool operatable() = 0;
+      virtual void rearm() = 0;
    
-}
+      virtual ~TaskInterface () {};
+};
 
-bool UnitAttackGenerator::available( Vehicle* unit )
-{
-   if ( unit )
-      if ( unit->attacked == false )
-         if ( unit->weapexist() )
-            if (unit->typ->wait == false  ||  !unit->hasMoved() )
-                  return true;
-   return false;
-}
-
-ASCString UnitAttackGenerator::getID()
-{
-   return "Attack";
-}
-
-Task* UnitAttackGenerator::generate( Vehicle* unit, const MapCoordinate& target )
-{
-   return new UnitAttack ( unit );
-}
-
+#endif

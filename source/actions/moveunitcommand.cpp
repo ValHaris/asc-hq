@@ -61,9 +61,20 @@ bool MoveUnitCommand :: descendAvail ( Vehicle* veh )
 }
 
 
+bool MoveUnitCommand :: longDistAvailable( const MapCoordinate& pos )
+{
+   MapField* fld = getMap()->getField(pos);
+   if ( !fld )
+      return false;
+   
+   return fieldAccessible( fld, getUnit() ) == 2;
+
+}
+
+
 
 MoveUnitCommand :: MoveUnitCommand ( Vehicle* unit )
-   : UnitCommand ( unit ), flags(0), verticalDirection(0)
+   : UnitCommand ( unit ), flags(0), verticalDirection(0), multiTurnMovement(false)
 {
    
 }
@@ -214,11 +225,21 @@ void MoveUnitCommand :: setDestination( const MapCoordinate& destination )
    if ( getState() != Evaluated )
       searchFields();
    
+   bool found = false;
    for ( set<MapCoordinate3D>::iterator i = reachableFields.begin(); i != reachableFields.end(); ++i )
       if ( destination.x == i->x && destination.y == i->y ) {
          this->destination = *i;
+         found = true;
+         multiTurnMovement = false;
          break;
       }
+      
+   if ( !found ) {
+      // assuming long dist movement
+      this->destination = MapCoordinate3D( destination, getUnit()->getHeight() );
+      multiTurnMovement = true;
+   }
+   
    setState( SetUp );
 }
 
@@ -248,8 +269,53 @@ bool MoveUnitCommand::isFieldReachable3D( const MapCoordinate3D& pos, bool direc
 void MoveUnitCommand::calcPath()
 {
    path.clear();
-   AStar3D ast ( getMap(), getUnit(), false, getUnit()->getMovement() );
-   ast.findPath ( path, destination );
+   {
+      AStar3D ast ( getMap(), getUnit(), false, getUnit()->getMovement() );
+      ast.findPath ( path, destination );
+   }
+   
+   
+   if ( path.empty() && multiTurnMovement ) {
+      
+      bool enterContainer = true;
+      
+      AStar3D::Path totalPath;
+      AStar3D astar ( getMap(), getUnit(), false );
+   
+      astar.findPath ( totalPath, destination );
+      if ( totalPath.empty() )
+         return;
+   
+      AStar3D::Path::const_iterator pi = totalPath.begin();
+      AStar3D::Path::const_iterator lastmatch = pi;
+      
+      while ( pi != totalPath.end() ) {
+         MapField* fld = getMap()->getField ( pi->x, pi->y );
+         bool ok = true;
+         if ( fld->getContainer() ) {
+            if ( pi+1 !=totalPath.end() )
+               ok = false;
+            else {
+               if ( fld->building && !enterContainer )
+                  ok = false;
+               if ( fld->vehicle && !enterContainer )
+                  ok = false;
+            }
+         }
+
+         if ( ok )
+            if ( isFieldReachable3D(*pi, true) )
+               lastmatch = pi;
+
+         ++pi;
+      }
+
+      if ( lastmatch == path.begin() )
+         return;
+  
+      AStar3D ast ( getMap(), getUnit(), false, getUnit()->getMovement() );
+      ast.findPath ( path, *lastmatch );
+   }
 }
 
 const AStar3D::Path& MoveUnitCommand::getPath()
@@ -274,7 +340,10 @@ ActionResult MoveUnitCommand::go ( const Context& context )
    
    calcPath();
    
-   if ( path.empty() || path.rbegin()->x != destination.x || path.rbegin()->y != destination.y  ) 
+   if ( path.empty() ) 
+      return ActionResult( 105 );
+   
+   if ( !multiTurnMovement && ( path.rbegin()->x != destination.x || path.rbegin()->y != destination.y  )) 
       return ActionResult( 105 );
    
    int nwid = getUnit()->networkid;
@@ -294,9 +363,15 @@ ActionResult MoveUnitCommand::go ( const Context& context )
    else
       destDamage = 100;
 
-   if ( res.successful() )
-      setState( Completed );
-   else
+   if ( res.successful() ) {
+      if ( destDamage < 100 ) {
+         if ( multiTurnMovement && getUnit()->getPosition() != destination )
+            setState( Run );
+         else
+            setState( Finished );
+      } else 
+         setState( Finished );
+   } else
       setState( Failed );
    
    return res;
@@ -310,7 +385,7 @@ void MoveUnitCommand :: setVerticalDirection( int dir )
 }
 
 
-static const int moveCommandVersion = 1;
+static const int moveCommandVersion = 2;
 
 void MoveUnitCommand :: readData ( tnstream& stream )
 {
@@ -322,6 +397,10 @@ void MoveUnitCommand :: readData ( tnstream& stream )
    
    flags = stream.readInt( );
    verticalDirection = stream.readInt();
+   if ( version >= 2 )
+      multiTurnMovement = stream.readInt();
+   else
+      multiTurnMovement = false;
 }
 
 void MoveUnitCommand :: writeData ( tnstream& stream ) const
@@ -331,6 +410,7 @@ void MoveUnitCommand :: writeData ( tnstream& stream ) const
    destination.write( stream );
    stream.writeInt( flags );
    stream.writeInt( verticalDirection );
+   stream.writeInt( multiTurnMovement );
 }
 
 ASCString MoveUnitCommand :: getCommandString() const {
@@ -355,10 +435,32 @@ ASCString MoveUnitCommand::getDescription() const
 }
 
 
-namespace {
-   const bool r1 = registerAction<MoveUnitCommand> ( ActionRegistry::MoveUnitCommand );
+int MoveUnitCommand::getCompletion()
+{
+   return 50;
+}
+
+bool MoveUnitCommand::operatable()
+{
+   return getUnit();
+}
+
+void MoveUnitCommand::rearm()
+{
+   if ( getState() == Finished || getState() == Run )
+      setState( SetUp );
+   
+   deleteChildren();
+}
+
+vector<MapCoordinate> MoveUnitCommand::getCoordinates() const
+{
+   vector<MapCoordinate> pos;
+   pos.push_back( destination );
+   return pos;
 }
 
 
-
-
+namespace {
+   const bool r1 = registerAction<MoveUnitCommand> ( ActionRegistry::MoveUnitCommand );
+}

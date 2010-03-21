@@ -86,7 +86,7 @@ class ActionContainer {
       
       /** The command, which has already been executed, is finally commited and will not be undone any more
           This may be used to store it in the replay structure  */
-      static SigC::Signal2<void,GameMap*,const Command&> commitCommand;
+      static SigC::Signal2<void,GameMap*,Command&> commitCommand;
       
       static SigC::Signal1<void,GameMap*> actionListChanged;
       

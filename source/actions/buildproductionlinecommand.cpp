@@ -128,7 +128,7 @@ ActionResult BuildProductionLineCommand::go ( const Context& context )
    getContainer()->addProductionLine( vt );
    
    cr.release();
-   setState( Completed );
+   setState( Finished );
 
    return res;
 }

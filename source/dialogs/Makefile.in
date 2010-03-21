@@ -61,7 +61,8 @@ am_libgamedialogs_la_OBJECTS = cargodialog.lo unitcounting.lo \
 	buildingtypeselector.lo choosetech.lo productionanalysis.lo \
 	internalAmmoTransferDialog.lo replayrecorder.lo \
 	mailoptionseditor.lo vehicleproductionselection.lo \
-	infodialogs.lo actionmanager.lo gotoposition.lo
+	infodialogs.lo actionmanager.lo gotoposition.lo taskmanager.lo \
+	actionwidget.lo
 libgamedialogs_la_OBJECTS = $(am_libgamedialogs_la_OBJECTS)
 libmapeddialogs_la_DEPENDENCIES =
 am_libmapeddialogs_la_OBJECTS = cargoeditor.lo cargowidget.lo \
@@ -272,7 +273,8 @@ libdialogs_la_SOURCES = editmapparam.cpp cargowidget.cpp selectionwindow.cpp fil
 libdialogs_la_LIBADD = @SDL_LIBS@ 
 libgamedialogs_la_SOURCES = cargodialog.cpp unitcounting.cpp cargowidget.cpp ammotransferdialog.cpp attackpanel.cpp vehicletypeselector.cpp nextcampaignmap.cpp \
                               editplayerdata.cpp buildingtypeselector.cpp choosetech.cpp productionanalysis.cpp internalAmmoTransferDialog.cpp replayrecorder.cpp \
-                              mailoptionseditor.cpp vehicleproductionselection.cpp infodialogs.cpp actionmanager.cpp gotoposition.cpp
+                              mailoptionseditor.cpp vehicleproductionselection.cpp infodialogs.cpp actionmanager.cpp gotoposition.cpp taskmanager.cpp \
+                              actionwidget.cpp
 
 libgamedialogs_la_LIBADD = @SDL_LIBS@ 
 libmapeddialogs_la_SOURCES = cargoeditor.cpp cargowidget.cpp eventeditor.cpp newmap.cpp exchangegraphics.cpp importbi3map.cpp edittechadapter.cpp
@@ -335,6 +337,7 @@ distclean-compile:
 	-rm -f *.tab.c
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/actionmanager.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/actionwidget.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/admingame.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/alliancesetup.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ammotransferdialog.Plo@am__quote@
@@ -369,6 +372,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/replayrecorder.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/selectionwindow.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/soundsettings.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/taskmanager.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/terraininfo.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unitcounting.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unitguidedialog.Plo@am__quote@

@@ -119,7 +119,7 @@ ActionResult RecycleUnitCommand::go ( const Context& context )
       res = (new DestructContainer( unit))->execute( context );
    
    if ( res.successful() )
-      setState( Completed );
+      setState( Finished );
    else
       setState( Failed );
    

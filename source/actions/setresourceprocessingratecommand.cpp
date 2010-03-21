@@ -79,7 +79,7 @@ ActionResult SetResourceProcessingRateCommand::go ( const Context& context )
    oldRate = c->plus;
    c->plus = getNewPlus();
    
-   setState( Completed );
+   setState( Finished );
 
    return ActionResult(0);
 }

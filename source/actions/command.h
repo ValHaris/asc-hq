@@ -113,7 +113,12 @@
 
 class Command : public GameAction {
    public:
-      enum State { Planned, Evaluated, SetUp, Completed, Failed };
+      enum State { Planned,    
+                   Evaluated, 
+                   SetUp, 
+                   Run,           //!< the command is completed this turn, but there is still something to do next turn
+                   Finished,      //!< the command is totally done
+                   Failed };
    private:
       State state;
    public:
@@ -140,6 +145,7 @@ class Command : public GameAction {
       virtual void writeData ( tnstream& stream ) const;
             
       virtual ActionResult checkExecutionPrecondition() const;
+      
 };
 
 #endif

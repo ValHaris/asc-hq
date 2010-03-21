@@ -26,7 +26,7 @@
 #include "actioncontainer.h"
 
 GameAction::GameAction( GameMap* map )
- : gamemap(map), done(false)
+ : gamemap(map)
 {
    static int counter = 0;
    sequenceNumber = ++counter;
@@ -128,16 +128,23 @@ void GameAction::read ( tnstream& stream )
    }
 }
 
-void GameAction::write ( tnstream& stream ) const
+void GameAction::write ( tnstream& stream, bool persistChildren ) const
 {
    stream.writeInt( getID() );
    stream.writeInt( currentGameActionVersion );
    writeData( stream );
    stream.writeInt( gameActionToken );
-   stream.writeInt( children.size() );
-   for ( int i = 0; i < children.size(); ++i ) 
-      children[i]->write( stream );
-   
+   if ( persistChildren ) {
+      stream.writeInt( children.size() );
+      for ( int i = 0; i < children.size(); ++i ) 
+         children[i]->write( stream );
+   } else
+      stream.writeInt( 0 );
+}
+
+void GameAction::write ( tnstream& stream ) const
+{
+   write( stream, true );
 }
 
 GameAction* GameAction::readFromStream( tnstream& stream, GameMap* map )

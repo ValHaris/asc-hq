@@ -205,7 +205,7 @@ ActionResult AttackCommand::go ( const Context& context )
    
    ActionResult res = (new VehicleAttackAction(getMap(), getUnitID(), targetPosition, weapon ))->execute( context );
    if ( res.successful() )
-      setState( Completed );
+      setState( Finished );
    else
       setState( Failed );
    return res;

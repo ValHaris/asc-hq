@@ -162,7 +162,9 @@ void Menu::setup()
    addfield ( "~A~ction" );
    addbutton ( "~U~ndo\tctrl-z", ua_undo );
    addbutton ( "~R~edo\tctrl-shift-z", ua_redo );
-   addbutton ( "~M~anage", ua_actionManager );
+   addbutton ( "~M~anage Actions", ua_actionManager );
+   addbutton ( "Manage ~P~ending Tasks", ua_taskManager );
+   addbutton ( "Run all pending tasks\tctrl-t", ua_runOpenTasks );
    currentMenu->addSeparator();
    addbutton ( "Save Script", ua_writeLuaCommands );
    addbutton ( "Run Script", ua_runLuaCommands );

@@ -256,7 +256,7 @@ ActionResult DiplomacyCommand::go ( const Context& context )
       repaintMap();
    }
    
-   setState( Completed );
+   setState( Finished );
    
    return ActionResult(0);
 }

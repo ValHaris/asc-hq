@@ -52,7 +52,7 @@ class CampaignActionLogger : public SigC::Object, public ActionRecorder {
       CommandList commands;
       
       void mapWon( Player& player ); 
-      void commitCommand( GameMap* map, const Command& command );
+      void commitCommand( GameMap* map, Command& command );
       LuaCommandListRecorder<CommandList> writer;
       
    public:

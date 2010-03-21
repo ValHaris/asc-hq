@@ -42,7 +42,7 @@ void CampaignActionLogger::mapWon( Player& player )
 }
 
 
-void CampaignActionLogger::commitCommand( GameMap* map, const Command& command )
+void CampaignActionLogger::commitCommand( GameMap* map, Command& command )
 {
    if ( map == gamemap && map->getCurrentPlayer().isHuman() ) {
       writer.printComment( command.getDescription() );

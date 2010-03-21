@@ -249,8 +249,6 @@ void CGameOptions::runTextIO ( PropertyContainer& pc )
    pc.addString("LanguageOverride", languageOverride, "" );
    
    pc.addBool("LogKillsToConsole", logKillsToConsole, false );
-   
-   pc.addBool("EnableTasks", enableTasks, false );
 }
 
 CGameOptions::CGameOptions()
@@ -348,8 +346,6 @@ void CGameOptions::setDefaults ( void )
    replayMoveSpeedFactor= 150;
    
    logKillsToConsole = false;
-   
-   enableTasks = false;
    
    setChanged();
 }
