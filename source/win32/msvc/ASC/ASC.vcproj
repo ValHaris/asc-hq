@@ -208,6 +208,10 @@
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm"
 			>
 			<File
+				RelativePath="..\..\..\tasks\abstracttaskcontainer.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\accessconstraints-game.cpp"
 				>
 			</File>
@@ -285,6 +289,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\containercontrols.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\contextutils.cpp"
 				>
 			</File>
 			<File
@@ -608,6 +616,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\tasks\taskcontainer.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\terraintype.cpp"
 				>
 			</File>
@@ -755,6 +767,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\dialogs\actionwidget.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\dialogs\admingame.cpp"
 					>
 				</File>
@@ -856,6 +872,10 @@
 				</File>
 				<File
 					RelativePath="..\..\..\dialogs\selectionwindow.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\dialogs\taskmanager.cpp"
 					>
 				</File>
 				<File

@@ -202,6 +202,10 @@
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm"
 			>
 			<File
+				RelativePath="..\..\..\tasks\abstracttaskcontainer.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\accessconstraints-editor.cpp"
 				>
 			</File>
@@ -540,6 +544,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\strtmesg.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\tasks\taskhibernatingcontainer.cpp"
 				>
 			</File>
 			<File
