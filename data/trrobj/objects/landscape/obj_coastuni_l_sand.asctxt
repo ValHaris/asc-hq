@@ -6,7 +6,7 @@ ObjectType {
    visible_in_fogOfWar = true
    LinkableObjects = 2690
    LinkableTerrain = 2006 299
-   NetBehaviour = autoborder
+   NetBehaviour = 
 
    Armor = 0
    Height = 1

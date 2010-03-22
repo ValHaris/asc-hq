@@ -11,6 +11,13 @@ BuildingType {
 ;
 ;      CategoriesNOT = -> VehicleType.cargo_trooper_only.CategoriesNOT
 
+   StorageCapacity { 
+      BImode { 
+         Energy = 1000000
+         Material = 1000000
+         fuel = 1000000
+      } BImode
+   } StorageCapacity
 
 ; ----------------------------------------------------------------------------------------------------------------
 ; -----   N O T   D E F I N A T I O N S   ------------------------------------------------------------------------

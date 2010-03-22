@@ -63,7 +63,7 @@
 
 ;   WeaponX.WeaponEffectiveness ->* VehicleType.AntiAirWeapon
    AntiAirWeapon {      
-         trooper = 50
+         trooper = 100
          rail_vehicle = 200
          building|turret|object = 200
          hoovercraft = 200
@@ -349,7 +349,7 @@
       HitAccuracy.0 = 100
 
       WeaponEffectiveness {      
-         trooper = 90
+         trooper = 100
          rail_vehicle = 90
          building|turret|object = 110
          hoovercraft = 90
@@ -439,7 +439,7 @@
       HitAccuracy.u2 = 95
 
       WeaponEffectiveness {      
-         trooper = 50
+         trooper = 100
          rail_vehicle = 100
          building|turret|object = 100
          hoovercraft = 100
@@ -512,7 +512,7 @@
       HitAccuracy.u1 = 100
 
       WeaponEffectiveness {
-         trooper = 40
+         trooper = 50
          rail_vehicle = 100
          building|turret|object = 100
          hoovercraft = 80
@@ -604,7 +604,7 @@
      	 WeaponEffectiveness {
             default = 100
             device = 100
-            trooper = 50
+            trooper = 100
          ; erhoehter Schaden an Einheiten die nicht fuer das Fliegen bestimmt sind
             building|turret|object = 200
             hoovercraft = 200
@@ -1130,7 +1130,7 @@
             u6 = 
          } HitAccuracy
       WeaponEffectiveness {      
-         trooper = 50
+         trooper = 100
          rail_vehicle = 100
          building|turret|object = 100
          hoovercraft = 100
@@ -1207,7 +1207,7 @@
             u6 = 0
          } HitAccuracy
       WeaponEffectiveness {      
-         trooper = 50
+         trooper = 100
          rail_vehicle = 100
          building|turret|object = 100
          hoovercraft = 100
@@ -1469,6 +1469,27 @@
          } HitAccuracy
      	 WeaponEffectiveness {
 	    trooper = 50
+	    default = 50
+            rail_vehicle = 100
+            building|turret|object = 100
+            hoovercraft = 100
+            helicopter = 100
+
+            light_tracked_vehicle = 100
+            medium_tracked_vehicle = 100
+            heavy_tracked_vehicle = 100
+
+            light_wheeled_vehicle = 100
+            medium_wheeled_vehicle = 100
+            heavy_wheeled_vehicle = 100
+         
+            light_ship = 100
+            medium_ship  = 100
+            heavy_ship = 100
+
+            light_aircraft = 100
+            medium_aircraft  = 100
+            heavy_aircraft = 100
 	 } WeaponEffectiveness
       } DCA
 

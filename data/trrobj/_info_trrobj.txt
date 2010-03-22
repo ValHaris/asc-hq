@@ -25,7 +25,8 @@ belegt:
 2656 Channel turquoise
 2657 Sand  (Net)
 2658 Laserzaun
-2659-2663 Hafenanlagen
+2659-2688 Hafenanlagen
+2689/90 Strandküste
 
 Terrain
 

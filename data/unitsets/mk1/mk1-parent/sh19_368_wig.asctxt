@@ -19,7 +19,7 @@ VehicleType {
    MaxSurvivableStorm = 160
    ResourceDrillingRange = 0
    SelfRepairRate = 0
-   Weight = 400
+   Weight = 900
 
    Height = floating ground_level
    Tank { 

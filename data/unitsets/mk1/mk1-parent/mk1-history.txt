@@ -5,6 +5,15 @@ InfoImages: GAMER, Schicksal(3D), BananaJoe(3D)
 Spezifikationen: GAMER
 
 _______________________
+Beta-10.04
+-AntiAir/AntiOrbital/Artillerie Waffen gegen Trooper auf 100% angehoben
+-Wigs Gewicht 900
+-Speedship Gewicht 400 (vorher 250)
+-patrolship Gewicht 400 (vorher 250)
+-corvette Gewicht 600 (vorher 500)
+-Troopertransporter: CMD 1.6
+-Wasserbombe Effektivität gefixt
+_______________________
 27.02.2010 z81 (GAMER)
 -Grafikupdate Boje
 Beta-10-03

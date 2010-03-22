@@ -1,0 +1,63 @@
+ObjectType { 
+   name = small turret foundation
+   ID = 2093
+   groupID = 7
+
+   visible_in_fogOfWar = false
+   canExistBeneathBuildings = false
+
+   LinkableObjects = 
+   NoSelfChaining = true
+   Armor = 250
+   Height = 118
+
+   AttackBonus_abs = -1
+   AttackBonus_plus = -2
+   DefenseBonus_abs = -1
+   DefenseBonus_plus = -2
+   ViewBonus_plus = -1
+   Jamming_abs = -1
+   Jamming_plus = -1
+
+   ConstructionCost { 
+      Energy = 0
+      Material = 400
+      fuel = 100
+      Movement = 10
+   } ConstructionCost
+   RemovalCost { 
+      Energy = 0
+      Material = -200
+      fuel = 50
+      Movement = 10
+   } RemovalCost
+
+   Weather = dry few_snow much_snow snow_and_ice
+   ;                def lTr mTr hvT lWh mWh hWh tro rlv mAC mSh BTO lAC hAC lSh hSh Hli hov
+   Movemalus_plus = 2   2   2   2   2   2   2   1   0   5   5   0   5   5   5   5   5   10
+   Movemalus_abs =  -1
+
+   TerrainAccess { 
+      terrain_any = Lowland Hard_sand Soft_sand mountains large_rocks ditch
+      terrain_all = 
+      terrain_not = Railroad Ditch bridge installation
+      terrain_kill = Water Deep_water River lava
+   } TerrainAccess
+   TerrainProperties_Filter = 
+   TerrainProperties_Add = Turret_foundation 
+
+   dry { 
+      UseGFXpics = false
+      picture = obj_turret_small_dry.png 1
+   } dry
+   few_snow { 
+      UseGFXpics = false
+      picture = obj_turret_small_fs.png 1
+   } few_snow
+   much_snow { 
+      UseGFXpics = false
+      picture = obj_turret_small_ms.png 1
+   } much_snow
+   snow_and_ice ->* ObjectType.much_snow
+
+} ObjectType

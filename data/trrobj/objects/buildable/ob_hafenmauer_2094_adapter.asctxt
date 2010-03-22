@@ -1,5 +1,0 @@
-Techadapter {
-   Name = o2094
-   ;Bezeichnung der verknüpften Technologie: Hafenmauer
-   TechnologiesRequired = 0
-} TechAdapter

@@ -406,7 +406,7 @@
       MaxLoadableUnits = 8
       MaxLoadableUnitSize = 5
       MaxLoadableMass = 16
-      CargoMovementDivisor = 1.7
+      CargoMovementDivisor = 1.6
       CategoriesNOT -> VehicleType.cargo_trooper_only.CategoriesNOT
       EntranceSystemNum = 1
       EntranceSystem0 ->* VehicleType.GrIO
@@ -417,6 +417,7 @@
       MaxLoadableUnits = 6
       MaxLoadableUnitSize = 6
       MaxLoadableMass = 24
+      CargoMovementDivisor = 1.6
       CategoriesNOT -> VehicleType.cargo_trooper_only.CategoriesNOT
       EntranceSystemNum = 1
       EntranceSystem0 ->* VehicleType.GrIO
@@ -427,6 +428,7 @@
       MaxLoadableUnits = 4
       MaxLoadableUnitSize = 3
       MaxLoadableMass = 10
+      CargoMovementDivisor = 1.6
       CategoriesNOT -> VehicleType.cargo_trooper_only.CategoriesNOT
       EntranceSystemNum = 1
       EntranceSystem0 ->* VehicleType.GrIO
@@ -470,6 +472,7 @@
       MaxLoadableUnits = 4
       MaxLoadableUnitSize = 4
       MaxLoadableMass = 8
+      CargoMovementDivisor = 1.6
       CategoriesNOT -> VehicleType.cargo_trooper_only.CategoriesNOT
       EntranceSystemNum = 2
       EntranceSystem0 ->* VehicleType.Fl2Sub
@@ -752,7 +755,7 @@
       MaxLoadableUnits = 2
       MaxLoadableUnitSize = 4
       MaxLoadableMass = 4
-      CargoMovementDivisor = 2
+      CargoMovementDivisor = 1.8
       CategoriesNOT -> VehicleType.cargo_deftur_only.CategoriesNOT
       EntranceSystemNum = 1
       EntranceSystem0 ->* VehicleType.GrIO
@@ -805,7 +808,7 @@
       MaxLoadableUnits = 1
       MaxLoadableUnitSize = 2
       MaxLoadableMass = 2
-      CargoMovementDivisor = 1.8
+      CargoMovementDivisor = 1.6
       CategoriesNOT -> VehicleType.cargo_deftro_only.CategoriesNOT
       EntranceSystemNum = 1
       EntranceSystem0 ->* VehicleType.GrIO
@@ -845,7 +848,7 @@
       MaxLoadableUnits = 2
       MaxLoadableUnitSize = 6
       MaxLoadableMass = 6
-      CargoMovementDivisor = 1.8
+      CargoMovementDivisor = 1.6
       CategoriesNOT = medium_wheeled_vehicle heavy_wheeled_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle light_aircraft medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship building|turret|object helicopter hoovercraft
       EntranceSystemNum = 1
       EntranceSystem0 ->* VehicleType.GrIO

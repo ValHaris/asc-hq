@@ -31,10 +31,10 @@ BuildingType {
    Techlevel = 0
    MaxResearch = 0
    TerrainAccess { 
-      terrain_any = Lowland Hard_sand Soft_sand very_shallow_water 
+      terrain_any = Lowland Hard_sand Soft_sand  
       terrain_all = 
       terrain_not = railroad large_rocks swamp
-      terrain_kill = lava water deep_water river
+      terrain_kill = shallow_water lava water deep_water river
    } TerrainAccess
    ConstructionCost { 
       Energy = 0
@@ -53,9 +53,9 @@ BuildingType {
    } defaultProduction
    StorageCapacity { 
       BImode { 
-         Energy = 100000
-         Material = 100000
-         fuel = 100000
+         Energy = 1000000
+         Material = 1000000
+         fuel = 1000000
       } BImode
       ASCmode { 
          Energy = 0

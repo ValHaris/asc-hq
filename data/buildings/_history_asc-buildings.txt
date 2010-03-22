@@ -3,6 +3,9 @@ Spezifikationen: GAMER
 
 BUILDINGS HISTORY
 ______________________
+Beta-10-04
+-Stadt + lava_barrier -100 Produktion, -1000 Energiespeicher
+______________________
 27.02.2010 z81 (GAMER)
 Beta-10-03
 Neu:

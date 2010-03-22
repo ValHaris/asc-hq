@@ -4,7 +4,7 @@ VehicleType {
    parent = 250
 
    Description = light artillery
-   Picture = mk1v_blackout.pcx
+   Picture = mk1v_blackout.png
    InfoImage = mk1v_blackout.jpg
    InfoImageSmall = mk1v_blackout_k.png
    WreckageObject = 401

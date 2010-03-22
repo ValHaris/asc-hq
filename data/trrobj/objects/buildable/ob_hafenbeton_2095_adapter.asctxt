@@ -1,5 +1,0 @@
-Techadapter {
-   Name = o2095
-   ;Bezeichnung der verknüpften Technologie: Hafenbeton
-   TechnologiesRequired = 0
-} TechAdapter

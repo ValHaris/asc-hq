@@ -1,9 +1,15 @@
 BuildingType { 
    Name = Town
    ID = 24
+   parent = 499
+
    Armor = 100000
    View = 50
-   parent = 499
+   Features = matter_converter
+   notRemovable = true
+   MaxResearch = 10
+   NominalResearch = 10
+
    ConstructionStages = 1
    Weather = dry 
    Fields = A1 
@@ -16,28 +22,29 @@ BuildingType {
 ;      A1 = 78
 ;   } rubble
    Entry = A1
-   Functions = matter_converter
-   notRemovable = true
+
    TerrainAccess { 
       terrain_kill = water deep_water river
    } TerrainAccess
-   MaxResearch = 10
-   NominalResearch = 10
+
    MaxResourceProduction { 
       Energy = 500
       Material = 500
       fuel = 500
    } MaxResourceProduction
+
    defaultProduction {
-      energy = 500
-      material = 500
-      fuel = 500
+      energy = 400
+      material = 400
+      fuel = 400
    } defaultProduction
+
    StorageCapacity { 
       ASCmode { 
-         Energy = 2000
+         Energy = 1000
          Material = 2000
          fuel = 2000
       } ASCmode
    } StorageCapacity
+
 } BuildingType
