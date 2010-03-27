@@ -1,6 +1,6 @@
 -- This is an example for a Lua brush for the mapeditor
 -- Brushs are a subset of the available scripts for the mapeditor
--- They are for each field that the user 'draws' on with a pressed mouse button
+-- They are run for each field that the user 'draws' on with a pressed mouse button
 -- This means the the scripts should not make any kind of user interaction 
 -- (like dialogs, messages boxes, ...)
 --

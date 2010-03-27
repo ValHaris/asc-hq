@@ -3336,6 +3336,30 @@ fail:
 }
 
 
+static int _wrap_MapField_getTerrainType(lua_State* L) {
+  int SWIG_arg = 0;
+  MapField *arg1 = (MapField *) 0 ;
+  TerrainType *result = 0 ;
+  
+  SWIG_check_num_args("getTerrainType",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("getTerrainType",1,"MapField *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_MapField,0))){
+    SWIG_fail_ptr("MapField_getTerrainType",1,SWIGTYPE_p_MapField);
+  }
+  
+  result = (TerrainType *)(arg1)->getTerrainType();
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_TerrainType,0); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_MapField_checkForObject(lua_State* L) {
   int SWIG_arg = 0;
   MapField *arg1 = (MapField *) 0 ;
@@ -3431,6 +3455,7 @@ static swig_lua_method swig_MapField_methods[] = {
     {"setMineralMaterial", _wrap_MapField_setMineralMaterial}, 
     {"setMineralFuel", _wrap_MapField_setMineralFuel}, 
     {"hasProperty", _wrap_MapField_hasProperty}, 
+    {"getTerrainType", _wrap_MapField_getTerrainType}, 
     {"checkForObject", _wrap_MapField_checkForObject}, 
     {"getObjectCount", _wrap_MapField_getObjectCount}, 
     {"getObject", _wrap_MapField_getObject}, 

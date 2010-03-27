@@ -164,7 +164,10 @@ class MapField {
 #ifdef mapeditor
       void setWeather( int weather );
       bool removeObject ( const ObjectType* obj, bool force = false );
+      void changeTerrainType( const TerrainType* terrain );
 #endif      
+      TerrainType* getTerrainType();
+      
      Object* checkForObject ( const ObjectType*  o );
      
      %extend

@@ -158,6 +158,22 @@ void MapField::operator= ( const MapField& f )
 }
 
 
+const TerrainType* MapField::getTerrainType() const 
+{
+   return typ->terraintype;
+}
+
+void MapField::changeTerrainType( const TerrainType* terrain )
+{
+   int weather = getWeather();
+   if ( terrain->weather[weather] )
+      typ = terrain->weather[weather];
+   else
+      typ = terrain->weather[0];
+   
+   setparams ();
+}
+
 
 int MapField :: mineattacks ( const Vehicle* veh )
 {

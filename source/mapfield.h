@@ -38,6 +38,14 @@ class  MapField {
 
     //! the terraintype of the field
     TerrainType::Weather* typ;
+    
+    //! returns the terrain of the field
+    const TerrainType* getTerrainType() const;
+    
+    
+    //! changes the terrain type to a new one; weather is not changed
+    void changeTerrainType( const TerrainType* terrain );
+    
 
     /** mineral resources on this field. 
         \note that mineral resources are different from #Resources , there is a factor of #resource_fuel_factor and #resource_material_factor in between
