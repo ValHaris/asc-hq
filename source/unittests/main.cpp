@@ -74,6 +74,7 @@ bool loadGameFromFile( const ASCString& filename )
 
 void runUnitTests()
 {
+   testMovement();   
    testStreamEncoding();
    testVersionIdentifier();
    testJumpdrive();
@@ -85,7 +86,6 @@ void runUnitTests()
    testRecycling();
    testTransferControl();
    testAiService();
-   testMovement();   
    testAttack();
    testAiMovement();
    testView();

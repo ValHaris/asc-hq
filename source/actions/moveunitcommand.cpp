@@ -67,7 +67,12 @@ bool MoveUnitCommand :: longDistAvailable( const MapCoordinate& pos )
    if ( !fld )
       return false;
    
-   return fieldAccessible( fld, getUnit() ) == 2;
+   for ( int h = 0; h < 8; ++h )
+      if ( getUnit()->typ->height & (1<<h))
+         if ( fieldAccessible( fld, getUnit(), 1 << h ) == 2 )
+            return true;
+   
+   return false;
 
 }
 
@@ -236,7 +241,16 @@ void MoveUnitCommand :: setDestination( const MapCoordinate& destination )
       
    if ( !found ) {
       // assuming long dist movement
-      this->destination = MapCoordinate3D( destination, getUnit()->getHeight() );
+      MapField* fld  = getMap()->getField( destination );
+      if ( !fld )
+         return;
+      
+      if ( fld->getContainer() ) 
+         this->destination.setnum( destination.x, destination.y, -1 );
+      else
+          this->destination = MapCoordinate3D( destination, getUnit()->getHeight() );
+      
+      
       multiTurnMovement = true;
    }
    
@@ -365,7 +379,7 @@ ActionResult MoveUnitCommand::go ( const Context& context )
 
    if ( res.successful() ) {
       if ( destDamage < 100 ) {
-         if ( multiTurnMovement && getUnit()->getPosition() != destination )
+         if ( multiTurnMovement && getUnit()->getPosition3D() != destination )
             setState( Run );
          else
             setState( Finished );

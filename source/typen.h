@@ -235,7 +235,7 @@ class MapCoordinate3D : public MapCoordinate {
             MapCoordinate3D ( const MapCoordinate& mc, int bitmappedHeight ) : MapCoordinate ( mc ), z ( getFirstBit(bitmappedHeight) ) {};
             void setnum ( int _x, int _y, int numericalz ) { x = _x; y = _y; z = numericalz; };
             bool operator== ( const MapCoordinate3D& mc ) const { return y == mc.y && x == mc.x && (z == mc.z || z == -2 || mc.z == -2);};
-            bool operator!= ( const MapCoordinate3D& mc ) const { return (mc.x != x) || (mc.y != y) || (mc.z != z); };
+            bool operator!= ( const MapCoordinate3D& mc ) const { return !operator==(mc) ; };
             void write( tnstream& stream ) const { stream.writeInt ( 3500 ); stream.writeInt ( z ); MapCoordinate::write( stream ); };
             void read( tnstream& stream ) {
                stream.readInt ( );

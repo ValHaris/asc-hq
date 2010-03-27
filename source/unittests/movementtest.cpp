@@ -13,7 +13,7 @@
 #include "../loaders.h"
 #include "../itemrepository.h"
 #include "unittestutil.h"
-
+#include "../tasks/taskcontainer.h"
 
 void testMovement1() 
 {
@@ -161,8 +161,77 @@ void testMovementFieldsReachable()
 }
 
 
+static void runTasks( GameMap* gamemap )
+{
+   if ( gamemap->tasks ) {
+      TaskContainer* tc = dynamic_cast<TaskContainer*>( gamemap->tasks );
+      if ( tc ) {
+         while ( tc->pendingCommands.begin() != tc->pendingCommands.end() ) {
+            Command* c = tc->pendingCommands.front();
+            TaskInterface* ti = dynamic_cast<TaskInterface*>( c );
+            
+            if ( ti->operatable() ) {
+               ActionResult res = c->execute( createTestingContext( gamemap ));
+               if ( !res.successful() )
+                  throw res;
+            }
+            
+            tc->pendingCommands.erase( tc->pendingCommands.begin() );
+         }
+      }
+   }
+}
+
+
+static void moveUnitTest( GameMap* game, Vehicle* veh, const MapCoordinate& destination, int turns )
+{
+   assertOrThrow( veh != NULL );
+   assertOrThrow( game != NULL );
+   auto_ptr<MoveUnitCommand> muc ( new MoveUnitCommand( veh ));
+   muc->searchFields();
+   muc->setDestination( destination );
+   ActionResult res = muc->execute( createTestingContext( veh->getMap() ));
+   if ( res.successful() )
+      muc.release();
+   else
+      throw ActionResult(res);
+   
+   for ( int i = 0; i < turns; ++i ) {
+      next_turn( game, NextTurnStrategy_Abort(), NULL, -1 );
+      runTasks( game );
+   }
+   
+   assertOrThrow( destination == veh->getPosition() );
+   
+   TaskContainer* tc = dynamic_cast<TaskContainer*>( game->tasks );
+   assertOrThrow( tc != NULL );
+   
+   assertOrThrow( tc->pendingCommands.begin() == tc->pendingCommands.end() );
+
+}
+
+void testLongDistMovement()
+{
+   auto_ptr<GameMap> game ( startMap("unittest-moveland.map"));
+   Vehicle* veh;
+   MapCoordinate airport(0,7);
+   MapCoordinate carrier(0,0);
+   
+   veh = game->getField(9,18)->vehicle;
+   moveUnitTest(  game.get(), veh, airport, 1 );
+   
+   veh = game->getField(9,19)->vehicle;
+   moveUnitTest(  game.get(), veh, carrier, 1 );
+   
+   veh = game->getField(9,17)->vehicle;
+   moveUnitTest(  game.get(), veh, airport, 3 );
+   
+}
+
+
 void testMovement() 
 {
+   testLongDistMovement();
    testMovementFieldsReachable();
    testMovement1();
    testMovementRF();
