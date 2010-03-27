@@ -301,7 +301,7 @@ void MoveUnitCommand::calcPath()
          return;
    
       AStar3D::Path::const_iterator pi = totalPath.begin();
-      AStar3D::Path::const_iterator lastmatch = pi;
+      AStar3D::Path::const_iterator lastmatch = totalPath.begin();
       
       while ( pi != totalPath.end() ) {
          MapField* fld = getMap()->getField ( pi->x, pi->y );
@@ -324,7 +324,7 @@ void MoveUnitCommand::calcPath()
          ++pi;
       }
 
-      if ( lastmatch == path.begin() )
+      if ( lastmatch == totalPath.begin() )
          return;
   
       AStar3D ast ( getMap(), getUnit(), false, getUnit()->getMovement() );
