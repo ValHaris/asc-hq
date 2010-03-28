@@ -15,7 +15,6 @@ VehicleType {
    Category = light_wheeled_vehicle
    Weight = 22
 
-   Movement += 0 0 0 10 0 0 0 0 
    TerrainAccess ->* VehicleType.offroad 
 
    Weapons { 

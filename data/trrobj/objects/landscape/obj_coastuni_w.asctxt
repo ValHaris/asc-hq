@@ -1,12 +1,14 @@
 ObjectType { 
-   Name = Küste Wasser
+   Name = Coast Seaside
    ID = 2690
+   namingMethodNames = AddToTerrain
 ;   SecondaryIDs = 
 
    visible_in_fogOfWar = true
    LinkableObjects = 2689
    LinkableTerrain = 
    NetBehaviour = 
+   canExistBeneathBuildings = true
 
    Armor = 0
    Height = 1

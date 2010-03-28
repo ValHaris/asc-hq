@@ -13,7 +13,6 @@ VehicleType {
    Transportation ->* VehicleType.TransTrooper
 
    Weapons { 
-      Initiative = 0
       Number = 1
       Weapon0 ->* VehicleType.MG40low
       Weapon0.Name = Maschinengewehr

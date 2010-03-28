@@ -4,6 +4,8 @@ VehicleType {
    parent = 357
 
    picture = MK1s_APOGEE.pcx
+   InfoImage = mk1s_apogee.jpg
+   InfoImageSmall = mk1s_apogee_k.png
    WreckageObject = 437
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
 

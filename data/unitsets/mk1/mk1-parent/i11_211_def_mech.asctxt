@@ -18,7 +18,7 @@ VehicleType {
    Weapons { 
       Number = 3
       Weapon0 ->* VehicleType.SSM 
-      Weapon0.MaxRange = 20
+      Weapon0.MaxRange = 30
       Weapon0.Ammo = 6
       Weapon0.Punch@MaxRange = 80
       Weapon0.Punch@MinRange = 80

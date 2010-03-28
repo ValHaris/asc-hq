@@ -15,11 +15,10 @@ VehicleType {
    Armor -= 20
    Transportation ->* VehicleType.TransTrooper 
 
-   Movement += 0 0 0 15 0 0 0 0 
    TerrainAccess ->* VehicleType.amphibian 
+   Movement += 0 0 0 2 0 0 0 0 
 
    Weapons { 
-      Initiative = 0
       Number = 1
       Weapon0 ->* VehicleType.MG40low 
       Weapon0.Ammo = 12

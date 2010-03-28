@@ -19,7 +19,6 @@ VehicleType {
    MaxSurvivableStorm = 150
    ResourceDrillingRange = 5
 
-   Movement += 0 0 0 15 0 0 0 0 
    TerrainAccess ->* VehicleType.amphibian 
 
    Weapons { 

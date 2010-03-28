@@ -13,10 +13,13 @@ VehicleType {
    Picture = MK3v_COJOTE.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
+   Armor -= 20
    Category = light_wheeled_vehicle
    TerrainAccess ->* VehicleType.Wheeled 
    TerrainAccess.terrain_not = morass swamp large_rocks deep_snow
+
    MovementSound = wheeled_l_g.ogg
+   Movement = 0 0 0 80 0 0 0 0 
 
    Weapons { 
       Initiative = 0

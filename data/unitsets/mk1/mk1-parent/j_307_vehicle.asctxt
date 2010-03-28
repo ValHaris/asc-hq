@@ -18,13 +18,12 @@ VehicleType {
    Weight = 40
    WreckageObject = 451
 
-   Movement = 0 0 0 70 0 0 0 0 
+   Movement = 0 0 0 66 0 0 0 0 
    MovementSound = tracked_ext_s.ogg
    FuelConsumption = 25
    Tank.Fuel += 500
    
    Weapons { 
-      Initiative = 0
       Number = 1
       Weapon0 ->* VehicleType.DEF_MG
    } Weapons

@@ -3,9 +3,12 @@ Advanced Strategic Command
 Specifications by GAMER
 Grafics by GAMER, Snuggels, ValHaris, Xyphagoroszh, Havanna Club, Uranius und Grom
 ________________________
+Beta-10-05
+Wichtig: Mit Einsatz der neuen Küste werden diverse Objekte in der Brandung durch das River-bit zerstört. Z.B. Wald und leichter Turret.
+-Hafenbeton, Kosten deutlich erhöht
+-Universalküste (Strand) integriert
 Beta-10-04
 -Lava, nicht mehr auf Hills
--Hafenbeton auf bei Wald baubar
 -Small turret integriert (ersetzt, Malaner und Outlaw turret)
 ________________________
 27.02.2010 z81 (GAMER)

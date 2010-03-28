@@ -5,6 +5,12 @@ InfoImage: GAMER
 Spezifikationen: GAMER
 
 ______________________
+Beta-10-05
+Wichtig: Alle MK3 Turrets verlangen ab Zyklus 83 zwingend "turret_foundation"
+-Movementkorrektur: Fuchs,Luchs,Wiesel,Tow,Gaskin
+-Cojote +10 Move -20 Armor
+-Grafikupdate PRD
+-Build+ElitePio und Elch bauen light turret
 Beta-10-04
 -Grafikupdate Notstromaggregat
 ______________________

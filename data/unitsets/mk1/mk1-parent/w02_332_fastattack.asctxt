@@ -12,7 +12,7 @@ VehicleType {
 
    View = 41
    Jamming = 12
-   Weight = 10
+;   Weight = 10
    Category = light_wheeled_vehicle
    Features += move_after_attack jam_only_own_field
 
