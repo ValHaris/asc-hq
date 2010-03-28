@@ -137,12 +137,14 @@ ActionResult DestructContainer::runAction( const Context& context )
    }
       
    Building* bld = dynamic_cast<Building*>(container);
+   bld->unchainbuildingfromfield();
+   
    if ( bld && !suppressWreckage ) {
       for (int i = 0; i < BuildingType::xdimension; i++)
          for (int j = 0; j < BuildingType::ydimension; j++)
             if ( bld->typ->fieldExists ( BuildingType::LocalCoordinate(i,j) ) ) {
                MapField* fld = bld->getField( BuildingType::LocalCoordinate(i,j) );
-               if ( fld && fld->building == bld ) {
+               if ( fld ) {
                   typedef BuildingType::DestructionObjects::const_iterator J;
                   pair<J,J> b = bld->typ->destructionObjects.equal_range(BuildingType::LocalCoordinate(i,j));
                   for ( J o = b.first; o != b.second; ++o)
@@ -154,9 +156,10 @@ ActionResult DestructContainer::runAction( const Context& context )
    if( fieldRegistration != CARRIER )
       container->removeview();
    
+   delete container;
+   
    evaluateviewcalculation( getMap(), container->getPosition(), container->baseType->view, 0, false, &context );
    
-   delete container;
    
    return ActionResult(0);
 }

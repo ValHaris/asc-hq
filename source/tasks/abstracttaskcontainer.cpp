@@ -24,6 +24,19 @@
             
 AbstractTaskContainer::AbstractTaskContainer() : newTasks(NULL), lastPlayer(-1)
 {
+   for ( int i = 0; i < GameMap::maxTotalPlayers; ++i )
+      playerTasks[i] = NULL;
+}            
+
+AbstractTaskContainer::~AbstractTaskContainer() 
+{
+   for ( int i = 0; i < GameMap::maxTotalPlayers; ++i ) {
+      delete playerTasks[i];
+      playerTasks[i] = NULL;
+   }
+   
+   delete newTasks;
+   newTasks = NULL;
 }            
 
 void AbstractTaskContainer::writeStorage( tnstream& stream ) const

@@ -33,9 +33,6 @@ static const int noOtherTasks = 0x339fbb40;
 TaskContainer::TaskContainer( GameMap* gamemap ) 
 {
    this->gamemap = gamemap;
-   for ( int i = 0; i < GameMap::maxTotalPlayers; ++i )
-      playerTasks[i] = NULL;
-   
    
    gamemap->sigPlayerTurnHasEnded.connect( SigC::slot( *this, &TaskContainer::endTurn ));
    gamemap->sigPlayerTurnBegins.connect( SigC::slot( *this, &TaskContainer::startTurn ));
@@ -43,16 +40,8 @@ TaskContainer::TaskContainer( GameMap* gamemap )
 
 TaskContainer::~TaskContainer()
 {
-   for ( int i = 0; i < GameMap::maxTotalPlayers; ++i ) {
-      delete playerTasks[i];
-      playerTasks[i] = NULL;
-   }
-   
    for ( CommandContainer::iterator i = pendingCommands.begin(); i != pendingCommands.end(); ++i )
       delete *i;
-   
-   delete newTasks;
-   newTasks = NULL;
 }
 
 void TaskContainer::hook( GameMap& gamemap )

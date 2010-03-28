@@ -41,7 +41,7 @@ class AbstractTaskContainer {
    public:
       virtual void read ( tnstream& stream ) = 0; 
       virtual void write ( tnstream& stream ) const = 0;
-      virtual ~AbstractTaskContainer() {};
+      virtual ~AbstractTaskContainer();
 };
 
 #endif
