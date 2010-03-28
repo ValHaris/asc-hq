@@ -1603,9 +1603,11 @@ SWIGINTERN bool ContainerBaseType_hasProperty(ContainerBaseType *self,std::strin
             return false;
          }
 SWIGINTERN bool MapField_hasProperty(MapField *self,std::string bitName){
-            for ( int i = 0; i < terrainPropertyNum; ++i )
-               if ( terrainProperties[i] == bitName )
+            for ( int i = 0; i < terrainPropertyNum; ++i ) {
+               ASCString t = terrainProperties[i];
+               if ( t.compare_ci( bitName ) == 0 )
                   return self->bdt.test(i);
+            }
             return false;
          }
 SWIGINTERN int MapField_getObjectCount(MapField *self){
@@ -2097,12 +2099,37 @@ fail:
 }
 
 
+static int _wrap_MapCoordinate_toString(lua_State* L) {
+  int SWIG_arg = 0;
+  MapCoordinate *arg1 = (MapCoordinate *) 0 ;
+  std::string result;
+  
+  SWIG_check_num_args("toString",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("toString",1,"MapCoordinate *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_MapCoordinate,0))){
+    SWIG_fail_ptr("MapCoordinate_toString",1,SWIGTYPE_p_MapCoordinate);
+  }
+  
+  result = (arg1)->toString();
+  lua_pushlstring(L,(&result)->data(),(&result)->size()); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static void swig_delete_MapCoordinate(void *obj) {
 MapCoordinate *arg1 = (MapCoordinate *) obj;
 delete arg1;
 }
 static swig_lua_method swig_MapCoordinate_methods[] = {
     {"valid", _wrap_MapCoordinate_valid}, 
+    {"toString", _wrap_MapCoordinate_toString}, 
     {0,0}
 };
 static swig_lua_attribute swig_MapCoordinate_attributes[] = {

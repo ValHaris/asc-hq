@@ -31,6 +31,7 @@ class MapCoordinate {
    public:       
       MapCoordinate(int x, int y );
       bool valid();
+      std::string toString();
 };
 
 
@@ -155,9 +156,11 @@ class MapField {
       {
          bool hasProperty ( std::string bitName ) // see textfiletags.cpp for value
          {
-            for ( int i = 0; i < terrainPropertyNum; ++i )
-               if ( terrainProperties[i] == bitName )
+            for ( int i = 0; i < terrainPropertyNum; ++i ) {
+               ASCString t = terrainProperties[i];
+               if ( t.compare_ci( bitName ) == 0 )
                   return $self->bdt.test(i);
+            }
             return false;
          }
       }
