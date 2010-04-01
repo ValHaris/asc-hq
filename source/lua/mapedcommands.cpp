@@ -48,7 +48,7 @@ Object* placeObject( GameMap* map, const MapCoordinate& pos, const ObjectType* o
 
 Building* placeBuilding( GameMap* map, const MapCoordinate& pos, const BuildingType* bld, int owner )
 {
-   if ( map && bld && owner >= 0 && owner < 8 ) {
+   if ( map && bld && owner >= 0 && owner <= 8 ) {
       MapField* fld = map->getField(pos);
       if ( fld ) {
          putbuilding( map, pos, owner*8, bld, bld->construction_steps );
