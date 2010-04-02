@@ -3,6 +3,8 @@ Spezifikationen: GAMER
 
 BUILDINGS HISTORY
 ______________________
+Beta-10-06
+-MK4 Solarkraftwerk aktiviert
 Beta-10-04
 -Stadt + lava_barrier -100 Produktion, -1000 Energiespeicher
 ______________________

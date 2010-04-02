@@ -39,7 +39,7 @@ ObjectType {
    } RemovalCost
 
    TerrainAccess { 
-      terrain_any = road runway Lowland hard_sand soft_sand ditch river very_shallow_water shallow_water turret_foundation spaceport
+      terrain_any = road runway Lowland hard_sand soft_sand ditch river very_shallow_water turret_foundation spaceport
       terrain_all = 
       terrain_not = lava_barrier hillside
       terrain_kill = 

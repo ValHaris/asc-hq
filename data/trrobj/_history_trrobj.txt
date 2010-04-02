@@ -3,6 +3,8 @@ Advanced Strategic Command
 Specifications by GAMER
 Grafics by GAMER, Snuggels, ValHaris, Xyphagoroszh, Havanna Club, Uranius und Grom
 ________________________
+Beta-10-06
+-Lava wächst nicht mehr auf shallow_water
 Beta-10-05
 Wichtig: Mit Einsatz der neuen Küste werden diverse Objekte in der Brandung durch das River-bit zerstört. Z.B. Wald und leichter Turret.
 -Hafenbeton, Kosten deutlich erhöht

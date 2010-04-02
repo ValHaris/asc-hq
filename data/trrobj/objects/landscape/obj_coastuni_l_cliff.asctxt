@@ -1,0 +1,20 @@
+ObjectType { 
+   Name = Steilkueste
+   parent = 523
+   ID = 2691
+;   SecondaryIDs = 
+
+   visible_in_fogOfWar = true
+   LinkableObjects = 2690
+   LinkableTerrain = 
+   NetBehaviour = 
+
+   Weather = dry few_snow much_snow snow_and_ice
+   dry.UseGFXpics = false
+   dry.picture = obj_coastuni_l_cliff_dry.png 65
+   few_snow.UseGFXpics = false
+   few_snow.picture = obj_coastuni_l_cliff_fs.png 65
+   much_snow.UseGFXpics = false
+   much_snow.picture = obj_coastuni_l_cliff_ms.png 65
+   snow_and_ice ->* ObjectType.much_snow
+} ObjectType

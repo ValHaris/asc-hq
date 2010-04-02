@@ -9,7 +9,7 @@ ObjectType {
    canExistBeneathBuildings = true
    visible_in_fogOfWar = true
    Armor = 0
-   Height = 1
+   Height = 2
 
    ConstructionCost { 
       Energy = 0

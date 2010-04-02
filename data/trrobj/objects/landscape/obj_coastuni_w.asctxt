@@ -5,7 +5,7 @@ ObjectType {
 ;   SecondaryIDs = 
 
    visible_in_fogOfWar = true
-   LinkableObjects = 2689
+   LinkableObjects = 2689 2691
    LinkableTerrain = 
    NetBehaviour = 
    canExistBeneathBuildings = true
