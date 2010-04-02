@@ -24,6 +24,7 @@ class VideoRecorderInternals {
      Revel_Params revParams;
      bool open;
      int framerate;
+     int ascFramerateLimit;
      long lastTick;
      ASCString filename;
      int frameCounterOut; //<! counts all frames that where send to the videorecorder
@@ -41,12 +42,13 @@ void checkErrors( const Revel_Error& err )
 }
 
 
-VideoRecorder::VideoRecorder( const ASCString& filename, const SDL_Surface* surf, int framerate, int quality  )
+VideoRecorder::VideoRecorder( const ASCString& filename, const SDL_Surface* surf, int framerate, int ascFramerateLimit, int quality  )
 {
     data = new VideoRecorderInternals();
     data->framerate = framerate;
     data->lastTick = getTicker();
     data->filename = filename;
+    data->ascFramerateLimit = ascFramerateLimit;
    
     Revel_Error revError = Revel_CreateEncoder(&data->encoderHandle);
     checkErrors( revError );
@@ -142,7 +144,7 @@ void VideoRecorder::storeFrame( const SDL_Surface* surf )
    ++data->frameCounterOut;
    
    // we are limited the video to our framerate
-   while ( getTicker() < data->lastTick + 100/data->framerate )
+   while ( getTicker() < data->lastTick + 100/data->ascFramerateLimit )
       releasetimeslice();
    
    data->lastTick = getTicker();
@@ -173,7 +175,7 @@ VideoRecorder::~VideoRecorder()
 
 #else
 
-VideoRecorder::VideoRecorder( const ASCString& filename, const SDL_Surface* surf, int framerate, int quality  ) {}
+VideoRecorder::VideoRecorder( const ASCString& filename, const SDL_Surface* surf, int framerate, int ascFramerateLimit, int quality  ) {}
 const ASCString VideoRecorder::getFilename() { return ""; }
 void VideoRecorder::storeFrame( const SDL_Surface* surf ) {}
 void VideoRecorder::close() {}

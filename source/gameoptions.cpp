@@ -162,6 +162,7 @@ void CGameOptions::runTextIO ( PropertyContainer& pc )
    
    pc.openBracket("replayVideo");
    pc.addInteger("FrameRate", video.framerate, video.framerate );
+   pc.addInteger("ASCFrameRateLimit", video.ascframeratelimit, video.ascframeratelimit );
    pc.addInteger("Quality", video.quality, video.quality);
    pc.closeBracket();
    
@@ -331,6 +332,7 @@ void CGameOptions::setDefaults ( void )
 
    video.quality = 100;
    video.framerate = 15;
+   video.ascframeratelimit = 30;
    
    panelColumns = 2;
 

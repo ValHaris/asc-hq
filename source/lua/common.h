@@ -63,8 +63,11 @@ class PropertyDialog : public ASC_PG_Dialog {
       map<ASCString,int>  intValues;
       map<ASCString,ASCString> stringValues;
       
+      void setup();
+      
    public:
       PropertyDialog( const ASCString& title );
+      PropertyDialog( const ASCString& title, const PG_Rect& size );
       void addBool( const ASCString& name, bool defaultValue );
       void addInteger( const ASCString& name, int defaultValue );
       void addIntDropdown ( const ASCString& name, const StringArray& names, int defaultValue );

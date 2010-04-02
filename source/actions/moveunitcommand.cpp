@@ -352,6 +352,9 @@ ActionResult MoveUnitCommand::go ( const Context& context )
    if ( !getUnit() )
       return ActionResult(21001);
    
+   if (( getUnit()->getPosition() == destination) || (getUnit()->getPosition().x == destination.x && getUnit()->getPosition().y == destination.y && destination.getNumericalHeight() == -1  ))
+      return ActionResult(22003);
+   
    calcPath();
    
    if ( path.empty() ) 

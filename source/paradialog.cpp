@@ -650,7 +650,7 @@ class   NewStringChooser : public ASC_PG_Dialog {
    }
    
    public :
-      NewStringChooser ( const ASCString& _title, const vector<ASCString>& _strings , const vector<ASCString>& _buttons, int defaultEntry ) : ASC_PG_Dialog( NULL, PG_Rect( -1, -1, 400, 300 ), _title ), button(-1), item(-1)
+      NewStringChooser ( const ASCString& _title, const vector<ASCString>& _strings , const vector<ASCString>& _buttons, int defaultEntry ) : ASC_PG_Dialog( NULL, PG_Rect( -1, -1, 500, 300 ), _title ), button(-1), item(-1)
       {
          listbox = new PG_ListBox( this, PG_Rect( 10, 30, Width()-140, Height() - 40) );
          listbox->SetMultiSelect( false );

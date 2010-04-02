@@ -165,7 +165,7 @@ class ReplayRecorderWatcherGlobal {
          replayRecorderWatcherGlobal.set( this );
       }
       
-      void start( const ASCString& filename, bool append, int framerate, int quality )
+      void start( const ASCString& filename, bool append, int framerate, int ascFramerateLimit, int quality )
       {
          lastFilename = filename;
          movieModeStorage = CGameOptions::Instance()->replayMovieMode;
@@ -173,7 +173,7 @@ class ReplayRecorderWatcherGlobal {
          ASCString newFilename = constructFileName( 0, "", filename );
          if ( !rec || !append || newFilename != rec->getFilename()  ) {
             delete rec;
-            rec = new VideoRecorder( newFilename, PG_Application::GetScreen(), framerate, quality );
+            rec = new VideoRecorder( newFilename, PG_Application::GetScreen(), framerate, ascFramerateLimit, quality );
          }
          
          if ( !connection.connected() )
@@ -488,7 +488,7 @@ class ReplayRecord : public GuiFunction
          
         if ( !replayRecorder )
            replayRecorder = new ReplayRecorder();
-        replayRecorder->start( rrd.getFilename(), rrd.getAppend(), rrd.getFramerate(), rrd.getQuality() );
+        replayRecorder->start( rrd.getFilename(), rrd.getAppend(), rrd.getFramerate(), rrd.getASCFramerateLimit(),  rrd.getQuality() );
         
         runreplay.status = 2;
         updateFieldInfo();

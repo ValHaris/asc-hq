@@ -81,7 +81,8 @@ const TerrainType* getTerrainType( int id )
          return true;  
       }
       
-      PropertyDialog :: PropertyDialog( const ASCString& title ) : ASC_PG_Dialog( NULL, PG_Rect( -1, -1, 400, 500 ), title ), propertyEditor(NULL), result(false)
+      
+      void PropertyDialog :: setup() 
       {
          propertyEditor = new ASC_PropertyEditor( this, PG_Rect( 10, GetTitlebarHeight()+10, Width() - 20, Height() - GetTitlebarHeight() - 60 ), "PropertyEditor", 70 );
          
@@ -89,7 +90,19 @@ const TerrainType* getTerrainType( int id )
          AddStandardButton("OK")->sigClick.connect( SigC::slot( *this, &PropertyDialog::ok ));
          AddStandardButton("Cancel")->sigClick.connect( SigC::slot( *this, &PropertyDialog::cancel ));
       }
+         
+      
+      PropertyDialog :: PropertyDialog( const ASCString& title ) : ASC_PG_Dialog( NULL, PG_Rect( -1, -1, 400, 500 ), title ), propertyEditor(NULL), result(false)
+      {
+         setup();
+      }
    
+      PropertyDialog :: PropertyDialog( const ASCString& title, const PG_Rect& pos ) : ASC_PG_Dialog( NULL, pos, title ), propertyEditor(NULL), result(false)
+      {
+         setup();
+      }
+      
+      
       void PropertyDialog :: addBool( const ASCString& name, bool defaultValue )
       {
          boolValues[name] = defaultValue ; 

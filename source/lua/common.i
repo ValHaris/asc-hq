@@ -248,10 +248,16 @@ class StringArray {
       int size(); //
 };
 
+/** a rectangle for specifying the size and position of dialogs, widgets, etc */
+class PG_Rect {
+   public:
+      PG_Rect( int xpos, int ypos, int width, int heigth );
+};
 
 class PropertyDialog  {
    public:
       PropertyDialog( const std::string& title );
+      PropertyDialog( const std::string& title, const PG_Rect& size );
       void addBool( const std::string& name, bool defaultValue );
       void addInteger( const std::string& name, int defaultValue );
       

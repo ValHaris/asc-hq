@@ -288,6 +288,8 @@ Assertion failed: Sequencing error
 Failed to set transferable amount 
 22002
 Destination not available
+22003
+Unit already there
 22100
 Unit for destruction not available
 22101

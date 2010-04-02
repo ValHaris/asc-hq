@@ -29,6 +29,7 @@ class ReplayRecorderDialog : public ASC_PG_Dialog {
       PG_LineEdit* filename;
       PG_CheckButton* append;
       PG_LineEdit* frameRate;
+      PG_LineEdit* frameRateLimit;
       PG_LineEdit* quality;
       bool selectFilename();
       bool ok();
@@ -38,6 +39,7 @@ class ReplayRecorderDialog : public ASC_PG_Dialog {
       bool getAppend();
       int getQuality();
       int getFramerate();
+      int getASCFramerateLimit();
 };
 
 

@@ -1537,18 +1537,19 @@ SWIG_Lua_dostring(lua_State *L, const char* str) {
 #define SWIGTYPE_p_MapField swig_types[8]
 #define SWIGTYPE_p_Object swig_types[9]
 #define SWIGTYPE_p_ObjectType swig_types[10]
-#define SWIGTYPE_p_Player swig_types[11]
-#define SWIGTYPE_p_Properties swig_types[12]
-#define SWIGTYPE_p_PropertyDialog swig_types[13]
-#define SWIGTYPE_p_Research swig_types[14]
-#define SWIGTYPE_p_Resources swig_types[15]
-#define SWIGTYPE_p_StringArray swig_types[16]
-#define SWIGTYPE_p_TerrainType swig_types[17]
-#define SWIGTYPE_p_Vehicle swig_types[18]
-#define SWIGTYPE_p_VehicleType swig_types[19]
-#define SWIGTYPE_p_std__string swig_types[20]
-static swig_type_info *swig_types[22];
-static swig_module_info swig_module = {swig_types, 21, 0, 0, 0, 0};
+#define SWIGTYPE_p_PG_Rect swig_types[11]
+#define SWIGTYPE_p_Player swig_types[12]
+#define SWIGTYPE_p_Properties swig_types[13]
+#define SWIGTYPE_p_PropertyDialog swig_types[14]
+#define SWIGTYPE_p_Research swig_types[15]
+#define SWIGTYPE_p_Resources swig_types[16]
+#define SWIGTYPE_p_StringArray swig_types[17]
+#define SWIGTYPE_p_TerrainType swig_types[18]
+#define SWIGTYPE_p_Vehicle swig_types[19]
+#define SWIGTYPE_p_VehicleType swig_types[20]
+#define SWIGTYPE_p_std__string swig_types[21]
+static swig_type_info *swig_types[23];
+static swig_module_info swig_module = {swig_types, 22, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -4490,7 +4491,50 @@ static swig_lua_class *swig_StringArray_bases[] = {0};
 static const char *swig_StringArray_base_names[] = {0};
 static swig_lua_class _wrap_class_StringArray = { "StringArray", &SWIGTYPE_p_StringArray,_wrap_new_StringArray, swig_delete_StringArray, swig_StringArray_methods, swig_StringArray_attributes, swig_StringArray_bases, swig_StringArray_base_names };
 
-static int _wrap_new_PropertyDialog(lua_State* L) {
+static int _wrap_new_PG_Rect(lua_State* L) {
+  int SWIG_arg = 0;
+  int arg1 ;
+  int arg2 ;
+  int arg3 ;
+  int arg4 ;
+  PG_Rect *result = 0 ;
+  
+  SWIG_check_num_args("PG_Rect",4,4)
+  if(!lua_isnumber(L,1)) SWIG_fail_arg("PG_Rect",1,"int");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("PG_Rect",2,"int");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("PG_Rect",3,"int");
+  if(!lua_isnumber(L,4)) SWIG_fail_arg("PG_Rect",4,"int");
+  arg1 = (int)lua_tonumber(L, 1);
+  arg2 = (int)lua_tonumber(L, 2);
+  arg3 = (int)lua_tonumber(L, 3);
+  arg4 = (int)lua_tonumber(L, 4);
+  result = (PG_Rect *)new PG_Rect(arg1,arg2,arg3,arg4);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_PG_Rect,1); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static void swig_delete_PG_Rect(void *obj) {
+PG_Rect *arg1 = (PG_Rect *) obj;
+delete arg1;
+}
+static swig_lua_method swig_PG_Rect_methods[] = {
+    {0,0}
+};
+static swig_lua_attribute swig_PG_Rect_attributes[] = {
+    {0,0,0}
+};
+static swig_lua_class *swig_PG_Rect_bases[] = {0};
+static const char *swig_PG_Rect_base_names[] = {0};
+static swig_lua_class _wrap_class_PG_Rect = { "PG_Rect", &SWIGTYPE_p_PG_Rect,_wrap_new_PG_Rect, swig_delete_PG_Rect, swig_PG_Rect_methods, swig_PG_Rect_attributes, swig_PG_Rect_bases, swig_PG_Rect_base_names };
+
+static int _wrap_new_PropertyDialog__SWIG_0(lua_State* L) {
   int SWIG_arg = 0;
   std::string *arg1 = 0 ;
   std::string temp1 ;
@@ -4508,6 +4552,78 @@ static int _wrap_new_PropertyDialog(lua_State* L) {
 fail:
   lua_error(L);
   return SWIG_arg;
+}
+
+
+static int _wrap_new_PropertyDialog__SWIG_1(lua_State* L) {
+  int SWIG_arg = 0;
+  std::string *arg1 = 0 ;
+  PG_Rect *arg2 = 0 ;
+  std::string temp1 ;
+  PropertyDialog *result = 0 ;
+  
+  SWIG_check_num_args("PropertyDialog",2,2)
+  if(!lua_isstring(L,1)) SWIG_fail_arg("PropertyDialog",1,"std::string const &");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("PropertyDialog",2,"PG_Rect const &");
+  temp1.assign(lua_tostring(L,1),lua_strlen(L,1)); arg1=&temp1;
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_PG_Rect,0))){
+    SWIG_fail_ptr("new_PropertyDialog",2,SWIGTYPE_p_PG_Rect);
+  }
+  
+  result = (PropertyDialog *)new PropertyDialog((std::string const &)*arg1,(PG_Rect const &)*arg2);
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_PropertyDialog,1); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_new_PropertyDialog(lua_State* L) {
+  int argc;
+  int argv[3]={
+    1,2,3
+  };
+  
+  argc = lua_gettop(L);
+  if (argc == 1) {
+    int _v;
+    {
+      _v = lua_isstring(L,argv[0]);
+    }
+    if (_v) {
+      return _wrap_new_PropertyDialog__SWIG_0(L);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    {
+      _v = lua_isstring(L,argv[0]);
+    }
+    if (_v) {
+      {
+        void *ptr;
+        if (lua_isuserdata(L,argv[1])==0 || SWIG_ConvertPtr(L,argv[1], (void **) &ptr, SWIGTYPE_p_PG_Rect, 0)) {
+          _v = 0;
+        } else {
+          _v = 1;
+        }
+      }
+      if (_v) {
+        return _wrap_new_PropertyDialog__SWIG_1(L);
+      }
+    }
+  }
+  
+  lua_pushstring(L,"Wrong arguments for overloaded function 'new_PropertyDialog'\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    PropertyDialog(std::string const &)\n"
+    "    PropertyDialog(std::string const &,PG_Rect const &)\n");
+  lua_error(L);return 0;
 }
 
 
@@ -5769,6 +5885,7 @@ static swig_type_info _swigt__p_MapCoordinate3D = {"_p_MapCoordinate3D", "MapCoo
 static swig_type_info _swigt__p_MapField = {"_p_MapField", "MapField *", 0, 0, (void*)&_wrap_class_MapField, 0};
 static swig_type_info _swigt__p_Object = {"_p_Object", "Object *", 0, 0, (void*)&_wrap_class_Object, 0};
 static swig_type_info _swigt__p_ObjectType = {"_p_ObjectType", "ObjectType *", 0, 0, (void*)&_wrap_class_ObjectType, 0};
+static swig_type_info _swigt__p_PG_Rect = {"_p_PG_Rect", "PG_Rect *", 0, 0, (void*)&_wrap_class_PG_Rect, 0};
 static swig_type_info _swigt__p_Player = {"_p_Player", "Player *", 0, 0, (void*)&_wrap_class_Player, 0};
 static swig_type_info _swigt__p_Properties = {"_p_Properties", "Properties *", 0, 0, (void*)&_wrap_class_Properties, 0};
 static swig_type_info _swigt__p_PropertyDialog = {"_p_PropertyDialog", "PropertyDialog *", 0, 0, (void*)&_wrap_class_PropertyDialog, 0};
@@ -5792,6 +5909,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_MapField,
   &_swigt__p_Object,
   &_swigt__p_ObjectType,
+  &_swigt__p_PG_Rect,
   &_swigt__p_Player,
   &_swigt__p_Properties,
   &_swigt__p_PropertyDialog,
@@ -5815,6 +5933,7 @@ static swig_cast_info _swigc__p_MapCoordinate3D[] = {  {&_swigt__p_MapCoordinate
 static swig_cast_info _swigc__p_MapField[] = {  {&_swigt__p_MapField, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Object[] = {  {&_swigt__p_Object, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_ObjectType[] = {  {&_swigt__p_ObjectType, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_PG_Rect[] = {  {&_swigt__p_PG_Rect, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Player[] = {  {&_swigt__p_Player, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_Properties[] = {  {&_swigt__p_Properties, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_PropertyDialog[] = {  {&_swigt__p_PropertyDialog, 0, 0, 0},{0, 0, 0, 0}};
@@ -5838,6 +5957,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_MapField,
   _swigc__p_Object,
   _swigc__p_ObjectType,
+  _swigc__p_PG_Rect,
   _swigc__p_Player,
   _swigc__p_Properties,
   _swigc__p_PropertyDialog,

@@ -50,6 +50,7 @@ bool ReplayRecorderDialog::ok()
       
       if ( !fileExists || getAppend() || choice_dlg( "overwrite " + getFilename() +" ?", "~y~es","~n~o") == 1 ) {
          
+         CGameOptions::Instance()->video.ascframeratelimit = getASCFramerateLimit();
          CGameOptions::Instance()->video.framerate = getFramerate();
          CGameOptions::Instance()->video.quality = getQuality();
          CGameOptions::Instance()->setChanged(true);
@@ -74,9 +75,15 @@ ReplayRecorderDialog::ReplayRecorderDialog( const ASCString& file, bool fileAlre
       append->SetPressed();
    }
    
-   new PG_Label(this, PG_Rect(20,100,80,25),"Framerate:");
+   new PG_Label(this, PG_Rect(20,100,80,25),"Video Framerate:");
    frameRate = new PG_LineEdit( this, PG_Rect( 120, 100, 150, 25 ));
    frameRate->SetText( ASCString::toString( CGameOptions::Instance()->video.framerate ));
+   
+   new PG_Label(this, PG_Rect(20,100,80,25),"ASC Framerate limit:");
+   frameRateLimit = new PG_LineEdit( this, PG_Rect( 120, 100, 150, 25 ));
+   frameRateLimit->SetText( ASCString::toString( CGameOptions::Instance()->video.ascframeratelimit ));
+   
+      
    
    new PG_Label(this, PG_Rect(20,140,80,25),"Quality:");
    quality   = new PG_LineEdit( this, PG_Rect( 120, 140, 150, 25 ));
@@ -117,6 +124,18 @@ int ReplayRecorderDialog::getQuality()
 int ReplayRecorderDialog::getFramerate()
 {
    int res = atoi(frameRate->GetText().c_str() );
+   
+   if ( res < 1 )
+      res = 1;
+   if ( res > 100 )
+      res = 100;
+   return res;
+   
+}
+
+int ReplayRecorderDialog::getASCFramerateLimit()
+{
+   int res = atoi(frameRateLimit->GetText().c_str() );
    
    if ( res < 1 )
       res = 1;

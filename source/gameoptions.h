@@ -240,6 +240,7 @@ class CGameOptions
 
       struct {
          int framerate;
+         int ascframeratelimit;
          int quality;
       } video;
 
