@@ -1592,6 +1592,7 @@ typedef struct{} LANGUAGE_OBJ;
 
 #include <string>
 #include "../gamemap.h"
+#include "../spfst.h"
 #include "../mapalgorithms.h"
 #include "../util/messaginghub.h"
 #include "../textfiletags.h"
@@ -2246,6 +2247,22 @@ static int _wrap_getActiveMap(lua_State* L) {
   SWIG_check_num_args("getActiveMap",0,0)
   result = (GameMap *)getActiveMap();
   SWIG_NewPointerObj(L,result,SWIGTYPE_p_GameMap,0); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_repaintMap(lua_State* L) {
+  int SWIG_arg = 0;
+  
+  SWIG_check_num_args("repaintMap",0,0)
+  repaintMap();
+  
   return SWIG_arg;
   
   if(0) SWIG_fail;
@@ -5834,6 +5851,7 @@ fail:
 
 static const struct luaL_reg swig_commands[] = {
     { "getActiveMap", _wrap_getActiveMap},
+    { "repaintMap", _wrap_repaintMap},
     { "getObjectType", _wrap_getObjectType},
     { "getBuildingType", _wrap_getBuildingType},
     { "getUnitType", _wrap_getUnitType},

@@ -63,7 +63,7 @@ bool ReplayRecorderDialog::ok()
       return false;
 }
       
-ReplayRecorderDialog::ReplayRecorderDialog( const ASCString& file, bool fileAlreadyOpen ) : ASC_PG_Dialog( NULL, PG_Rect( -1, -1, 400, 250 ), "Replay Recorder" ), append(NULL)
+ReplayRecorderDialog::ReplayRecorderDialog( const ASCString& file, bool fileAlreadyOpen ) : ASC_PG_Dialog( NULL, PG_Rect( -1, -1, 400, 290 ), "Replay Recorder" ), append(NULL)
 {
    new PG_Label(this, PG_Rect(20,30,80,25),"File:");
    filename = new PG_LineEdit( this, PG_Rect( 120, 30, 150, 25 ));
@@ -75,23 +75,23 @@ ReplayRecorderDialog::ReplayRecorderDialog( const ASCString& file, bool fileAlre
       append->SetPressed();
    }
    
-   new PG_Label(this, PG_Rect(20,100,80,25),"Video Framerate:");
-   frameRate = new PG_LineEdit( this, PG_Rect( 120, 100, 150, 25 ));
+   new PG_Label(this, PG_Rect(20,100,120,25),"Video Framerate:");
+   frameRate = new PG_LineEdit( this, PG_Rect( 150, 100, 150, 25 ));
    frameRate->SetText( ASCString::toString( CGameOptions::Instance()->video.framerate ));
    
-   new PG_Label(this, PG_Rect(20,100,80,25),"ASC Framerate limit:");
-   frameRateLimit = new PG_LineEdit( this, PG_Rect( 120, 100, 150, 25 ));
+   new PG_Label(this, PG_Rect(20,140,120,25),"ASC Framerate limit:");
+   frameRateLimit = new PG_LineEdit( this, PG_Rect( 150, 140, 150, 25 ));
    frameRateLimit->SetText( ASCString::toString( CGameOptions::Instance()->video.ascframeratelimit ));
    
       
    
-   new PG_Label(this, PG_Rect(20,140,80,25),"Quality:");
-   quality   = new PG_LineEdit( this, PG_Rect( 120, 140, 150, 25 ));
+   new PG_Label(this, PG_Rect(20,180,80,25),"Quality:");
+   quality   = new PG_LineEdit( this, PG_Rect( 150, 180, 150, 25 ));
    quality->SetText( ASCString::toString( CGameOptions::Instance()->video.quality ));
    
    
    
-   (new PG_Button( this, PG_Rect( 20, 200, 100, 30 ), "OK"))->sigClick.connect( SigC::slot(*this, &ReplayRecorderDialog::ok ));
+   (new PG_Button( this, PG_Rect( 20, 240, 100, 30 ), "OK"))->sigClick.connect( SigC::slot(*this, &ReplayRecorderDialog::ok ));
    
 }
 

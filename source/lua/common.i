@@ -4,6 +4,7 @@
 %{
 #include <string>
 #include "../gamemap.h"
+#include "../spfst.h"
 #include "../mapalgorithms.h"
 #include "../util/messaginghub.h"
 #include "../textfiletags.h"
@@ -44,6 +45,8 @@ class MapCoordinate3D : public MapCoordinate {
 };
 
 GameMap* getActiveMap();
+
+void repaintMap();
 
 const ObjectType* getObjectType( int id );
 const BuildingType* getBuildingType( int id );

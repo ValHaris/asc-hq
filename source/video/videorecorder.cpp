@@ -130,7 +130,7 @@ void VideoRecorder::storeFrame( const SDL_Surface* surf )
             ++src;
          }
       }
-      if ( diff ) {
+      if ( diff || 1 ) {
          int frameSize;
          Revel_Error revError = Revel_EncodeFrame(data->encoderHandle, &frame, &frameSize);
          checkErrors( revError);
@@ -143,7 +143,7 @@ void VideoRecorder::storeFrame( const SDL_Surface* surf )
    
    ++data->frameCounterOut;
    
-   // we are limited the video to our framerate
+   // we are limiting the playback to the specified framerate
    while ( getTicker() < data->lastTick + 100/data->ascFramerateLimit )
       releasetimeslice();
    
