@@ -196,6 +196,12 @@ class  MapField {
     //! returns the building if there is one with its entrance on this field
     Building* getBuildingEntrance();
     
+    //! if there is a building on the field, the building is deleted (may affect othere fields too, depending on building size)
+    void removeBuilding();
+    
+    //! if there is a unit on the field, the unit will be deleted 
+    void removeUnit();
+    
     //! put a mine of type typ for player owner and a punch of strength on the field. Strength is an absolute value (unlike the basestrength of a mine or the punch of the mine-weapon, which are just factors)
     bool  putmine ( int owner, MineTypes typ, int strength );
 

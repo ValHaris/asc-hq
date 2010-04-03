@@ -325,6 +325,21 @@ const ContainerBase* MapField :: getContainer() const
 }
 
 
+void MapField :: removeBuilding() 
+{
+   if ( building )
+      delete building;
+}
+
+void MapField :: removeUnit()
+{
+   if ( vehicle ) {
+      delete vehicle;
+      vehicle = NULL;
+   }
+}
+
+
 int MapField :: getWeather ( void )
 {
    if ( !typ )

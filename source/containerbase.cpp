@@ -658,6 +658,27 @@ Player& ContainerBase :: getOwningPlayer() const
    return getMap()->getPlayer(this); 
 }
 
+void ContainerBase :: setInternalResourcePlus( const Resources& res )
+{
+   for ( int r = 0; r < Resources::count; ++r ) 
+      plus.resource(r) = min ( res.resource(r), min( maxplus.resource(r), baseType->maxplus.resource(r)));
+}
+
+void ContainerBase :: setInternalResourceMaxPlus( const Resources& res )
+{
+   for ( int r = 0; r < Resources::count; ++r ) 
+      maxplus.resource(r) = min ( res.resource(r), baseType->maxplus.resource(r));
+}
+
+Resources ContainerBase :: getInternalResourcePlus() const
+{
+   return plus;
+}
+
+Resources ContainerBase :: getInternalResourceMaxPlus() const
+{
+   return maxplus;
+}
 
 
 Resources ContainerBase :: getResourcePlus( )

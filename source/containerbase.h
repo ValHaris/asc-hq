@@ -117,7 +117,7 @@ class ContainerBase {
       int getCargoCount() const { return cargo.size(); };
       
       /** returns the cargo slot with index i
-          Warning: the cargo may contain NULL items. This was deliberately, to allow easier navigation
+          Warning: the cargo may contain NULL items. This was done deliberately, to allow easier navigation
                    when the user moves items successivly out of a carrier
       */
       Vehicle* getCargo( int i );
@@ -127,8 +127,6 @@ class ContainerBase {
 
       SigC::Signal0<void> cargoChanged;
 
-      virtual int  getArmor() const = 0;
-      
       
       //! a name given by the user or the map creator
       ASCString    name;
@@ -187,6 +185,9 @@ class ContainerBase {
     //@}
 
    public:
+      
+      virtual int  getArmor() const = 0;
+      
      
 	  //! Damage. 0 is no damage, when damage reaches 100 the container is destroyed
       int damage;
@@ -244,7 +245,16 @@ class ContainerBase {
     //! returns the amount of resources that the net which the building is connected to produces each turn
       Resources netResourcePlus( ) const;
 
-
+      //! The ResourcePlus is used for different purposes by different building or vehicle functions, or not at all
+      void setInternalResourcePlus( const Resources& res );
+      //! The ResourceMaxPlus is used for different purposes by different building or vehicle functions, or not at all
+      void setInternalResourceMaxPlus( const Resources& res );
+      
+      //! The ResourcePlus is used for different purposes by different building or vehicle functions, or not at all
+      Resources getInternalResourcePlus() const;
+      //! The ResourceMaxPlus is used for different purposes by different building or vehicle functions, or not at all
+      Resources getInternalResourceMaxPlus() const;
+      
     //! the Resources that are produced each turn
       Resources   plus;
 

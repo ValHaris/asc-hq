@@ -2586,89 +2586,6 @@ static swig_lua_class *swig_TerrainType_bases[] = {0};
 static const char *swig_TerrainType_base_names[] = {0};
 static swig_lua_class _wrap_class_TerrainType = { "TerrainType", &SWIGTYPE_p_TerrainType,0, swig_delete_TerrainType, swig_TerrainType_methods, swig_TerrainType_attributes, swig_TerrainType_bases, swig_TerrainType_base_names };
 
-static int _wrap_ContainerBase_deleteProductionLine(lua_State* L) {
-  int SWIG_arg = 0;
-  ContainerBase *arg1 = (ContainerBase *) 0 ;
-  VehicleType *arg2 = (VehicleType *) 0 ;
-  
-  SWIG_check_num_args("deleteProductionLine",2,2)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("deleteProductionLine",1,"ContainerBase *");
-  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("deleteProductionLine",2,"VehicleType const *");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_ContainerBase,0))){
-    SWIG_fail_ptr("ContainerBase_deleteProductionLine",1,SWIGTYPE_p_ContainerBase);
-  }
-  
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_VehicleType,0))){
-    SWIG_fail_ptr("ContainerBase_deleteProductionLine",2,SWIGTYPE_p_VehicleType);
-  }
-  
-  (arg1)->deleteProductionLine((VehicleType const *)arg2);
-  
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static int _wrap_ContainerBase_deleteAllProductionLines(lua_State* L) {
-  int SWIG_arg = 0;
-  ContainerBase *arg1 = (ContainerBase *) 0 ;
-  
-  SWIG_check_num_args("deleteAllProductionLines",1,1)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("deleteAllProductionLines",1,"ContainerBase *");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_ContainerBase,0))){
-    SWIG_fail_ptr("ContainerBase_deleteAllProductionLines",1,SWIGTYPE_p_ContainerBase);
-  }
-  
-  (arg1)->deleteAllProductionLines();
-  
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
-static int _wrap_ContainerBase_addProductionLine(lua_State* L) {
-  int SWIG_arg = 0;
-  ContainerBase *arg1 = (ContainerBase *) 0 ;
-  VehicleType *arg2 = (VehicleType *) 0 ;
-  
-  SWIG_check_num_args("addProductionLine",2,2)
-  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("addProductionLine",1,"ContainerBase *");
-  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("addProductionLine",2,"VehicleType const *");
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_ContainerBase,0))){
-    SWIG_fail_ptr("ContainerBase_addProductionLine",1,SWIGTYPE_p_ContainerBase);
-  }
-  
-  
-  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_VehicleType,0))){
-    SWIG_fail_ptr("ContainerBase_addProductionLine",2,SWIGTYPE_p_VehicleType);
-  }
-  
-  (arg1)->addProductionLine((VehicleType const *)arg2);
-  
-  return SWIG_arg;
-  
-  if(0) SWIG_fail;
-  
-fail:
-  lua_error(L);
-  return SWIG_arg;
-}
-
-
 static int _wrap_ContainerBase_getCargoCount(lua_State* L) {
   int SWIG_arg = 0;
   ContainerBase *arg1 = (ContainerBase *) 0 ;
@@ -2710,6 +2627,60 @@ static int _wrap_ContainerBase_getCargo(lua_State* L) {
   arg2 = (int)lua_tonumber(L, 2);
   result = (Vehicle *)(arg1)->getCargo(arg2);
   SWIG_NewPointerObj(L,result,SWIGTYPE_p_Vehicle,0); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_ContainerBase_getInternalResourcePlus(lua_State* L) {
+  int SWIG_arg = 0;
+  ContainerBase *arg1 = (ContainerBase *) 0 ;
+  Resources result;
+  
+  SWIG_check_num_args("getInternalResourcePlus",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("getInternalResourcePlus",1,"ContainerBase const *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_ContainerBase,0))){
+    SWIG_fail_ptr("ContainerBase_getInternalResourcePlus",1,SWIGTYPE_p_ContainerBase);
+  }
+  
+  result = ((ContainerBase const *)arg1)->getInternalResourcePlus();
+  {
+    Resources * resultptr = new Resources((const Resources &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_Resources,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_ContainerBase_getInternalResourceMaxPlus(lua_State* L) {
+  int SWIG_arg = 0;
+  ContainerBase *arg1 = (ContainerBase *) 0 ;
+  Resources result;
+  
+  SWIG_check_num_args("getInternalResourceMaxPlus",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("getInternalResourceMaxPlus",1,"ContainerBase const *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_ContainerBase,0))){
+    SWIG_fail_ptr("ContainerBase_getInternalResourceMaxPlus",1,SWIGTYPE_p_ContainerBase);
+  }
+  
+  result = ((ContainerBase const *)arg1)->getInternalResourceMaxPlus();
+  {
+    Resources * resultptr = new Resources((const Resources &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_Resources,1); SWIG_arg++;
+  }
   return SWIG_arg;
   
   if(0) SWIG_fail;
@@ -2851,11 +2822,10 @@ ContainerBase *arg1 = (ContainerBase *) obj;
 delete arg1;
 }
 static swig_lua_method swig_ContainerBase_methods[] = {
-    {"deleteProductionLine", _wrap_ContainerBase_deleteProductionLine}, 
-    {"deleteAllProductionLines", _wrap_ContainerBase_deleteAllProductionLines}, 
-    {"addProductionLine", _wrap_ContainerBase_addProductionLine}, 
     {"getCargoCount", _wrap_ContainerBase_getCargoCount}, 
     {"getCargo", _wrap_ContainerBase_getCargo}, 
+    {"getInternalResourcePlus", _wrap_ContainerBase_getInternalResourcePlus}, 
+    {"getInternalResourceMaxPlus", _wrap_ContainerBase_getInternalResourceMaxPlus}, 
     {"getName", _wrap_ContainerBase_getName}, 
     {"setName", _wrap_ContainerBase_setName}, 
     {"getOwner", _wrap_ContainerBase_getOwner}, 

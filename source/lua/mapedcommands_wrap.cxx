@@ -2875,6 +2875,386 @@ fail:
 }
 
 
+static int _wrap_ContainerBase_removeUnitFromCargo__SWIG_0(lua_State* L) {
+  int SWIG_arg = 0;
+  ContainerBase *arg1 = (ContainerBase *) 0 ;
+  Vehicle *arg2 = (Vehicle *) 0 ;
+  bool arg3 ;
+  bool result;
+  
+  SWIG_check_num_args("removeUnitFromCargo",3,3)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("removeUnitFromCargo",1,"ContainerBase *");
+  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("removeUnitFromCargo",2,"Vehicle *");
+  if(!lua_isboolean(L,3)) SWIG_fail_arg("removeUnitFromCargo",3,"bool");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_ContainerBase,0))){
+    SWIG_fail_ptr("ContainerBase_removeUnitFromCargo",1,SWIGTYPE_p_ContainerBase);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_Vehicle,0))){
+    SWIG_fail_ptr("ContainerBase_removeUnitFromCargo",2,SWIGTYPE_p_Vehicle);
+  }
+  
+  arg3 = (lua_toboolean(L, 3)!=0);
+  result = (bool)(arg1)->removeUnitFromCargo(arg2,arg3);
+  lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_ContainerBase_removeUnitFromCargo__SWIG_1(lua_State* L) {
+  int SWIG_arg = 0;
+  ContainerBase *arg1 = (ContainerBase *) 0 ;
+  Vehicle *arg2 = (Vehicle *) 0 ;
+  bool result;
+  
+  SWIG_check_num_args("removeUnitFromCargo",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("removeUnitFromCargo",1,"ContainerBase *");
+  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("removeUnitFromCargo",2,"Vehicle *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_ContainerBase,0))){
+    SWIG_fail_ptr("ContainerBase_removeUnitFromCargo",1,SWIGTYPE_p_ContainerBase);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_Vehicle,0))){
+    SWIG_fail_ptr("ContainerBase_removeUnitFromCargo",2,SWIGTYPE_p_Vehicle);
+  }
+  
+  result = (bool)(arg1)->removeUnitFromCargo(arg2);
+  lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_ContainerBase_removeUnitFromCargo__SWIG_2(lua_State* L) {
+  int SWIG_arg = 0;
+  ContainerBase *arg1 = (ContainerBase *) 0 ;
+  int arg2 ;
+  bool arg3 ;
+  bool result;
+  
+  SWIG_check_num_args("removeUnitFromCargo",3,3)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("removeUnitFromCargo",1,"ContainerBase *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("removeUnitFromCargo",2,"int");
+  if(!lua_isboolean(L,3)) SWIG_fail_arg("removeUnitFromCargo",3,"bool");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_ContainerBase,0))){
+    SWIG_fail_ptr("ContainerBase_removeUnitFromCargo",1,SWIGTYPE_p_ContainerBase);
+  }
+  
+  arg2 = (int)lua_tonumber(L, 2);
+  arg3 = (lua_toboolean(L, 3)!=0);
+  result = (bool)(arg1)->removeUnitFromCargo(arg2,arg3);
+  lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_ContainerBase_removeUnitFromCargo__SWIG_3(lua_State* L) {
+  int SWIG_arg = 0;
+  ContainerBase *arg1 = (ContainerBase *) 0 ;
+  int arg2 ;
+  bool result;
+  
+  SWIG_check_num_args("removeUnitFromCargo",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("removeUnitFromCargo",1,"ContainerBase *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("removeUnitFromCargo",2,"int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_ContainerBase,0))){
+    SWIG_fail_ptr("ContainerBase_removeUnitFromCargo",1,SWIGTYPE_p_ContainerBase);
+  }
+  
+  arg2 = (int)lua_tonumber(L, 2);
+  result = (bool)(arg1)->removeUnitFromCargo(arg2);
+  lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_ContainerBase_removeUnitFromCargo(lua_State* L) {
+  int argc;
+  int argv[4]={
+    1,2,3,4
+  };
+  
+  argc = lua_gettop(L);
+  if (argc == 2) {
+    int _v;
+    {
+      void *ptr;
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_ContainerBase, 0)) {
+        _v = 0;
+      } else {
+        _v = 1;
+      }
+    }
+    if (_v) {
+      {
+        void *ptr;
+        if (SWIG_isptrtype(L,argv[1])==0 || SWIG_ConvertPtr(L,argv[1], (void **) &ptr, SWIGTYPE_p_Vehicle, 0)) {
+          _v = 0;
+        } else {
+          _v = 1;
+        }
+      }
+      if (_v) {
+        return _wrap_ContainerBase_removeUnitFromCargo__SWIG_1(L);
+      }
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    {
+      void *ptr;
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_ContainerBase, 0)) {
+        _v = 0;
+      } else {
+        _v = 1;
+      }
+    }
+    if (_v) {
+      {
+        _v = lua_isnumber(L,argv[1]);
+      }
+      if (_v) {
+        return _wrap_ContainerBase_removeUnitFromCargo__SWIG_3(L);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    {
+      void *ptr;
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_ContainerBase, 0)) {
+        _v = 0;
+      } else {
+        _v = 1;
+      }
+    }
+    if (_v) {
+      {
+        void *ptr;
+        if (SWIG_isptrtype(L,argv[1])==0 || SWIG_ConvertPtr(L,argv[1], (void **) &ptr, SWIGTYPE_p_Vehicle, 0)) {
+          _v = 0;
+        } else {
+          _v = 1;
+        }
+      }
+      if (_v) {
+        {
+          _v = lua_isboolean(L,argv[2]);
+        }
+        if (_v) {
+          return _wrap_ContainerBase_removeUnitFromCargo__SWIG_0(L);
+        }
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    {
+      void *ptr;
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_ContainerBase, 0)) {
+        _v = 0;
+      } else {
+        _v = 1;
+      }
+    }
+    if (_v) {
+      {
+        _v = lua_isnumber(L,argv[1]);
+      }
+      if (_v) {
+        {
+          _v = lua_isboolean(L,argv[2]);
+        }
+        if (_v) {
+          return _wrap_ContainerBase_removeUnitFromCargo__SWIG_2(L);
+        }
+      }
+    }
+  }
+  
+  lua_pushstring(L,"Wrong arguments for overloaded function 'ContainerBase_removeUnitFromCargo'\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    removeUnitFromCargo(ContainerBase *,Vehicle *,bool)\n"
+    "    removeUnitFromCargo(ContainerBase *,Vehicle *)\n"
+    "    removeUnitFromCargo(ContainerBase *,int,bool)\n"
+    "    removeUnitFromCargo(ContainerBase *,int)\n");
+  lua_error(L);return 0;
+}
+
+
+static int _wrap_ContainerBase_addToCargo(lua_State* L) {
+  int SWIG_arg = 0;
+  ContainerBase *arg1 = (ContainerBase *) 0 ;
+  Vehicle *arg2 = (Vehicle *) 0 ;
+  
+  SWIG_check_num_args("addToCargo",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("addToCargo",1,"ContainerBase *");
+  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("addToCargo",2,"Vehicle *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_ContainerBase,0))){
+    SWIG_fail_ptr("ContainerBase_addToCargo",1,SWIGTYPE_p_ContainerBase);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_Vehicle,0))){
+    SWIG_fail_ptr("ContainerBase_addToCargo",2,SWIGTYPE_p_Vehicle);
+  }
+  
+  (arg1)->addToCargo(arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_ContainerBase_setInternalResourcePlus(lua_State* L) {
+  int SWIG_arg = 0;
+  ContainerBase *arg1 = (ContainerBase *) 0 ;
+  Resources *arg2 = 0 ;
+  
+  SWIG_check_num_args("setInternalResourcePlus",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("setInternalResourcePlus",1,"ContainerBase *");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("setInternalResourcePlus",2,"Resources const &");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_ContainerBase,0))){
+    SWIG_fail_ptr("ContainerBase_setInternalResourcePlus",1,SWIGTYPE_p_ContainerBase);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_Resources,0))){
+    SWIG_fail_ptr("ContainerBase_setInternalResourcePlus",2,SWIGTYPE_p_Resources);
+  }
+  
+  (arg1)->setInternalResourcePlus((Resources const &)*arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_ContainerBase_setInternalResourceMaxPlus(lua_State* L) {
+  int SWIG_arg = 0;
+  ContainerBase *arg1 = (ContainerBase *) 0 ;
+  Resources *arg2 = 0 ;
+  
+  SWIG_check_num_args("setInternalResourceMaxPlus",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("setInternalResourceMaxPlus",1,"ContainerBase *");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("setInternalResourceMaxPlus",2,"Resources const &");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_ContainerBase,0))){
+    SWIG_fail_ptr("ContainerBase_setInternalResourceMaxPlus",1,SWIGTYPE_p_ContainerBase);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_Resources,0))){
+    SWIG_fail_ptr("ContainerBase_setInternalResourceMaxPlus",2,SWIGTYPE_p_Resources);
+  }
+  
+  (arg1)->setInternalResourceMaxPlus((Resources const &)*arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_ContainerBase_getInternalResourcePlus(lua_State* L) {
+  int SWIG_arg = 0;
+  ContainerBase *arg1 = (ContainerBase *) 0 ;
+  Resources result;
+  
+  SWIG_check_num_args("getInternalResourcePlus",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("getInternalResourcePlus",1,"ContainerBase const *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_ContainerBase,0))){
+    SWIG_fail_ptr("ContainerBase_getInternalResourcePlus",1,SWIGTYPE_p_ContainerBase);
+  }
+  
+  result = ((ContainerBase const *)arg1)->getInternalResourcePlus();
+  {
+    Resources * resultptr = new Resources((const Resources &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_Resources,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_ContainerBase_getInternalResourceMaxPlus(lua_State* L) {
+  int SWIG_arg = 0;
+  ContainerBase *arg1 = (ContainerBase *) 0 ;
+  Resources result;
+  
+  SWIG_check_num_args("getInternalResourceMaxPlus",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("getInternalResourceMaxPlus",1,"ContainerBase const *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_ContainerBase,0))){
+    SWIG_fail_ptr("ContainerBase_getInternalResourceMaxPlus",1,SWIGTYPE_p_ContainerBase);
+  }
+  
+  result = ((ContainerBase const *)arg1)->getInternalResourceMaxPlus();
+  {
+    Resources * resultptr = new Resources((const Resources &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_Resources,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_ContainerBase_getName(lua_State* L) {
   int SWIG_arg = 0;
   ContainerBase *arg1 = (ContainerBase *) 0 ;
@@ -3011,6 +3391,12 @@ static swig_lua_method swig_ContainerBase_methods[] = {
     {"addProductionLine", _wrap_ContainerBase_addProductionLine}, 
     {"getCargoCount", _wrap_ContainerBase_getCargoCount}, 
     {"getCargo", _wrap_ContainerBase_getCargo}, 
+    {"removeUnitFromCargo", _wrap_ContainerBase_removeUnitFromCargo}, 
+    {"addToCargo", _wrap_ContainerBase_addToCargo}, 
+    {"setInternalResourcePlus", _wrap_ContainerBase_setInternalResourcePlus}, 
+    {"setInternalResourceMaxPlus", _wrap_ContainerBase_setInternalResourceMaxPlus}, 
+    {"getInternalResourcePlus", _wrap_ContainerBase_getInternalResourcePlus}, 
+    {"getInternalResourceMaxPlus", _wrap_ContainerBase_getInternalResourceMaxPlus}, 
     {"getName", _wrap_ContainerBase_getName}, 
     {"setName", _wrap_ContainerBase_setName}, 
     {"getOwner", _wrap_ContainerBase_getOwner}, 
@@ -3709,6 +4095,52 @@ fail:
 }
 
 
+static int _wrap_MapField_removeBuilding(lua_State* L) {
+  int SWIG_arg = 0;
+  MapField *arg1 = (MapField *) 0 ;
+  
+  SWIG_check_num_args("removeBuilding",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("removeBuilding",1,"MapField *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_MapField,0))){
+    SWIG_fail_ptr("MapField_removeBuilding",1,SWIGTYPE_p_MapField);
+  }
+  
+  (arg1)->removeBuilding();
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_MapField_removeUnit(lua_State* L) {
+  int SWIG_arg = 0;
+  MapField *arg1 = (MapField *) 0 ;
+  
+  SWIG_check_num_args("removeUnit",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("removeUnit",1,"MapField *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_MapField,0))){
+    SWIG_fail_ptr("MapField_removeUnit",1,SWIGTYPE_p_MapField);
+  }
+  
+  (arg1)->removeUnit();
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_MapField_getTerrainType(lua_State* L) {
   int SWIG_arg = 0;
   MapField *arg1 = (MapField *) 0 ;
@@ -3831,6 +4263,8 @@ static swig_lua_method swig_MapField_methods[] = {
     {"setWeather", _wrap_MapField_setWeather}, 
     {"removeObject", _wrap_MapField_removeObject}, 
     {"changeTerrainType", _wrap_MapField_changeTerrainType}, 
+    {"removeBuilding", _wrap_MapField_removeBuilding}, 
+    {"removeUnit", _wrap_MapField_removeUnit}, 
     {"getTerrainType", _wrap_MapField_getTerrainType}, 
     {"checkForObject", _wrap_MapField_checkForObject}, 
     {"getObjectCount", _wrap_MapField_getObjectCount}, 
@@ -5111,6 +5545,36 @@ fail:
 }
 
 
+static int _wrap_setCursorPosition(lua_State* L) {
+  int SWIG_arg = 0;
+  GameMap *arg1 = (GameMap *) 0 ;
+  MapCoordinate *arg2 = 0 ;
+  
+  SWIG_check_num_args("setCursorPosition",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("setCursorPosition",1,"GameMap const *");
+  if(!lua_isuserdata(L,2)) SWIG_fail_arg("setCursorPosition",2,"MapCoordinate const &");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_GameMap,0))){
+    SWIG_fail_ptr("setCursorPosition",1,SWIGTYPE_p_GameMap);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_MapCoordinate,0))){
+    SWIG_fail_ptr("setCursorPosition",2,SWIGTYPE_p_MapCoordinate);
+  }
+  
+  setCursorPosition((GameMap const *)arg1,(MapCoordinate const &)*arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_clearField(lua_State* L) {
   int SWIG_arg = 0;
   GameMap *arg1 = (GameMap *) 0 ;
@@ -5835,6 +6299,7 @@ static const struct luaL_reg swig_commands[] = {
     { "setLocalizedEventMessage", _wrap_setLocalizedEventMessage},
     { "setLocalizedContainerName", _wrap_setLocalizedContainerName},
     { "getCursorPosition", _wrap_getCursorPosition},
+    { "setCursorPosition", _wrap_setCursorPosition},
     { "clearField", _wrap_clearField},
     { "getNeighbouringFieldCoordinate", _wrap_getNeighbouringFieldCoordinate},
     { "placeObject",_wrap_placeObject},

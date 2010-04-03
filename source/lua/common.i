@@ -90,15 +90,40 @@ class TerrainType {
 
 class ContainerBase {
    public:         
+#ifdef mapeditor
       void deleteProductionLine( const VehicleType* type );
       void deleteAllProductionLines();
       void addProductionLine( const VehicleType* type  );
+#endif
       
       int getCargoCount();
       
       // warning: the cargo may have items which are NULL
       Vehicle* getCargo( int i );
       
+#ifdef mapeditor
+      // removes a unit from the cargo. The unit will still be registered as containing to the map
+      // It must then be placed into another Container or onto a field 
+      bool removeUnitFromCargo( Vehicle* veh, bool recursive = false );
+      bool removeUnitFromCargo( int nwid, bool recursive = false );
+      
+      void addToCargo( Vehicle* v );
+      
+      //! The ResourcePlus is used for different purposes by different building or vehicle functions, or not at all
+      void setInternalResourcePlus( const Resources& res );
+      
+      //! The ResourceMaxPlus is used for different purposes by different building or vehicle functions, or not at all
+      void setInternalResourceMaxPlus( const Resources& res );
+      
+#endif      
+      
+      //! The ResourcePlus is used for different purposes by different building or vehicle functions, or not at all
+      Resources getInternalResourcePlus() const;
+      
+      //! The ResourceMaxPlus is used for different purposes by different building or vehicle functions, or not at all
+      Resources getInternalResourceMaxPlus() const;
+
+
       std::string getName();
       void setName( const std::string& name );
       
@@ -168,6 +193,8 @@ class MapField {
       void setWeather( int weather );
       bool removeObject ( const ObjectType* obj, bool force = false );
       void changeTerrainType( const TerrainType* terrain );
+      void removeBuilding();
+      void removeUnit();
 #endif      
       TerrainType* getTerrainType();
       
@@ -283,3 +310,6 @@ void setLocalizedContainerName( GameMap* map, const MapCoordinate& pos, const st
 
 MapCoordinate getCursorPosition( const GameMap* gamemap );
 
+#ifdef mapeditor
+void setCursorPosition( const GameMap* gamemap, const MapCoordinate& pos );
+#endif

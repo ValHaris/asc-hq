@@ -202,6 +202,15 @@ void setLocalizedContainerName( GameMap* map, const MapCoordinate& pos, const st
       
 MapCoordinate getCursorPosition( const GameMap* gamemap )
 {
-   return gamemap->getCursor(); 
+   if ( gamemap )
+      return gamemap->getCursor(); 
+   else
+      return MapCoordinate(-1,-1);
 }
       
+void setCursorPosition( const GameMap* gamemap, const MapCoordinate& pos )
+{
+   if ( gamemap && pos.valid() )  
+      if ( pos.x < gamemap->xsize && pos.y < gamemap->ysize )
+         gamemap->getCursor() = pos;
+}
