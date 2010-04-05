@@ -669,6 +669,8 @@ void BuildingType :: runTextIO ( PropertyContainer& pc )
          StringTokenizer st ( entryString );
          entry = LocalCoordinate ( st.getNextToken() );
       }
+      if ( !fieldExists( entry ))
+         pc.error( "Building " + name + " has invalid entrance position!" );
 
       pc.addInteger( "Armor", _armor );
 
