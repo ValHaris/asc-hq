@@ -2,7 +2,7 @@
     \brief Interface to game event dialogs
 */
 
-//     $Id: gameevent_dialogs.h,v 1.9 2009-05-01 12:24:45 mbickel Exp $
+//     $Id: gameevent_dialogs.h,v 1.10 2010-04-05 12:48:49 mbickel Exp $
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
@@ -56,7 +56,7 @@ extern bool chooseVehicleType( int& vehicleTypeID );
 
 class ReinforcementSelector : public SelectFromMap {
    private:
-      tmemorystreambuf& buf;
+      MemoryStreamStorage& buf;
       int& objectNum;
       void cut( const MapCoordinate& pos );
       CoordinateList cutPositions;
@@ -65,7 +65,7 @@ class ReinforcementSelector : public SelectFromMap {
       bool mark();
       virtual bool isOk();
    public:
-      ReinforcementSelector( CoordinateList& list, GameMap* map, tmemorystreambuf& buffer, int& objNum ) : SelectFromMap( list, map ), buf( buffer), objectNum(objNum) {};
+      ReinforcementSelector( CoordinateList& list, GameMap* map, MemoryStreamStorage& buffer, int& objNum ) : SelectFromMap( list, map ), buf( buffer), objectNum(objNum) {};
 };
 
 

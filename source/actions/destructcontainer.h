@@ -34,7 +34,7 @@ class DestructContainer : public ContainerAction {
       //! saves if the unit was registered on the field
       enum FieldRegistration { NONE, FIRST, SECOND, CARRIER } fieldRegistration;
 
-      tmemorystreambuf* unitBuffer;
+      MemoryStreamStorage* unitBuffer;
       
       int hostingCarrier;
       int cargoSlot;

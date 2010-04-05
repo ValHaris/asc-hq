@@ -589,7 +589,7 @@ void ReinforcementSelector::cut( const MapCoordinate& pos )
    cutPositions.push_back( pos );
    
    if ( fld->vehicle ) {
-      tmemorystream stream ( &buf, tnstream::appending );
+      MemoryStream stream ( &buf, tnstream::appending );
       stream.writeInt( Reinforcements::ReinfVehicle );
       fld->vehicle->write ( stream );
       objectNum++;
@@ -597,7 +597,7 @@ void ReinforcementSelector::cut( const MapCoordinate& pos )
       fld->vehicle = NULL;
    } else
       if ( fld->building ) {
-         tmemorystream stream ( &buf, tnstream::appending );
+         MemoryStream stream ( &buf, tnstream::appending );
          stream.writeInt( Reinforcements::ReinfBuilding );
          fld->building->write ( stream );
          objectNum++;

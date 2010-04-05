@@ -367,7 +367,7 @@ class ContainerBase {
 
 class TemporaryContainerStorage  {
         ContainerBase* cb;
-        tmemorystreambuf buf;
+        MemoryStreamStorage buf;
         bool _storeCargo;
      public:
         TemporaryContainerStorage ( ContainerBase* _cb, bool storeCargo = false );

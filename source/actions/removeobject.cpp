@@ -49,7 +49,7 @@ void RemoveObject::readData ( tnstream& stream )
    pos.read( stream );
    
    if ( stream.readInt() ) {
-      objectBuffer = new tmemorystreambuf();
+      objectBuffer = new MemoryStreamStorage();
       objectBuffer->readfromstream( &stream );  
    } else
       objectBuffer = NULL;
@@ -91,8 +91,8 @@ ActionResult RemoveObject::runAction( const Context& context )
    if ( !o )
       return ActionResult( 21502 );
    
-   objectBuffer = new tmemorystreambuf();
-   tmemorystream memstream( objectBuffer, tnstream::writing );
+   objectBuffer = new MemoryStreamStorage();
+   MemoryStream memstream( objectBuffer, tnstream::writing );
    o->write( memstream );
    
    if ( fld->removeObject( ot, true ) )
@@ -118,7 +118,7 @@ ActionResult RemoveObject::undoAction( const Context& context )
    if ( !o )
       return ActionResult( 21502 );
    
-   tmemorystream memstream( objectBuffer, tnstream::reading );
+   MemoryStream memstream( objectBuffer, tnstream::reading );
    o->read( memstream );
    
    return ActionResult(0);

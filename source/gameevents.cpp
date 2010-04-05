@@ -1843,7 +1843,7 @@ class FindUnitPlacementPos : public SearchFields {
 void Reinforcements :: execute( MapDisplayInterface* md )
 {
    int cnt = 0;
-   tmemorystream stream ( &buf, tnstream::reading );
+   MemoryStream stream ( &buf, tnstream::reading );
    while ( cnt < objectNum ) {
       Type type = Type(stream.readInt());
       if ( type == ReinfVehicle ) {

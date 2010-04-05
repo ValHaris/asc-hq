@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2008-06-27 19:22:11 $
+    Update Date:      $Date: 2010-04-05 12:48:54 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/include/pgapplication.h,v $
-    CVS/RCS Revision: $Revision: 1.4 $
+    CVS/RCS Revision: $Revision: 1.5 $
     Status:           $State: Exp $
 */
 
@@ -33,6 +33,9 @@
 
 #ifndef PG_APPLICATION_H
 #define PG_APPLICATION_H
+
+#include <list>
+#include <utility>
 
 #include "pgmessageobject.h"
 #include "pgscreenupdater.h"
@@ -163,6 +166,12 @@ class SignalAppIdle : public PG_Signal1<PG_MessageObject*, datatype> {}
 	Exit the main eventloop
 	*/
 	void Quit();
+
+
+	/**
+	Waits the given amount of time, while still performing all necessary background tasks
+	 */
+	void Sleep ( int milliSeconds );
 
 	/**
 	Set a custom screen surface
@@ -650,9 +659,22 @@ class SignalAppIdle : public PG_Signal1<PG_MessageObject*, datatype> {}
       };
    };
    
+   class PeriodicBackgroundTask {
+      public:
+         virtual void run( bool sleeping ) = 0;
+         virtual ~PeriodicBackgroundTask() {};
+   };
+
+   /**
+    * runs a periodic background task; this is only half-implemented, called only on sleeping
+    */
+   void registerTask( PeriodicBackgroundTask* task, int millisecondsInterval );
+   void unregisterTask( PeriodicBackgroundTask* task );
 
 
 protected:
+
+    std::list< std::pair<PeriodicBackgroundTask*, int> > tasks;
 
 	/**
 	Cleanup the application data

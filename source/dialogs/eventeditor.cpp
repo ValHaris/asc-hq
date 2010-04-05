@@ -309,7 +309,7 @@ class EventList : public ASC_PG_Dialog {
       bool ButtonEdit()
       {
          if ( gamemap->events.size() ) {
-            tmemorystreambuf buf;
+            MemoryStreamStorage buf;
             
 
             int marked = listbox->GetSelectedIndex();
@@ -321,13 +321,13 @@ class EventList : public ASC_PG_Dialog {
                ++e;
 
             {
-               tmemorystream stream ( &buf, tnstream::writing );
+               MemoryStream stream ( &buf, tnstream::writing );
                (*e)->write ( stream );
             }
 
             if ( ! createevent( gamemap, *e ) ) {
                      // cancel pressed, we are restoring the original event
-               tmemorystream stream ( &buf, tnstream::reading );
+               MemoryStream stream ( &buf, tnstream::reading );
                (*e)->read ( stream );
             }
 

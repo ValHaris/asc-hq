@@ -50,7 +50,7 @@ void RemoveMine::readData ( tnstream& stream )
    pos.read( stream );
    
    if ( stream.readInt() ) {
-      mineBuffer = new tmemorystreambuf();
+      mineBuffer = new MemoryStreamStorage();
       mineBuffer->readfromstream( &stream );  
    } else
       mineBuffer = NULL;
@@ -89,8 +89,8 @@ ActionResult RemoveMine::runAction( const Context& context )
    if ( mineID > 0 ) {
       for ( MapField::MineContainer::iterator i = fld->mines.begin(); i != fld->mines.end(); ++i ) {
          if ( i->identifier == mineID ) {
-            mineBuffer = new tmemorystreambuf();
-            tmemorystream memstream( mineBuffer, tnstream::writing );
+            mineBuffer = new MemoryStreamStorage();
+            MemoryStream memstream( mineBuffer, tnstream::writing );
             i->write( memstream );
             
             fld->mines.erase( i );
@@ -100,8 +100,8 @@ ActionResult RemoveMine::runAction( const Context& context )
       }
    } else {
       layer = fld->mines.size();
-      mineBuffer = new tmemorystreambuf();
-      tmemorystream memstream( mineBuffer, tnstream::writing );
+      mineBuffer = new MemoryStreamStorage();
+      MemoryStream memstream( mineBuffer, tnstream::writing );
       for ( MapField::MineContainer::iterator i = fld->mines.begin(); i != fld->mines.end(); ++i ) 
          i->write( memstream );
       fld->mines.clear();
@@ -128,10 +128,10 @@ ActionResult RemoveMine::undoAction( const Context& context )
       while ( l-- )
          ++i;
       
-      tmemorystream memstream( mineBuffer, tnstream::reading );
+      MemoryStream memstream( mineBuffer, tnstream::reading );
       fld->mines.insert( i, Mine::newFromStream( memstream ));
    } else {
-      tmemorystream memstream( mineBuffer, tnstream::reading );
+      MemoryStream memstream( mineBuffer, tnstream::reading );
       for ( int i = 0; i < layer; ++i )
          fld->mines.push_back( Mine::newFromStream( memstream ));
    }

@@ -27,7 +27,7 @@
 
 class tnstream;
 class Command;
-class tmemorystreambuf;
+class MemoryStreamStorage;
 
 class TaskContainer : public AbstractTaskContainer, public SigC::Object {
       GameMap* gamemap;

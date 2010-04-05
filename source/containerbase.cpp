@@ -606,7 +606,7 @@ ContainerBase :: ~ContainerBase ( )
 TemporaryContainerStorage :: TemporaryContainerStorage ( ContainerBase* _cb, bool storeCargo )
 {
    cb = _cb;
-   tmemorystream stream ( &buf, tnstream::writing );
+   MemoryStream stream ( &buf, tnstream::writing );
    cb->write ( stream, storeCargo );
    _storeCargo = storeCargo;
 }
@@ -617,7 +617,7 @@ void TemporaryContainerStorage :: restore (  )
       cb->clearCargo();
    }
 
-   tmemorystream stream ( &buf, tnstream::reading );
+   MemoryStream stream ( &buf, tnstream::reading );
    cb->read ( stream );
 }
 

@@ -1437,8 +1437,8 @@ void  savereplay( GameMap* gamemap, int num )
          gamemap->replayinfo->map[num] = NULL;
       }
 
-      gamemap->replayinfo->map[num] = new tmemorystreambuf;
-      tmemorystream memstream ( gamemap->replayinfo->map[num], tnstream::writing );
+      gamemap->replayinfo->map[num] = new MemoryStreamStorage;
+      MemoryStream memstream ( gamemap->replayinfo->map[num], tnstream::writing );
 
       memstream.writeInt( actreplayversion );
 
@@ -1452,13 +1452,13 @@ void  savereplay( GameMap* gamemap, int num )
    } /* endcatch */
 }
 
-GameMap*  loadreplay( tmemorystreambuf* streambuf )
+GameMap*  loadreplay( MemoryStreamStorage* streambuf )
 {
    GameMap* replaymap = NULL;
 
    try {
       const char* name = "memorystream actmap->replayinfo";
-      tmemorystream memstream ( streambuf, tnstream::reading );
+      MemoryStream memstream ( streambuf, tnstream::reading );
 
       int version = memstream.readInt();
       if (version > actreplayversion || version < minreplayversion )

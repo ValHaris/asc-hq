@@ -151,10 +151,10 @@ void PBEMServer::send( const GameMap* map, int lastPlayer, int lastturn )
          gameID = editInt( "turn", gameID );
 
       
-      tmemorystreambuf buffer;
+      MemoryStreamStorage buffer;
       
       {
-         tmemorystream stream ( &buffer, tnstream::writing );
+         MemoryStream stream ( &buffer, tnstream::writing );
          
          tnetworkloaders nwl;
          nwl.savenwgame( &stream, map );

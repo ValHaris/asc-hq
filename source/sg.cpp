@@ -319,10 +319,10 @@ bool loadGameFromFile( const ASCString& filename )
          displaymessage2( "actmemstream already open at begin of turn ",2 );
 
       if ( actmap->replayinfo->guidata[actmap->actplayer] )
-         actmap->replayinfo->actmemstream = new tmemorystream ( actmap->replayinfo->guidata[actmap->actplayer], tnstream::appending );
+         actmap->replayinfo->actmemstream = new MemoryStream ( actmap->replayinfo->guidata[actmap->actplayer], tnstream::appending );
       else {
-         actmap->replayinfo->guidata[actmap->actplayer] = new tmemorystreambuf;
-         actmap->replayinfo->actmemstream = new tmemorystream ( actmap->replayinfo->guidata[actmap->actplayer], tnstream::writing );
+         actmap->replayinfo->guidata[actmap->actplayer] = new MemoryStreamStorage;
+         actmap->replayinfo->actmemstream = new MemoryStream ( actmap->replayinfo->guidata[actmap->actplayer], tnstream::writing );
       }
    }
    
@@ -603,8 +603,155 @@ void redo()
    }
 }
 
+
+bool continueAndStartMultiplayerGame( bool mostRecent = false )
+{
+   GameMap* map = continueNetworkGame( mostRecent );
+   if ( map ) {
+      delete actmap;
+      actmap = map;
+      hookGuiToMap(actmap);
+      actmap->sigPlayerUserInteractionBegins( actmap->player[actmap->actplayer] );
+      displaymap();
+      return true;
+   } else
+      return false;
+}
+
+
+
+
+void writeLuaCommands()
+{
+   ASCString filename =  selectFile("*.lua", false );
+   if ( !filename.empty() ) {
+      LuaCommandFileWriter writer ( filename );
+      actmap->actions.getCommands( writer );
+   }
+}
+
+void selectAndRunLuaScript()
+{
+   ASCString file = selectFile( "*.lua", true );
+   if ( file.size() ) {
+      LuaState state;
+      LuaRunner runner( state );
+      runner.runFile( file );
+      if ( !runner.getErrors().empty() )
+         errorMessage( runner.getErrors() );
+      updateFieldInfo();
+   }
+}
+
+
+void showUnitAiProperties()
+{
+   MapField* fld = getSelectedField();
+   if ( fld->vehicle && fieldvisiblenow(fld ) ) {
+      Vehicle* v = fld->vehicle;
+      ASCString s;
+      s += "Unit nwid = " + ASCString::toString( v->networkid ) + "\n";
+
+      AiParameter* a = NULL;
+
+      for ( int i = 0; i < 8; ++i )
+         if ( v->aiparam[i] ) {
+         a = v->aiparam[i];
+         break;
+         }
+
+         s += "Task = " + ASCString(AItasks[(int)a->getTask() ]) + "\n";
+         s += "Job = " + ASCString(AIjobs[(int)a->getJob() ]) + "\n";
+
+
+         s += "Destination: ";
+         if ( a->dest.valid() )
+            s += a->dest.toString();
+         s += "\n";
+
+         ViewFormattedText vat ( "AI properties", s, PG_Rect( 20, -1 , 450, 480 ));
+         vat.Show();
+         vat.RunModal();
+   }
+}
+
+
+void showUsedPackages()
+{
+   PackageManager::storeData( actmap );
+   if ( actmap->packageData ) {
+      ASCString s;
+      for ( PackageData::Packages::const_iterator i  = actmap->packageData->packages.begin(); i != actmap->packageData->packages.end(); ++i ) {
+         s += "#fontsize=14#" + i->second->name + "#fontsize=11#\n";
+         s += i->second->description;
+         s += "\n\n";
+      }
+
+      ViewFormattedText vat ( "Used Packages", s, PG_Rect( 20, -1 , 450, 480 ));
+      vat.Show();
+      vat.RunModal();
+   }
+}
+
+
+class CommandAllianceSetupStrategy : public AllianceSetupWidget::ApplyStrategy {
+   virtual void sneakAttack ( GameMap* map, int actingPlayer, int towardsPlayer )
+   {
+      auto_ptr<DiplomacyCommand> dc ( new DiplomacyCommand( map->player[actingPlayer]));
+      dc->sneakAttack( map->getPlayer( towardsPlayer ));
+      ActionResult res = dc->execute( createContext(actmap) );
+      if ( res.successful() )
+         dc.release();
+      else
+         displayActionError( res );
+   }
+
+   virtual void setState ( GameMap* map, int actingPlayer, int towardsPlayer, DiplomaticStates newState )
+   {
+      auto_ptr<DiplomacyCommand> dc ( new DiplomacyCommand( map->player[actingPlayer]));
+      dc->newstate( newState, map->getPlayer( towardsPlayer ));
+      ActionResult res = dc->execute( createContext(actmap) );
+      if ( res.successful() )
+         dc.release();
+      else
+         displayActionError( res );
+   }
+};
+
+
+void editAlliances()
+{
+   CommandAllianceSetupStrategy cass;
+   if ( setupalliances( actmap, &cass, actmap->getCurrentPlayer().stat == Player::supervisor ) ) {
+      if ( computeview( actmap ))
+         displaymap();
+   }
+}
+
+
+/** this performs some check if a technology may be choosen right now and than
+    either calls chooseTechnology
+    or displays some informational messages
+ */
+void chooseTechnologyIfAvail( Player& player )
+{
+   if ( player.research.activetechnology ) {
+      infoMessage("You are already researching " + player.research.activetechnology->name);
+   } else {
+      if ( !player.research.progress )
+         infoMessage("You don't have any research points to spend");
+      else {
+         checkForNewResearch( player );
+      }
+   }
+}
+
+
+
+
+
 // user actions using the old event system
-void execuseraction ( tuseractions action )
+void executeUserAction ( tuseractions action )
 {
    switch ( action ) {
       case ua_repainthard  :
@@ -909,158 +1056,6 @@ void execuseraction ( tuseractions action )
          break;
 
          
-      default:;
-      };
-}
-
-bool continueAndStartMultiplayerGame( bool mostRecent = false )
-{
-   GameMap* map = continueNetworkGame( mostRecent );
-   if ( map ) {
-      delete actmap;
-      actmap = map;
-      hookGuiToMap(actmap);
-      actmap->sigPlayerUserInteractionBegins( actmap->player[actmap->actplayer] );
-      displaymap();
-      return true;
-   } else
-      return false;
-}
-
-
- 
-
-void writeLuaCommands() 
-{
-   ASCString filename =  selectFile("*.lua", false );
-   if ( !filename.empty() ) {
-      LuaCommandFileWriter writer ( filename );
-      actmap->actions.getCommands( writer ); 
-   }
-}
-
-void selectAndRunLuaScript()
-{
-   ASCString file = selectFile( "*.lua", true );
-   if ( file.size() ) {
-      LuaState state;
-      LuaRunner runner( state );
-      runner.runFile( file );
-      if ( !runner.getErrors().empty() )
-         errorMessage( runner.getErrors() );
-      updateFieldInfo();
-   }
-}
-
-
-void showUnitAiProperties() 
-{
-   MapField* fld = getSelectedField();
-   if ( fld->vehicle && fieldvisiblenow(fld ) ) {
-      Vehicle* v = fld->vehicle;
-      ASCString s;
-      s += "Unit nwid = " + ASCString::toString( v->networkid ) + "\n";
-   
-      AiParameter* a = NULL;
-      
-      for ( int i = 0; i < 8; ++i )
-         if ( v->aiparam[i] ) {
-         a = v->aiparam[i];
-         break;
-         }
-         
-         s += "Task = " + ASCString(AItasks[(int)a->getTask() ]) + "\n";
-         s += "Job = " + ASCString(AIjobs[(int)a->getJob() ]) + "\n";
-      
-      
-         s += "Destination: ";
-         if ( a->dest.valid() )
-            s += a->dest.toString();
-         s += "\n";
-      
-         ViewFormattedText vat ( "AI properties", s, PG_Rect( 20, -1 , 450, 480 ));
-         vat.Show();
-         vat.RunModal();
-   }
-}
-   
-
-void showUsedPackages()
-{
-   PackageManager::storeData( actmap );
-   if ( actmap->packageData ) {
-      ASCString s;
-      for ( PackageData::Packages::const_iterator i  = actmap->packageData->packages.begin(); i != actmap->packageData->packages.end(); ++i ) {
-         s += "#fontsize=14#" + i->second->name + "#fontsize=11#\n";
-         s += i->second->description;
-         s += "\n\n";
-      }
-      
-      ViewFormattedText vat ( "Used Packages", s, PG_Rect( 20, -1 , 450, 480 ));
-      vat.Show();
-      vat.RunModal();
-   }
-}
-
-
-class CommandAllianceSetupStrategy : public AllianceSetupWidget::ApplyStrategy {
-   virtual void sneakAttack ( GameMap* map, int actingPlayer, int towardsPlayer )
-   {
-      auto_ptr<DiplomacyCommand> dc ( new DiplomacyCommand( map->player[actingPlayer]));  
-      dc->sneakAttack( map->getPlayer( towardsPlayer ));
-      ActionResult res = dc->execute( createContext(actmap) );
-      if ( res.successful() )
-         dc.release();
-      else
-         displayActionError( res );
-   }
-   
-   virtual void setState ( GameMap* map, int actingPlayer, int towardsPlayer, DiplomaticStates newState )
-   {
-      auto_ptr<DiplomacyCommand> dc ( new DiplomacyCommand( map->player[actingPlayer]));  
-      dc->newstate( newState, map->getPlayer( towardsPlayer ));
-      ActionResult res = dc->execute( createContext(actmap) );
-      if ( res.successful() )
-         dc.release();
-      else
-         displayActionError( res );
-   }
-};
-
-
-void editAlliances()
-{
-   CommandAllianceSetupStrategy cass;
-   if ( setupalliances( actmap, &cass, actmap->getCurrentPlayer().stat == Player::supervisor ) ) {
-      if ( computeview( actmap ))
-         displaymap();
-   }
-}
-
-
-/** this performs some check if a technology may be choosen right now and than 
-    either calls chooseTechnology
-    or displays some informational messages
- */
-void chooseTechnologyIfAvail( Player& player )
-{
-   if ( player.research.activetechnology ) {
-      infoMessage("You are already researching " + player.research.activetechnology->name);
-   } else {
-      if ( !player.research.progress )
-         infoMessage("You don't have any research points to spend");
-      else {
-         checkForNewResearch( player );
-      }
-   }
-}
-
-
-// user actions using the new event system
-void execuseraction2 ( tuseractions action )
-{
-   switch ( action ) {
-   
       case ua_unitweightinfo:
          if ( fieldvisiblenow  ( getSelectedField() )) {
             Vehicle* eht = getSelectedField()->vehicle;
@@ -1267,18 +1262,8 @@ void execuseraction2 ( tuseractions action )
       case ua_taskManager: taskManager( actmap );
          break;
          
-      default:
-         break;
-   }
-
-}
-
-
-
-void execUserAction_ev( tuseractions action )
-{
-   execuseraction( action );
-   execuseraction2( action );
+      default:;
+      };
 }
 
 

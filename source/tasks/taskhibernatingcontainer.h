@@ -26,10 +26,10 @@
 
 class GameMap;
 class tnstream;
-class tmemorystreambuf;
+class MemoryStreamStorage;
 
 class TaskHibernatingContainer : public AbstractTaskContainer {
-      typedef deallocating_vector<tmemorystreambuf*> Buffer;
+      typedef deallocating_vector<MemoryStreamStorage*> Buffer;
       Buffer buffer;
       static void hook( GameMap& gamemap );
 

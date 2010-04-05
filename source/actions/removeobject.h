@@ -34,7 +34,7 @@ class RemoveObject : public GameAction {
       RemoveObject( GameMap* map ) : GameAction( map ) {};
       template<class Child> friend GameAction* GameActionCreator( GameMap* map);
       
-      tmemorystreambuf* objectBuffer;
+      MemoryStreamStorage* objectBuffer;
 
    public:
       RemoveObject( GameMap* gamemap, const MapCoordinate& position, int objectID );

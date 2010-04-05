@@ -858,13 +858,13 @@ void MapInfoPanel::layerChanged( bool state, const ASCString& label )
 
 bool MapInfoPanel::showWeaponRange()
 {
-   execuseraction( ua_viewunitweaponrange );
+   executeUserAction( ua_viewunitweaponrange );
    return true;
 }
 
 bool MapInfoPanel::showMovementRange()
 {
-   execuseraction( ua_viewunitmovementrange );
+   executeUserAction( ua_viewunitmovementrange );
    return true;
 }
 

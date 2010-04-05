@@ -73,7 +73,7 @@ void TaskContainer::startTurn( Player& player )
          before the actions are transferred */
       
       {
-         tmemorystream memstream( newTasks, tnstream::appending );
+         MemoryStream memstream( newTasks, tnstream::appending );
          memstream.writeInt( noOtherTasks );
       }
       
@@ -88,7 +88,7 @@ void TaskContainer::startTurn( Player& player )
       
       pendingCommands.clear();
       
-      tmemorystream stream ( playerTasks[p], tnstream::reading );
+      MemoryStream stream ( playerTasks[p], tnstream::reading );
       int token = stream.readInt();
       while ( token == yetAnotherTask ) {
          Command* cmd = dynamic_cast<Command*>( GameAction::readFromStream( stream, gamemap ) );
@@ -114,9 +114,9 @@ void TaskContainer::store( const Command& command )
 {
    if ( command.getState() == Command::Run ) {
       if ( newTasks == NULL )
-         newTasks = new tmemorystreambuf();
+         newTasks = new MemoryStreamStorage();
       
-      tmemorystream memstream( newTasks, tnstream::appending );
+      MemoryStream memstream( newTasks, tnstream::appending );
       memstream.writeInt( yetAnotherTask );
       command.write( memstream, false);
       lastPlayer = gamemap->actplayer;

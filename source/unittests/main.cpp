@@ -163,7 +163,7 @@ void deployMapPlayingHooks ( GameMap* map )
 #include "clparser/asc.cpp"
 
 
-void execuseraction ( tuseractions action ) {};
+void executeUserAction ( tuseractions action ) {};
 void execUserAction_ev ( tuseractions action ) {};
 
 

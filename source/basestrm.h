@@ -165,8 +165,12 @@ class MemoryStreamCopy : public tnstream {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-class tmemorystreambuf {
-           friend class tmemorystream;
+/**
+ * An in-memory storage of streamed data.
+ * A MemoryStream can be used to read or write to it
+ */
+class MemoryStreamStorage {
+           friend class MemoryStream;
 
            bool initialized;
 
@@ -175,29 +179,38 @@ class tmemorystreambuf {
            int dummy[10];
            char* buf;
         public:
-           tmemorystreambuf ( void );
+           MemoryStreamStorage();
+
+           //! persist the contents in another stream
            void writetostream ( tnstream* stream );
+
+           //! read persisted contents from another stream
            void readfromstream ( tnstream* stream );
+
            void clear() { used= 0; };
+
            int getMemoryFootprint() const { return allocated; };
            
            const char* getBuffer() const { return buf; };
            int getSize() const { return used; };
            
-           ~tmemorystreambuf ( );
+           ~MemoryStreamStorage ( );
       };
 
-
-class tmemorystream : public tnstream {
+/**
+ * Reads data from or writes data to a MemoryStreamStorage
+ * This allows a completely volatile storage of data.
+ */
+class MemoryStream : public tnstream {
        protected:
            int   blocksize;
-           char* zeiger;
+           char* pointer;
            IOMode _mode;
            int   actmempos;
-           tmemorystreambuf* buf;
+           MemoryStreamStorage* buf;
 
         public:
-           tmemorystream ( tmemorystreambuf* lbuf, IOMode mode );
+           MemoryStream ( MemoryStreamStorage* lbuf, IOMode mode );
            virtual void writedata ( const void* nbuf, int size );
            virtual int  readdata  ( void* nbuf, int size, bool excpt = true );
            int dataavail ( void );

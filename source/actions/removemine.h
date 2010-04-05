@@ -35,7 +35,7 @@ class RemoveMine : public GameAction {
       RemoveMine( GameMap* map ) : GameAction( map ) {};
       template<class Child> friend GameAction* GameActionCreator( GameMap* map);
       
-      tmemorystreambuf* mineBuffer;
+      MemoryStreamStorage* mineBuffer;
 
    public:
       //! mineID = 0 will remove all mines on that field

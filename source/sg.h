@@ -47,10 +47,7 @@ enum tuseractions { ua_repainthard,     ua_repaint, ua_help, ua_mainmenu, ua_mnt
                     ua_writeLuaCommands, ua_runLuaCommands, ua_recompteview, ua_unitGuideDialog, ua_turnUnitLeft, ua_turnUnitRight,
                     ua_chooseTechnology, ua_actionManager, ua_viewReactionfireOverlay, ua_unitAiOptions, ua_showUsedPackages, ua_runOpenTasks, ua_taskManager };
 
-extern void execuseraction ( tuseractions action );
-
-//! takes care of event system switching between old and new functions
-extern void execUserAction_ev( tuseractions action );
+extern void executeUserAction ( tuseractions action );
 
 class GameMap;
 extern void hookGuiToMap( GameMap* map );

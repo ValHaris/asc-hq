@@ -75,7 +75,7 @@ void AbstractTaskContainer::readStorage( tnstream& stream )
       
       int data = stream.readInt();
       if ( data ) {
-         playerTasks[i] = new tmemorystreambuf();
+         playerTasks[i] = new MemoryStreamStorage();
          playerTasks[i]->readfromstream( &stream );
       }
    }
@@ -88,7 +88,7 @@ void AbstractTaskContainer::readStorage( tnstream& stream )
    newTasks = NULL;
 
    if ( stream.readInt() ) {   
-      newTasks = new tmemorystreambuf();
+      newTasks = new MemoryStreamStorage();
       newTasks->readfromstream( &stream );
    } 
 

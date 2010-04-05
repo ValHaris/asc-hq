@@ -94,12 +94,12 @@ bool GameDialog::eventKeyDown (const SDL_KeyboardEvent *key) {
    if ( mod == 0 ) {
       switch ( key->keysym.sym ) {
             case SDLK_F3:
-               execUserAction_ev ( ua_continuenetworkgame );
+               executeUserAction ( ua_continuenetworkgame );
                QuitModal();
                return true;
 
             case SDLK_F4:
-               execUserAction_ev ( ua_networksupervisor );
+               executeUserAction ( ua_networksupervisor );
                QuitModal();
                return true;
             default:;
@@ -110,7 +110,7 @@ bool GameDialog::eventKeyDown (const SDL_KeyboardEvent *key) {
    if ( (mod & KMOD_SHIFT) && (mod & KMOD_CTRL)) {
       switch ( key->keysym.sym ) {
             case SDLK_l:
-               execUserAction_ev ( ua_loadrecentgame );
+               executeUserAction ( ua_loadrecentgame );
                QuitModal();
                return true;
             default:;
@@ -122,7 +122,7 @@ bool GameDialog::eventKeyDown (const SDL_KeyboardEvent *key) {
    if ( mod & KMOD_CTRL ) {
       switch ( key->keysym.sym ) {
             case SDLK_l:
-               execUserAction_ev ( ua_loadgame );
+               executeUserAction ( ua_loadgame );
                QuitModal();
                return true;
             default:;
@@ -132,7 +132,7 @@ bool GameDialog::eventKeyDown (const SDL_KeyboardEvent *key) {
    if ( mod & KMOD_SHIFT ) {
       switch ( key->keysym.sym ) {
             case SDLK_F3:
-               execUserAction_ev ( ua_continuerecentnetworkgame );
+               executeUserAction ( ua_continuerecentnetworkgame );
                QuitModal();
                return true;
             default:;

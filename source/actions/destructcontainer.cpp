@@ -53,7 +53,7 @@ void DestructContainer::readData ( tnstream& stream )
    building = stream.readInt();
    
    if ( stream.readInt() ) {
-      unitBuffer = new tmemorystreambuf();
+      unitBuffer = new MemoryStreamStorage();
       unitBuffer->readfromstream( &stream );  
    } else
       unitBuffer = NULL;
@@ -101,8 +101,8 @@ ActionResult DestructContainer::runAction( const Context& context )
 {
    ContainerBase* container = getContainer();
 
-   unitBuffer = new tmemorystreambuf();
-   tmemorystream memstream( unitBuffer, tnstream::writing );
+   unitBuffer = new MemoryStreamStorage();
+   MemoryStream memstream( unitBuffer, tnstream::writing );
    container->write( memstream );
    
    Vehicle* veh = dynamic_cast<Vehicle*>(container);
@@ -170,7 +170,7 @@ ActionResult DestructContainer::runAction( const Context& context )
 
 ActionResult DestructContainer::undoAction( const Context& context )
 {
-   tmemorystream memstream( unitBuffer, tnstream::reading );
+   MemoryStream memstream( unitBuffer, tnstream::reading );
    if ( building ) {
       Building* bld = Building::newFromStream( getMap(), memstream );
       bld->chainbuildingtofield( bld->getEntry() );

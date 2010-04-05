@@ -692,7 +692,7 @@ class UnitInfo : public GuiFunction
 public:
     bool available( const MapCoordinate& pos, ContainerBase* subject, int num ) ;
     void execute( const MapCoordinate& pos, ContainerBase* subject, int num ) {
-        execUserAction_ev(ua_vehicleinfo);
+        executeUserAction(ua_vehicleinfo);
     };
     Surface& getImage( const MapCoordinate& po, ContainerBase* subject, int nums ) {
         return IconRepository::getIcon("unitinfo.png");

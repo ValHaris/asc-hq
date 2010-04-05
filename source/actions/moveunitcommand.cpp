@@ -67,6 +67,9 @@ bool MoveUnitCommand :: longDistAvailable( const MapCoordinate& pos )
    if ( !fld )
       return false;
    
+   if ( !getUnit() )
+      return false;
+
    for ( int h = 0; h < 8; ++h )
       if ( getUnit()->typ->height & (1<<h))
          if ( fieldAccessible( fld, getUnit(), 1 << h ) == 2 )

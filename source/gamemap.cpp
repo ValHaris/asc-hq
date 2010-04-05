@@ -2180,13 +2180,13 @@ void GameMap :: ReplayInfo :: read ( tnstream& stream )
 
    for ( int i = 0; i < 8; i++ ) {
       if ( loadgui[i] ) {
-         guidata[i] = new tmemorystreambuf;
+         guidata[i] = new MemoryStreamStorage;
          guidata[i]->readfromstream ( &stream );
       } else
          guidata[i] = NULL;
 
       if ( loadmap[i] ) {
-         map[i] = new tmemorystreambuf;
+         map[i] = new MemoryStreamStorage;
          map[i]->readfromstream ( &stream );
       } else
          map[i] = NULL;

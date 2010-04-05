@@ -767,7 +767,7 @@ class AddResources : public EventAction {
 };
 
 class Reinforcements : public EventAction {
-      tmemorystreambuf buf;
+      MemoryStreamStorage buf;
       int objectNum;
       friend class ReinforcementSelector;
       enum Type { ReinfVehicle, ReinfBuilding };

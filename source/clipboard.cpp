@@ -80,7 +80,7 @@ void ClipBoardBase::setProperties( const ContainerBase* unit )
 
 void ClipBoardBase::addUnit ( const Vehicle* unit )
 {
-  tmemorystream stream ( &buf, tnstream::appending );
+  MemoryStream stream ( &buf, tnstream::appending );
   stream.writeInt( ClipVehicle );
   unit->write ( stream );
   objectNum++;
@@ -90,7 +90,7 @@ void ClipBoardBase::addUnit ( const Vehicle* unit )
 
 void ClipBoardBase::addBuilding ( const Building* bld )
 {
-  tmemorystream stream ( &buf, tnstream::appending );
+  MemoryStream stream ( &buf, tnstream::appending );
   stream.writeInt( ClipBuilding );
   bld->write ( stream );
   objectNum++;
@@ -114,7 +114,7 @@ Vehicle* ClipBoardBase::pasteUnit(  )
   if ( !objectNum )
      return NULL;
 
-  tmemorystream stream ( &buf, tnstream::reading );
+  MemoryStream stream ( &buf, tnstream::reading );
   Type type = Type(stream.readInt());
   if ( type == ClipVehicle )
      return pasteUnit ( stream );
@@ -128,7 +128,7 @@ void ClipBoardBase::place ( const MapCoordinate& pos )
   if ( !objectNum )
      return;
 
-  tmemorystream stream ( &buf, tnstream::reading );
+  MemoryStream stream ( &buf, tnstream::reading );
   Type type = Type(stream.readInt());
   if ( type == ClipVehicle ) {
      MapField* fld = actmap->getField ( pos );

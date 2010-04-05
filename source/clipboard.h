@@ -37,7 +37,7 @@
 class ClipBoardBase {
       map<ASCString,ASCString> properties;
    
-      tmemorystreambuf buf;
+      MemoryStreamStorage buf;
       enum Type { ClipVehicle, ClipBuilding };
       int objectNum;
 

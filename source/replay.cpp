@@ -704,8 +704,8 @@ void initReplayLogging( Player& player )
 
       savereplay ( gamemap, player.getPosition() );
 
-      gamemap->replayinfo->guidata[ player.getPosition() ] = new tmemorystreambuf;
-      gamemap->replayinfo->actmemstream = new tmemorystream ( gamemap->replayinfo->guidata[ player.getPosition() ], tnstream::writing );
+      gamemap->replayinfo->guidata[ player.getPosition() ] = new MemoryStreamStorage;
+      gamemap->replayinfo->actmemstream = new MemoryStream ( gamemap->replayinfo->guidata[ player.getPosition() ], tnstream::writing );
    }
 }
 
@@ -745,9 +745,9 @@ class LogActionIntoReplayInfo  {
          
             stream->writeChar( rpl_runCommandAction );
             
-            tmemorystreambuf buff;
+            MemoryStreamStorage buff;
             {
-               tmemorystream stream2( &buff, tnstream::writing );
+               MemoryStream stream2( &buff, tnstream::writing );
                cmd.write( stream2 );
             }
             
@@ -2073,10 +2073,10 @@ void trunreplay :: execnextreplaymove ( void )
          {
             stream->readInt();
             int padding = stream->readInt();
-            tmemorystreambuf buffer;
+            MemoryStreamStorage buffer;
             buffer.readfromstream( stream );
             
-            tmemorystream memstream( &buffer, tnstream::reading );
+            MemoryStream memstream( &buffer, tnstream::reading );
             
             auto_ptr<GameAction> readaction ( GameAction::readFromStream( memstream, actmap ));
             
@@ -2160,7 +2160,7 @@ int  trunreplay :: run ( int player, int viewingplayer, bool performEndTurnOpera
    SuppressTechPresentation stp;
    actmap->sigPlayerTurnBegins( actmap->getPlayer( player ));
    
-   tmemorystream guidatastream ( orgmap->replayinfo->guidata [ player ], tnstream::reading );
+   MemoryStream guidatastream ( orgmap->replayinfo->guidata [ player ], tnstream::reading );
    stream = &guidatastream;
 
    if ( stream->dataavail () )

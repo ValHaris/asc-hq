@@ -30,8 +30,8 @@ class Task;
 class AbstractTaskContainer {
    protected:
       static const int taskMagic = 0xda5cda5c;
-      tmemorystreambuf* playerTasks[GameMap::maxTotalPlayers];
-      tmemorystreambuf* newTasks;
+      MemoryStreamStorage* playerTasks[GameMap::maxTotalPlayers];
+      MemoryStreamStorage* newTasks;
       
       void writeStorage( tnstream& stream ) const;
       void readStorage( tnstream& stream );

@@ -2270,7 +2270,7 @@ int checkforvaliddirectory ( char* dir )
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-  tmemorystreambuf :: tmemorystreambuf ( void )
+  MemoryStreamStorage :: MemoryStreamStorage ( void )
   {
      used = 0;
      allocated = 0;
@@ -2278,7 +2278,7 @@ int checkforvaliddirectory ( char* dir )
      memset ( dummy, 0, sizeof ( dummy ));
   }
 
-  tmemorystreambuf :: ~tmemorystreambuf ( void )
+  MemoryStreamStorage :: ~MemoryStreamStorage ( void )
   {
      if ( buf ) {
         delete[] buf;
@@ -2286,7 +2286,7 @@ int checkforvaliddirectory ( char* dir )
      }
   }
 
-  void tmemorystreambuf :: writetostream ( tnstream* stream )
+  void MemoryStreamStorage :: writetostream ( tnstream* stream )
   {
      if ( stream ) {
         stream->writeInt ( 0 );
@@ -2299,7 +2299,7 @@ int checkforvaliddirectory ( char* dir )
      }
   }
 
-  void tmemorystreambuf :: readfromstream ( tnstream* stream )
+  void MemoryStreamStorage :: readfromstream ( tnstream* stream )
   {
      if ( stream ) {
         stream->readInt();
@@ -2321,7 +2321,7 @@ int checkforvaliddirectory ( char* dir )
   }
 
 
-tmemorystream :: tmemorystream ( tmemorystreambuf* lbuf, IOMode lmode )
+MemoryStream :: MemoryStream ( MemoryStreamStorage* lbuf, IOMode lmode )
 {
 
    blocksize = 1024;
@@ -2333,7 +2333,7 @@ tmemorystream :: tmemorystream ( tmemorystreambuf* lbuf, IOMode lmode )
 
 
    if ( _mode == reading ) {
-      zeiger = buf->buf;
+      pointer = buf->buf;
       actmempos = 0;
    } else
    if ( _mode == writing ) {     // neuen Puffer anlegen
@@ -2344,17 +2344,17 @@ tmemorystream :: tmemorystream ( tmemorystreambuf* lbuf, IOMode lmode )
       buf->buf = new char[blocksize];
       buf->allocated = blocksize;
       buf->used = 0;
-      zeiger = buf->buf;
+      pointer = buf->buf;
       actmempos = 0;
    }
    if ( _mode == appending ) {
-      zeiger = buf->buf;
+      pointer = buf->buf;
       actmempos = buf->used;
       _mode = writing;
    }
 }
 
-void tmemorystream :: writedata ( const void* nbuf, int size )
+void MemoryStream :: writedata ( const void* nbuf, int size )
 {
    if ( _mode != writing )
       throw tinvalidmode ( "memorystream", _mode, writing );
@@ -2374,7 +2374,7 @@ void tmemorystream :: writedata ( const void* nbuf, int size )
 }   
 
 
-int  tmemorystream :: readdata ( void* nbuf, int size, bool excpt  )
+int  MemoryStream :: readdata ( void* nbuf, int size, bool excpt  )
 {
    if (_mode != reading )
       throw  tinvalidmode ( "memorystream", _mode, reading );
@@ -2391,7 +2391,7 @@ int  tmemorystream :: readdata ( void* nbuf, int size, bool excpt  )
    return size;
 }
 
-int tmemorystream :: dataavail ( void )
+int MemoryStream :: dataavail ( void )
 {
    if ( _mode == writing )
       return 1;

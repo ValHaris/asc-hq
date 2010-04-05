@@ -58,7 +58,7 @@ extern GameMap* mapLoadingExceptionChecker( const ASCString& filename, MapLoadin
 
 
 
-extern GameMap*  loadreplay( tmemorystreambuf* streambuf );
+extern GameMap*  loadreplay( MemoryStreamStorage* streambuf );
 
 //! writes all replay relevant map information of player num to the replay variable of #actmap
 extern void  savereplay( GameMap* gamemap, int num );
