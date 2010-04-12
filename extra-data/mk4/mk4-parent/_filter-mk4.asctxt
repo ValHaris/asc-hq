@@ -1,6 +1,6 @@
 itemfilter {
    Vehicles = 1200-1299 14000-14999
-   Buildings = 14000-14999
+   Buildings = 50 61 1200 1212 14000-14999
    Objects = 1200-1299 14000-14999
    Terrain = 14000-14999
    Technologies = 1200-1299 14000-14999 100020 100021

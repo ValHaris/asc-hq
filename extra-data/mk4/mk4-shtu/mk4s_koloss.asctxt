@@ -35,7 +35,7 @@ VehicleType {
       Weapon0.MaxRange = 30
       Weapon0.Punch@MaxRange = 110
       Weapon0.Punch@MinRange = 120
-      Weapon0.Ammo = 20
+      Weapon0.Ammo = 8
       Weapon0.ReactionFireShots = 1
 
       Weapon1 ->* VehicleType.SAM 
@@ -49,7 +49,7 @@ VehicleType {
       Weapon2.Punch@MaxRange = 105
       Weapon2.Punch@MinRange = 120
       Weapon2.MaxRange = 40
-      Weapon2.Ammo = 6
+      Weapon2.Ammo = 20
       Weapon2.ReactionFireShots = 0
       
       Weapon3 ->* VehicleType.ServiceGround

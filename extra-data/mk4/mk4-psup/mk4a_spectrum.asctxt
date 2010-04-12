@@ -8,8 +8,17 @@ VehicleType {
    InfoImage = mk4a_spectrum.jpg
    wreckageobject = 1248 14848
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
-   infoText = [Tankflieger sind für jede Luftwaffe unverzichtbar. Sie ermöglichen Kampf- und Transportflugzeugen eine wesentlich größere Reichweite und eine längere Verweildauer im Kampfgebiet. Die Spectrum ist zwar leicht bewaffnet, doch da ihr Verlust den Untergang ganzer Geschwader bedeuten kann, ist sie von strategischer Bedeutung und sollte unbedingt aus Kämpfen herausgehalten werden.
-]
+   infoText = [Tankflieger sind für jede Luftwaffe unverzichtbar, da sie mit ihrer Fähigkeit, andere Flugzeuge direkt in der Luft mit Brennstoff versorgen zu können, deren effektive Gesamtreichweite drastisch erhöhen. Innerhalb des cromonischen Militärs fällt diese Aufgabe dem Tankflieger namens Spectrum zu.
+
+Im Gegensatz zu anderen cromonischen Einheiten, die in der jüngeren Vergangenheit immer wieder diversen Veränderungen unterzogen wurden, hat man am Spectrum nur sehr selten herumgebastelt, sodass dieser noch fast in seiner Ursprungsversion über den heutigen Schlachtfeldern auftaucht. Sein Fassungsvermögen an Sprit ist enorm, wodurch ein einziger Flieger seiner Art als Tankstelle für eine Vielzahl kleinerer Jets dienen kann. Doch auch für den Nachschub der großen Pterranos, der Cruxen und vor allem der UHUs, ist ein Spectrum unerlässlich.
+
+Zu beachten ist, dass er - im Gegensatz beispielsweise zum terranischen NSA - seiner Aufgabe nur in normaler Flughöhe nachkommen kann. Im Tiefflug verhindern Sicherheitssysteme ein Ausfahren der Tankstutzen - und die obersten Luftschichten erreicht der Spectrum schlicht und ergreifend nicht. Dies bedeutet aber auch, dass zu betankende Flugzeuge sich zwingend auf das Höhenniveau des Spectrum begeben müssen, um neuen Treibstoff übernehmen zu können.
+
+Die Panzerung des Tankers ist als eher mittelmäßig zu bezeichnen. Dies ist vor allem der Tatsache geschuldet, das er eben nicht für offensive Kampfhandlungen vorgesehen ist, sondern im eigenen Hinterland operiert - also weit außerhalb der Reichweite der gegnerischen Luftwaffe.
+
+Im Vergleich mit Tankfliegern anderer Spezies ist der Spectrum verhältnismäßig langsam, denn er erreicht lediglich Geschwindigkeiten, die denen einer Pterrano entsprechen. Leider birgt diese Tatsache auch einige unangenehme Nebenwirkungen in sich, denn vor allem eine schnell vorstoßende Luftwaffe ist auf rechtzeitige Nachschublieferungen angewiesen. Hinter den schnellen Genoms, Copras und Ghosts, kann ein Spectrum sehr schnell hoffnungslos hinterherhinken. Hier ist eine gut durchdachte Planung bereits beim Start der Luftwaffe nötig.
+
+Als Bewaffnung verfügt der Spectrum lediglich ein zur Selbstverteidigung dienendes, bewegliches MG, welches im unteren Bereich der Bugkanzel installiert ist. Damit vermag der Spectrum gegen Ziele zu feuern, die sich auf gleicher Höhe befinden, wie er selbst, sowie auf etwas tiefer Befindliche. Dies sollte vor allem dort beachtet werden, wo trotz aller Vorsichtsmaßnahmen mit Gegnern zu rechnen ist, die aus den höheren Luftschichten herabstoßen könnten, denn gegen Fliegerangriffe von oben ist er komplett wehrlos und würde - in Zusammenhang mit schwacher Panzerung und mangelnder Fluchtgeschwindigkeit - nur allzu schnell zu einer leichten Beute werden. Dies wiederum könnte, betrachtet man sich die enormen Spritmengen, die ein Spectrum zu fassen vermag, den Ausgang einer ganzen Schlacht gefährden, wenn die eigenen Jäger plötzlich ohne rechtzeitigen Spritnachschub dastehen.]
 
    Armor -= 40
    FuelConsumption = 20

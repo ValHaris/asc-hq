@@ -10,7 +10,7 @@ VehicleType {
    wreckageobject = 1241 14841
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
    
-   Armor += 50
+   Armor += 20
 
    Weight = 250
 } VehicleType

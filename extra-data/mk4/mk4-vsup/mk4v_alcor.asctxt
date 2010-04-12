@@ -15,6 +15,9 @@ Anders als der Algol, so ist dieser Munitionstransporter ein Kettenfahrzeug. Rec
 
 Manchmal sind diese Munitionstransporter jedoch trotzdem dazu gezwungen, sich näher an das Kampfgebiet heranzuwagen, etwa wenn es darum geht, schnelle und leichte Einheiten im Gefecht zu versorgen. Beispiel hierfür sind zum Beispiel die Demon-Kampfroboter, die bei Rückzugsgefechten dazu genutzt werden können, den nachrückenden Gegner mit ausgelegten Minen zu bremsen, dabei aber auf die Minenvorräte des Alcor angewiesen sind. Oder aber die Buggys, die zwar mit ihren Raketenwerfern eine wirkungsvolle Unterstützung bei aller Art von Bodengefechten bieten, selbst jedoch nur über einen sehr geringen Munitionsvorrat verfügen. Um also zu verhindern, dass dringend benötigte Kampfeinheiten zu Versorgungszwecken erst zeitaufwändig aus der Front gezogen und nach hinten geschickt werden müssen, muss der Alcor sie mitunter auch direkt vor Ort versorgen können. Um dabei das Risiko für sich selbst etwas zu vermindern, wurde seine Panzerung entsprechend so gestaltet, dass sie inzwischen an die eines leichten Kampfpanzers heranreicht. Außerdem wurde er noch mit einem leichten MG zur Selbstverteidigung ausgestattet.
 ]
+
+   Features += ExternalAmmoTransfer
+
    Weapons { 
       Initiative = -50
       Number = 9

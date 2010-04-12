@@ -28,6 +28,7 @@ Der ATLAS SX baut auf dem leistungsfaehigen ATLAS - Transporter auf und dient al
       EntranceSystem1.RequireUnitFunction = paratrooper
    } Transportation
 
+   Movement -= 0 0 0 10 0 0 0 0 
    TerrainAccess ->* VehicleType.mud_wheeled 
 
    Weapons { 

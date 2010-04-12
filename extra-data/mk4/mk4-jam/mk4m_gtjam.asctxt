@@ -10,4 +10,5 @@ VehicleType {
    Infotext = [GolemType Roboter mit Radarstöhrelektronik. ]
 
    Armor += 100
+
 } VehicleType

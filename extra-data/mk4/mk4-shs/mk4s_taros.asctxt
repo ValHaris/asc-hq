@@ -10,7 +10,7 @@ VehicleType {
    GuideSortHelp = 554 558 0 0 4 0 0 0 0 0
    
    Transportation ->* VehicleType.TransTurretBig2
-   Features = construct_specific_buildings construct_vehicles self_repairing 
+   Features = construct_specific_buildings construct_vehicles self_repairing ExternalMaterialTransfer ExternalFuelTransfer ExternalRepair
    SelfRepairRate = 10
 
    Tank { 
@@ -19,16 +19,21 @@ VehicleType {
    } Tank
    
    Construction { 
-      Buildings = 13 14 16-19
+      Buildings = 13 14 50
       Vehicles = 1221 1222 1219 1278
       Objects = 1000 2 30 44 999 997 996 995
       ObjectsRemovable = 
-      ObjectGroupsRemovable = 2 4 6 7 9 12 15
+      ObjectGroupsRemovable = 2 4 6 7 9 12 14 15
    } Construction
    Weapons { 
-      Initiative = 0
-      Number = 2
-      Weapon0 ->* VehicleType.ServiceGround 
+      Number = 4
+      Weapon0 ->* VehicleType.ServiceTurret 
       Weapon1 ->* VehicleType.Ship_MG 
+      Weapon2 ->* VehicleType.AmmoCannon 
+      Weapon2.Ammo = 70
+
+      Weapon3 ->* VehicleType.AmmoLM 
+      Weapon3.Ammo = 70
+
    } Weapons
 } VehicleType

@@ -1,5 +1,5 @@
 Techadapter {
-   ; SolarPowerMK4
-   Name = B31
+   ; Port
+   Name = B50
    TechnologiesRequired = 100020
 } TechAdapter

@@ -23,7 +23,6 @@ Einen weiteren gravierenden Vorteil hat der Orbiter jedoch noch: Wenn ein Raumsc
    Transportation.EntranceSystemNum = 3
    Transportation.EntranceSystem2 ->* VehicleType.Drop
 
-   Features += Repair_Facility
    Movement = 0 0 0 65 90 120 120 100 
    Weight += 50
    Weapons { 

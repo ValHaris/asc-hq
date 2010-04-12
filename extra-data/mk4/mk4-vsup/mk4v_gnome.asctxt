@@ -9,9 +9,9 @@ VehicleType {
    Infotext = [Der Gnome ist ein kleines, geländegängiges Radfahrzeug, welches darauf spezialisiert ist, Minen zu verlegen, aufzuspüren, einzusammeln und zu entschärfen. Hierzu verfügt er über einen langen Auslegerarm, welcher mit verschiedenen Sensoren zum Erkennen von Minen sowie entsprechenden Werkzeugen, um diese aus dem Boden entfernen und entschärfen zu können, ausgerüstet ist. Ein zweiter Werkzeugarm ermöglicht das Verlegen eigener Minen mit sehr hoher Sprengkraft, welcher er in größerer Zahl mit sich führt. Durch seine Spezialisierung können beide Aufgaben mit hoher Geschwindigkeit ausgeführt werden, wobei die langen Werkzeugarme ihm hierbei eine große Reichweite erlauben. Der Gnome ist ansonsten völlig unbewaffnet und auch nicht sonderlich gut gepanzert. Sein Haupteinsatzzweck ist das Verminen eigener Stellungen, um gegnerische Angriffe zu bremsen. Allerdings ist er auch sehr nützlich, um sich Zugang zu verminten Stellungen zu verschaffen. In beiden Fällen ist er aber als strategische Einheit ein bevorzugtes Ziel und daher gut zu schützen. ]
 
    Features += mine_layer mineview 
-
+   Movement -= 0 0 0 10 0 0 0 0 
+   
    Weapons { 
-      Initiative = 0
       Number = 1
       Weapon0 ->* VehicleType.MineWeapon 
       Weapon0.Ammo = 20

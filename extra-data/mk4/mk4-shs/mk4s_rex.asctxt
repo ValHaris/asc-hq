@@ -10,8 +10,8 @@ VehicleType {
    wreckageobject = 14256
    GuideSortHelp = 553 550 0 0 4 0 0 0 0 0
 
-   Transportation ->* VehicleType.TransTurretBig2 
-   Features = ExternalRepair self_repairing 
+   Transportation ->* VehicleType.TransTurretBig 
+   Features = ExternalRepair self_repairing ExternalMaterialTransfer ExternalFuelTransfer
    SelfRepairRate = 10
 
    Tank { 
@@ -29,7 +29,6 @@ VehicleType {
       Weapon0 ->* VehicleType.ServiceGround 
 
       Weapon1 ->* VehicleType.Ship_MG 
-      Weapon1.Type = machinegun ammo_transfer shootable 
       Weapon1.Ammo = 50
       Weapon1.Punch@MaxRange = 50
       Weapon1.Punch@MinRange = 50

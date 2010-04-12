@@ -33,7 +33,7 @@ Die Citadelle ist die Standardeinheit dieser Einheitenreihe. Sie ist mit einer v
       Weapon0.Ammo = 15
       Weapon0.Punch@MaxRange = 80
       Weapon0.Punch@MinRange = 105
-      Weapon0.ReactionFireShots = 0
+      Weapon0.ReactionFireShots = 1
 
       Weapon1 ->* VehicleType.Tank_Gun 
       Weapon1.MaxRange = 20

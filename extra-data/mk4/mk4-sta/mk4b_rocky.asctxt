@@ -13,10 +13,6 @@ VehicleType {
    Features += ManualSelfDestruct onlyTransMove
 
    Movement = 0 0 0 18 0 0 0 0 
-   Tank { 
-      fuel = 2100
-   } Tank
-   FuelConsumption = 300
    Terrainaccess ->* VehicleType.Turret_all
    
    Weapons {

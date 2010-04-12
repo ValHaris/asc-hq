@@ -4,13 +4,20 @@ VehicleType {
    parent = 244
 
    Description = Radarstellung
-   Infotext = [Diese sehr leistungsfähige stationäre Radarüberwachung ist die Nutzung von Radarstrahlungen für die Erfassung von Bewegungen an Land, zu Wasser oder in der Luft.
-Die Radarüberwachung ist völlig unabhängig von jedweden Wetterbedingungen. Sie setzt eine Abdeckung des Kontrollgebiets durch "Abtastungen" voraus, also ein Netz von Antennen. Eine Nutzung ist nicht unter Wasser möglich, hier wird das Echolot-/Sonarsystem verwendet.
-]
    Picture = mk4b_rune.png
    InfoImage = mk4v_rune.jpg
    wreckageobject = 1219
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+   Infotext = [Die Rune dient dem cromonischen Militär als stationäre Radaranlage. Ihr Aufgabenbereich liegt demzufolge in der weiträumigen Überwachung des eigenen und grenznahen Territoriums. Es handelt sich bei ihr jedoch nicht um eine starre, unbewegliche Bunkeranlage, sondern um einen halbmobilen Turret, der mithilfe geeigneter Transportfahrzeuge auch seine Position wechseln kann. Als gängige Landtransporter sind hier vor allem der Gigant, sowie der Lurat aufzuführen. Auf See übernehmen Rex und Taros diese Aufgabe, wobei Letzterer sogar noch dazu in der Lage ist, ein geeignetes Fundament im Flachwasserbereich zu errichten. Vor allem in ausgedehnten Seegebieten ist diese Fähigkeit von hohem Nutzen - sofern man eine geeignete Sandbank vorfindet, die nahe genug an die Wasseroberfläche heranreicht. Die Rune kann entweder in einer Fabrik hergestellt werden, oder aber ein Lurat oder Taros errichtet sie direkt im Feld, auf einem speziell dafür vorgesehenen Turret-Fundament.
+
+In ihrer Leistungsfähigkeit steht die Rune noch deutlich über dem UHU - ist jedoch leicht schwächer als der cromonische Aufklärungssatellit vom Typ Vision Spy. Dazu kommt noch, dass die Radarstrahlen des Turrets feste Materie nur schwer durchdringen können, wodurch seine Sichtweite durch natürliche Hindernisse, wie Berge oder Wälder deutlich reduziert werden kann. Wo sich ihre Radarstrahlen aber ungehindert ausbreiten können, entgeht der Rune so gut wie nichts! Daher ist es ihr möglich, selbst Satelliten im Planetenorbit aufzuspüren.
+
+Da die Rune über keinerlei Bewaffnung verfügt, wurde versucht, ihre Panzerung entsprechend anzupassen, ohne jedoch die Produktionskosten unnötig in die Höhe zu treiben. Dies wurde vor allem durch eine enorm dicke Aussenhaut aus gewöhnlichem Stahl erreicht, der billig herzustellen und in großen Mengen verfügbar ist. Dadurch kann sie sogar noch mehr Beschuss einstecken, als ein leichter Panzer. Kein Kommandant sollte sich dadurch aber zu sicher fühlen, denn aufgrund ihrer eingeschränkten Mobilität und der nicht vorhandenen Verteidigungsmöglichkeiten, wird sie nur allzu oft zum leichten Ziel für jede gegnerische Einheit, die mehr als eine simple Steinschleuder als Bewaffnung vorzuweisen hat. Denn wie ein Sprichwort so schön sagt: steter Tropfen höhlt den Stein! Und so kann selbst eine herkömmliche Infanterieeinheit mit ihrem Maschinengewehr eine Rune zur Explosion bringen, wenn sie nur lange genug auf die selbe Stelle feuert.
+
+Die vergleichsweise geringen Kosten und die entsprechende Panzerung wurden - und das darf keinesfalls unerwähnt bleiben - mit einem relativ hohen Gewicht erkauft. Durch die Menge an herkömmlichem Stahl, der für die Panzerung verwendet wurde, wiegt die Rune fast soviel, wie fünf Radarpanzer des Typs Orion, die mit weitaus moderneren (und vor allem leichteren) Materialien gegen feindlichen Beschuss gesichert wurden. Diese hohe Masse ist auch der Hauptgrund dafür, dass Runen nur auf speziellen Fundamenten, sogenannten Turret Foundations, errichtet werden können.
+
+Zu guter Letzt sei noch zu erwähnen, dass die Rune - wie alle anderen cromonischen Turrets auch - über einen Standardsprengsatz zur Selbstzerstörung verfügt. Dieser hat keine Flächenwirkung, sondern soll lediglich verhindern, dass der Turret einem vorrückenden Gegner unbeschadet in die Hände fällt, oder zu "Zielübungen unter Gefechtsbedingungen" missbraucht wird.
+]
 
    View += 10
 } VehicleType

@@ -4,9 +4,21 @@ VehicleType {
    parent = 313
    
    Description = Anti Spionage Satellite
-   Infotext = [ - geheim -]
    picture = mk4o_visionrj.png
    wreckageobject = 14019 14819
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+   Infotext = [Wie der Name bereits vermuten lässt, basiert dieser Jamming-Satellit ebenfalls auf dem Ursprungsmodell des Vision. Bei ihm muss man jedoch anmerken, dass er eher ein Nachzügler in der Entwicklung ist und erst weit nach den anderen Vision-Modifikationen entstanden ist.
+
+Wie allgemein bekannt ist, tun sich cromonische Wissenschaftler mit der Radarstörtechnologie - gemeinhin auch als Jamming bezeichnet - seit je her etwas schwer. Bis vor wenigen Jahren war das leichte Radarstörfahrzeug vom Typ Elixier die einzigste Einheit ihrer Art innerhalb des cromonischen Militärs. Später folgten dann GT Jam und Cita RJ, doch all dies konnte nicht mit dem Fortschritt der Rehaner mithalten, gegen deren EXP-Reihe von cromonischer Seite aus bis heute nichts Gleichwertiges entgegengesetzt werden konnte. Bei den Jammerversionen des GT und der Cita bestand folgendes Problem: entweder war die Einheit leistungsfähig, aber langsam, oder aber beweglich und dafür schwach in der Wirkung. Und ein weiteres Manko haftete allen bisherigen cromonischen Jammern an: ihre Beschränkung auf das Land! Und selbst dort konnte es, vor allem im Hochgebirge und anderen schwer zugänglichen Gebieten, große Probleme geben, da die Einheiten diese Terrains teilweise nicht befahren konnten. An Einsätze auf dem Meer, oder gar über Lavaseen, war dabei natürlich gar nicht erst zu denken!
+
+Ursprünglich versuchte man daher, den EXP 21 der Rehaner, also einen Radarstörhelikopter, zu kopieren. Versuche mit umfunktionierten Modellen von Dragon- und Firebird-Hubschraubern schlugen allesamt fehl: die kleinen, leichten Firebirds erwiesen sich als zu schwach in der Leistung und konnten daher das Gewicht der Radarstörer nicht tragen. Bei den Dragons wiederum wirkte sich die abgegebene Strahlung auf die Dauer negativ auf die internen Systeme aus, was bereits in der Testphase zu ersten Totalverlusten führte.
+
+Da man jedoch unbedingt einen Jammer entwickeln wollte, welcher über den bisher nicht zugänglichen Terrains operieren konnte, ließ man sich nicht entmutigen und tüftelte weiter. Flugzeuge kamen nicht in Frage - schließlich sollte die Einheit punktgenau zum Einsatz gebracht werden können. Diese Bedingung ließ sich nicht mit dem notwendigen Kreisen eines Fliegers über einem gewissen Gebiet vereinbaren. Ergo blieb nur eine Möglichkeit: man musste in den Orbit ausweichen. Da bereits mehrere Varianten des Vision existierten, wurde dieses Baumuster auch für die neue Aufgabe herangezogen.
+
+In seiner Effektivität kann er inzwischen durchaus mit der Cita RJ mithalten. Probleme wie bei den Versuchen mit dem Dragon gab es nicht, denn im Gegensatz zu diesem braucht der Vision RJ in der Vertikalen nur in einer Richtung zu funktionieren - nämlich nach unten. Deshalb konnten die Störquellen derart an der Unterseite des Chassis angebracht werden, dass die internen Systeme des Satelliten weitgehend unbehelligt blieben. Um diese entsprechend leistungsfähigen Radarstörgeräte unterbringen zu können, musste jedoch das etwas leichtere Chassis des Vision Spy verwendet werden. Dadurch ging zwar der Gesamtpanzerungswert etwas nach unten - da es sich bei dem Jamming-Satelliten aber ebenso um eine eher taktische Einheit handelt, wurde dies anfangs nicht als Problem angesehen.
+
+Im Endeffekt muss man jedoch in der heutigen Zeit immer besser auf seine Satelliten aufpassen, denn auch die Entwicklung der Anti-Orbital-Waffen geht ständig weiter. Vor allem vor gut ausgebauten Stellungen, die gewöhnlich auch mit Langreichweiten-AO-Waffen bestückt sind, muss sich ein Vision RJ besonders hüten, wenn er nicht als Totalverlust enden will.
+
+Es sei noch anzumerken, dass es den Entwicklern leider bis zum Schluss nicht gelungen ist, den Vision RJ mit einem schnelleren Antrieb auszustatten. So setzt sich auch beim ihm das Manko mangelnder Geschwindigkeit fort, unter dem schon die ganze vorherige Vision-Serie leidet. Um schnell größere Entfernungen überbrücken zu können, ist daher auch die RJ-Version auf die Transportkapazitäten der Orbiter angewiesen.]
 
 } VehicleType

@@ -9,13 +9,13 @@ VehicleType {
    picture = mk4v_spring.png
    wreckageobject = 14274
 
-   Armor += 150
+   Armor += 250
+   Weight += 25
    Transportation ->* VehicleType.TransBigTrooper 
 
+   Movement -= 0 0 0 7 0 0 0 0   
    FuelConsumption = 18
-   Weight += 15
    Weapons { 
-      Initiative = -100
       Number = 1
       Weapon0 ->* VehicleType.MG35low 
    } Weapons

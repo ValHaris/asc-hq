@@ -7,14 +7,15 @@ VehicleType {
    Infotext = [Der GIGANT uebernimmt Spezialaufgaben wie das Errichten der Medusa3 Stellungen und das Versetzen von größeren Geschuetztürmen und der Bunker Citadellen.]
    picture = mk4v_gigant.png
    wreckageobject = 14005
+
    Armor -= 100
    View = 20
-   Weight -= 10
+   Weight = 90
 
    Transportation ->* VehicleType.TransTurretBig
    Transportation.MaxLoadableUnits = 2
 
-   Features += construct_specific_buildings construct_vehicles
+   Features += construct_specific_buildings construct_vehicles ExternalRepair ExternalAmmoTransfer
    TerrainAccess ->* VehicleType.offroad 
 
    Tank { 
@@ -23,7 +24,7 @@ VehicleType {
    } Tank
 
    Construction { 
-      Buildings = 26 29 35-37
+      Buildings = 26 29 35-37 50 1200
       Vehicles = 1276 14004
       Objects = 
       ObjectsRemovable = 988
@@ -32,7 +33,8 @@ VehicleType {
    CategoriesProduceable = building|turret|object
 
    Weapons { 
-      Initiative = 0
-      Number = 0
+      Number = 2
+      Weapon0 ->* VehicleType.ServiceTurret
+      Weapon1 ->* VehicleType.AmmoLM
    } Weapons
 } VehicleType

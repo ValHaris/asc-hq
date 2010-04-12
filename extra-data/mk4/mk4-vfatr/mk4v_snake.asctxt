@@ -1,6 +1,6 @@
 VehicleType { 
    Name = SNAKE
-   parent = 335
+   parent = 336
    ID = 1208
    GuideSortHelp = 552 423 0 0 4 0 0 0 0 0
 
@@ -12,10 +12,13 @@ Diese frühen Schützenpanzer wurden sehr bald mit einer stärkeren Panzerung, die 
    InfoImage = mk4v_snake.jpg
    WreckageObject = 14208
 
-   Movement += 0 0 0 20 0 0 0 0 
+   Armor -= 50
+   Weight -= 5
    Transportation ->* VehicleType.TransTrooper 
+
+   Movement += 0 0 0 11 0 0 0 0 
+
    Weapons { 
-      Initiative = 0
       Number = 1
       Weapon0 ->* VehicleType.MG35low 
    } Weapons

@@ -12,7 +12,7 @@ VehicleType {
   
    Armor = 390
    Transportation ->* VehicleType.TransTrain 
-   Features += ExternalFuelTransfer ExternalMaterialTransfer
+   Features += ExternalFuelTransfer ExternalMaterialTransfer ExternalAmmoTransfer
 
    Tank { 
       Energy = 0

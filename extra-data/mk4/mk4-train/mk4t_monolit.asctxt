@@ -27,7 +27,7 @@ VehicleType {
       Buildings = 
       Vehicles = 
       Objects = 2 999 995
-      ObjectsRemovable = 2 10 44 181
+      ObjectsRemovable = 2 10 44 181 991
       ObjectGroupsRemovable = 1 2 3 4 6 10 11 13
    } Construction
 
@@ -35,7 +35,6 @@ VehicleType {
       Initiative = 0
       Number = 2
       Weapon0 ->* VehicleType.MG_Tank 
-      Weapon0.Type = machinegun ammo_transfer shootable 
       Weapon0.Ammo = 35
       Weapon0.Punch@MaxRange = 41
       Weapon0.Punch@MinRange = 41

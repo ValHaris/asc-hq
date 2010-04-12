@@ -15,7 +15,6 @@ VehicleType {
 
    WaitForAttack = true
    Weapons { 
-      Initiative = 0
       Number = 2
       Weapon0 ->* VehicleType.SSM 
       Weapon0.MaxRange = 70

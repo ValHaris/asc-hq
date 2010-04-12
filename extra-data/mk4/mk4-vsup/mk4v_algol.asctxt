@@ -4,6 +4,9 @@ VehicleType {
    parent = 335
 
    Description = Tankfahrzeug
+   picture = mk4v_algol.png
+   InfoImage = mk4v_algol.jpg
+   wreckageobject = 14217
    Infotext = [Jede Truppe im Feld braucht ihre Versorgungseinheiten. Egal, ob es sich dabei um Sprit, Munition oder Ersatzteile handelt - kein Armee kommt im bewaffneten Einsatz ohne diese wertvolle Unterstützung aus. Innerhalb der cromonischen Landstreitkräfte ist der Algol speziell für die Versorgung mit Brennstoffen zuständig. Bei ihm handelt es sich im Endeffekt um einen großen Tanklastwagen mit enormem Fassungsvermögen. Zwar wurde die Außenhaut des Tanks gegenüber den zivilen Modellen erheblich verstärkt und auch die Fahrerkabine wurde mit Panzerplatten versehen - einem direkten Beschuss sollte er trotzdem keinesfalls ausgesetzt werden! Im Vergleich mit anderen gepanzerten Fahrzeugen ist der Algol leider eher schwach situiert, was den Schutz vor gegnerischen Waffensystemen angeht. So kann selbst ein einfaches Maschinengewehr zu einer tödlichen Bedrohung werden.
 
 Um im Angesicht nahender Feinde schnell das Weite suchen zu können, verfügt dieser 5-Achser über eine beachtliche Höchstgeschwindigkeit, mit der er auch leichte Panzer und Schützenpanzer locker hinter sich lässt. Allerdings kann er diesen Vorteil nur auf Straßen und befestigten Wegen ausspielen, denn aufgrund seiner Länge und der mangelnden Bodenfreiheit, ist er für Geländefahrten eher ungeeignet. Außerdem machen ihm schwierige Bodenverhältnisse, wie Schnee, lockerer Sand und sumpfiger Untergrund schwer zu schaffen. Es ist bereits mehr als einmal vorgekommen, dass ein Algol bei einer Geländefahrt nach plötzlich einsetzendem Schneefall in einer Wehe stecken blieb und nicht wieder flott zu bekommen war, während man vorne an der Front händeringend auf den dringend benötigten Kraftstoff wartete.
@@ -12,19 +15,15 @@ Seine Transportkapazität ist im Übrigen enorm! Sage und schreibe 20.000 Standard
 
 Trotzdem hat ein Algol in den vordersten Reihen einer Front nichts zu suchen - sofern man keine zusätzliche Gefechtsfeldbeleuchtung in Form eines haushohen und weithin sichtbaren Benzinfeuers wünscht.
 ]
-   picture = mk4v_algol.png
-   InfoImage = mk4v_algol.jpg
-   wreckageobject = 14217
 
    Armor -= 100
+   Weight -= 10
    Tank { 
       fuel = 20000
    } Tank
    Features += ExternalFuelTransfer 
-   Movement += 0 0 0 10 0 0 0 0 
 
    Weapons { 
-      Initiative = 0
       Number = 1
       Weapon0 ->* VehicleType.ServiceGround 
    } Weapons

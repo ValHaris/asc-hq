@@ -4,15 +4,15 @@ VehicleType {
    parent = 242
    
    Description = Radarfahrzeug
+   Picture = mk4v_orion.png
+   InfoImage = mk4v_orion.jpg
+   wreckageobject = 14204
+   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
    Infotext = [Obwohl das ORION-System nur ueber minimale Bewaffnung verfuegt, stellt es mit seiner 
    ueberaus bedeutsamen Radarreichweite einen Eckpfeiler der militaerischen Strategie dar. Es 
    versteht sich von selbst, dass die Wichtigkeit des Systems groesstmoeglichen Schutz bedingt. 
    Radareinheiten sind die Augen jeder Truppe und je weiter sie sehen koennen, desto eher sind 
    die Reaktionen des Feindes einzuschaetzen.] 
-   Picture = mk4v_orion.png
-   InfoImage = mk4v_orion.jpg
-   wreckageobject = 14204
-   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
 
  
 } VehicleType

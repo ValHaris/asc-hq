@@ -8,9 +8,10 @@ VehicleType {
    auf vorhandene Turret-Sockel stationaere Verteidigungsanlagen zu errichten und kleinere Sockeleinheiten zu transportieren.]
    picture = mk4v_lurat.png
    wreckageobject = 14240
+
    Armor -= 100
    Transportation ->* VehicleType.TransTurretMed 
-   Features += construct_vehicles 
+   Features += construct_vehicles ExternalAmmoTransfer ExternalRepair
 
    Tank { 
       Material = 25000
@@ -25,7 +26,6 @@ VehicleType {
    } Construction
 
    Weapons { 
-      Initiative = 0
       Number = 4
       Weapon0 ->* VehicleType.AmmoMG 
       Weapon0.Ammo = 50

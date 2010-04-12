@@ -1,0 +1,5 @@
+Techadapter {
+   ; Atomkraftwerk
+   Name = B29
+   TechnologiesRequired = 100020 100104
+} TechAdapter

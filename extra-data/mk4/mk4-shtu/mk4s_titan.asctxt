@@ -14,7 +14,7 @@ VehicleType {
 
    Weapons { 
       Initiative = 0
-      Number = 7
+      Number = 6
       Weapon0 ->* VehicleType.Ship_Flak 
       Weapon0.targets = floating ground_level low_level_flight medium_level_flight 
       Weapon0.ReactionFireShots = 2
@@ -23,9 +23,9 @@ VehicleType {
 
       Weapon1 ->* VehicleType.SAMH 
       Weapon1.MaxRange = 60
-      Weapon1.Ammo = 14
+      Weapon1.Ammo = 90
 
-      Weapon2 ->* VehicleType.AmmoLM 
+      Weapon2 ->* VehicleType.AmmoBomb 
       Weapon2.Ammo = 90
 
       Weapon3 ->* VehicleType.AmmoSM 
@@ -36,9 +36,6 @@ VehicleType {
 
       Weapon5 ->* VehicleType.AmmoMG 
       Weapon5.Ammo = 150
-
-      Weapon6 ->* VehicleType.AmmoBomb 
-      Weapon6.Ammo = 90
 
    } Weapons
 } VehicleType

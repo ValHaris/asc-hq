@@ -1,6 +1,7 @@
 VehicleType { 
    Name = do not use !
    ID = 1277
+   SecondaryIDs = 12012
    Description = eleminate this unit
    Infotext = []
    Armor = 150

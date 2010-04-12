@@ -90,9 +90,9 @@ ID  1217/335 Algol          Tankfahrzeug
 ID  1218/336 Alcor          Munitionstransporter
 ID  1239/336 Planum LL      Luftlandebaufahrzeug
 ID  1240/336 Lurat          Baupanzer/Abwehranlagen
-ID  1268/335 Gigant         standart Baufahrzeug
+ID  1268/335 Gigant (14005) standart Baufahrzeug
 ID  1270/336 Regio          Baufahrzeug/Infrastruktur
-ID 14005/336 Wizard         Spezial Baufahrzeug
+ID 14005/336 Wizard (1268!) Spezial Baufahrzeug
 ID 14010/335 Gnome          Minenleger
 
 

@@ -10,9 +10,10 @@ VehicleType {
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
 
    Armor += 40
-   WaitForAttack = true
    Features += ManualSelfDestruct
+   Weight = 450
 
+   WaitForAttack = true
    Weapons { 
       Number = 3
       Weapon2 ->* VehicleType.SAMH 

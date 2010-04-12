@@ -18,28 +18,26 @@ VehicleType {
    Features += Repair_Facility
 
    Weapons { 
-      Initiative = 0
-      Number = 6
+      Number = 5
       Weapon0 ->* VehicleType.Ship_Gun 
-      Weapon0.MaxRange = 20
+      Weapon0.MaxRange = 30
       Weapon0.Ammo = 8
       Weapon0.Punch@MaxRange = 70
       Weapon0.Punch@MinRange = 79
 
-      Weapon1 ->* VehicleType.Ship_Flak 
-      Weapon1.MaxRange = 20
+      Weapon1 ->* VehicleType.smMSM 
+      Weapon1.Punch@MaxRange = 70
+      Weapon1.Punch@MinRange = 70
+      Weapon1.MaxRange = 30
 
       Weapon2 ->* VehicleType.SAMH 
       Weapon2.MaxRange = 30
-      Weapon2.Ammo = 15
+      Weapon2.Ammo = 20
       
-      Weapon3 ->* VehicleType.AmmoLM
+      Weapon3 ->* VehicleType.DCS
       Weapon3.Ammo = 20
 
       Weapon4 ->* VehicleType.AmmoTorp
       Weapon4.Ammo = 20
-
-      Weapon5 ->* VehicleType.AmmoBomb
-      Weapon5.Ammo = 20
    } Weapons
 } VehicleType

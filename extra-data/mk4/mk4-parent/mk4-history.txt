@@ -1,9 +1,70 @@
 History MK4-Set Cromoner
 Grafiken: GAMER, Dr.Snuggels, Xyphagorosh, Keyfinder
 InfoTexte: Rennreh, Redhorse
-InfoImages: GAMER
+InfoImages: GAMER/BananaJoe
 Spezifikationen: GAMER
 
+________________________
+Entwicklung und Bearbeitung eingestellt durch GAMER
+-Ranger Movebugfix
+-Gnome Moveanpassung
+-Gigant TurretService
+-Lurat Turretservie
+________________________
+03.04.2010 z82 (GAMER)
+Beta-10-06
+-MK4 Solarkraftwerk aktiviert, bau durch Wizzard/Gigant
+Beta-10-05
+-Atlas/AtlasDX 80 Movement
+-Snake Kette 88 Move
+-Spring +100 Armor -7 Move
+Beta-10-04
+-Grafikupdate Gigant
+-InfoText: Rune
+-Snake 90 Movement (bugfix)
+________________________
+27.02.2010 z81 (GAMER)
+Beta-10-03
+-Grafikbugfix Angel
+-Wizzard Gewicht 65
+-Giant Gewicht 90
+-MK4 Bohrturm baubar durch Wizzard, Grafikupdate
+________________________
+23.01.2010 z80 (GAMER)
+Beta-10-01
+-MK4 Werft baubar durch Tarus, Gigant und Wizzard
+-InfoText: Troll
+Beta-09-19
+-Infotext: Vision RJ
+________________________
+12.12.2009 z79 (GAMER)
+Beta-09-18
+-InfoText = Whale, Ranger, Stormbringer, Vision, Vision Spy, Vision GA
+-Rocky = kein Treibstoffverbrauch
+-Medusa3 = kein Treibstoffverbrauch
+Beta-09-17
+-Buggy, Movebugfix
+-Infotext: Moewe, Moewe2, Marauder, Spectrum
+-Adapter Atomkrftwerk hinzugefügt
+-UHU -30 Armor
+________________________
+08.11.2009 z78 (GAMER)
+Beta-09-15
+-Deneb, Weight 450
+-Citadelle +1RF Kanone
+-Titan, PolarDX Waffenzusammenlegung
+-HydraDX, Wafenupgrade
+-Koloss Ammoverlagerung Torpedo
+-Buggy, Terrainbugfix
+________________________
+03.10.2009 z77 (GAMER)
+-Monolith baut Rollschine
+Beta-09-14
+-Rex, External Transfer
+-Taros, turret service, Lavaabbau
+________________________
+01.08.2009 z75-2 (GAMER)
+-ExternalAmmoTransfer Bugfix = Alcor, Lurat, Dolmen, Shell
 __________________
 20.06.2009 (GAMER) [incl.Beta-09-08+07]
 -InfoImage = Nashorn

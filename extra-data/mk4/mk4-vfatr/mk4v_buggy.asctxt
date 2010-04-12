@@ -21,7 +21,11 @@ Seine Hauptbewaffnung besteht indes aus einem leichten Raketenwerfer. Dieser ver
 Als schnelle Kampfeinheit ist der Buggy heutzutage aus dem cromonischen Militär nicht mehr wegzudenken. Wenn man es versteht, mit dem geringen Munitionsvorrat, sowie der nur aus recht dünnem Alu-Blech bestehenden Panzerung umzugehen und man den Buggy dann auch nur dementsprechend einsetzt, wird man mit ihm sehr viel Freude haben und dem Gegner die ein oder andere, böse Überraschung bereiten können.
 ]
    Armor -= 50
+   Weight -= 5
    View += 10
+
+   TerrainAccess ->* VehicleType.Wheeled
+   Movement += 0 0 0 10 0 0 0 0 
 
    Weapons { 
    } Weapons
