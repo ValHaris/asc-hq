@@ -12,7 +12,7 @@ ObjectType {
    NetBehaviour = 
 
    Armor = 0
-   Height = 1
+   Height = 3
 
    ;                def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
    Movemalus_plus =   3   3   3   3   3   3   3   2   1   3   3   0   3   3   3   3   3   3

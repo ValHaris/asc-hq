@@ -26,7 +26,7 @@ TerrainType {
       BasicJamming = 2
    ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
       MoveMalus = 15  14  14  14  15  17  17  15  10  20  20  16  20  20  20  20  20  10
-      TerrainProperties = soft_sand morass track_possible
+      TerrainProperties = soft_sand mud track_possible
    } heavy_rain
    few_snow {
       DefenseBonus = 0

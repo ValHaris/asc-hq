@@ -12,7 +12,7 @@ VehicleType {
 
 
    Armor -= 20
-   Weight = -2
+   Weight -= 7
    View += 20
    Jamming = 11
    Transportation ->* VehicleType.TransLowTrooper 

@@ -3,6 +3,11 @@ Advanced Strategic Command
 Specifications by GAMER
 Grafics by GAMER, Snuggels, ValHaris, Xyphagoroszh, Havanna Club, Uranius und Grom
 ________________________
+-Küste nicht mehr unter Gebäuden zerstörbar.
+-heavy_rain auf Wüste zerstört keine Kristalle mehr
+
+________________________
+03.04.2010 z82 (GAMER)
 Beta-10-06
 -Lava wächst nicht mehr auf shallow_water
 Beta-10-05

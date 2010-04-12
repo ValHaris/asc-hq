@@ -3,6 +3,10 @@ Spezifikationen: GAMER
 
 BUILDINGS HISTORY
 ______________________
+-MAx. Produktion Stadt, gefixt
+
+______________________
+03.04.2010 z82 (GAMER)
 Beta-10-06
 -MK4 Solarkraftwerk aktiviert
 Beta-10-04

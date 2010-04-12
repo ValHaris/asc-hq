@@ -6,6 +6,7 @@ ObjectType {
    abstract = true
    LinkableObjects = 
 
+   GrowOnUnits = true
    canExistBeneathBuildings = true
    visible_in_fogOfWar = true
    NetBehaviour =

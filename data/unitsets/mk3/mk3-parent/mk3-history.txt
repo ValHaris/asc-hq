@@ -5,6 +5,7 @@ InfoImage: GAMER
 Spezifikationen: GAMER
 
 ______________________
+03.04.2010 z82 (GAMER)
 Beta-10-05
 Wichtig: Alle MK3 Turrets verlangen ab Zyklus 83 zwingend "turret_foundation"
 -Movementkorrektur: Fuchs,Luchs,Wiesel,Tow,Gaskin

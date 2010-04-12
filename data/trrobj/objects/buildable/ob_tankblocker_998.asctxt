@@ -33,7 +33,7 @@ ObjectType {
    } RemovalCost
 
    TerrainAccess { 
-      terrain_any = road runway railroad Lowland Hard_sand Soft_sand mountains Frozen_water very_shallow_water shallow_water
+      terrain_any = road runway railroad Lowland Hard_sand Soft_sand mountains Frozen_water very_shallow_water
       terrain_all = 
       terrain_not = 
       terrain_kill = Water Deep_water Lava River

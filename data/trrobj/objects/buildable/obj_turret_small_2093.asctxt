@@ -41,7 +41,7 @@ ObjectType {
    TerrainAccess { 
       terrain_any = Lowland Hard_sand Soft_sand mountains large_rocks ditch
       terrain_all = 
-      terrain_not = Railroad Ditch bridge installation
+      terrain_not = Railroad bridge installation
       terrain_kill = Water Deep_water River lava
    } TerrainAccess
    TerrainProperties_Filter = 

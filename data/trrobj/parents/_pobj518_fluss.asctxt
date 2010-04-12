@@ -6,6 +6,7 @@ ObjectType {
    abstract = true
 
    visible_in_fogOfWar = true
+   GrowOnUnits = true
    canExistBeneathBuildings = true
    LinkableObjects = 
    LinkableTerrain = 

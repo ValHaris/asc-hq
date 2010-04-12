@@ -9,6 +9,7 @@ ObjectType {
    Armor = 0
    Height = 96
 
+   GrowOnUnits = true
    canExistBeneathBuildings = true
    visible_in_fogOfWar = true
    NoSelfChaining = true

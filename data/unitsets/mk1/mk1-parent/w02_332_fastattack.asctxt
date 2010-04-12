@@ -12,7 +12,7 @@ VehicleType {
 
    View = 41
    Jamming = 12
-;   Weight = 10
+   Weight -= 5
    Category = light_wheeled_vehicle
    Features += move_after_attack jam_only_own_field
 
@@ -21,7 +21,6 @@ VehicleType {
    TerrainAccess ->* VehicleType.offroad 
 
    Weapons { 
-      Initiative = 50
       Number = 2
       Weapon0 ->* vehicleType.MG35low 
       Weapon1 ->* VehicleType.smSSM 

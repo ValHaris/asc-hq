@@ -28,9 +28,9 @@ BuildingType {
    } TerrainAccess
 
    MaxResourceProduction { 
-      Energy = 500
-      Material = 500
-      fuel = 500
+      Energy = 400
+      Material = 400
+      fuel = 400
    } MaxResourceProduction
 
    defaultProduction {

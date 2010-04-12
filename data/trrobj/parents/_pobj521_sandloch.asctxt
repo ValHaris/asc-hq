@@ -6,8 +6,9 @@ ObjectType {
    abstract = true
    LinkableObjects = 
    Armor = 0
-   Height = 1
+   Height = 3
 
+   GrowOnUnits = true
    canExistBeneathBuildings = true
    visible_in_fogOfWar = true
    NoSelfChaining = true

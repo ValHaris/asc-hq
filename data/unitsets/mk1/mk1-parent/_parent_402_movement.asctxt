@@ -113,7 +113,7 @@
    mediumship_terrain {
       terrain_any = shallow_water water deep_water river
       terrain_all =
-      terrain_not = forest small_rocks large_rocks frozen_water installation very_shallow_water shallow_water
+      terrain_not = forest small_rocks large_rocks frozen_water installation very_shallow_water
       terrain_kill = lava
    } mediumship_terrain
 

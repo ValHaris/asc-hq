@@ -1,6 +1,7 @@
 TerrainType { 
    Name = Water blue
    ID = 301
+   SecondaryIDs = 300
    parent = 515
    Weather = dry few_snow much_snow snow_and_ice
 
