@@ -10,19 +10,27 @@ VehicleType {
    Infotext = []
 
    Armor += 100
+   Category = heavy_wheeled_vehicle
+   Weight = 195
    Transportation ->* VehicleType.TransTurretBig 
-   Transportation.CategoriesNOT = trooper rail_vehicle light_aircraft medium_aircraft heavy_aircraft medium_ship heavy_ship
+   Transportation.MaxLoadableUnits = 2
    Transportation.MaxLoadableUnitSize = 700
    Transportation.MaxLoadableMass = 700
+   Transportation.CargoMovementDivisor = 1.8
+   Transportation.CategoriesNOT = trooper light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle light_aircraft medium_aircraft heavy_aircraft medium_ship heavy_ship helicopter hoovercraft
+   Transportation.EntranceSystemNum = 2
+   Transportation.EntranceSystem0.CategoriesNOT = light_ship
+   Transportation.EntranceSystem0.DisableAttack = false
+   Transportation.EntranceSystem1 ->* VehicleType.GrIO
+   Transportation.EntranceSystem1.CategoriesNOT -> VehicleType.cargo_lship_only.CategoriesNOT
+   Transportation.EntranceSystem1.DisableAttack = true
 
 
-   Category = heavy_wheeled_vehicle
-   Weight = 150
-   TerrainAccess ->* VehicleType.hvy_wheeled
-   TerrainAccess.Terrain_any += very_shallow_water 
+
+   Movement -= 0 0 0 10 0 0 0 0 
+   TerrainAccess ->* VehicleType.offroad
 
    Weapons { 
-      Initiative = 0
       Number = 1
       Weapon0 ->* VehicleType.MG_Tank 
    } Weapons

@@ -16,6 +16,7 @@ Hayabusa Biker sind in Truppe hoch geachtet. Aufgrund der fehlenden Bewaffnung u
    WreckageObject = 1402
 
    Armor = 200
+   Weight = 10
    Jamming = 39
    Transportation ->* VehicleType.TransLowTrooper 
    Features += jam_only_own_field

@@ -7,9 +7,10 @@ VehicleType {
    Picture = MK5v_FGDV.pcx
    WreckageObject = 1404
 
-   Transportation ->* VehicleType.TransLowTrooper2
+   Transportation ->* VehicleType.TransLowTrooper
 
    Armor += 100
+   Weight += 10
    Features += moveduringreactionfire   
    Movement -= 0 0 0 10 0 0 0 0 
    MovementSound = buggy2.ogg

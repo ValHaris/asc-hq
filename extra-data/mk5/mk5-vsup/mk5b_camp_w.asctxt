@@ -1,0 +1,12 @@
+ObjectType { 
+   Parent = 497
+
+   ID = 16006
+
+   Name = Helipad Wreck
+
+   dry { 
+      picture = mk5b_camp_w.png 1
+   } dry
+
+} ObjectType

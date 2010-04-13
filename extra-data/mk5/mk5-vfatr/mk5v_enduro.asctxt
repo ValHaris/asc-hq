@@ -14,6 +14,7 @@ Zudem ist sie nicht unbewaffnet! - Ein Satz Small Missle gegen Fahrzeuge und ein
    Transportation ->* VehicleType.TransLowTrooper 
 
    Armor = 260
+   Weight = 10 
    Jamming = 29
    Features += move_after_attack jam_only_own_field
    Category = light_wheeled_vehicle

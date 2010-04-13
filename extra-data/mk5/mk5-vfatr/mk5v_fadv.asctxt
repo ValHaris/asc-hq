@@ -5,13 +5,14 @@ VehicleType {
    
    Description = fast air defence vehicle 
    Infotext = []
-   Picture = MK5v_FADV.pcx
+   Picture = mk5v_fadv.pcx
    WreckageObject = 1404
 
    Armor += 50
+   Weight += 5
    Jamming = 19
 
-   Transportation ->* VehicleType.TransLowTrooper2
+   Transportation ->* VehicleType.TransLowTrooper
    Features += jam_only_own_field moveduringreactionfire
 
    Tank.fuel = 700
@@ -19,6 +20,7 @@ VehicleType {
    Movement -= 0 0 0 10 0 0 0 0 
    MovementSound = buggy2.ogg
 
+   WaitForAttack = true
    Weapons { 
       Initiative = 0
       Number = 2

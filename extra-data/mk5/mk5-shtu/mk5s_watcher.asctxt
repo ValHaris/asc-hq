@@ -18,12 +18,12 @@ VehicleType {
    Movement = 55 55 55 50 0 0 0 0 
    TerrainAccess ->* VehicleType.hooverfull_terrain 
 
-   Construction {
-      VehiclesInternally = 1470 1452
-      ProductionEfficiency = [   0   0   2
-                                 0   1   0
-                                 0   0   1 ]
-   } Construction 
+;   Construction {
+;      VehiclesInternally = 1470 1452
+;      ProductionEfficiency = [   0   0   2
+;                                 0   1   0
+;                                 0   0   1 ]
+;   } Construction 
 
    Weapons { 
       Number = 6

@@ -10,11 +10,12 @@ VehicleType {
 
    Category = default
    Armor -= 150
+   Weight = 10
    Features += no_midair_refuel
    
    TerrainAccess ->* VehicleType.heli_terrain 
-   Movement = 0 0 0 17 39 39 0 0 
+   Height = ground_level low_level_flight medium_level_flight
+   Movement = 0 0 0 17 40 40 0 0 
    FuelConsumption = 1
    Tank.fuel = 1000
-   Weight = 10
 } VehicleType

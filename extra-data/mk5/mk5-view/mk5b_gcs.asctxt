@@ -6,8 +6,7 @@ VehicleType {
    Description = Kommunikationsstation
    Infotext = [#crt# ground communication system - defence hightech#crt# #crt#
    Das GCS ist ein hochentwickeltes Radarstörsystem und ein Aufklärungsposten. Damit die Hardware nicht 
-   in falsche Hände gerat, wird ein sehr starker EMP-Impuls ausgelöst gefolgt von einer Detonation des 
-   Systems, sobald ein Gegner in die Naehe des systems kommt.]
+   in falsche Hände gerat, wird ein sehr starker EMP-Impuls ausgelöst, sobald ein Gegner in die Naehe des systems kommt.]
    Picture = MK5b_GCS.pcx
    WreckageObject = 1414
 
@@ -15,20 +14,20 @@ VehicleType {
    Weight = 15
    View -= 10
    Jamming = 39
-   Features += Kamikaze_only jam_only_own_field
+   Features += jam_only_own_field
 
    Tank { 
       Energy = 0
       Material = 0
-      fuel = 90
+      fuel = 600
    } Tank
-   FuelConsumption = 30
 
    WaitForAttack = true
    Weapons { 
       Initiative = 120
       Number = 1
       Weapon0 ->* VehicleType.EMP 
+      Weapon0.MaxRange = 20
       Weapon0.Punch@MaxRange = 200
       Weapon0.Punch@MinRange = 250
    } Weapons

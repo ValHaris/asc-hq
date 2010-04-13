@@ -18,8 +18,8 @@ BuildingType {
 
    transportation { 
       MaxLoadableUnits = 3
-      MaxLoadableUnitSize = 11
-      MaxLoadableMass = 33
+      MaxLoadableUnitSize = 20
+      MaxLoadableMass = 60
       CategoriesNOT = trooper light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle trooper rail_vehicle medium_aircraft medium_ship building|turret|object heavy_aircraft light_ship heavy_ship helicopter 
       EntranceSystemNum = 1
       EntranceSystem0 {

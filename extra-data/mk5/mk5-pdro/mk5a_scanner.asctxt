@@ -9,11 +9,11 @@ VehicleType {
    Infotext = [
    InfoImage = Wikipedia Luna (Drohne) ]
 
-   Armor = 100
+   Armor = 150
    View = 80
-   Jamming = 39
+   Jamming = 49
    Category = default
-   Features = Kamikaze_only no_midair_refuel jam_only_own_field
+   Features = no_midair_refuel jam_only_own_field
    Weight = 1
 
    Height = ground_level low_level_flight medium_level_flight
@@ -23,11 +23,11 @@ VehicleType {
       fuel = 50
    } Tank
    FuelConsumption = 1
-   Movement = 0 0 0 20 80 80 0 0  
+   Movement = 0 0 0 20 110 110 0 0  
    TerrainAccess ->* VehicleType.heli_terrain
    MovementSound = 
 
-   waitforattack = true
+   waitforattack = false
    Weapons { 
       Initiative = 0
       Number = 0

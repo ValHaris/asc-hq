@@ -1,12 +1,12 @@
 VehicleType { 
-   Name = OCS HT
+   Name = OCS
    ID = 1413
    parent = 246
 
    Description = Spionagesatellit
-   Infotext = [ Das OCS HT System ist das derzeit beste erhaeltliche Ortungssystem. Leider ist die Technik sehr störanfällig. Deshalb konnten keine Waffen oder Defensivsysteme eigebaut werden. Das System ist nicht in der Lage eigenständig zu starten oder zu Landen, und muss deshalb ständig versorgt und beschützt werden.]
-   Picture = MK5o_OCS.pcx
+   Infotext = [ Das OCS HT System ist ein einfaches Ortungssystem. Leider ist die Technik sehr störanfällig. Deshalb konnten keine Waffen oder Defensivsysteme eingebaut werden. Das System ist nicht in der Lage eigenständig zu starten oder zu Landen, und muss deshalb ständig versorgt und beschützt werden.]
+   Picture = mk5o_ocs.pcx
 
-   Armor -= 100
-   View += 10
+   Armor -= 80
+   View -= 5
 } VehicleType

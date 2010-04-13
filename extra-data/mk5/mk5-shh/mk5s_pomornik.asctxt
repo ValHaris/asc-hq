@@ -4,5 +4,10 @@ VehicleType {
    ID = 1459
    
    picture = MK5s_pomornik.pcx
+   
+   Armor -= 50
+   Transportation.MaxLoadableUnitSize = 170
+   FuelConsumption += 5 
+
 
 } VehicleType

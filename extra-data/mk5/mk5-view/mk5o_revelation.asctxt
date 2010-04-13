@@ -1,0 +1,16 @@
+VehicleType { 
+   Name = Revelation
+   ID = 16005
+   parent = 246
+
+   Description = Spionagesatellit
+   Infotext = []
+   Picture = mk5o_revelation.png
+
+   Features += jam_only_own_field
+   Jamming = 60
+
+   Armor -= 200
+   View += 20
+   Movement -= 0 0 0 0 0 0 0 10
+} VehicleType

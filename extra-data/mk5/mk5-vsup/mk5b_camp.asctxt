@@ -1,0 +1,59 @@
+VehicleType { 
+   Name = FELDLAGER
+   parent = 400 401 402 422
+   ID = 16006
+   WreckageObject = 16006
+   
+   Description = mobile servicecenter
+   Infotext = []
+   picture = mk5b_camp.png
+   
+;   GuideSortHelp = 550 553 565 0 3 0 0 0 0 0
+
+   Armor -= 200
+   Jamming = 21
+   Transportation { 
+      MaxLoadableUnits = 3
+      MaxLoadableUnitSize = 100
+      MaxLoadableMass = 300 
+      CategoriesNOT = default
+      EntranceSystemNum = 2
+      EntranceSystem0 ->* VehicleType.GrIO
+      EntranceSystem1 ->* VehicleType.Cruiser_ground
+   } Transportation
+   Features = Repair_Facility jam_only_own_field ManualSelfDestruct Vehicle_Production
+   Weight = 190
+
+   Tank { 
+      Energy = 0
+      Material = 20000
+      fuel = 40000
+   } Tank
+   FuelConsumption = 0
+   TerrainAccess ->* VehicleType.turret_lowland 
+
+   CategoriesProduceable = trooper
+   Construction {
+      ProductionEfficiency = [   0   0   2
+                                 0   1   0
+                                 0   0   1 ]
+   } Construction 
+
+   Weapons { 
+      Number = 6
+      Weapon0 ->* VehicleType.BigMiniGun
+      Weapon0.Ammo = 100
+      Weapon1 ->* VehicleType.SAMH
+      Weapon1.Ammo = 40
+      Weapon2 ->* VehicleType.smSSM
+      Weapon2.Ammo = 35
+      Weapon2.MaxRange = 40
+      Weapon2.ReactionFireShots = 2
+      Weapon3 ->* VehicleType.AmmoBomb
+      Weapon3.Ammo = 40
+      Weapon4 ->* VehicleType.AmmoCannon
+      Weapon4.Ammo = 40
+      Weapon5 ->* VehicleType.AmmoTorp
+      Weapon5.Ammo = 15
+   } Weapons
+} VehicleType

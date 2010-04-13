@@ -4,14 +4,18 @@ VehicleType {
    parent = 400 401 402 411
 
    Description = Offroad Transporter
-   Infotext = [Das "Maedchen fuer Alles". Der FSV 4x4 ist das Landtransportfahrzeug der "outsider". Dementsprechend hat es vielseitige Aufgaben zu uebernehem. Truppen-, Waffen-, Material- und Treibstofftransport, ausserdem den Transport der Defensivwaffen. Er ist nur schwach gepanzert und hat nur ein MG zur Verteidigung. Niemals offensiven Kraeften aussetzen.]
+   Infotext = [Das "Maedchen fuer Alles". Der FSV 4x4 ist das Landtransportfahrzeug der "Outlaw". Dementsprechend hat es vielseitige Aufgaben zu uebernehem. Truppen-, Waffen-, Material- und Treibstofftransport, ausserdem den Transport der Defensivwaffen. Er ist nur schwach gepanzert und hat nur ein MG zur Verteidigung. Niemals offensiven Kraeften aussetzen.]
    Picture = mk5v_fsv.pcx
    WreckageObject = 1404
    GuideSortHelp = 552 423 429 551 5 0 0 0 0 0
 
+   Features += ExternalFuelTransfer ExternalMaterialTransfer ExternalAmmoTransfer automatic_resource_searching
    Armor = 350
+   Category = light_wheeled_vehicle
+   ResourceDrillingRange = 1
+   Weight = 35
    Transportation { 
-      MaxLoadableUnits = 4
+      MaxLoadableUnits = 5
       MaxLoadableUnitSize = 45
       MaxLoadableMass = 50
       CategoriesNOT = hoovercraft light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle rail_vehicle medium_aircraft medium_ship light_aircraft heavy_aircraft light_ship heavy_ship helicopter 
@@ -20,50 +24,42 @@ VehicleType {
       EntranceSystem0.CategoriesNOT = building|turret|object
       EntranceSystem1 ->* VehicleType.TurretOut
    } Transportation
+
    Tank { 
       Energy = 0
-      Material = 6000
-      fuel = 10000
+      Material = 20000
+      fuel = 20000
    } Tank
    FuelConsumption = 16
-   Features += ExternalFuelTransfer ExternalMaterialTransfer self_repairing automatic_resource_searching
-   Movement = 0 0 0 90 0 0 0 0 
-   Category = light_wheeled_vehicle
-   ResourceDrillingRange = 1
-   SelfRepairRate = 20
-   Weight = 20
+   Movement += 0 0 0 6 0 0 0 0 
    TerrainAccess ->* VehicleType.Offroad 
-
+   ObjectsLayedByMovement = 7
    Construction { 
       ObjectGroupsRemovable = 13
    } Construction
 
    Weapons { 
-      Initiative = -50
-      Number = 8
+      Number = 7
       Weapon0 ->* VehicleType.MG_Tank 
-      Weapon0.Ammo = 10
+      Weapon0.Ammo = 100
       Weapon0.Punch@MaxRange = 40
       Weapon0.Punch@MinRange = 40
 
       Weapon1 ->* VehicleType.ServiceGround
 
-      Weapon2 ->* VehicleType.AmmoMG 
-      Weapon2.Ammo = 40
+      Weapon2 ->* VehicleType.AmmoCannon 
+      Weapon2.Ammo = 50
 
-      Weapon3 ->* VehicleType.AmmoCannon 
-      Weapon3.Ammo = 30
+      Weapon3 ->* VehicleType.AmmoMine 
+      Weapon3.Ammo = 50
 
-      Weapon4 ->* VehicleType.AmmoMine 
+      Weapon4 ->* VehicleType.AmmoBomb 
       Weapon4.Ammo = 30
 
-      Weapon5 ->* VehicleType.AmmoBomb 
-      Weapon5.Ammo = 30
+      Weapon5 ->* VehicleType.AmmoLM 
+      Weapon5.Ammo = 40
 
-      Weapon6 ->* VehicleType.AmmoLM 
+      Weapon6 ->* VehicleType.AmmoSM 
       Weapon6.Ammo = 40
-
-      Weapon7 ->* VehicleType.AmmoSM 
-      Weapon7.Ammo = 30
    } Weapons
 } VehicleType

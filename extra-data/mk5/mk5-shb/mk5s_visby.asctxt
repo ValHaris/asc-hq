@@ -20,7 +20,7 @@ VehicleType {
       Weapon0.Punch@MaxRange = 85
       Weapon0.Punch@MinRange = 100
       
-      Weapon1 ->* VehicleType.SAM
+      Weapon1 ->* VehicleType.SAMH
       Weapon1.Ammo = 8
       Weapon1.MaxRange = 30
 

@@ -4,25 +4,27 @@ VehicleType {
    parent = 400 401 402 423
 
    Description = Transport Container
-   Picture = mk5d_ContainerD.pcx
+   Picture = mk5d_containerd.pcx
    InfoImage = mk5d_container.jpg
-   Infotext = [Der Container des Typs C ist für den Transport von schwerem Gerät vorgesehen. Die Transportkapazität ist allerding begrenzt.
+   Infotext = [Der Container des Typs D ist für den Transport von schwerem Gerät vorgesehen. Die Transportkapazität ist allerding begrenzt.
       InfoImage = Wikipedia ISO-Container]
 
    Armor = 400
-   Weight = 20
+   Weight = 100
 ;   Features += Repair_Facility
    Transportation ->* VehicleType.TransVehicleHeavy
-   Transportation.CargoMovementDivisor = 8
+   Transportation.CargoMovementDivisor = 1.7
+   Transportation.CategoriesNOT = default heavy_wheeled_vehicle heavy_tracked_vehicle rail_vehicle helicopter light_aircraft medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship hoovercraft
    Transportation.MaxLoadableUnits = 8
 
    Tank { 
       Energy = 0
       Material = 0
-      fuel = 1
+      fuel = 0
    } Tank
    FuelConsumption = 0
    TerrainAccess ->* VehicleType.heli_terrain 
+   MovementSound = 
 
    Weapons { 
       Initiative = 0

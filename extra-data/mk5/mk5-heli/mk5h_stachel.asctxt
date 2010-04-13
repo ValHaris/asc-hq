@@ -25,6 +25,7 @@ VehicleType {
       Weapon0.Punch@MinRange = 110
 
       Weapon1.Ammo = 6
+      Weapon1.MaxRange = 20
       Weapon1.ShotFrom = medium_level_flight
       Weapon1.Punch@MaxRange += 5
       Weapon1.Punch@MinRange += 5

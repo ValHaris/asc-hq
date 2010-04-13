@@ -10,7 +10,7 @@ VehicleType {
 
    TerrainAccess ->* VehicleType.wheeled 
    MovementSound = wheeled_l_g.ogg
-   Movement = 0 0 0 90 0 0 0 0 
+   Movement = 0 0 0 80 0 0 0 0 
 
    Weapons {
       Number = 2

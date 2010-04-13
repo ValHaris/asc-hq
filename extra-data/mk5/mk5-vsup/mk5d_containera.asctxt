@@ -10,7 +10,7 @@ VehicleType {
    InfoImage = Wikipedia ISO-Container]
 
    Armor = 400
-   Weight = 20
+   Weight = 100
    Features += ExternalFuelTransfer ExternalMaterialTransfer
 
    Tank { 
@@ -20,6 +20,7 @@ VehicleType {
    } Tank
    FuelConsumption = 0
    TerrainAccess ->* VehicleType.heli_terrain
+   MovementSound = 
 
    Weapons { 
       Number = 1

@@ -17,12 +17,12 @@ VehicleType {
    Height = submerged floating 
    Movement += 0 15 0 0 0 0 0 0 
 
-   Construction {
-      VehiclesInternally = 1483 1431 1430
-      ProductionEfficiency = [   0   0   2
-                                 0   1   0
-                                 0   0   1 ]
-   } Construction 
+;   Construction {
+;      VehiclesInternally = 1483 1431 1430
+;      ProductionEfficiency = [   0   0   2
+;                                 0   1   0
+;                                 0   0   1 ]
+;   } Construction 
    
    Weapons { 
       Number = 7

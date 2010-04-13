@@ -17,7 +17,7 @@ VehicleType {
    ResourceDrillingRange = 0
    SelfRepairRate = 0
 
-   Height = deep_submerged submerged floating
+   Height = submerged floating
    Tank { 
       Energy = 0
       Material = 0

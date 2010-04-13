@@ -15,7 +15,6 @@ Ein FSV4x4 Servicefahrzeug nebst Mechaniker sollte jedoch immer in Reichweite se
 
    MovementSound = buggy2.ogg
    Weapons { 
-      Initiative = 0
       Number = 3
 
       Weapon1 ->* VehicleType.smSAM 

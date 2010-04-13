@@ -1,0 +1,10 @@
+technology {
+   Name = Camp
+   infotext = 
+   id = 16006
+   RelatedUnitID = 16006
+   parent = 1499
+   researchpoints *= 20
+   techlevel = 5
+   TechnologiesRequired = 1499,100002,100105,100207 
+} Technology

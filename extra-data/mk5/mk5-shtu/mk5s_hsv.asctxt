@@ -7,7 +7,7 @@ VehicleType {
    picture = mk5s_hsv.pcx
    InfoImage = mk5s_hsv.jpg
 
-   Armor -= 100
+   Armor += 50
    Features = MoveDuringReactionFire Jam_only_own_field
 
    Transportation ->* VehicleType.TransHeliCarrier
@@ -18,13 +18,21 @@ VehicleType {
    Transportation.CategoriesNOT = medium_tracked_vehicle heavy_tracked_vehicle heavy_wheeled_vehicle medium_ship heavy_ship medium_aircraft heavy_aircraft rail_vehicle
 
    Movement -= 0 0 0 10 0 0 0 0 
-   Tank.Fuel += 5000
+   Tank.Fuel += 15000
    
    Weapons { 
-      Number = 1
+      Number = 4
       Weapon0 ->* VehicleType.MiniGun
-      Weapon0.Type = machinegun shootable ammo_transfer
       Weapon0.Ammo = 200
+      Weapon1 ->* VehicleType.SAM
+      Weapon1.Ammo = 50
+      Weapon1.ReactionFireShots = 1
+      Weapon2 ->* VehicleType.SAMH
+      Weapon2.Ammo = 50
+      Weapon2.ReactionFireShots = 1
+      Weapon3 ->* VehicleType.AmmoTorp
+      Weapon3.Ammo = 50
+      
    } Weapons
 
 } VehicleType

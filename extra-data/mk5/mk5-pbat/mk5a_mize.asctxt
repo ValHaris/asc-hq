@@ -3,7 +3,7 @@ VehicleType {
    parent = 275 
    ID = 1492
 
-   Picture = mk5a_mize.pcx
+   Picture = mk5a_mize.png
    GuideSortHelp += 0 0 0 0 5 0 0 0 0 0
 
    Category = default

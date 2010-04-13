@@ -32,6 +32,7 @@ Aber ein Rennen ist jedoch was anderes als ein Kartenquartett. Um dem Spezialbug
    GuideSortHelp = 504 417 0 0 5 0 0 0 0 0
 
    Armor -= 100
+   Weight -= 10
    View -= 11
    
    Movement += 0 0 0 28 0 0 0 0 

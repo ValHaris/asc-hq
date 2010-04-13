@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 16005
+   ;Bezeichnung der verknüpften Technologie: Revelation
+   TechnologiesRequired = 16005
+} TechAdapter

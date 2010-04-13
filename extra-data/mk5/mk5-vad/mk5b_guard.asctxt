@@ -8,10 +8,10 @@ VehicleType {
    Picture = MK5b_Guard.pcx
    
    Armor -= 200
-   Weight = 40
+   Weight = 100
    Jamming = 21
    Features += jam_only_own_field ManualSelfDestruct
-   TerrainAccess ->* VehicleType.turret_ditch 
+   TerrainAccess ->* VehicleType.turret_only 
 
    Weapons { 
       Weapon1 ->* VehicleType.SOMT

@@ -16,7 +16,7 @@ VehicleType {
    Transportation.EntranceSystemNum = 3
    Transportation.EntranceSystem2.Mode = in out
    Transportation.EntranceSystem2.UnitHeightAbs = low_level_flight
-   Transportation.EntranceSystem2.UnitHeightRel = 2
+   Transportation.EntranceSystem2.UnitHeightRel = -100
    Transportation.EntranceSystem2.ContainerHeight = floating
    Transportation.EntranceSystem2.CategoriesNOT = 
    Transportation.EntranceSystem2.DockingHeightAbs = 
@@ -27,7 +27,8 @@ VehicleType {
    Armor += 100
    Jamming = 39
    Movement += 0 0 20 0 0 0 0 0
-   FuelConsumption = 30
+   FuelConsumption = 18
+   Tank.Fuel += 500
 
    Weapons {
       Number = 5

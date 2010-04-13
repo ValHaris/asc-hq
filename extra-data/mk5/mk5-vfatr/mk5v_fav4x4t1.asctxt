@@ -15,6 +15,7 @@ VehicleType {
    Transportation.EntranceSystem1 ->* VehicleType.ejector
 
    Armor -= 50
+   Weight -= 5
    View += 10
 
    Movement -= 0 0 0 10 0 0 0 0 

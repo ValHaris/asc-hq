@@ -5,44 +5,20 @@ VehicleType {
 
    Description = Radarstoermodul
    Infotext = []
-   Picture = MK5b_GJS.pcx
+   Picture = mk5b_gjs.pcx
    WreckageObject = 1414
 
    Armor = 250
    Weight = 25
    View = 50
-   Jamming = 51
-   Features = Kamikaze_only
-   Category = default 
+   
+   Tank.Fuel = 600
 
    Weapons { 
-      Initiative = 120
       Number = 1
-      Weapon0 { 
-         Type = bomb shootable 
-         targets = floating ground_level low_level_flight medium_level_flight
-         shotFrom = ground_level 
-         MaxRange = 10
-         MinRange = 10
-         Ammo = 1
-         Punch@MaxRange = 250
-         Punch@MinRange = 250
-         HitAccuracy { 
-            d6 = 
-            d5 = 
-            d4 = 
-            d3 = 
-            d2 = 
-            d1 = 
-            0 = 100
-            u1 = 80
-            u2 = 50
-            u3 = 
-            u4 = 
-            u5 = 
-            u6 = 
-         } HitAccuracy
-         cantHit = 
-      } Weapon0
+      Weapon0 ->* VehicleType.EMP
+      Weapon0.MaxRange = 20
+      Weapon0.Punch@MaxRange = 200
+      Weapon0.Punch@MinRange = 250
    } Weapons
 } VehicleType

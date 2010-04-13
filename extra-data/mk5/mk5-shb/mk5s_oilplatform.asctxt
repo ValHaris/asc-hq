@@ -13,7 +13,7 @@ VehicleType {
 
    View = 90
    Armor = 2000
-   Features += Repair_Facility ExternalFuelTransfer ExternalMaterialTransfer self_repairing sonar
+   Features += Repair_Facility ExternalFuelTransfer ExternalMaterialTransfer self_repairing sonar Mining_Station
    SelfRepairRate = 10
    Weight = 4500
    
@@ -21,6 +21,20 @@ VehicleType {
    TerrainAccess.Terrain_Any = water deep_water
    Tank.Fuel = 70000
    Tank.material = 50000
+
+   MaxResourceProduction { 
+      Energy = 0
+      Material = -5
+      fuel = 2000
+   } MaxResourceProduction
+   defaultProduction {
+      energy = 0
+      material = -5
+      fuel = 2000
+   } defaultProduction
+   ResourceExtractionEfficiency {
+      Fuel = 2000
+   } ResourceExtractionEfficiency
 
    Weapons { 
       Number = 6

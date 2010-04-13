@@ -3,23 +3,22 @@ VehicleType {
    parent = 400 401 402 498 415 
    ID = 1425
    Description = space fighter
-   Infotext = [#crt# Universeller Raum- und Luftjaeger mit ansprechender Panzerung und Bewaffnung.]
-   Picture = MK5a_doomsday.pcx
+   Infotext = [ Die Outlaw streckten ihre Hände auch in Richtung der Technologieallianz TECCNOLS aus. In geheimen Verhandlungen versuchten sie Baupläne und Ausrüstung für den Kampf gegen ihre ehemaligen Unterdrücker zu erwerben. Den Teccnols selbst war dieser Handel durchaus recht, da sie selbst einen Groll gegen ihre ehemaligen Arbeitgeber hatten. Beide Seiten waren aber derart egoistsch auf ihren eigenen Vorteil bedacht, dass am Enden die Teccnols mit relativ wertlosen Informationen beliefert wurden und die Outlaw nur die Pläne für ein ausgedientes Raumjägerchassis bekamen. Den Teccnols war aber nicht bewust, wie einfallsreich die Outlaw mit technologie umgehen. Die fehlende Bewaffnung wurde mit Raketen , Bomben und Maschienenkanonen ausgeglichen. Leider ist der alte Jägertyp derart schwerfällig, dass er nicht auf einem Flugzeugträger landen kann. Er muß entweder im Orbit oder am Boden mit neuen Waffen bestückt werden. ]
+   Picture = mk5a_doomsday.png
 
-   Armor = 420
-   Weight = 190
+   Armor = 390
+   Weight = 290
 
    Height = ground_level low_level_flight medium_level_flight high_level_flight orbit 
    Tank { 
       fuel = 8000
    } Tank
    FuelConsumption = 20
-   Movement = 0 0 0 60 160 170 180 70 
+   Movement = 0 0 0 60 120 160 170 50 
    MovementSound = aircraft_l_g.ogg
 
    Weapons { 
-      Initiative = 0
-      Number = 3
+      Number = 4
       Weapon0 ->* VehicleType.Air_MG 
       Weapon0.targets = floating ground_level low_level_flight medium_level_flight high_level_flight orbit 
       Weapon0.shotFrom = ground_level low_level_flight medium_level_flight high_level_flight orbit 
@@ -28,15 +27,19 @@ VehicleType {
 
       Weapon1 ->* VehicleType.AAMO
       Weapon1.MaxRange = 20
-      Weapon1.Ammo = 4
+      Weapon1.Ammo = 3
       Weapon1.Punch@MaxRange = 75
       Weapon1.Punch@MinRange = 75
 
       Weapon2 ->* VehicleType.ASM
       Weapon2.MaxRange = 20
-      Weapon2.Ammo = 4
+      Weapon2.Ammo = 1
       Weapon2.Punch@MaxRange = 75
       Weapon2.Punch@MinRange = 75
 
+      Weapon3 ->* VehicleType.medBomb
+      Weapon3.Ammo = 2
+      Weapon3.Punch@MaxRange = 90
+      Weapon3.Punch@MinRange = 90
    } Weapons
 } VehicleType

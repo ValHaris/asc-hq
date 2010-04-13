@@ -4,7 +4,7 @@ VehicleType {
    parent = 335
 
 
-   Description = construction vehicle
+   Description = Infrastruktur Baueinheit
    Infotext = [The Construction Vehicle is necessary for the construction of
               infrastructure such as bridges railroads and pipelines.
               A very important unit if you aspire a well defended, smoothly
@@ -13,27 +13,31 @@ VehicleType {
    GuideSortHelp = 556 0 0 0 5 0 0 0 0 0
 
    Armor -= 50
+   Weight -= 5
    Transportation ->* VehicleType.TransTurretMed
+   Transportation.MaxLoadableUnits = 2
+   Transportation.MaxLoadableMass = 90
+   Features += ExternalAmmoTransfer ExternalRepair
 
    Tank { 
-      Material = 6000
-      fuel = 6000
+      Material = 10000
+      fuel = 10000
    } Tank
    FuelConsumption = 11
-   Movement = 0 0 0 90 0 0 0 0 
    TerrainAccess ->* VehicleType.Offroad 
 
    Construction { 
-      Buildings = 
-      Vehicles = 
-      Objects = 2 3 30 999 1000 998 997 996 995 1400 1401
+      Buildings = 7 26
+      Vehicles = 1431 1430
+      Objects = 3 30 991 1000 998 997 1401 44 2093 2098 2097 2099
       ObjectsRemovable = 
       ObjectGroupsRemovable = 2 3 4 6 8 9 13 14
    } Construction
 
    Weapons { 
-      Initiative = 0
-      Number = 1
+      Number = 3
       Weapon0 ->* Vehicletype.Def_MG
+      Weapon1 ->* VehicleType.AmmoCannon
+      Weapon2 ->* VehicleType.ServiceTurret
    } Weapons
 } VehicleType

@@ -2,18 +2,17 @@ VehicleType {
    Name = Mechanic
    ID = 1409
    parent = 400 401 402 410
-   Description = Bau- und Reparaturtrupp
-   Infotext = [ Diese Spezialisten betrachten sich als unentbehrlich und das sind sie auch. Im Feld 
-   uebernehmen sie wichtige Vorbereitungsaufgaben und die Reparatur der Einheiten. Sie legen Strassen 
-   und Befestigungen an, erstellen den Sockel fuer stationaere Defensivsysteme und andere noch nicht 
-   absehbare Sonderaufgaben. Sie verfuegen nur ueber leichte Bewaffnung und sind unter allen Umstaenden 
-   zu schuetzen.]
 
-   Picture = MK5i_Mechanic.pcx
+   Description = Bau- und Reparaturtrupp
+   Picture = mk5i_mechanic.pcx
    WreckageObject = 1416
+   Infotext = [ Diese Spezialisten betrachten sich als unentbehrlich und das sind sie auch. Im Feld 
+   uebernehmen sie wichtige Vorbereitungsaufgaben und die Reparatur der Einheiten. Sie legen Wege 
+   und Befestigungen an, erstellen den Sockel fuer stationaere Defensivsysteme und andere noch nicht 
+   absehbare Sonderaufgaben. Sie verfuegen nur ueber leichte Bewaffnung und wenig Munition. Die Errichteten Defensivsysteme muessen von anderen Einheiten versorgt werden.]
+
    Transportation ->* VehicleType.TransTurretmed 
-   WaitForAttack = true
-   Features += construct_specific_buildings construct_vehicles paratrooper mine_layer ExternalRepair mineview automatic_resource_searching
+   Features += construct_specific_buildings construct_vehicles paratrooper mine_layer ExternalRepair mineview automatic_resource_searching ExternalAmmoTransfer
    ResourceDrillingRange = 2
    SelfRepairRate = 20
 
@@ -22,27 +21,27 @@ VehicleType {
       Material = 30000
       fuel = 30000
    } Tank
-   Movement = 0 0 0 49 0 0 0 0 
+   Movement = 0 0 0 60 0 0 0 0 
 
    Construction { 
-      Buildings = 1 2 4-7 10-23 30-32
-      Vehicles = 1405 1419 1428 1430 1431 1433 1442 1472 1478 1486 1494
-      Objects = 9 10 181 998 1400 1489 2097 2099
+      Buildings = 1 2 4 6 7 10-23 30-32 39
+      Vehicles = 1405 1419 1428 1430 1431 1442 1472 1478 1486 1494
+      Objects = 9 10 181 998 1489 2093 2097 2099
       ObjectsRemovable = 1400
       ObjectGroupsRemovable = 1 2 3 4 5 6 7 8 10 11 12 13 14 21
    } Construction
 
+   WaitForAttack = true
    Weapons { 
       Initiative = -50
       Number = 3
       Weapon0 ->* VehicleType.MG_Trooper
-      Weapon0.Type = machinegun shootable ammo_transfer 
-      Weapon0.Ammo = 30
+      Weapon0.Ammo = 100
       Weapon0.Punch@MaxRange = 35
       Weapon0.Punch@MinRange = 35
 
       Weapon1 ->* VehicleType.MineWeapon 
-      Weapon1.Ammo = 6
+      Weapon1.Ammo = 10
       Weapon1.Punch@MaxRange = 140
       Weapon1.Punch@MinRange = 140
 

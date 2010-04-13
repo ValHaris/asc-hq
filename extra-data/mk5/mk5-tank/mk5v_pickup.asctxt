@@ -8,12 +8,9 @@ VehicleType {
    Picture = MK5v_PickUp.pcx
    InfoImage = mk5v_pickup.jpg
 
-   Armor -= 50
-   Weight -= 5
 
+   Features += MoveDuringReactionFire
    Transportation ->* VehicleType.TransNoMechTrooper2 
-
-   Movement += 0 0 0 20 0 0 0 0 
    TerrainAccess ->* VehicleType.offroad
    
    Weapons { 

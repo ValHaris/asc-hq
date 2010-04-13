@@ -4,17 +4,16 @@ VehicleType {
    parent = 400 401 402 410
    Description = Bau- und Reparaturtrupp
    Infotext = [ Diese Spezialisten betrachten sich als unentbehrlich und das sind sie auch. Im Feld 
-   uebernehmen sie wichtige Vorbereitungsaufgaben und die Reparatur der Einheiten. Sie legen Strassen 
-   und Befestigungen an, erstellen den Sockel fuer stationaere Defensivsysteme und andere noch nicht 
+   uebernehmen sie wichtige Vorbereitungsaufgaben. Den Bau, Versorgung und die Reparatur der stationären Verteidigungssysteme. Sie legen Wege
+   und spezielle Befestigungen an, erstellen den Sockel fuer stationaere Defensivsysteme und andere noch nicht 
    absehbare Sonderaufgaben. Sie verfuegen nur ueber leichte Bewaffnung und sind unter allen Umstaenden 
-   zu schuetzen.]
+   zu schuetzen. Tauchausrüstung und Munition fuer die errichteten Defensivsysteme gehoeren ebenfalls zur Grundausstattung.]
 
-   Picture = MK5i_Mechanic.pcx
+   Picture = mk5i_elite_mechanic.png
    WreckageObject = 1416
 
-   Transportation ->* VehicleType.TransTurretbig 
-   WaitForAttack = true
-   Features += construct_specific_buildings construct_vehicles paratrooper ExternalRepair automatic_resource_searching
+   Transportation ->* VehicleType.TransTurretBig 
+   Features += construct_specific_buildings construct_vehicles paratrooper ExternalRepair automatic_resource_searching ExternalFuelTransfer ExternalMaterialTransfer ExternalAmmoTransfer
    ResourceDrillingRange = 2
    SelfRepairRate = 20
 
@@ -23,22 +22,33 @@ VehicleType {
       Material = 60000
       fuel = 70000
    } Tank
-   Movement = 0 0 0 49 0 0 0 0 
+   Movement = 0 44 0 55 0 0 0 0 
    Height = submerged ground_level 
 
    Construction { 
       Buildings = 26 35-37 1400 1401
-      Vehicles = 1414 1432 1472 1494
-      Objects = 10 44 2096 2098 2099 16901
+      Vehicles = 1405 1414 1419 1422 1428 1432 1433 1472 1478 1486 1494
+      Objects = 9 10 44 2093 2096 2098 2099 16901
       ObjectsRemovable = 988
       ObjectGroupsRemovable = 1 2 3 4 5 6 7 8 10 11 12 13 14
    } Construction
 
+   WaitForAttack = true
    Weapons { 
-      Initiative = -50
-      Number = 2
-      Weapon0 ->* VehicleType.Def_MG 
-      Weapon1 ->* VehicleType.ServiceGround 
+      Number = 6
+      Weapon0 ->* VehicleType.Def_MG
+      Weapon0.Ammo = 100
+      Weapon1 ->* VehicleType.ServiceTurret 
+      Weapon1.targets = submerged floating ground_level
+      Weapon1.shotfrom = submerged floating ground_level
+      Weapon2 ->* VehicleType.AmmoCannon
+      Weapon2.Ammo = 100
+      Weapon3 ->* VehicleType.AmmoLM
+      Weapon3.Ammo = 100
+      Weapon4 ->* VehicleType.AmmoSM
+      Weapon4.Ammo = 100
+      Weapon5 ->* VehicleType.AmmoTorp
+      Weapon5.Ammo = 100
    } Weapons
    
    HeightChangeMethodNum = 4
@@ -64,7 +74,7 @@ VehicleType {
       canattack = true
    } HeightChangeMethod2
    HeightChangeMethod3 {
-      movecost = 10
+      movecost = 15
       heightdelta = -2
       dist = 0
       startheight = ground_level

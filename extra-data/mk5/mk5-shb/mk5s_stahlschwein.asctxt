@@ -4,14 +4,14 @@ VehicleType {
    ID = 16002
    
    Description = Panzerschiff
-   picture = mk5s_stahlschwein.pcx
+   picture = mk5s_stahlschwein.png
    InfoImage = mk5s_stahlschwein.jpg
    InfoText = []
 
    Armor += 700
    Transportation ->* VehicleType.noTrans 
    Tank.Material = 0
-   Features += move_after_attack
+   Features += move_after_attack icebreaker
 
    WaitForAttack = true
    Weapons {
@@ -22,7 +22,7 @@ VehicleType {
       
       Weapon1 ->* VehicleType.DCS
       Weapon1.Ammo = 8
-      Weapon1.MaxRange = 20
+      Weapon1.MaxRange = 30
       Weapon1.ReactionFireShots = 1
 
       Weapon2 ->* VehicleType.GrL

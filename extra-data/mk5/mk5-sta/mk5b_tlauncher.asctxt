@@ -1,7 +1,7 @@
 VehicleType { 
    Name = TL HT 401
    ID = 1422
-   parent = 400 401 402 493
+   parent = 400 401 402
 
    Description = Torpedolauncher
    Infotext = [Stationaere Abschussvorrichtung fuer Torpedos. Da nur wenige Torpedos gelagert werden koennen, muss staendig fuer Nachschub gesorgt werden.]
@@ -16,7 +16,7 @@ VehicleType {
    ResourceDrillingRange = 0
    SelfRepairRate = 0
    Weight = 50
-   Features = sonar MoveDuringReactionFire
+   Features = sonar MoveDuringReactionFire 
 
    Tank { 
       Energy = 0
@@ -24,7 +24,7 @@ VehicleType {
       fuel = 200
    } Tank
    FuelConsumption = 20
-   Movement = 14 14 14 0 0 0 0 0 
+   Movement = 10 11 18 0 0 0 0 0 
    TerrainAccess { 
       terrain_any = Shallow_water Water Deep_water Very_shallow_water River 
       terrain_all = 
@@ -40,13 +40,42 @@ VehicleType {
 
    WaitForAttack = true
    Weapons { 
-      Initiative = 120
       Number = 1
-      Weapon0 ->* vehicleType.UTorp 
+      Weapon0 ->* VehicleType.UTorp 
       Weapon0.MaxRange = 50
       Weapon0.Ammo = 6
       Weapon0.ReactionFireShots = 2
-      Weapon0.Punch@MaxRange = 120
-      Weapon0.Punch@MinRange = 120
+      Weapon0.Punch@MaxRange = 125
+      Weapon0.Punch@MinRange = 125
    } Weapons
+
+   HeightChangeMethodNum = 2
+   HeightChangeMethod0 {
+      movecost = 5
+      heightdelta = 1
+      dist = 0
+      startheight = submerged
+      canattack = true
+   } HeightChangeMethod0
+   HeightChangeMethod1 {
+      movecost = 10
+      heightdelta = 1
+      dist = 0
+      startheight = deep_submerged
+      canattack = true
+   } HeightChangeMethod1
+   HeightChangeMethod1 {
+      movecost = 5
+      heightdelta = -1
+      dist = 0
+      startheight = floating
+      canattack = true
+   } HeightChangeMethod1
+   HeightChangeMethod1 {
+      movecost = 11
+      heightdelta = -1
+      dist = 0
+      startheight = submerged
+      canattack = true
+   } HeightChangeMethod1
 } VehicleType

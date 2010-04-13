@@ -1,0 +1,10 @@
+technology {
+   Name = Plugin
+   infotext = Forschungsprojekt abgeschlossen! Plugin verfuegbar!
+   id = 16003
+   RelatedUnitID = 16003
+   parent = 1499
+   researchpoints *= 14
+   techlevel = 3
+   TechnologiesRequired = 1499,100003,100103,100202 
+} Technology

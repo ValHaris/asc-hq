@@ -22,7 +22,7 @@ VehicleType {
       fuel = 8000
    } Tank
    FuelConsumption = 15
-   Features = ExternalFuelTransfer ExternalMaterialTransfer ExternalAmmoTransfer Repair_Facility 
+   Features += ExternalAmmoTransfer 
    Movement -= 0 0 0 0 10 10 10 0 
    Weight = 70
    Weapons { 

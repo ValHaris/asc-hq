@@ -1,0 +1,5 @@
+Techadapter {
+   ; Barb
+   Name = 16004
+   TechnologiesRequired = 16004
+} TechAdapter

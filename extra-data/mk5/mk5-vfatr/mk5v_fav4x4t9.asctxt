@@ -11,8 +11,9 @@ VehicleType {
               ausgestattes ist.]
    
    Armor += 250
+   Weight += 25
    View = 30
-   Movement -= 0 0 0 20 0 0 0 0 
+   Movement -= 0 0 0 10 0 0 0 0 
    MovementSound = buggy3.ogg
 
    Weapons { 

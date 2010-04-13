@@ -74,6 +74,7 @@ ID 1466 Notstrom X
 ID 1467 Bulldozer X
 ID 1468 FBV
 ID 1495 Ural
+ID 16006 Camp
 
 ID 1428 GCS DHT
 ID 1434 Ninja
@@ -85,6 +86,7 @@ ID 1410 Hoover (Heli)
 ID 1448 Summse
 ID 1449 Stachel
 ID 1450 Lastesel
+ID 16004 Barb
 
 **Flugzeuge**
 ID 1425 Doomsday
@@ -92,6 +94,7 @@ ID 1451 Blackwiddow
 ID 1475 Tenga
 ID 1476 Saenger
 ID 1491 mize
+ID 16003 Plugin
 
 **Dronen**
 ID 1417 RTH 302 (Rakete)
@@ -103,6 +106,7 @@ ID 1411 Energia
 ID 1413 OCS
 ID 1477 Horus
 ID 1480 WOAS
+ID 16005 Revelation
 
 **Schiffe**
 ID 1455 Sealboat

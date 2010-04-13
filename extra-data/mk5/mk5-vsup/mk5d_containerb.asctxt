@@ -6,25 +6,31 @@ VehicleType {
    Description = Transport Container
    Picture = MK5d_ContainerB.pcx
    InfoImage = mk5d_container.jpg
-   Infotext = [Der Container des Typs B speichert alle Arten von Waffen.
+   Infotext = [Der Container des Typs B speichert alle Arten von Waffen und kleingeräten
       InfoImage = Wikipedia ISO-Container]
+
+   Transportation ->* VehicleType.TransDevice
+   Transportation.MaxLoadableUnits = 14
+   Transportation.MaxLoadableMass = 50
 
    Armor = 400
    Tank { 
       Energy = 0
       Material = 0
-      fuel = 1
+      fuel = 0
    } Tank
    FuelConsumption = 0
-   Weight = 10
+   Weight = 100
    TerrainAccess ->* VehicleType.heli_terrain 
+   MovementSound = 
+   Features += ExternalAmmoTransfer
+
    Weapons { 
-      Initiative = -50
       Number = 8
       Weapon0 ->* VehicleType.ServiceGround 
 
       Weapon1 ->* VehicleType.AmmoCM 
-      Weapon2.Ammo = 4
+      Weapon2.Ammo = 10
 
       Weapon2 ->* VehicleType.AmmoMG 
       Weapon2.Ammo = 200

@@ -12,13 +12,12 @@ VehicleType {
 
    WaitForAttack = false
    Weapons { 
-      Initiative = 0
       Number = 1
       Weapon0 ->* VehicleType.SOM
       Weapon0.Punch@MaxRange = 75
       Weapon0.Punch@MinRange = 75
-      Weapon0.MaxRange = 60
-      Weapon0.MinRange = 20
+      Weapon0.MaxRange = 50
+      Weapon0.MinRange = 10
       Weapon0.ReactionFireShots = 2
    } Weapons
 } VehicleType

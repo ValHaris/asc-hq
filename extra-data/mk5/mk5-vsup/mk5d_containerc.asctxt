@@ -10,10 +10,11 @@ VehicleType {
       InfoImage = Wikipedia ISO-Container]
 
    Armor = 400
-   Weight = 20
+   Weight = 100
    Features += Repair_Facility
    Transportation ->* VehicleType.TransTrooper
-   Transportation.CargoMovementDivisor = 9
+   Transportation.CargoMovementDivisor = 2.3
+   Transportation.CategoriesNOT -> VehicleType.cargo_trooper_only.CategoriesNOT
    Transportation.MaxLoadableUnits = 16
    Transportation.MaxLoadableUnitSize = 6
    Transportation.MaxLoadableMass = 32
@@ -25,6 +26,7 @@ VehicleType {
    } Tank
    FuelConsumption = 0
    TerrainAccess ->* VehicleType.heli_terrain 
+   MovementSound = 
 
    Weapons { 
       Number = 0

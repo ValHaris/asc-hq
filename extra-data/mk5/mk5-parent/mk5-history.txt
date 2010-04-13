@@ -1,8 +1,131 @@
 MK5 Outlaw
 Grafiken: GAMER
 InfoText: Hastrubal
-InfoImage: GAMER
-
+InfoImage: GAMER, BananaJoe
+________________________
+Pflege, Entwicklung und Bearbeitung durch GAMER eingestellt zum 12.04.2010
+-Barb nur 1 RF mit Raketenwaffe
+-AOV, Waffenreichweite 1-5
+-WOAS, Waffenreichweite 5-12, kein MAM, 80 Move
+-Stahlschwein, Eisbrecher, Waffenreichweite Wasserbombe 1-3
+-Visby, feuert auch auf High Air
+-CCS interne Produktion deaktiviert
+-Watcher interne Produktion deaktiviert
+-Buffed interne Produktion deaktiviert
+-TLauncher deep_submerged 10 move
+-ContB, Transportkapazität default 14/50, CM = 10
+-Ural, beschränkt auf default, BTO und light_ship, kein WfA für default, 2 Stellplätze, offroad
+-FAV T9 +10 Move; T4 -10 Move; T7 +10 Move
+-Bidguard/Guard: nur noch auf  turret_foundation aufstellbar
+-Flak 80 Move
+-Tontaube Move 40
+-Scanner Move 110
+-FBV, 2 Stellplätze, max 90 Gewicht, Turretservice
+-FSV, Stellplätze 5
+-Lastesel -10 Move
+-PickUp +50Armor, MdRF, Move = 90
+________________________
+06.04.2010 z81.1 (GAMER)
+-Barb +cruiserlanding
+______________________
+03.04.2010 z82 (GAMER)
+Beta-10-05
+-Ural 80 Move
+-Guard Gewicht 100
+-BigGuard Gewicht 150
+-Pomornik, Single Load 170, Armor -50, FC +5
+-ContainerA-D Gewicht = 100
+-Kracher; Typ = default; Gewicht 80
+-FSV +6 Move
+-ADG kein Fuelverbrauch/Tank mehr
+-Grafikupdate Barb
+-Mecanic,Elitemechanic und FBV bauen neuen light Turret
+Beta-10-04
+-Grafikupdate: Stahlschwein
+-Ural, 1 Stellplatz, 2.0 CMD, Weight 195
+-JetStar Preis +1000EM, Armor 180, 2 Feld Waffe
+-Plugin Move 90 (vorher 100)
+-Camp Fueltank 40k
+______________________
+27.02.2010 z81 (GAMER)
+-Grafikupdate Camp
+Beta-10-03
+-Mechanic baut Windrad
+______________________
+23.01.2010 z80 (GAMER)
+Beta-10-01
+-Tontaube nicht mehr auf High_level
+-Lastesel CMD 2.0 , kein Service, Gewicht 60
+Beta-09-19
+-FSV hinterläßt Fahrspuren
+-ContainerC, Lastesel CMD 2.3
+-ContainerD CMD 1.7
+-Doomsday, Waffenumbau, Grafik überarbeitet
+______________________
+12.12.2009 z79 (GAMER)
+Beta-09-18
+-Kracher, 19 Move
+-Elite MEc, Movebugfix
+Beta-09-17
+-Techbugfix Camp
+-Revelation Orbit -10Move
+-TLauncher, kann wieder eigenständig auf und abtauchen.
+-MUHS, Ext.AmmoTr.
+______________________
+08.11.2009 z78 (GAMER)
+Beta-09-15/16
+-ContainerD, CargoMovementDivisor = 1.8, läd kein default
+-ContainerC, CargoMovementDivisor = 2.5, läd kein default
+-Lastesel, CargoMovementdivisor = 2.5
+-Hoover, CargoMovementDivisor = 1.8
+-Ural, CargoMovementDivisor = 2.1
+-FADV WaitForAttack
+-FAV 6x6 TX Waffe3-Bugfix
+Neu:
+-Camp
+______________________
+03.10.2009 z77 (GAMER)
+-MUHS, baut mehr Turrets, +Turretservice
+-BigGuard: SAM 1x RF, SSM 2x RF
+-GJS = EMP Waffe
+-GCS kein Kamikaze mehr
+-EliteMec, upgrade Turretservice
+-Mechanic,FBV,FSV upgrade
+Beta-09-14
+-Muhs, lavaabbau, External Transfer(Beschr.)
+-Tenga, ContB = externalAmmoTransfer
+-Barb Waffenbugfix
+Beta-09-13
+-Movementsound abgeschaltet: Scanner, Container
+-Scanner +10 Stealth
+______________________
+29.08.2009 z76 (GAMER)
+-Barb, Waffenumbau
+-Tramper, weniger Spritverbrauch
+-Oelplatform fördert jetzt Fuel
+Beta-09-11
+-HSV Waffenanzahl korrigiert
+-Kracher Default, damit nicht mehr Trainierbar
+-Tlauncher, nur noch transportierbar
+-THT30 nicht mehr auf tiefgetaucht
+-leichte Anpassungen bei den Drohnen
+Neu:
+-Revelation (SpionageSat)
+________________________
+01.08.2009 z75-2 (GAMER)
+-Buffed Waffenumbau
+-Plugin, Techbugfix
+-Barb, Waffen-,Armorbugfix
+-HSV, Waffenupgrade
+-FSV, ExternalAmmoTransfer
+______________________
+25.07.2009 Z75 (GAMER)
+Beta-09-10
+Neu:
+-Plugin, Tankerzeppelin
+-Barb, Defensivheli
+Beta-09-09
+-Horus Tech 4
 __________________
 20.06.2009 [incl. Beta-09-08+07]
 -InfoImage = Gateling

@@ -2,23 +2,31 @@ VehicleType {
    Name = JETSTAR
    parent = 400 401 402 410 497
    ID = 1407
+
    Description = Jet Trooper
-   Infotext = [ Dieser Spezialist ist mit einem Luftstrahlaggregat ausgeruestet, welches es ihm ermoeglicht, sich kurzfristig durch die Luft zu bewegen. Es kann nur in Erdnaehe verwendet werden und bietet vielfaelltige Einsatzmoeglichkeiten.]
-   Armor = 200
-   View = 31
    Picture = MK5i_JetStar.pcx
+   Infotext = [ Dieser Spezialist ist mit einem Luftstrahlaggregat ausgeruestet, welches es ihm ermoeglicht, sich kurzfristig durch die Luft zu bewegen. Es kann nur in Erdnaehe verwendet werden und bietet vielfaelltige Einsatzmoeglichkeiten.]
+
+   Features += no_midair_refuel move_after_attack
+   Armor = 180
+   View = 31
+   ConstructionCost { 
+      CalculationMethod = add
+      material = 1000
+      energy = 1000
+   } ConstructionCost
+
    Height = ground_level low_level_flight 
    Tank { 
       Energy = 0
       Material = 500
       fuel = 1000
    } Tank
-   FuelConsumption = 4
-   Features += no_midair_refuel move_after_attack
+   FuelConsumption = 10
    Movement = 0 0 0 33 71 0 0 0 
+
    Weapons { 
-      Initiative = 30
-      Number = 2
+      Number = 3
       Weapon0 ->* VehicleType.MG35low 
       Weapon0.Ammo = 6
       Weapon0.Punch@MaxRange = 35
@@ -31,5 +39,11 @@ VehicleType {
       Weapon1.Punch@MaxRange = 75
       Weapon1.Punch@MinRange = 75
       Weapon1.WeaponEffectiveness.trooper = 80
+
+      Weapon2 ->* VehicleType.smASM 
+      Weapon2.MaxRange = 20
+      Weapon2.Ammo = 1
+      Weapon2.Punch@MaxRange = 69
+      Weapon2.Punch@MinRange = 69
    } Weapons
 } VehicleType

@@ -2,27 +2,19 @@ VehicleType {
    Name = ADG 311
    ID = 1419
    parent = 222
+
    Description = Luftabwehrkanone
+   Picture = MK5b_ADG.pcx
    Infotext = [ Extrem weitreichendes Flugabwehrgeschuetz dessen Geschosse mit einer ueberdurchschnittlichen 
    Geschwindigkeit abgefeuert werden. Die Treffergenauigkeit ist enorm und die Schaeden an den 
    gegnerischen Maschienen betraechtlich. Fehlende Bodenverteidigung macht staendigen Schutz notwendig.]
-   Picture = MK5b_ADG.pcx
 
    Armor = 500
    Weight = 40
    jamming = 31
    Features += jam_only_own_field ManualSelfDestruct
-   WaitForAttack = true
-   Tank { 
-      Energy = 0
-      Material = 0
-      fuel = 100
-   } Tank
-   FuelConsumption = 20
-   TerrainAccess ->* VehicleType.turret_only 
 
    Weapons { 
-      Initiative = 50
       Number = 1
       Weapon0 ->* VehicleType.Flak 
       Weapon0.targets = low_level_flight medium_level_flight high_level_flight 
