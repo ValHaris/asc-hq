@@ -10,12 +10,11 @@ of a launcher with 2 ready to fire missiles.]
    Picture = MK3b_rapier.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
-   Armor -= 200
+   Armor -= 100
    Weight = 190
    Jamming = 21
    Features += jam_only_own_field ManualSelfDestruct
 
-   TerrainAccess ->* VehicleType.turret_ditch 
 
    Weapons { 
       Weapon0.Punch@MaxRange += 4

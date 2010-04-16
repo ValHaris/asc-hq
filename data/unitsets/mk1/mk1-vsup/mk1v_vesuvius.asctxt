@@ -17,7 +17,7 @@ VehicleType {
 
    Armor -= 100
    Weight = 65
-   Features = construct_vehicles construct_specific_buildings leaves_tracks NoProductionCustomization
+   Features = construct_vehicles construct_specific_buildings leaves_tracks NoProductionCustomization externalFuelTransfer externalMaterialTransfer externalAmmoTransfer
 
    Transportation ->* VehicleType.TransTurretBig 
 
@@ -36,8 +36,13 @@ VehicleType {
       ObjectGroupsRemovable = 1 2 3 4 6 7 8 11 13
    } Construction
    Weapons { 
-      Initiative = 0
-      Number = 1
+      Number = 4
       Weapon0 ->* VehicleType.Def_MG
+      Weapon0.Ammo = 100
+      Weapon1 ->* VehicleType.AmmoLM
+      Weapon1.Ammo = 20
+      Weapon2 ->* VehicleType.AmmoCannon
+      Weapon2.Ammo = 50
+      Weapon3 ->* VehicleType.ServiceTurret
    } Weapons
 } VehicleType

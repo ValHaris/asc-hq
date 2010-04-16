@@ -11,7 +11,7 @@ ObjectType {
    Movemalus_plus = 
    Movemalus_abs =  20  20  20  20  20  20  20  20  30  20  30  20  20  20  30  30  15  30
    AttackBonus_abs = -1
-   AttackBonus_plus = 1
+   AttackBonus_plus = 2
    DefenseBonus_abs = 0
    DefenseBonus_plus = 0
    ViewBonus_plus = 10
@@ -20,13 +20,13 @@ ObjectType {
    Height = 118
    ConstructionCost { 
       Energy = 0
-      Material = 600
+      Material = 800
       fuel = 300
       Movement = 30
    } ConstructionCost
    RemovalCost { 
       Energy = 0
-      Material = -300
+      Material = -400
       fuel = 100
       Movement = 25
    } RemovalCost

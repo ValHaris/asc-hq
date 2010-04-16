@@ -9,11 +9,10 @@ VehicleType {
    Picture = mk3b_rapier2.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
   
-   Armor -= 200
+   Armor -= 100
    Jamming = 21
    Features += jam_only_own_field
 
-   TerrainAccess ->* VehicleType.turret_ditch 
 
    Weapons { 
       Weapon0.Punch@MaxRange += 4

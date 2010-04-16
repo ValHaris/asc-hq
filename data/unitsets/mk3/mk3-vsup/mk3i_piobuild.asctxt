@@ -12,7 +12,7 @@ VehicleType {
 
    Armor = 250
    Transportation ->* VehicleType.TransTurretMed 
-   Features += construct_vehicles construct_specific_buildings
+   Features += construct_vehicles construct_specific_buildings externalAmmoTransfer
    Weight = 5
 
    Tank { 

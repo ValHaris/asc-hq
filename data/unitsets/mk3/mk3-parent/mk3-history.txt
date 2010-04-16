@@ -5,6 +5,14 @@ InfoImage: GAMER
 Spezifikationen: GAMER
 
 ______________________
+-Pflege, Entwicklung und Bearbeitung durch GAMER eingestellt zum 16.04.2010
+-Anger, auf default orbitaldefenceturret verlinkt
+-Boeing 2 RF
+-SS37, nur noch auf Turret_foundation
+-Rapier +100, nur noch auf Turret_foundation
+-Rapier2 +100 Armor, nur noch Flachland
+-ElitePio Turretservice
+______________________
 03.04.2010 z82 (GAMER)
 Beta-10-05
 Wichtig: Alle MK3 Turrets verlangen ab Zyklus 83 zwingend "turret_foundation"

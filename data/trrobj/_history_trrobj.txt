@@ -3,7 +3,11 @@ Advanced Strategic Command
 Specifications by GAMER
 Grafics by GAMER, Snuggels, ValHaris, Xyphagoroszh, Havanna Club, Uranius und Grom
 ________________________
--Küste nicht mehr unter Gebäuden zerstörbar.
+Beta Nr.7-2010
+-LTurret Attackbonus -1
+-High Turret Attackbonus +2
+Beta Nr.5-2010
+-Uni-Küste nicht mehr unter Gebäuden zerstörbar.
 -heavy_rain auf Wüste zerstört keine Kristalle mehr
 
 ________________________

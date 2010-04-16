@@ -29,7 +29,6 @@ This experimental plane is able to attack all targets above the water-line and i
    MovementSound = aircraft_l_g.ogg
 
    Weapons { 
-      Initiative = 0
       Number = 1
       Weapon0 ->* VehicleType.ML 
       Weapon0.Ammo = 2
@@ -37,5 +36,6 @@ This experimental plane is able to attack all targets above the water-line and i
       Weapon0.LaserRechargeCost.Material = 100
       Weapon0.Punch@MaxRange = 75
       Weapon0.Punch@MinRange = 85
+      Weapon0.ReaktionFireShots = 2
    } Weapons
 } VehicleType

@@ -12,7 +12,6 @@ VehicleType {
    Features += satelliteview  ManualSelfDestruct
    TerrainAccess ->* VehicleType.Turret_only 
    Weapons { 
-      Initiative = 0
       Number = 2
       Weapon0 ->* VehicleType.SOMT 
 

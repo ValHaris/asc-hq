@@ -13,7 +13,7 @@ ObjectType {
    Height = 118
 
    AttackBonus_abs = -1
-   AttackBonus_plus = -2
+   AttackBonus_plus = -1
    DefenseBonus_abs = -1
    DefenseBonus_plus = -2
    ViewBonus_plus = -1

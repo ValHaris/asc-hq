@@ -1,16 +1,16 @@
 VehicleType { 
    Name = SS37
    ID = 624
-   WreckageObject = 15624
    parent = 320
+
    Description = surface defence system
-   Infotext = []
    picture = MK3b_SS37.png
+   WreckageObject = 15624
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+   Infotext = []
 
    Armor -= 100
    Weight = 300
-   TerrainAccess ->* VehicleType.Turret_ditch 
    
    Weapons { 
       Weapon0 ->* VehicleType.type_large_missile 

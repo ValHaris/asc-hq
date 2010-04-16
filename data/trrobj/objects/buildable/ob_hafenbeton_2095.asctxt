@@ -9,14 +9,15 @@ ObjectType {
    LinkableObjects = 2092 2094 12012
    LinkableTerrain = 10
    NetBehaviour = NetToSelf AutoBorder NetToBorder
+
    TerrainAccess.terrain_any = Lowland Hard_sand Soft_sand Very_shallow_water
    TerrainAccess.terrain_not = harbour forest large rocks installation
-   TerrainAccess.terrain_kill = lava
+   TerrainAccess.terrain_kill = water deep_water lava
 
    Armor = 2500
    ConstructionCost { 
       Energy = 0
-      Material = 6000
+      Material = 10000
       fuel = 6000
       Movement = 50
    } ConstructionCost

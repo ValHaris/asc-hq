@@ -5,7 +5,10 @@ InfoImages: GAMER, Schicksal(3D), BananaJoe(3D)
 Spezifikationen: GAMER
 
 _______________________
-z82.1 (GAMER)
+v82.2
+-MK1: Pflege, Entwicklung und Bearbeitung durch GAMER eingestellt zum 16.04.2010
+-MK1: Vesuvius, MBV Turretervice
+v82.1 (GAMER)
 BASIS: medium schiffe wieder auf shallow water
 BASIS: Gewicht, leichter Radaufklärer Korrigiert
 BASIS: FAV (Buggy, Trike) generell -5 Gewicht
