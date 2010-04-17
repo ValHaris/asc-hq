@@ -41,3 +41,11 @@ MapCoordinate selectPosition();
 Resources putResources( ContainerBase* container, const Resources& resources );
 void setReactionFire( Vehicle* vehicle, bool state );
 
+class EditingEnvironment {
+   public:
+      int getSelectedPlayerPosition() const;
+      int getBrushSize() const;
+};
+
+extern EditingEnvironment getEditingEnvironment();
+

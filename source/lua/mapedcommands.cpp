@@ -2,7 +2,6 @@
 
 #include <iostream>
 
-#include "../sg.h"
 #include "../ascstring.h"
 #include "../vehicle.h"
 #include "../gamemap.h"
@@ -14,6 +13,7 @@
 #include "mapedcommands.h"
 #include "../ed_mapcomponent.h"
 #include "../dialogs/fieldmarker.h"
+#include "../edglobal.h"
          
          
          
@@ -174,4 +174,20 @@ void setReactionFire( Vehicle* vehicle, bool state )
       vehicle->reactionfire.enable();
    else
       vehicle->reactionfire.disable();
+}
+
+int EditingEnvironment :: getSelectedPlayerPosition() const
+{
+   return selection.getPlayer();
+}
+
+int EditingEnvironment :: getBrushSize() const
+{
+   return selection.brushSize;
+}
+
+
+EditingEnvironment getEditingEnvironment() 
+{
+   return EditingEnvironment();
 }

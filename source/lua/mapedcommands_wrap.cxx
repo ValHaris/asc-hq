@@ -1530,26 +1530,27 @@ SWIG_Lua_dostring(lua_State *L, const char* str) {
 #define SWIGTYPE_p_BuildingType swig_types[1]
 #define SWIGTYPE_p_ContainerBase swig_types[2]
 #define SWIGTYPE_p_ContainerBaseType swig_types[3]
-#define SWIGTYPE_p_FieldVector swig_types[4]
-#define SWIGTYPE_p_GameMap swig_types[5]
-#define SWIGTYPE_p_MapCoordinate swig_types[6]
-#define SWIGTYPE_p_MapCoordinate3D swig_types[7]
-#define SWIGTYPE_p_MapField swig_types[8]
-#define SWIGTYPE_p_Object swig_types[9]
-#define SWIGTYPE_p_ObjectType swig_types[10]
-#define SWIGTYPE_p_PG_Rect swig_types[11]
-#define SWIGTYPE_p_Player swig_types[12]
-#define SWIGTYPE_p_Properties swig_types[13]
-#define SWIGTYPE_p_PropertyDialog swig_types[14]
-#define SWIGTYPE_p_Research swig_types[15]
-#define SWIGTYPE_p_Resources swig_types[16]
-#define SWIGTYPE_p_StringArray swig_types[17]
-#define SWIGTYPE_p_TerrainType swig_types[18]
-#define SWIGTYPE_p_Vehicle swig_types[19]
-#define SWIGTYPE_p_VehicleType swig_types[20]
-#define SWIGTYPE_p_std__string swig_types[21]
-static swig_type_info *swig_types[23];
-static swig_module_info swig_module = {swig_types, 22, 0, 0, 0, 0};
+#define SWIGTYPE_p_EditingEnvironment swig_types[4]
+#define SWIGTYPE_p_FieldVector swig_types[5]
+#define SWIGTYPE_p_GameMap swig_types[6]
+#define SWIGTYPE_p_MapCoordinate swig_types[7]
+#define SWIGTYPE_p_MapCoordinate3D swig_types[8]
+#define SWIGTYPE_p_MapField swig_types[9]
+#define SWIGTYPE_p_Object swig_types[10]
+#define SWIGTYPE_p_ObjectType swig_types[11]
+#define SWIGTYPE_p_PG_Rect swig_types[12]
+#define SWIGTYPE_p_Player swig_types[13]
+#define SWIGTYPE_p_Properties swig_types[14]
+#define SWIGTYPE_p_PropertyDialog swig_types[15]
+#define SWIGTYPE_p_Research swig_types[16]
+#define SWIGTYPE_p_Resources swig_types[17]
+#define SWIGTYPE_p_StringArray swig_types[18]
+#define SWIGTYPE_p_TerrainType swig_types[19]
+#define SWIGTYPE_p_Vehicle swig_types[20]
+#define SWIGTYPE_p_VehicleType swig_types[21]
+#define SWIGTYPE_p_std__string swig_types[22]
+static swig_type_info *swig_types[24];
+static swig_module_info swig_module = {swig_types, 23, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -6298,6 +6299,107 @@ fail:
 }
 
 
+static int _wrap_EditingEnvironment_getSelectedPlayerPosition(lua_State* L) {
+  int SWIG_arg = 0;
+  EditingEnvironment *arg1 = (EditingEnvironment *) 0 ;
+  int result;
+  
+  SWIG_check_num_args("getSelectedPlayerPosition",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("getSelectedPlayerPosition",1,"EditingEnvironment const *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_EditingEnvironment,0))){
+    SWIG_fail_ptr("EditingEnvironment_getSelectedPlayerPosition",1,SWIGTYPE_p_EditingEnvironment);
+  }
+  
+  result = (int)((EditingEnvironment const *)arg1)->getSelectedPlayerPosition();
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_EditingEnvironment_getBrushSize(lua_State* L) {
+  int SWIG_arg = 0;
+  EditingEnvironment *arg1 = (EditingEnvironment *) 0 ;
+  int result;
+  
+  SWIG_check_num_args("getBrushSize",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("getBrushSize",1,"EditingEnvironment const *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_EditingEnvironment,0))){
+    SWIG_fail_ptr("EditingEnvironment_getBrushSize",1,SWIGTYPE_p_EditingEnvironment);
+  }
+  
+  result = (int)((EditingEnvironment const *)arg1)->getBrushSize();
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_new_EditingEnvironment(lua_State* L) {
+  int SWIG_arg = 0;
+  EditingEnvironment *result = 0 ;
+  
+  SWIG_check_num_args("EditingEnvironment::EditingEnvironment",0,0)
+  result = (EditingEnvironment *)new EditingEnvironment();
+  SWIG_NewPointerObj(L,result,SWIGTYPE_p_EditingEnvironment,1); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static void swig_delete_EditingEnvironment(void *obj) {
+EditingEnvironment *arg1 = (EditingEnvironment *) obj;
+delete arg1;
+}
+static swig_lua_method swig_EditingEnvironment_methods[] = {
+    {"getSelectedPlayerPosition", _wrap_EditingEnvironment_getSelectedPlayerPosition}, 
+    {"getBrushSize", _wrap_EditingEnvironment_getBrushSize}, 
+    {0,0}
+};
+static swig_lua_attribute swig_EditingEnvironment_attributes[] = {
+    {0,0,0}
+};
+static swig_lua_class *swig_EditingEnvironment_bases[] = {0};
+static const char *swig_EditingEnvironment_base_names[] = {0};
+static swig_lua_class _wrap_class_EditingEnvironment = { "EditingEnvironment", &SWIGTYPE_p_EditingEnvironment,_wrap_new_EditingEnvironment, swig_delete_EditingEnvironment, swig_EditingEnvironment_methods, swig_EditingEnvironment_attributes, swig_EditingEnvironment_bases, swig_EditingEnvironment_base_names };
+
+static int _wrap_getEditingEnvironment(lua_State* L) {
+  int SWIG_arg = 0;
+  EditingEnvironment result;
+  
+  SWIG_check_num_args("getEditingEnvironment",0,0)
+  result = getEditingEnvironment();
+  {
+    EditingEnvironment * resultptr = new EditingEnvironment((const EditingEnvironment &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_EditingEnvironment,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 #ifdef __cplusplus
 }
 #endif
@@ -6329,6 +6431,7 @@ static const struct luaL_reg swig_commands[] = {
     { "selectPosition", _wrap_selectPosition},
     { "putResources", _wrap_putResources},
     { "setReactionFire", _wrap_setReactionFire},
+    { "getEditingEnvironment", _wrap_getEditingEnvironment},
     {0,0}
 };
 
@@ -6361,6 +6464,7 @@ static swig_type_info _swigt__p_Building = {"_p_Building", "Building *", 0, 0, (
 static swig_type_info _swigt__p_BuildingType = {"_p_BuildingType", "BuildingType *", 0, 0, (void*)&_wrap_class_BuildingType, 0};
 static swig_type_info _swigt__p_ContainerBase = {"_p_ContainerBase", "ContainerBase *", 0, 0, (void*)&_wrap_class_ContainerBase, 0};
 static swig_type_info _swigt__p_ContainerBaseType = {"_p_ContainerBaseType", "ContainerBaseType *", 0, 0, (void*)&_wrap_class_ContainerBaseType, 0};
+static swig_type_info _swigt__p_EditingEnvironment = {"_p_EditingEnvironment", "EditingEnvironment *", 0, 0, (void*)&_wrap_class_EditingEnvironment, 0};
 static swig_type_info _swigt__p_FieldVector = {"_p_FieldVector", "FieldVector *", 0, 0, (void*)&_wrap_class_FieldVector, 0};
 static swig_type_info _swigt__p_GameMap = {"_p_GameMap", "GameMap *", 0, 0, (void*)&_wrap_class_GameMap, 0};
 static swig_type_info _swigt__p_MapCoordinate = {"_p_MapCoordinate", "MapCoordinate *", 0, 0, (void*)&_wrap_class_MapCoordinate, 0};
@@ -6385,6 +6489,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_BuildingType,
   &_swigt__p_ContainerBase,
   &_swigt__p_ContainerBaseType,
+  &_swigt__p_EditingEnvironment,
   &_swigt__p_FieldVector,
   &_swigt__p_GameMap,
   &_swigt__p_MapCoordinate,
@@ -6409,6 +6514,7 @@ static swig_cast_info _swigc__p_Building[] = {  {&_swigt__p_Building, 0, 0, 0},{
 static swig_cast_info _swigc__p_BuildingType[] = {  {&_swigt__p_BuildingType, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_ContainerBase[] = {  {&_swigt__p_ContainerBase, 0, 0, 0},  {&_swigt__p_Building, _p_BuildingTo_p_ContainerBase, 0, 0},  {&_swigt__p_Vehicle, _p_VehicleTo_p_ContainerBase, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_ContainerBaseType[] = {  {&_swigt__p_ContainerBaseType, 0, 0, 0},  {&_swigt__p_VehicleType, _p_VehicleTypeTo_p_ContainerBaseType, 0, 0},  {&_swigt__p_BuildingType, _p_BuildingTypeTo_p_ContainerBaseType, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_EditingEnvironment[] = {  {&_swigt__p_EditingEnvironment, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_FieldVector[] = {  {&_swigt__p_FieldVector, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_GameMap[] = {  {&_swigt__p_GameMap, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_MapCoordinate[] = {  {&_swigt__p_MapCoordinate, 0, 0, 0},  {&_swigt__p_MapCoordinate3D, _p_MapCoordinate3DTo_p_MapCoordinate, 0, 0},{0, 0, 0, 0}};
@@ -6433,6 +6539,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_BuildingType,
   _swigc__p_ContainerBase,
   _swigc__p_ContainerBaseType,
+  _swigc__p_EditingEnvironment,
   _swigc__p_FieldVector,
   _swigc__p_GameMap,
   _swigc__p_MapCoordinate,

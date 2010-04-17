@@ -38,5 +38,12 @@ class FieldVector : public vector<MapCoordinate> {
 extern FieldVector getFieldsInDistance( GameMap* map, const MapCoordinate& position, int distance );
 extern void setReactionFire( Vehicle* vehicle, bool state );
 
+class EditingEnvironment {
+   public:
+      int getSelectedPlayerPosition() const;
+      int getBrushSize() const;
+};
+
+extern EditingEnvironment getEditingEnvironment();
       
 #endif
