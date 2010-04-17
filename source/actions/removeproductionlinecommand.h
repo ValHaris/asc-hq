@@ -33,7 +33,7 @@ class RemoveProductionLineCommand : public ContainerCommand {
    public:
       static bool avail ( const ContainerBase* factory );
       
-      static Resources resourcesNeeded( const VehicleType* veh );
+      static Resources resourcesNeeded( const ContainerBaseType* factory, const VehicleType* veh );
 
    private:
       RemoveProductionLineCommand( GameMap* map ) : ContainerCommand( map ), vehicleTypeId( -1 ) {};

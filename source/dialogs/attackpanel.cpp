@@ -22,6 +22,7 @@
 #include "../events.h"
 #include "../gameoptions.h"
 #include "../windowing.h"
+#include "../sdl/graphicsqueue.h"
 
 #define USE_COLOR_CONSTANTS
 #include <pgcolors.h>
@@ -261,6 +262,28 @@ class BattleSoundPlayer : public FightVisitor {
 const int maxdefenseshown = 2;
 const int maxattackshown = 2;
 
+/**
+  Waits the given time, but still updates the screen.
+  These is of no use to the user, but are needed by the video recorder
+*/
+void waitWithUpdate( int millisecs ) 
+{
+   int frameDelay;
+   if ( CGameOptions::Instance()->video.ascframeratelimit  > 0 )
+      frameDelay = 100 / CGameOptions::Instance()->video.ascframeratelimit ;
+   else
+      frameDelay = 10;
+   
+   int t = ticker;
+   do {
+      int t2 = ticker;
+      do {
+         releasetimeslice();
+      } while ( t2 + frameDelay > ticker );
+      postScreenUpdate( PG_Application::GetScreen() );
+   } while ( t + millisecs/20 > ticker ); 
+}
+
 
 void showAttackAnimation( tfight& battle, GameMap* actmap, int ad, int dd )
 {
@@ -302,7 +325,6 @@ void showAttackAnimation( tfight& battle, GameMap* actmap, int ad, int dd )
    at->dispValue( "defender_defencebonus", battle.defense_defensebonus(battle.dv.defensebonus), maxattackshown, defendingColor );
 
 
-   int t = ticker;
    battle.calc();
    at->Show();
 
@@ -319,9 +341,7 @@ void showAttackAnimation( tfight& battle, GameMap* actmap, int ad, int dd )
    if ( time3 <= 0 )
       time3 = 30;
 
-   do {
-      releasetimeslice();
-   } while ( t + time1 > ticker ); /* enddo */
+   waitWithUpdate( time1*10 );
 
 
 
@@ -355,9 +375,6 @@ void showAttackAnimation( tfight& battle, GameMap* actmap, int ad, int dd )
 
    bsp.playEnd();
    
-   t = ticker;
-   do {
-      releasetimeslice();
-   } while ( t + time3 > ticker ); /* enddo */
+   waitWithUpdate( time3*10 );
 }
 

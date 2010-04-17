@@ -44,9 +44,9 @@ bool RemoveProductionLineCommand :: avail ( const ContainerBase* factory )
 }
 
 
-Resources RemoveProductionLineCommand :: resourcesNeeded( const VehicleType* veh )
+Resources RemoveProductionLineCommand :: resourcesNeeded( const ContainerBaseType* factory, const VehicleType* veh )
 {
-   return veh->productionCost * productionLineRemovalCostFactor;
+   return factory->productionEfficiency * veh->productionCost * productionLineRemovalCostFactor;
 }
 
 
@@ -85,7 +85,7 @@ ActionResult RemoveProductionLineCommand::go ( const Context& context )
    if ( !vt )
       return ActionResult(22900);
    
-   Resources needed = resourcesNeeded( vt );
+   Resources needed = resourcesNeeded( getContainer()->baseType,  vt );
    Resources avail = getContainer()->getResource( needed, true );
    if ( avail < needed  )
       return ActionResult(22901);

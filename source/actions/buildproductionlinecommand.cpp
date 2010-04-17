@@ -70,9 +70,9 @@ vector<const VehicleType*> BuildProductionLineCommand :: productionLinesBuyable(
    return list;
 }
 
-Resources BuildProductionLineCommand :: resourcesNeeded( const VehicleType* veh )
+Resources BuildProductionLineCommand :: resourcesNeeded( const ContainerBaseType* factory, const VehicleType* veh )
 {
-   return veh->productionCost * productionLineConstructionCostFactor;
+   return factory->productionEfficiency * veh->productionCost * productionLineConstructionCostFactor ;
 }
 
 
@@ -112,7 +112,7 @@ ActionResult BuildProductionLineCommand::go ( const Context& context )
       return ActionResult(22900);
    
    
-   Resources needed = resourcesNeeded( vt );
+   Resources needed = resourcesNeeded( getContainer()->baseType, vt );
    Resources avail = getContainer()->getResource( needed, true );
    if ( avail < needed  )
       return ActionResult(22901);

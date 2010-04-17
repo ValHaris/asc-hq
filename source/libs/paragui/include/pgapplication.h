@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2010-04-05 12:48:54 $
+    Update Date:      $Date: 2010-04-17 17:46:44 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/include/pgapplication.h,v $
-    CVS/RCS Revision: $Revision: 1.5 $
+    CVS/RCS Revision: $Revision: 1.6 $
     Status:           $State: Exp $
 */
 
@@ -659,22 +659,8 @@ class SignalAppIdle : public PG_Signal1<PG_MessageObject*, datatype> {}
       };
    };
    
-   class PeriodicBackgroundTask {
-      public:
-         virtual void run( bool sleeping ) = 0;
-         virtual ~PeriodicBackgroundTask() {};
-   };
-
-   /**
-    * runs a periodic background task; this is only half-implemented, called only on sleeping
-    */
-   void registerTask( PeriodicBackgroundTask* task, int millisecondsInterval );
-   void unregisterTask( PeriodicBackgroundTask* task );
-
 
 protected:
-
-    std::list< std::pair<PeriodicBackgroundTask*, int> > tasks;
 
 	/**
 	Cleanup the application data

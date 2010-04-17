@@ -135,7 +135,7 @@ void AddProductionLine_SelectionItemFactory::vehicleTypeSelected( const VehicleT
 
 Resources AddProductionLine_SelectionItemFactory::getCost( const VehicleType* type )
 {
-   return BuildProductionLineCommand::resourcesNeeded( type );
+   return BuildProductionLineCommand::resourcesNeeded( plant->baseType, type );
 };
 
 

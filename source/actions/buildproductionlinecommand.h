@@ -34,7 +34,7 @@ class BuildProductionLineCommand : public ContainerCommand {
    public:
       static bool avail ( const ContainerBase* factory );
       
-      static Resources resourcesNeeded( const VehicleType* veh );
+      static Resources resourcesNeeded( const ContainerBaseType* factory, const VehicleType* veh );
 
    private:
       BuildProductionLineCommand( GameMap* map ) : ContainerCommand( map ), vehicleTypeId( -1 ) {};

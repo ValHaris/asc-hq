@@ -20,9 +20,9 @@
     pipelka@teleweb.at
  
     Last Update:      $Author: mbickel $
-    Update Date:      $Date: 2010-04-05 12:48:54 $
+    Update Date:      $Date: 2010-04-17 17:46:45 $
     Source File:      $Source: /home/martin/asc/v2/svntest/games/asc/source/libs/paragui/src/core/pgapplication.cpp,v $
-    CVS/RCS Revision: $Revision: 1.6 $
+    CVS/RCS Revision: $Revision: 1.7 $
     Status:           $State: Exp $
 */
 
@@ -1318,18 +1318,6 @@ void PG_Application::SetHighlightingTag( PG_Char c )
 PG_Char PG_Application::GetHighlightingTag()
 {
    return highlightingTag;
-}
-
-
-void PG_Application::registerTask( PeriodicBackgroundTask* task, int millisecondsInterval )
-{
-
-}
-
-void PG_Application::unregisterTask( PeriodicBackgroundTask* task )
-{
-
-
 }
 
 
