@@ -136,7 +136,7 @@ int VehicleType::maxsize ( void ) const
 }
 
 
-const int vehicle_version = 31;
+const int vehicle_version = 32;
 
 
 
@@ -570,6 +570,10 @@ void VehicleType :: read ( tnstream& stream )
    
    if ( version >= 31 )
       imageFilename = stream.readString();
+   
+   if ( version >= 32 )
+      recommendedAIJob = AiParameter::Job(stream.readInt());
+
 }
 
 
@@ -748,6 +752,7 @@ void VehicleType:: write ( tnstream& stream ) const
    stream.writeInt( unitConstructionMinDistance );
    stream.writeInt( unitConstructionMaxDistance );
    stream.writeString( imageFilename );
+   stream.writeInt( recommendedAIJob );
 }
 
 
