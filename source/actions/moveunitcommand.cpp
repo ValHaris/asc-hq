@@ -69,6 +69,9 @@ bool MoveUnitCommand :: longDistAvailable( const MapCoordinate& pos )
    
    if ( !getUnit() )
       return false;
+   
+   if ( pos == getUnit()->getPosition() )
+      return false;
 
    for ( int h = 0; h < 8; ++h )
       if ( getUnit()->typ->height & (1<<h))
