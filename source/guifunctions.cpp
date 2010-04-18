@@ -935,7 +935,7 @@ public:
             Vehicle* eht = actmap->getField(pos)->vehicle;
             if ( eht )
                 if ( eht->getOwner() == actmap->actplayer )
-                    return JumpDriveCommand::avail(eht);
+                    return JumpDriveCommand::available(eht).getAvailability() >= ActionAvailability::partially;
         } else {
             JumpDriveCommand* jdc = dynamic_cast<JumpDriveCommand*>(NewGuiHost::pendingCommand);
             if ( jdc ) {
@@ -957,6 +957,12 @@ public:
             if ( !eht )
                 return;
 
+            ActionAvailability aa = JumpDriveCommand::available(eht);
+            if ( !aa.ready() ) {
+               warningMessage( aa.getMessage() );
+               return;
+            }
+            
             auto_ptr<JumpDriveCommand> jdc ( new JumpDriveCommand( eht ));
 
             vector<MapCoordinate> fields = jdc->getDestinations();

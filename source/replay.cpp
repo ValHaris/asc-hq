@@ -1976,7 +1976,7 @@ void trunreplay :: execnextreplaymove ( void )
 
             Vehicle* veh = actmap->getUnit(nwid);
             if ( veh ) {
-               if ( JumpDriveCommand::avail( veh )) {
+               if ( JumpDriveCommand::available( veh ).ready()) {
                   auto_ptr<JumpDriveCommand> jd( new JumpDriveCommand(veh) );
                   displayActionCursor ( veh->getPosition().x , veh->getPosition().x, x, y, 0 );
                   jd->setDestination( MapCoordinate(x,y));

@@ -27,12 +27,12 @@
 #include "../typen.h"
 #include "../objects.h"
 #include "../mapfield.h"
-
+#include "actionavailability.h"
 
 class JumpDriveCommand : public UnitCommand {
    
    public:
-      static bool avail ( const Vehicle* unit );
+      static ActionAvailability available( const Vehicle* unit );
    private:
       
       MapCoordinate destination;

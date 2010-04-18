@@ -432,8 +432,9 @@ ActionResult unitJump( GameMap* actmap, int veh, const MapCoordinate& destinatio
    if ( !unit )
       return ActionResult(120);
    
-   if ( !JumpDriveCommand::avail( unit ))   
-      return ActionResult(23411);
+   ActionAvailability aa = JumpDriveCommand::available( unit );
+   if ( !aa.ready())   
+      return ActionResult(23411, aa.getMessage() );
    
    auto_ptr<JumpDriveCommand> ac( new JumpDriveCommand(unit) );
    ac->setDestination( destination );

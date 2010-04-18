@@ -401,7 +401,8 @@ extern  const char*  choehenstufen[8] ;
  #define chhochfliegend 64  
  #define chsatellit 128  
 
-
+extern ASCString heightToString( int bitmappedHeight );
+      
 
 
 const int experienceDecreaseDamageBoundaryNum = 4;

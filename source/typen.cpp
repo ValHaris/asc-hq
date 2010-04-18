@@ -378,4 +378,15 @@ void Properties::read( tnstream& stream )
    }
 }
 
+ASCString heightToString( int bitmappedHeight )
+{
+   ASCString s;
+   for ( int i = 0; i < 8; ++i )
+      if ( bitmappedHeight & (1 << i )) {
+         if ( !s.empty() )
+            s += " ";
+         s += choehenstufen[i];
+      }
+   return s;
+}
 

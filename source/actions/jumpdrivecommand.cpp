@@ -36,19 +36,32 @@
 #include "unitfieldregistration.h"
 #include "changeunitproperty.h"
 
-bool JumpDriveCommand :: avail ( const Vehicle* unit )
+ActionAvailability JumpDriveCommand :: available( const Vehicle* unit )
 {
-   if ( unit )
-      if ( !unit->hasMoved() )
-         if ( !unit->attacked )
-            if ( (unit->reactionfire.getStatus() == Vehicle::ReactionFire::off) || unit->typ->hasFunction(VehicleType::MoveWithReactionFire ) )
-               if ( unit->height & unit->typ->jumpDrive.height )
-                  if ( unit->getResource( unit->typ->jumpDrive.consumption ) == unit->typ->jumpDrive.consumption ) 
-                     return true;
-
-   return false;
+   ActionAvailability avail;
+   if ( !unit )
+      return avail.set( ActionAvailability::notAtAll, "No unit selected");
+   
+   if ( !unit->typ->jumpDrive.height )
+      return avail.set( ActionAvailability::notAtAll, "Unit has no jump drive");
+   
+   if ( unit->hasMoved() )
+      avail.set( ActionAvailability::partially, "Unit has already moved" );
+   
+   if ( unit->attacked )
+      avail.set( ActionAvailability::partially, "Unit has already attacked" );
+   
+   if ( (unit->reactionfire.getStatus() != Vehicle::ReactionFire::off) && !unit->typ->hasFunction(VehicleType::MoveWithReactionFire ) )
+      avail.set( ActionAvailability::partially, "Unit has reaction fire enabled" );
+   
+   if ( !(unit->height & unit->typ->jumpDrive.height) ) 
+      avail.set( ActionAvailability::partially, "Unit needs to be on this height: " + heightToString(unit->typ->jumpDrive.height)  );
+   
+   if ( unit->getResource( unit->typ->jumpDrive.consumption ) < unit->typ->jumpDrive.consumption ) 
+      avail.set( ActionAvailability::partially, "Unit is missing resources. Required: " + unit->typ->jumpDrive.consumption.toString()  );
+   
+   return avail;
 }
-
 
 JumpDriveCommand :: JumpDriveCommand ( Vehicle* unit)
    : UnitCommand ( unit )
@@ -74,7 +87,7 @@ vector<MapCoordinate> JumpDriveCommand::getDestinations()
 {
    vector<MapCoordinate> fields;
    
-   if ( !avail( getUnit() ))
+   if ( !available( getUnit() ).ready() )
       return fields;
      
    GameMap* gamemap = getMap();
@@ -105,7 +118,7 @@ ActionResult JumpDriveCommand::go ( const Context& context )
 
    Vehicle* unit = getUnit();
    
-   if ( !avail( unit ))
+   if ( !available( unit ).ready() )
       return ActionResult( 22600 );
    
    if ( !fieldReachable( destination ))
