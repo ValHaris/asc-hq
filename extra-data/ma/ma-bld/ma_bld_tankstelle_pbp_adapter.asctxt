@@ -1,0 +1,5 @@
+Techadapter {
+   ; Tankstelle
+   Name = B22921
+   TechnologiesRequired = 22000
+} TechAdapter

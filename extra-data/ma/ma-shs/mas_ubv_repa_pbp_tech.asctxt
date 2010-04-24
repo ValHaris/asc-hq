@@ -1,10 +1,10 @@
 technology {
-   Name = Versorgungs-U-B
+   Name = UBV Repa
    infotext = 
    id = 22714
    RelatedUnitID = 22714
    parent = 22000
-   researchpoints *= 9
-   techlevel = 2
-   TechnologiesRequired = 22000 22002 22014 22712
+   researchpoints *= 14
+   techlevel = 3
+   TechnologiesRequired = 22000 22003 22014 22712
 } Technology

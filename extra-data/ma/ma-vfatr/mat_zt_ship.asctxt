@@ -14,8 +14,8 @@ VehicleType {
 
    transportation { 
       MaxLoadableUnits = 2
-      MaxLoadableUnitSize = 12000
-      MaxLoadableMass = 12000
+      MaxLoadableUnitSize = 4000
+      MaxLoadableMass = 4000
       CategoriesNOT = trooper light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle light_aircraft medium_aircraft heavy_aircraft building|turret|object helicopter hoovercraft default
       EntranceSystemNum = 1
       EntranceSystem0 ->* VehicleType.GrIO

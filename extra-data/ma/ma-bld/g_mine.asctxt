@@ -1,0 +1,69 @@
+BuildingType { 
+   Name = Mining Station
+   parent = 499 498
+   
+   Transportation ->* BuildingType.Esmall
+
+   ConstructionStages = 1
+   Weather = dry
+   Fields = A1
+   UseGFXpics = false
+   Pictures { 
+      dry = g_mine.pcx
+      few_snow = g_mine.pcx
+      much_snow = g_mine.pcx
+      snow_and_ice = g_mine.pcx
+   } Pictures
+;   RubbleObjects = false
+   RubbleObjects = true
+   rubble {
+      A1 = 76
+   } rubble
+   Entry = A1
+   ID = 22901
+   Armor = 600
+   View = 10
+   Jaming = 0
+   Functions = Mining_Station NoObjectChaining
+   Techlevel = 0
+   TerrainAccess { 
+      terrain_any = Lowland road runway Hard_sand Soft_sand hillside mountains high_mountains very_shallow_water  
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = lava river water deep_water
+   } TerrainAccess
+   MaxResearch = 0
+   ConstructionCost { 
+      Energy = 0
+      Material = 5000
+      fuel = 5000
+   } ConstructionCost
+   MaxResourceProduction { 
+      Energy = -300
+      Material = 1000
+      fuel = 0
+   } MaxResourceProduction
+   defaultProduction {
+      energy = -300
+      material = 1000
+      fuel = 
+   } defaultProduction
+   ResourceExtractionEfficiency {
+      Material = 2000
+      Fuel = 2000
+   } ResourceExtractionEfficiency
+   StorageCapacity { 
+      BImode { 
+         Energy = 0
+         Material = 2000
+         fuel = 0
+      } BImode
+      ASCmode { 
+         Energy = 0
+         Material = 2000
+         fuel = 0
+      } ASCmode
+   } StorageCapacity
+   Height = ground_level 
+   ExternalLoading =
+} BuildingType

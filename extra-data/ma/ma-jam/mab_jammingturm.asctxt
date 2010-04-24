@@ -7,7 +7,7 @@ VehicleType {
    GuideSortHelp += 0 0 0 0 21 0 0 0 0 0
    Picture = mab_jammingturm.pcx
 
-   Armor -= 250
+   Armor -= 50
    Jamming += 5
    Features += satelliteview
 

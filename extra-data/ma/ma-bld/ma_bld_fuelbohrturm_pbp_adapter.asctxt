@@ -1,0 +1,5 @@
+Techadapter {
+   ; Ölförderturm
+   Name = B22902
+   TechnologiesRequired = 22000
+} TechAdapter

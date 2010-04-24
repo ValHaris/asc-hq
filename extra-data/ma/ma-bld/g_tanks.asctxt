@@ -1,0 +1,54 @@
+BuildingType { 
+   Name = Lagertanks
+   parent = 499 498
+   
+   Transportation ->* BuildingType.Esmall
+
+   ConstructionStages = 1
+   Weather = dry few_snow much_snow snow_and_ice
+   Fields = A1 
+  UseGFXpics = false
+   Pictures { 
+      dry = g_tanks.pcx
+      few_snow = g_tanks.pcx
+      much_snow = g_tanks.pcx
+      snow_and_ice = g_tanks.pcx
+   } Pictures
+;   RubbleObjects = false
+   RubbleObjects = true
+   rubble {
+      A1 = 76
+   } rubble
+   Entry = A1
+   ID = 22922
+   Armor = 600
+   View = 15
+   Jaming = 0
+   Functions = NoObjectChaining
+   Techlevel = 0
+   MaxResearch = 0
+   ConstructionCost { 
+      Energy = 0
+      Material = 5000
+      fuel = 4000
+   } ConstructionCost
+   MaxResourceProduction { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } MaxResourceProduction
+   StorageCapacity { 
+      BImode { 
+         Energy = 0
+         Material = 0
+         fuel = 50000
+      } BImode
+      ASCmode { 
+         Energy = 0
+         Material = 0
+         fuel = 50000
+      } ASCmode
+   } StorageCapacity
+   Height = ground_level 
+   ExternalLoading =
+} BuildingType

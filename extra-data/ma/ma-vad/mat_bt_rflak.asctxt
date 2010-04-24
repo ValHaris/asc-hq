@@ -23,7 +23,7 @@ VehicleType {
       Weapon1.targets = medium_level_flight high_level_flight
       Weapon1.HitAccuracy.u2 = 100
       Weapon1.HitAccuracy.u3 = 90 
-      Weapon1.MaxRange = 20
+      Weapon1.MaxRange = 30
       Weapon1.Ammo = 12
       Weapon1.ReactionFireShots = 1
 

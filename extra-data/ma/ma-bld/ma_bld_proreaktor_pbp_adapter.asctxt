@@ -1,0 +1,5 @@
+Techadapter {
+   ; ProReaktor
+   Name = B22912
+   TechnologiesRequired = 22000
+} TechAdapter

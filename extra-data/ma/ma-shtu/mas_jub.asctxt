@@ -4,9 +4,11 @@ VehicleType {
    ID = 22705
 
    Description = submarine
-   Infotext = [Standart Jagd-U-Boot]
    Picture = mas_jub.pcx
    WreckageObject = 434
+   Infotext = [Das JUB ist das Standardjagduboot der Malaner. Ausgerüstet mit außerordentlich explosiven Torpedos sowie einem starken Antrieb ist es eines der gefährlichsten U-Boote und bei allen Völkern gefürchtet. Die Spezialpanzerung ist dazu um einiges widerstandsfähiger als die Panzerung bei vergleichbaren Booten anderer Rassen. Zusätzlich verfügt das JUB über einen Unterwasserspeziallaser, mit welchem es beispielsweise Taucher auch auf größere Entfernung sehr effektiv bekämpfen kann. Dies stellt normalerweise ein großes Problem für U-Boote da. Hier wurde eine geniale Lösung konstruiert. Der Laser arbeitet auf der Basis von blauem Licht, welches den von Wasser üblicherweise am wenigsten absorbierten blauen Lichtbereich nutzt, um ein Verdampfen des Wassers zu verhindern und die geballte Energie des Lasers am Ziel wirksam werden zu lassen. Die für den Laser benutzte Substanz ist geheim und eines der bestgehüteten Geheimnisse des malanischen Flottenbaus.
+Aufgrund seiner Parameter ist das JUB universell einsetzbar und daher bei den malanischen Völkern in großer Zahl in Gebrauch.
+   ]
 
    Armor += 100
 

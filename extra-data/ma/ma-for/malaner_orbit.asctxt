@@ -1,0 +1,16 @@
+ Technology {
+   name = "Orbit"
+   infotext = "Advanced technology"
+   id = 22018
+   researchpoints = 1000
+   
+   techlevel = 0
+   
+   requireEvent = false
+   
+   TechnologiesRequired = 22000 22013
+   
+   BlockingTechnologies = 
+   
+   RequireAllListedTechnologies = true
+} Technology 

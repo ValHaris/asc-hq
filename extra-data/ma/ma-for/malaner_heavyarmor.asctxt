@@ -1,0 +1,16 @@
+ Technology {
+   name = "Heavy Armor"
+   infotext = "Advanced technology"
+   id = 22026
+   researchpoints = 1000
+   
+   techlevel = 0
+   
+   requireEvent = false
+   
+   TechnologiesRequired = 22000
+   
+   BlockingTechnologies = 
+   
+   RequireAllListedTechnologies = true
+} Technology 

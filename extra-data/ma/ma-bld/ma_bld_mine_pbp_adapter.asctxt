@@ -1,0 +1,5 @@
+Techadapter {
+   ; Mine
+   Name = B22901
+   TechnologiesRequired = 22000
+} TechAdapter

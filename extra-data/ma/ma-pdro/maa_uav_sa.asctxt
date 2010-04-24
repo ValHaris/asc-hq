@@ -1,6 +1,6 @@
 VehicleType { 
    Name = UAV SA
-   parent = 425
+   parent = 22995
    ID = 22202
 
    Description = Jagddrohne

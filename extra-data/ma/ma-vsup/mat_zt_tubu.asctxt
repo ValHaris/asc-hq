@@ -1,21 +1,21 @@
 VehicleType { 
-   Name = ZT Turret
+   Name = ZT TuBu
    parent = 400 401 22997
    ID = 22831
    
    Description = Turretmontage
    Infotext = [HitecTurretbauer]
-   Picture = mat_zt_tubu.pcx
+   Picture = mat_zt_tubu.png
 
    Armor = 400
    Weight = 200
    Jamming = 0
    view = 30
-   Features = construct_vehicles construct_specific_buildings
+   Features = construct_vehicles construct_specific_buildings externalFuelTransfer externalMaterialTransfer externalAmmoTransfer externalRepair
 
    Tank { 
-      Material = 60000
-      fuel = 60000
+      Material = 75000
+      fuel = 75000
    } Tank
    FuelConsumption = 25
    Movement = 0 0 0 80 0 0 0 0 
@@ -25,7 +25,7 @@ VehicleType {
    Construction { 
       Buildings = 26
       Vehicles = 22618 22603 22606 22617 22608 22607 22615 22610
-      Objects = 
+      Objects = 44 2093 2098 2096
       ObjectsRemovable = 
       ObjectGroupsRemovable = 
    } Construction
@@ -38,6 +38,6 @@ VehicleType {
       Weapon0.Ammo = 40
       Weapon1 ->* VehicleType.AmmoCannon 
       Weapon1.Ammo = 100
-      Weapon2 ->* VehicleType.ServiceGround
+      Weapon2 ->* VehicleType.ServiceTurret
     } Weapons
 } VehicleType

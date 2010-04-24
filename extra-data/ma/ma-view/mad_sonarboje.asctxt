@@ -4,7 +4,7 @@ VehicleType {
    ID = 22616
    Description = Sonarboje
    Infotext = [ Diese Boje wird unterhalb der Wasseroberflaeche installiert und kann UBoote sowie Schiffe per Sonar lokalisieren. Sie verfuegt ueber keine Verteidigungsmechanismen und sollte daher so tief wie moeglich installiert werden.]
-   Picture = mad_sonarboje.pcx
+   Picture = mad_sonarboje.png
 
    Jamming = 21
    Height = submerged floating

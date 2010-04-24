@@ -1,0 +1,5 @@
+Techadapter {
+   Name = o2108
+   ;Bezeichnung der verknüpften Technologie: Mushrooms 1
+   TechnologiesRequired = 100006 22003
+} TechAdapter

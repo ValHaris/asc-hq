@@ -7,7 +7,7 @@ VehicleType {
               armed, they make a decent pace and aren't as expensive to build
               as Combat Tanks. Light tanks are well suited for strike force
               support.]
-   Picture = mav_lp.pcx
+   Picture = mav_lp.png
 
    Movement -= 0 0 0 11 0 0 0 0
     

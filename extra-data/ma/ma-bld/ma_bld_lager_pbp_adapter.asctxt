@@ -1,0 +1,5 @@
+Techadapter {
+   ; Lager
+   Name = B22923
+   TechnologiesRequired = 22000
+} TechAdapter

@@ -1,0 +1,5 @@
+Techadapter {
+   ; Depot
+   Name = B22920
+   TechnologiesRequired = 22000
+} TechAdapter

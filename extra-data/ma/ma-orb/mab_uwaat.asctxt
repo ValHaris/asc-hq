@@ -103,13 +103,13 @@ VehicleType {
       heightdelta = 1
       dist = 0
       startheight = submerged deep_submerged
-      canattack = false
+      canattack = true
    } HeightChangeMethod0
    HeightChangeMethod1 {
       movecost = 10
       heightdelta = -1
       dist = 0
       startheight = floating submerged
-      canattack = false
+      canattack = true
    } HeightChangeMethod1
 } VehicleType

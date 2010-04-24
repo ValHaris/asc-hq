@@ -1,6 +1,0 @@
-Techadapter {
-   Name = o22151
-   ;Bezeichnung der verknüpften Technologie: 
-   TechnologiesRequired = 22000
-   RequireAllListedTechnologies = false
-} TechAdapter

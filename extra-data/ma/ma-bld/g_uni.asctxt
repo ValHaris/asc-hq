@@ -1,0 +1,65 @@
+BuildingType { 
+   Name = research institute
+   ID = 22915
+   parent = 499 498
+   
+   Transportation ->* BuildingType.Esmall
+   ConstructionStages = 1
+   Weather = dry
+   Fields = A3 A4 B1 B3 
+   UseGFXpics = false
+   Pictures { 
+      dry = g_Uni.pcx
+   } Pictures
+;   RubbleObjects = false
+   RubbleObjects = true
+   rubble {
+      A3 = 76
+      A4 = 77
+      B1 = 76
+      B3 = 78
+   } rubble
+   Entry = B3
+   Armor = 800
+   View = 20
+   Jaming = 0
+   Functions = Research
+   Techlevel = 0
+   TerrainAccess { 
+      terrain_any = Lowland Hard_sand Soft_sand Small_rocks very_shallow_water 
+      terrain_all = 
+      terrain_not = swamp
+      terrain_kill = water deep_water lava river
+   } TerrainAccess
+   MaxResearch = 100
+   NominalResearch = 40
+   ConstructionCost { 
+      Energy = 0
+      Material = 20000
+      fuel = 20000
+   } ConstructionCost
+   MaxResourceProduction { 
+      Energy = -800
+      Material = -800
+      fuel = -800
+   } MaxResourceProduction
+   defaultProduction {
+      energy = -800
+      material = -800
+      fuel = -800
+   } defaultProduction
+   StorageCapacity { 
+      BImode { 
+         Energy = 100
+         Material = 100
+         fuel = 100
+      } BImode
+      ASCmode { 
+         Energy = 0
+         Material = 0
+         fuel = 0
+      } ASCmode
+   } StorageCapacity
+   Height = ground_level 
+   ExternalLoading = 
+} BuildingType

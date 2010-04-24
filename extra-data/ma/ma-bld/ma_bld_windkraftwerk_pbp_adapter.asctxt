@@ -1,0 +1,5 @@
+Techadapter {
+   ; Windkraftwerk
+   Name = B22904
+   TechnologiesRequired = 22000
+} TechAdapter

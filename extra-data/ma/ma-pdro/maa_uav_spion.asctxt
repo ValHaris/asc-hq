@@ -1,6 +1,6 @@
 VehicleType { 
    Name = UAV SPION
-   parent = 425
+   parent = 22995
    ID = 22208
    Description = Spionagedrohne
    Infotext = [Unbemannte Kurzstreckenradardrohne. Dieses unbewaffnete Drohnenmodell dient ausschliesslich der Aufklaerung und kann etwas länger in der Luft bleiben als die anderen Modelle, aber wegen der schlechten Panzerung ist ein Aufenthalt in der Luft sehr riskant.]

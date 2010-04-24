@@ -1,22 +1,22 @@
 VehicleType { 
-   Name = BT SG
-   parent = 22997 291 
+   Name = BTM
+   parent = 22997 292 
    ID = 22803
 
    Description = assault train
-   Infotext = [Schwere Kanone noetig? Der Sturmgeschuetzzug hat die staerkste Landkanone, aber dafuer nur maessige Panzerung.]
    Picture = mat_bt_sg.pcx
+   Infotext = [Der BTM ist so etwas wie der Standardkampfpanzerzug der Malaner. Er verfügt über akzeptable Geschwindigkeits- sowie Panzerungswerte sowie ein recht weitreichendes Hauptgeschütz. Dazu kommen Luftabwehr-MGs und leichte MGs gegen Infanterie. Seine Panzerung hält auch stärkerem Beschuß stand, was für seine universelle Einsetzbarkeit wichtig ist. Wenn der Zug steht und alle Waffen aktive Feuerbereitschaft hergestellt haben, läßt er sich auch sehr gut zur Verteidigung verwenden.]
 
    Armor += 100
    Movement = 0 0 0 100 0 0 0 0 
    Weight = 150
 
    Weapons { 
-      Number = 2
-      Weapon0.MaxRange = 20
+      Number = 3
+      Weapon0.MaxRange = 30
       Weapon0.Ammo = 5
       Weapon0.Punch@MinRange += 20
+      Weapon0.Punch@MaxRange -= 10
 
-      Weapon1 ->* VehicleType.Weapons.Weapon0 
    } Weapons
 } VehicleType

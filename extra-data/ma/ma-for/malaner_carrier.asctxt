@@ -1,0 +1,16 @@
+ Technology {
+   name = "Carrier"
+   infotext = "Advanced technology"
+   id = 22022
+   researchpoints = 500
+   
+   techlevel = 0
+   
+   requireEvent = false
+   
+   TechnologiesRequired = 22000
+   
+   BlockingTechnologies = 
+   
+   RequireAllListedTechnologies = true
+} Technology 

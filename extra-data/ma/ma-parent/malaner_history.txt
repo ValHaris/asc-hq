@@ -3,7 +3,80 @@ Grafik: Marla, GAMER
 InfoText: Marla
 InfoImage: GAMER
 Spezifikationen: GAMER, Marla
-
+________________________
+-InfoText: Sest LiBo
+________________________
+Beta-10-9
+-MATU RF +200 Armor
+-DSEST, -MAM, 4Felder WRange vs.Orbit
+-Kanonenturm + 200 Armor
+-ZS Tubu, Turretservice
+-ZT Turret, Turretservice
+________________________
+03.04.2010 z82 (GAMER)
+Beta-10-05
+-Grafikupdate: Panter
+-InfoText: UBS SMR
+-Pionier, Architekt und ZS TuBu bauen neuen light Turret
+Beta-10-04
+-Grafikupdate Löwe
+-IntoText: MUB SR, MUB A
+-UK3, kein Self_repair
+-SEST TR , Bojenabwurf
+-Raumsprinter kein Jamming mehr
+-Korrektur Ladegewicht ZT SHIP auf 4000
+-UBV Trans Gewicht 3500
+________________________
+28.02.2010 z81 (GAMER)
+-Sest TR +20 Move
+-Grafikupdate Sonarboje
+________________________
+23.01.2010 z80 (GAMER)
+Beta-10-01
+-InfoText: SEST AAL, SEST AAM, SEST AAH, JUb, Jub-U/s
+Beta-09-19
+-UAV SN, Waffenbugfix
+-SOlarGebäude orbit, betretbar
+________________________
+12.12.2009 z79 (GAMER)
+Beta-09-18
+-Infotext = BTL, BTM, FATS
+-OAS-OA/LA = -3 move
+-ReMu , MG zusammengelegt
+-InfoText: BT ASG, BTM
+Beta-09-17
+-MUB-A Torpedo RW=20 1xRF
+________________________
+08.11.2009 z78 (GAMER)
+Beta-09-15
+-Raumschiffe +7000 Kapazität
+________________________
+03.10.2009 z77 (GAMER)
+-Transportsenkrechtstarter = SEST Trans
+________________________
+01.08.2009 z75-2 (GAMER)
+-ExternalAmmoTransfer Bugfix = ReMu, Versorger
+-Hafen, Oilplattform Verlinkung gefixt 
+______________________
+25.07.2009 Z75 (GAMER)
+-BTM Waffenbugfix
+Beta-09-10
+-Hafen angepasst
+-Architekt baut, Lavawall und Stealthturret
+-TuBu 75k Tank
+Beta-09-09
+-BT SG => BTM 3 Felder Waffenreichweite
+-diverse Forschungsupdates
+-ART ZD , -1 Feld Waffen
+-Railgun, maxRange 180
+-TuBu 65k Tank
+-Drohnen, highChange bugfix
+-AAL Waffe3 + high_level
+-Matador MaxLoadableMass = 240
+-Sattra + interne Reparatur
+-Uwaat + Attack after HC
+-BT RFLAK + 1 Feld Höhenfliegerabwehr
+-
 __________________
 20.06.2009 (GAMER) [incl. Beta-09-08+07
 -MUB-A , -1 RF

@@ -1,0 +1,5 @@
+Techadapter {
+   ; Uni
+   Name = B22915
+   TechnologiesRequired = 22000
+} TechAdapter

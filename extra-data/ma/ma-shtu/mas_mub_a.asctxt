@@ -4,9 +4,13 @@ VehicleType {
    ID = 22700
 
    Description = Anti-Air-U-Boot
-   Infotext = []
    Picture = mas_mub_a.pcx
    WreckageObject = 435
+   Infotext = [Das MUB A ist die wichtigste Einheit für die Luftverteidigung der malanischen Flotte. Ausgestattet mit mehreren hochmodernen und sehr leistungsfähigen Laserbatterien kann es anfliegende Feindeinheiten bis in die höchsten Luftschichten schon auf große Entfernung wirksam bekämpfen. Dies bedingt allerdings eine sehr genaue Ausrichtung der Laser, was einen Angriff während der Fahrt unmöglich macht. Andererseits erlaubt die Lasertechnik sehr wohl eine schnelle Fahrtaufnahme nach dem Waffeneinsatz, während die Energiespeicher der Laser aufgeladen werden.
+Eine Besonderheit der verwendeten Laserbatterien ist die Nutzung blauen Lichts, welche eines der größten Geheimnisse der malanischen Wissenschaft darstellt. Dies ermöglicht den Beschuß von tief- und mittelhoch fliegenden Flugzeugen von unterhalb der Wasseroberfläche, wo das Schiff für feindliche Kanonen unerreichbar ist. So kann der effektive Schutz der eigenen Flotte vor feindlichen Torpedobombern jederzeit gewährleistet werden.
+Die für die Waffen benötigten Energiemengen sind enorm, weshalb sowohl die Treibstofftanks als auch die Speichereinheiten sehr voluminös dimensioniert wurden und einen großen Teil des Rumpfes einnehmen. Obwohl das MUB A wesentlich größer als ein Jagd-U-Boot ist, beschränkt sich die Sekundärbewaffnung daher auf einige Torpedos zur Verteidigung. Die Spezialpanzerung absorbiert jedoch auch schwerere Treffer und sorgt dafür, daß das MUB-A auch in größeren Gefechten nicht zur Achillesferse der eigenen Flotte werden kann. Der starke Antrieb ermöglicht es ihm, mit schnelleren Einheiten mitzuhalten und so als Begleitschutz von U-Boot-Rudeln zu fungieren.
+Es handelt sich alles in allem um eine sehr gelungene Konstruktion, die für jeden Flottenverband unersetzlich und daher fast immer in größerer Anzahl vorhanden ist.
+]
 
    Features += MoveDuringReactionFire move_after_attack
    Armor += 300
@@ -24,8 +28,8 @@ VehicleType {
       
       Weapon0 ->* VehicleType.UTorp 
       Weapon0.Ammo = 4
-      Weapon0.MaxRange = 30
-      Weapon0.ReactionFireShots = 0
+      Weapon0.MaxRange = 20
+      Weapon0.ReactionFireShots = 1
       
       Weapon1 { 
          Type = laser shootable

@@ -1,0 +1,31 @@
+VehicleType { 
+   Name = DROHNE
+   parent = 400 401 402 413 495
+   ID = 22995
+   abstract = true
+   
+   Description = Drohne
+   Infotext = []
+   GuideSortHelp = 0 0 0 0 0 0 0 0 0 0
+
+   Armor = 220
+   View = 30
+   wreckageobject = 400 300
+   Features += paratrooper no_midair_refuel 
+   Weight = 20
+
+   Height = ground_level low_level_flight medium_level_flight high_level_flight 
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 3500
+   } Tank
+   FuelConsumption = 15
+   Movement = 0 0 0 60 160 160 160 0 
+
+   Weapons { 
+      Initiative = 0
+      Number = 0
+   } Weapons
+
+} VehicleType

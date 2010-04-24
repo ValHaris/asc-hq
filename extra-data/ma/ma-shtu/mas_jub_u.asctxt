@@ -2,10 +2,13 @@ VehicleType {
    Name = JUB U
    parent = 364
    ID = 22713
+
    Description = U-Boot Jaeger
-   Infotext = [Das U-Boot zur Bekaempfung getauchter Zieler]
    Picture = mas_jub_u.pcx
    WreckageObject = 434
+   Infotext = [Beim JUB U handelt es sich um eine Weiterentwicklung des JUB S. Es verfügt ebenfalls über 2 verschiedene Torpedowaffen. Im Gegensatz zum JUB S sind die hier verwendeten Spezialtorpedos nur für den U-Boot-Kampf geeignet. Sie verfügen über eine ähnliche Form und Struktur wie die Torpedos des JUB S. Allerdings ist die Sonarsteuerung weiterentwickelt, um auch weit entfernte Ziele sicher anvisieren zu können. Bedauerlicherweise verhindern Reflexionen an der Wasseroberfläche aber die Bekämpfung schwimmender Ziele, so daß der Einsatz nur gegen getauchte Boote sinnvoll ist. Für den Kampf gegen Schiffe kommen Standardtorpedos zum Einsatz. Hier ist die recht hohe Geschwindigkeit des JUB U ein großer Pluspunkt. Sie wurde durch Verbesserungen des Rumpfdesigns gegenüber dem JUB S ermöglicht und kommt nahe an die des JUB heran. Daß das JUB trotzdem nicht unentbehrlich ist, liegt an der Ineffizienz der verwendeten Torpedos gegen Taucher, die in großer Zahl auch einem Jagd-U-Boot gefährlich werden können.
+In heutigen Seeschlachten ist das JUB U unentbehrlich, um gegnerische U-Boote auf Distanz zu halten und wirkungsvoll bekämpfen zu können und die eigene Flotte zu schützen.
+   ]
 
    Weapons { 
       Initiative = 0

@@ -8,6 +8,7 @@ VehicleType {
    Picture = mat_matador.pcx
 
    Transportation ->* VehicleType.TransHeliTrain 
+   Transportation.MaxLoadableMass = 240
    Transportation.MaxLoadableUnits = 4
 
    Features = Repair_Facility MoveDuringReactionFire
@@ -25,7 +26,6 @@ VehicleType {
    Weapons { 
       Number = 5
       Weapon0 ->* VehicleType.Flak
-      Weapon0.Type = cannon ammo_transfer shootable 
       Weapon0.targets =  low_level_flight medium_level_flight high_level_flight 
       Weapon0.MaxRange = 20
       Weapon0.Ammo = 60
@@ -41,7 +41,6 @@ VehicleType {
       Weapon1.Punch@MinRange = 80
 
       Weapon2 ->* VehicleType.Def_MG
-      Weapon2.Type = machinegun ammo_transfer shootable 
       Weapon2.Ammo = 40
       Weapon3 ->* VehicleType.AmmoTorp 
       Weapon3.Ammo = 30

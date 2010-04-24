@@ -1,6 +1,6 @@
 VehicleType { 
    Name = UAV SN
-   parent = 425
+   parent = 22995
    ID = 22207
 
    Description = Jagddrohne
@@ -10,7 +10,7 @@ VehicleType {
 
    TerrainAccess.terrain_any =
    Tank.fuel = 500
-   Tank.fuel = 80
+   Tank.material = 80
    FuelConsumption = 10
 
    Movement -= 0 0 0 0 20 20 20 0 
@@ -29,6 +29,7 @@ VehicleType {
       Weapon0.Type = laser shootable 
       Weapon0.LaserRechargeCost.material = 40
       Weapon0.LaserRechargeCost.fuel = 20
-      Weapon0.Ammo = 1
+      Weapon0.LaserRechargeRate = 1
+      Weapon0.Ammo = 2
    } Weapons
 } VehicleType

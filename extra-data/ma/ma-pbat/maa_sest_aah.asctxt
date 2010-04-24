@@ -2,9 +2,13 @@ VehicleType {
    Name = SEST AAH
    parent = 22998 272
    ID = 22502
-   Description = hvy VTO
-   Infotext = [Dieser schwere Senkrechtstarter ist für den Luftkampf und Satelittenabwehr, aber primaer Satellitenabwehr.]
+   Description = schwerer Abfangjaeger
    Picture = maa_sest_aah.pcx
+   Infotext = [Beim SEST AAH handelt es sich um eine Weiterentwicklung des AAM. Ein Nachteil der malanischen Senkrechtstarter ist, daß Sie aufgrund der Tragflächenform und –größe nicht in der Lage sind, hohe Luftschichten zu erreichen. So war es auch mit den besten Kanonen nicht möglich, Satelliten effektiv anzugreifen. Dies stellte ein immer größeres Problem dar. Die Lösung brachte eine revolutionäre Miniaturisierung in der Lasertechnik. Normalerweise wird für die Erzeugung eines energiereichen Laserstrahls eine starke und entsprechend schwere Energiequelle benötigt. Entsprechende Waffen sind daher sehr groß und schwer. Malanische Wissenschaftler haben dann allerdings einen Kristall entdeckt, welcher bei entsprechender Anregung den Strahl um das mehr als Vierhundertfache verstärkt. Die benötigte Energie wird hierbei vom Kristall selbst freigesetzt, was diesen dabei zerstört. Es handelt sich vom Prinzip her um einen „Einweglaser“. Die Struktur der Kristalle ist ein streng gehütetes Geheinis, sie müssen aber strikt voneinander getrennt gelagert werden. Von den entsprechenden Lagerboxen ist nur bekannt, daß Sie recht dick und schwer sind, was verschiedene Schlußfolgerungen über die Kristalle offen läßt.
+Jedenfalls war es nun möglich, mit einem sehr kleinen und leichten Laser eine AntiSatellitenwaffe zu konstruieren. Diese ist beim AAH im oberen Teil des Rumpfes installiert. Aufgrund der Waffenkonstruktion ist der Munitionsvorrat allerdings begrenzt. Eine Zuladung der Kristalle erfolgt immer unter großen Vorsichtsmaßnahmen und dauert relativ lange, was einen der größten Nachteile dieser Waffe darstellt.
+Erwähnenswert ist dabei noch, daß das kleine Radar des AAH selbst keine Satelliten orten kann. Hier ist er auf die Daten entsprechender Aufklärungseinheiten angewiesen.
+Zusätzlich ist der AAH noch mit zwei flexibel einsetzbaren, hocheffektiven Bordkanonen ausgerüstet, so daß er auch als Jäger einsetzbar ist. Die notwendige Gewichtsbeschränkung sorgt allerdings dafür, daß auch hier nur ein geringer Munitionsvorrat mitgerführt werden kann.
+Um weiteres Gewicht zu sparen, wurde der AAH mit einer sehr leichten Spezialpanzerung versehen, die zwar die Kosen in die Höhe treibt, ihn aber sehr robust gegen feindlichen Beschuß macht. Er stellt bis heute neben der Drohne UAV OA das einzig brauchbare echte Antisatellitenflugzeug der Malaner dar.]
 
    Tank.Material = 10
    Tank.Fuel += 1000

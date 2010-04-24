@@ -1,0 +1,5 @@
+Techadapter {
+   ; klFabrik
+   Name = B22925
+   TechnologiesRequired = 22000
+} TechAdapter

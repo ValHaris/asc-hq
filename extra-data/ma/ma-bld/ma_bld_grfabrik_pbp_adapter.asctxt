@@ -1,0 +1,5 @@
+Techadapter {
+   ; grFabrik
+   Name = B22926
+   TechnologiesRequired = 22000
+} TechAdapter

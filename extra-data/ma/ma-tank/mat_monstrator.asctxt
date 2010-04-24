@@ -6,6 +6,8 @@ VehicleType {
    Description = Bunkerzug
    Infotext = [Die Festung auf Schienen, langsam, aber exellent bewaffnet - die maechtigste Landkampfeinheit der Malaner]
    Picture = mat_monstrator.pcx
+   InfoImage = mat_monstrator.jpg
+   InfoImageSmall = mat_monstrator_k.png
 
    Transportation ->* VehicleType.TransLowTrooper3
 

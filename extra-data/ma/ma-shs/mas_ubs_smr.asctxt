@@ -2,9 +2,13 @@ VehicleType {
    Name = UBS SMR
    parent = 22996 352
    ID = 22717
+
    Description = Minenraeum-U-Boot
-   Infotext = []
    Picture = mas_ubs_smr.pcx
+   Infotext = [Beim UBS SMR handelt es sich um ein kleines, aber wichtiges Mitglied der malanischen Flotte. Es ist einzig und allein dafür konzipiert, feindliche Minen aufzuspüren und kontrolliert zur Detonation zu bringen. Zu diesem Zweck verfügt es über Sensoren, welche die Minen sowohl über als auch unter Wasser orten. Diese werden dann mit kleinen Geschossen kontrolliert zur Explosion gebracht.
+Bewaffnet ist das Boot noch mit einem Torpedorohr, aufgrund der geringen Größe allerdings nur mit geringem Munitionsvorrat ausgestattet. Da das Minenräumen auf der Wasseroberfläche etwas einfacher ist, wurde es zusätzlich mit einer leichten Flugabwehrkanone ausgerüstet, was ihm einen gewissen Schutz vor angreifenden Bombern gibt. Da die Panzerung ingesamt nicht allzu stark ist, sollte das Boot trotzdem vor massiven Angriffen geschützt operieren.
+Keine Flotte sollte ohne das UBS SMR auslaufen, sonst kann es schnell passieren, daß feindliche Minenfelder zu unüberwindlichen Hindernissen werden.
+]
 
    Armor -= 100
    View -= 10

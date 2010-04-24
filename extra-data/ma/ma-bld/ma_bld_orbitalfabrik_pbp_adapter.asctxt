@@ -1,0 +1,5 @@
+Techadapter {
+   ; Orbitalfabrik
+   Name = B22940
+   TechnologiesRequired = 22000
+} TechAdapter

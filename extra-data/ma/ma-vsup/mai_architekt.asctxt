@@ -5,7 +5,7 @@ VehicleType {
 
    Description = constructing unit
    Infotext = [Die wichtigste Baueinheit der Malaner - baut alle Gebaeude, viele Turrets  und Turretfoundations]
-   Picture = mai_Architekt.pcx
+   Picture = mai_architekt.png
 
    Armor = 220
    Weight = 5
@@ -21,7 +21,7 @@ VehicleType {
    Construction { 
       Buildings = 35-37 22901 22902 22903 22904 22905 22911 22912 22915 22920 22921 22922 22923 22925 22926 22928 22929 22930 22932 7 26 22033
       Vehicles = 22600 22601 22602 22603 22604 22605 22609 22614
-      Objects = 44 2098 22151
+      Objects = 10 44 2093 2096 2097 2098
       ObjectsRemovable = 22151 22152 22153 22154
       ObjectGroupsRemovable = 1 2 3 4 5 6 7 8 9 10 11 12 13
    } Construction

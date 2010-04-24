@@ -10,8 +10,9 @@ VehicleType {
       fuel = 9800
    } Tank
 
-   Weapons { 
+   Movement -= 0 0 0 0 0 0 0 3 
 
+   Weapons { 
       Weapon0 ->* VehicleType.type_laser 
       Weapon0.targets = low_level_flight medium_level_flight high_level_flight
       Weapon0.Ammo = 6

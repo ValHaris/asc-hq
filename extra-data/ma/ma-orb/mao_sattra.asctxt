@@ -3,7 +3,7 @@ VehicleType {
    parent = 231
    ID = 22101
    Description = spaceship
-   Infotext = [Dient dem Transport von Satelliten vom Boden in den Orbit oder innerhalb des Orbits]
+   Infotext = [Dient dem Transport von Satelliten vom Boden in den Orbit oder innerhalb des Orbits. Startet senkrecht mit Hilfe von Boostern.]
    Picture = mao_sattra.pcx
 
    Tank { 
@@ -11,7 +11,7 @@ VehicleType {
       Material = 20000
       fuel = 30000
    } Tank
-   Features = construct_specific_buildings ExternalMaterialTransfer ExternalFuelTransfer no_midair_refuel 
+   Features += construct_specific_buildings 
    Movement -= 0 0 0 0 30 20 20 10 
   
    Construction { 
@@ -19,7 +19,6 @@ VehicleType {
    } Construction
    
    Weapons { 
-      Initiative = 0
       Number = 3
       Weapon0 ->* VehicleType.Orbit_Cannon 
       Weapon0.Type = cannon ammo_transfer shootable 
@@ -31,26 +30,33 @@ VehicleType {
 
     } Weapons
   
-   HeightChangeMethodNum = 3
+   HeightChangeMethodNum = 4
    HeightChangeMethod0 {
-      movecost = 50
+      movecost = 60
       heightdelta = 4
       dist = 0
       startheight = ground_level
       canattack = true
    } HeightChangeMethod0
    HeightChangeMethod1 {
-      movecost = 10
+      movecost = 40
       heightdelta = -1
-      dist = 1
-      startheight = medium_level_flight high_level_flight orbit
+      dist = 2
+      startheight =  orbit
       canattack = true
    } HeightChangeMethod1
    HeightChangeMethod2 {
+      movecost = 25
+      heightdelta = -1
+      dist = 2
+      startheight = medium_level_flight high_level_flight
+      canattack = true
+   } HeightChangeMethod2
+   HeightChangeMethod3 {
       movecost = 40
       heightdelta = -1
       dist = 3
       startheight = low_level_flight
       canattack = true
-   } HeightChangeMethod2
+   } HeightChangeMethod3
 } VehicleType

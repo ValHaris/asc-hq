@@ -1,0 +1,16 @@
+ Technology {
+   name = "Senkrechtstarter"
+   infotext = "Advanced technology"
+   id = 22017
+   researchpoints = 500
+   
+   techlevel = 0
+   
+   requireEvent = false
+   
+   TechnologiesRequired = 22000 22013
+   
+   BlockingTechnologies = 
+   
+   RequireAllListedTechnologies = true
+} Technology 

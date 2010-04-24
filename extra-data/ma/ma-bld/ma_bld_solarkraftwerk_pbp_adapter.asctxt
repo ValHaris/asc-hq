@@ -1,0 +1,5 @@
+Techadapter {
+   ; Solarkraftwerk
+   Name = B22905
+   TechnologiesRequired = 22000
+} TechAdapter

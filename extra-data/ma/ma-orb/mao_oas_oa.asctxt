@@ -6,6 +6,7 @@ VehicleType {
    Infotext = [Orbitales Angriff System - Orbitalangriff]
    Picture = mao_oas_oa.pcx
 
+   Movement -= 0 0 0 0 0 0 0 3 
    Weapons { 
       Number = 2
       Weapon0 ->* VehicleType.type_cannon 

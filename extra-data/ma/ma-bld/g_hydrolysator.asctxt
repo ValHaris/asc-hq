@@ -1,0 +1,68 @@
+BuildingType { 
+   Name = Hydrolysator
+   parent = 499 498
+   
+   Transportation ->* BuildingType.Esmall
+
+   ConstructionStages = 1
+   Weather = dry few_snow much_snow snow_and_ice
+   Fields = A2 A3 A4 B3 
+   UseGFXpics = false
+   Pictures { 
+      dry = g_hydrolysator.pcx
+      few_snow = g_hydrolysator.pcx
+      much_snow = g_hydrolysator.pcx
+      snow_and_ice = g_hydrolysator.pcx
+   } Pictures
+;   RubbleObjects = false
+   RubbleObjects = true
+   rubble {
+      A2 = 76
+      A3 = 76
+      A4 = 77
+      B3 = 78
+   } rubble
+   Entry = A2
+   ID = 22911
+   Armor = 600
+   View = 10
+   Jaming = 0
+   Functions = matter_converter NoObjectChaining
+   Techlevel = 0
+   TerrainAccess { 
+      terrain_any = Lowland road runway Hard_sand Soft_sand  
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = lava river water deep_water
+   } TerrainAccess
+   MaxResearch = 0
+   ConstructionCost { 
+      Energy = 0
+      Material = 16000
+      fuel = 16000
+   } ConstructionCost
+   MaxResourceProduction { 
+      Energy = -6000
+      Material = 0
+      fuel = 2000
+   } MaxResourceProduction
+   defaultProduction {
+      energy = -6000
+      material = 0
+      fuel = 2000
+   } defaultProduction
+   StorageCapacity { 
+      BImode { 
+         Energy = 1000
+         Material = 20000
+         fuel = 1000
+      } BImode
+      ASCmode { 
+         Energy = 0
+         Material = 0
+         fuel = 2000
+      } ASCmode
+   } StorageCapacity
+   Height = ground_level 
+   ExternalLoading =
+} BuildingType

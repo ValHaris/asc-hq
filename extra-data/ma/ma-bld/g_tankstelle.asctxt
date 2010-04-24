@@ -1,0 +1,56 @@
+BuildingType { 
+   Name = Gas Station
+   ID = 22921
+   parent = 499 498
+   
+   Transportation ->* BuildingType.Esmall
+
+   Armor = 300
+   View = 10
+   Jaming = 0
+   ConstructionStages = 1
+   Weather = dry few_snow much_snow snow_and_ice
+   Fields = A1 
+   UseGFXpics = false
+   Pictures { 
+      dry = g_tankstelle.pcx
+      few_snow = g_tankstelle.pcx
+      much_snow = g_tankstelle.pcx
+      snow_and_ice = g_tankstelle.pcx
+   } Pictures
+   RubbleObjects = true
+   rubble {
+      A1 = 76
+   } rubble
+   Entry = A1
+   Functions = external_loading NoObjectChaining
+   Techlevel = 0
+   TerrainAccess { 
+      terrain_not = swamp forest
+   } TerrainAccess
+   MaxResearch = 0
+   ConstructionCost { 
+      Energy = 0
+      Material = 3000
+      fuel = 3000
+   } ConstructionCost
+   MaxResourceProduction { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } MaxResourceProduction
+   StorageCapacity { 
+      BImode { 
+         Energy = 0
+         Material = 100
+         fuel = 100
+      } BImode
+      ASCmode { 
+         Energy = 0
+         Material = 0
+         fuel = 0
+      } ASCmode
+   } StorageCapacity
+   Height = ground_level 
+   ExternalLoading = ground_level floating
+} BuildingType

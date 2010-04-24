@@ -10,7 +10,6 @@ VehicleType {
    Armor -= 100
    View -= 10
 
-   Features += self_repairing
    Movement += 55 55 0 0 0 0 0 0 
 
     Weapons { 

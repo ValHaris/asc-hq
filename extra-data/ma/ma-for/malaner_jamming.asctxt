@@ -1,0 +1,16 @@
+ Technology {
+   name = "Jamming"
+   infotext = "Advanced technology"
+   id = 22024
+   researchpoints = 1000
+   
+   techlevel = 0
+   
+   requireEvent = false
+   
+   TechnologiesRequired = 22000 22023
+   
+   BlockingTechnologies = 
+   
+   RequireAllListedTechnologies = true
+} Technology 

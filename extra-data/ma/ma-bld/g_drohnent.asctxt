@@ -1,0 +1,74 @@
+BuildingType {
+   Name = Drohnentower
+   parent =
+   ConstructionStages = 1
+   Weather = dry 
+   Fields = A1
+  UseGFXpics = false
+   Pictures { 
+      dry = g_Drohnent.pcx
+      few_snow = g_Drohnent.pcx
+      much_snow = g_Drohnent.pcx
+      snow_and_ice = g_Drohnent.pcx
+   } Pictures
+;   RubbleObjects = false
+   RubbleObjects = true
+   rubble {
+      A1 = 76
+   } rubble
+   Entry = A1
+   ID = 22929
+   Armor = 1000
+   View = 66
+   Jaming = 0
+   Transportation { 
+      MaxLoadableUnits = 3
+      MaxLoadableUnitSize = 5
+      MaxLoadableMass = 30
+      CategoriesNOT = default hoovercraft Light_tracked_vehicle Medium_tracked_vehicle Heavy_tracked_vehicle Light_wheeled_vehicle Medium_wheeled_vehicle Heavy_wheeled_vehicle Medium_ship Heavy_Ship Rail_vehicle building|turret|object trooper
+      EntranceSystemNum = 1
+      EntranceSystem0 {
+        Mode = out docking
+        UnitHeightAbs = low_level_flight ground_level floating
+        UnitHeightRel = -100
+        ContainerHeight = ground_level
+        CategoriesNOT = 
+        DockingHeightAbs =
+        DockingHeightRel = -100 
+        MoveCost = 40 
+      } EntranceSystem0
+   } Transportation
+   Features = Vehicle_Production Ammo_Production Recycling selfdestruct_at_conquer NoObjectChaining
+   Techlevel = 0
+ TerrainAccess { 
+      terrain_any = Very_shallow_water Lowland Hard_sand Soft_sand 
+      terrain_all = 
+      terrain_not = forest
+      terrain_kill = lava deep_water water river shallow_water
+   } TerrainAccess
+   MaxResearch = 0
+   ConstructionCost { 
+      Energy = 0
+      Material = 8000
+      fuel = 8000
+   } ConstructionCost
+   MaxResourceProduction { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } MaxResourceProduction
+   StorageCapacity { 
+      BImode { 
+         Energy = 10000
+         Material = 10000
+         fuel = 10000
+      } BImode
+      ASCmode { 
+         Energy = 0
+         Material = 0
+         fuel = 0
+      } ASCmode
+   } StorageCapacity
+   Height = ground_level
+   ExternalLoading =  
+} BuildingType

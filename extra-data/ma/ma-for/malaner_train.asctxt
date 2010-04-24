@@ -1,0 +1,16 @@
+ Technology {
+   name = "Train"
+   infotext = "Advanced technology"
+   id = 22012
+   researchpoints = 300
+   
+   techlevel = 0
+   
+   requireEvent = false
+   
+   TechnologiesRequired = 22000
+   
+   BlockingTechnologies = 
+   
+   RequireAllListedTechnologies = true
+} Technology 

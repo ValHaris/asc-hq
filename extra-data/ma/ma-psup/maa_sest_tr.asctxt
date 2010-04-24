@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = Transportsenkrechstarter
+   Name = SEST Trans
    parent = 22998 400 401 414
    ID = 22515
  
@@ -12,6 +12,9 @@ VehicleType {
    View = 40
    Transportation ->* VehicleType.TransHeli
    Transportation.MaxLoadableUnits = 6
+   Transportation.EntranceSystemNum = 4
+   Transportation.EntranceSystem3 ->* VehicleType.ParaDevice
+
 
    Tank { 
       Energy = 0
@@ -19,7 +22,7 @@ VehicleType {
       fuel = 7500
    } Tank
    FuelConsumption = 25
-   Movement = 0 0 0 40 120 120 0 0 
+   Movement = 0 0 0 40 130 140 0 0 
 
    Waitforattack = false
    Weapons { 

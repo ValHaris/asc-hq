@@ -4,9 +4,11 @@ VehicleType {
    ID = 22711
    
    Description = spionage submarine
-   Infotext = [Dieses U-Boot ist mit Senoren vollgestopft, was aber nur die minimale Standardbewaffnung erlaubt.]
    Picture = mas_mub_sr.pcx
    WreckageObject = 436
+   Infotext = [Beim MUB SR handelt es sich um ein sehr leistungsfähiges Aufklärungs-U-Boot. Es stellt die Augen und Ohren der malanischen Flotte dar, wenn der Einsatz fliegender Aufklärer nicht möglich oder zu gefährlich ist. Ausgestattet mit verschiedenen Sonar- und Radaranlagen ist es in der Lage, ein großes Gebiet von den Tiefen der Ozeane bis in die höchsten Luftschichten zu überwachen ohne aufzutauchen. Lediglich der Orbit bleibt der Besatzung dieses Schiffes verborgen.
+Der Rumpf ist ähnlich dem eines Schlacht-U-Bootes, was dem Schiff eine recht gute Panzerung verleiht. Der riesige Innenraum wird aber fast völlig von der Aufklärungstechnik in Beschlag genommen. So mußte auf die sonst übliche Bewaffnung verzichtet werden. Es stehen lediglich zwei Torpedorohre mit begrenzten Munitionsvorrat zur Verfügung. Diese ermöglichen einen Einsatz im Kampf gegen feindliche U-Boote. Dabei sollte der Kapitän jedoch immer die begrenzte Manövrierfähigkeit und Geschwindigkeit des MUB SR beachten.
+]
 
 
    Armor += 200

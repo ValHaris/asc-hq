@@ -8,7 +8,7 @@ VehicleType {
    Picture = mat_zs_ReMu.pcx
 
 
-   Features += ExternalRepair self_repairing
+   Features += ExternalRepair self_repairing ExternalAmmoTransfer
    SelfRepairRate = 20
    Armor -= 50
    Weight = 150
@@ -21,17 +21,15 @@ VehicleType {
    Movement += 0 0 0 20 0 0 0 0 
 
    Weapons { 
-      Initiative = 0
-      Number = 6
+      Number = 5
       Weapon0 ->* VehicleType.Def_MG
+      Weapon0.Ammo = 120
       Weapon1 ->* VehicleType.ServiceGround
-      Weapon2 ->* vehicleType.AmmoMG 
-      Weapon2.Ammo = 120
+      Weapon2 ->* VehicleType.AmmoBomb 
+      Weapon2.Ammo = 90
       Weapon3 ->* VehicleType.AmmoCannon 
       Weapon3.Ammo = 150
       Weapon4 ->* VehicleType.AmmoTorp 
       Weapon4.Ammo = 90
-      Weapon5 ->* VehicleType.AmmoBomb 
-      Weapon5.Ammo = 90
    } Weapons
 } VehicleType

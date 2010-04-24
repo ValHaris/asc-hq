@@ -8,7 +8,9 @@ VehicleType {
    Picture = mao_Raumk.pcx
 
    Armor = 600
+   Transportation.MaxLoadableMass += 7000
 
+   
   JumpDrive {
       terrain_any = Spaceport runway
       terrain_all = beacon

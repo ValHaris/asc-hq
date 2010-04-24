@@ -1,0 +1,34 @@
+BuildingType {
+   Name = Hafen
+   ID = 22930
+   parent = 16
+
+   ConstructionStages = 1
+   Weather = dry
+   Fields = A2
+   Entry = A2
+   UseGFXpics = false
+   Pictures { 
+      dry = ma_bld_hafen.pcx
+   } Pictures
+   RubbleObjects = true
+   rubble {
+      A2 = 76
+   } rubble
+   TerrainAccess { 
+      terrain_any = Shallow_water Water Very_shallow_water river 
+   } TerrainAccess
+
+   Armor = 1000
+   View = 20
+   Features = Vehicle_Production Ammo_Production Repair_Facility ExternalMaterialTransfer ExternalFuelTransfer ExternalAmmoTransfer recycling selfdestruct_at_conquer
+
+   StorageCapacity { 
+      ASCmode { 
+         Energy = 0
+         Material = 0
+         fuel = 0
+      } ASCmode
+   } StorageCapacity
+   Height = floating 
+} BuildingType

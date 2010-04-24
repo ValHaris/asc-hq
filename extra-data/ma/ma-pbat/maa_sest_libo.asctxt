@@ -3,8 +3,10 @@ VehicleType {
    parent = 22998 276
    ID = 22507
 
-   Infotext = [Dieser Senkrechtstarter ist fuer Bodeneinheitenbekaempfung, der kleinste seiner Art.]
    Picture = maa_sest_libo.pcx
+   Infotext = [Der SEST LiBo ist der kleinste Bomber der malanischen Streitkräfte. Entwicklungsgeschichtlich handelt es sich um das erste Bombermodell unter den Senkrechtstartern. Bei der Entwicklung wurde viel Wert auf Geschwindigkeit und Manövrierfähigkeit gelegt. Dafür mußten Abstriche beim Gewicht der eingebauten Bewaffnung gemacht werden. So führt der LiBo lediglich sechs 500-Pfund-Bomben mit allerdings beachtlicher Sprengkraft mit sich. Diese besitzen eine gleichermaßen hohe Wirksamkeit gegen leichte und schwere feindliche Waffensysteme und Truppen. Zusätzlich ist mit den unter dem Rumpf ausfahrbar montierten Maschinenkanonen ein effektiver Angriff auf leichte Bodentruppen möglich und auch eine gewisse Verteidigung gegen gegnerische Jäger gegeben. Die Panzerung ist nicht allzu stark, doch durch seine gute Manövrierfähigkeit bietet der LiBo kein leichtes Ziel für Angreifer.
+Seine größte Schwäche stellt das Fehlen von Distanzwaffen dar. Durch die Senkrechtstartertechnologie verbietet sich der Flug in großen Höhen, was bei den allermeisten Zielen dazu führt, daß der Libo mit Schäden durch feindlichen Beschuß leben muß. Wegen seiner hohen Geschwindigkeit und der geringen Baukosten wird er trotzdem noch in gewissen Stückzahlen für die malanischen Luftflotten gebaut. Geschickt eingesetzt kann er so mancher starken gegnerischen Einheit den Todesstoß versetzen.
+]
 
 
    Armor += 30

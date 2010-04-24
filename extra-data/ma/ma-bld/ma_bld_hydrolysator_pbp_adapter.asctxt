@@ -1,0 +1,5 @@
+Techadapter {
+   ; Hydrolysator
+   Name = B22911
+   TechnologiesRequired = 22000
+} TechAdapter

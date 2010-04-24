@@ -1,0 +1,5 @@
+Techadapter {
+   Name = o2153
+   ;Bezeichnung der verknüpften Technologie: Raps
+   TechnologiesRequired = 100006 22002
+} TechAdapter

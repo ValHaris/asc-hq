@@ -1,0 +1,57 @@
+BuildingType { 
+   Name = Lager
+   parent = 499 498
+   
+   Transportation ->* BuildingType.Esmall
+
+   ConstructionStages = 1
+   Weather = dry few_snow much_snow snow_and_ice
+   Fields = A2 A3 A4 B3 
+  UseGFXpics = false
+   Pictures { 
+      dry = g_lager.pcx
+      few_snow = g_lager.pcx
+      much_snow = g_lager.pcx
+      snow_and_ice = g_lager.pcx
+   } Pictures
+;   RubbleObjects = false
+   RubbleObjects = true
+   rubble {
+      A2 = 76
+      A3 = 76
+      A4 = 77
+      B3 = 78
+   } rubble
+   Entry = A4
+   ID = 22923
+   Armor = 1000
+   View = 15
+   Jaming = 0
+   Functions = NoObjectChaining
+   Techlevel = 0
+   MaxResearch = 0
+   ConstructionCost { 
+      Energy = 0
+      Material = 5000
+      fuel = 4000
+   } ConstructionCost
+   MaxResourceProduction { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } MaxResourceProduction
+   StorageCapacity { 
+      BImode { 
+         Energy = 0
+         Material = 50000
+         fuel = 0
+      } BImode
+      ASCmode { 
+         Energy = 0
+         Material = 50000
+         fuel = 0
+      } ASCmode
+   } StorageCapacity
+   Height = ground_level 
+   ExternalLoading =
+} BuildingType

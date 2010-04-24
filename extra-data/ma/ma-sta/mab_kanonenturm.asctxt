@@ -9,7 +9,6 @@ VehicleType {
               the Turret on their radars. Its only drawback is that it cannot
               get a lock on very small targets.]
    Picture = mab_kanonenturm.pcx
-   Armor -= 200
 
    Weapons { 
       Weapon0.Punch@MaxRange += 10

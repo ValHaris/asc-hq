@@ -5,7 +5,7 @@ VehicleType {
 
    Description = build submarine
    Infotext = [Die Baueinheit auf See baut Bohrinseln oder die stationaeren Marineeinheiten, auch für den Transport dieser Einheiten ist das Pionier-U-Boot zustaendig.]
-   Picture = mas_ubv_pionier.pcx
+   Picture = mas_ubv_pionier.png
    WreckageObject = 436
 
    Transportation ->* VehicleType.TransTurretBig 
@@ -29,7 +29,7 @@ VehicleType {
    Construction { 
       Buildings = 22930 22903 22929
       Vehicles = 22611 22612 22613 22616
-      Objects = 1 3 9 10 30 44 45 995 996 997 998 999 1000
+      Objects = 3 30 44 995 996 997 998 999 1000
       ObjectsRemovable = 
       ObjectGroupsRemovable = 1 2 3 4 5 6 7 8 10 11 12 13 14 15
    } Construction

@@ -5,7 +5,7 @@ VehicleType {
 
    Description = Markierer
    Infotext = []
-   picture = mai_markierer.pcx
+   picture = mai_markierer.png
 
    Features += paratrooper
    Tank { 

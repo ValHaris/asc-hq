@@ -4,8 +4,9 @@ VehicleType {
    ID = 22812
    
    Description = leichter Kampfzug 
-   Infotext = [leichter Kampfzug fuer den offensiven Einsatz]
    Picture = mat_btl.pcx
+   Infotext = [Der BTL ist ein nur leicht gepanzerter Kampfzug. Dadurch ist er recht schnell unterwegs und sehr flexibel einsetzbar. Die langläufige Kanone ermöglicht ihm den Angriff auf weiter entfernte Ziele, ohne sich direktem Gegenfeuer aussetzen zu müssen. Dies ist auch nötig, da er im direkten Kampf sonst recht schnell zerstört werden kann. Es werden verschiedene Arten von Munition mitgeführt, so ist auch der Beschuß von Fußtruppen mit großer Effektivität möglich. Gegen allzu vorwitzige Tiefflieger sind noch leichte Maschinenkanonen montiert, eine echte Luftabwehr sucht man aber vergebens. Bewährt hat sich der kleine Laderaum, in dem eine Troopereinheit mitgeführt werden kann, besonders bei schnellen Vorstößen ins feindliche Hinterland.
+Der BTL kann, in großer Zahl eingesetzt, auch für stärkere Panzer ein Problem werden, doch ist er nicht für schwere Gefechte konzipiert und wird eher für schnelle Vorstöße und die Flankendeckung verwendet.]
 
    Transportation ->* VehicleType.TransLowTrooper
 

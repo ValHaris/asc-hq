@@ -7,6 +7,8 @@ VehicleType {
    Infotext = [#crt#Raumtransporter#crt# #crt#]
    Picture = mao_RaumS.pcx
 
+   Transportation.MaxLoadableMass += 7000
+
   JumpDrive {
       terrain_any = Spaceport runway
       terrain_all = beacon
@@ -14,12 +16,15 @@ VehicleType {
       terrain_kill = 
    } JumpDrive
 
-   Height = ground_level orbit 
-   Features = self_repairing no_midair_refuel
-   Movement = 0 0 0 60 0 0 0 150 
+   Features = self_repairing no_midair_refuel 
    SelfRepairRate = 10
    Weight = 90000
-HeightChangeMethodNum = 2
+   Jamming = 0
+
+   Height = ground_level orbit 
+   Movement = 0 0 0 60 0 0 0 150 
+
+   HeightChangeMethodNum = 2
    HeightChangeMethod0 {
       movecost = 30
       heightdelta = 4

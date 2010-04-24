@@ -4,7 +4,10 @@ VehicleType {
    ID = 22501
 
    Description = medium anti air vto
-   Infotext = [Dieser mittlere Senkrechtstarter ist fuer den Luftkampf.]
+   Infotext = [Der SEST AAM wurde als reiner Luftkampfjet entwickelt. Er verfügt über 4 Bordkanonen, von denen jeweils 2 gegen tieffliegende und hochfliegende Ziele eingesetzt werden können. Das obere Paar hat einen extrem verlängerten Lauf sowie einen optimierten Drehkranz. So ist zwar kein Einsatz gegen Ziele in gleicher Höhe möglich, dafür können höherfliegende Maschinen jetzt aus größerer Distanz getroffen werden. Die Zielerfassungselektronik ist gegenüber dem AAL deutlich verbessert, so daß die Treffgenauigkeit gerade beim Angriff auf weiter entfernte Ziele deutlich erhöht wurde. Der mitgeführte Munitionsvorrat ist gewaltig, was auch längere, weitgehend autonom durchgeführte Einsätze ermöglicht.
+Die Panzerung ist stärker als bei den leichten Modellen. Durch das höhere Gewicht ist der Treibstoffverbrauch etwas höher als beim AAL und er erreicht nicht ganz dessen Höchstgeschwindigkeit. Trotzdem verfügt der AAM über eine sehr gute Manövrierfähigkeit.
+Sein größtes Manko ist die völlige Wehrlosigkeit gegen Bodenangriffe. Selbst Trooper mit Flaraks können ihm gefährlich werden, was bei der Einsatzplanung immer zu berücksichtigen ist.
+Die Baukosten liegen zwar deutlich höher als beim AAL, rechnen sich aber mit der Zeit durch die längere Haltbarkeit der Maschinen, so daß auch der AAM recht häufig eingesetzt wird.]
    Picture = maa_sest_aam.pcx
 
    Armor += 30

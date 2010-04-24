@@ -2,10 +2,14 @@ VehicleType {
    Name = BASUKA	
    ID = 22302
    parent = 203
+
    Description = Heavy Trooper
-   Infotext = [Trooper zur Bekämpfung von feindlichen Fahrzeugen]
-   Armor += 20
    Picture = mai_basuka.pcx
+   Infotext = [Die Basuka-Trooper sind speziell für den Kampf gegen Rad- und Kettenfahrzeuge ausgebildet und ausgerüstet. Hierzu führen sie eine Panzerfaust mit sich, die hochwirksame panzerbrechende Geschosse verschießt. Die Treffgenauigkeit ist enorm, auch auf größere Entfernung sind die Schäden noch beachtlich. Falls doch einmal Gefechte gegen andere Fußtruppen geführt werden, können notfalls auch Splittergranaten verschossen werden. Auch ihre Tarnfähigkeit im Gelände ist dabei ein nicht zu unterschätzender Faktor.
+Durch das hohe Gewicht der Waffe und besonders der Munition besitzen sie aber keinerlei Möglichkeiten, sich gegen Luftangriffe zur Wehr zu setzen. Hier sind sie auf unterstützende Einheiten, beispielsweise den Metro zur Luftabwehr angewiesen. Ihre Marschgeschwindigkeit ist ebenfalls recht gering, so daß der Einsatz schneller Transportfahrzeuge für einen effizienten Einsatz wichtig ist.
+   ]
+
+   Armor += 20
    Movement -= 0 0 0 2 0 0 0 0 
    Weapons { 
       Number = 1

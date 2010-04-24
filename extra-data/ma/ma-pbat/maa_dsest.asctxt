@@ -7,7 +7,7 @@ VehicleType {
    Infotext = []
    Picture = maa_dsest.pcx
 
-   Features += satelliteview no_midair_refuel MoveDuringReactionFire
+   Features = satelliteview no_midair_refuel MoveDuringReactionFire
 
    Tank { 
       Energy = 0
@@ -54,7 +54,7 @@ VehicleType {
          Type = laser shootable
          targets = orbit
          shotFrom = medium_level_flight
-         MaxRange = 50
+         MaxRange = 40
          MinRange = 10
          Ammo = 3
          Punch@MaxRange = 71

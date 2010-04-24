@@ -1,0 +1,66 @@
+BuildingType { 
+   Name = Protomaterie Reactor
+   parent = 499 498
+   
+   Transportation ->* BuildingType.Esmall
+
+   ConstructionStages = 1
+   Weather = dry few_snow much_snow snow_and_ice
+   Fields = A2 A3 A4 B3 
+   UseGFXpics = false
+   Pictures { 
+      dry = g_proreaktor.pcx
+      few_snow = g_proreaktor.pcx
+      much_snow = g_proreaktor.pcx
+      snow_and_ice = g_proreaktor.pcx
+   } Pictures
+;   RubbleObjects = false
+   RubbleObjects = true
+   rubble {
+      A2 = 76
+      A3 = 76
+      A4 = 77
+      B3 = 78
+   } rubble
+   Entry = A4
+   ID = 22912
+   Armor = 600
+   View = 10
+   Jaming = 0
+   Functions = matter_converter NoObjectChaining
+   Techlevel = 0
+   MaxResearch = 0
+   ConstructionCost { 
+      Energy = 0
+      Material = 20000
+      fuel = 20000
+   } ConstructionCost
+   MaxResourceProduction { 
+      Energy = -12500
+      Material = 2500
+      fuel = 0
+   } MaxResourceProduction
+   defaultProduction {
+      energy = -12500
+      material = 2500
+      fuel = 
+   } defaultProduction
+   ResourceExtractionEfficiency {
+      Material = 2048
+      Fuel = 2048
+   } ResourceExtractionEfficiency
+   StorageCapacity { 
+      BImode { 
+         Energy = 1000
+         Material = 20000
+         fuel = 1000
+      } BImode
+      ASCmode { 
+         Energy = 0
+         Material = 2500
+         fuel = 0
+      } ASCmode
+   } StorageCapacity
+   Height = ground_level 
+   ExternalLoading =
+} BuildingType

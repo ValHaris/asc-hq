@@ -1,0 +1,59 @@
+BuildingType { 
+   Name = wind power plant
+   ID = 22904
+   parent = 498 499
+   
+   Transportation ->* BuildingType.Esmall
+   Armor = 360
+   View = 20
+   Jaming = 0
+   ConstructionStages = 1
+   Weather = dry few_snow much_snow snow_and_ice
+   Fields = A2 B1 
+   UseGFXpics = false
+   Pictures { 
+      dry = g_windkraft.pcx
+      few_snow = g_windkraft.pcx
+      much_snow = g_windkraft.pcx
+      snow_and_ice = g_windkraft.pcx
+   } Pictures
+;   RubbleObjects = false
+   RubbleObjects = true
+   rubble {
+      A2 = 76
+      B1 = 78
+   } rubble
+   Entry = A2
+   Functions = Wind_Power_Plant NoObjectChaining
+   Techlevel = 0
+   MaxResearch = 0
+   ConstructionCost { 
+      Energy = 0
+      Material = 10000
+      fuel = 10000
+   } ConstructionCost
+   MaxResourceProduction { 
+      Energy = 5000
+      Material = 0
+      fuel = 0
+   } MaxResourceProduction
+   defaultProduction {
+      energy = 5000
+      material = 
+      fuel = 
+   } defaultProduction
+   StorageCapacity { 
+      BImode { 
+         Energy = 3000
+         Material = 0
+         fuel = 0
+      } BImode
+      ASCmode { 
+         Energy = 3000
+         Material = 0
+         fuel = 0
+      } ASCmode
+   } StorageCapacity
+   Height = ground_level 
+   ExternalLoading = 
+} BuildingType

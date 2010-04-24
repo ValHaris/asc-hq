@@ -1,0 +1,5 @@
+Techadapter {
+   ; Öltank
+   Name = B22922
+   TechnologiesRequired = 22000
+} TechAdapter

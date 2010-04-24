@@ -2,9 +2,13 @@ VehicleType {
    Name = FAT S
    parent =  22997 331
    ID = 22814
+
    Description = small fast attack train
-   Infotext = [Bahntrasse versperrt und ein Schuss reicht nicht? Ein Fall für den MAM-Zug.]
    Picture = mat_fats.pcx
+   Infotext = [Der FAT S wurde nur für einen einzigen Zweck entwickelt. Er verkörpert das Hit-and-Run Prinzip in seiner reinsten Form. Hierfür wurde ein sehr leichtes Chassis mit einem starken, revolutionärem Antrieb kombiniert. Die Energie des Zuges wird beim Bremsen gespeichert und beim Beschleunigen über zusätzliche Hilfsmotoren wieder eingespeist. Dieses Brems- und Antriebssystem wirkt auf alle Achsen und ermöglicht eine für einen Zug ungewöhnliche Manövrierfähigkeit.
+Speziell beim sogenannten Stopshot-Angriff wird das deutlich. Hierbei wird das Ziel in voller Fahrt anvisiert, der beste Trefferpunkt berechnet und der Zug dann genau an dieser Stelle voll abgebremst. Der Schuß wird bei Stillstand des Zuges abgefeuert und dann verläßt der FAT S mit Höchstgeschwindigkeit rückwärts die Gefahrenzone.
+Bei richtigem Einsatz ist dieser Zug kaum zu treffen, doch die sehr dünne Panzerung bestraft jeden Fehler des Kommandanten sofort.
+Außer seiner Kanone verfügt der FAT S über keinerlei weitere Bewaffnung, was einen Schutz durch weitere Kampfeinheiten erforderlich macht, speziell wenn der Gegner über Flugzeuge verfügt. Ein kleiner Laderaum ermöglicht aber den Transport einer leichten Infanterieeinheit zur Unterstützung.]
 
    Transportation ->* VehicleType.TransLowTrooper2 
 

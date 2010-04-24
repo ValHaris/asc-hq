@@ -1,0 +1,16 @@
+ Technology {
+   name = "Drohne"
+   infotext = "Advanced technology"
+   id = 22016
+   researchpoints = 300
+   
+   techlevel = 0
+   
+   requireEvent = false
+   
+   TechnologiesRequired = 22000 22013
+   
+   BlockingTechnologies = 
+   
+   RequireAllListedTechnologies = true
+} Technology 

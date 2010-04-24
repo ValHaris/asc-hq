@@ -1,0 +1,34 @@
+BuildingType { 
+   Name = Mobile Fabrik
+   ID = 22940
+   parent = 12017
+
+   ConstructionStages = 1
+   Weather = dry 
+   Fields = A2 A3 A4 B3 
+   UseGFXpics = false
+   Pictures { 
+      dry = pu_marla_mobilefabrik.pcx
+   } Pictures
+    RubbleObjects = true
+   rubble {
+      A2 = 76
+      A3 = 76 
+      A4 = 77
+      B3 = 78
+   } rubble
+   Entry = A4
+
+   Armor = 4000
+   Features = matter_converter Vehicle_Production Ammo_Production Recycling Repair_Facility ExternalAmmoTransfer ExternalFuelTransfer ExternalMaterialTransfer
+   View = 100
+   Jamming = 80
+
+   TerrainAccess { 
+      terrain_any = Shallow_water Lowland Road Railroad Runway Hard_sand Soft_sand Very_shallow_water Ditch River 
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = 
+   } TerrainAccess
+   Height = ground_level
+} BuildingType

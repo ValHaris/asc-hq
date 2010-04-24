@@ -1,0 +1,16 @@
+ Technology {
+   name = "Technology Level 1"
+   infotext = "Advanced technology"
+   id = 22001
+   researchpoints = 500
+   
+   techlevel = 1
+   
+   requireEvent = false
+   
+   TechnologiesRequired = 22000
+   
+   BlockingTechnologies = 
+   
+   RequireAllListedTechnologies = true
+} Technology 

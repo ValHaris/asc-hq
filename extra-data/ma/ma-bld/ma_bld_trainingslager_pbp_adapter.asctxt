@@ -1,0 +1,5 @@
+Techadapter {
+   ; Traininglager
+   Name = B22932
+   TechnologiesRequired = 22000
+} TechAdapter

@@ -1,0 +1,5 @@
+Techadapter {
+   ; Hafen
+   Name = B22930
+   TechnologiesRequired = 22000
+} TechAdapter

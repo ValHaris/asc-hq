@@ -4,8 +4,8 @@ VehicleType {
    ID = 22815
 
    Description = assault battle train
-   Infotext = [verbesserter Sturmgeschuetzzug ist nicht zum Nahkampf gezwungen, hat dafuer aber eine noch schlechtere Panzerung]
    Picture = mat_bt_asg.pcx
+   Infotext = [Der BT ASG ist auch unter den malanischen Kampfzügen etwas besonderes. Er kombiniert sehr große Feuerkraft mit hoher Geschwindigkeit. Dies ermöglicht überraschende Vorstöße in die Flanken des Gegners – solange die Schienenbaufahrzeuge bei ihrer Arbeit schnell genug sind. Wenn der BT ASG erst zum Schuß kommt, sind speziell gepanzerte Einheiten sehr schnell verschrottet. Gegen Infanterie sind seine Geschütze deutlich weniger effektiv. Hier zeigt sich, daß zur Gewichtsreduktion nicht nur an der Panzerung gespart wurde, nein, es wird auch nur panzerbrechende Munition mitgeführt. Das 125er Hauptgeschütz hat zwar eine größere Reichweite, so daß der Nahkampf auf Kosten der Treffgenauigkeit umgangen werden kann, aufgrund seiner Geschwindigkeit landet der Zug allerdings oft genug in vorderster Front. Etliche Kommandanten verloren schon ihr Leben, weil sie den Zug nicht schnell genug zum Stehen brachten und die dünne Panzerung von leichten Geschützen förmlich durchsiebt wurde. Erfahrene Kommandeure sorgen daher immer für ausreichenden Feuerschutz und steuern den Zug lieber etwas langsamer über das Schlachtfeld.]
 
    Armor -= 100
    Weight = 150

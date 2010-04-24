@@ -24,8 +24,8 @@ VehicleType {
       Weapon0.LaserRechargeCost.energy = 0
       Weapon0.LaserRechargeCost.material = 500
       Weapon0.LaserRechargeCost.fuel = 3000
-      Weapon0.MaxRange = 160
-      Weapon0.MinRange = 80
+      Weapon0.MaxRange = 180
+      Weapon0.MinRange = 90
       Weapon0.Punch@MaxRange = 110
       Weapon0.Punch@MinRange = 140
    } Weapons

@@ -9,7 +9,7 @@ VehicleType {
    Infotext = [Das Versorgungfahrzeug abseits der Schiene.
    InfoImage = Wikipedia Lastkraftwagen]
 
-   Features += ExternalFuelTransfer ExternalMaterialTransfer
+   Features += ExternalFuelTransfer ExternalMaterialTransfer ExternalAmmoTransfer
 
    Tank { 
       Energy = 0

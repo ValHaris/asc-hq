@@ -1,6 +1,6 @@
 VehicleType { 
    Name = UAV SON
-   parent = 425
+   parent = 22995
    ID = 22201
 
    Description = sonardrohne

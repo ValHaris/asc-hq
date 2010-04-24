@@ -1,0 +1,63 @@
+BuildingType { 
+   Name = solarsatplant
+   parent = 498
+   
+   Transportation.EntranceSystem0 ->* BuildingType.OrbIOD
+   ConstructionStages = 1
+   Weather = dry 
+   Fields = A1 A2 B1 
+   UseGFXpics = false
+   Pictures { 
+      dry = g_orbkraftwerk.pcx
+       } Pictures
+;   RubbleObjects = false
+   RubbleObjects = true
+   rubble {
+      A1 = 76
+      A2 = 77
+      B1 = 78
+   } rubble
+   Entry = A2
+   ID = 22941
+   Armor = 600
+   View = 2
+   Jaming = 0
+   Functions = matter_converter NoObjectChaining
+   Techlevel = 0
+   TerrainAccess { 
+      terrain_any = Shallow_water Lowland Swamp Forest High_mountains Road Railroad Harbour Runway Pipeline Buried_pipeline Water Deep_water Hard_sand Soft_sand Track_possible Small_rocks Mud Snow Deep_snow Mountains Very_shallow_water Large_rocks Lava Ditch Hillside Turret_foundation Morass Installation Pack_ice River Frozen_water 
+      terrain_all = 
+      terrain_not = swamp
+      terrain_kill = water deep_water lava river
+   } TerrainAccess
+   MaxResearch = 0
+   ConstructionCost { 
+      Energy = 0
+      Material = 20000
+      fuel = 20000
+   } ConstructionCost
+ MaxResourceProduction { 
+      Energy = 4000
+      Material = 0
+      fuel = 0
+   } MaxResourceProduction
+   defaultProduction {
+      energy = 4000
+      material = 0
+      fuel = 
+   } defaultProduction
+StorageCapacity { 
+      BImode { 
+         Energy = 4000
+         Material = 0
+         fuel = 0
+      } BImode
+      ASCmode { 
+         Energy = 4000
+         Material = 0
+         fuel = 0
+      } ASCmode
+   } StorageCapacity
+   Height = orbit
+   ExternalLoading = 
+} BuildingType

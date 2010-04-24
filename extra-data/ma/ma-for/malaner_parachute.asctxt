@@ -1,0 +1,16 @@
+ Technology {
+   name = "parachute"
+   infotext = "Advanced technology"
+   id = 22029
+   researchpoints = 1000
+   
+   techlevel = 0
+   
+   requireEvent = false
+   
+   TechnologiesRequired = 22000 22010 22011
+   
+   BlockingTechnologies = 
+   
+   RequireAllListedTechnologies = true
+} Technology 

@@ -1,0 +1,5 @@
+Techadapter {
+   ; Orbitalkraftwerk
+   Name = B22941
+   TechnologiesRequired = 22000
+} TechAdapter

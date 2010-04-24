@@ -1,0 +1,39 @@
+BuildingType { 
+   Name = oilplattform
+   ID = 22903
+   parent = 14
+
+   Armor = 1000
+
+   ConstructionStages = 1
+   Weather = dry
+   Fields = A1
+   UseGFXpics = false
+   Pictures { 
+      dry = g_oelbohrinsel.pcx
+   } Pictures
+;   RubbleObjects = false
+   RubbleObjects = true
+   rubble {
+      A1 = 76
+   } rubble
+   Entry = A1
+
+   ConstructionCost { 
+      Energy = 0
+      Material = 10000
+      fuel = 10000
+   } ConstructionCost
+
+   MaxResourceProduction { 
+      Energy = 0
+      Material = 0
+      fuel = 3000
+   } MaxResourceProduction
+   defaultProduction {
+      energy = 
+      material = 
+      fuel = 3000
+   } defaultProduction
+
+} BuildingType

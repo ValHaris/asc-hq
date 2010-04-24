@@ -1,0 +1,5 @@
+Techadapter {
+   ; Ölbohrinsel
+   Name = B22903
+   TechnologiesRequired = 22000
+} TechAdapter

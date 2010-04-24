@@ -3,9 +3,9 @@ VehicleType {
    parent = 292
    ID = 22752
 
-   Description = medium tank
+   Description = mittlerer Kampfpanzer
+   Picture = mav_mp.png
    Infotext = [eine verbesserte Version des Panther ist die schwerste Landkampfeinheit der Malaner, die keine Schienen benoetigt]
-   Picture = MAv_Mp.pcx
 
    Movement -= 0 0 0 11 0 0 0 0
 
