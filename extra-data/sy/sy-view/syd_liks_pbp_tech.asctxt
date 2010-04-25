@@ -1,0 +1,10 @@
+technology {
+   Name = LIKS
+   infotext = 
+   id = 1347
+   RelatedUnitID = 1347
+   parent = 1399
+   researchpoints *= 2
+   techlevel = 0
+   TechnologiesRequired = 1399,100002 
+} Technology

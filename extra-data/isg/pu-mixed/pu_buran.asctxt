@@ -1,0 +1,35 @@
+VehicleType { 
+   Name = Buran
+   parent = 400 401 402 423
+   ID = 12545
+
+   Description = Zünder
+   Picture = pu_buran.png
+   wreckageobject = 12545 12546
+   Infotext = [Spezialeinheit der NeuHallwarianer. Buran ist ein SPrengkopf mit besonderer Wirkung. Anstatt einer Explosion, verursachen die Detonation eine unbekannte sich langsam ausdehnende Strahlung. Zusammenhängende Wasserflächen gefrieren daruch. ]
+
+   ConstructionCost { 
+      CalculationMethod = manual
+      Energy = 50000
+      Material = 50000
+      fuel = 0
+   } ConstructionCost
+
+   Features = paratrooper ManualSelfDestruct
+   SelfRepairRate = 0
+   MaxSurvivableStorm = 0
+
+
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 2
+   } Tank
+
+   Height = floating
+   TerrainAccess ->* Vehicletype.verysmallship_terrain
+
+   Weapons {
+      Number = 0
+   } Weapons
+} VehicleType

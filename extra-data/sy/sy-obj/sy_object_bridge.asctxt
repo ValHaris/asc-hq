@@ -1,0 +1,47 @@
+ObjectType {
+   Name = SY-BRIDGE
+   ID = 1306
+   GroupID = 2
+   Weather = dry
+   canExistBeneathBuildings = true
+   visible_in_fogOfWar = true
+   LinkableObjects = 1305
+   Armor = 600
+   ;                def lTr mTr hvT lWh mWh hWh tro rlv mAC mSh BTO lAC hAC lSh hSh Hli hov
+   Movemalus_plus = 
+   Movemalus_abs =  20  20  20  20  25  25  25  15  10  20  20  20  20  20  20  20  20  10
+   AttackBonus_abs = -1
+   AttackBonus_plus = 0
+   DefenseBonus_abs = -1
+   DefenseBonus_plus = 0
+   Jamming_abs = -1
+   Jammming_plus = 0
+   Height = 117
+   ConstructionCost { 
+      Energy = 0
+      Material = 2100
+      fuel = 800
+      Movement = 20
+   } ConstructionCost
+   RemovalCost { 
+      Energy = 0
+      Material = -500
+      fuel = 300
+      Movement = 30
+   } RemovalCost
+   NetBehaviour = NetToSelf 
+   TerrainAccess { 
+      terrain_any = water river
+      terrain_all = 
+      terrain_not = bridge
+      terrain_kill = lava 
+   } TerrainAccess
+   TerrainProperties_Filter = 
+   TerrainProperties_Add = Road
+   dry { 
+      UseGFXpics = false
+      picture = sy_object_bridge.pcx 64
+      ImageReference = -1
+      Flippictures = 0
+   } dry
+} ObjectType

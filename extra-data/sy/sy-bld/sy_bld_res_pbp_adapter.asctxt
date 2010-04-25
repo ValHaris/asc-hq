@@ -1,0 +1,5 @@
+Techadapter {
+   ; Res
+   Name = B1316
+   TechnologiesRequired = 1399
+} TechAdapter

@@ -1,0 +1,5 @@
+Techadapter {
+   ; flying Factory
+   Name = B1325
+   TechnologiesRequired = 1399
+} TechAdapter

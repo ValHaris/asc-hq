@@ -1,0 +1,57 @@
+VehicleType { 
+   Name = DRUS
+   parent = 1397 1391 1395
+   ID = 1330
+
+   Description = Destroyer
+   Infotext = [Neben dem Druk ist der Drus ein weiterer Verteter der Zerstörerklasse. Hülle und Antrieb sind analog des Druk. Einzig die Waffensysteme unterscheiden die beiden. Er ist einzig und allein dafür konstruiert, gegnersiche Kampfflieger auf Distance zu halten. Dafür wurde die Waffensystem auf defensive Lanstreckenabwehr umgebaut. Die permanete Überwachung und Erfassung der verschiedensten Luftziele ermöglichen eine effektive Verteidigung gegen aus allen Richtungen angreifende Gegner. Der Drus befindet sich immer inmitten des Schwarms und deckt so die Jäger, Schiffe und Orbitalkanonen gegen direkte Angriffe ab. Er sollte seine Position so wählen, das anfliegende Flugzeuge immer zuerst in die Reichweite der Drus geraten, bevor die in feuerreichte der anderen Einheiten kommen.]
+   Picture = sya_drus.png
+
+   Armor = 750
+   Height = low_level_flight medium_level_flight high_level_flight orbit 
+   Jamming = 55
+   Features += MoveDuringReactionFire
+
+   Tank { 
+      Energy = 0
+      Material = 4000
+      fuel = 12000
+   } Tank
+   FuelConsumption = 25
+   Movement = 0 0 0 0 120 130 140 140 
+   Weight = 500
+   TerrainAccess ->* VehicleType.SY_Air
+   Transportation ->* VehicleType.TransSyDestroyer 
+
+   WaitForAttack = true
+   Weapons { 
+      Number = 2
+      Weapon0 ->* VehicleType.SY_Fighter_AD 
+      Weapon0.MinRange = 10
+      Weapon0.MaxRange = 60
+      Weapon0.ReactionFireShots = 2
+      Weapon0.Ammo = 6
+
+      Weapon1 ->* VehicleType.SY_Fighter_Gun 
+      Weapon1 { 
+         targets = floating ground_level low_level_flight medium_level_flight high_level_flight 
+         MaxRange = 50
+         ReactionFireShots = 1
+         HitAccuracy { 
+            d6 = 0
+            d5 = 0
+            d4 = 0
+            d3 = 0
+            d2 = 100
+            d1 = 100
+            0 = 0
+            u1 = 0
+            u2 = 0
+            u3 = 0
+            u4 = 0
+            u5 = 0
+            u6 = 0
+         } HitAccuracy
+      } Weapon1
+   } Weapons
+} VehicleType

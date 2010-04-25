@@ -1,0 +1,32 @@
+VehicleType { 
+   Name = SCAPEGOAT
+   parent = 90
+   ID = 12561
+
+   Description = trooper hunter
+   picture = puh_itaker_scapegoat.png
+   GuideSortHelp = 
+   Infotext = []
+
+   Features += self_repairing
+   SelfRepairRate = 5
+   Armor = 800
+   Weight = 80
+   Transportation ->* VehicleType.noTrans 
+
+   Tank { 
+      Energy = 0
+      Material = 5000
+      fuel = 10000
+   } Tank
+   FuelConsumption = 25
+
+   Weapons { 
+      Number = 1
+      Weapon0 ->* VehicleType.Air_MG 
+      Weapon0.Ammo = 8
+      Weapon0.Punch@MaxRange = 55
+      Weapon0.Punch@MinRange = 55
+
+   } Weapons
+} VehicleType

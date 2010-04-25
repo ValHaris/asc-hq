@@ -1,0 +1,10 @@
+technology {
+   Name = Jumro
+   infotext = Forschungsprojekt abgeschlossen! Jumro verfügbar!
+   id = 15108
+   RelatedUnitID = 15108
+   parent = 15000
+   researchpoints *= 17
+   techlevel = 5
+   TechnologiesRequired = 15000,100001,100105,100315 
+} Technology

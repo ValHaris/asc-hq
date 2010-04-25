@@ -8,7 +8,7 @@ VehicleType {
    picture = mk5a_tenga.pcx
    GuideSortHelp = 551 601 0 0 5 0 0 0 0 0
 
-   Features += externalFuelTransfer ExternalMaterialTransfer ExternalFuelTransfer
+   Features += externalFuelTransfer ExternalMaterialTransfer ExternalAmmoTransfer
    Armor = 320
    Transportation { 
       MaxLoadableUnits = 6
@@ -34,7 +34,6 @@ VehicleType {
    TerrainAccess.terrain_all = 
 
    Weapons { 
-      Initiative = 0
       Number = 9
       Weapon0 ->* VehicleType.Air_MG
       Weapon0.Ammo = 40

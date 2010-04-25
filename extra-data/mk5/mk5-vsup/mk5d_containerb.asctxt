@@ -11,7 +11,8 @@ VehicleType {
 
    Transportation ->* VehicleType.TransDevice
    Transportation.MaxLoadableUnits = 14
-   Transportation.MaxLoadableMass = 50
+   Transportation.MaxLoadableUnitSize = 10
+   Transportation.MaxLoadableMass = 80
 
    Armor = 400
    Tank { 

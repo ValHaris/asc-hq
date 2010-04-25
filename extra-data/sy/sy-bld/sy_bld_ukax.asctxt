@@ -1,0 +1,67 @@
+BuildingType { 
+   Name = UKAX 
+   ID = 1311
+   parent = 498
+   
+   Features = Mining_Station ExternalMaterialTransfer ExternalFuelTransfer NoObjectChaining
+   ExternalLoading = floating ground_level low_level_flight 
+   Armor = 600
+   View = 25
+   Jamming = 20
+   Techlevel = 0
+   MaxResearch = 0
+
+   Transportation ->* BuildingType.Esmall
+   StorageCapacity { 
+      ASCmode { 
+         Energy = 0
+         Material = 0
+         fuel = 5000
+      } ASCmode
+   } StorageCapacity
+   
+   Height = ground_level 
+   ConstructionStages = 1
+   Weather = dry few_snow much_snow snow_and_ice
+   Fields = A1 
+   UseGFXpics = false
+   Pictures { 
+      dry = sy_bld_ukax_dry.png
+      few_snow = sy_bld_ukax_fs.png
+      much_snow = sy_bld_ukax_ms.png
+      snow_and_ice = sy_bld_ukax_ms.png
+   } Pictures
+   RubbleObjects = true
+   rubble {
+      A1 = 1302
+   } rubble
+   Entry = A1
+   ConstructionCost { 
+      Energy = 0
+      Material = 6500
+      fuel = 7500
+   } ConstructionCost
+
+   TerrainAccess { 
+      terrain_any = Lowland Road Hard_sand Soft_sand
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = Lava
+   } TerrainAccess
+
+   ResourceExtractionEfficiency {
+      Material = 2048
+      Fuel = 2048
+   } ResourceExtractionEfficiency
+   MaxResourceProduction { 
+      Energy = -200
+      Material = 0
+      fuel = 1300
+   } MaxResourceProduction
+   defaultProduction {
+      energy = -200
+      material = 
+      fuel = 1300
+   } defaultProduction
+
+} BuildingType

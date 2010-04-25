@@ -1,9 +1,118 @@
 History MK6 teccnols unit set
 Grafik: GAMER, Rhiow, ExarKun
 Infotext: Rhiow
-InfoImage: GAMER
+InfoImage: BananaJoe
 Spezifikationen: GAMER
-__________________
+
+_______________________
+Beta Nr.10 - 2010
+-Brownie, Bodenein-/ausgang
+-MBF, -WfA, -Waffe
+Beta Nr.9-2010
+-Agness, neue Grafik, Laserbasiert
+-Defkind, kein MAM
+Neu:
+-Meta Rail
+-Hannah (Grafik vom Agness)
+-Box S
+________________________
+03.04.2010 z82 (GAMER)
+Beta-10-05
+-Grafikupdate: Bullwark
+Neu:
+-Agness: Luftabwehrbunker (T5)
+Beta-10-04
+-MBF, Grafikupdate, -10 Move, baut keinen laserzaun mehr
+
+________________________
+27.02.2010 z81 (GAMER)
+-Grafikupdate Signal
+Beta-10-03
+-Bugfix TECC TrooperDefenceWeapon
+-Executioner, MDRF, Torpedo/EMP RF=0
+-MBC30 Tech5
+-MetaTag Tech5
+-MetaTE Tech3
+-CillaSV,MBF baut Windrad
+Neu:
+-DevoJ
+-MBC 23
+________________________
+Beta-10-02
+-Grafikupdate: Tender, UTX, DevoTE
+-Bugfix, Turret to ISG-Beton
+-Damon -5 Punch
+________________________
+23.01.2010 z80 (GAMER)
+Beta-10-01
+-Brownie, Wait for Attack, Waffenupdate
+-MRF/Meta SV + Tank
+Beta-09-19
+-Global +4 Movement
+-Brownie +20 Movement
+-Ionenkanone  +Mdrf
+-Married nur noch 8 Felder Jumpdrive, Tech 4 , -1 Feld Waffenreichweite
+-Doomsday => Revenge
+-Boxen auf Straße, Runway, ISG Beton bewegbar
+-Tanker, kein Cannon Ammo mehr
+Neu:
+-MONS JAM Sat
+-Laserzaun baubar ab Tech5, durch Cilla SV/MBF
+-Jumro
+________________________
+12.12.2009 z79 (GAMER)
+Beta-09-18
+==> Achtung Wechsel Munitionsversorgung von Tanker auf CargoMX
+-CargoMX, + Ammo
+________________________
+08.11.2009 z78 (GAMER)
+Beta-09-15/16
+-Damon, Waffenupgrade
+-Defkind, Waffen-/ArmorUpgrade
+-RDS, Umbau auf reine Bodendefence, Tech 2
+-LDS, Waffenumbau
+-Married, FuelConsumption = 500
+-Neuberechnung Kosten EMO, ARS
+________________________
+03.10.2009 z77 (GAMER)
+Beta-09-14
+-Tender, Lavaabbau
+Beta-09-13
+-Turretservice: MBF, CillaSV
+-CillaSV baut Tankstelle
+-MBF,MRF -20 Movement
+-Tender baut Werften, Oelbohrinseln, U-Bootwerft und Tiefseefarm
+_______________________
+02.09.2009 z76-2 (GAMER)
+-FT90 Techbugfix
+-JumpBoxen nur noch verladbar.
+-EMO und Ars, keine Straßenverlinkung mehr
+-JumpBeton, keine Verlinkung zu Eingängen oder Rand
+-InfoImageSmall eingebaut
+_____________________
+29.08.2009 z76 (GAMER)
+Beta-09-11
+-CargoMX Ex.FuelTransfer
+-Executioner + Mattank
+-Tender HC Bugfix
+-Married, Waffen/Movebugfix
+-Brownie, Jump- und Transportbugfix
+________________________
+01.08.2009 z75-2 (GAMER)
+-Debugg, Waffenbugfix
+______________________
+25.07.2009 Z75 (GAMER)
+Beta-09-10
+Neu:
+-Brownie, Spacestation
+-Married, Abwehrkanone (Boden/Luft)
+Beta-09-09
+-BOX4 +2 Felder Wafffen
+-Box6 +1 Feld Waffen
+-Debugg -1 Feld Waffen
+-RDS Ammo 6/6
+-Baliste/GB137 Korrektur Schwebeantrieb
+_____________________________________
 20.06.2009 (GAMER) [incl. Beta-09-08]
 MBF baut Spacecenter
 Intruder + FuelVerbrauch beim laufen
@@ -11,7 +120,7 @@ Executioner, +Sonar -Transport
 Klotz, 1xRF Torpedo, langsamer im Wasser
 Neu:
 -Spacecenter (Gebäude)
-__________________
+___________________________________
 16.05.2007 (GAMEr) /incl.Beta-09-06
 -Jumpdrive Bugfix, auch auf ISG Beton
 -Speed Attack Tech für Tecc freigegeben

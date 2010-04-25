@@ -1,0 +1,75 @@
+VehicleType { 
+   Name = SIRTAKI
+   parent = 400 401 402 415 496
+   ID = 12527
+
+   Description = Munitionstransportflieger
+   Infotext = [Spezialserviceeinheit]
+   Picture = pua_sirhacke_sirtaki.pcx
+
+   Features += jam_only_own_field mine_layer ExternalAmmoTransfer NoMineRemoval
+   Armor = 400
+   Weight = 150
+   View = 40
+   Jamming = 40
+
+   transportation { 
+      MaxLoadableUnits = 2
+      MaxLoadableUnitSize = 100
+      MaxLoadableMass = 100
+      CategoriesNOT -> VehicleType.cargo_drop.CategoriesNOT
+      EntranceSystemNum = 3
+      EntranceSystem0 ->* VehicleType.GrIO
+      EntranceSystem0.RequireUnitFunction = paratrooper
+      EntranceSystem1 ->* VehicleType.Drop
+      EntranceSystem1.Mode = In out
+      EntranceSystem2 ->* VehicleType.ParaDevice
+   } transportation 
+
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 10000
+   } Tank
+   FuelConsumption = 18
+   Movement = 0 0 0 65 90 120 0 0 
+
+   WaitForAttack = false
+   Weapons { 
+      Initiative = 0
+      Number = 8
+      Weapon0 ->* VehicleType.AmmoMG
+      Weapon0.Ammo = 50
+
+      Weapon1 ->* VehicleType.MineAir 
+      Weapon1.MaxRange = 20
+      Weapon1.Ammo = 6
+
+      Weapon2 ->* VehicleType.AmmoLM 
+      Weapon2.targets = floating ground_level medium_level_flight 
+      Weapon2.shotFrom = ground_level medium_level_flight 
+      Weapon2.Ammo = 10
+
+      Weapon3 ->* VehicleType.AmmoSM 
+      Weapon3.targets = floating ground_level medium_level_flight 
+      Weapon3.shotFrom = ground_level medium_level_flight 
+      Weapon3.Ammo = 10
+
+      Weapon4 ->* VehicleType.AmmoBomb 
+      Weapon4.targets = floating ground_level medium_level_flight 
+      Weapon4.shotFrom = ground_level medium_level_flight 
+      Weapon4.Ammo = 10
+
+      Weapon5 ->* VehicleType.AmmoTorp 
+      Weapon5.targets = floating ground_level medium_level_flight 
+      Weapon5.shotFrom = ground_level medium_level_flight 
+      Weapon5.Ammo = 6
+
+      Weapon6 ->* VehicleType.AmmoCannon 
+      Weapon6.targets = floating ground_level medium_level_flight 
+      Weapon6.shotFrom = ground_level medium_level_flight 
+      Weapon6.Ammo = 20
+
+      Weapon7 ->* VehicleType.ServiceAir 
+   } Weapons
+} VehicleType

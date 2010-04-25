@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 15313
+   ;Bezeichnung der verknüpften Technologie: MONS
+   TechnologiesRequired = 15313
+} TechAdapter

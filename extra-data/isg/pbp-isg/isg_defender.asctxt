@@ -1,0 +1,26 @@
+VehicleType { 
+   Name = ISG DEFENDER
+   parent = 12006
+   ID = 12007
+
+   Description = Command Unit
+   Infotext = [Waechter des HQ]
+   Picture = isg_defender.png
+
+   ConstructionCost { 
+      CalculationMethod = auto
+   } ConstructionCost
+
+   Features = MoveDuringReactionFire ManualSelfDestruct
+   Armor = 2000
+   View = 100
+   Jamming = 0
+
+   TerrainAccess { 
+      terrain_any = turret_foundation
+      terrain_all = Installation
+      terrain_not = 
+      terrain_kill = lava
+   } TerrainAccess
+
+} VehicleType

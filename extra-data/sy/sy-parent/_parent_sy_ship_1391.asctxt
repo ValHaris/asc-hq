@@ -1,0 +1,45 @@
+VehicleType { 
+   Name = PARENT SHIP
+   abstract = true
+   ID = 1391
+   parent = 1394
+   Description =  space ship
+   Infotext = []
+   Armor = 700
+   View = 50
+   WreckageObject = 1308
+   ConstructionCost { 
+      CalculationMethod = auto
+      energy =
+      fuel =
+      Material =
+   } ConstructionCost
+   Height = low_level_flight medium_level_flight high_level_flight orbit 
+   Jamming = 55
+   WaitForAttack = false
+   Tank { 
+      Energy = 0
+      Material = 2000
+      fuel = 5000
+   } Tank
+   FuelConsumption = 12
+   Features = self_repairing jam_only_own_field
+   Movement = 0 0 0 80 140 160 160 40 
+   movementsound = sy_ground_s.ogg
+   Category = heavy_aircraft
+   MaxSurvivableStorm = 255
+   ResourceDrillingRange = 0
+   SelfRepairRate = 15
+   Weight = 200
+   TerrainAccess ->* VehicleType.SY_Air
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+      ObjectsRemovable = 
+   } Construction
+   Weapons { 
+      Initiative = 0
+      Number = 0
+   } Weapons
+} VehicleType

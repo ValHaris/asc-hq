@@ -1,0 +1,21 @@
+BuildingType { 
+   Name = SSG
+   ID = 1323
+   parent = 12023
+
+   ConstructionStages = 1
+   Weather = dry
+   Fields = A4
+   UseGFXpics = false
+   Pictures {
+      dry = sy_bld_kolonie.png
+   } Pictures
+   RubbleObjects = false
+   Entry = A4
+   TerrainAccess { 
+      terrain_any = lowland hard_sand soft_sand 
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = 
+   } TerrainAccess
+} BuildingType

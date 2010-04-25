@@ -1,0 +1,27 @@
+VehicleType { 
+   Name = META RAIL
+   ID = 15225
+   parent = 224
+
+   Description = AirDefence Railgun
+   Picture = mk6v_metarail.png
+   Infotext = []
+
+   Weapons { 
+      Weapon0 {
+         Name = Ground-Air Railgun
+         sound = lasergun.ogg
+         Type = Laser shootable 
+	 LaserRechargeRate = 1
+         LaserRechargeCost {
+            energy = 0
+            material = 150
+            fuel = 400
+         } LaserRechargeCost
+         MaxRange = 70
+         Ammo = 1
+         Punch@MaxRange = 70
+         Punch@MinRange = 90
+      } Weapon0
+   } Weapons
+} VehicleType

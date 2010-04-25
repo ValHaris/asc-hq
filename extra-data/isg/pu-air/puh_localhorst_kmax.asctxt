@@ -1,0 +1,35 @@
+VehicleType { 
+   Name = K MAX
+   parent = 382
+   ID = 12565
+
+   Description = Attack Helicopter
+   picture = puh_localhorst_kmax.png
+   InfoImage = puh_localhorst_kmax.jpg
+   InfoImageSmall = puh_localhorst_kmax_k.png
+   GuideSortHelp = 0 0 0 0 0 0 0 0 0 0
+   InfoText = [Spezialeinheit.
+   Technische Merkmale: Flettner Rotor, Jetantrieb, panzerbrechende Raketen, Tarnbauweise
+    ]
+
+   Armor += 100
+   Jamming = 65
+   
+   Height = ground_level low_level_flight medium_level_flight high_level_flight
+   Movement = 0 0 0 40 150 150 180
+
+   Weapons {
+      Numbers = 3
+      Weapon0.Ammo = 6
+      Weapon0.Punch@MaxRange = 110
+      Weapon0.Punch@MinRange = 110
+      Weapon0.MaxRange = 30
+      Weapon0.MinRange = 10
+      Weapon1.Ammo = 6
+      Weapon1.Punch@MaxRange = 70
+      Weapon1.Punch@MinRange = 70
+      Weapon1.MaxRange = 30
+      Weapon1.MinRange = 10
+
+   } Weapons
+} VehicleType

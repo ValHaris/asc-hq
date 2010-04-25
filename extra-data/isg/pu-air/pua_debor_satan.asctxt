@@ -1,0 +1,68 @@
+VehicleType { 
+   Name = Satan
+   ID = 12547
+   parent = 400 402 414 498
+
+   Description = air service unit
+   Picture = pua_debor_satan.png
+   WreckageObject = 1302
+   Infotext = [Spezial Flugzeug der Debor Sekte, ehemals ein abgestuerztes Alienraumschiff. Zerstoerte Komponenten wurden durch eigene Technologien ersetzt und erweitert.]
+
+   Armor = 350
+   View = 52
+   Jamming = 25
+   FuelConsumption = 15
+   Features = ExternalRepair self_repairing automatic_resource_searching externalmaterialtransfer externalfueltransfer externalammotransfer
+;   Abilities = repair_vehicle self_repairing automatic_resource_searching fuel_transfer material_transfer
+   MaxSurvivableStorm = 255
+   ResourceDrillingRange = 4
+   SelfRepairRate = 30
+   Weight = 50
+
+   Height = ground_level low_level_flight medium_level_flight high_level_flight orbit
+   Tank { 
+      Material = 25000
+      fuel = 50000
+   } Tank
+   Movement = 0 0 0 60 150 170 170 130 
+   TerrainAccess ->* VehicleType.Aircraft_terrain_road
+   MovementSound = aircraft_l_g.ogg
+
+   Weapons { 
+      Initiative = -100
+      Number = 7
+      Weapon0 ->* VehicleType.ServiceGround 
+      Weapon0.targets = floating ground_level low_level_flight medium_level_flight high_level_flight orbit 
+      Weapon0.shotFrom = ground_level low_level_flight medium_level_flight high_level_flight orbit 
+
+      Weapon1 ->* VehicleType.AmmoMG 
+      Weapon1.targets = floating ground_level low_level_flight medium_level_flight high_level_flight orbit 
+      Weapon1.shotFrom = ground_level low_level_flight medium_level_flight high_level_flight orbit 
+      Weapon1.Ammo = 100
+
+      Weapon2 ->* VehicleType.AmmoSM
+      Weapon2.targets = floating ground_level low_level_flight medium_level_flight high_level_flight orbit 
+      Weapon2.shotFrom = ground_level low_level_flight medium_level_flight high_level_flight orbit 
+      Weapon2.Ammo = 40
+
+      Weapon3 ->* VehicleType.AmmoLM 
+      Weapon3.targets = floating ground_level low_level_flight medium_level_flight high_level_flight orbit 
+      Weapon3.shotFrom = ground_level low_level_flight medium_level_flight high_level_flight orbit 
+      Weapon3.Ammo = 30
+
+      Weapon4 ->* VehicleType.AmmoBomb 
+      Weapon4.targets = floating ground_level low_level_flight medium_level_flight high_level_flight orbit 
+      Weapon4.shotFrom = ground_level low_level_flight medium_level_flight high_level_flight orbit 
+      Weapon4.Ammo = 40
+
+      Weapon5 ->* VehicleType.AmmoCannon 
+      Weapon5.targets = floating ground_level low_level_flight medium_level_flight high_level_flight orbit 
+      Weapon5.shotFrom = ground_level low_level_flight medium_level_flight high_level_flight orbit 
+      Weapon5.Ammo = 30
+
+      Weapon6 ->* VehicleType.AmmoTorp 
+      Weapon6.targets = floating ground_level low_level_flight medium_level_flight high_level_flight orbit 
+      Weapon6.shotFrom = ground_level low_level_flight medium_level_flight high_level_flight orbit 
+      Weapon6.Ammo = 15
+   } Weapons
+} VehicleType

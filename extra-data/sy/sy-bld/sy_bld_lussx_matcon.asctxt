@@ -1,0 +1,54 @@
+BuildingType { 
+   Name = LUSSX MATERIALCONVERTER
+   ID = 1309
+   Armor = 2000
+   View = 40
+   Jamming = 40
+   ConstructionStages = 1
+   Weather = dry 
+   Fields = A4 B4 B5 B6 C4 C5  
+   UseGFXpics = false
+   Pictures { 
+      dry = SY_BLD_lussx2.pcx
+   } Pictures
+   RubbleObjects = false
+   Entry = B4
+   Functions = matter_converter NoObjectChaining
+   Techlevel = 0
+   TerrainAccess { 
+      terrain_any = Shallow_water Lowland High_mountains Road Runway Water Deep_water Hard_sand Soft_sand Mountains Very_shallow_water Lava Ditch Hillside Turret_foundation Installation River  
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = 
+   } TerrainAccess
+   MaxResearch = 0
+   ConstructionCost { 
+      Energy = 0
+      Material = 20000
+      fuel = 20000
+   } ConstructionCost
+   MaxResourceProduction { 
+      Energy = -15000
+      Material = 5000
+      fuel = 0
+   } MaxResourceProduction
+   defaultProduction {
+      energy = -15000
+      material = 5000
+      fuel = 
+   } defaultProduction
+   StorageCapacity { 
+      BImode { 
+         Energy = 100000
+         Material = 100000
+         fuel = 100000
+      } BImode
+      ASCmode { 
+         Energy = 0
+         Material = 10000
+         fuel = 0
+      } ASCmode
+   } StorageCapacity
+   Height = orbit 
+   ExternalLoading =
+} BuildingType

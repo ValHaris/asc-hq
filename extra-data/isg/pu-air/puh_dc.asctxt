@@ -1,0 +1,65 @@
+VehicleType { 
+   Name = DC
+   parent = 400 401 402 409 497
+   ID = 12574
+   WreckageObject = 15502 15802
+
+   Description = Davion Constructor
+   picture = puh_dc.png
+   InfoImage = puh_dc.jpg
+;   GuideSortHelp = 515 550 551 0 3 0 0 0 0 0
+   Infotext = []
+
+   Armor = 400
+   Weight = 100
+   Jamming = 70
+   Transportation ->* VehicleType.TransHeliHvy 
+   Features += Vehicle_Production ExternalFuelTransfer ExternalMaterialTransfer ExternalAmmoTransfer automatic_resource_searching construct_specific_buildings ExternalRepair self_repairing jam_only_own_field
+   ResourceDrillingRange = 4
+   SelfRepairRate = 10
+
+   Tank { 
+      Energy = 0
+      Material = 80000
+      fuel = 80000
+   } Tank
+   FuelConsumption = 18
+   Movement = 0 0 0 30 100 100 0 0 
+   TerrainAccess.terrain_any += very_shallow_water shallow_water
+   
+   Construction { 
+      Buildings = 1 2 4-7 10-23 26 30-32 35-37
+      Vehicles = 510 511 531 572 573 574 579 617 621 624 625
+      Objects = 2 3 10 30 44 995 996 997 998 999 1000 2096 2097 2098
+   } Construction
+   CategoriesProduceable = default
+
+   Weapons { 
+      Number = 9
+      Weapon0 ->* VehicleType.ServiceGround 
+
+      Weapon1 ->* VehicleType.AmmoMG 
+      Weapon1.Ammo = 100
+
+      Weapon2 ->* VehicleType.AmmoCannon 
+      Weapon2.Ammo = 50
+
+      Weapon3 ->* VehicleType.AmmoGM 
+      Weapon3.Ammo = 30
+
+      Weapon4 ->* VehicleType.AmmoAM 
+      Weapon4.Ammo = 30
+
+      Weapon5 ->* VehicleType.AmmoBomb 
+      Weapon5.Ammo = 40
+
+      Weapon6 ->* VehicleType.AmmoMine 
+      Weapon6.Ammo = 40
+      
+      Weapon7 ->* VehicleType.AmmoCM
+      Weapon7.Ammo = 4
+      
+      Weapon8 ->* VehicleType.AmmoTorp
+      Weapon8.Ammo = 6
+   } Weapons
+} VehicleType

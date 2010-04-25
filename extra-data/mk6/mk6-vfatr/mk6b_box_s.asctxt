@@ -1,0 +1,46 @@
+VehicleType { 
+   Name = BOX S
+   parent = 400 401 402 403 15000
+   ID = 15341
+;   GuideSortHelp = 339 0 0 0 6 0 0 0 0 0
+
+   Description = Service Jump Box
+   Infotext = []
+   picture = mk6b_box_s.png
+;   WreckageObject = 14235
+
+   JumpDrive ->* VehicleType.TeccnolsJump1
+   JumpDrive.MaxDistance = 400
+   JumpDrive.consumption.Material = 200
+   JumpDrive.consumption.Fuel = 1000
+
+   View = 0
+   Features = MoveDuringReactionFire externalRepair externalFuelTransfer externalMaterialTransfer externalAmmoTransfer
+   Weight = 1000
+
+
+   Movement = 0 0 0 14 0 0 0 0 
+   Tank.Material = 40000
+   Tank.Fuel = 60000
+   TerrainAccess ->* VehicleType.heli_terrain 
+
+   Weapons { 
+      Number = 8
+      Weapon0 ->* VehicleType.DLS 
+      Weapon0.MaxRange = 30
+      Weapon1 ->* VehicleType.AmmoCannon 
+      Weapon1.Ammo = 100
+      Weapon2 ->* VehicleType.AmmoSM 
+      Weapon2.Ammo = 100
+      Weapon3 ->* VehicleType.AmmoLM 
+      Weapon3.Ammo = 100
+      Weapon4 ->* VehicleType.AmmoCM 
+      Weapon4.Ammo = 20
+      Weapon5 ->* VehicleType.AmmoSM 
+      Weapon5.Ammo = 100
+      Weapon6 ->* VehicleType.AmmoTorp 
+      Weapon6.Ammo = 100
+      Weapon7 ->* VehicleType.ServiceGround 
+
+   } Weapons
+} VehicleType

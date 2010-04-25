@@ -1,0 +1,10 @@
+technology {
+   Name = Pul
+   infotext = 
+   id = 1344
+   RelatedUnitID = 1344
+   parent = 1399
+   researchpoints *= 12
+   techlevel = 4
+   TechnologiesRequired = 1399,100001,100104,1329 
+} Technology

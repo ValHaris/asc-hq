@@ -1,0 +1,8 @@
+ObjectType { 
+   ID = 12557
+   parent = 499
+   Name = Azraee Wreckage
+   dry { 
+      picture = puv_undertaker_azraeel_w.png 1
+   } dry
+} ObjectType

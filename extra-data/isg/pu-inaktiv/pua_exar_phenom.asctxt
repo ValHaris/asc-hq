@@ -1,0 +1,36 @@
+VehicleType { 
+   Name = PHENOM
+   parent = 340 15000
+   ID = 12543
+   
+   Description = universal mine layer
+   picture = pua_exar_phenom.png
+;   wreckageobject = 14016 14816
+   Infotext = []
+
+   Features += mine_layer mineview jam_only_own_field NoMineRemoval
+   Armor = 500
+   Jamming = 45
+
+   Tank.Material = 10000
+   Tank.Fuel = 20000
+   FuelConsumption = 22
+
+   View=0
+   JumpDrive ->* VehicleType.TeccnolsJump4
+
+   WaitforAttack = false
+   Weapons { 
+      Number = 2
+
+      Weapon0 ->* VehicleType.MineAir
+      Weapon0.Ammo = 40
+
+      Weapon1 ->* VehicleType.TeccEMPAir
+      Weapon1.Punch@MaxRange = 90
+      Weapon1.Punch@MinRange = 90
+      Weapon1.ReactionFireShots = 2
+      Weapon1.LaserRechargeCost.Material = 50
+
+   } Weapons
+} VehicleType

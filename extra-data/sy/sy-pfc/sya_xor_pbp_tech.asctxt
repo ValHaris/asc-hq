@@ -1,0 +1,10 @@
+technology {
+   Name = Xor
+   infotext = 
+   id = 1336
+   RelatedUnitID = 1336
+   parent = 1399
+   researchpoints *= 27
+   techlevel = 5
+   TechnologiesRequired = 1399,100003,100105,100305,100302,100313,1330,1317,1318
+} Technology

@@ -1,0 +1,10 @@
+itemfilter {
+   Vehicles = 1300-1399
+   Buildings = 1300-1399
+   Objects = 1300-1399
+   Terrain =
+   Technologies = 1300-1399
+   name = SY Unit Set 
+   activated = true
+} itemfilter
+   

@@ -7,6 +7,7 @@ VehicleType {
 ;   Infotext = []
    Picture = mk6m_devastor.pcx
    InfoImage = mk6m_devastor.jpg
+   InfoImageSmall = mk6m_devastor_k.png
    GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
 
    Armor += 20

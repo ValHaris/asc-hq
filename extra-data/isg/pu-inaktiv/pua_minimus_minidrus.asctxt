@@ -1,0 +1,53 @@
+VehicleType { 
+   Name = miniDRUS
+   parent = 496 1330 400 401 402 
+   ID = 12539
+   Description = Adaptierter Sy-Zerstörer 
+   Infotext = [Minimalistische Archiologen fanden bei Grabungen auf Zdum alte Sy-
+               Relikte aus vergangen Tagen. Die Wissenschaftler vermuteten, dass
+               diese von abgestürzten Sy-Zerstören stammen und infolge richtete
+               das minimalistische Oberkommando eine Abteilung zur Erforschung 
+               dieser Relikte ein. Es wurde schnell klar, dass es sich bei den 
+               antiken Stücken um den Vorgänger des derzeitigen Drus handelt. 
+               Einige Zyklen später war es dann soweit, der erste nachgebaute
+               Prototyp war fertig gestellt. Die Antriebs und Waffensystem konnten geborgen werden 
+               , nur die typische Auoreparaturfunktion der Biohülle konnte nicht mehr verwendet werden, da sie schon seit langem abgestorben war.
+               Stattdessen wurde auf Basis des Stormbringers ein Chassis gebaut, welches die schweren Energieerzeuger aufnehmen kann. Dadurch kann der Prototyp
+               auch ein wenig schneller als sein Vorbild durch die Lüfte gleiten. Um die Offensivfähigkeiten zu stärken, wurden unter den tragflächen jeweils 2 langstrecken Luft-Boden, bzw. Luft-luft Raketen installiert. ]
+
+   Picture = pua_minimus_minidrus.png
+
+   Armor -= 50
+   Weight -= 50
+   Features -= self_repairing
+
+   Transportation ->* VehicleType.noTrans 
+
+   Tank { 
+      Energy = 0
+      Material = 500
+      fuel = 10000
+   } Tank
+
+   Movement = 0 0 0 60 120 130 150 0 
+   Height = ground_level low_level_flight medium_level_flight high_level_flight
+   TerrainAccess ->* VehicleType.aircraft_terrain 
+   
+   Weapons {
+      Number = 3
+      Weapon1 ->* VehicleType.ASMH
+      Weapon1.shotFrom = medium_level_flight high_level_flight
+      Weapon1.ReactionFireShots = 0
+      Weapon1.MinRange = 30
+      Weapon1.MaxRange = 90
+      Weapon1.Ammo = 2
+      
+      Weapon2 ->* VehicleType.AAMO
+      Weapon2.shotFrom = medium_level_flight high_level_flight
+      Weapon2.targets = medium_level_flight high_level_flight orbit
+      Weapon2.ReactionFireShots = 0
+      Weapon2.MinRange = 30
+      Weapon2.MaxRange = 90
+      Weapon2.Ammo = 2
+   } Weapons
+} VehicleType

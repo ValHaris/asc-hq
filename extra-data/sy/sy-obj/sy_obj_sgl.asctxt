@@ -1,0 +1,51 @@
+ObjectType { 
+   Name = Stachelgras
+   ID = 1307
+   groupID = 11
+
+   growthRate = 0.14
+   lifetime = 30
+   MaxChildSpawnNumber = 150
+   visible_in_fogOfWar = true
+   LinkableObjects = 
+   Armor = 200
+   
+   Weather = dry
+   ;                def lTr mTr hvT lWh mWh hWh tro rlv mAC mSh BTO lAC hAC lSh hSh Hli hov
+   Movemalus_plus = 10  3   5   3   8   10  15  2   20   20  14  14  20  20  14  14  20  20
+   Movemalus_abs = -1 
+   AttackBonus_abs = -1
+   AttackBonus_plus = 0
+   DefenseBonus_abs = -1
+   DefenseBonus_plus = 0
+   Jamming_abs = -1
+   Jamming_plus = 1
+   Height = 117
+   ConstructionCost { 
+      Energy = 0
+      Material = 200
+      fuel = 10
+      Movement = 5
+   } ConstructionCost
+   RemovalCost { 
+      Energy = 0
+      Material = -150
+      fuel = 20
+      Movement = 15
+   } RemovalCost
+;   NetBehaviour = NetToSelf NetToBorder
+   TerrainAccess { 
+      terrain_any = Lowland Soft_sand hard_sand road runway spaceport ditch 
+      terrain_all = 
+      terrain_not = forest large_rocks small_rocks swamp very_shallow_water shallow_water water deep_water river lava
+      terrain_kill = swamp very_shallow_water shallow_water water deep_water river lava
+   } TerrainAccess
+   TerrainProperties_Filter =  
+   TerrainProperties_Add = small_rocks 
+   dry { 
+      UseGFXpics = false
+      picture = SY_OBJ_SGL.pcx 1
+      ImageReference =  -1 
+      FlipPictures   =  0 
+   } dry
+} ObjectType

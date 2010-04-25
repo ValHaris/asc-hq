@@ -1,0 +1,5 @@
+Techadapter {
+   Name = o2105
+   ;Bezeichnung der verknüpften Technologie: Crystals 1
+   TechnologiesRequired = 100006 100104
+} TechAdapter

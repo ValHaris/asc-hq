@@ -36,7 +36,7 @@ Aufgrund des Rückstoßes des Geschützes ist die BALISTE nur in der Lage im geland
 
    HeightChangeMethodNum = 2
    HeightChangeMethod0 {
-      movecost = 11
+      movecost = 1
       heightdelta = 1
       dist = 0
       startheight = ground_level

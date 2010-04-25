@@ -1,0 +1,37 @@
+VehicleType { 
+   Name = ATLATL
+   parent = 19 
+   ID = 12517
+
+   Description = Elite Arrow
+   Picture = pua_atlatl.pcx
+   InfoImage = pua_atlatl.jpg
+   InfoImageSmall = pua_atlatl_k.png
+   Infotext = [Der Elite Arrow (Prototyp), auch Atlatl (Serienkennung) genannt, ist ein leichter Luft- und Raumjäger der durch eine hohe Geschindigkeit und großen Munitionsvorrat besticht. 
+Im Gegensatz zu dem weitverbreiteten Glauben, dass die Piloten der Atlatl-Staffeln aus den besten ihrer Jahrgänge ausgewählt würden, werden sie tatsächlich direkt nach der Geburt ausgewählt. Und zwar allein nach körperlichen und geistigen Voraussetztungen. 
+Dabei stehen zwei Dinge im Vordergrund:
+1. Der Anwärter erfüllt die körperlichen Voraussetzungen, er verfühgt also über keinen lebensfähigen Körper.
+2. Der Anwärter erfüllt die geistigen Anforderungen, er verfühgt also über ein gesundes Gehirn.
+Liegen diese Bedingungen vor wird der Anwärter mit einem neuem Körper, dem Atlatl verbunden. Dieses geschieht in mehreren Schritten, zuerst wird der Anwärter mit einem Computersystem verbunden, dass ihm eine Ausbildung möglich macht. Dem folgt dann die Übergabe der Kontrolle eines unbewaffenten Trainingsflugzeuges. Diesem wiederum folgt dann nach etwa einem Jahr der Atlatl und die Einberufung in die Elite der Streitkräfte der Theokratie.
+]
+
+   Armor += 50
+   Weight += 20
+
+   Movement += 0 0 0 0 20 20 180 60 
+   Height = ground_level low_level_flight medium_level_flight high_level_flight orbit
+
+   Weapons { 
+      Number = 4
+      Weapon0 ->* VehicleType.AAMO
+      Weapon0.Punch@MaxRange = 90
+      Weapon0.Punch@MinRange = 90
+
+      Weapon1.targets = floating ground_level low_level_flight medium_level_flight high_level_flight orbit
+      Weapon1.shotFrom = ground_level low_level_flight medium_level_flight high_level_flight orbit
+
+      Weapon2 ->* VehicleType.AAMO2
+      Weapon2.Punch@MaxRange = 85
+      Weapon2.Punch@MinRange = 85
+   } Weapons
+} VehicleType

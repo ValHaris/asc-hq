@@ -1,0 +1,30 @@
+VehicleType { 
+   Name = ISG JAMMER
+   parent = 400 422
+   ID = 12010
+
+   Description = Jamming Unit 150
+   Infotext = [Waechter des HQ]
+   Picture = isg_jammer.png
+
+   ConstructionCost { 
+      CalculationMethod = auto
+   } ConstructionCost
+
+   Features = ManualSelfDestruct
+   Armor = 2000
+   Weight = 6000
+   View = 100
+   Jamming = 150
+   
+   Movement = 0 0 0 20 0 0 0 0
+
+   TerrainAccess { 
+      terrain_any = turret_foundation
+      terrain_all = Installation
+      terrain_not = 
+      terrain_kill = lava
+   } TerrainAccess
+   
+   Weapons.Number = 0
+} VehicleType

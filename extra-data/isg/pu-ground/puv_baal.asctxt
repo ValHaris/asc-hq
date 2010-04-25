@@ -1,0 +1,31 @@
+VehicleType { 
+   Name = BAAL
+   ID = 12572
+   parent = 1446
+   Description = Extrem Kampfbuggy
+   Picture = puv_baal.png
+   InfoImage = puv_baal.jpg
+   InfoImageSmall = puv_baal_k.png
+   WreckageObject = 1404
+   Infotext = [Auf der Grundlage erbeuteter, aber leider unvollständiger Pläne eines Outsider-Buggys mit der Bezeichnung TX, entwickelten die draconianischen Ingenieure den BAAL, einen Buggy der auch schwierigstes Gelände mit hoher Geschwindigkeit bewältigen kann.
+BAAL ist mit Luftabwehrraketen ausgerüstet, mit denen Flugzeuge in allen Höhenlagen bekämpft werden können. Des weiteren verfügt er über Boden-Boden-Raketen, mit denen sich auch schwer gepanzerte Ziele wirkungsvoll bekämpfen lassen sowie eine automatische Gattlingkanone zur Bekämpfung von Infanterie oder Tieffliegern.
+Um eine hohe Geschwindigkeit zu gewährleisten, wurde auf eine stärkere Panzerung verzichtet, allerdings ist der Buggy in der Lage, sich nach erfolgtem Angriff wieder in den Schutz anderer Kampfeinheiten zurückzuziehen.]
+   
+   Armor += 100
+   View += 10
+   Movement += 0 0 0 20 0 0 0 0
+   Tank.Fuel = 1500
+
+   Weapons { 
+      Weapon1.MaxRange = 40
+      Weapon1.Punch@MaxRange = 90
+      Weapon1.Punch@MinRange = 90
+      Weapon1.Ammo = 6
+      Weapon2 ->* VehicleType.SAMH
+      Weapon2.Punch@MaxRange = 75
+      Weapon2.Punch@MinRange = 75
+      Weapon2.MaxRange = 30
+      Weapon2.Ammo = 4
+      Weapon2.ReactionFireShots = 2
+   } Weapons
+} VehicleType

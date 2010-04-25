@@ -318,6 +318,64 @@ Plasmabomb {
          } LaserRechargeCost
    } NLS
 
+   TDW { 
+         Name = Trooper Defence Weapon
+         Sound = weapon10_s.ogg
+         Type = Laser shootable 
+         targets = floating ground_level low_level_flight medium_level_flight
+         shotFrom = floating ground_level low_level_flight medium_level_flight
+	 ReactionFireShots = 2
+         Punch@MaxRange = 110
+         Punch@MinRange = 130
+         MaxRange = 30
+         MinRange = 10
+         Ammo = 4
+	 LaserRechargeRate = 1
+         LaserRechargeCost {
+            energy = 0
+            material = 20
+            fuel = 100
+         } LaserRechargeCost
+         HitAccuracy { 
+            d6 = 0
+            d5 = 0
+            d4 = 0
+            d3 = 0
+            d2 = 90
+            d1 = 100
+            0 = 100
+            u1 = 100
+            u2 = 90
+            u3 = 0
+            u4 = 0
+            u5 = 0
+            u6 = 0
+         } HitAccuracy
+      WeaponEffectiveness {      
+         default = 100
+         trooper = 100
+         rail_vehicle = 0
+         building|turret|object = 0
+         hoovercraft = 0
+         helicopter = 0
+
+         light_tracked_vehicle = 0
+         medium_tracked_vehicle = 0
+         heavy_tracked_vehicle = 0
+
+         light_wheeled_vehicle = 0
+         medium_wheeled_vehicle = 0
+         heavy_wheeled_vehicle = 0
+         
+         light_ship = 0
+         medium_ship  = 0
+         heavy_ship = 0
+
+         light_aircraft = 0
+         medium_aircraft  = 0
+         heavy_aircraft = 0
+      } WeaponEffectiveness
+   } TDW
 
    DLS { 
          Name = Defence Laser System
@@ -618,11 +676,25 @@ LRHEPT {
       terrain_kill = 
    } TeccnolsJump5
 
+   TeccnolsJump6 {
+      Height = orbit
+      MaxDistance = 300
+      consumption {
+         Energie = 0
+         Material = 500
+         Fuel = 3000
+      } consumption
+      terrain_any = turret_foundation runway spaceport
+      terrain_all = beacon
+      terrain_not = 
+      terrain_kill = 
+   } TeccnolsJump6
+
    Turret_all_tecc {
       terrain_any = road runway lowland hard_sand soft_sand turret_foundation
       terrain_all =
-      terrain_not = railroad forest
-      terrain_kill = shallow_water Water Deep_water lava river
+      terrain_not = forest large_rocks hillside swamp bridge morass
+      terrain_kill = swamp shallow_water Water Deep_water lava river
    } Turret_all_tecc
 
 } VehicleType

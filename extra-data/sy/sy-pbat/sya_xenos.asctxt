@@ -1,0 +1,28 @@
+VehicleType { 
+   Name = XENOS
+   parent = 1395 1393 1398
+   ID = 1324
+
+   Description = medium bomber
+   Infotext = [ Mittlerer Bomber auf Basis des Xentor mit ansprechender Panzerung und Bewaffnung.]
+   Picture = sya_xenos.png
+
+   Armor = 400
+   View = 40
+   Category = medium_aircraft
+   Movement = 0 0 0 30 180 190 190 20 
+   Weight = 80
+
+   Weapons { 
+      Initiative = 0
+      Number = 2
+      Weapon0 ->* VehicleType.SY_Bomber_Big 
+      Weapon0.Punch@MaxRange = 110
+      Weapon0.Punch@MinRange = 130
+
+      Weapon1 ->* VehicleType.SY_fighter_Small 
+      Weapon1.Punch@MaxRange = 55
+      Weapon1.Punch@MinRange = 55
+   } Weapons
+
+} VehicleType

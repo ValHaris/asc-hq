@@ -1,0 +1,45 @@
+VehicleType {
+	Name 			= Devil
+	parent		= 400 401 402 409
+	ID 			= 12546
+
+	WreckageObject	= 15507 15807
+
+	Description		= Eloka Helicopter
+	Infotext		= [PU Satanplayer]
+
+	picture		= puh_devil.pcx
+
+	Features		+= sonar satelliteview Vehicle_Production NoProductionCustomization
+	View 			+= 40
+	Movement 		+= 0 0 0 0 10 20 0 0
+
+	Tank { 
+		Energy	= 0
+		Material	= 12000
+		fuel		+= 16000
+	} Tank
+	FuelConsumption	= 20
+
+	Construction {
+		VehiclesInternally = 1452
+		ProductionEfficiency = [0 0 1.5 0 1 0 0 0 1]
+	} Construction 
+
+	Transportation ->* VehicleType.TransWeaponPlane
+      Transportation.MaxLoadableUnits = 5
+      Transportation.MaxLoadableUnitSize = 10
+      Transportation.MaxLoadableMass = 50
+	Transportation.EntranceSystem1.UnitHeightAbs = medium_level_flight
+	Transportation.EntranceSystem1.ContainerHeight =  medium_level_flight
+
+
+	Weapons { 
+		Initiative = 0
+ 		Number = 1
+ 		Weapon0 ->* Vehicletype.Air_MG 
+		Weapon0.Ammo = 8
+		Weapon0.Punch@MaxRange = 43
+		Weapon0.Punch@MinRange = 43	
+	} Weapons
+} VehicleType

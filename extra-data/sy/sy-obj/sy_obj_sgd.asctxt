@@ -1,0 +1,53 @@
+ObjectType { 
+   Name = Dichtes Stachelgras
+   ID = 1311
+   groupID = 11
+
+   lifetime = 50
+   MaxChildSpawnNumber = 150
+   canExistBeneathBuildings = true
+   GrowOnUnits = true
+   visible_in_fogOfWar = true
+   LinkableObjects = 
+   Armor = 300
+
+   Weather = dry
+   ;                def lTr mTr hvT lWh mWh hWh tro rlv mAC mSh BTO lAC hAC lSh hSh Hli hov
+   Movemalus_plus = 12  7  10   7   15  17  22  10  32  32  16  16  32  32  32  32  32  32
+   Movemalus_abs = -1 
+   AttackBonus_abs = -1
+   AttackBonus_plus = 0
+   DefenseBonus_abs = -1
+   DefenseBonus_plus = 0
+   Jamming_abs = -1
+   Jammming_plus = 7
+   Height = 91
+   ConstructionCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+      Movement = 0
+   } ConstructionCost
+   RemovalCost { 
+      Energy = 0
+      Material = -400
+      fuel = 30
+      Movement = 20
+   } RemovalCost
+;   NetBehaviour = NetToSelf NetToBorder
+   growthRate = 10.00
+   TerrainAccess { 
+      terrain_any = lava 
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = water deep_water
+   } TerrainAccess
+   TerrainProperties_Filter =  
+   TerrainProperties_Add = large_rocks lava_barrier
+   dry { 
+      UseGFXpics = false
+      picture = SY_OBJ_SGD.pcx 1
+      ImageReference =  -1 
+      FlipPictures   =  0 
+   } dry
+} ObjectType

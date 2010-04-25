@@ -1,0 +1,44 @@
+VehicleType {
+   Name = KOMORAN
+   parent = 1255
+   ID = 12536
+
+   Description = Jamm- und Transport Wasserflugzeug
+   Infotext = [Umbau des ALBATROS welcher Zugunsten eines experimentellen Jammingmodules und neuem Torpedowurfsystem weniger Transportkapazitaet in kauf nimmt und keinerlei Bomben mehr mitfuehrt.]
+   picture = pua_kraal_komoran.png
+   wreckageobject = 12536
+   GuideSortHelp = 551 601 0 0 0 0 0 0 0 0
+   
+   Features = move_after_attack MoveDuringReactionFire Sonar
+
+   Jamming = 45
+
+   Transportation {
+      MaxLoadableUnits = 3
+      MaxLoadableUnitSize = 15
+      MaxLoadableMass = 15
+      EntranceSystem4 ->* VehicleType.Diver_Out
+   } Transportation
+
+   FuelConsumption = 30
+
+   Weapons {
+      Initiative = 0
+      Number = 2
+
+      Weapon0 ->* VehicleType.Air_MG
+      Weapon0.MaxRange = 20
+      Weapon0.Ammo = 20
+      Weapon0.ReactionFireShots = 2
+      Weapon0.Punch@MaxRange = 45
+      Weapon0.Punch@MinRange = 55
+
+      Weapon1 ->* VehicleType.AUTorp
+      Weapon1.MaxRange = 30
+      Weapon1.Ammo = 4
+      Weapon1.ReactionFireShots = 0
+      Weapon1.Punch@MaxRange = 105
+      Weapon1.Punch@MinRange = 115      
+   
+   } Weapons
+} VehicleType

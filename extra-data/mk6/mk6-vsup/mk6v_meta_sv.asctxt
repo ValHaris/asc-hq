@@ -14,8 +14,8 @@ VehicleType {
    Category = heavy_tracked_vehicle
 
    Movement -= 0 0 0 10 0 0 0 0 
-   Tank.Material = 10000
-   Tank.fuel = 15000
+   Tank.Material = 15000
+   Tank.fuel = 25000
 
    Weapons { 
       Initiative = 0

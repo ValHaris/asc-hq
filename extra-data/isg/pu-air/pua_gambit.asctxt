@@ -1,0 +1,73 @@
+VehicleType { 
+   Name = GAMBIT
+   parent = 400 401 402 415 496
+   ID = 12532
+   
+   Description = Munitionstransportflieger
+   Infotext = [Spezialserviceeinheit]
+   Picture = pua_gambit.pcx
+
+   Armor = 400
+   View = 40
+
+   transportation { 
+      MaxLoadableUnits = 2
+      MaxLoadableUnitSize = 100
+      MaxLoadableMass = 100
+      CategoriesNOT -> VehicleType.cargo_vehicle_med.CategoriesNOT
+      EntranceSystemNum = 2
+      EntranceSystem0 ->* VehicleType.GrIO
+      EntranceSystem1 ->* VehicleType.Para
+   } transportation 
+   Tank { 
+      Energy = 0
+      Material = 1000
+      fuel = 4000
+   } Tank
+   FuelConsumption = 18
+   Features += mine_layer externalAmmoTransfer nomineremoval
+   Movement = 0 0 0 65 90 120 0 0 
+
+   Weight = 130
+   Weapons { 
+      Initiative = 0
+      Number = 9
+      Weapon0 ->* VehicleType.Air_MG
+      Weapon0.Ammo = 10
+
+      Weapon1 ->* VehicleType.MineAir 
+      Weapon1.Ammo = 10
+
+      Weapon2 ->* VehicleType.AmmoLM 
+      Weapon2.targets = floating ground_level medium_level_flight 
+      Weapon2.shotFrom = ground_level medium_level_flight 
+      Weapon2.Ammo = 10
+
+      Weapon3 ->* VehicleType.AmmoSM 
+      Weapon3.targets = floating ground_level medium_level_flight 
+      Weapon3.shotFrom = ground_level medium_level_flight 
+      Weapon3.Ammo = 10
+
+      Weapon4 ->* VehicleType.AmmoBomb 
+      Weapon4.targets = floating ground_level medium_level_flight 
+      Weapon4.shotFrom = ground_level medium_level_flight 
+      Weapon4.Ammo = 10
+
+      Weapon5 ->* VehicleType.AmmoMG 
+      Weapon5.targets = floating ground_level medium_level_flight 
+      Weapon5.shotFrom = ground_level medium_level_flight 
+      Weapon5.Ammo = 50
+
+      Weapon6 ->* VehicleType.AmmoTorp 
+      Weapon6.targets = floating ground_level medium_level_flight 
+      Weapon6.shotFrom = ground_level medium_level_flight 
+      Weapon6.Ammo = 6
+
+      Weapon7 ->* VehicleType.AmmoCannon 
+      Weapon7.targets = floating ground_level medium_level_flight 
+      Weapon7.shotFrom = ground_level medium_level_flight 
+      Weapon7.Ammo = 20
+
+      Weapon8 ->* VehicleType.ServiceAir 
+   } Weapons
+} VehicleType

@@ -9,6 +9,7 @@ ObjectType {
    LinkableObjects = 
    Height = 98
    NoSelfChaining = false
+   NetBehaviour = NetToSelf
    lifetime = 100
 
    Armor = 500

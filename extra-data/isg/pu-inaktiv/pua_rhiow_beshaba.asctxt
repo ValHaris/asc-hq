@@ -1,0 +1,44 @@
+VehicleType { 
+   Name = Beshaba
+   Infotext = [	Entwickelt nach einigen unliebsamen Überraschungen mit Raum/Zeit Diskontinuitäten, 
+			nutzt die Beshaba Klasse von Aufklärungsflugzeugen die Vorteile die Verzerrungen der Raumzeit Ortungsgeräten geben können voll aus:
+
+			Durch das Erzeugen von vielen kleinen "Falten" im Raum/Zeit Kontinuum, durch welche die Radarstrahlen getunnelt werden, wird die Aufklärungsreichweite
+			extrem erhöht.
+
+			Weiterhin ist die Beshaba Klasse mit einem Prototyp-MG ausgerüstet, das durch die erzeugten Falten sogar orbitale Ziele unter Beschuss nehmen kann.
+
+			Durch den Experimentalstatus der Technik muß derzeit noch eine Minimaldistanz zwischen den beiden Enden einer Raumfalte eingehalten werden, womit die Beshaba
+			nicht über Punktverteidigung verfügt.
+		]
+   ID = 12534
+   Parent = 515
+
+   View = 150
+   Description = Advanced Radar Plane
+   Picture = pua_rhiow_beshaba.png
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel *= 2
+   } Tank
+   FuelConsumption *= 1.5
+   Features += move_after_attack no_reactionfire 
+   Weight += 50
+   Armor += 50
+	Weapons { 
+		Initiative = 0
+		Number = 1
+		Weapon0 ->* vehicleType.Air_MG 
+		Weapon0 {
+			targets = floating ground_level low_level_flight medium_level_flight high_level_flight orbit
+			shotFrom = low_level_flight medium_level_flight high_level_flight 
+			HitAccuracy.u1 = 25
+			HitAccuracy.d2 = 50
+			HitAccuracy.d3 = 10
+			MaxRange = 90
+			MinRange = 50
+		} Weapon0 
+	} Weapons
+} VehicleType 
+

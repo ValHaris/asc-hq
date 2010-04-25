@@ -1,0 +1,65 @@
+BuildingType { 
+   Name = BOL 
+   ID = 1303
+   parent = 498
+
+   Armor = 600
+   View = 25
+   Jamming = 20
+   Transportation ->* BuildingType.Esmall
+
+   ConstructionStages = 1
+   Weather = dry 
+   Fields = B4 
+   UseGFXpics = false
+   Pictures { 
+      dry = sy_bld_bol.pcx
+   } Pictures
+   RubbleObjects = true
+   rubble {
+      B4 = 1302
+   } rubble
+   Entry = B4
+   Functions = Mining_Station External_Loading 
+   Techlevel = 0
+   TerrainAccess { 
+      terrain_any = Lowland Road Hard_sand Soft_sand 
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = Lava
+   } TerrainAccess
+   MaxResearch = 0
+   ResourceExtractionEfficiency {
+      Material = 2048
+      Fuel = 2048
+   } ResourceExtractionEfficiency
+   ConstructionCost { 
+      Energy = 0
+      Material = 6500
+      fuel = 7500
+   } ConstructionCost
+   MaxResourceProduction { 
+      Energy = -200
+      Material = 1100
+      fuel = 0
+   } MaxResourceProduction
+   defaultProduction {
+      energy = -200
+      material = 1100
+      fuel = 0
+   } defaultProduction
+   StorageCapacity { 
+      BImode { 
+         Energy = 1000
+         Material = 20000
+         fuel = 20000
+      } BImode
+      ASCmode { 
+         Energy = 100
+         Material = 5000
+         fuel = 300
+      } ASCmode
+   } StorageCapacity
+   Height = ground_level 
+   ExternalLoading = floating ground_level low_level_flight 
+} BuildingType

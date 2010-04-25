@@ -1,0 +1,10 @@
+technology {
+   Name = Hytak
+   infotext = 
+   id = 1305
+   RelatedUnitID = 1305
+   parent = 1399
+   researchpoints *= 5
+   techlevel = 1
+   TechnologiesRequired = 1399,100003,100101,100305,100206 
+} Technology

@@ -1,0 +1,99 @@
+VehicleType { 
+   Name = Morl Booster
+   ID = 12514
+   parent = 415
+
+   Description = Booster
+   Infotext = Die neuste Entwicklung der legendären SlackWorks !
+   Picture = PUa_Slacks_morl-booster.pcx
+
+   Armor = 420
+   View = 20
+   Height = ground_level low_level_flight medium_level_flight 
+   Jamming = 39
+   WaitForAttack = false
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 4000
+   } Tank
+   FuelConsumption = 30
+   Features = no_midair_refuel jam_only_own_field
+   Movement = 0 0 0 160 160 160 0 0 
+
+   Category = medium_aircraft
+
+   MaxSurvivableStorm = 0
+   ResourceDrillingRange = 0
+   SelfRepairRate = 0
+   Weight = 125
+   TerrainAccess { 
+      terrain_any = Runway
+      terrain_all = 
+      terrain_not = morass swamp deep_snow small_rocks large_rocks forest
+      terrain_kill = very_shallow_water Shallow_water Water Deep_water lava River
+   } TerrainAccess
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+   } Construction
+   Weapons { 
+      Initiative = 0
+      Number = 0
+   } Weapons
+
+   HeightChangeMethodNum = 3
+   HeightChangeMethod0 {
+      movecost = 10
+      heightdelta = 2
+      dist = 1
+      startheight = ground_level
+      canattack = true
+   } HeightChangeMethod0
+   HeightChangeMethod1 {
+      movecost = 10
+      heightdelta = -1
+      dist = 1
+      startheight = medium_level_flight
+      canattack = true
+   } HeightChangeMethod1
+   HeightChangeMethod2 {
+      movecost = 20
+      heightdelta = -1
+      dist = 3
+      startheight = low_level_flight
+      canattack = true
+   } HeightChangeMethod2
+   
+   Transportation { 
+      EntranceSystemNum = 2
+      MaxLoadableUnits  = 6
+      MaxLoadableUnitSize = 100
+      MaxLoadableMass = 100
+      CategoriesNOT = default light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle rail_vehicle medium_ship building|turret|object light_aircraft heavy_aircraft light_ship heavy_ship helicopter hoovercraft    
+      CargoMovementDivisor = 10
+      EntranceSystem0 {
+        Mode = In docking
+        UnitHeightAbs =  ground_level 
+        UnitHeightRel = -100
+        ContainerHeight =  ground_level
+        RequireUnitFunction = 
+        CategoriesNOT = 
+        DockingHeightAbs = ground_level 
+        DockingHeightRel = -100 
+        RequireUnitFunction = Kamikaze_only
+      } EntranceSystem0
+      EntranceSystem1 {
+        Mode =  out
+        UnitHeightAbs = medium_level_flight
+        UnitHeightRel = -100
+        ContainerHeight = medium_level_flight 
+        CategoriesNOT = 
+        DockingHeightAbs = medium_level_flight
+        DockingHeightRel = -100 
+        RequireUnitFunction = Kamikaze_only
+      } EntranceSystem1
+   } Transportation
+
+} VehicleType

@@ -20,11 +20,12 @@ VehicleType {
    Features += ExternalAmmoTransfer ExternalRepair
 
    Tank { 
-      Material = 10000
-      fuel = 10000
+      Material = 15000
+      fuel = 15000
    } Tank
    FuelConsumption = 11
    TerrainAccess ->* VehicleType.Offroad 
+   ObjectsLayedByMovement = 7
 
    Construction { 
       Buildings = 7 26

@@ -24,7 +24,7 @@ BuildingType {
       MaxLoadableMass = 15
       CategoriesNOT = Default hoovercraft Medium_tracked_vehicle Heavy_tracked_vehicle Medium_wheeled_vehicle Heavy_wheeled_vehicle Light_aircraft Medium_aircraft Heavy_aircraft Helicopter Light_ship Medium_ship Heavy_Ship Building|turret|object Rail_vehicle
    } Transportation
-   Functions = 
+   Features = NoObjectChaining
    TerrainAccess { 
       terrain_any = Lowland Hard_sand Soft_sand 
       terrain_all = 
@@ -33,7 +33,7 @@ BuildingType {
    } TerrainAccess
    ConstructionCost { 
       Energy = 0
-      Material = 12000
-      fuel = 15000
+      Material = 13000
+      fuel = 16000
    } ConstructionCost
 } BuildingType

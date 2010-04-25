@@ -1,0 +1,38 @@
+VehicleType { 
+   Name = HYAS
+   parent = 1393 1395 1398
+   ID = 1338
+
+   Description = Markierer
+   Picture = sya_hyas.png
+   WreckageObject = 1303
+   Infotext = [Die athmosphaerentauglichen Triebwerke ermoeglichen extreme
+              Beschleunigungswerte, sind aber nur bedingt in der Lage den Hytak
+              ausserhalb der Lufthuelle zu bewegen.]
+
+   Armor = 300
+   Movement = 0 0 0 40 190 190 190 20 
+   MaxSurvivableStorm = 180
+   Weight = 45
+   Jamming += 10
+   Features += satelliteview
+
+   Tank { 
+      Material = 7000
+      fuel += 3000
+   } Tank
+
+   Construction {
+      Objects = 1313
+      ObjectsRemovable = 1313
+   } Construction
+
+   Weapons { 
+      Initiative = 0
+      Number = 1
+      Weapon0 ->* VehicleType.SY_Fighter_Small 
+      Weapon0.Punch@MaxRange = 55
+      Weapon0.Punch@MinRange = 55
+      Weapon0.LaserRechargeCost.fuel -> VehicleType.Weapons.Weapon0.Punch@MinRange
+   } Weapons
+} VehicleType

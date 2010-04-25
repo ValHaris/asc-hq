@@ -1,0 +1,74 @@
+BuildingType { 
+   Name = Raumfahrtzentrum
+   ID = 12022
+
+   Features = ammo_production ExternalMaterialTransfer ExternalFuelTransfer Selfdestruct_at_conquer
+   Armor = 100000
+   View = 50
+   Jamming = 0
+
+   ConstructionStages = 1
+   Weather = dry 
+   Fields = A3
+   UseGFXpics = false
+   Pictures { 
+      dry = bld_isg_kolonieHQ.png
+   } Pictures
+   RubbleObjects = false
+   Entry = A3
+
+   Transportation { 
+      MaxLoadableUnits = 18
+      MaxLoadableUnitSize = 190000
+      MaxLoadableMass = 195000
+      CategoriesNOT =  
+      EntranceSystemNum = 1
+      EntranceSystem0 {
+        Mode = In out docking
+        UnitHeightAbs = floating ground_level 
+        UnitHeightRel = -100
+        ContainerHeight = floating ground_level
+        CategoriesNOT =  
+        DockingHeightAbs = floating ground_level 
+        DockingHeightRel = -100 
+        DisableAttack = true
+      } EntranceSystem0
+    } Transportation
+   Techlevel = 0
+   TerrainAccess { 
+      terrain_any = Runway  
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = 
+   } TerrainAccess
+   MaxResearch = 0
+   ConstructionCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } ConstructionCost
+   MaxResourceProduction { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } MaxResourceProduction
+   defaultProduction {
+      energy = 0
+      material = 0
+      fuel = 0
+   } defaultProduction
+   StorageCapacity { 
+      BImode { 
+         Energy = 40000
+         Material = 30000
+         fuel = 40000
+      } BImode
+      ASCmode { 
+         Energy = 5000
+         Material = 3000
+         fuel = 7000
+      } ASCmode
+   } StorageCapacity
+   Height = ground_level 
+   ExternalLoading = ground_level floating
+} BuildingType

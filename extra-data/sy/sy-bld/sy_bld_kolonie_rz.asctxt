@@ -1,0 +1,30 @@
+BuildingType { 
+   Name = SY RZ
+   parent = 12022
+   ID = 1320
+
+   ConstructionStages = 1
+   Weather = dry 
+   Fields = A3
+   UseGFXpics = false
+   Pictures { 
+      dry = sy_bld_kolonie.png
+   } Pictures
+   RubbleObjects = false
+   Entry = A3
+   Armor = 100000
+   View = 50
+   Jamming = 0
+   Transportation { 
+      EntranceSystemNum = 2
+      EntranceSystem1 {
+        Mode = In out docking
+        UnitHeightAbs = low_level_flight medium_level_flight high_level_flight 
+        UnitHeightRel = -100
+        ContainerHeight = ground_level
+        CategoriesNOT =  
+        DockingHeightAbs = 
+        DockingHeightRel = -100 
+      } EntranceSystem1
+    } Transportation
+} BuildingType

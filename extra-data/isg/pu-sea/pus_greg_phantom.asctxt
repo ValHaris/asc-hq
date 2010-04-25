@@ -1,0 +1,78 @@
+VehicleType { 
+   Name = PHANTOM
+   parent = 400 401 402 418
+   ID = 12525
+   Description = Multi Attack Cruiser
+   Infotext = [Spezialeinheit der Rehaner]
+   Armor = 1500
+   View = 50
+   jamming = 41
+   Picture = PUs_greg_phantom.pcx
+   Transportation { 
+      MaxLoadableUnits = 2
+      MaxLoadableUnitSize = 100
+      MaxLoadableMass = 200
+      CategoriesNOT -> VehicleType.cargo_cruiser.CategoriesNOT
+      EntranceSystemNum = 2
+      Entrancesystem0 ->* VehicleType.GrIO_Carrier
+      EntranceSystem1 ->* VehicleType.Cruiser
+   } Transportation
+   Tank { 
+      Energy = 0
+      Material = 10000
+      fuel = 15000
+   } Tank
+   FuelConsumption = 20
+   Movement = 0 0 60 0 0 0 0 0
+   Features += Repair_Facility
+   Weapons { 
+      Initiative = 0
+      Number = 10
+      Weapon0 ->* VehicleType.Artillery 
+      Weapon0.Ammo = 10
+      Weapon0.MaxRange = 90
+      Weapon0.MinRange = 30
+      Weapon0.Punch@MaxRange = 120
+      Weapon0.Punch@MinRange = 160
+      Weapon0.ReactionFireShots = 0
+
+      Weapon1 ->* VehicleType.SgM
+      Weapon1.Ammo = 6
+      Weapon1.MaxRange = 90
+      Weapon1.Punch@MaxRange = 90
+      Weapon1.Punch@MinRange = 90
+      
+      Weapon2 ->* VehicleType.SSM
+      Weapon2.Ammo = 10
+      Weapon2.MaxRange = 70
+      Weapon2.Punch@MaxRange = 100
+      Weapon2.Punch@MinRange = 100
+
+      Weapon3 ->* VehicleType.SAMH
+      Weapon3.MaxRange = 50
+      Weapon3.Ammo = 20
+
+      Weapon4 ->* VehicleType.SOM
+      Weapon4.MaxRange = 60
+      Weapon4.Punch@MaxRange = 80
+      Weapon4.Punch@MinRange = 90
+      Weapon4.Ammo = 10
+      Weapon4.ReactionFireShots = 1
+
+      Weapon5 ->* vehicleType.AmmoTorp 
+      Weapon5.Ammo = 20
+
+      Weapon6 ->* VehicleType.AmmoMG 
+      Weapon6.Ammo = 40
+
+      Weapon7 ->* vehicleType.AmmoCannon 
+      Weapon7.Ammo = 20
+
+      Weapon8 ->* vehicleType.AmmoLM 
+      Weapon8.Ammo = 20
+
+      Weapon9 ->* vehicleType.AmmoSM 
+      Weapon9.Ammo = 20
+
+   } Weapons
+} VehicleType

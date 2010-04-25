@@ -1,0 +1,54 @@
+VehicleType { 
+   Name = MORR
+   parent = 1392 1395 401
+   ID = 1316
+
+   Description = Flugzeugträger
+   Picture = syv_morr.png
+   Infotext = [Der Morr ist die landgestützte Kommandozentrale der Sy.]
+
+   Features += moveduringreactionfire
+   Armor = 1600
+   Weight = 1000
+   View = 85
+   Jamming = 39
+
+   Transportation { 
+      MaxLoadableUnits = 10
+      MaxLoadableUnitSize = 150
+      MaxLoadableMass = 1000
+      CategoriesNOT = medium_ship light_ship heavy_ship light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle rail_vehicle building|turret|object
+      EntranceSystemNum = 2
+      EntranceSystem0 ->* VehicleType.GrIO
+      EntranceSystem1 ->* VehicleType.Carrier_Ground
+   } Transportation
+
+   Tank { 
+      Energy = 0
+      Material = 30000
+      fuel = 60000
+   } Tank
+   FuelConsumption = 18
+   Movement = 0 0 0 50 0 0 0 0  
+
+   WaitForAttack = false
+   Weapons { 
+      Number = 3
+      Weapon0 ->* VehicleType.SY_TankL 
+      Weapon0.MaxRange = 20
+      Weapon0.Ammo = 10
+      Weapon0.LaserRechargeCost.fuel = 105
+      Weapon0.Punch@MaxRange = 90
+      Weapon0.Punch@MinRange = 105
+
+      Weapon1 ->* VehicleType.SY_TankL 
+      Weapon1.MaxRange = 30
+      Weapon1.Ammo = 10
+      Weapon1.LaserRechargeCost.fuel = 90
+      Weapon1.Punch@MaxRange = 60
+      Weapon1.Punch@MinRange = 90
+
+      Weapon2 ->* VehicleType.SY_TankL_AirH
+      Weapon2.MaxRange = 40
+   } Weapons
+} VehicleType

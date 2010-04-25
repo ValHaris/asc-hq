@@ -5,8 +5,9 @@ VehicleType {
 
 ;   Description = Kampfroboter
 ;   Infotext = []
-   Picture = mk6m_destructor.pcx
+   Picture = mk6m_destructor.png
    InfoImage = mk6m_destructor.jpg
+   InfoImageSmall = mk6m_destructor_k.png
    GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
 
    Armor += 10

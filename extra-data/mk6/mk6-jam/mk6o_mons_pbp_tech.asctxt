@@ -1,0 +1,10 @@
+technology {
+   Name = MONS
+   infotext = Forschungsprojekt abgeschlossen! MONS verfügbar!
+   id = 15313
+   RelatedUnitID = 15313
+   parent = 15000
+   researchpoints *= 27
+   techlevel = 5
+   TechnologiesRequired = 15000,100003,100105,100302,100306 
+} Technology

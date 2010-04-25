@@ -1,0 +1,79 @@
+VehicleType { 
+   Name = GORGOL
+   parent = 1395 1391 400 401 402 1399
+   ID = 1303
+
+   Description = transport unit
+   Picture = sya_gorgol.png
+   Infotext = [Dieser gigantische Transportflieger ist eines der wichtigsten Bestandteile der SY Technik. Der Transporter ist absolut universell einsetzbar und kann außer dem fast ebensogroßen Morr alle Landeinheiten und Satelliten der SY Transportieren. Er besteht aus zwei riesigen eiförmigen Sektionen , die in der Mitte durch eine kleine Steuerungssektion verbunden sind. Trotz seiner Größe ist diese Konstruktion auch in der Athmosphäre eines Planeten passabel steuerbar. Der Gorgol verfügt über diverse Betankungssysteme für Flugzeuge und Bodentruppen. Seine starken Anitgravitationsmotoren ermöglichen es, die Aktivitäten ohne direkte Landung auszuführen. Die linke Sektion beinhaltet die Speicher für Materialien und Treibstoff. Die Rechte Sektion Ladebuchten für Fahrzeuge, Soldaten und Satelliten. Außerdem über Ruheplätze zur Regeneration. Zugunsten der Transportkapazität und auch wegen der Arbeiterbesatzung wurde auf Waffensysteme und Abwehreinrichtungen weitgehend verzichtet. Der Gorgol darf nicht feindlichem Beschuß ausgesetz werden.
+Ein landender Gorgol erzeugt eine so große Luftverdrängung , das im Landegebiet ein kleiner Orkan tobt. Dazu verdunkelt sich unter ihm die Umgebung und erzeugt so eine beängstigende Wirkung. Einige Piloten lassen den Gogol in fast freiem Fall dem Boden entgegenrasen und fahren den Antigravitationsantrieb erst kurz vor dem Erdboden hoch. Die Druckwelle entwurzelt Bäume und läßt jeden unvorbereiteten Soldaten davonwirbeln.
+
+Hinweis: Einheiten, die im Tiefflug entladen werden, koennen nicht angreifen.
+]
+
+   Features += ExternalFuelTransfer ExternalMaterialTransfer
+   Armor = 500
+   Weight = 500
+   Jamming = 39
+
+   Transportation { 
+      MaxLoadableUnits = 14
+      MaxLoadableUnitSize = 1200
+      MaxLoadableMass = 1200
+      CategoriesNOT = medium_aircraft heavy_aircraft rail_vehicle heavy_ship medium_ship
+      CargoMovementDivisor = 1.8
+      EntranceSystemNum = 4
+      EntranceSystem0 ->* VehicleType.GrIO
+      EntranceSystem1 {
+        Mode = in out docking
+        UnitHeightAbs = low_level_flight
+        UnitHeightRel = 0
+        ContainerHeight = low_level_flight
+        CategoriesNOT = light_aircraft medium_aircraft heavy_aircraft helicopter light_ship medium_ship heavy_ship
+        DockingHeightAbs = low_level_flight
+        DockingHeightRel = 0 
+        Movecost = 30
+        DisableAttack = true
+      } EntranceSystem1
+      EntranceSystem2 ->* VehicleType.OrbIO
+      EntranceSystem2.CategoriesNOT = default
+      EntranceSystem3 {
+        Mode = out
+        UnitHeightAbs = ground_level
+        UnitHeightRel = -100
+        ContainerHeight = low_level_flight
+        CategoriesNOT = 
+        DockingHeightAbs = low_level_flight
+        DockingHeightRel = -100 
+        RequireUnitFunction = onlyTransMove
+      } EntranceSystem3
+   } Transportation
+
+   Tank { 
+      Energy = 0
+      Material = 40000
+      fuel = 70000
+   } Tank
+
+
+   Movement = 0 0 0 41 110 120 130 110 
+   FuelConsumption = 16
+   TerrainAccess ->* VehicleType.Sy_Multi_Service
+   Height = ground_level low_level_flight medium_level_flight high_level_flight orbit
+
+   Construction { 
+      ObjectGroupsRemovable = 8 13
+   } Construction
+
+   WaitForAttack = true
+   Weapons { 
+      Initiative = -100
+      Number = 2
+      Weapon0 ->* VehicleType.ServiceHighAir 
+      Weapon0.targets = floating ground_level low_level_flight medium_level_flight high_level_flight orbit 
+      Weapon0.shotFrom = ground_level low_level_flight medium_level_flight high_level_flight orbit 
+      Weapon0.HitAccuracy.d1 = 100
+
+      Weapon1 ->* VehicleType.Sy_fighter_small 
+   } Weapons
+} VehicleType

@@ -1,0 +1,22 @@
+VehicleType { 
+   Name = CATACLYSM
+   parent = 1235
+   ID = 12518
+   GuideSortHelp = 0 0 0 0 4 600 0 0 0 0
+
+   Description = Fahrender Bunker
+   Infotext = [ personal unit]
+   picture = PUv_xypha_cataclysm.png
+
+
+   Transportation { 
+      MaxLoadableUnits = 6
+   } Transportation
+
+   Movement += 0 0 0 13 0 0 0 0 
+
+   Weapons { 
+      Weapon0.ReactionFireShots = 1
+      Weapon4.MaxRange = 70
+   } Weapons
+} VehicleType

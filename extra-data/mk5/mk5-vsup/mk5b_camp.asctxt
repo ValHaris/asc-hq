@@ -21,7 +21,7 @@ VehicleType {
       EntranceSystem0 ->* VehicleType.GrIO
       EntranceSystem1 ->* VehicleType.Cruiser_ground
    } Transportation
-   Features = Repair_Facility jam_only_own_field ManualSelfDestruct Vehicle_Production
+   Features = Repair_Facility jam_only_own_field ManualSelfDestruct Vehicle_Production onlyTransMove
    Weight = 190
 
    Tank { 
@@ -34,6 +34,7 @@ VehicleType {
 
    CategoriesProduceable = trooper
    Construction {
+      VehiclesInternally = 
       ProductionEfficiency = [   0   0   2
                                  0   1   0
                                  0   0   1 ]

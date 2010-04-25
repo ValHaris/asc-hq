@@ -12,5 +12,5 @@ VehicleType {
    Features += sonar
    Armor += 100
    View += 10
-   Movement -= 0 0 0 0 0 0 0 10
+   Movement -= 0 0 0 0 0 0 0 6
 } VehicleType

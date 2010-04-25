@@ -3,8 +3,11 @@ Grafiken: GAMER
 InfoText: Hastrubal
 InfoImage: GAMER, BananaJoe
 ________________________
+Bugfix:FBV Tank auf 15k erhöht
+________________________
 Pflege, Entwicklung und Bearbeitung durch GAMER eingestellt zum 12.04.2010
--Barb nur 1 RF mit Raketenwaffe
+-cvs aktualisiert
+-Barb nur 1 RF mit Raketenwaffe, no_midair_refuel
 -AOV, Waffenreichweite 1-5
 -WOAS, Waffenreichweite 5-12, kein MAM, 80 Move
 -Stahlschwein, Eisbrecher, Waffenreichweite Wasserbombe 1-3
@@ -13,17 +16,20 @@ Pflege, Entwicklung und Bearbeitung durch GAMER eingestellt zum 12.04.2010
 -Watcher interne Produktion deaktiviert
 -Buffed interne Produktion deaktiviert
 -TLauncher deep_submerged 10 move
--ContB, Transportkapazität default 14/50, CM = 10
+-ContB, Transportkapazität default 14/80, CM = 10
 -Ural, beschränkt auf default, BTO und light_ship, kein WfA für default, 2 Stellplätze, offroad
 -FAV T9 +10 Move; T4 -10 Move; T7 +10 Move
 -Bidguard/Guard: nur noch auf  turret_foundation aufstellbar
 -Flak 80 Move
 -Tontaube Move 40
 -Scanner Move 110
--FBV, 2 Stellplätze, max 90 Gewicht, Turretservice
+-FBV, 2 Stellplätze, max 90 Gewicht, Turretservice, Fahrspuren
 -FSV, Stellplätze 5
--Lastesel -10 Move
+-Lastesel -10 Move, kein MAM Flag mehr
 -PickUp +50Armor, MdRF, Move = 90
+-Hangar, Adapter hinzugefügt
+-HSV, medium_ship 950 Gewicht
+-Camp, nicht mehr selbst bewegbar
 ________________________
 06.04.2010 z81.1 (GAMER)
 -Barb +cruiserlanding

@@ -1,0 +1,5 @@
+Techadapter {
+   ; IOX
+   Name = 1312
+   TechnologiesRequired = 1312
+} TechAdapter

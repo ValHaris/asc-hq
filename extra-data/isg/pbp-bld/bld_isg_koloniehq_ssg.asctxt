@@ -1,0 +1,56 @@
+BuildingType { 
+   Name = SSG
+   ID = 12023
+
+   ConstructionStages = 1
+   Weather = dry
+   Fields = A1
+   UseGFXpics = false
+   Pictures {
+      dry = bld_isg_kolonieHQ_SSG.png
+   } Pictures
+   RubbleObjects = false
+   Entry = A1
+   Armor = 2000
+   View = 100
+   Jamming = 200
+   transportation { 
+      MaxLoadableUnits = 0
+      MaxLoadableUnitSize = 0
+      MaxLoadableMass = 0
+      EntranceSystemNum = 0
+   } transportation
+   Functions = NoObjectChaining
+   Techlevel = 0
+   TerrainAccess { 
+      terrain_any = Turret_foundation Installation 
+      terrain_all = Turret_foundation Installation
+      terrain_not = 
+      terrain_kill = 
+   } TerrainAccess
+   MaxResearch = 0
+   ConstructionCost { 
+      Energy = 80000
+      Material = 80000
+      fuel = 0
+   } ConstructionCost
+   MaxResourceProduction { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } MaxResourceProduction
+   StorageCapacity { 
+      BImode { 
+         Energy = 0
+         Material = 0
+         fuel = 0
+      } BImode
+      ASCmode { 
+         Energy = 0
+         Material = 0
+         fuel = 0
+      } ASCmode
+   } StorageCapacity
+   Height = low_level_flight 
+   ExternalLoading = 
+} BuildingType

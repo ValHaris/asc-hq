@@ -1,0 +1,41 @@
+VehicleType { 
+   Name = RAMBO
+   parent = 400 401 402 409 497
+   ID = 12524
+   Description = Heavy Attack Helicopter
+   Infotext = [Spezialeinheit der Rehaner]
+   Armor = 400
+   Picture = PUh_greg_Rambo.pcx
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 2500
+   } Tank
+   FuelConsumption = 20
+   Weight = 90
+   Jamming = 41
+   Weapons { 
+      Initiative = 0
+      Number = 3
+      Weapon0 ->* VehicleType.Artillery
+      Weapon0.shotFrom = low_level_flight medium_level_flight
+      Weapon0.Ammo = 6
+      Weapon0.Punch@MaxRange = 80
+      Weapon0.Punch@MinRange = 100
+      Weapon0.HitAccuracy.0 = 0
+      Weapon0.HitAccuracy.d1 = 100
+      Weapon0.HitAccuracy.d2 = 90
+      
+      Weapon1 ->* VehicleType.Artillery
+      Weapon1.shotFrom = low_level_flight medium_level_flight
+      Weapon1.Ammo = 6
+      Weapon1.Punch@MaxRange = 80
+      Weapon1.Punch@MinRange = 100
+      Weapon1.HitAccuracy.0 = 0
+      Weapon1.HitAccuracy.d1 = 100
+      Weapon1.HitAccuracy.d2 = 90
+
+      Weapon2 ->* VehicleType.Air_MG 
+      
+   } Weapons
+} VehicleType

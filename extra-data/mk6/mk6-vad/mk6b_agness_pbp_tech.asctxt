@@ -1,0 +1,10 @@
+technology {
+   Name = Agness
+   infotext = Forschungsprojekt abgeschlossen! Agness verfuegbar!
+   id = 15224
+   RelatedUnitID = 15224
+   parent = 15000
+   researchpoints *= 22
+   techlevel = 5
+   TechnologiesRequired = 15000,100002,100105,100202,100310,100303,100315
+} Technology

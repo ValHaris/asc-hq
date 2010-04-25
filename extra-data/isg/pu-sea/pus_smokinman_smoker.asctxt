@@ -1,0 +1,25 @@
+VehicleType { 
+   Name = Smoker
+   parent = 569
+   ID = 12505
+   
+   Description = aircraft carrier
+   picture = pus_smokinman_smoker.pcx
+   InfoImage = pus_smokinman_smoker.jpg
+
+   Transportation.MaxLoadableUnits = 14
+   Transportation.MaxLoadableUnitSize = 160
+   Transportation.MaxLoadableMass = 1000
+
+   Features += sonar
+   Category = Hoovercraft 
+   Armor -= 200
+   Height = ground_level
+
+   Movement = 0 0 0 55 0 0 0 0 
+   TerrainAccess ->* VehicleType.hooverfull_terrain
+
+   Weapons { 
+      Weapon0.ReactionFireShots = 2
+   } Weapons
+} VehicleType

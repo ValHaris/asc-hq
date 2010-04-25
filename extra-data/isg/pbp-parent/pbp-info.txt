@@ -1,0 +1,177 @@
+Interstellare Gilde
+Grafics and Stats by GAMER
+PBP v11.00
+
+***Buildings***
+ID     8 PBP Protoreaktor
+ID     9 PBP Raffinery
+ID 12000 ISG Spacebase                                Grafik Gamer
+ID 12001 ISG Depot                                    Grafik Gamer
+ID 12002 NZ SSG 
+ID 12003 
+ID 12004 
+ID 12005 
+ID 12006 
+ID 12007 
+ID 12008 
+ID 12009 
+ID 12010 
+ID 12011 
+ID 12012 NZ Raumfahrtzentrum                           RZ Grafik Schicksal/Gamer
+ID 12013 NZ ResearchLab			       
+ID 12014 NZ ISG Depot
+ID 12015 ?
+ID 12016 Evak Pod
+ID 12017 ISG TRADESHIP
+ID 12018 Störschildgenerator (SSG)
+ID 12019 Command HQ
+ID 12020 KolonieHQ
+ID 12021 KolonieHQ-ISG Depot
+ID 12022 KolonieHQ-RZ
+ID 12023 KolonieHQ-SSG
+ID 12024 KolonieHq-Hangar
+ID 12025 HomeBase HQ
+ID 12026 Colony Center Radar
+ID 12027 COLONY Center RZ
+
+***Objects***
+ID 12000 LZ Down
+ID 12001 LZ Left
+ID 12002 LZ Right
+ID 12003 LZ Top
+ID 12004 NZ SSG
+ID 12005 ALZ
+ID 12006 PNZ Nord
+ID 12007 PNZ Sued
+ID 12008 NZ1
+ID 12009 NZ2
+ID 12010 NZ3
+ID 12011 NZ4
+ID 12012 ISG Beton
+ID 12013 ISG Sockel
+ID 12014 Homebase Center
+ID 12015 ISG Zone NEW
+
+ID 12020 KolonieHQ LZN
+ID 12021 KolonieHQ LZS
+ID 12022 KolonieHQ Nordteil
+ID 12023 KolonieHQ Nortost-Sockel
+ID 12024 KolonieHQ NordWest-Sockel
+ID 12025 KolonieHQ Ostrand
+ID 12026 KolonieHQ Westrand
+
+ID 12100 MK1 Name
+ID 12101 MK3 Name
+ID 12102 MK4 Name
+ID 12103 MK5 Name
+ID 12104 MK6 Name
+ID 12105 PUset SY Name
+ID 12106 PUset Malan Name
+
+***Units***
+ID 12000 ISG Starship           Raumtransporter        Grafik Gamer
+ID 12001 ISG SV                 SUPERVISOR ship        Grafik Gamer
+ID 12002 ISG-SAT                                       Grafik Gamer
+ID 12003 ISG Pathfinder                                Grafik Gamer
+ID 12004 ISG Carrier  
+ID 12005 ISG Builder                                   Grafik Gamer
+ID 12006 ISG Command Unit
+ID 12007 ISG Defender
+ID 12008 ISG SAC
+ID 12009 ISG SHF
+ID 12010 ISG Jammer
+ID 12011 ISG Invasor Radar
+ID 12012 Schrott
+
+Bugs
+ID 12100 Bug Krabbler
+
+
+***Personal Units***
+ID 12500 Komic     Avatar       Air+orbit Defence tank grafic by Gamer
+ID 12501 Rausi     Orxis        Mix:Axis&Orion         grafik by Rausi
+off12502 (Sir Hacke Enduro       Kampfmotorrad          grafic by Gamer)
+ID 12503 Tigerking Dora         Schienengeschütz       grafic by Gamer
+ID 12504 Cushman   HI-OB        Schienengeschütz       grafics by Hastrubal/Gamer/BananaJoe
+ID 12505 SmokinMan
+ID 12506 Greg      MORMONE      heavy attack tank      grafic by Gamer
+ID 12507 Hanni     ConzeptX
+* OBJ ID 12401
+* OBJ ID 12402
+* OBJ ID 12403
+* OBJ ID 12404
+* OBJ ID 12405
+* OBJ ID 12406
+ID 12508           Aquila       Drohnenträgerraumschiff
+off  12509 Tengri    Lethos       Raketenpanzer          grafic by Gamer
+ID 12510 Komic2    MOA          CM Heli                grafic by Komic
+off  12511 GenSek        
+ID 12512 Caturix   Balors SChwert     	Defence spacecraft
+ID 12513 Tengri2   Lemur        (Sinner)              grafic by Gamer
+ID 12514 Slacks    Morl-Booster                        grafic by Slacks
+ID 12515 Slacks    Morl-Glider                         grafic by Slacks
+ID 12516 Rennreh   Rehstar                             grafic by rennreh
+ID 12517 WULT
+off  12518 Xypha2    catalysm
+off  12519 Jogi      Jogi
+ID 12520 Micky     Adler11                             grafic by Gamer
+ID 12521 Keyfinder FASM         Angriffs-U-Boot
+off  12522 Xyphag.   Zyklop       support
+off  12523 Grom
+ID 12524 Greg2     Rambo
+ID 12525 Greg3     
+ID 12526 Ares
+ID 12527 Sirhacke  Sirtaki 	Support		(ehemals Zapp)
+ID 12528 Prophet
+off12529 Khan      Pussycat
+off12530 Grom2     Grimm
+ID 12531 Shadow     Shadow
+ID 12532 Gambit
+off12533 Bundy      Pak-Fa
+off12534 Rhiow      Beshaba
+off12535 Lucius     Neptun
+ID 12536 Kral       Kormoran
+ID 12537 Excalibur  Clustius
+ID 12538 Redhorse   Artemis
+ID 12539 Google    miniDrus (by minimus)
+ID 12540 Adamski    Lander
+ID 12541 Shadow2    Gravos
+ID 12542 hanni2     PTR Observer
+off 12543 Exar
+ID 12544 SmokinMan2 Whitenoise
+* OBJ ID 12544 Statik
+ID 12545 Prophet
+* OBJ ID 12545 
+* OBJ ID 12546
+off 12546 Satanplayer Devil
+off 12547 --         Satan47
+ID 12548 Raiden     Atomrakete
+ID 12549 Toby B1
+ID 12550 Bear       thanatos
+ID 12551 Snake      Thunderstorm
+ID 12552 Scara      Scar
+ID 12553 BananJoe   Omega
+off 12554 Chewie     DoomsdayXXL
+ID 12555 NoBear     Exodus
+ID 12556 vanBuckel  Speed
+ID 12557 Undertaker Azrael
+ID 12558 BloodyMary Damokles
+ID 12559 Redhorse2  Cleaner
+ID 12560 GAMER      SYG
+ID 12561 Itaker     Scapegoat
+ID 12562 CH187      AO187
+ID 12563 Lord       Venenum Volaticum
+ID 12564 Tigerking2 Tigerqueen
+ID 12565 Localhorst KMAX
+ID 12566 Omega      Okeanos
+ID 12567 Taxi
+ID 12568 Shadow(3)  Wellos
+ID 12569 Gambit(2)  Poor
+ID 12570 Cataldo    Serpente
+ID 12571 Setupman   Onion-X
+ID 12572 Banana(3)  Baal
+ID 12573 Sarpeda    Scal
+ID 12574 Davion     DC
+ID 12575 Wult(MA)   Kukulcan
+ID 12576 Bahunabega DragonFly
+ID 12577 Unknown    Hermelin

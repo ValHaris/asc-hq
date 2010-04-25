@@ -1,0 +1,10 @@
+technology {
+   Name = Xenos
+   infotext = 
+   id = 1324
+   RelatedUnitID = 1324
+   parent = 1399
+   researchpoints *= 9
+   techlevel = 2
+   TechnologiesRequired = 1399,100003,100102,100305,100205,1305,1323 
+} Technology

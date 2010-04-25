@@ -1,0 +1,8 @@
+ObjectType {
+   name = HQ Kolonie Westrand
+   ID = 12026
+   parent = 12025
+   dry { 
+      picture = bld_isg_kolonieHQ_rand_W.png 1
+   } dry
+} ObjectType

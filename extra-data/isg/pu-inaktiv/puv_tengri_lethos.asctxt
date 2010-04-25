@@ -1,0 +1,25 @@
+VehicleType { 
+   Name = Lethos
+   ID = 12509
+   parent = 100
+
+   Description = rocket tank
+   Infotext = [Spezial Einheit der Lemurer
+Mittlerer Panzer mit starken und weitreichenden Raketenwerfern.]
+   Picture = PUv_tengri_Lethos.pcx
+
+   TerrainAccess ->* VehicleType.lt_terrain
+   Features += move_after_attack 
+   Weapons { 
+      Initiative = 0
+      Number = 2
+      Weapon0 ->* VehicleType.SSM 
+      Weapon0.MaxRange = 80
+      Weapon0.MinRange = 30
+      Weapon0.Ammo = 4
+      Weapon0.Punch@MaxRange = 100
+      Weapon0.Punch@MinRange = 100
+
+      Weapon1 ->* VehicleType.MG45med 
+   } Weapons
+} VehicleType

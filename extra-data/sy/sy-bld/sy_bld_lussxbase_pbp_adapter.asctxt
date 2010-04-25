@@ -1,0 +1,5 @@
+Techadapter {
+   ; LussxBase
+   Name = B1308
+   TechnologiesRequired = 1399
+} TechAdapter

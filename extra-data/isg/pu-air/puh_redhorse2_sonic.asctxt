@@ -1,0 +1,54 @@
+VehicleType { 
+   Name = SONIC
+   ID = 12559
+   Parent = 1287
+
+   Description = Mine Cleaner
+   picture = puh_redhorse2_sonic.png
+   wreckageobject = 1287 14887
+;   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+   Infotext = [Der Sonic ist ein Experimentalmodell der Kelosker. Aufgrund der
+schlechten Erfahrungen mit den Minenräumeigenschaften des Gnom auf
+Wüstenplaneten setzte eine fieberhafte Suche nach neuen Möglichkeiten
+zur schnellen, effizienten Minenräumung ein. Der Sonic verkörpert
+hierbei ein völlig neuartiges Konzept. Mit Hilfe von modulierten
+Schallwelleninterferenzen ist er in der Lage, den Zünder jeder Mine auf
+größere Distanz zur Detonation zu bringen. Dazu wird mit zwei
+mitgeführten starken Akustikgeneratoren ein wanderndes, überlappendes
+Resonanzfeld geschaffen. An den Schnittpunkten entsteht hierbei eine
+erhebliche mechanische Kraft, die selbst die Zünder von Panzerminen
+auslöst. Die Logik der Steuerungscomputer ist so ausgefeilt, daß auch
+Unterwasserminen erfaßt und zerstört werden können. Eine
+Offensivbewaffnung des Sonic ist aufgrund seines Einsatzzweckes nicht
+sinnvoll. Also wurden die Waffen lediglich für die Verteidigung
+konzipiert. Da der Sonic aber im direkten Kampfbereich operiert, wurde
+er mit neuartigen Störschildgeneratoren ausgerüstet, die eine optische
+und elektronische Erfassung erschweren. Die Eigenheit, daß man den Sonic
+nun zwar gut hören, aber sonst kaum wahrnehmen kann, verschaffte ihm den
+Spitznamen "Singing Bee". Allerdings kam es schon zu schweren Unfällen,
+da die modulierten Resonanzfelder zweier Sonic gerade auf große
+Distanzen nicht berechen- oder kontrollierbar sind. Deshalb wird der
+Sonic bisher nur in Einzelexemplaren eingesetzt.
+]
+
+   Armor += 50
+   Jamming = 39
+   Features = no_midair_refuel jam_only_own_field MoveDuringReactionFire mine_layer mineview
+
+   Movement -= 0 0 0 0 20 0 0 0 
+
+   WaitForAttack = true
+   Weapons { 
+
+	Weapon0 ->* VehicleType.MineAir
+	Weapon0.MaxRange = 20
+        Weapon0.MinRange = 20
+	Weapon0.Ammo = 0
+
+      Weapon1.Ammo = 4
+      Weapon1.MaxRange = 30
+      Weapon1.ReactionFireShots = 2
+
+   } Weapons
+
+} VehicleType

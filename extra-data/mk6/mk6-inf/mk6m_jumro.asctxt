@@ -1,0 +1,31 @@
+VehicleType { 
+   Name = JUMRO
+   ID = 15108
+   parent = 209 15000
+
+   Description = Kampfroboter
+   Picture = mk6m_jumro.png
+;   InfoImage = mk6m_destructor.jpg
+;   InfoImageSmall = mk6m_destructor_k.png
+   GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
+   Infotext = []
+
+   Features += MoveDuringReactionFire
+   Armor -= 20
+   Tank.material = 600
+   Tank.fuel = 4000
+   View = 0
+
+   Jumpdrive ->* VehicleType.TeccnolsJump1
+
+   Weapons {
+      Number = 2
+      Weapon0 ->* VehicleType.GGLS
+      Weapon0.Punch@MaxRange = 70
+      Weapon0.Punch@MinRange = 80
+      Weapon0.Ammo = 2
+      Weapon0.ReactionFireShots = 0
+
+      Weapon1 ->* VehicleType.NLS
+   } Weapons
+} VehicleType

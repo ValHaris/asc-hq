@@ -1,0 +1,73 @@
+BuildingType { 
+   ID = 12017
+
+   Name = ISG TRADESHIP
+   Description = Lastenraumschiff
+   InfoText = [ Das ISG TRADERSHIP ist ein Großraumtransporter. Es befördert deutlich mehr Einheiten als ein ISG Starship. Durch die enorme Masse kann es nur auf einem Raumhafen landen und besitzt keinen planetaren Sprungantrieb. An dessen Stelle wurde ein Atomkraftwerk und eine Servicestation eingerichtet.]
+
+   ConstructionStages = 1
+   Weather = dry
+   Fields = A1
+   UseGFXpics = false
+   Pictures {
+      dry = isg_tradeship.png
+   } Pictures
+   RubbleObjects = false
+   Entry = A1
+   ConstructionCost { 
+      Energy = 0
+      Material = 60000
+      fuel = 60000
+   } ConstructionCost
+
+   Features = matter_converter Vehicle_Production Ammo_Production Recycling Repair_Facility NoProductionCustomization ExternalAmmoTransfer ExternalFuelTransfer ExternalMaterialTransfer NoObjectChaining
+   ExternalLoading = ground_level floating
+   notRemovable = true
+   Armor = 2000
+   View = 30
+   Jamming = 0
+   Techlevel = 10
+   MaxResearch = 0
+
+   transportation { 
+      MaxLoadableUnits = 60
+      MaxLoadableUnitSize = 30000
+      MaxLoadableMass = 60000
+      EntranceSystemNum = 1
+      EntranceSystem0 {
+        Mode = In out docking
+        UnitHeightAbs = floating ground_level 
+        UnitHeightRel = -100
+        ContainerHeight = floating ground_level low_level_flight
+        CategoriesNOT = 
+        DockingHeightAbs = floating ground_level 
+        DockingHeightRel = -100 
+      } EntranceSystem0
+   } transportation
+
+   Height = low_level_flight 
+   TerrainAccess { 
+      terrain_any = spaceport 
+      terrain_all = spaceport
+      terrain_not = 
+      terrain_kill = 
+   } TerrainAccess
+   StorageCapacity { 
+      BImode { 
+         Energy = 900000
+         Material = 900000
+         fuel = 900000
+      } BImode
+      ASCmode { 
+         Energy = 10000
+         Material = 40000
+         fuel = 40000
+      } ASCmode
+   } StorageCapacity
+
+   MaxResourceProduction { 
+      Energy = 10000
+      Material = -1000
+      fuel = -1000
+   } MaxResourceProduction
+} BuildingType

@@ -1,0 +1,8 @@
+ObjectType {
+   name = HQ Kolonie NordWest-Sockel
+   ID = 12024
+   parent = 12023
+   dry { 
+      picture = bld_isg_kolonieHQ_NW.png 1
+   } dry
+} ObjectType

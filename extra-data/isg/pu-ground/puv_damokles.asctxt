@@ -1,0 +1,38 @@
+VehicleType { 
+   Name = DAMOKLES
+   ID = 12558
+   parent = 218
+
+   Description = Double Gateling
+   Picture = puv_damokles.png
+   InfoImage = puv_damokles.jpg
+   InfoImageSmall = puv_damokles_k.png
+   Infotext = [Findigen Mechanikern ist es gelungen, ein völlig neues Waffensystem unter Nutzung vorhandener Bauteile zu konstruieren.
+DAMOKLES kombiniert die Durchschlagskraft und Reichweite einer normalen 50mm-Kanone mit der hohen Feuergeschwindigkeit einer Gattling. Durch die Verwendung von panzerbrechender Munition entfesseln die beiden automatisch und separat steuerbaren Gattlinggeschütze im Zielgebiet einen waren Tornado aus Feuer und Stahl, dem kaum etwas widerstehen dürfte.
+DAMOKLES kann Bodentruppen sowie Lufteinheiten auch auf größere Entfernung bekämpfen und ist zudem in der Lage eine kleinere Anzahl Soldaten zu transportieren, die für zusätzlichen Schutz sorgen können.
+DAMOKLES ist trotz seiner großen Masse geländegängig und seine vier Uralmotore ermöglichen eine recht beachtliche Geschwindigkeit, was sich allerdings in einem sehr hohen Treibstoffverbrauch niederschlägt.]
+   
+   Category = heavy_wheeled_vehicle
+   Weight = 100
+   
+   Transportation ->* VehicleType.TransLowTrooper2
+   TerrainAccess ->* VehicleType.wheeled
+   TerrainAccess.Terrain_any += soft_Sand
+   MovementSound = wheeled_l_g.ogg
+   Movement = 0 0 0 80 0 0 0 0 
+   FuelConsumption = 30
+   Tank.Fuel = 3000
+
+   Weapons {
+      Number = 2
+      Weapon0.ReactionFireShots = 1
+      Weapon0.Punch@MinRange = 85
+      Weapon0.MaxRange = 80
+      Weapon0.Ammo = 4
+      Weapon1 ->* VehicleType.BigMiniGun
+      Weapon1.Ammo = 6
+      Weapon1.ReactionFireShots = 1
+      Weapon1.Punch@MinRange = 85
+      Weapon1.MaxRange = 40
+   } Weapons
+} VehicleType

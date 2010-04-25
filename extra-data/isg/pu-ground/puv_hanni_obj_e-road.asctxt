@@ -1,0 +1,47 @@
+ObjectType { 
+   Name = Energie Road
+   ID = 12401
+   canExistBeneathBuildings = false
+   Weather = dry 
+   visible_in_fogOfWar = false
+   LinkableObjects = 12404
+   Armor = 1100
+   ;                def lTr mTr hvT lWh mWh hWh tro rlv mAC mSh BTO lAC hAC lSh hSh Hli hov
+   Movemalus_plus = 
+   Movemalus_abs =  10  10  10  10  10  10  10  10  12  17  20  10  17  17  20  20  17  10
+   AttackBonus_abs = -1
+   AttackBonus_plus = 0
+   DefenseBonus_abs = -1
+   DefenseBonus_plus = 0
+   Jamming_abs = -1
+   Jammming_plus = 0
+   Height = 97
+   
+   lifetime = 4
+   
+   ConstructionCost { 
+      Energy = 0
+      Material = 20
+      fuel = 80
+      Movement = 5
+   } ConstructionCost
+   RemovalCost { 
+      Energy = 0
+      Material = -10
+      fuel = 50
+      Movement = 5
+   } RemovalCost
+   NetBehaviour = NetToSelf AutoBorder NetToBuildingEntry
+   TerrainAccess { 
+      terrain_any = road Lowland Hard_sand Soft_sand frozen_water 
+      terrain_all = 
+      terrain_not = hillside Forest road Large_rocks Ditch Installation turret_foundation railroad swamp lava
+      terrain_kill = swamp very_shallow_water Shallow_water Water Deep_water river lava 
+   } TerrainAccess
+   TerrainProperties_Filter = lowland hard_sand soft_sand hillside ditch mountains high_mountains installation mud morass swamp very_shallow_water shallow_water snow deep_snow forest small_rocks large_rocks 
+   TerrainProperties_Add = Road
+   dry { 
+      UseGFXpics = false
+      picture = PUv_Hanni_obj_e-road.png 64
+   } dry
+} ObjectType

@@ -1,0 +1,59 @@
+VehicleType { 
+   Name = Gravos
+   parent = 371 496
+   ID = 12541
+
+   Description = Turret Trans
+   Picture = pus_shadow_gravos.png
+   InfoImage = pus_shadow_gravos.jpg
+   InfoImageSmall = pus_shadow_gravos_k.png
+   Infotext = [Der Gravos Highspeed Turrettransporter ist von den Dark-Elfen konzipiert und wird in der glühend heißen Sonne von Kryt produziert.
+Er ist in der Lage ein sehr schweres Turret zu transportieren oder maximal 4 leichte Turrets. Die Besatzung ist speziell ausgebildet und in der Lage, Sockel aller Art für die zu transportierenden Turrets zu errichten.
+Bevorzugt werden Turrets wie die Shadow - Abwehrstellung oder der Wellos transportiert.
+Mit diesen Beiden speziell für die Dark-Elfen konzipierten Turrets ist ein optimales zusammenarbeiten möglich.]
+
+   Features = jam_only_own_field  self_repairing MoveDuringReactionFire
+   Armor = 500
+   View = 30
+   Jamming = 61
+   MaxSurvivableStorm = 160
+   ResourceDrillingRange = 0
+   SelfRepairRate = 10
+   Weight = 200
+
+   Transportation ->* VehicleType.TransTurretBig 
+   Transportation.CargoMovementDivisor = 1.5
+   Transportation.MaxLoadableUnits = 4
+
+   Height = ground_level low_level_flight
+   Movement += 0 0 0 0 160 0 0 0 
+   Tank { 
+      Energy = 0
+      Material = 2400
+      fuel = 10000
+   } Tank
+   FuelConsumption = 40
+
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 10 44 2096 2098
+      ObjectsRemovable = 
+      ObjectGroupsRemovable = 7
+   } Construction
+
+   WaitForAttack = true
+   Weapons {
+      Number = 1
+
+      Weapon0 ->* VehicleType.ML
+      Weapon0.Punch@MaxRange = 70
+      Weapon0.Punch@MinRange = 90
+      Weapon0.targets = floating ground_level low_level_flight medium_level_flight
+      Weapon0.shotFrom = floating ground_level
+      Weapon0.Ammo = 3
+      Weapon0.ReactionFireShots = 2
+      Weapon0.MinRange = 10
+      Weapon0.MaxRange = 30
+  } Weapons
+} VehicleType

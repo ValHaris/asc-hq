@@ -1,0 +1,63 @@
+BuildingType { 
+   Name = AKK
+   ID = 1301
+   parent = 498
+
+   Armor = 500
+   View = 25
+   Jamming = 20
+   Functions = Solar_Power_Plant 
+   ExternalLoading = floating ground_level low_level_flight 
+   Transportation ->* BuildingType.Esmall
+
+   Height = ground_level
+   MaxResearch = 0
+   ConstructionStages = 1
+   Techlevel = 0
+   TerrainAccess { 
+      terrain_any = Lowland Road Hard_sand Soft_sand 
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = Lava
+   } TerrainAccess
+   ConstructionCost { 
+      Energy = 0
+      Material = 8500
+      fuel = 9500
+   } ConstructionCost
+
+   Weather = dry 
+   Fields = A1 
+   UseGFXpics = false
+   Pictures { 
+      dry = sy_bld_akk.pcx
+   } Pictures
+   RubbleObjects = true
+   Rubble {
+      A1 = 1302
+   } Rubble
+   Entry = A1
+
+   MaxResourceProduction { 
+      Energy = 2000
+      Material = 0
+      fuel = 0
+   } MaxResourceProduction
+   defaultProduction {
+      energy = 2000
+      material = 
+      fuel = 
+   } defaultProduction
+   StorageCapacity { 
+      BImode { 
+         Energy = 10000
+         Material = 0
+         fuel = 0
+      } BImode
+      ASCmode { 
+         Energy = 4000
+         Material = 0
+         fuel = 0
+      } ASCmode
+   } StorageCapacity
+} BuildingType

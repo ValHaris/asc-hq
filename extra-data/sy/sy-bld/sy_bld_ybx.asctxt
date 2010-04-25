@@ -1,0 +1,74 @@
+BuildingType { 
+   Name = YBX
+   ID = 1314
+   parent = 498
+   
+   Armor = 500
+   View = 40
+   Jamming = 21
+   ConstructionStages = 1
+   Weather = dry 
+   Fields = A1 
+   UseGFXpics = false
+   Pictures { 
+      dry = sy_bld_ybx.pcx
+   } Pictures
+   RubbleObjects = true
+   Rubble {
+      A1 = 1302
+   } Rubble
+   Entry = A1
+   Functions = Vehicle_Production Recycling 
+   Techlevel = 0
+   Transportation { 
+      MaxLoadableUnits = 5
+      MaxLoadableUnitSize = 5
+      MaxLoadableMass = 50
+      EntranceSystemNum = 1
+      EntranceSystem0 {
+        Mode = In out docking
+        UnitHeightAbs = low_level_flight 
+        UnitHeightRel = -100
+        ContainerHeight = low_level_flight
+        CategoriesNOT = trooper
+        DockingHeightAbs = low_level_flight
+        DockingHeightRel = -100 
+      } EntranceSystem0
+   } Transportation
+   TerrainAccess { 
+      terrain_any = Lowland Road Runway Hard_sand Soft_sand Small_rocks very_shallow_water shallow_water water river 
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = Lava
+   } TerrainAccess
+   MaxResearch = 0
+   ConstructionCost { 
+      Energy = 0
+      Material = 6317
+      fuel = 6970
+   } ConstructionCost
+   MaxResourceProduction { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } MaxResourceProduction
+   defaultProduction {
+      energy = 
+      material = 
+      fuel = 
+   } defaultProduction
+   StorageCapacity { 
+      BImode { 
+         Energy = 100000
+         Material = 100000
+         fuel = 100000
+      } BImode
+      ASCmode { 
+         Energy = 100
+         Material = 100
+         fuel = 100
+      } ASCmode
+   } StorageCapacity
+   Height = low_level_flight
+   ExternalLoading =  
+} BuildingType

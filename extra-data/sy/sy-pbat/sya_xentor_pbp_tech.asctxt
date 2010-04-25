@@ -1,0 +1,10 @@
+technology {
+   Name = Xentor
+   infotext = 
+   id = 1302
+   RelatedUnitID = 1302
+   parent = 1399
+   researchpoints *= 14
+   techlevel = 3
+   TechnologiesRequired = 1399,100003,100103,100305,100206,1305,1322 
+} Technology

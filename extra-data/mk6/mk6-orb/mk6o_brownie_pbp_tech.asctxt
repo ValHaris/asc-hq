@@ -1,0 +1,10 @@
+technology {
+   Name = Brownie
+   infotext = Forschungsprojekt abgeschlossen! Brownie verfuegbar!
+   id = 15235
+   RelatedUnitID = 15235
+   parent = 15000
+   researchpoints *= 27
+   techlevel = 5
+   TechnologiesRequired = 15000,100003,100105,100315
+} Technology

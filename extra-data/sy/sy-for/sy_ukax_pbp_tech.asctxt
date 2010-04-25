@@ -1,0 +1,10 @@
+technology {
+   Name = please delete this
+   infotext = 
+   id = 1391
+   RelatedUnitID = 
+   parent = 1399
+   researchpoints *= 2
+   techlevel = 1
+   TechnologiesRequired = -1 
+} Technology

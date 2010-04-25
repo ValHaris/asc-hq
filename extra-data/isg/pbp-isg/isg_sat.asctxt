@@ -1,0 +1,22 @@
+VehicleType { 
+   Name = ISG Satellite
+   ID = 12002
+   parent = 400 401 402 407
+
+   Description = Radar Satellite
+   Infotext = [] 
+   Picture = isg_sat.png
+
+   View = 115
+   TerrainAccess ->* Vehicletype.sat_terrain 
+   ConstructionCost { 
+      CalculationMethod = add
+      Energy = 4000
+      Material = 4000
+      fuel = 0
+   } ConstructionCost
+
+   Weapons {
+     Number = 0
+   } Weapons
+} VehicleType

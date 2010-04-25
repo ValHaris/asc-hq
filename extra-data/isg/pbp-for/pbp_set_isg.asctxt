@@ -1,0 +1,7 @@
+ Technology {
+   name = "Set ISG PBP-technology"
+   infotext = "base technology of the ISG units"
+   id = 12999
+   parent = 100000
+   BlockingOtherTechnologies = 
+} Technology 

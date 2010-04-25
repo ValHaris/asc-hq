@@ -7,6 +7,7 @@ VehicleType {
    Infotext = []
    Picture = mk6a_deltahunter.pcx
    InfoImage = mk6a_deltahunter.jpg
+   InfoImageSmall = mk6a_deltahunter_k.png
    GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
 
    Weapons {

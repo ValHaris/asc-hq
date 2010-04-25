@@ -1,0 +1,55 @@
+VehicleType {
+   Name = NOG
+   parent = 1395 1392 401
+   ID = 1320
+
+   Description = Defender
+   Picture = syv_nog.png
+   Infotext = [Der Nog-Panzer ist wesentlich schwerer als der Tolg und kann auch nicht in den Flugmodus wechseln. Seine Bewaffnung ist auf den Schutz der umgebenen Einheiten ausgelegt. Der Kugelemitter ist etwas kleiner als der des Ax und kann auch Bodenziele im Nahbereich bekämpfen. Die Panzerung ist für den Einsatz an forderster Front ausgelegt und kann einiges an direktem Beschuss einstecken. Er wurde entwickelt, um die eigenen Soldaten durch gegnerische Defensivfeuer zu schleusen und sie dann zum Einsatz zu bringen. Die offensiven Fähigkeiten sind eher gering. Dazu sind andere Waffensysteme besser geeignet. Innerhalb des Nog können angeschlagene Sy regenerieren.
+
+]
+   Armor = 1100
+   Weight = 65
+   View = 40
+   Transportation { 
+      MaxLoadableUnits = 5
+      MaxLoadableUnitSize = 10
+      MaxLoadableMass = 50
+      CategoriesNOT -> VehicleType.cargo_trooper_only.CategoriesNOT
+      EntranceSystemNum = 1
+      EntranceSystem0 ->* VehicleType.GrIO
+   } Transportation
+
+   Tank { 
+      Energy = 0
+      Material = 1500
+      fuel = 2500
+   } Tank
+   FuelConsumption = 10
+   Features += moveduringreactionfire
+   Movement = 0 0 0 50 0 0 0 0 
+
+   WaitForAttack = true
+   Weapons { 
+      Initiative = 50
+      Number = 3
+      Weapon0 ->* VehicleType.SY_TankL 
+      Weapon0.Ammo = 6
+      Weapon0.LaserRechargeCost.fuel = 120
+      Weapon0.targets = floating ground_level low_level_flight
+      Weapon0.Punch@MaxRange = 120
+      Weapon0.Punch@MinRange = 120
+      Weapon0.Reactionfireshoots = 0
+
+      Weapon1 ->* VehicleType.SY_TankL 
+      Weapon1.Ammo = 6
+      Weapon1.LaserRechargeCost.fuel = 90
+      Weapon1.targets = floating ground_level low_level_flight
+      Weapon1.MaxRange = 20
+      Weapon1.Punch@MaxRange = 80
+      Weapon1.Punch@MinRange = 90
+
+      Weapon2 ->* VehicleType.SY_TankL_AirH 
+      Weapon2.Ammo = 6
+   } Weapons
+} VehicleType

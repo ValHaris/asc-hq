@@ -1,0 +1,80 @@
+VehicleType { 
+   Name = ISG STARSHIP
+   parent = 401 497
+   ID = 12000
+
+   Description = Spaceship
+   Picture = isg_starship.png
+   Infotext = [#crt#Raumtransporter#crt# #crt#
+   Das Raumschiff ist Eigentum der Interstellaren Gilde. Es darf nur zu Transportzwecken zwischen und auf den Planeten eingesetzt werden. Offensiver Einsatz ist untersagt. Ersatz wird nur bei Naturkatastrophen gestellt.]
+
+   Armor = 600
+   Category = heavy_aircraft
+   View = 0
+   Jamming = 0
+   MaxSurvivableStorm = 255
+   ResourceDrillingRange = 0
+   SelfRepairRate = 5
+   Weight = 100000
+   Features = self_repairing icebreaker no_midair_refuel
+   transportation { 
+      MaxLoadableUnits = 48
+      MaxLoadableUnitSize = 20000
+      MaxLoadableMass = 40000
+      CargoMovementDivisor = 1.5
+      EntranceSystemNum = 2
+      EntranceSystem0 ->* VehicleType.GrIO
+      EntranceSystem0.DisableAttack = true
+      EntranceSystem1 ->* VehicleType.OrbIO
+      EntranceSystem1.DisableAttack = true
+   } transportation
+   ConstructionCost { 
+      CalculationMethod = manual
+      Energy = 60000
+      Material = 60000
+      fuel = 0
+   } ConstructionCost
+
+   Height = ground_level low_level_flight medium_level_flight high_level_flight orbit 
+   Tank { 
+      Energy =
+      Material = 100000
+      fuel = 120000
+   } Tank
+   FuelConsumption = 200
+   Movement = 0 0 0 60 60 60 60 60 
+   MovementSound = ship_d_a_s.ogg
+
+   WaitForAttack = false
+   TerrainAccess { 
+      terrain_any = spaceport
+      terrain_all = spaceport
+      terrain_not = forest small_rocks large_rocks bridge
+      terrain_kill = lava
+   } TerrainAccess
+   MovementSound = ship_d_a_s.ogg
+
+  JumpDrive {
+      Height = orbit
+      MaxDistance = 2500
+      consumption {
+         Energie = 0
+         Material = 10000
+         Fuel = 10000
+      } consumption
+      terrain_any = Spaceport
+      terrain_all = Spaceport
+      terrain_not = forest small_rocks large_rocks bridge
+      terrain_kill = 
+   } JumpDrive
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+      ObjectsRemovable = 
+   } Construction
+   Weapons { 
+      Initiative = 0
+      Number = 0
+   } Weapons
+} VehicleType

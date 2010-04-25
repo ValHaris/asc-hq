@@ -33,6 +33,7 @@ ID 15213 Baltic
 ID 15216 Meo
  ( 15241 Evi )
  ( 15306 Shadow )
+ID 15108 Jumro
 
 --Tanks--
 ID 15290 CillaTE
@@ -47,12 +48,13 @@ ID 15291 Meta TAG
 ID 15241 Evi
 ID 15243 Signal
 ID 15242 Devo R
+ID 15444 Terminal1500
 
 --Jamming--
 ID 15306 Shadow
 
 --Air Defence--
-ID 15006 LV2beta
+ID 15106 LV2beta
 
 --Artillery--
 ID 15251 Baliste
@@ -65,6 +67,9 @@ ID 15303 Jumps
 ID 15304 Debugg
 
 --turrets & bunkers--
+ID 15223 Married
+ID 15318 LDS
+ID 15222 RDS
 
 --SupportVehice--
 ID 15103 Cilla SV
@@ -74,6 +79,7 @@ ID 15105 Meta SV
 15238 Ionenkanone
 15246 Global
 15232 Blaster
+15235 Brownie
 
 --Aircraft--
 ID 15100 Defkind
@@ -101,6 +107,7 @@ ID 15305 Deltasearcher
 --Battleships--
 ID 15355 MBC 10
 ID 15356 MBC 20
+ID 15109 MBC 23
 ID 15357 MBC 30
 ID 15367 Ececutioner
 

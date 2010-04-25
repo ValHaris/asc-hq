@@ -1,0 +1,10 @@
+technology {
+   Name = Meta Rail
+   infotext = Forschungsprojekt abgeschlossen! Meta Rail verfügbar!
+   id = 15225
+   RelatedUnitID = 15225
+   parent = 15000
+   researchpoints *= 16
+   techlevel = 4
+   TechnologiesRequired = 15000,100002,100104,100202,100303,100313
+} Technology

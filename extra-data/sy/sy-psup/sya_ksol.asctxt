@@ -1,0 +1,73 @@
+VehicleType { 
+   Name = KSOL
+   parent = 400 401 402 1399 12000
+   ID = 1327
+
+   Description = SpaceShip
+   Infotext = [Interstellares Raumschiff der SY]
+   Picture = sya_ksol.png
+   InfoImage = sya_ksol.jpg
+   InfoImageSmall = sya_ksol_k.png
+
+   Features = jam_only_own_field self_repairing
+   Armor = 600
+   Weight = 100000
+   View = 0
+   Jamming = 20
+   Category = heavy_aircraft
+   MaxSurvivableStorm = 255
+   ResourceDrillingRange = 0
+   SelfRepairRate = 10
+
+  JumpDrive {
+      terrain_any = road runway Spaceport lowland hard_sand soft_sand hillside ditch mountains high_mountains very_shallow_water shallow_water water deep_water river lava installation turret_foundation
+      terrain_all = beacon
+      terrain_not = 
+      terrain_kill = 
+   } JumpDrive
+
+   Transportation { 
+      EntranceSystemNum = 2
+      EntranceSystem0 {
+        Mode = in out docking
+        UnitHeightAbs = floating ground_level low_level_flight
+        UnitHeightRel = -100
+        ContainerHeight = low_level_flight ground_level 
+        CategoriesNOT = 
+        DockingHeightAbs = ground_level low_level_flight medium_level_flight high_level_flight
+        DockingHeightRel = 0 
+        DisableAttack = true
+      } EntranceSystem0
+      EntranceSystem1 ->* VehicleType.OrbIO
+      EntranceSystem1.DisableAttack = true
+   } Transportation
+
+   Height = ground_level low_level_flight medium_level_flight high_level_flight orbit 
+   Tank { 
+      Energy = 0
+      Material = 100000
+      fuel = 100000
+   } Tank
+   FuelConsumption = 200
+   Movement = 0 0 0 30 80 90 100 150 
+
+   TerrainAccess { 
+      terrain_any = Spaceport 
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = 
+   } TerrainAccess
+
+   Construction { 
+      Buildings = 
+      Vehicles =
+      Objects = 
+      ObjectsRemovable = 
+   } Construction
+
+   WaitForAttack = false
+   Weapons { 
+      Initiative = 0
+      Number = 0
+   } Weapons
+} VehicleType

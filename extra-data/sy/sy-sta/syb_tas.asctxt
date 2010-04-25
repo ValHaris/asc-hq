@@ -1,0 +1,47 @@
+VehicleType { 
+   Name = TAS
+   ID = 1349
+   parent = 321
+
+   Description = surface defence system
+   WreckageObject = 1308
+   picture = syb_tas.png
+;   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+   Infotext = []
+
+   Armor -= 50
+   Weight = 200
+   Category = Trooper
+   Jamming = 39
+   Features += jam_only_own_field self_repairing
+   SelfRepairRate = 15
+
+   TerrainAccess.terrain_any = hard_sand soft_sand lowland mountains high_mountains
+   TerrainAccess.terrain_kill += very_shallow_water
+   Tank.Fuel = 10000
+   Tank.Material = 5000
+   Movement = 0 0 0 19 0 0 0 0 
+
+
+   Weapons { 
+      Weapon0 ->* VehicleType.type_laser
+      Weapon0.name = Dronenschacht 
+      Weapon0.Punch@MaxRange = 110
+      Weapon0.Punch@MinRange = 110
+      Weapon0.LaserRechargeRate = 1
+      Weapon0.Ammo = 3
+      Weapon0.LaserRechargeCost.energy = 0
+      Weapon0.LaserRechargeCost.material = 100
+      Weapon0.LaserRechargeCost.fuel = 200
+
+      Weapon1 ->* VehicleType.type_laser 
+      Weapon1.name = Dronenschacht 
+      Weapon1.Punch@MaxRange = 120
+      Weapon1.Punch@MinRange = 120
+      Weapon1.LaserRechargeRate = 1
+      Weapon1.Ammo = 4
+      Weapon1.LaserRechargeCost.energy = 0
+      Weapon1.LaserRechargeCost.material = 100
+      Weapon1.LaserRechargeCost.fuel = 200
+   } Weapons
+} VehicleType

@@ -10,6 +10,7 @@ VehicleType {
    
    Armor = 300
    Weight = 60
+   Features = no_midair_refuel cruiserlanding
 
    Transportation ->* VehicleType.TransTurretBig 
    Transportation.CategoriesNOT = trooper rail_vehicle light_aircraft medium_aircraft heavy_aircraft medium_ship heavy_ship

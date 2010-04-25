@@ -1,0 +1,16 @@
+ObjectType {
+   ID = 1302
+   GroupID = 14
+   parent = 1301
+   Weather = dry 
+   RemovalCost { 
+      Energy = 0
+      Material = 400
+      fuel = 200
+      Movement = 30
+   } RemovalCost
+   Name = lava Krater gross
+   dry { 
+      picture = sy_krater_gross.pcx 1
+   } dry
+} ObjectType

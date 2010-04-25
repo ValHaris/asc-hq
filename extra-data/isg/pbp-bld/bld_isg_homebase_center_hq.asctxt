@@ -1,0 +1,79 @@
+BuildingType { 
+   Name = Homebase HQ
+   ID = 12025
+
+   Description = Multifunktionsgebaeude
+   InfoImage = bld_isg_homebase_center_hq.png
+   InfoImageSmall = bld_isg_homebase_center_hq_k.png
+
+   Features = Research NoProductionCustomization ammo_production ExternalMaterialTransfer ExternalFuelTransfer ExternalAmmoTransfer Selfdestruct_at_conquer Repair_Facility Recycling Vehicle_Production Produce_Units_that_cannot_leave
+   Armor = 100000
+   View = 200
+   Jamming = 240
+
+   ConstructionStages = 1
+   Weather = dry 
+   Fields = A1
+   UseGFXpics = false
+   Pictures { 
+      dry = bld_isg_homebase_center_hq_dry.png
+   } Pictures
+   RubbleObjects = false
+   Entry = A1
+
+   Transportation { 
+      MaxLoadableUnits = 50
+      MaxLoadableUnitSize = 190000
+      MaxLoadableMass = 195000
+      CategoriesNOT =  
+      EntranceSystemNum = 1
+      EntranceSystem0 {
+        Mode = In out docking
+        UnitHeightAbs = ground_level floating
+        UnitHeightRel = -100
+        ContainerHeight = orbit
+        CategoriesNOT =  
+        DockingHeightAbs = ground_level floating
+        DockingHeightRel = -100 
+        DisableAttack = true
+      } EntranceSystem0
+    } Transportation
+   Techlevel = 0
+   TerrainAccess { 
+      terrain_any = Runway Spaceport 
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = 
+   } TerrainAccess
+   MaxResearch = 100
+   NominalResearch = 50
+   ConstructionCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } ConstructionCost
+   MaxResourceProduction { 
+      Energy = -200
+      Material = -200
+      fuel = -200
+   } MaxResourceProduction
+   defaultProduction {
+      energy = -200
+      material = -200
+      fuel = -200
+   } defaultProduction
+   StorageCapacity { 
+      BImode { 
+         Energy = 40000
+         Material = 30000
+         fuel = 40000
+      } BImode
+      ASCmode { 
+         Energy = 10000
+         Material = 10000
+         fuel = 10000
+      } ASCmode
+   } StorageCapacity
+   Height = orbit 
+   ExternalLoading = ground_level floating
+} BuildingType

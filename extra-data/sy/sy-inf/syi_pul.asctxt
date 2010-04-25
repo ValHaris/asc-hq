@@ -1,0 +1,42 @@
+VehicleType { 
+   Name = PUL
+   ID = 1344
+   parent = 1395 204
+
+   Description = Panzerbohrer
+   Picture = syi_pul.png
+   InfoImage = syi_pul.jpg
+   InfoImageSmall = syi_pul_k.png
+   Infotext = [Dieser übergroße Käfer stammt definitiv aus einem genmanipuliertem Züchtungsprogramm der SY. Der Panzer des Käfers ist hochverdichtet und hält auch Granatbeschuss stand. Seine Kieferzangen zerquetschen zentimeterdicken Stahl. Verletzte Käfer können sich mit dem Holz von Bäumen wieder regenerieren.
+Größe:
+ca. 8m lang, 5m breit, 3,25 hoch
+]
+
+   Features -= conquer_buildings
+   Armor += 200
+   Weight = 6
+   Jamming = 11
+   Tank { 
+      Energy = 0
+      Material = 1000
+      fuel = 1500
+   } Tank
+   Movement += 0 0 0 10 0 0 0 0 
+   SelfRepairRate = 10
+   MovementSound = trampling.ogg
+
+   Construction { 
+      ObjectsRemovable = 
+      ObjectGroupsRemovable = 21 10
+   } Construction
+
+   Weapons { 
+      Number = 1
+      Weapon0 ->* VehicleType.SY_Animal 
+      Weapon0.Punch@MinRange = 120
+      Weapon0.Punch@MaxRange = 120
+      Weapon0.WeaponEffectiveness ->* VehicleType.SY_Animal2Effectiveness
+      Weapon0.Name = Kieferbohrer
+      Weapon0.Sound = metalcrush.ogg
+   } Weapons
+} VehicleType

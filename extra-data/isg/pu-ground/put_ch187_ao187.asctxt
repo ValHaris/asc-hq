@@ -1,0 +1,43 @@
+VehicleType { 
+   Name = AO187
+   parent = 289
+   ID = 12562
+   
+   Description = AO Panzerzug
+   picture = put_ch187_ao187.png
+   WreckageObject = 457
+;   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+   Infotext = [Die AO187 ist eine technische Glanzleistung der Terraner.
+Um die wachsenden Aufgaben der Bodenstreitkräfte zu unterstützen, ist auf Basis des Panzerzuges ein Luft- und Orbitalbwehrzug entstanden.
+
+Dafür wurde eine modifizierte Version der Patriot Abschussanlage entwickelt, die mit 4 scharfen Raketen alle Höhenstufen absichert.
+Die Besonderheit ist aber das gegen Flieger auf niedriger Höhe eine seperate Zielerfassung installiert wurde, wodurch zwei Raketen permanent diese höhe überwachen.
+Die anderen beiden Raketen verteidigen den Zug gegen mittlere und hochfliegende Ziele. Durch diese Umrüstung konnte leider nicht die Reichweite der ursprungs Patriot erreicht werden.
+
+Als Vorbild gegen Ziele in der Planetenumlaufbahn wurde die Abschussvorrichtung der stationären Anger umgebaut.
+Diese wird durch eine Klappe an der rechten Seite des Zuges ausgefahren und ist dann sofort Abschussbereit. 
+Da das Radarsystem nicht bis in den Orbit reicht, ist die AO187 auf eine externe Zielführung angewiesen. 
+
+Gegen Bodenziele biete eine mit längerem Lauf ausgestattete Ursprungskanone, weiterhin einen passablen Schutz.
+
+Die möglichkeit zwei Einheiten der Fußtruppen mitzuführen konnte erhalten bleiben, und läst eine zusätzliche Absicherung des Zuges zu.  
+
+Das besondere schmankerl der AO187 ist aber der Tarnanstrich, der wie bei der Nighthawk, Radarstrahlen absorbiert.
+Aber aufgrund der fehlenden, auf dreiecken aufgebauten Form, günstigeren Materialien, und der aus dem Zug ragenden Patriot Abschussanlage, erreicht er nicht die verstohlenheit des Vorbildes.
+
+Alles in allem entspricht er aber den Vorgaben und Vorstellungen der Militärs, die endlich die Lücke in den Reihen Ihrer Schienenfahrzeuge geschlossen sehen. 
+]
+
+   Jamming = 39
+   Features += Jam_only_own_field
+   Weapons {
+      Number = 4
+      Weapon0.MaxRange = 30
+      Weapon1 ->* VehicleType.SAM
+      Weapon1.Targets = low_level_flight
+      Weapon2 ->* VehicleType.SAMH
+      Weapon2.Targets = medium_level_flight high_level_flight
+      Weapon2.MaxRange = 50
+      Weapon3 ->* VehicleType.SOM 
+   } Weapons
+} VehicleType

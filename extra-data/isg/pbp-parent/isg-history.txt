@@ -1,0 +1,510 @@
+ISG Set  Personal Units
+grafics & specifications by GAMER
+
+________________________
+Beta Nr.10 - 2010
+-Conzept X Anpassung an LTurret
+________________________
+06.04.2010 z82.1 (GAMER)
+-PBP-Landezonenscript, Kolonie erstellbar
+________________________
+03.04.2010 z82 (GAMER)
+Beta-10-05
+-Überarbeitung: Avatar
+-Krabbler KI Job Fight
+-PU V an Caturix, Balors Schwert
+-PU Damokles an Bloody Mary
+-PU MiniDrus an Google
+Beta-10-04
+-ISG Beton Filtert river
+-Raffinerie über Rohstoff-Objekte baubar
+-Grafikupdate: Prophet
+-Transportbugfix Prophet
+________________________
+27.02.2010 z81 (GAMER)
+-Überarbeitung Buran+Eiswelle
+Beta-10-2/3
+-Grafik SSG gefixt
+-Grafik AO178 gefixt
+-PU DC, Kukulcan upgrade
+________________________
+23.01.2010 z80 (GAMER)
+-Infotext: Thunderstorm
+Beta-10-01
+-Grafikupdate: ISG Builder, ISG Carrier, PU AO187
+-Farbrotation SSG
+-Evak-Pod keine Objektverlinkung
+Beta-09-19
+-Infotext: Wellos
+Neu:
+-PU Bahunabega
+-PU Unknown
+________________________
+12.12.2009 z79 (GAMER)
+Beta-09-18
+-Azraeel, Waffenbugfix
+-PU Poor => PU divorced +MdRF
+-PU Wellos, Tankvergrößerung
+-ISG Starship/Pathfinder, Jumpdrive 250 Felder
+Beta-09-17
+-PU HI-OB => Cushman , + InfoImage
+-PU Exodus, InfoImage
+-PU Baal, InfoImage, InfoText
+-PU Azraeel, Infotext
+-PU Aquila => Amiganom
+Neu:
+-PU Kukulcan
+-PU DC
+-PU Scal
+________________________
+08.11.2009 z78 (GAMER)
+-PU Gravos, InfoText+SmallinfoImage
+Beta-09-15/16 77.1 (GAMER)
+-Beshaba -1Feld Waffenreichweite
+-Azrael, Waffenupgrade
+-Thunderstorm, Waffenupgrade
+-PU Hanni, Waffen-/Transportupgrade
+Neu:
+-PU Taxi
+-PU Shadow(3)
+-PU Gambit(2)
+-PU Omega
+-PU cataldo
+-PU Setupman
+-PU Banana(3)
+PU Inaktiv
+-HiOb
+-Gram
+-Damokles
+-Lethos
+-DDXXL
+-Grimm
+________________________
+03.10.2009 z77 (GAMER)
+Beta-09-14
+-PU Scar upgrade
+Beta-09-13
+-neues HB HQ auch für "floating" zugänglich
+-PU Lord, Grafikbugfix
+Beta-09-12
+-Infotext: PU Sonic
+-Adapter für Subbase auf Basis PBP-Basetech
+-PU Exodus InfoImage Bugfix
+________________________
+02.09.2009 z76-2 (GAMER)
+-ISG Builder  = Icebreaker
+-InfoImageSmall eingebaut
+Neu:
+-PU Localhorst
+______________________
+29.08.2009 z76 (GAMER)
+Neu:
+-LU Lord
+-PU Tigerking2
+Beta-09-11
+-ISG-Beton kein Basejamming mehr
+-ISG Builder landet auch auf Spaceport
+-neue ISG HQ/RZ 50 Stellplätze
+________________________
+01.08.2009 z75-2 (GAMER)
+-Trader + ISG Depot keine Objectverlinkung
+Neu:
+-PU Ch187
+-PU Redhorse2
+-PU Itaker
+-PU GAMER2
+______________________
+25.07.2009 (GAMER) Z75
+Beta-09-10
+-ISG jammer 6k Gewicht
+-ISG Builder kann bis zu 6000Gewicht Laden
+Beta-09-09
+-PU Moa, Waffenbugfix
+-PU Adolar, Waffenbugfix +Cargo 2 Trooper
+__________________
+20.06.2009 (GAMER) [incl. Beta-09-08+07]
+-InfoImage = Gravos
+-alter SSG BauKosten 100k
+-Orxis +200 Armor
+-altes ISG Forschungslab gefixt
+-ISG Kreuzer Mdrf Bugfix
+Neu:
+-PU Adolar
+-PU Undertaker
+__________________
+16.05.2009 (GAMER) /incl.Beta-09-06
+-Korgonen wegen diverser Fehlermeldungen entfernt
+-ISG SV, Waffe für landezonenverteidigung eingebaut.
+-PU-Devil aktualisiert
+-PU Exar Kun umgebaut
+-Starship/PF DisableAttack = true
+-HQs/RZ/Hangar DisableAttack = true
+-altes RZ an neues Homebase HQ angepasst (Funktionen)
+-InfoImage, Thunderstorm
+-alte Landezonen wieder Sprungfähig
+
+__________________
+30.04.2009 (GAMER)
+-Homebase-HQ, einfügen aller Bauoptionen möglich (nur durch SV)
+-ISG Jammer Gewicht 10000
+-ISG Beton  + pipeline
+-Kein Festpreis mehr für SHF, SAT und SAC
+__________________
+20.04.2009 (GAMER)
+-ISG Beton verlinkt zu hafenkante und Hafenbeton
+-Bugfix Grafik ISG Jammer, Adapter ISG jammer
+-ISG Depot 0 View
+-PU NoBear Grafikbugfix 
+__________________
+11.04.2009 (GAMER)
+-Builder, kann diverse Objekte abreissen
+-PTR Observer Zusatzpreis weggefallen
+-Trader, doppelter Energiespeicher, Reparaturfunktion, Munitionsproduktion, Wiederverwertung
+-ISG Builder kann DeepCore bauen, Tauchfähig, kann Tiefseekristalle bauen
+-ISG Builder, Jumpdrive Bugfix
+-ISG Builder baut KolonieDefender, ISG Jammer
+-CU/Kolonie Defender Waffenupgrade
+-Clustius, NoMineRemoval
+-Infotext: Clustius,Scar,Prophet
+-InfoImage = Scar,Thanatos
+-Thanatos neue Grafik
+-SirTaki, NoMineRemoval
+Neu:
+-PU NoBear
+-PU van Buckel
+-neue Homebase integriert
+-PU Chewiebaca
+-ISG Jammer (Unit-Baubar HQneu/Kolonie)
+
+__________________
+07.03.2009 (GAMER)
+-InfoImage = Lander,Gram,Omega
+-V, bugfix autorepair, Paratrooperausgang
+-Infotext = BananaJoe
+Neu:
+-PU Scara
+-PU BananaJoe
+-PU Snake
+__________________
+18.10.2008 (GAMER)
+-InfoImage = Toby, Wult, Shadow1, Hanni1, Excalibur
+-KolonieHQ Rand Movementbugfix
+-InfoImage = Gram
+Neu:
+-PU Toby
+-PU Bear
+Neu: (bestellbare Einheiten, siehe Inside/Behörde)
+-ISG Sat
+-ISG heavy Fighter
+-ISG Aircraft Carrier
+__________________
+13.09.2008 (GAMER)
+-Satan Features bugfix
+-Morl upgrade
+-movementSound, Ares,Adler, Satan, Lander
+-neues Docking System ISG Radar
+-ISG Carrier Transport=waitforAttack
+-ISG Builder 3000gw
+-PU Smoker hochseetauglich
+-PU Hanni1 upgrade
+-PU Debor Sekte wieder aktiviert
+-ISG Beton Höhe 101
+-InfoImage = FASM
+-ISG-Beton/KolonieHQ = überarbeitet-angepasst
+-ISG Builder = 30 Felder Jumpdrive, TurretTransport,Sound
+-ISG Carrier = 30 Felder Jumpdrive, Sound, Cargoanpassung
+-ISG Pathfinder = Cargoanpassung
+-ISG CU/Defender = Waffenbugfix
+-ISG Starship = Cargoanpassung , Sound
+-ISG Trader = Cargoanpassung
+-ISG EvakPod = Cargoanpassung
+-PU Hanni, Kostenanpassung
+-PU Lucius Kostenanpassung
+-PU Zapp umgebaut zu Sirtaki (SirHacke)
+-ISG Depot, stetiger Verbrauch, mehr Speicherkapazität
+Neu: 
+-PU2 SmokinMan
+-PU2 Prophet
+-PU Satanplayer
+-PU Raiden
+-PU Exar
+(neue PUs in der Übersicht auf der HP aktualisiert)
+__________________
+09.08.2008 (GAMER)
+-PU geändert Keyfinder
+-kolonieHQ überarbeitet
+-ALZ, bau kostet 70 Movement
+-ISG Builder low air 90, medium air 60 movement
+- +10 view für altes RFZ/neues Command HQ
+-Command Unit +Waffen/Armor
+Neu:
+-PU hanni2 PTR Observer
+-PU Adamski
+-PU Shadow Gravos
+-ISG Defender
+-ISG Radar (KolonieHQ-Bestandteil)
+__________________
+06.07.2008 (GAMER)
+-ImfoImage = Adler
+-PU rennreh aktualisiert
+-PU Artemis,Shadow Infotext
+-PU Lucius, kein Docking im orbit
+Neu:
+-PU minimus
+__________________
+24.03.2008 (GAMER)
+-PU Hanni erweitert
+-ISG Builder baut Hafenbeton und -mauer
+__________________
+15.03.2008 (GAMER)
+-PU Redhorse waitforattack = true
+-Überflüssige ISG Objekte entfernt (per second ID)
+-Protoreaktor, Rafinerie, auch auf Soft_Sand baubar
+-ISG Primärlandezone, 50 basejamming
+-Zyklop, remove GroupID 21
+
+__________________
+24.02.2008 (GAMER)
+-ISG Builder baut Kristalle, Wald, Pilze und Raps an, Jump auf Medium Level, kein Spacestation bau mehr
+-ISG Carrier nur noch 2000 Gewicht, Jumpdrive, 20k Fuel
+Neu:
+-PU Excalibur
+-PU Redhorse
+
+__________________
+10.02.2008 (GAMER)
+-Ablities -> Features
+Neu:
+-PU Lucius Neptun
+-PU Kral Kormoran
+-Kolonie HQ/+Hangar
+__________________
+05.10.2007 (GAMER)
+PU Lucius neue Grafik
+__________________
+03.10.2007 (GAMER)
+PU Albundy integriert
+PU Zyklop neues Bild
+_________________
+v12.05 17.06.2007
+-TankUpgrade: Zapp
+-Smoker = Hoovercraft
+-Zyklop, Minenleger entfernt
+-ISG Builder Jumpdrive
+Neu:
+-Wrack: Prophet
+-PU Gambit
+
+_________________
+v12.04 09.05.2007
+-Avatar überarbeitet
+Neu:
+-PU Shadow
+
+_________________
+v12.03
+Neu:
+PU Maewin
+PU2 Xypha
+PU2 Grom
+
+_________________
+v12.02 
+-Basejamming PLZ Nord gefixt
+-RZ EIngang auf 15000 erweitert
+-PU Gram Transportsystem angepasst
+-Neues Selbstverbindendes ISG Kreuz
+
+_________________
+v12.01 08.03.2007
+-Landezonen Livetime/Basejamming Bugfix
+-RZ View erhöht /100
+-PU Prophet Anpassungen.
+
+_____________________
+v12.00 04.03.2007
+-Release
+
+_____________________
+v11.01beta 03.03.2007
+-ISG Gebäude nicht mehr abreissbar
+-landezonen -> Terrainbit=Spaceport
+Neu:
+-PU Hanni
+-PU Gensek
+-PU SmokinMan
+-Command HQ
+-PU Wult
+
+_________________________
+bis v11.00beta 26.02.2007
+-PUs default Einheiten zugeordnet
+-PU Orxis , Aufwertung Move, Punch, Armor
+-PU Mormone , Artillery MinRange 20
+-PU Morl , Movemant-Divisor erhöhung + Stealth Erhöhung
+-ISG Starship/Pathfinder Jumpdrive eingebaut, Tank erhöht, Armor erhöht
+-ISG Trader, Tank Material/Fuel entfernt, Generator integriert, STellkapazität erhöht
+-neue preise integriert
+Neu:
+- PU SmokinMan
+2006
+-PU Pussycat ID bugfix
+-PU Jogi/Prophet Bauoptionen bugfix
+-PU Khan, Jamming Bugfix
+-PU Moa waffenbugfix
+-PU Pussycat
+-PU Jogi
+-PU Zapp
+-PU Prophet
+2005
+-PU HiOb, 100% CM Effektivität gegen Orbit
+-PU Air-Air auf default fighter Werte angepasst.
+-PU Bugfix gfx Masakari
+
+________________
+v9.01 31.08.2005
+-Bugfixes PU Grom
+
+________________
+v9.00 30.08.2005
+-Umbau zu komplettfile für PBP
+-Umbau des Techfilters über alle PBP-Techbereiche
+-Anpassung einzelner PUs an default Einheiten
+NEU:
+-PU AndreasK,Komic2,Tengri2
+
+________________
+v8.09
+-Spear+Spor Tech 4
+-Pomornik Tech Bugfix
+-Tech neu: Javelin,Airbourne,Wiesel,LST,Notstromaggregat
+-Trooper und AD-PUs auf default Units angepasst
+
+________________
+01.06.2005 v8.08 - ZV
+-diverse Forschungsupdates für neue Einheiten im mk1+mk3
+-Anpassung Transportsystem/Gewicht ISG+PUs
+
+________________
+30.04.2005 v8.07
+Änderungen:
+-diverse Bugfixes
+-Forschungsupgrade MK1+MK3
+
+________________
+26.03.2005 v8.05
+Neu:
+-PU Grom
+-PU Mike
+-Greg Test PU´s
+Änderungen:
+-Pathfinder +Stealth - Generator
+
+________________
+19.02.2005 v8.03
+Neu:
+-PU Dorfdrull
+-ISG Störschildgenerator
+-ISG Neutral Solo Zone
+
+________________
+04.02.2005 v8.02
+-Überarbeitung Forschung mk1+mk3
+
+________________
+06.01.2005 v8.01
+-Umbau PU greg+Jochen
+-Bugfix Forschungssystem MK1
+Neu:
+-ISG Tradeship
+
+________________
+26.11.2004 v8.00
+-Tech JamTower auf Stufe 4 gesetzt
+-Tech MBV auf Stufe 3 gesetzt
+-Tech Pioneer = Building Pioneer
+-Doomsday,Watcher,Flussgeist, entfernt
+-SamTrooper/Mistral = 600FP
+Neu:
+-PU Xyphagorozh
+
+________________
+16.10.2004 v7.03
+-MK1 Technologieblocking gefixt
+-ISG Filter gefixt
+Neu:
+-PU Keyfinder
+
+
+________________
+28.09.2004 v7.02
+-PBP-Forschung Tech4+5 MK1/mk3 freigegeben
+-Bugfix Mk1 Depot Adapter 
+
+________________
+20.08.2004 v7.01
+-Tech EXP21 korrigiert
+-Protoreaktor+Raffinerie aktualisiert +Tech hinzugefügt.
+Neu:
+-ISG Builder
+
+________________
+09.08.2004 v7.00
+-Bugfix ISG Carrier, Landung auf Steinen
+-Pathfinder+Starship langsamer im Orbit
+-ISG Tech eingebaut, Sat wieder baubar
+-Adapter von nicht existierenden mk1/mk3 Einheiten entfernt
+
+________________
+26.06.2004 v6.03
+-Anpassung MK3 Forschung
+-Umbau Hi-Ob PUnit
+-Änderung Starship/ISG-Carrier
+
+________________
+22.06.2004 v6.02
+-Bugfix Technologiestrang Ship/Stealth mk3
+-Bugfix Adler PUnit
+
+________________
+15.06.2004 v6.01
+Überarbeitung Aircraft
+Neu:
+-Adler (PUnit)
+
+________________
+v6.00
+Update neues Forschungssystem
+Anpassung ISG Zone
+
+________________
+v5.01
+neu:
+-Tengri
+-Borderline
+Änderungen:
+-Einheiten an Einheitliche Kostenstruktur angepasst.
+
+________________
+20.03.2004 v5.00
+Neu: 
+-Greg
+Änderungen:
+-Jochen Anpassungen
+-Gamer Bugfix in/out
+-Protoreaktor und Raffinery in pbp.con integriert
+-Starship+Pathfinder Energietank vergrößert
+-Doomsday an neues AirCraftprinzip angepasst
+
+_____
+v4.01
+-ISG Starship=Generator
+-Watcher kann auf ground_level wechseln.
+-Pathfinder Lande- und Entladefunktion für medium/high_level
+
+_________________
+v 4.00 06.01.2004
+-Umstellung RZ auf RessourceSink
+-Gwildu,Tropi,Son PUnit entfernt
+-Pathfinder+RZ Carrier eingebaut
+-Starship+Pathfinder = Generator

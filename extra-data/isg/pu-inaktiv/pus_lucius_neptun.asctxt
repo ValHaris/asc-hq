@@ -1,0 +1,63 @@
+VehicleType { 
+   Name = NEPTUN
+   parent = 365
+   ID = 12535
+
+   Description = Raketen AA-U-Boot
+   Infotext = [Eine auf Luftabwehr spezialiserte Modifikation des Pluto]
+   picture = pus_lucius_neptun.png
+   wreckageobject = 14267
+  
+   Armor += 200
+   View += 10
+   Features = self_repairing MoveDuringReactionFire sonar move_after_attack
+   SelfRepairRate = 5
+   Weight += 2000
+
+   Transportation { 
+      MaxLoadableUnits = 5
+      MaxLoadableUnitSize = 30
+      MaxLoadableMass = 90
+      CategoriesNOT = hoovercraft medium_tracked_vehicle heavy_tracked_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle rail_vehicle medium_aircraft medium_ship building|turret|object light_aircraft heavy_aircraft light_ship heavy_ship 
+      EntranceSystemNum = 2
+      EntranceSystem0 ->* VehicleType.GrIO
+      EntranceSystem1 ->* VehicleType.SubIO
+   } Transportation
+   Tank { 
+      Material = 3000
+      fuel = 6000
+   } Tank
+   
+  WaitForAttack = true
+  Weapons { 
+      Initiative = 0
+      Number = 4
+      Weapon0 ->* VehicleType.UTorp 
+      Weapon0.Ammo = 6
+
+      Weapon1 ->* VehicleType.SAM
+      Weapon1.shotFrom = submerged floating 
+      Weapon1.MaxRange = 70
+      Weapon1.Ammo = 16
+      Weapon1.HitAccuracy.U3 = 100
+            
+      Weapon2 ->* VehicleType.SAMH
+      Weapon2.shotFrom = submerged floating
+      Weapon2.Ammo = 16
+      Weapon2.MaxRange = 60
+      Weapon2.HitAccuracy.U4 = 100
+      Weapon2.ReactionFireShots = 1
+      
+      Weapon3 ->* VehicleType.CMO
+      Weapon3.shotFrom = floating submerged
+      Weapon3.targets = high_level_flight orbit
+      Weapon3.Ammo = 4
+      Weapon3.HitAccuracy.U3 = 100
+      Weapon3.HitAccuracy.U4 = 100
+      Weapons.HitAccuracy.U5 = 80
+      Weapon3.MaxRange = 120
+      Weapon3.MinRange = 60
+      Weapon3.ReactionFireShots = 1
+            
+   } Weapons
+} VehicleType

@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = DOOMSDAY
+   Name = RETURN
    parent = 400 401 402 498 415 15000
    ID = 15329
    Description = space fighter
@@ -15,7 +15,7 @@ VehicleType {
       Material = 500
    } Tank
    FuelConsumption = 20
-   Movement = 0 0 0 60 160 170 180 70 
+   Movement = 0 0 0 60 130 170 180 50 
    MovementSound = aircraft_l_g.ogg
 
    Weapons { 

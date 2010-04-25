@@ -1,0 +1,69 @@
+BuildingType { 
+   ID = 12016
+   Name = ISG EvakPod
+
+   ConstructionStages = 1
+   Weather = dry
+   Fields = A1
+   UseGFXpics = false
+   Pictures {
+      dry = isg_evakpod.png
+   } Pictures
+   RubbleObjects = false
+   Entry = A1
+   notRemovable = true
+
+   Features = NoObjectChaining
+   Armor = 2000
+   View = 60
+   Jamming = 0
+   Techlevel = 0
+   MaxResearch = 0
+   ExternalLoading = 
+
+   transportation { 
+      MaxLoadableUnits = 66
+      MaxLoadableUnitSize = 70000
+      MaxLoadableMass = 70000
+      EntranceSystemNum = 1
+      EntranceSystem0 {
+        Mode = In out docking
+        UnitHeightAbs = floating ground_level low_level_flight 
+        UnitHeightRel = -100
+        ContainerHeight = floating ground_level low_level_flight
+        CategoriesNOT = 
+        DockingHeightAbs = floating ground_level low_level_flight 
+        DockingHeightRel = -100 
+      } EntranceSystem0
+   } transportation
+
+   Height = low_level_flight 
+   TerrainAccess { 
+      terrain_any = Shallow_water Lowland Swamp Forest High_mountains Road Railroad Harbour Runway Pipeline Buried_pipeline Water Deep_water Hard_sand Soft_sand Track_possible Small_rocks Mud Snow Deep_snow Mountains Very_shallow_water Large_rocks Lava Ditch Hillside Turret_foundation Morass Installation Pack_ice River Frozen_water 
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = 
+   } TerrainAccess
+   ConstructionCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } ConstructionCost
+   MaxResourceProduction { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } MaxResourceProduction
+   StorageCapacity { 
+      BImode { 
+         Energy = 900000
+         Material = 900000
+         fuel = 900000
+      } BImode
+      ASCmode { 
+         Energy = 0
+         Material = 0
+         fuel = 0
+      } ASCmode
+   } StorageCapacity
+} BuildingType

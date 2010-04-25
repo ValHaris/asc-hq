@@ -1,0 +1,47 @@
+ObjectType { 
+   Name = Peilsender
+   ID = 1313
+   groupID =
+   visible_in_fogOfWar = false
+   LinkableObjects = 
+   Height = 200
+   NoSelfChaining = true
+   lifetime = 10
+
+   Armor = 200
+   ConstructionCost { 
+      Energy = 0
+      Material = 3000
+      fuel = 500
+      Movement = 60
+   } ConstructionCost
+   RemovalCost { 
+      Energy = 0
+      Material = -1500
+      fuel = 60
+      Movement = 60
+   } RemovalCost
+
+   Weather = dry 
+
+   Movemalus_plus = 0
+   Movemalus_abs = -1
+   AttackBonus_abs = -1
+   AttackBonus_plus = 0
+   DefenseBonus_abs = -1
+   DefenseBonus_plus = 0
+   Jamming_abs = -1
+   Jammming_plus = 0
+   TerrainAccess { 
+      terrain_any = lowland hard_sand soft_sand road runway spaceport very_shallow_water shallow_water water deep_water river hillside mountains high_mountains ditch turret_foundation installation
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = 
+   } TerrainAccess
+   TerrainProperties_Filter =  
+   TerrainProperties_Add = beacon
+   dry { 
+      UseGFXpics = false
+      picture = sy_obj_beacon.png 1
+   } dry
+} ObjectType

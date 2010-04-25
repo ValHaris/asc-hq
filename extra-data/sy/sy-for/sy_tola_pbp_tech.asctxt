@@ -1,0 +1,10 @@
+technology {
+   Name = Tola
+   infotext = 
+   id = 1328
+   RelatedUnitID = 1328
+   parent = 1399
+   researchpoints *= 20
+   techlevel = 4
+   TechnologiesRequired = 1399,100003,100104,100309,100302,1314 
+} Technology

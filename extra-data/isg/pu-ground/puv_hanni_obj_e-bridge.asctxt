@@ -1,0 +1,49 @@
+ObjectType { 
+   Name = Energie Bruecke
+   ID = 12404
+   canExistBeneathBuildings = true
+   Weather = dry 
+   visible_in_fogOfWar = false
+   LinkableObjects = 12401
+   Armor = 1100
+   ;                def lTr mTr hvT lWh mWh hWh tro rlv mAC mSh BTO lAC hAC lSh hSh Hli hov
+   Movemalus_plus = 
+   Movemalus_abs =  10  10  10  10  10  10  10  10  12  17  20  10  17  17  20  20  17  10
+   AttackBonus_abs = -1
+   AttackBonus_plus = 0
+   DefenseBonus_abs = -1
+   DefenseBonus_plus = 0
+   Jamming_abs = -1
+   Jammming_plus = 0
+   Height = 97
+   
+   lifetime = 4
+   
+   ConstructionCost { 
+      Energy = 0
+      Material = 200
+      fuel = 1000
+      Movement = 15
+   } ConstructionCost
+   RemovalCost { 
+      Energy = 0
+      Material = -100
+      fuel = 50
+      Movement = 5
+   } RemovalCost
+   NetBehaviour = NetToSelf AutoBorder NetToBuildingEntry
+
+   TerrainAccess { 
+      terrain_any = Shallow_water Very_shallow_water swamp morass water river hillside railroad
+      terrain_all = 
+      terrain_not = Forest Road Runway bridge lava
+      terrain_kill = deep_water lava
+   } TerrainAccess
+   TerrainProperties_Filter = forest swamp snow deep_snow morass mud small_rocks large_rocks hillside
+   TerrainProperties_Add = Road bridge
+
+   dry { 
+      UseGFXpics = false
+      picture = PUv_Hanni_obj_e-road.png 64
+   } dry
+} ObjectType

@@ -1,0 +1,17 @@
+ObjectType {
+   name = HQ Kolonie Nord-Ost-Sockel
+   ID = 12023
+   parent = 12022
+   Movemalus_abs = 150
+   dry { 
+      picture = bld_isg_KolonieHQ_NO.png 1
+   } dry
+   TerrainAccess { 
+      terrain_any = Runway  
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = 
+   } TerrainAccess
+   TerrainProperties_Filter = Shallow_water Lowland Swamp Forest High_mountains Road Railroad Harbour Runway Hard_sand Soft_sand Track_possible Small_rocks Mud Snow Deep_snow Mountains Very_shallow_water Large_rocks Ditch Morass Frozen_water water deep_water
+   TerrainProperties_Add = Turret_foundation Installation buried_pipeline
+} ObjectType

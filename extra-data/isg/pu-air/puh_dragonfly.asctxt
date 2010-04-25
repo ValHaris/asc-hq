@@ -1,0 +1,78 @@
+VehicleType {
+  Name = DRAGONFLY
+  parent = 381
+  ID = 12576
+
+  Description = Tarn-Kampfhubschrauber
+  picture = puh_dragonfly.png
+  InfoImage = puh_dragonfly.jpg
+;  wreckageobject = 18001 15803
+;  GuideSortHelp ?
+  Infotext = [
+Lange bevor die Wissenschaftler der Schwarzbegas die Stealth-Technologie so
+weit vorangetrieben hatten, dass sie den Nachbau eines chromonischen Ghost
+oder Usurius an Angriff nehmen konnten, initiierte die Hauptabteilung
+Werkschutz ein Projekt, in dem die bis dahin erzielten Fortschritte auf ein
+aerodynamisch weniger anspruchsvolles Fluggerät übertragen werden sollten.
+So entstand der von großen Teilen des Schwarzbega-Militärs als
+"Baby-Stealthbomber" belächelte DRAGONFLY Angriffshelikopter.
+
+
+Der Dragonfly ist in der Tat eher das Produkt der Bastelfreude
+schwarzbegischer Techniker als das einer zielgerichteten Entwicklung. Er
+vereint Komponenten aus verschiedenen Entwicklungsprojekten und hat in
+kürzester Zeit bei Piloten einen schlechten Ruf für sein instabiles
+Flugverhalten erworben. Die Stealth-Anforderungen haben dafür gesorgt, dass
+die Panzerung des Dragonfly leichter und weniger effektiv ausfällt als bei
+vergleichbaren Helikoptern. Außerdem musste er deutliche Einbußen bei
+Tankvolumen und Munitionsvorrat hinnehmen. Folglich kann der Dragonfly nur
+kurze Zeit ohne logistische Unterstützung operieren, außerdem benötigt er
+ein sicheres Rückzugsgebiet, denn einmal aufgeklärt wird er zur leichten
+Beute für Jäger oder Flugabwehrbatterien.
+
+
+Bei all diesen Nachteilen erfüllt der Dragonfly jedoch die Aufgabe, für die
+er gebaut wurde: Er schleicht sich an eine Frontlinie an, die aufgrund ihrer
+dichten Luftverteidigung für Kampfbomber völlig unerreichbar wäre, feuert
+Raketen außergewöhnlicher Reichweite auf taktisch wichtige Ziele ab und
+zieht sich zurück, ohne einen Gegenschlag befürchten zu müssen. Im Idealfall
+eröffnet er so einen Angriffskorridor für andere Lufteinheiten. Bei weniger
+starrem Frontverlauf macht der Dragonfly mit seiner Sekundärwaffe Jagd auf
+leicht gepanzerte Ziele, kann feindliche Kommandos abfangen oder unentdeckt
+Landeunternehmen vorbereiten.
+  ]
+
+  Features += MoveDuringReactionFire
+  Armor -= 80
+  Jamming += 60
+
+  Tank {
+    Energy = 0
+    Material = 0
+    Fuel = 2500
+  } Tank
+
+  Weapons {
+
+    Number = 3
+
+    Weapon0 ->* VehicleType.ASM
+    Weapon0.Ammo = 4
+    Weapon0.MinRange = 10
+    Weapon0.MaxRange = 30
+    Weapon0.ReactionFireShots = 0
+
+    Weapon1 ->* VehicleType.smAAM
+    Weapon1.Ammo = 2
+
+    Weapon2 ->* VehicleType.MiniGun
+    Weapon2.targets = floating ground_level
+    Weapon2.shotFrom = low_level_flight
+    Weapon2.HitAccuracy ->* VehicleType.HitAcc
+    Weapon2.HitAccuracy.0 = 0
+    Weapon2.HitAccuracy.d1 = 100
+    Weapon2.Ammo = 10
+    Weapon2.ReactionFireShots = 2
+
+  } Weapons
+} VehicleType

@@ -1,0 +1,25 @@
+VehicleType { 
+   Name = ISG SHF
+   parent = 272
+   ID = 12009
+
+   Description = standard heavy fighter
+   Picture = isg_shf.png
+;   InfoImage = mk1a_dominator.jpg
+;   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+   Infotext = [Heavy Fighters are the big boys in the air. In close combat,
+              the Heavy Fighter is equalled by none. This makes the airplane
+              ideal for taking out enemy aircraft. But beware of ground support,
+              for the Heavy Fighter has no ground-targeted weaponry.
+              ]
+
+   ConstructionCost { 
+      CalculationMethod = add
+      Energy = 4000
+      Material = 4000
+      fuel = 0
+   } ConstructionCost
+
+   Armor -= 50
+   Movement -= 0 0 0 0 0 10 10 0 
+} VehicleType

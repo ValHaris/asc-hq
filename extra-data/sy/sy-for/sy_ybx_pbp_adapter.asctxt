@@ -1,0 +1,5 @@
+Techadapter {
+   ; YBX
+   Name = B1314
+   TechnologiesRequired = 1394
+} TechAdapter

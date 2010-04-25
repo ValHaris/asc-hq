@@ -1,0 +1,66 @@
+BuildingType { 
+   Name = do_not_use
+   ConstructionStages = 1
+   Weather = dry
+   Fields = A1
+   UseGFXpics = false
+   Pictures {
+      dry = isg_sat.pcx
+   } Pictures
+   RubbleObjects = false
+   Entry = A1
+   notRemovable = true
+
+   ID = 12015
+   Armor = 2000
+   View = 30
+   Jamming = 0
+   transportation { 
+      MaxLoadableUnits = 25
+      MaxLoadableUnitSize = 50000
+      MaxLoadableMass = 120000
+      EntranceSystemNum = 1
+      EntranceSystem0 {
+        Mode = In out docking
+        UnitHeightAbs = floating ground_level 
+        UnitHeightRel = -100
+        ContainerHeight = floating ground_level low_level_flight
+        CategoriesNOT = 
+        DockingHeightAbs = floating ground_level 
+        DockingHeightRel = -100 
+      } EntranceSystem0
+   } transportation
+   Functions = matter_converter
+   Techlevel = 10
+   TerrainAccess { 
+      terrain_any = spaceport 
+      terrain_all = spaceport
+      terrain_not = 
+      terrain_kill = 
+   } TerrainAccess
+   MaxResearch = 0
+   ConstructionCost { 
+      Energy = 0
+      Material = 60000
+      fuel = 60000
+   } ConstructionCost
+   MaxResourceProduction { 
+      Energy = 10000
+      Material = -1000
+      fuel = -1000
+   } MaxResourceProduction
+   StorageCapacity { 
+      BImode { 
+         Energy = 900000
+         Material = 900000
+         fuel = 900000
+      } BImode
+      ASCmode { 
+         Energy = 5000
+         Material = 0
+         fuel = 0
+      } ASCmode
+   } StorageCapacity
+   Height = low_level_flight 
+   ExternalLoading = 
+} BuildingType

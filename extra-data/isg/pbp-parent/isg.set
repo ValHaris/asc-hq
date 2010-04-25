@@ -1,0 +1,10 @@
+#V2#
+NAME= ISG-PUs
+ID=12000-12999
+BUILDINGID=8,9,12000-12999
+IDENTIFICATION=12000
+MAINTAINER=GAMER (gamer@ulrichshorst.de)
+ACTIVE=0
+INFORMATION= Sonder Einheiten-Gebäude-Objekte-terrain für das PROJECT:Battle Planets
+
+ 

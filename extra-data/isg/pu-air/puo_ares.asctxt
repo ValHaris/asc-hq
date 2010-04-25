@@ -1,0 +1,67 @@
+VehicleType { 
+   Name = ARES
+   parent = 400 401 402 497
+   ID = 12526
+
+   Description = Transport Shuttle
+   Picture = puo_ares.png
+   Infotext = []
+
+   Armor = 490
+   View = 60
+;   WreckageObject = 1411
+   Height = ground_level low_level_flight medium_level_flight high_level_flight orbit 
+   Jamming = 80
+   WaitForAttack = true
+   Transportation { 
+      MaxLoadableUnits = 4
+      MaxLoadableUnitSize = 7250
+      MaxLoadableMass = 7400
+      CategoriesNOT = heavy_aircraft
+      EntranceSystemNum = 2
+      EntranceSystem0 ->* VehicleType.GrIO
+      EntranceSystem1 ->* VehicleType.OrbIO
+      Entrancesystem1.DisableAttack = true
+   } Transportation
+   Tank { 
+      Energy = 5000
+      Material = 40000
+      fuel = 40000
+   } Tank
+   FuelConsumption = 40
+   Features = no_midair_refuel Matter_Converter Repair_Facility jam_only_own_field self_repairing move_after_attack
+   Movement = 0 0 0 40 80 100 140 150 
+   Category = heavy_aircraft
+   MaxSurvivableStorm = 160
+   ResourceDrillingRange = 0
+   SelfRepairRate = 10
+   Weight = 2000
+   TerrainAccess ->* VehicleType.heli_terrain
+   MovementSound = aircraft_l_g.ogg
+
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+   } Construction
+   Weapons { 
+      Initiative = 0
+      Number = 6
+      Weapon0 ->* VehicleType.ML 
+      Weapon1 ->* VehicleType.AmmoMG
+      Weapon1.Ammo = 50
+      
+      Weapon2 ->* VehicleType.AmmoCannon
+      Weapon2.Ammo = 40
+      
+      Weapon3 ->* VehicleType.AmmoBomb
+      Weapon3.Ammo = 30
+      
+      Weapon4 ->* VehicleType.AmmoSM
+      Weapon4.Ammo = 30
+      
+      Weapon5 ->* VehicleType.AmmoLM
+      Weapon5.Ammo = 30
+      
+   } Weapons
+} VehicleType

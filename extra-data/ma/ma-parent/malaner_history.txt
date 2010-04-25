@@ -4,7 +4,8 @@ InfoText: Marla
 InfoImage: GAMER
 Spezifikationen: GAMER, Marla
 ________________________
--InfoText: Sest LiBo
+-InfoText: Sest LiBo, MeBo, HeBo
+-HeBo +10 Punch
 ________________________
 Beta-10-9
 -MATU RF +200 Armor

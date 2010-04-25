@@ -1,0 +1,44 @@
+VehicleType { 
+   Name = DRUK
+   parent = 1397 1391 1395
+   ID = 1317
+
+   Description = Destroyer
+   Picture = sya_druk.png
+   Infotext = [Die SY verfügen anstelle der klassischen Schiffe über mehrere Flugkreuzerklassen. Der Druk repräsentiert die Zerstörerklasse. Seine Waffensysteme sind sowohl defensiv als auch offensiv einsetzbar. Das Antriebssystem basiert auf Antigravitation und kann bis in die unteren Schichten der Athmosphäre eingesetzt werden. Für die Fortbewegung sind allerdings normale Rückstoßtriebwerke vorhanden, die seitlich aus dem Rumpf ragen. Die Kombination aus beiden Triebswerksarten ermöglicht eine herausragende Wendigkeit für einen Flugkörper dieser Größe. Die Massenträgheit und der Luftwiderstand verhindern allergings hohe Geschwindigkeiten. Der Aufbau des Schiffes ist typisch SY. Der Rumpf mit einer Doppelspitze ist mit einem Exoskellet überzogen, welches die direkten Waffen- und Leitsysteme hält. 
+Obwohl die Waffen eine geringe Defensivkapazität besitzen, ist der Druk keine stand alone Waffe. Im Schwarm ist seine primäre Aufgabe, der Schutz der Träger und der Schlachtschiffe. Seine gegenüber anderen Raumschiffklassen hohe Geschwindigkeit ermöglichen es ihm schnell an Brennpunkt des Geschehens zu sein oder die ersten Treffer einzustecken.
+Die Waffensysteme sind sowohl im Boden als auch im Luftkampf gut einsetbar. Besitzen aber keine besonders große Reichweite.
+]
+
+   Armor = 750
+   Weight = 500
+   Height = low_level_flight medium_level_flight high_level_flight orbit 
+   Jamming = 55
+   Features += MoveDuringReactionFire move_after_attack
+   Transportation ->* VehicleType.TransSyDestroyer 
+
+   Tank { 
+      Energy = 0
+      Material = 3000
+      fuel = 10000
+   } Tank
+   FuelConsumption = 20
+   Movement = 0 0 0 0 120 130 140 140 
+   TerrainAccess ->* VehicleType.SY_Air
+
+   Weapons { 
+      Initiative = 0
+      Number = 2
+      Weapon0 ->* VehicleType.SY_Bomber_Big 
+      Weapon0.sound = lasergun.ogg 
+      Weapon0.MaxRange = 30
+      Weapon0.Punch@MaxRange = 80
+      Weapon0.Punch@MinRange = 120
+      Weapon0.LaserRechargeCost.fuel = 120
+
+      Weapon1 ->* VehicleType.SY_Fighter_AD
+      Weapon1.sound = lasergun.ogg 
+      Weapon1.ReactionfireShots = 1
+
+   } Weapons
+} VehicleType

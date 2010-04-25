@@ -1,0 +1,14 @@
+VehicleType {
+	Name = WhiteNoise
+	parent = 409
+	ID = 12544
+	
+	Description = Tactical Helicopter
+	picture = puh_smokinman2_whitenoise.png
+	
+        Features -= move_after_attack
+	Armor += 100
+	Construction.Objects = 12544
+        Tank.Material = 5000
+        Tank.fuel = 10000   
+} VehicleType

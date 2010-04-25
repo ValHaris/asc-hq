@@ -7,7 +7,7 @@ VehicleType {
 
    Description = Invasion Jump Box
    Infotext = []
-   picture = mk6b_box_i.pcx
+   picture = mk6b_box_i.png
 ;   WreckageObject = 14235
 
    JumpDrive ->* VehicleType.TeccnolsJump3
@@ -20,10 +20,10 @@ VehicleType {
    Features = MoveDuringReactionFire
    Weight = 600
 
-   Transportation ->* VehicleType.TransTrooper 
-   Transportation.MaxLoadableMass = 20
+   Transportation ->* VehicleType.TransBigTrooper 
+   Transportation.MaxLoadableMass = 25
 
-   Movement = 0 0 0 10 0 0 0 0 
+   Movement = 0 0 0 14 0 0 0 0 
    Tank.Material = 2000
    Tank.Fuel = 10000
    TerrainAccess ->* VehicleType.heli_terrain 

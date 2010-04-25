@@ -1,0 +1,41 @@
+VehicleType { 
+   Name = GRAM
+   parent = 1208
+   ID = 12523
+
+   Description = Luftlande Schuetzenpanzer
+   Picture = puv_grom_gram.pcx
+   InfoImage = puv_grom_gram.jpg
+   InfoImageSmall = puv_grom_gram_k.png
+   Infotext = [Spezialeinheit der Golomiten
+   InfoImage = BananaJoe]
+
+   View += 10
+   Jamming = 39
+
+   Transportation { 
+      MaxLoadableUnits = 8
+      MaxLoadableUnitSize = 9
+      MaxLoadableMass = 40
+      CategoriesNOT = hoovercraft Medium_tracked_vehicle Heavy_tracked_vehicle Medium_wheeled_vehicle Heavy_wheeled_vehicle Light_aircraft Medium_aircraft Heavy_aircraft Helicopter Light_ship Medium_ship Heavy_Ship building|turret|object Rail_vehicle
+      EntranceSystemNum = 1
+      EntranceSystem0 ->* VehicleType.GrIO
+   } Transportation
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 600
+   } Tank
+   Features += paratrooper move_after_attack jam_only_own_field
+   TerrainAccess ->* VehicleType.offroad
+   TerrainAccess.any = road runway hard_sand lowland soft_sand hillside ditch very_shallow_water shallow_water 
+   Weapons { 
+      Initiative = 0
+      Number = 2
+      Weapon0 ->* VehicleType.MiniGun 
+      Weapon1 ->* VehicleType.smSSM
+      Weapon1.MaxRange = 20
+      Weapon1.Punch@MinRange = 70
+      Weapon1.Punch@MaxRange = 70
+   } Weapons
+} VehicleType

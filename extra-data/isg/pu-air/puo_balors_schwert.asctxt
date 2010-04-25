@@ -1,0 +1,55 @@
+VehicleType { 
+   Name = BALORS SCHWERT
+   ID = 12512
+   parent = 400 401 402 497 415
+
+   Description = defence spacecraft
+   Infotext = [Umgebauter korgonischer Schlachtkreuzer einer aelteren Baureihe. Gefunden auf einem der Monde im Mystery System. Vermutlich waehrend der Schlacht mit den SY um Zdum schwer beschaedigt und notgelandet.]
+   Picture = puo_balors_schwert.png
+
+   Armor = 600
+   Weight = 500
+   Category = heavy_aircraft
+   View = 100
+   Jamming = 39
+   Features = MoveDuringReactionFire Move_after_Attack Repair_Facility ExternalFuelTransfer self_repairing
+   MaxSurvivableStorm = 220
+   SelfRepairRate = 10
+
+   TerrainAccess ->* VehicleType.sat_terrain
+   TerrainAccess.Terrain_any = Spaceport
+   Height = ground_level low_level_flight medium_level_flight high_level_flight orbit 
+   Tank { 
+      Energy = 0
+      Material = 3000
+      fuel = 10000
+   } Tank
+   FuelConsumption = 50
+   Movement = 0 0 0 0 60 80 100 120 
+
+   Transportation ->* VehicleType.TransSpSt 
+   Transportation.EntranceSystemNum = 2
+   Transportation.EntranceSystem1 ->* VehicleType.GrIO
+
+   WaitForAttack = true
+   Weapons { 
+      Number = 2
+         
+         Weapon0 ->* VehicleType.OCM 
+         Weapon0.shotFrom = orbit high_level_flight
+         Weapon0.Ammo = 6
+         Weapon0.ReactionFireshots = 0
+         Weapon0.HitAccuracy.d3 = 100
+         Weapon0.cantHit = trooper  
+         
+         Weapon1 ->* VehicleType.AAMO
+         Weapon1.MaxRange = 50
+         Weapon1.MinRange = 20
+         Weapon1.Ammo = 20
+         Weapon1.targets = orbit high_level_flight
+         Weapon1.ReactionFireShots = 2
+         
+         Weapon2 ->* VehicleType.ServiceOrbit
+                        
+  } Weapons
+} VehicleType

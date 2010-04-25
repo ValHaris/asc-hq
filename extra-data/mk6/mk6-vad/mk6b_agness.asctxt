@@ -1,0 +1,38 @@
+VehicleType { 
+   Name = AGNESS
+   ID = 15224
+   parent = 223 15000
+
+   Description = Luftabwehrturm
+;   Infotext = []
+   Picture = mk6b_agness.png
+;   InfoImage = mk1b_silo.jpg
+   GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
+   
+   Armor -= 100
+   View = 0
+   Tank.Fuel = 10000
+   Tank.Material = 5000
+   Jumpdrive ->* VehicleType.TeccnolsJump3
+
+   Weapons {
+      Weapon0 {
+         Name = Ground-Air Railgun
+         sound = lasergun.ogg
+         Type = Laser shootable 
+	 LaserRechargeRate = 1
+         LaserRechargeCost {
+            energy = 0
+            material = 200
+            fuel = 500
+         } LaserRechargeCost
+         MaxRange -= 10
+         Ammo = 6
+         ReactionFireShots = 2
+         Punch@MinRange += 20
+      } Weapon0
+      Weapon1 ->* VehicleType.GALS
+      Weapon1.MaxRange = 30
+      Weapon2 ->* VehicleType.NLS
+   } Weapons
+} VehicleType

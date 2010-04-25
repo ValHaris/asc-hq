@@ -1,0 +1,54 @@
+VehicleType { 
+   Name = HERMELIN
+   ID = 12577
+   WreckageObject = 15591
+   parent = 335
+   
+   Description = Unknowns modified MB 809
+   Picture = puv_hermelin.png
+;   Infoimage = mk3v_truck.jpg
+   Movement += 0 0 0 10 0 0 0 0 
+;   GuideSortHelp = 550 0 0 0 3 0 0 0 0 0
+   InfoText = [In Kriegszeiten greifen die Unnies auf alle Technologie zurück, die das Volk bietet. Unter anderem auf diesen von Wissenschaftlern umgebauten und modifizierten LKW vom Typ MB 809.
+Eigentlich für Kriegszwecke absolut ungeeignet hat dieses Exemplar dennoch seine Daseinsberechtigung denn es hat durch den massiven Umbau einzigartige Fähigkeiten erhalten.
+Durch die Motorleistung von nur 90 PS ist er nicht schnell unterwegs (Trotzdem als Radfahrzeug schnell genug um einige Kettenfahrzeuge zu überholen) und kann nur auf Strasse fahren,
+da die Standartreifen hoffnungslos selbst in Gras einsinken würden. Um diesen Nachteil zu kompensieren wurde ein RailRoad 2WegeFahrwerk
+(Beispiel: http://gelaendewagen.at/artikel06/2wege_unimog_0141.php)hinzugefügt. Da Schienen schon so eben wie möglich verlaufen,
+ist das Fahrzeug dort schneller unterwegs als auf der Strasse. Die Besatzung besteht aus einem Wissenschaftler und einem Ingenieur, welche die Bordtechnik, die Werkstatt und das Labor bedienen. Da beide keine Militärs sind gibt es auch keinerlei verbauten Waffensysteme. Um dennoch nicht leichtes Ziel zu bieten ist das Fahrzeug grün angestrichen und verfügt dank Spezialbeschichtung, Elektrostörsender und der Tatsache das es, wenn es nicht aufgebaut ist nicht von einem Zivilfahrzeug zu unterscheiden ist, gewähren ihm gewisse Tarneigenschaften - verbergen es jedoch nicht vor starken High - Tech Radaranlagen.
+Sein Hauptnutzen ist die Produktion, Transport, Aufstellung und der Betrieb kleiner Radarsender (wie Outlaw), welche durch die Besatzung im aufgesattelten Koffer hergestellt werden. Dank der
+eingebauten Regale, in denen die Materialien gelagert werden, des eingebauten Stromerzeugers,der Heckseitigen Ladeeinrichtung und ausreichend Platz ist dies für die 2 Mann kein Problem
+Ebenso kann mit der Ladebordwand auch ganz einfach Material geladen, entladen und an andere Einheiten bei Bedarf ausgegeben werden. Der große Tank sorgt für
+eine große Reichweite, jedoch ist keine Zapfanlage vorhanden, so dass nichts einfach in andere Einheiten umgetankt werden kann. Ein ins Dach eingelassener
+teleskopierbarer Lichtmast mit Umfeldbeleuchtung für Arbeiten bei Nacht, komfortable Schlafgelegenheiten für die Besatzung, sowie die überdimensionaler Empfangstechnik des Labors, welche es ermöglicht,
+jeden Sender des Planeten selbst im dichtesten Jungel zu empfangen runden dieses Allroundpaket ab. Da dieses Fahrzeug ursprünglich zivilen Zwecken diente,
+und von den betreibendend Wissenschaftlern keine Pläne für den Nachbau des Fahrzeuges gezeichnet wurden, ist es nur in sehr geringer Stückzahl unterwegs.
+   ]
+
+   Features += ExternalMaterialTransfer Vehicle_Production construct_vehicles ExternalRepair
+   CategoriesProduceable = default
+   Category = rail_vehicle
+   View = 60
+   
+   Transportation ->* VehicleType.TransDevice
+   
+   Construction { 
+      Buildings = 26 29 33-37
+      Vehicles = 84 93 94 111 112 117 122 76 110
+      Objects = 9 44 2096 2098 992 2097
+      ObjectsRemovable = 992 988 2097
+      ObjectGroupsRemovable = 1 2 3 4 7 8 14 21
+      VehiclesInternaly = 1430 1431
+      ProductionEfficiency = [   0   0   2
+                                 0   1   0
+                                 0   0   1 ]
+   } Construction
+
+   Movement = 0 0 0 100 0 0 0 0
+   Terrain_Access.Terrain_any = railroad runway road
+   Tank.Fuel = 25000
+   Tank.Material = 20000
+
+   Weapons { 
+      Number = 0
+   } Weapons
+} VehicleType

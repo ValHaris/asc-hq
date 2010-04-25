@@ -1,0 +1,43 @@
+VehicleType { 
+   Name = SYG
+   ID = 12560
+   parent = 1395 202
+
+   Description = special trooper
+   Picture = pui_gamer_syg.png
+   InfoImage = syi_sy.jpg
+   InfoImageSmall = syi_sy_k.png
+   Infotext = [Stealth Trooper]
+
+   Transportation ->* VehicleType.TransLowTrooper
+   Transportation.MaxLoadableUnitSize = 1
+   Transportation.MaxLoadableUnits = 2
+   Transportation.CategoriesNOT -> VehicleType.cargo_deftro_only.CategoriesNOT
+
+   Features += paratrooper move_after_attack mine_layer mineview construct_specific_buildings
+   Armor += 200
+   Jamming = 90
+   SelfRepairRate = 30
+   Construction.Vehicles = 1347 1329
+
+   Tank { 
+      Energy = 0
+      Material = 10000
+      fuel = 15000
+   } Tank
+   Movement += 0 0 0 19 0 0 0 0 
+
+   Weapons { 
+      Number = 2
+      Weapon0 ->* VehicleType.SY_TankL 
+      Weapon0.Ammo = 4
+      Weapon0.MaxRange = 40
+      Weapon0.MinRange = 10
+      Weapon0.Punch@MinRange = 140
+      Weapon0.Punch@MaxRange = 120
+      Weapon0.WeaponEffectiveness.building|turret|object = 120
+
+      Weapon1 ->* VehicleType.AntiMine 
+
+   } Weapons
+} VehicleType

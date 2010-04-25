@@ -1,0 +1,4 @@
+Techadapter {
+   Name = B61
+   TechnologiesRequired = 100006
+} TechAdapter

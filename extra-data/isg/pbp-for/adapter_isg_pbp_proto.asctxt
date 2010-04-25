@@ -1,0 +1,5 @@
+Techadapter {
+   Name = B8
+   ;Bezeichnung der verknüpften Technologie: Protoreaktor
+   TechnologiesRequired = 100103
+} TechAdapter

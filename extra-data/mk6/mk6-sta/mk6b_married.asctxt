@@ -1,0 +1,64 @@
+VehicleType { 
+   Name = MARRIED
+   ID = 15223
+   parent = 223 15000
+
+   Description = Abwehrgeschütz
+   Picture = mk6b_married.png
+;   InfoImage = mk1b_sdb.jpg
+   GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
+   Infotext = []
+   
+   Armor = 500
+   Weight = 400
+   Features = 
+   View = 0
+
+   Movement = 0 0 0 20 0 0 0 20
+   FuelConsumption = 500
+   Tank.Fuel = 17000
+   Tank.Material = 8000
+   Height = ground_level orbit
+   TerrainAccess.Terrain_any = runway spaceport turret_foundation
+   TerrainAccess.Terrain_all = beacon
+   Jumpdrive ->* VehicleType.TeccnolsJump6
+   Jumpdrive.MaxDistance = 80
+   Jumpdrive.consumption.Material = 300
+   Jumpdrive.consumption.Fuel = 1000
+
+   WaitForAttack = true
+   Weapons { 
+      Number = 1
+      Weapon0 ->* VehicleType.OGLS
+      Weapon0.name = Ionenkanone
+      Weapon0.sound = lasergun.ogg
+      Weapon0.MaxRange = 80
+      Weapon0.MinRange = 40
+      Weapon0.Punch@MaxRange = 100
+      Weapon0.Punch@MinRange = 120
+      Weapon0.Ammo = 4
+      Weapon0.LaserRechargeRate = 1
+      Weapon0.LaserRechargeCost.material = 200
+      Weapon0.LaserRechargeCost.fuel = 400
+      Weapon0.HitAccuracy.u3 = 80
+      Weapon0.HitAccuracy.u2 = 85
+      Weapon0.HitAccuracy.u1 = 90
+      Weapon0.ReactionFireShots = 2
+   } Weapons
+
+   HeightChangeMethodNum = 2
+   HeightChangeMethod0 {
+      movecost = 20
+      heightdelta = 4
+      dist = 0
+      startheight = ground_level
+      canattack = false
+   } HeightChangeMethod0
+   HeightChangeMethod1 {
+      movecost = 10
+      heightdelta = -4
+      dist = 0
+      startheight = orbit
+      canattack = false
+   } HeightChangeMethod1
+} VehicleType

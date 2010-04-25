@@ -1,0 +1,47 @@
+ObjectType {
+   name = ISG NEUTRAL SOLO ZONE
+   ID = 12005
+   Weather = dry
+   visible_in_fogOfWar = true
+   canExistBeneathBuildings = true
+   LinkableObjects = 
+   Armor = 2000
+   lifetime = 80
+
+   Movemalus_plus = 
+   Movemalus_abs =  10
+   AttackBonus_abs = 0
+   AttackBonus_plus = 0
+   DefenseBonus_abs = 0
+   DefenseBonus_plus = 0
+   Jamming_abs = 50
+   Jammming_plus = 
+   Height = 119
+   ConstructionCost { 
+      Energy = 0
+      Material = 10000
+      fuel = 10000
+      Movement = 70
+   } ConstructionCost
+   RemovalCost { 
+      Energy = 0
+      Material = -2000
+      fuel = 2000
+      Movement = 70
+   } RemovalCost
+   NoSelfChaining = true
+   TerrainAccess { 
+      terrain_any = Lowland Hard_sand Soft_sand 
+      terrain_all = 
+      terrain_not = forest large_rocks installation railroad
+      terrain_kill = shallow_water water river deep_water lava
+   } TerrainAccess
+   TerrainProperties_Filter = Road runway railroad Hard_sand Soft_sand Lowland Ditch Hillside Mountains High_mountains Installation Turret_foundation Small_rocks Large_rocks Forest Swamp Very_shallow_water Shallow_water water deep_water Railroad Mud Snow Deep_snow Morass Frozen_water 
+   TerrainProperties_Add = spaceport pipeline
+   dry { 
+      UseGFXpics = false
+      picture = isg_alz.pcx 1
+      ImageReference =  -1
+      FlipPictures   =  0
+   } dry
+} ObjectType

@@ -1,0 +1,10 @@
+technology {
+   Name = Tox
+   infotext = 
+   id = 1334
+   RelatedUnitID = 1334
+   parent = 1399
+   researchpoints *= 27
+   techlevel = 5
+   TechnologiesRequired = 1399,100003,100105,100309,100302,1314,1328 
+} Technology

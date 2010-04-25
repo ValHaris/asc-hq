@@ -1,0 +1,54 @@
+ObjectType {
+   name = ISG NEUTAL ZONE
+   ID = 12000
+   SecondaryIDs = 12001 12002 12003 12006 12007
+
+   Weather = dry
+   visible_in_fogOfWar = false
+   canExistBeneathBuildings = true
+   LinkableObjects = 12000 
+   Armor = 0
+   Movemalus_plus = 
+   Movemalus_abs =  10
+   AttackBonus_abs = 0
+   AttackBonus_plus = 0
+   DefenseBonus_abs = 0
+   DefenseBonus_plus = 0
+   Jamming_abs = 85
+   Jammming_plus = 
+   Height = 119
+   ConstructionCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+      Movement = 0
+   } ConstructionCost
+   RemovalCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+      Movement = 0
+   } RemovalCost
+   NoSelfChaining = true
+   TerrainAccess { 
+      terrain_any = road runway Lowland Hard_sand Soft_sand very_shallow_water shallow_water water deep_water   
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = lava
+   } TerrainAccess
+   TerrainProperties_Filter = Road railroad Hard_sand Soft_sand Lowland Ditch Hillside Mountains High_mountains Installation Turret_foundation Small_rocks Large_rocks Forest Swamp Very_shallow_water Shallow_water water deep_water Railroad Mud Snow Deep_snow Morass Frozen_water 
+   TerrainProperties_Add = runway spaceport beacon
+   dry { 
+      UseGFXpics = false
+      Picture = isg_zone_linked.png 65
+      ImageReference =  [-1 -1 -1  2  2 -1 -1  2 -1  2 -1  2  2  2  2  2  2 -1  2  2
+                         -1  1  1  1  2  1  1  1 -1  2  1  1  2  2 -1 -1  2  2  2  2
+                         -1  2  2  2  2  2  2  2 -1  2  2  2  2  2  2  2  2  2  2  2
+                          2  2  2  2  0]
+      FlipPictures   =  [ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+                          0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+                          0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+                          0  0  0  0  0]
+      DisplayMethod = normal
+  } dry
+} ObjectType

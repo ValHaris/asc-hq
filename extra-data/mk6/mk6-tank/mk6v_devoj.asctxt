@@ -1,0 +1,22 @@
+VehicleType { 
+   ID = 15110
+   parent = 291 15000
+
+   Name = DevoJ
+   Picture = mk6v_devoj.png
+   GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
+   InfoText = [Der DevoJ ist der neuste Prototyp der Teccnol Panzer. Getrieben von ihrere bahnbrechenden Sprungantrieb Erfindung versuchen die Teccnol diesen Antrieb in die verschiedensten Fahrzeugmodelle zu integrieren. Sie kämpfen dabei mit diversen Problemen aufgrund der erhemlichen Störstrahlung der Jumpmodule. So mußten die hochsensiblen EMP Waffensysteme entfernt werden. Ohne din EMP konnte das Chassis aber robuster ausgelegt werden.]
+   
+   View = 0
+   
+   Tank.Material = 500
+   Tank.Fuel += 1500 
+
+   JumpDrive ->* VehicleType.TeccnolsJump1
+   JumpDrive.consumption.Material = 100
+   JumpDrive.consumption.Fuel = 1000
+
+   Weapons { 
+      Weapon1 ->* VehicleType.NLS
+   } Weapons
+} VehicleType

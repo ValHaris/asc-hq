@@ -1,0 +1,44 @@
+VehicleType { 
+   Name = TAL
+   ID = 1348
+   parent = 322
+
+   Description = lr surface defence system
+   Infotext = []
+   picture = syb_tal.png
+   WreckageObject = 1308
+;   InfoImage = mk3b_ss74.jpg
+;   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+
+   Jamming = 39
+   Features += jam_only_own_field self_repairing
+   SelfRepairRate = 15
+   Category = Trooper
+
+   TerrainAccess.terrain_any = hard_sand soft_sand lowland mountains high_mountains
+   TerrainAccess.terrain_kill += very_shallow_water
+   Tank.Fuel = 10000
+   Tank.Material = 5000
+
+   Weapons {
+      Weapon0 ->* VehicleType.type_laser
+      Weapon0.name = Dronenschacht 
+      Weapon0.Punch@MaxRange = 110
+      Weapon0.Punch@MinRange = 110
+      Weapon0.LaserRechargeRate = 1
+      Weapon0.Ammo = 6
+      Weapon0.LaserRechargeCost.energy = 0
+      Weapon0.LaserRechargeCost.material = 100
+      Weapon0.LaserRechargeCost.fuel = 200
+
+      Weapon1 ->* VehicleType.type_laser 
+      Weapon1.name = Defensivlaser 
+      Weapon1.Punch@MaxRange = 60
+      Weapon1.Punch@MinRange = 60
+      Weapon1.LaserRechargeRate = 2
+      Weapon1.Ammo = 4
+      Weapon1.LaserRechargeCost.energy = 0
+      Weapon1.LaserRechargeCost.material = 10
+      Weapon1.LaserRechargeCost.fuel = 20
+   } Weapons
+} VehicleType

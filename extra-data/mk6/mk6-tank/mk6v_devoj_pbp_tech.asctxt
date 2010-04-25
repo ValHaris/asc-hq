@@ -1,0 +1,10 @@
+technology {
+   Name = DevoJ
+   infotext = Forschungsprojekt abgeschlossen! DevoJ verfügbar!
+   id = 15110
+   RelatedUnitID = 15110
+   parent = 15000
+   researchpoints *= 17
+   techlevel = 4
+   TechnologiesRequired = 15000,100002,100104,100201,100315
+} Technology

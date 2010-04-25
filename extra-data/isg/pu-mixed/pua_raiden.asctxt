@@ -1,0 +1,67 @@
+VehicleType { 
+	Name = Atomrakete
+	ID = 12548
+	Parent = 400 402
+	
+	wreckageobject = 983
+	Description = Atomrakete
+	Picture 		= pua_raiden.pcx
+	Infotext = [Wen interessiert gut und böse, wenn man die Mutter aller Bomeben einsetzen kann?]
+
+   	ConstructionCost { 
+	   CalculationMethod = manual
+	   Energy = 80000
+	   Material = 80000
+	   fuel = 0
+   	} ConstructionCost
+
+	Category = light_aircraft
+	Features = Kamikaze_only jam_only_own_field no_midair_refuel no_reactionfire paratrooper
+	MaxSurvivableStorm = 100
+	ResourceDrillingRange = 0
+	SelfRepairRate = 0
+	Armor = 290
+	Weight = 50
+	View = 0
+	Jamming = 91
+
+	Tank { 
+	   Energy = 0
+	   Material = 0
+	   fuel = 2000
+	} Tank
+	FuelConsumption	= 40
+	Height = low_level_flight medium_level_flight high_level_flight
+	Movement = 0 0 0 65 100 200 200 00
+	TerrainAccess ->* VehicleType.Sat_Terrain
+
+	waitforattack = false
+	Weapons { 
+		Initiative = 0
+		Number = 1
+		Weapon0 ->* VehicleType.medBomb
+		Weapon0.Ammo = 1
+		Weapon0.Punch@MaxRange = 255
+		Weapon0.Punch@MinRange = 255
+	} Weapons
+
+   HeightChangeMethodNum = 2
+   HeightChangeMethod0 {
+      movecost = 20
+      heightdelta = 1
+      dist = 1
+      startheight = low_level_flight medium_level_flight
+      canattack = true
+   } HeightChangeMethod0
+   HeightChangeMethod1 {
+      movecost = 15
+      heightdelta = -1
+      dist = 1
+      startheight = high_level_flight
+      canattack = true
+   } HeightChangeMethod1
+
+
+
+	
+} VehicleType

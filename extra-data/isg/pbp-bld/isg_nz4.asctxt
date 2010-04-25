@@ -1,0 +1,8 @@
+ObjectType { 
+   name = ISG NZ4
+   ID = 12011
+   parent = 12008
+   dry { 
+      picture = ISG_NZ4.pcx 1
+   } dry
+} ObjectType

@@ -1,0 +1,43 @@
+VehicleType { 
+   Name = TRIS
+   parent = 1393 1394 1398
+   ID = 1310
+
+   Description = Aufklaerungssonde
+   Picture = sya_tris.png
+   Infotext = [Wie für alle anderen Rassen auch ist die Aufklärung des Gebietes eine lebenswichtige Aufgabe. Neben der stationäre TR besitzen 
+   die SY diesen hochmobilen Aufklärer. Die Sensortechnick ist unbekannt, doch funktioniert offensichtlich ähnlich des Radars. 
+   Die Stealth-Technologie der Terraner behindert die SY-Sensoren genauso wie herkömmliche Radartechniken. Das Fluggerät besitzt diverse 
+   spitze Flügel in denen anscheinend die Antennen und Empfänger sitzen. Die Hülle ist regenerativ und besitzt selbst Stealthfähigkeiten. 
+   Erfarungsberichte aus Kämpfen mit SY berichten häufig über einzelene Tris, die sich über den Orbit an die Kampfzone aus unvorhersehbaren 
+   Richtungen heranschleichen, um dann bewegungslos das gegnerische Gebiet zu überwachen. Die Tris-Sonde ist nicht landefähig, kann aber im 
+   Orbit auf eine Betankung warten. Der Antrieb der Sonde ist nicht so stark wie die der Kampfflieger. Der Aufstieg in den Orbit dauert erheblich länger.
+   
+Spezifikationen:
+Lange: 21m
+Breite/Höhe: 6,5m
+
+Waffensystem: nicht verfügbar
+Primäre Aufgabe: Aufklärung
+]
+
+   Features = satelliteview self_repairing jam_only_own_field cruiserlanding
+   Armor = 400
+   Weight = 6
+   View = 100
+   Category = light_aircraft
+
+   Height = low_level_flight medium_level_flight high_level_flight orbit
+   FuelConsumption = 10
+   Movement = 0 0 0 0 150 150 150 30 
+   TerrainAccess ->* VehicleType.SY_Air
+
+   WaitForAttack = false
+   Weapons { 
+      Initiative = 0
+      Number = 0
+   } Weapons
+   HeightChangeMethod3 {
+      movecost = 100
+   } HeightChangeMethod3
+} VehicleType

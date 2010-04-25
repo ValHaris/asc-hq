@@ -1,0 +1,53 @@
+ObjectType { 
+   Name = BlitzEis
+   ID = 12545
+   groupID = 
+   lifetime = 10
+   canExistBeneathBuildings = true
+   GrowOnUnits = true
+
+
+   Weather = dry
+   visible_in_fogOfWar = true
+   LinkableObjects = 
+   MaxChildSpawnNumber = 60
+   Armor = 400
+   ;                def lTr mTr hvT lWh mWh hWh tro rlv mAC mSh BTO lAC hAC lSh hSh Hli hov
+   Movemalus_plus = -1
+   Movemalus_abs = 13 13  13  13  14  14  14  12  12  20  22  18  20  20  22  22  20  11  
+   AttackBonus_abs = -1
+   AttackBonus_plus = 0
+   DefenseBonus_abs = -1
+   DefenseBonus_plus = 0
+   Jamming_abs = -1
+   Jammming_plus = 0
+   Height = 7
+   ConstructionCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+      Movement = 0
+   } ConstructionCost
+   RemovalCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+      Movement = 0
+   } RemovalCost
+;   NetBehaviour = NetToSelf NetToBorder
+   growthRate = 9.00
+   TerrainAccess { 
+      terrain_any = very_shallow_water shallow_water water deep_water river 
+      terrain_all = 
+      terrain_not = pack_ice
+      terrain_kill = lava 
+   } TerrainAccess
+   TerrainProperties_Filter = pack_ice
+   TerrainProperties_Add = frozen_water 
+   dry { 
+      UseGFXpics = false
+      picture = gfx_ice40_blue.png 1
+      ImageReference =  -1 
+      FlipPictures   =  0 
+   } dry
+} ObjectType

@@ -3,8 +3,11 @@ VehicleType {
    parent = 22998 278
    ID = 22509
 
-   Infotext = [Dieser schwere Senkrechtstarter ist für die Bodeneinheitenbekaempfung. Er hat staerkere Bomben.]
    Picture = maa_sest_hebo.pcx
+   Infotext = [Beim SEST HeBo handelt es sich um den Versuch, eine gute Einheit noch besser zu machen. Dazu wurde die Bewaffnung etwas modifiziert. Zusätzlich zu den normalen Bomben trägt der Hebo noch 2 überschwere lasergesteuerte Sprengkörper, welche sehr große Schäden besonders an schweren Einheiten anrichten können.
+Der Tank wurde ebenfalls vergrößert, um dem HeBo eine längere autonome Einsatzzeit zu ermöglichen. In krassem Widerspruch dazu steht allerdings die Tatsache, daß aufgrund des höheren Gewichts der Munitionsvorrat der Bordkanonen deutlich reduziert werden mußte.
+Dies führt dazu, daß der Einsatzzweck des HeBo bevorzugt die Bombardierung schwerer Bodenziele ist und die Kanone lediglich als Unterstützungsbewaffnung eingestuft werden kann. Im Gegensatz zum LiBo sind die Überlebenschancen durch die starke Panzerung natürlich deutlich höher, wenn die Angriffsziele durch Luftabwehr geschützt sind. Der HeBo wird deshalb für diese Aufgabenbereiche gerne genutzt, ein Ersatz für den MeBo ist er jedoch nie geworden.
+]
 
    Weight = 100
 
@@ -27,7 +30,5 @@ VehicleType {
 
       Weapon2 ->* VehicleType.medBomb
       Weapon2.Ammo = 2
-      Weapon2.Punch@MaxRange -= 10
-      Weapon2.Punch@MinRange -= 10
    } Weapons
 } VehicleType

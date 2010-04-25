@@ -1,0 +1,10 @@
+technology {
+   Name = Druk
+   infotext = 
+   id = 1317
+   RelatedUnitID = 1317
+   parent = 1399
+   researchpoints *= 14
+   techlevel = 3
+   TechnologiesRequired = 1399,100003,100103,100305,100302,100313,1330
+} Technology

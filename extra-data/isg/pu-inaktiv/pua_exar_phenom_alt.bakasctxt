@@ -1,0 +1,34 @@
+VehicleType { 
+   Name = PHENOM
+   parent = 340 
+   ID = 12543
+   
+   Description = universal builder
+   picture = pua_exar_phenom.png
+;   wreckageobject = 14016 14816
+   Infotext = []
+
+   Transportation ->* VehicleType.TransLowTrooper3
+
+   Armor = 800
+   Movement += 0 0 0 0 0 0 0 50
+   Features += construct_specific_buildings Vehicle_Production
+   Tank.Material = 30000
+   Tank.Fuel = 30000
+
+   Construction { 
+      Buildings = 1-7 10-23 26 29-32 35-37 
+      Vehicles = 
+      Objects = 1 2 3 9 10 30 44 45 1000 999 998 997 996 995 991 181 2153 2097 2098
+      ObjectsRemovable = 2096-2098
+      ObjectGroupsRemovable = 1 2 3 4 5 6 7 8 9 10 11 12 13 14 21
+   } Construction  
+
+   WaitforAttack = false
+   Weapons { 
+      Initiative = 20
+      Number = 3
+
+      Weapon0 ->* VehicleType.Def_MG 
+   } Weapons
+} VehicleType

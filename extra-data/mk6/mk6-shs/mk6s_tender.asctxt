@@ -14,7 +14,7 @@ VehicleType {
    Jumpdrive.terrain_any = deep_water water river shallow_water Spaceport
    View = 0
    
-   Features = MoveDuringReactionFire Repair_Facility self_repairing
+   Features = MoveDuringReactionFire Repair_Facility self_repairing construct_specific_buildings icebreaker
    Armor = 1600
    Weight = 4000
    SelfRepairRate = 10
@@ -30,7 +30,7 @@ VehicleType {
    } Transportation
 
    Height = submerged floating ground_level low_level_flight
-   Movement = 0 22 55 33 33 0 0 0 
+   Movement = 0 22 60 33 33 0 0 0 
    TerrainAccess {
       terrain_any = Spaceport shallow_water water deep_water river
       terrain_all =
@@ -43,10 +43,10 @@ VehicleType {
    } Tank
 
    Construction { 
-      Buildings = 
+      Buildings = 13 14 16-19 61 38
       Vehicles = 
-      Objects = 995 996 997 998 999 1000 44 30 3
-      ObjectGroupsRemovable = 1 2 3 4 6 7 8 10 11 13 15
+      Objects = 996 997 998 1000 44 30 3 15003
+      ObjectGroupsRemovable = 1 2 3 4 6 7 8 10 11 13 14 15
    } Construction
 
    Weapons { 

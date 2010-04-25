@@ -5,7 +5,7 @@ VehicleType {
 
    Description = transport submarine
    Infotext = []
-   picture = mk6s_utx.pcx
+   picture = mk6s_utx.png
    WreckageObject = 436
    GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
 

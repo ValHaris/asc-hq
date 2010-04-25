@@ -6,6 +6,7 @@ VehicleType {
    Description = schneller Kampfroboter
    Picture = mk6m_eneg.pcx
    InfoImage = mk6m_eneg.jpg
+   InfoImageSmall = mk6m_eneg_k.png
    GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
    Infotext = [Der ENEG war als schnelle Aufklärungseinheit gedacht und basiert auf dem INTRUDER. Schon früh merkte man, daß man sehr schnell Verstärkung schicken muss, sobald der ENEG Feindkontakt hat. Dazu wurde ihm die Möglichkeit gegeben, Signalpunkte zu setzen. Damit können verschiedene Boxen schnell als Verstärkung "einspringen".
 Diese Taktik erweist sich als so effektiv, daß das Setzen dieser Signalpunkte zu seiner Primäraufgabe geworden ist.

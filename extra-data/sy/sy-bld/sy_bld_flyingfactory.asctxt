@@ -1,0 +1,62 @@
+BuildingType {
+   Name = airport
+   ID = 1325
+   parent = 10
+   Infotext = [Produktionsanlage für Flugzeuge incl. Munitionsproduktion, Reparatur und Wiederverwertung.]
+   Armor = 2000
+   ConstructionStages = 1
+   Weather = dry 
+   Fields = A2 A4 B2 B3 B4 
+   UseGFXpics = false
+   Pictures { 
+      dry = sy_bld_flyingfactory.png
+;      few_snow = bld_asc_airport.png
+;      much_snow = bld_asc_airport.png
+;      snow_and_ice = bld_asc_airport_hs.png
+   } Pictures
+   RubbleObjects = true
+   rubble {
+      A2 = 
+      A4 = 
+      B2 = 
+      B3 = 988
+      B4 = 
+   } rubble
+   Entry = B3
+   Transportation { 
+      MaxLoadableUnits = 8
+      MaxLoadableUnitSize = 3000
+      MaxLoadableMass = 1000000
+      CategoriesNOT = default Medium_tracked_vehicle Heavy_tracked_vehicle light_wheeled_vehicle Medium_wheeled_vehicle Heavy_wheeled_vehicle Light_ship Medium_ship Heavy_Ship Rail_vehicle building|turret|object
+      EntranceSystemNum = 2
+      EntranceSystem0 {
+        Mode = in out docking
+        UnitHeightAbs = ground_level high_level_flight
+        UnitHeightRel = -100
+        ContainerHeight = high_level_flight
+        CategoriesNOT = 
+        DockingHeightAbs = high_level_flight
+        DockingHeightRel = 0 
+        DisableAttack = false
+      } EntranceSystem0
+      EntranceSystem1 {
+        Mode = out 
+        UnitHeightAbs = orbit
+        UnitHeightRel = -100
+        ContainerHeight = high_level_flight
+        CategoriesNOT = 
+        DockingHeightAbs = 
+        DockingHeightRel = 0 
+        DisableAttack = false
+      } EntranceSystem1
+   } Transportation
+   Features = Vehicle_Production Ammo_Production Repair_Facility Recycling
+   CategoriesProduceable = default light_Aircraft medium_Aircraft heavy_aircraft
+   ConstructionCost { 
+      Energy = 0
+      Material = 15000
+      fuel = 15000
+   } ConstructionCost
+   Height = high_level_flight 
+   ExternalLoading = 
+} BuildingType

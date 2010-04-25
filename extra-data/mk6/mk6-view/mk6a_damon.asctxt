@@ -1,6 +1,6 @@
 VehicleType { 
    Name = DAMON
-   parent = 248 
+   parent = 248 15000
    ID = 15248
 
    Infotext = [Raumtaugliches Spionageflugzeug]
@@ -23,13 +23,16 @@ VehicleType {
       fuel = 8000
       Material = 500
    } Tank
-   Features += no_midair_refuel 
    FuelConsumption = 20
    Movement += 0 0 0 0 0 -10 -20 70 
    MovementSound = aircraft_l_g.ogg
 
    Weapons { 
-      Initiative = 0
-      Number = 0
+      Number = 1
+      Weapon0 ->* VehicleType.TeccEMPAir
+      Weapon0.Punch@MaxRange = 70
+      Weapon0.Punch@MinRange = 70
+      Weapon0.LaserRechargeCost.material = 50
+      Weapon0.ReactionFireShots = 0
    } Weapons
 } VehicleType

@@ -1,0 +1,83 @@
+VehicleType { 
+   Name = ISG PATHFINDER
+   parent = 401 497
+   ID = 12003
+
+   Description = Special Spaceship
+   Picture = isg_pathfinder.png
+   Infotext = [#crt#Raumtransporter#crt# #crt#
+   Das Raumschiff ist Eigentum der Interstellaren Gilde. Offensiver Einsatz ist untersagt. Ersatz wird nur bei 
+   Naturkatastrophen gestellt. Der Pathfinder besitz einen verbesserten Antrieb, der die Raumflugzeit um die Hälfte verkürzt.]
+
+   ConstructionCost { 
+      CalculationMethod = manual
+      Energy = 60000
+      Material = 60000
+      fuel = 0
+   } ConstructionCost
+
+   transportation { 
+      MaxLoadableUnits = 36
+      MaxLoadableUnitSize = 10000
+      MaxLoadableMass = 20000
+      CargoMovementDivisor = 1.5
+      EntranceSystemNum = 2
+      EntranceSystem0 ->* VehicleType.GrIO
+      EntranceSystem0.DisableAttack = true
+      EntranceSystem1 ->* VehicleType.OrbIO
+      EntranceSystem1.DisableAttack = true
+   } transportation
+
+   Features = self_repairing no_midair_refuel jam_only_own_field
+   Armor = 500
+   View = 0
+   Jamming = 90
+   Category = heavy_aircraft
+   MaxSurvivableStorm = 255
+   ResourceDrillingRange = 0
+   SelfRepairRate = 5
+   Weight = 90000
+
+   Height = ground_level low_level_flight medium_level_flight high_level_flight orbit 
+   Movement = 0 0 0 50 90 100 100 100 
+   Tank { 
+      Energy = 0
+      Material = 60000
+      fuel = 80000
+   } Tank
+   FuelConsumption = 200
+   TerrainAccess { 
+      terrain_any = Spaceport runway
+      terrain_all = 
+      terrain_not = forest small_rocks large_rocks bridge
+      terrain_kill = lava
+   } TerrainAccess
+   MovementSound = ship_d_a_s.ogg
+
+   JumpDrive {
+      Height = orbit
+      MaxDistance = 2500
+      consumption {
+         Energie = 0
+         Material = 10000
+         Fuel = 10000
+      } consumption
+      terrain_any = Spaceport
+      terrain_all = Spaceport
+      terrain_not = forest small_rocks large_rocks
+      terrain_kill =
+   } JumpDrive
+
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+      ObjectsRemovable = 
+   } Construction
+
+   WaitForAttack = false
+   Weapons { 
+      Initiative = 0
+      Number = 0
+   } Weapons
+} VehicleType

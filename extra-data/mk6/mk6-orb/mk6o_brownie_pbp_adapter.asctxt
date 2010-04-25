@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 15235
+   ;Bezeichnung der verknüpften Technologie: brownie
+   TechnologiesRequired = 15235
+} TechAdapter

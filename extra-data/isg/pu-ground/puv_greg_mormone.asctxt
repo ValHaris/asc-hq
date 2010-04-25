@@ -1,0 +1,48 @@
+VehicleType { 
+   Name = MORMONE
+   ID = 12506
+   parent = 4
+
+   Description = heavy attack tank
+   Infotext = [Spezialeinheit der Gregorianer]
+   Picture = PUv_greg_Mormone.pcx
+   InfoImage = puv_greg_mormone.jpg
+   Weight = 200
+
+   Jamming = 41
+   transportation { 
+      MaxLoadableUnits = 4
+      MaxLoadableUnitSize = 10
+      MaxLoadableMass = 40
+      CategoriesNOT -> VehicleType.cargo_trooper_only.CategoriesNOT
+      EntranceSystemNum = 1
+      EntranceSystem0 ->* VehicleType.GrIO
+   } Transportation
+
+   Weapons { 
+      Initiative = 0
+      Number = 4
+      Weapon0 ->* VehicleType.Artillery 
+      Weapon0.MaxRange = 70
+      Weapon0.MinRange = 20
+      Weapon0.Ammo = 8
+      Weapon0.Punch@MaxRange = 80
+      Weapon0.Punch@MinRange = 120
+
+      Weapon1 ->* VehicleType.SSM 
+      Weapon1.MaxRange = 90
+      Weapon1.MinRange = 30
+      Weapon1.Ammo = 4
+      Weapon1.Punch@MaxRange = 75
+      Weapon1.Punch@MinRange = 75
+      
+      Weapon2 ->* VehicleType.SAMH
+      Weapon2.MaxRange = 60
+      Weapon2.Ammo = 4
+      Weapon2.ReactionFireShots = 1
+      Weapon2.Punch@MaxRange = 75
+      Weapon2.Punch@MinRange = 75
+
+      Weapon3 ->* VehicleType.MiniGun
+   } Weapons
+} VehicleType

@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 15225
+   ;Bezeichnung der verknüpften Technologie: Metarail
+   TechnologiesRequired = 15225
+} TechAdapter

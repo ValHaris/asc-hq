@@ -1,0 +1,51 @@
+ObjectType { 
+   Name = Hohes Stachelgras
+   ID = 1308
+   groupID = 11
+
+   lifetime = 40
+   MaxChildSpawnNumber = 160
+   visible_in_fogOfWar = true
+   LinkableObjects = 
+   Armor = 300
+   growthRate = 0.12
+
+   Weather = dry
+   ;                def lTr mTr hvT lWh mWh hWh tro rlv mAC mSh BTO lAC hAC lSh hSh Hli hov
+   Movemalus_plus = 10  5   8   5   10  15  20  5   30  30  14  14  30  30  30  30  30  30
+   Movemalus_abs = -1 
+   AttackBonus_abs = -1
+   AttackBonus_plus = 0
+   DefenseBonus_abs = -1
+   DefenseBonus_plus = 0
+   Jamming_abs = -1
+   Jammming_plus = 7
+   Height = 117
+   ConstructionCost { 
+      Energy = 0
+      Material = 350
+      fuel = 5
+      Movement = 5
+   } ConstructionCost
+   RemovalCost { 
+      Energy = 0
+      Material = -300
+      fuel = 30
+      Movement = 15
+   } RemovalCost
+;   NetBehaviour = NetToSelf NetToBorder
+   TerrainAccess { 
+      terrain_any = Lowland Soft_sand hard_sand road runway spaceport ditch
+      terrain_all = 
+      terrain_not = forest large_rocks small_rocks swamp very_shallow_water shallow_water water deep_water river lava
+      terrain_kill = swamp very_shallow_water shallow_water water deep_water river lava
+   } TerrainAccess
+   TerrainProperties_Filter =  
+   TerrainProperties_Add = small_rocks 
+   dry { 
+      UseGFXpics = false
+      picture = SY_OBJ_SGH.pcx 1
+      ImageReference =  -1 
+      FlipPictures   =  0 
+   } dry
+} ObjectType

@@ -9,6 +9,8 @@ VehicleType {
 
    Armor += 50
    Features = MoveDuringReactionFire Jam_only_own_field
+   Category = medium_ship
+   Weight = 950
 
    Transportation ->* VehicleType.TransHeliCarrier
    Transportation.MaxLoadableUnits = 5

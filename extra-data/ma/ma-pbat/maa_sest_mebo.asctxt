@@ -3,7 +3,10 @@ VehicleType {
    parent = 22998 277
    ID = 22508
 
-   Infotext = [Dieser mittlere Senkrechtstarter ist fuer die Bodeneinheitenbekaempfung. Er verfuegt im Gegensatz zur kleineren Version auch ueber eine Kanone, um Panzer aus der Distanz anzugreifen.]
+   Infotext = [Beim SEST MeBo handelt es sich um den Standardbomber der Malaner. Er ist einigermaßen schnell, verfügt über schwere Bewaffnung und ist wesentlich besser gepanzert als der LiBo.
+Zum einen trägt er deutlich stärkere Bomben ins Ziel, zum anderen gibt ihm die drehbare 25mm-Langrohr-Zwillingskanone ausgezeichnete Möglichkeiten zum Distanzangriff auf Bodenziele. Die Durchschlagskraft gegen Fahrzeuge, Schiffe und Geschütztürme ist enorm, Infanterie ist naturgemäß erheblich schlechter bekämpfbar. Die Kanone ist allerdings im Gegensatz zu der des LiBo nicht zum Angriff auf Flugzeuge nutzbar, der MeBo ist deshalb immer auf Jagdschutz angewiesen.
+Trotzdem handelt es sich alles in allem um eine hervorragende Konstruktion, die bei malanischen Streitkräften sehr häufig im Einsatz ist.
+]
    Picture = maa_sest_mebo.pcx
 
    Armor += 30

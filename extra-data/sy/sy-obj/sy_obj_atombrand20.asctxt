@@ -1,0 +1,18 @@
+ObjectType { 
+   Name = Atombrand
+   ID = 1315
+   parent = 982
+   GroupID = 14
+
+   MaxChildSpawnNumber = 22
+   Lifetime = 8
+   growthRate = 10.00
+
+   TerrainAccess { 
+      terrain_any = road runway railroad Lowland hard_sand soft_sand ditch river very_shallow_water shallow_water turret_foundation installation
+      terrain_all = 
+      terrain_not = lava_barrier
+      terrain_kill = 
+   } TerrainAccess
+
+} ObjectType

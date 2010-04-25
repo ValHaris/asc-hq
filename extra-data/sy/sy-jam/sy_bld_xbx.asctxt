@@ -1,0 +1,61 @@
+BuildingType { 
+   Name = XBX
+   ID = 1313
+   parent = 498
+
+   Armor = 1200
+   View = 40
+   Jamming = 61
+   Transportation ->* BuildingType.Ellf
+
+   ConstructionStages = 1
+   Weather = dry 
+   Fields = A1 
+   UseGFXpics = false
+   Pictures { 
+      dry = sy_bld_xbx.pcx
+   } Pictures
+   RubbleObjects = true
+   Rubble {
+      A1 = 1302
+   } Rubble
+   Entry = A1
+   Functions =  
+   Techlevel = 0
+   TerrainAccess { 
+      terrain_any = Lowland Road Runway Hard_sand Soft_sand Small_rocks very_shallow_water shallow_water water river 
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = Lava
+   } TerrainAccess
+   MaxResearch = 0
+   ConstructionCost { 
+      Energy = 0
+      Material = 13000
+      fuel = 16000
+   } ConstructionCost
+   MaxResourceProduction { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } MaxResourceProduction
+   defaultProduction {
+      energy = 
+      material = 
+      fuel = 
+   } defaultProduction
+   StorageCapacity { 
+      BImode { 
+         Energy = 100000
+         Material = 100000
+         fuel = 100000
+      } BImode
+      ASCmode { 
+         Energy = 100
+         Material = 100
+         fuel = 100
+      } ASCmode
+   } StorageCapacity
+   Height = low_level_flight
+   ExternalLoading =  
+} BuildingType

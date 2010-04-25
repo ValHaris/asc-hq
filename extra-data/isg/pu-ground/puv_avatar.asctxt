@@ -1,0 +1,36 @@
+VehicleType { 
+   Name = AVATAR
+   ID = 12500
+   parent = 336
+
+   Description = Raketenwerfer
+   Picture = puv_avatar.png
+   Infotext = [ Flugabwehrpanzer mit geringer Beweglichkeit und starker Bewaffnung. Die Large Missile basierte Bewaffnung kann Objekte bis zum Orbit hin beschiessen.]
+
+;   Features += MoveDuringReactionFire
+   Armor -= 100
+   Weight -= 10
+   View = 62
+
+   Tank { 
+      fuel = 300
+   } Tank
+   Movement -= 0 0 0 10 0 0 0 0 
+
+   Weapons { 
+      Number = 2
+      Weapon0 ->* VehicleType.SAMH 
+      Weapon0.targets = low_level_flight medium_level_flight high_level_flight Orbit
+      Weapon0.MaxRange = 90
+      Weapon0.MinRange = 40
+      Weapon0.ReactionFireShots = 2
+      Weapon0.Ammo = 2
+      Weapon0.HitAccuracy.u1 = 80
+      Weapon0.HitAccuracy.u2 = 100
+      Weapon0.HitAccuracy.u3 = 100
+      Weapon0.HitAccuracy.u4 = 90
+      
+      Weapon1 ->* VehicleType.MG_Tank 
+      Weapon1.Ammo = 10
+   } Weapons
+} VehicleType

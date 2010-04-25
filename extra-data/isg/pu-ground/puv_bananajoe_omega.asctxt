@@ -1,0 +1,42 @@
+VehicleType { 
+   Name = Omega
+   ID = 12553
+   parent = 220
+
+   Description = Modified AA/AO System
+   Picture = puv_bananajoe_omega.pcx
+   InfoImage = puv_bananajoe_omega.jpg
+   InfoImageSmall = puv_bananajoe_omega_k.png
+   WreckageObject = 464
+;   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+   Infotext = [Um die Lücke zwischen stationären und schienengebundenen Anti-Orbital-Abwehrsystemen zu schließen, entwickelten die draconianischen Ingenieure den Omega-Prototypen.
+Für den Omega wurde das bewerte Chassis des Spike vergrößert und verstärkt, um das hohe Gewicht des Waffenträgers aufnehmen zu können, außerdem wurde er mit einer neuartigen Panzerung versehen, die ihn widerstandsfähiger gegen Feindbeschuss macht. Da der Omega mit einem großzügig bemessenen Tank ausgerüstet wurde, musste zur Gewichtsreduzierung auf Waffensysteme gegen Bodeneinheiten komplett verzichtet werden, was eine Eskorte zwingend erforderlich macht.
+Die Bewaffnung des Omega besteht aus weitreichenden Raketen mit äußerst wirkungsvollen Sprengköpfen zur Bekämpfung von Orbital- und Lufteinheiten. Des weiteren wurde das gesamte Fahrzeug mit einer neu entwickelten Beschichtung überzogen, die eine Entdeckung durch gegnerische Radarsysteme erschwert.
+Da die Produktionskosten des Omega immens hoch sind, ist es kaum anzunehmen, das er je in größeren Stückzahlen produziert werden wird.]
+
+   Tank.fuel = 3000
+   FuelConsumption += 5
+   View = 85
+   Jamming = 20
+
+   Features += jam_only_own_field
+
+
+   Armor +=70
+   Movement -= 0 0 0 1 0 0 0 0 
+   Weight = 65
+   Weapons { 
+      Number = 2
+      Weapon0.MaxRange = 60
+      Weapon0.Punch@MaxRange = 85
+      Weapon0.Punch@MinRange = 85
+	  Weapon0.Ammo = 8
+	  MaxRange = 60
+	  Weapon1 ->* vehicleType.SOM
+	  Weapon1.ReactionFireShots = 2
+	  Weapon1.MaxRange = 80
+          Weapon1.Punch@MaxRange = 85
+          Weapon1.Punch@MinRange = 85
+	  Weapon1.Ammo = 8
+   } Weapons
+} VehicleType

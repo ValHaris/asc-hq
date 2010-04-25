@@ -1,0 +1,73 @@
+BuildingType { 
+   Name = Raumfahrtzentrum
+   ConstructionStages = 1
+   Weather = dry 
+   Fields = B1 A2 A3 A5
+   UseGFXpics = false
+   Pictures { 
+      dry = ISG_NZ.pcx
+   } Pictures
+   RubbleObjects = false
+   Entry = A2
+   notRemovable = true
+
+   ID = 12012
+   Armor = 100000
+   View = 100
+   Jamming = 0
+   Transportation { 
+      MaxLoadableUnits = 18
+      MaxLoadableUnitSize = 15000
+      MaxLoadableMass = 1000000
+      CategoriesNOT =  
+      EntranceSystemNum = 1
+      EntranceSystem0 {
+        Mode = In out docking
+        UnitHeightAbs = floating ground_level 
+        UnitHeightRel = -100
+        ContainerHeight = floating ground_level
+        CategoriesNOT =  
+        DockingHeightAbs = floating ground_level 
+        DockingHeightRel = -100 
+        DisableAttack = true
+      } EntranceSystem0
+    } Transportation
+   Features = NoProductionCustomization ammo_production ExternalMaterialTransfer ExternalFuelTransfer ExternalAmmoTransfer Selfdestruct_at_conquer Repair_Facility Recycling Vehicle_Production Produce_Units_that_cannot_leave
+   Techlevel = 0
+   TerrainAccess { 
+      terrain_any = Lowland Hard_sand soft_sand very_shallow_water
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = lava deep_water river
+   } TerrainAccess
+   MaxResearch = 0
+   ConstructionCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } ConstructionCost
+   MaxResourceProduction { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } MaxResourceProduction
+   defaultProduction {
+      energy = 0
+      material = 0
+      fuel = 0
+   } defaultProduction
+   StorageCapacity { 
+      BImode { 
+         Energy = 40000
+         Material = 30000
+         fuel = 40000
+      } BImode
+      ASCmode { 
+         Energy = 5000
+         Material = 3000
+         fuel = 7000
+      } ASCmode
+   } StorageCapacity
+   Height = ground_level 
+   ExternalLoading = ground_level floating
+} BuildingType

@@ -3,7 +3,7 @@ VehicleType {
    parent = 292 15000
 
    Name = DevoTE
-   Picture = mk6v_devoTE.pcx
+   Picture = mk6v_devoTE.png
    GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
    InfoText = [Der DevoTE ist ein auf dem Erfolgsmodell CillaTE aufbauender mittlerer Kampfpanzer.
 Das verstärkte Chassis ist in der Lage, eine deutlich stärkere Panzerung zu tragen. Dies geht jedoch zu Lasten der Geschwindigkeit und Geländegängigkeit.

@@ -1,0 +1,52 @@
+BuildingType { 
+   Name = COlONY CENTER RZ
+   ID = 12027
+   Parent = 12025
+
+   View = 100
+   Jamming = 20
+
+   ConstructionStages = 1
+   Weather = dry 
+   Fields = A1
+   UseGFXpics = false
+   Pictures { 
+      dry = bld_isg_colony_center_rz.png
+   } Pictures
+   RubbleObjects = false
+   Entry = A1
+
+   Transportation.EntranceSystem0.ContainerHeight = ground_level
+
+   MaxResearch = 50
+   NominalResearch = 20
+   ConstructionCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } ConstructionCost
+   MaxResourceProduction { 
+      Energy = -200
+      Material = -200
+      fuel = -200
+   } MaxResourceProduction
+   defaultProduction {
+      energy = -200
+      material = -200
+      fuel = -200
+   } defaultProduction
+   StorageCapacity { 
+      BImode { 
+         Energy = 40000
+         Material = 30000
+         fuel = 40000
+      } BImode
+      ASCmode { 
+         Energy = 10000
+         Material = 10000
+         fuel = 10000
+      } ASCmode
+   } StorageCapacity
+   Height = ground_level 
+   ExternalLoading = ground_level floating
+} BuildingType

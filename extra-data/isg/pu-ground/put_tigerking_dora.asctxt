@@ -1,0 +1,41 @@
+VehicleType {
+   Name = DORA
+   ID = 12503
+   parent = 400 402 412
+
+   Description = assault railgun
+   Infotext = [Railroad Guns are the ultimate artillery on land. Special weapon of the forgotten volk Titzotanier.]
+   Picture = PUt_tigerking_dora.pcx
+   MaxSurvivableStorm = 255
+   Weight = 199
+
+   Armor = 350
+   WaitForAttack = true
+   Features = 
+
+   Tank { 
+      fuel = 1200
+   } Tank
+   FuelConsumption = 20
+   Movement = 0 0 0 70 0 0 0 0 
+
+   Weapons { 
+      Initiative = 0
+      Number = 3
+      Weapon0 ->* VehicleType.Artillery 
+      Weapon0.MaxRange = 120
+      Weapon0.MinRange = 60
+      Weapon0.Ammo = 2
+      Weapon0.Punch@MaxRange = 80
+      Weapon0.Punch@MinRange = 180
+
+      Weapon1 ->* VehicleType.SAMH 
+      Weapon1.MaxRange = 40
+      Weapon1.Ammo = 1
+      Weapon1.Punch@MaxRange = 75
+      Weapon1.Punch@MinRange = 75
+      
+      Weapon2 ->* VehicleType.MG40low
+      Weapon2.Ammo = 4
+   } Weapons
+} VehicleType

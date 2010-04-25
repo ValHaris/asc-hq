@@ -1,0 +1,55 @@
+VehicleType { 
+   Name = AD
+   ID = 1350
+   parent = 304
+
+   Description = genmanipulierter Riesenwurm
+   Picture = syi_ad.png
+   WreckageObject = 983 1311
+;   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+   Infotext = [Der AD ist ein genmanipulierter Riesenwurm. In seinem natürlichen Zustand ist seine Erscheinung ebenfalls eine sehr bemerkenswerte Erfahrung. Es lebt in der Erde 
+   und nur die Maulöffnung schaut aus er Erde hervor. Die größte Exemplate werden bis zu 20m lang. Sie jagen ihr Beute, indem sie kleine Larven gezieht auf die Opfer abschiessen. 
+   Die SY erschufen aus diesen Kreaturen extrem gefährliche Kämpfer. Ihre Laven sind flugfähig und können Gegner auf grosse Distance aufspüren und angreifen. Der Wurm kann seine 
+   Position wechseln, ist aber nur in der Erde überlebensfähig.]
+
+   Armor += 100
+   Jamming = 39
+   Features += jam_only_own_field self_repairing
+   SelfRepairRate = 10
+   Category = Trooper
+   View = 0
+
+   TerrainAccess.terrain_any = hard_sand soft_sand lowland mountains high_mountains
+   Tank.Fuel = 10000
+   Tank.Material = 5000
+   Weapons {
+      Weapon0 ->* VehicleType.type_laser
+      Weapon0.Name = Dronenschacht 
+;      Weapon0.Sound = cannon_very_big_s.ogg
+      Weapon0.targets = submerged floating ground_level
+      Weapon0.HitAccuracy.d1 = 60
+      Weapon0.ReactionFireShots = 0
+      Weapon0.LaserRechargeRate = 1
+      Weapon0.LaserRechargeCost.energy = 0
+      Weapon0.LaserRechargeCost.material = 1000
+      Weapon0.LaserRechargeCost.fuel = 2000
+      Weapon0.MaxRange = 180
+      Weapon0.MinRange = 40
+      Weapon0.Punch@MaxRange = 120
+      Weapon0.Punch@MinRange = 120
+   } Weapons
+
+   JumpDrive { 
+      Height = ground_level
+      consumption { 
+         Energy = 0
+         Material = 300
+         fuel = 300
+      } consumption
+      terrain_any -> VehicleType.TerrainAccess.terrain_any 
+      terrain_all = 
+      terrain_not -> VehicleType.TerrainAccess.terrain_not
+      terrain_kill = 
+      MaxDistance = 30
+   } JumpDrive
+} VehicleType

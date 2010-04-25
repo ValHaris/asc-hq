@@ -1,0 +1,76 @@
+VehicleType { 
+   Name = ADLER
+   parent = 400 401 402 497
+   ID = 12520
+   Description = Transport Shuttle
+   Infotext = [Adler 11
+               
+               Dieser transporter wurde urspruenglich fuer schwere Lasten auf dem Mond
+               konstruiert und ist mit modernster High-tech ausgestattet. Durch die starke
+               Titan Konstruktion und speziellen Triebwerkstechnicken gibt es kaum etwas,
+               was der Transportadler nicht von einem Ort zum anderen bringen kann.
+               wegen athmosphaerischen Attacken besitzt er zusätzlich ein Schutz- und Tarnschild.]
+   Picture = puo_adler.png
+   InfoImage = puo_adler.jpg
+;   WreckageObject = 1411
+
+   Features = no_midair_refuel Matter_Converter Repair_Facility jam_only_own_field self_repairing move_after_attack
+   Category = heavy_aircraft
+   Armor = 490
+   View = 60
+   Jamming = 80
+   MaxSurvivableStorm = 160
+   ResourceDrillingRange = 0
+   SelfRepairRate = 10
+   Weight = 2000
+
+   Transportation { 
+      MaxLoadableUnits = 4
+      MaxLoadableUnitSize = 7250
+      MaxLoadableMass = 7400
+      CategoriesNOT = heavy_aircraft
+      EntranceSystemNum = 2
+      EntranceSystem0 ->* VehicleType.GrIO
+      EntranceSystem1 ->* VehicleType.OrbIO
+      Entrancesystem1.DisableAttack = true
+   } Transportation
+
+   Height = ground_level low_level_flight medium_level_flight high_level_flight orbit 
+   Movement = 0 0 0 40 80 100 140 150 
+   TerrainAccess ->* VehicleType.heli_terrain
+   MovementSound = aircraft_l_g.ogg
+   Tank { 
+      Energy = 5000
+      Material = 40000
+      fuel = 40000
+   } Tank
+   FuelConsumption = 40
+
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+   } Construction
+
+   WaitForAttack = true
+   Weapons { 
+      Initiative = 0
+      Number = 6
+      Weapon0 ->* VehicleType.ML 
+      Weapon1 ->* VehicleType.AmmoMG
+      Weapon1.Ammo = 50
+      
+      Weapon2 ->* VehicleType.AmmoCannon
+      Weapon2.Ammo = 40
+      
+      Weapon3 ->* VehicleType.AmmoBomb
+      Weapon3.Ammo = 30
+      
+      Weapon4 ->* VehicleType.AmmoSM
+      Weapon4.Ammo = 30
+      
+      Weapon5 ->* VehicleType.AmmoLM
+      Weapon5.Ammo = 30
+      
+   } Weapons
+} VehicleType

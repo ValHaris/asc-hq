@@ -5,11 +5,15 @@ InfoImages: GAMER/BananaJoe
 Spezifikationen: GAMER
 
 ________________________
-Entwicklung und Bearbeitung eingestellt durch GAMER
+-Infotext: Thunder FX
+
+________________________
+Pflege, Entwicklung und Bearbeitung durch GAMER eingestellt zum 12.04.2010
+-CVS aktualisiert
 -Ranger Movebugfix
 -Gnome Moveanpassung
 -Gigant TurretService
--Lurat Turretservie
+-Lurat Turretservice
 ________________________
 03.04.2010 z82 (GAMER)
 Beta-10-06

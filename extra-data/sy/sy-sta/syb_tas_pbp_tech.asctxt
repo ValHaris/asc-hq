@@ -1,0 +1,10 @@
+technology {
+   Name = TAS
+   infotext = 
+   id = 1349
+   RelatedUnitID = 1349
+   parent = 1399
+   researchpoints *= 16
+   techlevel = 4
+   TechnologiesRequired = 1399,100002,100104,100203
+} Technology

@@ -1,0 +1,49 @@
+VehicleType { 
+   parent = 280
+   ID = 12549
+
+   Name = B1 TOBY
+   Description = Bomber
+   Picture = pua_toby_b1.png
+   InfoImage = pua_toby_b1.jpg
+   InfoImageSmall = pua_toby_b1_k.png
+   wreckageobject = 14013 14813
+   GuideSortHelp = 511 279 0 0 0 0 0 0 0 0
+   Infotext = [Informationen sind als -geheim- eingestuft.]
+
+   Armor = 400
+   Jamming = 50
+   Features += jam_only_own_field
+   Weight = 130
+
+   Tank.fuel += 3000
+   FuelConsumption += 5
+   Height = ground_level low_level_flight medium_level_flight high_level_flight
+   Movement = 0 0 0 60 190 190 190 0 
+   TerrainAccess ->* VehicleType.aircraft_terrain 
+
+   Weapons { 
+      Number = 4
+      Weapon0 ->* VehicleType.highBomb 
+      Weapon0.Ammo = 6
+      Weapon0.Punch@MaxRange = 130
+      Weapon0.Punch@MinRange = 130
+      
+      Weapon1 ->* VehicleType.ASM
+      Weapon1.MaxRange = 20 
+      Weapon1.Ammo = 4
+      Weapon1.Punch@MaxRange = 110
+      Weapon1.Punch@MinRange = 110
+
+      Weapon2 ->* VehicleType.smAAM 
+      Weapon2.Ammo = 2
+
+      Weapon3 ->* VehicleType.ASMH 
+      Weapon3.Type = cruise_missile shootable
+      Weapon3.MaxRange = 30 
+      Weapon3.Ammo = 2
+      Weapon3.Punch@MaxRange = 145
+      Weapon3.Punch@MinRange = 145
+
+   } Weapons
+} VehicleType

@@ -1,0 +1,52 @@
+ObjectType { 
+   Name = Packeis
+   ID = 12546
+   groupID = 
+   lifetime = 20
+   canExistBeneathBuildings = true
+   GrowOnUnits = true
+
+   Weather = dry
+   visible_in_fogOfWar = true
+   MaxChildSpawnNumber = 65
+   LinkableObjects = 
+   Armor = 400
+   ;                def lTr mTr hvT lWh mWh hWh tro rlv mAC mSh BTO lAC hAC lSh hSh Hli hov
+   Movemalus_plus = -1
+   Movemalus_abs =   25 25  25  25  25  25  25  25  12  25  14  25  25  25  16  12  25  25   
+   AttackBonus_abs = -1
+   AttackBonus_plus = 0
+   DefenseBonus_abs = -1
+   DefenseBonus_plus = 0
+   Jamming_abs = -1
+   Jammming_plus = 0
+   Height = 6
+   ConstructionCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+      Movement = 0
+   } ConstructionCost
+   RemovalCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+      Movement = 0
+   } RemovalCost
+;   NetBehaviour = NetToSelf NetToBorder
+   growthRate = 5.00
+   TerrainAccess { 
+      terrain_any = frozen_water 
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = lava
+   } TerrainAccess
+   TerrainProperties_Filter =  
+   TerrainProperties_Add = pack_ice 
+   dry { 
+      UseGFXpics = false
+      picture = gfx_packice50_blue.png 1
+      ImageReference =  -1 
+      FlipPictures   =  0 
+   } dry
+} ObjectType

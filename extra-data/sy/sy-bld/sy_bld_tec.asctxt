@@ -1,0 +1,74 @@
+BuildingType { 
+   Name = TEC
+   ID = 1302
+   Armor = 1200
+   View = 30
+   Jamming = 31
+   ConstructionStages = 1
+   Weather = dry 
+   Fields = C2 D1 D2 D3 
+   UseGFXpics = false
+   Pictures { 
+      dry = sy_bld_tec.pcx
+   } Pictures
+   RubbleObjects = false
+   Entry = D3
+   Transportation { 
+      MaxLoadableUnits = 10
+      MaxLoadableUnitSize = 2000
+      MaxLoadableMass = 7000
+      CategoriesNOT = default light_ship medium_ship heavy_ship rail_vehicle medium_aircraft heavy_aircraft rail_vehicle helicopter light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle
+      EntranceSystemNum = 2
+      EntranceSystem0 {
+        Mode = out
+        UnitHeightAbs = ground_level
+        UnitHeightRel = -100
+        ContainerHeight = ground_level
+        CategoriesNOT = 
+        DockingHeightAbs = 
+        DockingHeightRel = -100 
+      } EntranceSystem0
+      EntranceSystem1 {
+        Mode = In out docking
+        UnitHeightAbs = low_level_flight
+        UnitHeightRel = -100
+        ContainerHeight = ground_level
+        CategoriesNOT = 
+        DockingHeightAbs = low_level_flight
+        DockingHeightRel = -100 
+      } EntranceSystem1
+   } Transportation
+   Functions = Vehicle_Production Recycling External_Loading
+   Techlevel = 0
+   TerrainAccess { 
+      terrain_any = Lowland Road Runway Hard_sand Soft_sand  
+      terrain_all = 
+      terrain_not = large_rocks
+      terrain_kill = Water Deep_water lava river
+   } TerrainAccess
+   MaxResearch = 0
+   ConstructionCost { 
+      Energy = 0
+      Material = 9500
+      fuel = 9500
+   } ConstructionCost
+   MaxResourceProduction { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } MaxResourceProduction
+   StorageCapacity { 
+      BImode { 
+         Energy = 1000
+         Material = 10000
+         fuel = 10000
+      } BImode
+      ASCmode { 
+         Energy = 1000
+         Material = 10000
+         fuel = 10000
+      } ASCmode
+   } StorageCapacity
+   Height = ground_level 
+   ExternalLoading = ground_level low_level_flight
+} BuildingType

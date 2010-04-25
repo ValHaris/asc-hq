@@ -1,0 +1,10 @@
+technology {
+   Name = TAL
+   infotext = 
+   id = 1348
+   RelatedUnitID = 1348
+   parent = 1399
+   researchpoints *= 22
+   techlevel = 5
+   TechnologiesRequired = 1399,100002,100105,100203,1349
+} Technology

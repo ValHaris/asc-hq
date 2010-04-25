@@ -1,0 +1,32 @@
+VehicleType { 
+   Name = TO
+   ID = 1314
+   parent = 1389 1395 232
+   Description = orbit gun
+   Infotext = [Informationen ueber diese Einheit sind nur gegen besondere Berechtigung erhaeltlich.]
+   Picture = sy_to.pcx
+
+   Armor = 500
+   Weight = 50
+
+   Movement += 0 0 0 0 0 0 0 10 
+
+   Weapons { 
+      Number = 2
+      Weapon0 ->* VehicleType.SY_OrbAL 
+      Weapon0.Punch@MaxRange += 5
+      Weapon0.Punch@MinRange += 9
+      Weapon0.LaserRechargeCost.fuel -> VehicleType.Weapons.Weapon0.Punch@MinRange
+
+      Weapon1 ->* VehicleType.SY_OrbAL 
+      Weapon1.Punch@MaxRange += 5
+      Weapon1.Punch@MinRange += 9
+      Weapon1.HitAccuracy.d4 = 100
+      Weapon1.HitAccuracy.d3 = 90
+      Weapon1.HitAccuracy.d2 = 80
+      Weapon1.HitAccuracy.d1 = 70
+      Weapon1.HitAccuracy.0 = 60
+      Weapon1.LaserRechargeCost.fuel -> VehicleType.Weapons.Weapon1.Punch@MinRange
+
+   } Weapons
+} VehicleType

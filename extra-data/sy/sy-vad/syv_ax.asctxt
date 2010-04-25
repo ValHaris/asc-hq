@@ -1,0 +1,25 @@
+VehicleType { 
+   Name = AX
+   parent = 1390 222
+   ID = 1331
+
+   Description = Air Defence Turret
+   Infotext = [Die SY verfügen zwar über eine starke Luftflotte, doch den Schutz vor gegnersichen Flugzeugen kann diese alleine nicht bewältigen. So wurde auf dem Sockel des Iox ein Richtung Himmel gerichtetes Lasersystem installiert. Dieser Kugelförmige Emitter kann mehrere Energiestrahlen in diverse Richtungen aussenden und so einen großen Bereich des Luftraumes abdecken. Aufgrund des Schweberantriebs ist das Waffensystem etwas kleiner ausgefallen als das des AY. Der Ay kann genauso wie der Iox auf jeder ebenen Fläche landen und sich verankern. Obwohl die SY keine Befestigungen und Geschützturmsockel errichten, können diese beiden Einheiten die von den Humanuiden errichteten Bauwerke für ihre eigenen Zwecke nutzen.]
+   Picture = syv_ax.pcx
+
+   Features += moveduringreactionfire
+
+   WaitForAttack = true
+   Weapons { 
+      Number = 3
+      Weapon0 ->* VehicleType.SY_AirL 
+      Weapon0.Punch@MaxRange -= 5
+      Weapon0.Punch@MinRange += 5
+      
+      Weapon1 ->* VehicleType.SY_AirL
+
+      Weapon2 ->* VehicleType.SY_TankL
+      Weapon2.ReactionFireShots = 0
+
+   } Weapons
+} VehicleType

@@ -1,0 +1,8 @@
+ObjectType {
+   name = PUs
+   ID = 12107
+   parent = 12100
+   dry { 
+      picture = pus_name.pcx 1
+   } dry
+} ObjectType

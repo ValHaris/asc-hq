@@ -1,0 +1,39 @@
+BuildingType { 
+   Name = research center
+   ID = 1316
+   parent = 499 498
+
+   Infotext = [Forschungszentrum]
+   Transportation ->* BuildingType.Ellf
+   Transportation.MaxLoadableUnitSize = 190
+   ConstructionStages = 1
+   Weather = dry
+   Fields = A1 
+   UseGFXpics = false
+   Pictures { 
+      dry = sy_bld_res.png
+   } Pictures
+   RubbleObjects = false
+   Entry = A1
+   Armor = 1500
+   Functions = Research
+   MaxResearch = 60
+   NominalResearch = 30
+   ConstructionCost { 
+      Energy = 0
+      Material = 15000
+      fuel = 15000
+   } ConstructionCost
+   MaxResourceProduction { 
+      Energy = -800
+      Material = -800
+      fuel = -800
+   } MaxResourceProduction
+   defaultProduction {
+      energy = -800
+      material = -800
+      fuel = -800
+   } defaultProduction
+   Height = low_level_flight
+   ExternalLoading =  
+} BuildingType

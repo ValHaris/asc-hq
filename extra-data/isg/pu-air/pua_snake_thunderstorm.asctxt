@@ -1,0 +1,52 @@
+VehicleType { 
+   Name = THUNDERSTORM
+   parent = 495 425
+   ID = 12551
+   Description = AntiAir Jagddrohne
+   Infotext = []
+
+   picture = pua_snake_thunderstorm.png
+   InfoImage = pua_snake_thunderstorm.jpg
+   InfoImageSmall = pua_snake_thunderstorm_k.png
+   wreckageobject = 1244 14844
+;   GuideSortHelp += 0 0 0 0 4 272 0 0 0 0
+  InfoText = [Die nikanischen Ingenieure erhielten vom hohen Rat nach der Invasion
+Cetas durch die Insekten den Auftrag, die Drohnen der Thunder-Baureihe
+stark zu verbessern. Das Ergebnis ist der Thunder Storm, welcher
+inzwischen mehrfach überarbeitet wurde.
+
+Er zeichnet sich durch eine Tarnlackierung und eine hohe Geschwindigkeit
+aus. Zudem ist er in der Lage, Boden-, Luft- und Orbitalziele anzugreifen
+und sich anschließend zurückzuziehen. Die Operationsreichweite wurde
+etwas erhöht.
+   ]
+
+   Features += jam_only_own_field
+   Jamming = 39
+   Armor += 20
+   
+   Movement = 0 0 0 60 200 220 200 0 
+   Tank.Fuel += 300
+   FuelConsuption = 18
+
+   Weapons { 
+      Number = 3
+      Weapon0 ->* VehicleType.AAMO2 
+      Weapon0.Ammo = 2
+      Weapon0.Punch@MaxRange = 80
+      Weapon0.Punch@MinRange = 80
+
+      Weapon1 ->* VehicleType.AAMH 
+      Weapon1.MaxRange = 30
+      Weapon1.Ammo = 2
+      Weapon1.Punch@MaxRange = 76
+      Weapon1.Punch@MinRange = 76
+
+      Weapon2 ->* VehicleType.ASM 
+      Weapon2.MaxRange = 20
+      Weapon2.Ammo = 2
+      Weapon2.Punch@MaxRange = 85
+      Weapon2.Punch@MinRange = 85
+   } Weapons
+
+} VehicleType

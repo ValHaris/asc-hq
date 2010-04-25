@@ -9,7 +9,7 @@ VehicleType {
    Infotext = [
    InfoImage = Wikipedia Bell-Boeing V-22]
 
-   Features = MoveDuringReactionFire cruiserlanding
+   Features = MoveDuringReactionFire cruiserlanding no_midair_refuel
    Armor += 100
 
    WaitForAttack = false

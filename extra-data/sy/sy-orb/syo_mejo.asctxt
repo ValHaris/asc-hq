@@ -1,0 +1,24 @@
+VehicleType { 
+   Name = MEJO
+   parent = 246
+   ID = 1341
+   
+   Description = espionage unit
+   Infotext = []
+   Picture = syo_mejo.pcx
+   
+   Armor += 100
+   View = 120
+   Jamming = 39
+   Features += self_repairing jam_only_own_field
+   SelfRepairRate = 15
+
+   Height = orbit
+   Movement = 0 0 0 0 0 0 0 30 
+   Tank.Fuel += 3000
+   Tank.Material = 3000
+
+   Weapons { 
+      Number = 0
+   } Weapons
+} VehicleType

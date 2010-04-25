@@ -1,0 +1,466 @@
+GAMER (Grafiken & Spezifikationen)
+
+noch nicht überarbeitete Einheiten/Gebäude:
+To,Tola
+AX,Zeo
+Ent
+YBX,TR
+
+________________________
+Beta-10-10
+-SY_Fighter_Gun auf 75% gegen Flugzeuge abgeschwächt.
+-XYX weniger Gewicht
+Beta-10-09
+-Kool, 250 Gewicht, kein WfA, kein MAM
+-SY-A Werteanpassung
+-Morr, kein WfA, -1 Feld BodenWReichweite, -10 Move, mehr Tankinhalt, läd nur noch bis 150, kein BTO
+-Drus, Waffenumbau
+________________________
+06.04.2010 z82.1 (GAMER)
+-Ukax, Eingang Bugfix (Erzeugte Programmcrash)
+_______________________
+03.04.2010 z82 (GAMER)
+Beta-10-06
+- Tankanpassung Tolg, Mejo, Sx
+Beta-10-05
+-InfoImage = Pul
+-Grafikupdate YL, Yz
+-Kerg Überarbeitung: Grafik, Gewicht = 3000, Fuel = 100k, Waffenbugfix
+-Tankanpassung: Ent, Zeo, Laak, Druk, Drus, AY, Schwebeturrets
+Beta-10-04
+-SOl (orbitkraftwerk) überarbeitet, Tech + Orbital
+-Nog Grafikupdate
+-IMS,Zah -10 Move
+-Tec, FlyFact, Lussx läd/baut kein default
+-XYX 30 Jam, 2XRF Multidefence
+-Ukax, Grafikupdate + keine Objektverlinkung
+-Tox, Grafikupdate, kein RF auf Flugzeuge
+_______________________
+27.02.2010 z81 (GAMER)
+-YB überarbeitet
+Beta-10-03
+-Drus Tech(2)bugfix
+-Krah Tech4
+Beta-10-02
+-Grafikupdate Pul, SX
+-Tris/Trox/Ent + cruiserlanding
+-Trainingsanlage, +100 Gewichtkapazität
+-Waffensound Druk
+________________________
+07.02.2008 z80.1 (GAMER)
+-Depot Grafikbugfix, baubar durch Zah
+-Training, Grafikbugfix
+________________________
+23.01.2010 z80 (GAMER)
+Beta-10-01
+-Krah, wieder auf Kerg landbar
+-SY Fighter 2 Feld Waffe nicht mehr orbittauglich
+-SIS überarbeitet
+-SY Waffen ca. 1/2 Punch Materialverbrauch
+Beta-09-19
+-SY Gebäude nicht mehr im Wasser baubar
+-Grafikupdate: Forschungsgebäude, Trainingsgebäude, Flugzeugfabrik
+-SY Flugzeugfabrik kann Xor bauen
+-Laserzaun entfernt (jetzt im ASC Basispaktet)
+-ASC Laserzaun baubar ab Tech 4.
+Neu:
+-Depot
+________________________
+12.12.2009 z79 (GAMER)
+-Gorgol, Transport und Movementumbau
+-Flugkreuzer CMD 1.8, kein Laden von Sats mehr
+-Kerg, Transport und Movementumbau, kein laden von sats mehr
+Beta-09-18
+-Zah, Ext.Mat.Trans
+-To, -MAM, 50 Gewicht
+-Tolg, +100 Armor
+-Kerg, Tank vergrößert
+Beta-09-17
+-Xebu -11Move submerged, HC sub<->low +15Move
+-Hyas -40Move air, -30 View
+________________________
+08.11.2009 z78 (GAMER)
+Beta-09-15/16
+-Überarbeitung: Laak, Xor
+-Tox kein MAM mehr
+-Orbitalkanonen Gewichtanpassung
+-Neuberechnung Kosten TR/XBX
+________________________
+03.10.2009 z77 (GAMER)
+-Ksol,Ysol landefähig auf Spaceport
+-Fliegende Flugzeugfabrik, Eingangsystem korrigiert
+-Fighter Landesystem modifiziert
+-Bodeneinheiten nicht mehr in Wasser
+-Einheitenüberarbeitung: Hytak,Hylo,Hytak,Hyter,Xentor,Xenos,Jhak,Jhal,Gorgol,Tolg
+-Carriersysteme 30 Movemalus beim ausladen
+Beta-09-13
+-Zah überarbeitet, baut keine AY mehr, keine Landung auf Wasser möglich, FC=25 Bodenservice für Turret+Defence
+-IMS überarbeitet, keine Landung auf Wasser möglich, -10 Move, BodenService für Default (Liks), FC=25
+-AY, -1 Feld Waffenreichweite
+-XYX überarbeitet, nicht mehr trainierbar, 45 jamming, kein Kamikaze, keine Waffen
+-Anti-Air Flugkreuzerwaffen nur noch -2 Höhenstufen.
+-Terraformwelle auch auf shallow_water
+-Tal,AD, Trooper
+-Druk, Drus überarbeitet (FC = 25, Tank 8000)
+-Stachelgras nicht mehr im Wald, Flachwasser, Sumpf
+-Krah überarbeitet, kein MAM, dafür Angriff
+-Fighter allg: jamming auf 75 reduziert, Tank auf 8000 erhöht, Verbrauch von 12 auf 18 erhöht
+-Myx, Gewicht 4, keine Eroberung
+-Pul, Gewicht 6, Move +10, keine Eroberung
+-SX,  -10 Punch, keine Eroberung, 20 Stealth
+-Sly, Grafikbugfix
+Beta-09-12
+-Gorgol, Eingang Low_air wait for attack, 30 Movemalus
+-Höhenstufenwechsel von und in den Orbit erschwert
+-Iox überarbeitet, keine AirWaffe mehr
+-Gewicht Schwebeturrets 100 (wenn überarbeitet)
+-Gewicht Orbitalkanonen 150-200(wenn überarbeitet)
+-Kerg FeatureBugfix
+-Tris/Trox HC2orbit = 100 MM
+________________________
+02.09.2009 z76-2 (GAMER)
+-InfoImage Filename Bugfix SY Trooper
+-Bugfix Adapter Flying Factory
+-InfoimageSmall eingebaut
+______________________
+29.08.2009 z76 (GAMER)
+Beta-09-11
+-Orbitalkanonen wieder MdRF
+-Beacon neue Grafik
+-YB deutlich teurer, Umbau geplant
+-Forschungszentrum, Max Unitweight = 190
+-SY Flugzeugfabrik, Adapter hinzugefügt
+________________________
+01.08.2009 z75-2 (GAMER)
+-Tal,Tas = trooper
+-Gorgol,Zah,Ims Transportupgrade
+-Gewicht Tas = 200
+______________________
+25.07.2009 Z75 (GAMER)
+-Flugzeuge = noRF
+Beta-09-10
+Neu:
+-Flugzeugfabrik
+Beto-09-09
+-AD, MaxRange = 180
+__________________
+20.06.2009 (GAMER) [incl. Beta-09-08+07]
+-Hyas +Satview
+-Xor -1 RF + 10 AA-Range
+-Tec baut keine Medium Aircraft + Bunker mehr
+-Lussx Center baut keine Bunker mehr
+-SLY Transportbugfix
+__________________
+30.04.2009 (GAMER)
+-SIS,SY,SYr Transportbugfix
+-Tolg, AirLaser angepasst
+__________________
+19.04.2009 (GAMER)
+-Trox, jamming Bugfix
+__________________
+11.04.2009 (GAMER)
+-Xebu, XyX, Sly = Techbugfix
+-Bomben, nicht mehr erforschbar
+-Xor, Forschungsnamen korrigiert
+-Sly Grafik korrigiert
+-PUL Gewicht  = 10
+-SIS, Maxladegewicht 3
+-Doppelwaffen entfernt, Drus
+-Zah, an neue Preise angepasst
+-SY Turrets, FuelConsumption = 40
+-kleine Fighterwafe nur noch +/- 1 Höhenstufe
+-große Fighterwaffe, nur noch auf Luftziele
+-Kerg, Additionspreis entfernt
+-Xor, move_after_attack
+-Gebäude: Sol,Res,XbX Eingang hinzugefügt
+-Trox, auf standartFlugjammer angepasst
+-Tolg Waffenbugfix
+-Sy Einheiten hinterlassen keine Wracks oder Krater, nur noch Stachelgras
+-Stachelgras hat nun MaxChildSpawn
+__________________
+07.03.2009 (GAMER)
+-Grafikbugfix Hohes Stachelgras
+-TR, Tech 2
+-AY, Tech 5
+-Zah, baut neue EInheiten, größerer Tank
+-Krah Landeoptionen bugfix
+-MES +Stealth Tech
+-InfoImage = SX,SY
+-Morr Gewicht reduziert
+-Gorgol, Ladekapazität analog Transportzug
+Neu:
+-Liks
+-TAS
+-TAL
+-AD
+__________________
+Beta-09-01
+-Tank-Laser nicht mehr automatisch auf Med_air
+-AY nicht mehr trainierbar
+-SY-Stadt angepasst
+-Mes, nicht mehr auf ground_level, orbit
+-Jhal nicht mehr Xebu als Forschungsvoraussetzung
+-Lussx Station, nur noch 40 jamming
+__________________
+21.10.2008 (GAMER) Hotfix
+-SY MoveSoundbugfix
+__________________
+18.10.2008 (GAMER)
+-Mejo 120 View
+__________________
+21.09.2008 (GAMER)
+-Hyas techbugfix
+-Yb/Yl/Yz Techbugfix
+-großer Atombrand -10 Radius, neue Höhenstufe
+-Xebu, Techbugfix
+__________________
+13.09.2008 (GAMER)
+-neue Grafik: Hyas, Hylo, Hytak, Hyter
+-Hyas mehr MatTank
+-Raumschiffe an ISG Zuladung angepasst
+-MovementSound = Sx,Pul,Myx
+-Waffensound = Pul
+-dichtes Stachelgras, bugfix
+-Atombrand überarbeitet ,Einheit wesentlich teuerer (200k) max 90 Felder Ausdehnung
+-kleiner Atombrand hinzugefügt max 20 felder ausdehnung
+__________________
+09.08.2008 (GAMER)
+-Sy,Syr,Sly können Sx laden
+-Xentor, Infotext+Grafik
+-Mes,Krah,Sly umgebaut
+-Forschung Faktor von 100 auf 150 gesetzt.
+-Hyas Forschung hinzugefügt
+-Kool tech 1
+-Ent +Radartech
+-Xebu + Sumarine tech (Sub Tech für Sy freigegeben)
+-Rohstoff und Radargebäude eroberbar
+-Xor mdrf bugfix
+-InfoImage = Tolg
+-Gorgol, kein Entfernen von SChienen, Brücken und unterseeischer Schrott mehr
+-Xebu, kein Orbitalangriff mehr, Fighterwaffe nicht unter Wasser einsetzbar
+Neu:
+-Mejo, Radar Sat
+-Pul, Panzerborer
+-Krah, Truppentransporter
+-Mes, Stealthfighter
+__________________
+06.07.2008 (GAMER)
+-Ax, waitforAttack, geringerer punch
+-Ay, geringerer Punch, -1 RF
+-Ysol Grafikbugfix
+-Laak Mdrf,MAM bugfix
+-diverse Infotexte neu
+-Xebu, Movebugfix
+__________________
+07.06.2008 (GAMER)
+-Training nicht mehr für default
+-Trainingsgebäude Grafikkorrektur
+__________________
+04.05.2008 (GAMER)
+-Forschungsgebäude andere Grafik
+-Zah baut Orbitakraftwerk
+Neu:
+-Kolonie HQ SY
+-Orbitales Solarkraftwerk (Tech 4)
+-Ysol (Pathfinder)
+__________________
+05.04.2008 (GAMER)
+-IMS mehr Movemnt wegen Wind, Baubugfix
+__________________
+15.03.2008 (GAMER)
+bugfix gebäudebau
+__________________
+04.03.2008 (GAMER)
+-Zah baut neues Gebäude, +5k Fuel
+Neu:
+-Rohstofsammelgebäude
+_________________
+02.02.2008 (GAMER)
+-SY Training, Eingang 200 mass
+-Umbau abilities -> Features
+-Laser nur noch 80% Wirkung gegen Trooper
+-Gorgol, Zah, kool kein mdrf,mam
+-Nog, waitforattack = true, Bodenwaffe 2 felder
+-Xor kein mam
+-AY, nur noch verladbar
+Neu:
+-Ims Ernteflugzeug
+_________________
+02.11.07 Gamer
+-Atombrand überarbeitet
+-Gorgol docking low level, mehr Kapazität
+-TrainCenter, Adapter hinzugefügt
+_________________
+v10.04 16.05.2007
+-Peilsender Kosten 3000M
+-Hyas Tank angepasst
+
+_________________
+v10.03 12.05.2007
+-SIS, 1 Trooperstellplatz
+Neu:
+-Myx, leichte Artillery
+-training Center
+
+_________________
+v10.02 09.05.2007
+-jammer standardisiert
+Neu:
+-Hyas, Markierer
+-Jumpdrive für Ksol
+
+_________________
+v10.01 04.03.2007
+-Research lab eingebaut, Zah angepasst
+
+_________________
+07.01.2005 v10.00
+-Kategorisierung Panzer und Bomber
+-Baukostenfix, SY-Road, Stachelgras
+-Zah, Kool, Gorgol kein MAM/MdRF mehr
+
+________________
+31.08.2005 v9.06
+-Forschung wieder integriert
+-Sound wieder eingebaut
+-Set Files wieder eingebaut
+
+___________________
+29.08.2005 v9.05
+-default units Ari
+-Kerg und Nog wieder Feuerbereit nach Bewegung
+Neu:
+-Tox, Hvy.Artillery
+
+___________________
+07.08.2005 v9.04
+-KostenAnpassung TR
+-Bugfix XYX
+
+___________________
+08.07.2005 v9.03
+-SY,SYr,Sx,AX Anpassung an Default Units
+Neu:
+-AY, vollstationäre AD
+
+___________________
+19.05.2005 v9.02 ZV
+-Gorgol wieder Landung
+-Kreuzer, Zerstörer langsamer+ spezialisierte Waffen
+-keine Lavakrater nach Zerstörung
+-Hyter+Xentor nicht mehr tauchfähig
+-Xebu nicht mehr Orbit
+-Kostenreduktion (1000) entfernt 
+-Tris kein Jaming mehr
+Neu:
+-Sx, Haustier
+-AX, AD Turm
+-Drus, AD Zerstörer
+-Trox, Jammersonde
+
+
+________________
+22.04.2005 v9.00
+- Abwertung der Fighterwaffen gegen Bodenziele
+- Bugfix AirDefence
+
+________________
+09.04.2005 v8.08
+-Bugfix Entrance Gorgol,Ksol
+
+________________
+26.03.2005 v8.07
+-Kerg,Nog und Morr, kein Angriff nach Bewegung
+-Tola Bugfix Waffen
+-Tris , kein Sonat
+-Ent +Sonar
+-Morr+Iox Waffenupdate, reine AirDefence
+
+________________
+05.02.2005 v8.06
+-Gorgol Bugfix entrance,Wrackservice
+-Forschungsupdate
+________________
+19.11.2004 v8.05
+-Gorgol , WrackService Bugfix
+-Fighter nicht mehr auf allen Flächen landefähig
+-Gorgol+Zah an Großschiffklasse angepasst.
+-Hyter, Waffenanpassung
+-Hytak schneller
+
+________________
+24.10.2004 v8.04
+-Xebu WeaponBugfix
+-TR Adapter+Preis Bugfix
+
+________________
+01.10.2004 v8.03
+-SY Beton + Brücke jetzt durch andere Fahrzeuge abreissbar.
+-Morr, Bugfix CarrierLoad
+
+________________
+27.09.2004 v8.02
+-Bugfix, diverse TechnologieVoraussetzungen
+-Automatisch Preisberechnung aktiviert
+-höherer Movementverbrauch beim Höhenstufenwechsel
+Neu:
+-TR Radargebäude
+________________
+16.09.2004 v8.01
+-Bugfix Adapter Lussx Reaktor
+-Korrektur Kerg Preis.
+
+________________
+10.09.2004 v8.00
+-Überarbeitung Techstufe 4+5
+-Anpassung multiple RF
+-XYX an Iox angepasst.
+Neu:
+-TOLA, OrbitGun
+-Jhal, Heavy Bomber
+
+________________
+25.08.2004 v7.01
+-Überarbeitung Techstufe 3
+-neue Grafik für XYX, andere Überarbeitet
+-Tech für Yb hinzugefügt
+-Wirtschaftsgebäude sofort baubar
+Neu:
+-Xebu,XbX,YbX
+
+________________
+Beta v7.00
+-Bugfix Kool, Minen entfernen
+-Gebäude, jamming update
+-Gebäude, NoObjectChaining update
+
+________________
+09.07.2004 v6.03
+Überarbeitung Techstufe 2 komplett
+Gorgol kann Wracks aufsammeln
+Ladebugfix Ksol
+Neu: Xenos, mitterer Bomber
+
+________________
+15.06.2004 v6.03
+nochmalige Überarbeitung Tech0+1
+neuer Movesound
+Bugfix Sy-Beton
+
+________________
+06.06.2004 v6.02
+Überarbeitung Vehicle+Air Tech0+1
+Anpassung Zah
+Neu: Hylo
+
+________________
+31.05.2004 v6.01
+Neu: Hyter
+Anpassung: Hytak
+
+________________
+26.05.2004 v6.00
+Umstellung auf neues Forschungssystem
+Trooper Überarbeitet
+Neu: SYr
+

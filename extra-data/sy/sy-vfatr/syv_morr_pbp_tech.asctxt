@@ -1,0 +1,10 @@
+technology {
+   Name = Morr
+   infotext = 
+   id = 1316
+   RelatedUnitID = 1316
+   parent = 1399
+   researchpoints *= 11
+   techlevel = 4
+   TechnologiesRequired = 1399,100002,100103,100307,100201,100309,1309,1320 
+} Technology

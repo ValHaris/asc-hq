@@ -1,0 +1,38 @@
+VehicleType { 
+   Name = KRAH
+   parent = 1393 1394 1395 1398
+   ID = 1343
+
+   Description = trooper transport
+   Infotext = []
+   Picture = sya_krah.png
+
+   Transportation ->* VehicleType.TransTrooper
+   Transportation.CategoriesNOT -> VehicleType.cargo_deftro_only.CategoriesNOT
+   Transportation.MaxLoadableUnitSize = 8
+
+   Features = Jam_Only_Own_Field MoveDuringReactionFire cruiserlanding
+   Armor = 410
+   Weight = 90
+   Category = medium_aircraft
+
+   Height = ground_level low_level_flight medium_level_flight high_level_flight 
+   FuelConsumption = 12
+   Movement = 0 0 0 40 140 160 160 0 
+   TerrainAccess ->* VehicleType.Sy_Multi_Service
+
+   WaitForAttack = false
+   Weapons { 
+      Initiative = 0
+      Number = 1
+      Weapon0 ->* VehicleType.SY_Fighter_Big 
+      Weapon0.Punch@MaxRange = 70
+      Weapon0.Punch@MinRange = 75
+      Weapon0.LaserRechargeCost.fuel -> VehicleType.Weapons.Weapon0.Punch@MinRange
+      Weapon0.ReactionFireShots = 2
+
+      Weapon1 ->* VehicleType.SY_Fighter_Small 
+      Weapon1.LaserRechargeCost.fuel -> VehicleType.Weapons.Weapon0.Punch@MinRange
+      Weapon1.ReactionFireShots = 0
+   } Weapons
+} VehicleType

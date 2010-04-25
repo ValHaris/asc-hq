@@ -1,0 +1,59 @@
+VehicleType { 
+   Name = ISG SAC
+   parent = 360
+   ID = 12008
+
+   Description = aircraft carrier
+   Infotext = [Panzerung: moderne polyadaptive Titanlegierung, effektive Panzerungsstärke entspricht 1700mm gehärtetem Stahl
+Bewaffnung: 2 Standard-Abschußvorrichtungen für Mittelstrecken-SAM, Gefechtsköpfe entsprechen 70kg TNT; Reichweite 5 SEE (1)
+Radar: Erfassung von Oberflächen und Luftzielen auf maximal 6.9 SEE möglich
+Geschwindigkeit: 6,1 SEE/SZE (2)
+Tiefgang: nur auf offenem Gewässer, großen Flüssen und Kanälen einsetzbar
+Masse: standard mittlerer Träger
+Bunkerinhalt:
+- 120'000 SFE (3) Treibstoff
+- 60'000 SFE Material
+- 80 Gefechtseinheiten schwere Raketen
+- 80 Gefechtseinheiten leichte Raketen
+- 80 Gefechtseinheiten Artilleriegeschosse
+- 40 Gefechtseinheiten Torpedos
+- 40 Gefechtseinheiten Bomben
+- 200 Gefechtseinheiten MG Munition
+
+Hangar, Flugdeck Schadenskontrolle
+Hangar und Flugdeck sind ausgelegt für bis zu 18 Staffeln (3) an leichten und mittleren Kampfflugzeugen sowie Helikoptern. Katapulte sind ausgelegt, um Flugzeuge bis 10.5 SGE [4] starten zu können, wodurch praktisch alle Einheiten diese Kategorien startbar sind. Maximale Gesamtzuladung beträgt jedoch nur 1500 SGE, was aber mehr als 20 kompletten Staffeln an leichten Jägern entspricht. Werkstätten für Wartung und Reparatur der Fluggeräte sind ebenso vorhanden wie Werkstätten für schiffsinterne Schadenskontrollteams.
+Selbstverständlich können auch Infanterieregimenter im Hangar untergebracht werden.]
+   picture = isg_sac.png
+;   InfoImage = mk1s_wedge.jpg
+   WreckageObject = 414
+;   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+
+   ConstructionCost { 
+      CalculationMethod = add
+      Energy = 8000
+      Material = 8000
+      fuel = 0
+   } ConstructionCost
+
+   Weapons { 
+      Number = 6
+      Weapon0 ->* VehicleType.SAMH 
+      Weapon0.MaxRange = 50
+      Weapon0.Ammo = 80
+
+      Weapon1 ->* VehicleType.AmmoCannon
+      Weapon1.Ammo = 80
+
+      Weapon2 ->* VehicleType.AmmoSM 
+      Weapon2.Ammo = 80
+
+      Weapon3 ->* VehicleType.AmmoTorp 
+      Weapon3.Ammo = 40
+
+      Weapon4 ->* VehicleType.AmmoBomb 
+      Weapon4.Ammo = 80
+
+      Weapon5 ->* VehicleType.AmmoMG 
+      Weapon5.Ammo = 200
+   } Weapons
+} VehicleType

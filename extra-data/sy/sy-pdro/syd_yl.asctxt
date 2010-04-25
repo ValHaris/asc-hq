@@ -1,0 +1,51 @@
+VehicleType { 
+   Name = YL
+   parent = 1393 1395 1398
+   ID = 1346
+
+   Description = lokal terraformer
+   Infotext = [Die SY haben diese Waffen lange Zeit vor den Humanuiden verstecken können. Die stellt eine der größten Bedrohungen jedweden Lebens dar und wird auch deshalb von den SY nur ganz selten eingesetz. Erste Tests sind teilweise fehlgeschlagen. Nur deshalb ist die Existenz dieser Waffe überhaupt bekannt. Wissenschaftliche Prognosen gehen davon aus, dass die Waffe ein Gebiet im Durchmesser von ca 90 km² vernichten kann. Da bisher nur die Auswirkungen eines fehlgeschlagenden Einsatzes beobachtet worden sind, kann über die Wirkungsweise nur spekuliert werden. Fest steht nur, das die Waffe das Zielgebiet energetisch aufläd und sich dieser Effekt (der sogenannte Atombrand) dann unregelmäßig ausbreitet. Optsich sieht es aus als ob der Boden brennt. Die Atome geraten in einen hyperenergetischen Zustand, der die Molekülketten, in denen sich die Atome befinden, auflöst. Jede Art von Bewuchs, Gebäude oder Infrastruktur wird dabei zerstört. Mit zunehmender Ausdehnung nimmt die Heftigkeit der Reaktion ab, bis sie irgendwann zum Stillstand kommt. Merkwürdig dabei ist, das nach Ausklingen der Reaktion eine mineralsiche Staubschicht zurückbleibt. Dieser Staub bildet nach kurzer Zeit kristalline Struckturen welche dann problemlos abgetragen und zu den verschiedensten Stoffen verarbeitet werden können. Ein Gerücht innerhalb der wissenschaftlichen Kreise hält sich harnäckig. Eventuell handelt es sich bei dieser Waffe um keine Waffe, sondern um ein nicht vollendetes Terraformingprojekt, welches durch die Konfrontation mit den Humanuiden zurückgestellt und modifiziert wurde. ]
+   Picture = syd_yl.png
+   wreckageobject = 1346 1311
+
+   Features = Kamikaze_only jam_only_own_field no_midair_refuel ManualSelfDestruct
+   Armor = 100
+   Jamming = 29
+   Category = default
+   SelfRepairRate = 0
+   Weight = 20
+
+   ConstructionCost { 
+      CalculationMethod = manual
+      Energy = 80000
+      Material = 80000
+      fuel = 0
+   } ConstructionCost
+
+   Height = low_level_flight medium_level_flight high_level_flight 
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 30
+   } Tank
+   FuelConsumption = 1
+   Movement = 0 0 0 0 130 130 130 0 
+   TerrainAccess { 
+      terrain_any = road runway hard_sand lowland soft_sand hillside mountains high_mountains ditch installation turret_foundation very_shallow_water shallow_water water deep_water river
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = 
+   } TerrainAccess
+
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+      ObjectsRemovable = 
+   } Construction
+
+   WaitForAttack = false
+   Weapons { 
+      Number = 0
+   } Weapons
+} VehicleType

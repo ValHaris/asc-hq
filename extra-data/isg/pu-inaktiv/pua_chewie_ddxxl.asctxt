@@ -1,0 +1,51 @@
+VehicleType { 
+   Name = DOOMSDAY XXL
+   parent = 1425
+   ID = 12554
+
+   Description = space fighter
+   Infotext = []
+   Picture = pua_chewie_ddxxl.png
+
+   Armor = 420
+   Jamming = 25
+   Weight = 150
+   Features += jam_only_own_field 
+
+   Height = ground_level low_level_flight medium_level_flight high_level_flight orbit 
+   Tank { 
+      material = 10000
+      fuel = 12000
+   } Tank
+   FuelConsumption = 25
+   Movement = 0 0 0 60 160 170 180 70 
+   MovementSound = aircraft_l_g.ogg
+
+   Transportation ->* VehicleType.TransLowTrooper3
+   Transportation.EntranceSystemNum = 3
+   Transportation.EntranceSystem1 ->* VehicleType.ParaTr
+   Transportation.EntranceSystem2 ->* VehicleType.OrbIO
+
+   Weapons { 
+      Initiative = 0
+      Number = 3
+      Weapon0 ->* VehicleType.Air_MG 
+      Weapon0.targets = floating ground_level low_level_flight medium_level_flight high_level_flight orbit 
+      Weapon0.shotFrom = ground_level low_level_flight medium_level_flight high_level_flight orbit 
+      Weapon0.Punch@MaxRange = 55
+      Weapon0.Punch@MinRange = 55
+
+      Weapon1 ->* VehicleType.AAMO
+      Weapon1.MaxRange = 20
+      Weapon1.Ammo = 2
+      Weapon1.Punch@MaxRange = 85
+      Weapon1.Punch@MinRange = 85
+
+      Weapon2 ->* VehicleType.ASM
+      Weapon2.MaxRange = 30
+      Weapon2.Ammo = 6
+      Weapon2.Punch@MaxRange = 85
+      Weapon2.Punch@MinRange = 85
+
+   } Weapons
+} VehicleType

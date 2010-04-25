@@ -1,0 +1,48 @@
+ObjectType { 
+   Name = Energie Schild
+   ID = 12406
+   Weather = dry 
+   Armor = 1000
+   Height = 134
+   visible_in_fogOfWar = false
+   LinkableObjects = 
+   
+   ;                def lTr mTr hvT lWh mWh hWh tro rlv mAC mSh BTO lAC hAC lSh hSh Hli hov
+   Movemalus_plus = 0
+   Movemalus_abs =   25  25  25  25  25  25  25  15  25  25  25  16  25  25  25  25  25  25
+ 
+   AttackBonus_abs = -1
+   AttackBonus_plus = 0
+   DefenseBonus_abs = -1
+   DefenseBonus_plus = 6
+   Jamming_abs = -1
+   Jammming_plus = 10
+   
+   lifetime = 5
+   
+   ConstructionCost { 
+      Energy = 0
+      Material = 100
+      fuel = 1000
+      Movement = 25
+   } ConstructionCost
+   RemovalCost { 
+      Energy = 0
+      Material = -100
+      fuel = 50
+      Movement = 10
+   } RemovalCost
+
+   TerrainAccess { 
+      terrain_any = road runway Lowland hard_sand soft_sand ditch turret_foundation river very_shallow_water Shallow_water frozen_water 
+      terrain_all = 
+      terrain_not = lava bridge
+      terrain_kill = lava 
+   } TerrainAccess
+   TerrainProperties_Filter = 
+   TerrainProperties_Add = Ditch 
+   dry { 
+      UseGFXpics = false
+	  picture = puv_hanni_obj_schildbase.png 1
+   } dry
+} ObjectType

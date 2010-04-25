@@ -1,0 +1,28 @@
+VehicleType { 
+   parent = 14013
+   ID = 12537
+   Name = Clustius
+
+   Description = TarnMinenLeger
+   Picture = pua_excalibur_clustius.png
+   InfoImage = pua_excalibur_clustius.jpg
+   InfoImageSmall = pua_excalibur_clustius_k.png
+   wreckageobject = 14013 14813
+   GuideSortHelp = 0 0 0 0 0 0 0 0 0 0
+   Infotext = [Die Cali Ingenieure entwickelten in mühevoller Detailarbeit aus einem gängigen Tarnbomber einen einzigartigen Tarnminenwerfer. Die Minen werden mittels einer starken Rakete in die gewünschte Richtung geschossen, ist der Treibstoffvorrat der Trägerrakete aufgebraucht, geht die Mine in einen Sturzflug über. Dieses Fallsignal löst einen kleinen befestigten Minifallschirm und so landet die Mine sanft auf dem gewünschten Terrain. Es können so alle Arten von Minen verschossen werden, allerdings ist der Munitionsvorrat äußerst knapp bemessen. Das diese komplizierte Abschussapparatur mit den ganzen Messinstrumenten Platz und Gewicht beansprucht war von vorneherein klar. Um aber bei der Geschwindigkeit keine Einbußen hinnehmen zu müssen, wurde hier schließlich auf jegliche Bewaffnung verzichtet. Dieses Spezialflugzeug kann nicht aktiv schießen, sondern nur über eine weite Entfernung Minen verschießen bzw. -werfen. Bei dieser Spezialkonstruktion verlässt man sich alleinig auf die hohe Geschwindigkeit und seine Tarneigenschaften. Da diese Einheit überhaupt nicht aktiv schießen kann, ist es eine der ganz wenigen Einheiten, wo der nur Gegner selbst und aus eigenen Willen den Schuss gegen ihn auslösen muss. Aufgrund dieser Eigenschaften kann man sie zu recht zu den Defensivwaffen zählen. 
+
+]
+
+   Armor -= 100
+   Features = jam_only_own_field no_midair_refuel mine_layer NoMineRemoval
+   Weight = 110
+
+   Weapons { 
+      Number = 1
+      Weapon0 ->* VehicleType.MineAir
+      Weapon0.Name = Streuminen 
+      Weapon0.MinRange = 30
+      Weapon0.MaxRange = 70
+      Weapon0.Ammo = 12
+   } Weapons
+} VehicleType

@@ -1,0 +1,45 @@
+VehicleType { 
+   Name = PARENT FIGHTER
+   abstract = true
+   ID = 1393
+   parent = 1394
+   Description =  fighter
+   Infotext = []
+   Armor = 400
+   View = 40
+   WreckageObject = 1307
+   ConstructionCost { 
+      CalculationMethod = auto
+      energy =
+      fuel =
+      Material =
+   } ConstructionCost
+   Height = ground_level low_level_flight medium_level_flight high_level_flight orbit 
+   Jamming = 75
+   WaitForAttack = false
+   Tank { 
+      Energy = 0
+      Material = 2000
+      fuel = 8000
+   } Tank
+   FuelConsumption = 18
+   Features = self_repairing jam_only_own_field move_after_attack cruiserlanding no_reactionfire
+   Movement = 0 0 0 80 140 160 160 40 
+   movementsound = sy_ground_s.ogg
+   Category = light_aircraft
+   MaxSurvivableStorm = 255
+   ResourceDrillingRange = 0
+   SelfRepairRate = 15
+   Weight = 45
+   TerrainAccess ->* VehicleType.SY_fighter_ground
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+      ObjectsRemovable = 
+   } Construction
+   Weapons { 
+      Initiative = 0
+      Number = 0
+   } Weapons
+} VehicleType

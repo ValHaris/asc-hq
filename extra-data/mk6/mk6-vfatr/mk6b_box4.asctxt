@@ -7,7 +7,7 @@ VehicleType {
 
    Description = Mech Jump Box
    Infotext = []
-   picture = mk6b_box4.pcx
+   picture = mk6b_box4.png
 ;   WreckageObject = 14235
 
    JumpDrive ->* VehicleType.TeccnolsJump1
@@ -22,8 +22,9 @@ VehicleType {
 
    Transportation ->* VehicleType.TransBigTrooper 
    Transportation.MaxLoadableUnits = 10
+   Transportation.MaxLoadableMass = 40
 
-   Movement = 0 0 0 10 0 0 0 0 
+   Movement = 0 0 0 14 0 0 0 0 
    Tank.Material = 400
    Tank.Fuel = 2000
    TerrainAccess ->* VehicleType.heli_terrain 
@@ -31,5 +32,7 @@ VehicleType {
    Weapons { 
       Number = 1
       Weapon0 ->* VehicleType.DLS 
+      Weapon0.MaxRange = 40
+      Weapon0.Punch@MaxRange = 60
    } Weapons
 } VehicleType

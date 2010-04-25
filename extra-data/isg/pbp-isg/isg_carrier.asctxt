@@ -1,0 +1,79 @@
+VehicleType { 
+   Name = ISG CARRIER
+   parent = 401 497
+   ID = 12004
+
+   Description = Ship Carrier
+   Picture = isg_carrier.png
+   Infotext = [#crt#Planetenransporter#crt# #crt#
+   Der CARRIER ist Eigentum der Interstellaren Gilde. Es darf nur zu Transportzwecken auf dem zugewiesenen Planeten eingesetzt werden. Offensiver Einsatz ist untersagt. Ersatz wird nur bei Naturkatastrophen gestellt.]
+
+   ConstructionCost { 
+      CalculationMethod = manual
+      Energy = 50000
+      Material = 50000
+      fuel = 0
+   } ConstructionCost
+
+  JumpDrive {
+      Height = medium_level_flight
+      MaxDistance = 300
+      consumption {
+         Energie = 0
+         Material = 1000
+         Fuel = 4000
+      } consumption
+      terrain_any = Spaceport 
+      terrain_all = 
+      terrain_not = forest small_rocks large_rocks bridge
+      terrain_kill = 
+   } JumpDrive
+
+   Category = heavy_aircraft
+   Features = self_repairing icebreaker no_midair_refuel
+   Armor = 500
+   Weight = 2000
+   View = 0
+   Jamming = 0
+   MaxSurvivableStorm = 255
+   ResourceDrillingRange = 0
+   SelfRepairRate = 5
+   transportation { 
+      MaxLoadableUnits = 4
+      MaxLoadableUnitSize = 10000
+      MaxLoadableMass = 20000
+      CargoMovementDivisor = 1.4
+      EntranceSystemNum = 1
+      EntranceSystem0 ->* VehicleType.GrIO
+      EntranceSystem0.DisableAttack = true
+   } transportation
+
+   Height = ground_level low_level_flight medium_level_flight 
+   FuelConsumption = 200
+   Tank { 
+      Energy = 0
+      Material = 10000
+      fuel = 20000
+   } Tank
+   Movement = 0 0 0 50 100 110 0 0 
+   TerrainAccess { 
+      terrain_any = spaceport runway shallow_water water deep_water river
+      terrain_all = 
+      terrain_not = forest small_rocks large_rocks
+      terrain_kill = lava
+   } TerrainAccess
+   MovementSound = ship_d_a_s.ogg
+
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+      ObjectsRemovable = 
+   } Construction
+
+   WaitForAttack = false
+   Weapons { 
+      Initiative = 0
+      Number = 0
+   } Weapons
+} VehicleType

@@ -1,0 +1,77 @@
+VehicleType { 
+   Name = Conzept X
+   ID = 12507
+   parent = 400 401
+
+   Description = experimentelles Support Fahrzeug
+   picture = puv_hanni_conzeptx.png
+   InfoImage = puv_hanni_conzeptx.jpg
+   InfoImageSmall = puv_hanni_conzeptx_k.png
+   WreckageObject = 12507
+   Infotext = [Nach Jahren der Forschung und vielen scheinbar ergebnislosen Lösungsansätzen wurde dieser Prototyp eines neuartigen Support Fahrzeugs von den Laboren der Pan Thau Ra zum Feldtest freigegeben. Durch seinen neuartigen Octapod Antrieb stellt dieser Prototyp ein absolutes Novum in Sachen Geländegängigkeit dar. Die frei konfigurierbaren Enden der einzelnen Gliedmaßen garantieren im Zusammenhang mit diesem neuartigem Antriebskonzept Fortbewegungsmöglichkeiten selbst im Sumpf auch Minenfelder stellen kein Problem dar. Bei dem Entwurf dieses Prototypes wurden des weiteren Schwerpunkte auf eine schnelle Verlegefähigkeit und größtmögliche Flexibilität im Einsatz gelegt. Das Conzept X ist unter anderem mit neuartigen Energiefeldgeneratoren ausgestattet, welche einmal konfiguriert Brücken, Straßen oder auch Flugplatzanlagen in der Struktur nachbilden können. Leider ist der Energiebedarf dieser Generatoren noch immens hoch, so das die Energiefelder schon nach relativ kurzer Zeit wieder zusammenbrechen. Aus diesem Grund wurde diesem Prototyp zusätzlich die Möglichkeit verliehen die entsprechenden Anlagen auch auf herkömmlichen Weg zu bauen. Derzeitig arbeiten die Wissenschaftler der Pan Thau Ra an einer Lösung des Energieproblems der Generatoren. Es wird damit gerechnet, das eine Lösung spätestens nach Abschluss dieses ersten Truppenversuchs verfügbar sein wird. Es mag wie eine Selbstverständlichkeit klingen, dennoch sei es hier erwähnt. Da dieser Prototyp unersetzlich ist wurden spezielle Maßnahmen für den Selbstschutz getroffen.]
+
+   Armor = 650
+   View = 31
+   Jamming = 90
+   Weight = 100
+   SelfRepairRate = 33
+
+   Height = ground_level 
+   WaitForAttack = true
+
+   Category = light_tracked_vehicle
+   
+   Transportation { 
+      MaxLoadableUnits = 2
+      MaxLoadableUnitSize = 7
+      MaxLoadableMass = 14
+      CategoriesNOT = hoovercraft Medium_tracked_vehicle Heavy_tracked_vehicle Light_wheeled_vehicle Medium_wheeled_vehicle Heavy_wheeled_vehicle Light_aircraft Medium_aircraft Heavy_aircraft Helicopter Light_ship Medium_ship Heavy_Ship Building|turret|object Rail_vehicle
+      EntranceSystemNum = 1
+      EntranceSystem0 ->* VehicleType.GrIO
+   } Transportation
+
+   Tank { 
+      Energy = 0
+      Material = 15000
+      fuel = 20000
+   } Tank
+   FuelConsumption = 18
+   Features = move_after_attack self_repairing ExternalMaterialTransfer ExternalFuelTransfer jam_only_own_field mineview mine_layer MoveDuringReactionFire immune_to_mines paratrooper
+   Movement = 0 0 0 88 0 0 0 0 
+
+   TerrainAccess { 
+      terrain_any = Lowland Road Runway Soft_Sand Hard_sand ditch Frozen_water swamp very_shallow_water shallow_water river hillside mountains
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = water deep_water Lava
+   } TerrainAccess
+
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 1 1000 997 991 999 995 45 994 44 2098 2096 12401 12402 12403 12404 2093 12406
+      ObjectsRemovable = 12401 12402 12403 12404 12405 12406
+      ObjectGroupsRemovable = 1 2 3 4 5 6 7 8 9 10 11 12 13 14 21
+   } Construction
+
+   Weapons {
+      Initiative = 0
+      Number = 3
+      Weapon0 ->* VehicleType.Mine2Weapon 
+      Weapon0.Ammo = 10
+      Weapon0.Punch@MaxRange = 120
+      Weapon0.Punch@MinRange = 120
+
+      Weapon1 ->* VehicleType.ML
+      Weapon1.Punch@MaxRange = 80
+      Weapon1.Punch@MinRange = 90
+      Weapon1.targets = floating ground_level low_level_flight medium_level_flight
+      Weapon1.shotFrom = floating ground_level
+      Weapon1.Ammo = 5
+      Weapon1.ReactionFireShots = 2
+      Weapon1.MinRange = 10
+      Weapon1.MaxRange = 30
+	  
+      Weapon2->* VehicleType.ServiceGround
+   } Weapons
+} VehicleType

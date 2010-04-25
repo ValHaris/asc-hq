@@ -1,0 +1,47 @@
+ObjectType {
+   Name = SY-LOGO
+   ID = 1309
+   Weather = dry
+   canExistBeneathBuildings = true
+   visible_in_fogOfWar = true
+   LinkableObjects = 
+   Armor = 100
+   ;                def lTr mTr hvT lWh mWh hWh tro rlv mAC mSh BTO lAC hAC lSh hSh Hli hov
+   Movemalus_plus = 
+   Movemalus_abs =  -1
+   AttackBonus_abs = -1
+   AttackBonus_plus = 0
+   DefenseBonus_abs = -1
+   DefenseBonus_plus = 0
+   Jamming_abs = -1
+   Jammming_plus = 0
+   Height = 117
+   ConstructionCost { 
+      Energy = 0
+      Material = 50
+      fuel = 40
+      Movement = 10
+   } ConstructionCost
+   RemovalCost { 
+      Energy = 0
+      Material = 0
+      fuel = 30
+      Movement = 10
+   } RemovalCost
+   NetBehaviour =  
+   growthRate = 
+   TerrainAccess { 
+      terrain_any = lowland hard_sand soft_sand hillside installation very_shallow_water shallow_water mountains high_mountains
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = lava water river deep_water 
+   } TerrainAccess
+   TerrainProperties_Filter = 
+   TerrainProperties_Add = 
+   dry { 
+      UseGFXpics = false
+      picture = sy_logo.pcx 1
+      ImageReference = -1
+      Flippictures = 0
+   } dry
+} ObjectType

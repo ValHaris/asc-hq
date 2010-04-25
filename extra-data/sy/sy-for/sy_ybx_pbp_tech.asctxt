@@ -1,0 +1,10 @@
+technology {
+   Name = YBX
+   infotext = 
+   id = 1394
+   RelatedUnitID = 
+   parent = 1399
+   researchpoints *= 14
+   techlevel = 3
+   TechnologiesRequired = 1399,100003,100104
+} Technology

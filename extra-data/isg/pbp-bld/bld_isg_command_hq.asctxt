@@ -1,0 +1,60 @@
+BuildingType { 
+   Name = Command HQ
+   ID = 12019
+   parent = 499
+
+   Armor = 100000
+   View = 80
+   Jamming = 20
+
+   ConstructionStages = 1
+   Weather = dry
+   Fields = A1 
+   UseGFXpics = false
+   Pictures {
+      dry = bld_ISG_Command_HQ.pcx
+   } Pictures
+   RubbleObjects = false
+   Entry = A1
+   notRemovable = true
+
+   Transportation { 
+      MaxLoadableUnits = 10
+      MaxLoadableUnitSize = 100
+      MaxLoadableMass = 300
+      CategoriesNOT = light_aircraft Medium_aircraft Heavy_aircraft helicopter hoovercraft Light_ship Medium_ship Heavy_Ship Building|turret|object
+      EntranceSystemNum = 1
+   } Transportation
+   Features = matter_converter
+   Techlevel = 0
+   MaxResearch = 0
+   ConstructionCost { 
+      Energy = 0
+      Material = 10000
+      fuel = 10000
+   } ConstructionCost
+   MaxResourceProduction { 
+      Energy = 500
+      Material = 500
+      fuel = 500
+   } MaxResourceProduction
+   defaultProduction {
+      energy = 500
+      material = 500
+      fuel = 500
+   } defaultProduction
+   StorageCapacity { 
+      BImode { 
+         Energy = 1000000000
+         Material = 1000000000
+         fuel = 1000000000
+      } BImode
+      ASCmode { 
+         Energy = 2000
+         Material = 2000
+         fuel = 2000
+      } ASCmode
+   } StorageCapacity
+   Height = ground_level 
+   ExternalLoading = 
+} BuildingType

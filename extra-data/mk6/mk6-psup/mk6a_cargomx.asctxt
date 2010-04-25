@@ -10,16 +10,20 @@ VehicleType {
 
    Weight = 300
    View = 40
-   Features = ExternalMaterialTransfer ExternalAmmoTransfer
+   Features = ExternalMaterialTransfer ExternalFuelTransfer ExternalAmmoTransfer
 
    Tank.Material = 10000
-   Tank.Fuel = 20000
+   Tank.Fuel = 30000
    movement += 0 0 0 20 40 40 40 0
 
    Weapons { 
-      Number = 2
+      Number = 6
       Weapon0 ->* VehicleType.ServiceGround
       Weapon1 ->* VehicleType.AmmoCM
+      Weapon2 ->* VehicleType.AmmoLM
+      Weapon3 ->* VehicleType.AmmoSM
+      Weapon4 ->* VehicleType.AmmoCannon
+      Weapon5 ->* VehicleType.AmmoTorp
    } Weapons
    
 } VehicleType

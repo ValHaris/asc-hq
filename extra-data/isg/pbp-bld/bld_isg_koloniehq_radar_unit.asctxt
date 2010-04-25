@@ -1,0 +1,66 @@
+BuildingType { 
+   Name = ISG Kolonie HQ Radar
+   ConstructionStages = 1
+   Weather = dry 
+   Fields = A1
+   UseGFXpics = false
+   Pictures { 
+      dry = bld_isg_kolonieHQ_radar_unit_dry.png
+   } Pictures
+   RubbleObjects = false
+   Entry = A1
+   notRemovable = true
+
+   ID = 12000
+   Armor = 5000
+   View = 159
+   Jamming = 20
+   transportation { 
+      MaxLoadableUnits = 1
+      MaxLoadableUnitSize = 5
+      MaxLoadableMass = 5
+      EntranceSystemNum = 1
+      EntranceSystem0 {
+        Mode = in out docking
+        UnitHeightAbs = ground_level 
+        UnitHeightRel = -100
+        ContainerHeight = orbit
+        CategoriesNOT = 
+        DockingHeightAbs = submerged 
+        DockingHeightRel = 0 
+      } EntranceSystem0
+   } transportation
+   Features =  
+   Techlevel = 0
+   TerrainAccess { 
+      terrain_any = Runway  
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = 
+   } TerrainAccess
+   MaxResearch = 0
+   ConstructionCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } ConstructionCost
+   MaxResourceProduction { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } MaxResourceProduction
+   StorageCapacity { 
+      BImode { 
+         Energy = 900000
+         Material = 900000
+         fuel = 900000
+      } BImode
+      ASCmode { 
+         Energy = 0
+         Material = 0
+         fuel = 0
+      } ASCmode
+   } StorageCapacity
+   Height = orbit 
+   ExternalLoading =  
+} BuildingType

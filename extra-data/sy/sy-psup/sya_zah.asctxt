@@ -1,0 +1,66 @@
+VehicleType { 
+   Name = ZAH
+   parent = 400 1395 1391 1399
+   ID = 1304
+
+   Description = construction unit
+   Infotext = [Dieser Bauschweber ist ein riesieges mächtiges Fluggerät. Zwei Kugelförmige Tanks beinhalten die verschiedensten Rohmaterialien für den Bau von Gebäuden und Verteidigungsanlagen. Aus der Unterseite ragen riesiege Tentakeln, die über integrierte Röhrensysteme die Materialienen vor Ort zu den verschiedensten Bauteilen zusammenfügen und modelieren können. Der Bauschweber ist ausschliesslich von Arbeitern bevölkert. So effektiv er auch im Errichten von Gebäuden ist, so ineffektiv ist seine Bewaffnung und seine Verteidigungsbereitschaft. Er muß zwingend beschützt werden und sollte unter keinen Umständen in Kampfhandlungen verwickelt werden. Die gelagerten Rohstoffe sind dafür zu wertvoll. Beobachtungen sagen aus, das SY-Arbeiter gegnerische Einheiten vollständig ignorieren. Allerdings sind sie meistens niemals wirklich alleine unterwegs. Ein Angriff auf SY Arbeiter hatte in den meisten Fällen fatale Konsequenzen. Plötzlich erschienen aus dem Nichts SY Jäger und löschten die Angreifer brutal aus, selbst wenn es sich nur um ein Versehen gehandelt hat.]
+   Picture = sya_zah.png
+   WreckageObject = 1301
+
+   Features += construct_specific_buildings construct_vehicles ExternalFuelTransfer ExternalMaterialTransfer
+   Armor = 500
+   Weight = 200
+   Jamming = 39
+
+   Tank { 
+      Energy = 0
+      Material = 65000
+      fuel = 65000
+   } Tank
+   FuelConsumption = 25
+   Movement = 0 0 0 45 110 100 100 110 
+   TerrainAccess ->* VehicleType.Sy_Multi_Service
+   Height = ground_level low_level_flight medium_level_flight high_level_flight orbit 
+
+   Construction { 
+      Buildings = 1301-1303 1311 1313-1318 1325 1324 1325 1335
+      Vehicles = 1347-1350
+      Objects = 3 30 996 1309 2153
+      ObjectsRemovable = 988 1300 1305 1306
+      ObjectGroupsRemovable = 
+   } Construction
+
+   Transportation { 
+      MaxLoadableUnits = 2
+      MaxLoadableUnitSize = 400
+      MaxLoadableMass = 400
+      CategoriesNOT = light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_aircraft medium_aircraft heavy_aircraft rail_vehicle heavy_ship medium_ship light_ship helicopter
+      EntranceSystemNum = 3
+      EntranceSystem0 ->* VehicleType.GrIO
+      EntranceSystem0.RequireUnitFunction = onlyTransMove
+      EntranceSystem1 ->* VehicleType.OrbIO
+      EntranceSystem1.RequireUnitFunction = onlyTransMove
+      EntranceSystem2 {
+        Mode = out
+        UnitHeightAbs = ground_level
+        UnitHeightRel = -100
+        ContainerHeight = low_level_flight
+        CategoriesNOT = 
+        DockingHeightAbs = low_level_flight
+        DockingHeightRel = -100 
+        RequireUnitFunction = onlyTransMove
+      } EntranceSystem2
+   } Transportation
+
+   WaitForAttack = true
+   Weapons { 
+      Initiative = 0
+      Number = 2
+      Weapon0 ->* VehicleType.ServiceTurret 
+      Weapon0.targets = floating ground_level orbit
+      Weapon0.shotFrom = floating ground_level orbit
+      Weapon0.WeaponEffectiveness.trooper = 100
+      Weapon1 ->* VehicleType.SY_Fighter_small 
+   } Weapons
+} VehicleType

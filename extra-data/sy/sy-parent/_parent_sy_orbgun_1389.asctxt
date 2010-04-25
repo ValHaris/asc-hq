@@ -1,0 +1,47 @@
+VehicleType { 
+   Name = PARENT ORBGUN
+   abstract = true
+   ID = 1389
+
+   Description = orbital gun
+
+   Features = self_repairing jam_only_own_field moveduringreactionfire
+   View = 50
+   Category = light_aircraft
+   MaxSurvivableStorm = 255
+   ResourceDrillingRange = 0
+   SelfRepairRate = 15
+   Weight = 200
+
+   ConstructionCost { 
+      CalculationMethod = auto
+      energy =
+      fuel =
+      Material =
+   } ConstructionCost
+
+   Height = orbit 
+   Jamming = 39
+   Tank { 
+      Energy = 0
+      Material = 2000
+      fuel = 4000
+   } Tank
+   FuelConsumption = 10
+   Movement = 0 0 0 0 0 0 0 20 
+   movementsound = sy_ground_s.ogg
+   TerrainAccess { 
+      terrain_any = 
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = 
+   } TerrainAccess
+
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+      ObjectsRemovable = 
+   } Construction
+
+} VehicleType

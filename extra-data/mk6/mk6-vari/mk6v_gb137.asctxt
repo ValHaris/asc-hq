@@ -1,7 +1,7 @@
 VehicleType { 
    Name = GB 137
    ID = 15256
-   parent = 256 15000 497
+   parent = 256 15000
    
    Description = jump gun
    Infotext = []
@@ -27,4 +27,19 @@ VehicleType {
    HeightChangeMethod0.movecost = 10
    MovementSound = jet_pass.ogg
 
+   HeightChangeMethodNum = 2
+   HeightChangeMethod0 {
+      movecost = 1
+      heightdelta = 1
+      dist = 0
+      startheight = ground_level
+      canattack = true
+   } HeightChangeMethod0
+   HeightChangeMethod1 {
+      movecost = 11
+      heightdelta = -1
+      dist = 0
+      startheight = low_level_flight
+      canattack = true
+   } HeightChangeMethod1
 } VehicleType

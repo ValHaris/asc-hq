@@ -1,0 +1,61 @@
+VehicleType { 
+   Name = YB
+   parent = 1393 1395 1398
+   ID = 1311
+   
+   Description = small terraformer
+   Picture = syd_yb.png
+   WreckageObject = 982
+   Infotext = [Diese Sonde hat nur einen Zweck. Vernichtung. Im Grunde ist es ein fliegender Sprengsatz, der bei Ankuft im Zielgebiet detoniert. Die besitzt nur die minimalsten Systeme , die zu diesem Zweck erforderlich sind. Die Panzerung hält praktisch nur einen Faustschlag aus. Der Treibstoff reicht nur für eine geringe Entfernung. Das Triebwerk ist nicht abgeschirmt und somit leicht aufspürbar. Sie besitz keine Scanner und kann nur in aufgeklärten Gebiet verwendet werden. Effektiv einsetzbar ist diese Einheit nur, wenn der Gegner über keine Defensiveinrichtungen in der Gegend besitzt. Ebenso muß bedacht werden, das diese Einheit nur 1x und ohne Wiederkehr eingesetzt werden kann. Neue Typen dieser Waffe sind mit einem kleinen Terraform-Sprengkopf ausgerüstet. Die Auswirkungen sind lokal begrenzt.]
+
+   ConstructionCost { 
+      CalculationMethod = manual
+      Energy = 20000
+      Material = 20000
+      fuel = 0
+   } ConstructionCost
+
+   Features = Kamikaze_only no_midair_refuel ManualSelfDestruct jam_only_own_field
+   Armor = 100
+   Weight = 10
+   Jamming = 29
+   View = 10
+   Category = default
+   SelfRepairRate = 0
+
+   Height = low_level_flight medium_level_flight high_level_flight 
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 25
+   } Tank
+   FuelConsumption = 1
+   Movement = 0 0 0 0 130 130 130 0 
+   TerrainAccess { 
+      terrain_any = road runway hard_sand lowland soft_sand hillside mountains high_mountains ditch installation turret_foundation very_shallow_water shallow_water water deep_water river
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = 
+   } TerrainAccess
+
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+      ObjectsRemovable = 
+   } Construction
+
+   WaitForAttack = false
+   Weapons { 
+      Number = 1
+      Weapon0 ->* VehicleType.SY_Fighter_BIG 
+      Weapon0.MaxRange = 10
+      Weapon0.Ammo = 1
+      Weapon0.LaserRechargeRate = 1
+      Weapon0.LaserRechargeCost.material = 0
+      Weapon0.LaserRechargeCost.fuel = 150
+      Weapon0.Punch@MaxRange = 100
+      Weapon0.Punch@MinRange = 100
+      Weapon0.HitAccuracy.d1 = 100
+   } Weapons
+} VehicleType

@@ -1,0 +1,58 @@
+BuildingType { 
+   Name = SSG
+   ConstructionStages = 1
+   Weather = dry
+   Fields = A1
+   UseGFXpics = false
+   Pictures {
+      dry = ISG_SSG.pcx
+   } Pictures
+   RubbleObjects = false
+   Entry = A1
+   notRemovable = true
+
+
+   ID = 12018
+   Armor = 2000
+   View = 100
+   Jamming = 200
+   transportation { 
+      MaxLoadableUnits = 0
+      MaxLoadableUnitSize = 0
+      MaxLoadableMass = 0
+      EntranceSystemNum = 0
+   } transportation
+   Functions = NoObjectChaining
+   Techlevel = 0
+   TerrainAccess { 
+      terrain_any = Road Runway  Hard_sand Soft_sand Lowland High_mountains Shallow_water Water Deep_water Mountains Very_shallow_water Lava Ditch Hillside Turret_foundation Installation River 
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = 
+   } TerrainAccess
+   MaxResearch = 0
+   ConstructionCost { 
+      Energy = 100000
+      Material = 100000
+      fuel = 0
+   } ConstructionCost
+   MaxResourceProduction { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } MaxResourceProduction
+   StorageCapacity { 
+      BImode { 
+         Energy = 0
+         Material = 0
+         fuel = 0
+      } BImode
+      ASCmode { 
+         Energy = 0
+         Material = 0
+         fuel = 0
+      } ASCmode
+   } StorageCapacity
+   Height = low_level_flight 
+   ExternalLoading = 
+} BuildingType

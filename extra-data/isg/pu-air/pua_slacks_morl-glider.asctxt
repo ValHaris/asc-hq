@@ -1,0 +1,96 @@
+VehicleType { 
+   Name = Morl Glider
+   ID = 12515
+   parent = 400 401 402
+   ; bei Änderungen der ID auch den Construction-Abschnitt des Morl-Boosters anpassen
+
+   Description = Glider
+   Infotext = Die neuste Entwicklung der legendären SlackWorks !
+   Picture = PUa_Slacks_morl-glider.pcx
+
+   Armor = 410
+   View = 30
+   Jamming = 120
+   WaitForAttack = false
+   Features = no_midair_refuel jam_only_own_field Kamikaze_only
+   Category = medium_aircraft
+
+   Height = ground_level low_level_flight medium_level_flight 
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 30
+   } Tank
+   FuelConsumption = 1
+   Movement = 0 0 0 15 230 230 0 0 
+   MaxSurvivableStorm = 0
+   ResourceDrillingRange = 0
+   SelfRepairRate = 0
+   Weight = 14
+   TerrainAccess { 
+      terrain_any = Lowland Road Runway hard_sand 
+      terrain_all = 
+      terrain_not = swamp small_rocks large_rocks forest
+      terrain_kill = very_shallow_water Shallow_water Water Deep_water lava River swamp
+   } TerrainAccess
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+   } Construction
+   Weapons { 
+      Initiative = 0
+      Number = 1
+      Weapon0 ->* VehicleType.Lowbomb 
+      Weapon0.Ammo = 2
+      Weapon0.Punch@MaxRange = 150
+      Weapon0.Punch@MinRange = 150
+   } Weapons
+
+   HeightChangeMethodNum = 2
+   HeightChangeMethod0 {
+      movecost = 10
+      heightdelta = -1
+      dist = 1
+      startheight = medium_level_flight 
+      canattack = true
+   } HeightChangeMethod0
+   HeightChangeMethod1 {
+      movecost = 20
+      heightdelta = -1
+      dist = 2
+      startheight = low_level_flight 
+      canattack = true
+   } HeightChangeMethod1
+
+   Transportation { 
+      EntranceSystemNum = 2
+      MaxLoadableUnits  = 8
+      MaxLoadableUnitSize = 39
+      MaxLoadableMass = 80
+      CargoMovementDivisor = 5
+      EntranceSystem0 {
+        Mode = out in docking
+        UnitHeightAbs =  ground_level 
+        UnitHeightRel = -100
+        ContainerHeight =  ground_level
+        RequireUnitFunction = 
+        CategoriesNOT = default medium_tracked_vehicle heavy_tracked_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle rail_vehicle medium_aircraft medium_ship building|turret|object light_aircraft heavy_aircraft light_ship heavy_ship helicopter hoovercraft    
+        DockingHeightAbs = ground_level 
+        DockingHeightRel = -100 
+        DisableAttack = true
+      } EntranceSystem0
+      EntranceSystem1 {
+        Mode = out
+        UnitHeightAbs =  ground_level
+        UnitHeightRel = -100
+        ContainerHeight =  low_level_flight
+        RequireUnitFunction = paratrooper
+        CategoriesNOT = default light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle rail_vehicle medium_aircraft medium_ship building|turret|object light_aircraft heavy_aircraft light_ship heavy_ship helicopter hoovercraft    
+        DockingHeightAbs = 
+        DockingHeightRel = -100 
+        DisableAttack = true
+      } EntranceSystem1
+   } Transportation
+
+} VehicleType

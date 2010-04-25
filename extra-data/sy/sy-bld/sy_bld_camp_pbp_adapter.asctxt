@@ -1,0 +1,5 @@
+Techadapter {
+   ; Camp
+   Name = B1318
+   TechnologiesRequired = 1399
+} TechAdapter

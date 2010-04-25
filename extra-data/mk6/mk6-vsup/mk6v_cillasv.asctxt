@@ -3,18 +3,15 @@ VehicleType {
    ID = 15103
    parent = 336
    
-   Description = construction vehicle
-   Infotext = [The Construction Vehicle is necessary for the construction of
-              infrastructure such as roads, ditches, bridges and the like.
-              A very important unit if you aspire a well defended, smoothly
-              operating base.]
+   Description = Baufahrzeug
+   Infotext = [Baufahrzeug auf Basis des Cilla-Chassis. Transportiert kleinere Turretsysteme und repariert, versorgt alle stationaeren Einheiten und Kleingeraete.]
    picture = mk6v_cillaSV.pcx
 ;   WreckageObject = 426
    GuideSortHelp = 556 0 0 0 6 0 0 0 0 0
 
    Transportation ->* VehicleType.TransTurretMed 
    Armor += 100
-   Features += construct_vehicles construct_specific_buildings NoProductionCustomization
+   Features += construct_vehicles construct_specific_buildings NoProductionCustomization ExternalRepair Repair_Facility  ExternalMaterialTransfer ExternalFuelTransfer ExternalAmmoTransfer
 
    Tank { 
       Material = 20000
@@ -23,16 +20,18 @@ VehicleType {
    TerrainAccess ->* VehicleType.offroad 
 
    Construction {
-      Buildings = 15008
+      Buildings = 6 39 15008
       Vehicles = 15222 15243 
-      Objects = 1 3 9 10 30 45 181 2153 1000 998 997 2098 44 15003
-      ObjectsRemovable = 
+;							   LaZa JuTur
+      Objects = 1 3 10 30 45 181 2153 1000 998 997 2098 44 2658 15003
+      ObjectsRemovable = 2658
       ObjectGroupsRemovable = 1 2 3 4 5 6 7 8 9 10 11 12 13 14 21
    } Construction
 
    Weapons { 
-      Initiative = 0
       Number = 1
-      Weapon0 ->* VehicleType.ServiceGround
+      Weapon0 ->* VehicleType.ServiceTurret
+      Weapon1 ->* VehicleType.AmmoLM
+      Weapon1.Ammo = 20
    } Weapons
 } VehicleType

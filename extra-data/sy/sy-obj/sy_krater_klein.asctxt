@@ -1,0 +1,12 @@
+ObjectType {
+   ID = 1303
+   GroupID = 14
+   parent = 1301
+   Weather = dry 
+   Name = lava krater klein
+   TerrainProperties_Filter =  
+   TerrainProperties_Add = large_rocks
+   dry { 
+      picture = sy_krater_klein.pcx 1
+   } dry
+} ObjectType

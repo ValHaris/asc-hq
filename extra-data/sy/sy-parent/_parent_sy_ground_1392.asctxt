@@ -1,0 +1,41 @@
+VehicleType { 
+   Name = Parent SY Ground
+   abstract = true
+   ID = 1392
+   parent = 1394
+
+   WreckageObject = 1307
+
+   ConstructionCost { 
+      CalculationMethod = auto
+      energy =
+      fuel =
+      Material =
+   } ConstructionCost
+   Height = ground_level
+   Jamming = 35
+   WaitForAttack = false
+   Tank { 
+      Energy = 0
+      Material = 1000
+      fuel = 1500
+   } Tank
+   FuelConsumption = 15
+   Features = self_repairing jam_only_own_field
+   Movement = 0 0 0 60 0 0 0 0 
+   movementsound = sy_ground_s.ogg
+   TerrainAccess ->* VehicleType.SY_Ground 
+   Category = hoovercraft
+   MaxSurvivableStorm = 255
+   ResourceDrillingRange = 0
+   SelfRepairRate = 15
+   Weight = 28
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+      ObjectsRemovable = 
+   } Construction
+   Weapons { 
+   } Weapons
+} VehicleType

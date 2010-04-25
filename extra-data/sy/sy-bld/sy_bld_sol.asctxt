@@ -1,0 +1,56 @@
+BuildingType { 
+   Name = SOL
+   ID = 1324
+   Armor = 500
+   View = 25
+   Jamming = 20
+   ConstructionStages = 1
+   Weather = dry 
+   Fields = A1 
+   UseGFXpics = false
+   Pictures { 
+      dry = sy_bld_sol.pcx
+   } Pictures
+   RubbleObjects = false
+   Rubble {
+   } Rubble
+   Entry = A1
+   Functions = matter_converter 
+   Techlevel = 0
+   TerrainAccess { 
+      terrain_any =  
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = 
+   } TerrainAccess
+   MaxResearch = 0
+   ConstructionCost { 
+      Energy = 0
+      Material = 15000
+      fuel = 15000
+   } ConstructionCost
+   MaxResourceProduction { 
+      Energy = 3000
+      Material = 0
+      fuel = 0
+   } MaxResourceProduction
+   defaultProduction {
+      energy = 3000
+      material = 
+      fuel = 
+   } defaultProduction
+   StorageCapacity { 
+      BImode { 
+         Energy = 10000
+         Material = 0
+         fuel = 0
+      } BImode
+      ASCmode { 
+         Energy = 3000
+         Material = 0
+         fuel = 0
+      } ASCmode
+   } StorageCapacity
+   Height = orbit
+   ExternalLoading = 
+} BuildingType

@@ -25,7 +25,7 @@ VehicleType {
    Transportation.CategoriesNOT = light_aircraft medium_aircraft heavy_aircraft medium_ship heavy_ship
    Transportation.MaxLoadableMass = 350
 
-   Movement = 0 0 0 10 0 0 0 0 
+   Movement = 0 0 0 14 0 0 0 0 
    Tank.Material = 500
    Tank.Fuel = 2500
    TerrainAccess ->* VehicleType.heli_terrain 
@@ -33,5 +33,6 @@ VehicleType {
    Weapons { 
       Number = 1
       Weapon0 ->* VehicleType.DLS 
+      Weapon0.MaxRange = 30
    } Weapons
 } VehicleType

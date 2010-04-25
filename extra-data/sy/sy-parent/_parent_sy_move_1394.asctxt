@@ -1,0 +1,139 @@
+VehicleType { 
+   Name = Parent SY Move
+   abstract = true
+   ID = 1394
+   Parent = 401
+
+   SY_Air { 
+      terrain_any =  
+      terrain_all = 
+      terrain_not =  
+      terrain_kill = Lava 
+   } SY_Air
+
+   SY_fighter_ground { 
+      terrain_any = Lowland Road Runway Hard_sand soft_sand frozen_water Spaceport
+      terrain_all = 
+      terrain_not = forest large_rocks small_rocks deep_snow installation bridge hillside
+      terrain_kill = Lava 
+   } SY_fighter_ground
+
+   SY_Multi_Service { 
+      terrain_any = Lowland Road Runway Hard_sand Soft_Sand frozen_Water very_shallow_water Spaceport
+      terrain_all = 
+      terrain_not = Swamp forest large_rocks bridge installation
+      terrain_kill = shallow_water water deep_water river Lava 
+   } SY_Multi_Service
+
+   SY_Multi { 
+      terrain_any = Road Runway Hard_sand frozen_Water 
+      terrain_all = 
+      terrain_not = Swamp forest large_rocks bridge 
+      terrain_kill = shallow_water water deep_water river Lava 
+   } SY_Multi
+
+   SY_Multi_Sea { 
+      terrain_any = very_shallow_water shallow_water water deep_water Road Runway Hard_sand River 
+      terrain_all = 
+      terrain_not = Swamp Frozen_water forest large_rocks 
+      terrain_kill = Lava 
+   } SY_Multi_Sea
+
+   SY_Multi_Ice { 
+      terrain_any = very_shallow_water shallow_water water deep_water Road Runway Hard_sand River 
+      terrain_all = 
+      terrain_not = Swamp forest large_rocks  
+      terrain_kill = Lava 
+   } SY_Multi_Ice
+
+   SY_Ground { 
+      terrain_any = Lowland Road Runway Hard_sand Soft_sand frozen_water
+      terrain_all = 
+      terrain_not = forest large_rocks hillside
+      terrain_kill = Water Deep_water lava River 
+   } SY_Ground
+
+; --- Transport ---
+
+   TransSyDestroyer {
+      MaxLoadableUnits = 1
+      MaxLoadableUnitSize = 50
+      MaxLoadableMass = 50
+      CategoriesNOT = trooper light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship building|turret|object hoovercraft default helicopter
+      EntranceSystemNum = 1
+      EntranceSystem0 {
+        Mode = in out docking
+        UnitHeightAbs = medium_level_flight high_level_flight orbit
+        UnitHeightRel = 0
+        ContainerHeight = medium_level_flight high_level_flight orbit
+        CategoriesNOT = 
+        DockingHeightAbs = medium_level_flight high_level_flight orbit
+        DockingHeightRel = 0 
+        Movecost = 20
+        RequireUnitFunction = cruiserlanding
+      } EntranceSystem0
+   } TransSyDestroyer
+
+   TransSyCruiser {
+      MaxLoadableUnits = 2
+      MaxLoadableUnitSize = 80
+      MaxLoadableMass = 100
+      CategoriesNOT = trooper light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle heavy_aircraft light_ship medium_ship heavy_ship building|turret|object hoovercraft default helicopter
+      CargoMovementDivisor = 1.8
+      EntranceSystemNum = 1
+      EntranceSystem0 {
+        Mode = in out docking
+        UnitHeightAbs = medium_level_flight high_level_flight orbit
+        UnitHeightRel = 0
+        ContainerHeight = medium_level_flight high_level_flight orbit
+        CategoriesNOT = 
+        DockingHeightAbs = medium_level_flight high_level_flight orbit
+        DockingHeightRel = 0 
+        Movecost = 20
+        RequireUnitFunction = cruiserlanding
+      } EntranceSystem0
+   } TransSyCruiser
+
+   TransSyBattleShip {
+      MaxLoadableUnits = 3
+      MaxLoadableUnitSize = 100
+      MaxLoadableMass = 200
+      CategoriesNOT = trooper light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle light_ship medium_ship heavy_ship building|turret|object hoovercraft default helicopter
+      CargoMovementDivisor = 1.8
+      EntranceSystemNum = 1
+      EntranceSystem0 {
+        Mode = in out docking
+        UnitHeightAbs = medium_level_flight high_level_flight orbit
+        UnitHeightRel = 0
+        ContainerHeight = medium_level_flight high_level_flight orbit
+        CategoriesNOT = 
+        DockingHeightAbs = medium_level_flight high_level_flight orbit
+        DockingHeightRel = 0 
+        Movecost = 20
+        RequireUnitFunction = cruiserlanding
+      } EntranceSystem0
+   } TransSyBattleShip
+   
+   TransSyCarrier {
+      MaxLoadableUnits = 18
+      MaxLoadableUnitSize = 150
+      MaxLoadableMass = 2000
+      CategoriesNOT = trooper light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle light_ship medium_ship heavy_ship building|turret|object hoovercraft helicopter
+      CargoMovementDivisor = 1.8
+      EntranceSystemNum = 1
+      EntranceSystem0 {
+        Mode = in out docking
+        UnitHeightAbs = medium_level_flight high_level_flight orbit
+        UnitHeightRel = 0
+        ContainerHeight = medium_level_flight high_level_flight orbit
+        CategoriesNOT = 
+        DockingHeightAbs = medium_level_flight high_level_flight orbit
+        DockingHeightRel = 0 
+        Movecost = 20
+        RequireUnitFunction = cruiserlanding
+      } EntranceSystem0
+   } TransSyCarrier
+
+
+
+} VehicleType

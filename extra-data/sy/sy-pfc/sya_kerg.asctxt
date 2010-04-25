@@ -1,0 +1,53 @@
+VehicleType { 
+   Name = KERG
+   parent = 1399 1391 1395
+   ID = 1306
+
+   Description = Flugzeugtraeger
+   Picture = sya_kerg.png
+   Infotext = [Der Kerg ist der Kern eines SY-Schwarms. Er ist ein Trägerschiff und kann bis zu 20 Jägerund andere kleiner Flugkörper aufnehmen.
+Der Schwarm besteht neben dem Kerg aus 4 Zerstörern (Drus/Druk) 2 Kreuzern (Laak) und einem Schlachtschiff (Xor).
+Der Kerg selbst besteht aus zwei abgeflachten Kugelnsegmenten die durch verschiedene Verstrebungen miteinander verbunden sind. Die verstrebungen sind aerodynamisch luftberuhigend kostruiert. Sie verringern die durch Umströmung entstehenden Verwirbelungen. Dadurch kann der Kerg auch in mittleren Luftschichten eine annehmbare Geschwindigkeit erreichen.
+Das vordere Segment enthält den Hangarbereich, das hintere den Triebwerksbereich und Leiteinrichtungen. Aufgrund der Größe und des Gewichts ist der Kerg nicht landefähig. Ebenso ist die Stealthfähigkeit der Hülle gegenüber Jägern verringert.
+
+Technische Daten:
+Abmessungen:
+-Länge: 700m
+-Breite: 250m
+-Höhe: 150m
+
+Antrieb: unbekannt (vermutlich Antigravitation)
+Waffensystem: Hochenergielaser
+]
+
+   Armor = 950
+   Weight = 3000
+   View = 60
+
+   Height = medium_level_flight high_level_flight orbit 
+   WaitForAttack = false
+   Transportation ->* VehicleType.TransSyCarrier 
+   Tank { 
+      Energy = 0
+      Material = 50000
+      fuel = 100000
+   } Tank
+   FuelConsumption = 25
+   Features += satelliteview moveduringreactionfire
+   Movement = 0 0 0 0 0 110 120 110 
+   Weapons { 
+      Number = 2
+      Weapon0 ->* VehicleType.SY_Fighter_Gun 
+      Weapon0.Punch@MaxRange = 75
+      Weapon0.Punch@MinRange = 100
+      Weapon0.LaserRechargeCost.fuel = 100
+      Weapon0.ReactionFireShots = 2
+
+      Weapon1 ->* VehicleType.SY_Fighter_big 
+      Weapon1.Punch@MaxRange = 60
+      Weapon1.Punch@MinRange = 75
+      Weapon1.LaserRechargeCost.fuel = 75
+      Weapon1.ReactionFireShots = 2
+
+   } Weapons
+} VehicleType

@@ -1,0 +1,34 @@
+VehicleType { 
+   Name = MYX
+   ID = 1337
+   parent = 1395 203
+
+   Description = Saeurewerfer
+   Infotext = [Dieser übergroße Käfer stammt definitiv aus einem genmanipuliertem Züchtungsprogramm der SY. Kein Tier benötgt derartige Menge an natürlichen Verteidigungssekreten. Das Sekret ist eine säureartige Substanz, die bei Kontakt alle bekannten Strukturen und organische Verbindungen innerhalb von Sekunden zersetzt. Die Syx können kleine Mengen davon weit durch die Luft schleudern und besitzen dabei eine erstaunliche Genauigkeit. Der Anblick dieser Tiere ist für Humanuide erschreckend, denn sie sind alles andere als harmlos. Rehaner erinnern sich nur mit unbehagen an eine globale Insektenplage ihres Planeten. Der Hahbor-Fresser, ein handtellergroßer aber in Aussehen sehr ähnlicher Käfer, richtete in der Geschichte der Rehaner mehrer schwere Ernte ausfälle an und hinterließ eklige stinkende Landschaften. Eine genaue Untersuchung des Syx war bisher nicht möglich. Zum eine kämpfen die Tiere bis zum Tod und der Eigenschutzt gegen die Säure verliert im Tod seine Wirkung. Alle erlegten Exemplare lösten sich sofort auf und versprühten überschüssige Säure. Beteiligte Soldaten erlitten schwerste Verletzungen. Über die Nahkampffähigkeiten gibt es deshalb nur wenige Aufzeichnungen.
+Größe:
+ca. 3,5m lang, 2m breit, 1,75 hoch
+]
+   Picture = syi_myx.pcx
+
+   Features -= conquer_buildings
+   Jamming += 10
+   Weight = 4
+   Tank { 
+      Energy = 0
+      Material = 400
+      fuel = 1000
+   } Tank
+   Movement += 0 0 0 2 0 0 0 0 
+   SelfRepairRate = 10
+   MovementSound = trampling.ogg
+
+   Weapons { 
+      Number = 1
+      Weapon0 ->* VehicleType.SY_Trooper 
+      Weapon0.MinRange = 10
+      Weapon0.MaxRange = 30
+      Weapon0.Punch@MinRange += 20
+      Weapon0.WeaponEffectiveness.trooper = 80
+      Weapon0.Name = Saeurewerfer
+   } Weapons
+} VehicleType

@@ -1,0 +1,25 @@
+VehicleType { 
+   Name = ISG INVASOR Radar
+   ID = 12011
+   parent = 400 401 402 407
+
+   Description = Radar Satellite
+   Infotext = [] 
+   Picture = isg_sat.png
+
+   Armor  = 2000
+   View = 159
+   TerrainAccess ->* Vehicletype.sat_terrain 
+
+   Movement = 0 0 0 0 0 0 0 0
+   ConstructionCost { 
+      CalculationMethod = add
+      Energy = 4000
+      Material = 4000
+      fuel = 0
+   } ConstructionCost
+
+   Weapons {
+     Number = 0
+   } Weapons
+} VehicleType

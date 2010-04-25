@@ -3,8 +3,9 @@ VehicleType {
    ID = 15213
    parent = 213 15000
 
-   Picture = mk6m_baltic.pcx
+   Picture = mk6m_baltic.png
    InfoImage = mk6m_baltic.jpg
+   InfoImageSmall = mk6m_baltic_k.png
    GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
 
    Armor += 10

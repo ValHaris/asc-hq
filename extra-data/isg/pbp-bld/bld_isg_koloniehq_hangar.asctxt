@@ -1,0 +1,26 @@
+BuildingType { 
+   Name = Kolonie HQ Hangar
+   parent = 12022
+   ID = 12024
+
+   Features = Selfdestruct_at_conquer Repair_Facility Recycling
+   ConstructionStages = 1
+   Weather = dry 
+   Fields = B5
+   UseGFXpics = false
+   Pictures { 
+      dry = bld_isg_kolonieHQ.png
+   } Pictures
+   RubbleObjects = false
+   Entry = B5
+
+   TerrainAccess { 
+      terrain_any = Runway  
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = 
+   } TerrainAccess
+
+
+   ExternalLoading = 
+} BuildingType

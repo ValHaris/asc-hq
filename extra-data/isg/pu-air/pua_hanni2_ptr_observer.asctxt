@@ -1,0 +1,107 @@
+VehicleType {
+	Name 						= Petronas
+	ID 						= 12542
+	parent						= 400 401 496 415
+
+	Description					= Flagschiff
+	Infotext					= [Dieser, auf Entwürfen der Korgonen basierende, riesige Raumkreuzer ist das Flagschiff des Hohepriesters der Pan Thau Ra. ]
+	WreckageObject					= 13204
+	picture						= pua_hanni2_ptr_observer.png
+
+	Features					= move_after_attack self_repairing MoveDuringReactionFire Repair_Facility
+	Armor						= 1000
+	View						= 0
+	Weight						= 2000
+	SelfRepairRate					= 10
+	MaxSurvivableStorm				= 160
+	
+	JumpDrive {
+		Height					= medium_level_flight
+		MaxDistance				= 400
+		consumption {
+			Energie				= 0
+			Material			= 1500
+			Fuel				= 5000
+		} consumption
+		terrain_any				= Spaceport beacon
+		terrain_all				= 
+		terrain_not				= forest small_rocks large_rocks bridge
+		terrain_kill				= 
+	} JumpDrive
+
+	Transportation ->* VehicleType.TransHvyCarrier
+	Transportation.MaxLoadableUnits = 15
+	Transportation.MaxLoadableMass = 1500
+	Transportation.MaxLoadableUnitSize = 505
+	Transportation.EntranceSystem0 ->* VehicleType.OrbIO
+	Transportation.EntranceSystem1 ->* VehicleType.Carrier_Air_high 
+        Transportation.EntranceSystem1.CategoriesNOT = light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle heavy_aircraft medium_ship heavy_ship building|turret|object hoovercraft default
+
+
+	Height						= ground_level low_level_flight medium_level_flight high_level_flight orbit
+	FuelConsumption					= 50
+	Tank { 
+		Material				= 30000
+		fuel					= 70000
+	} Tank	
+	Movement					= 0 0 0 65 65 65 70 160
+
+	HeightChangeMethodNum = 5
+	HeightChangeMethod0.dist = 4
+	HeightChangeMethod4.canattack = false
+
+	WaitForAttack					= true
+	Weapons {
+		Number 					= 8
+
+		Weapon0					->* VehicleType.ML
+		Weapon0.shotFrom			= orbit
+		Weapon0.targets				= low_level_flight medium_level_flight high_level_flight orbit
+		Weapon0.LaserRechargeRate		= 1
+		Weapon0.Punch@MaxRange			= 80 
+		Weapon0.Punch@MinRange			= 85
+		Weapon0.Ammo 				= 3
+		Weapon0.ReactionFireShots 		= 2
+		Weapon0.MinRange			= 10
+		Weapon0.MaxRange			= 30
+
+		Weapon1 ->* VehicleType.ML
+		Weapon1.shotFrom			= medium_level_flight high_level_flight orbit
+		Weapon1.LaserRechargeRate		= 1
+		Weapon1.LaserRechargeCost.material	= 150
+		Weapon1.LaserRechargeCost.fuel		= 200
+		Weapon1.Punch@MaxRange			= 70
+		Weapon1.Punch@MinRange			= 85
+		Weapon1.Ammo 				= 5
+		Weapon1.ReactionFireShots 		= 2
+		Weapon1.MinRange			= 20
+		Weapon1.MaxRange			= 50
+		Weapon1.HitAccuracy.u2		= 0
+		Weapon1.HitAccuracy.d2		= 80
+
+		Weapon2 ->* VehicleType.ML
+		Weapon2.targets				= floating ground_level low_level_flight medium_level_flight
+		Weapon2.shotFrom			= low_level_flight
+		Weapon2.LaserRechargeRate		= 1
+		Weapon2.LaserRechargeCost.material	= 100
+		Weapon2.LaserRechargeCost.fuel		= 150
+		Weapon2.Punch@MaxRange			= 80
+		Weapon2.Punch@MinRange			= 85
+		Weapon2.Ammo 				= 5
+		Weapon2.ReactionFireShots 		= 2
+		Weapon2.MinRange			= 10
+		Weapon2.MaxRange			= 50	
+
+		Weapon3	->* VehicleType.AmmoMG
+		Weapon3.Ammo				= 100	
+		Weapon4	->* VehicleType.AmmoBomb
+		Weapon4.Ammo				= 50	
+		Weapon5	->* VehicleType.AmmoTorp
+		Weapon6.Ammo				= 50
+		Weapon6	->* VehicleType.AmmoSM
+		Weapon7.Ammo				= 50
+		Weapon7	->* VehicleType.AmmoLM
+		Weapon7.Ammo				= 100
+	} Weapons
+
+} VehicleType

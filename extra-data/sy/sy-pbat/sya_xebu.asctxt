@@ -1,0 +1,96 @@
+VehicleType { 
+   Name = XEBU
+   parent = 1393 1394 1395 1398
+   ID = 1325
+
+   Description = U-Boot-Jaeger
+   Picture = sya_xebu.png
+   Infotext = [Der Xebu ist eine der wenige neueren Konstruktionen die nur wegen der Konfrontation mit den Humanuiden entwickelt wurde. Vor dieser Zeit wäre es den SY nie in den Sinn gekommen ihre Technik schwimm oder tauchfähig zu gestallten. Der Xebu Jäger besitzt zwar Ähnlichkeiten mit mit dem Xentor Modell, ist aber ein komplette Neukonstruktion. Der Xebu besitz die für Flugkörper notwendige stromlinienförmige Konstruktion. Diese bietet auch eine effiziente Geschwindligkeit unter Wasser, ist aber nicht bodenlande- und orbitalfähig. Der Rumpf ist als Druckkörper konstruiert und kann deshalb nicht ausserhalb der Lufthülle existieren. Das Waffensystem wurde komplett neu entwickelt und funktioniert nur im Wasser. Einfach getauchte U-Boote kann der Xebu auch im Tiefflug bekämpfen, allerdings ist die Waffenwirkung beschränkt. Für den Schutz gegen Abfangjäger besitzt er einen einfachen Laser, der auch beim Hytak Verwendung findet. Sein volles Potential eröffnet sich unter Wasser. Der Xebu ist das schnelles derzeit bekannte Unterwasserfahrzeug. Praktisch fliegt er durch das Wasser. Das hohe Offensivpotential sollte aber nicht über einge Schwächen hinwegtäuschen. Er ist immernoch ein Flugzeug und somit anfällig gegen direkten Beschuss. Torpedos und Wasserbomben machen ihm sehr zu schaffen. Ein weiteres Problem stellt die fehlende Versorgung unter Wasser dar. Einmal gestrandet, ist keine andere SY Einheit in der Lage den Xebu aus den Tiefen des Ozeans zu retten. Die ersten Versuche mit Xebu wurden durch erbeutete U-Boote und humanuiden Gefangenen begleitet.
+]
+   
+   Transportation ->* VehicleType.TransSubTrooper 
+   Transportation.MaxLoadableUnits = 1
+   Transportation.MaxLoadableUnitSize = 2
+   Transportation.MaxLoadableMass = 2
+
+   Armor = 400
+   Category = medium_aircraft
+   Features += sonar
+
+   Height = deep_submerged submerged low_level_flight medium_level_flight high_level_flight 
+   Movement = 110 110 20 20 170 170 170 0 
+   Weight = 45
+   TerrainAccess ->* VehicleType.SY_Multi_Ice
+
+   Weapons { 
+      Initiative = 0
+      Number = 3
+      Weapon0 ->* VehicleType.SY_Bomber_Big 
+      Weapon0.targets = deep_submerged submerged floating 
+      Weapon0.shotfrom = deep_submerged submerged
+      Weapon0.Punch@MaxRange = 115
+      Weapon0.Punch@MinRange = 125
+      Weapon0.LaserRechargeCost.fuel = 125
+      Weapon0.HitAccuracy.d1 = 90
+      Weapon0.HitAccuracy.0 = 100
+      Weapon0.HitAccuracy.u1 = 100
+
+      Weapon1 ->* VehicleType.SY_Bomber_Big 
+      Weapon1.targets = submerged floating 
+      Weapon1.Punch@MaxRange = 105
+      Weapon1.Punch@MinRange = 115
+      Weapon1.LaserRechargeCost.fuel = 115
+
+      Weapon2 ->* VehicleType.SY_fighter_Small 
+      Weapon2.targets = floating ground_level low_level_flight medium_level_flight high_level_flight
+      Weapon2.shotfrom = low_level_flight medium_level_flight high_level_flight
+      Weapon2.Punch@MaxRange = 70
+      Weapon2.Punch@MinRange = 70
+      Weapon2.LaserRechargeCost.fuel = 70
+
+   } Weapons
+
+   HeightChangeMethodNum = 6
+   HeightChangeMethod0 {
+      movecost = 10
+      heightdelta = 1
+      dist = 0
+      startheight = deep_submerged
+      canattack = true
+   } HeightChangeMethod0
+   HeightChangeMethod1 {
+      movecost = 30
+      heightdelta = 3
+      dist = 1
+      startheight = submerged
+      canattack = true
+   } HeightChangeMethod1
+   HeightChangeMethod2 {
+      movecost = 15
+      heightdelta = 1
+      dist = 1
+      startheight = low_level_flight medium_level_flight
+      canattack = true
+   } HeightChangeMethod2
+   HeightChangeMethod3 {
+      movecost = 10
+      heightdelta = -1
+      dist = 0
+      startheight = submerged
+      canattack = true
+   } HeightChangeMethod3
+   HeightChangeMethod4 {
+      movecost = 25
+      heightdelta = -3
+      dist = 1
+      startheight = low_level_flight
+      canattack = true
+   } HeightChangeMethod4
+   HeightChangeMethod5 {
+      movecost = 10
+      heightdelta = -1
+      dist = 1
+      startheight = medium_level_flight high_level_flight
+      canattack = true
+   } HeightChangeMethod5
+} VehicleType

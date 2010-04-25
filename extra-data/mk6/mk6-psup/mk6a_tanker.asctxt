@@ -22,7 +22,7 @@ VehicleType {
    MovementSound = jet_pass.ogg
 
    Weapons { 
-      Number = 5
+      Number = 4
       Weapon0 ->* VehicleType.ServiceAir
       Weapon1 ->* VehicleType.AmmoTorp
       Weapon1.Ammo = 50
@@ -30,8 +30,6 @@ VehicleType {
       Weapon2.Ammo = 50
       Weapon3 ->* VehicleType.AmmoSM
       Weapon3.Ammo = 50
-      Weapon4 ->* VehicleType.AmmoCannon
-      Weapon4.Ammo = 100
    } Weapons
    
 } VehicleType

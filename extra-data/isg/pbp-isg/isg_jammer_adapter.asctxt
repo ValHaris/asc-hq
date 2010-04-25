@@ -1,0 +1,5 @@
+Techadapter {
+   ; ISG Defender
+   Name = 12010
+   TechnologiesRequired = 100006
+} TechAdapter

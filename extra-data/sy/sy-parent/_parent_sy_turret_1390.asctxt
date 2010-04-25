@@ -1,0 +1,41 @@
+VehicleType { 
+   abstract = true
+   Name = SY Turret
+   parent = 1395 1392 1399
+   ID = 1390
+
+   Description = Turret
+   Infotext = []
+   WreckageObject = 1308
+
+   Category = building|turret|object
+   Features += no_midair_refuel moveduringreactionfire
+   Armor = 600
+   Weight = 100
+   View = 50
+   Jamming = 29
+   Tank { 
+      Energy = 0
+      Material = 1500
+      fuel = 2500
+   } Tank
+
+   Height = ground_level low_level_flight 
+   FuelConsumption = 40
+   Movement = 0 0 0 10 70 0 0 0 
+   TerrainAccess { 
+      terrain_any = road runway Lowland Hard_sand Soft_sand Turret_foundation ditch 
+      terrain_all = 
+      terrain_not = swamp forest large_rocks installation
+      terrain_kill = shallow_water Water Deep_water River lava 
+   } TerrainAccess
+   HeightChangeMethod0 {
+      movecost = 1
+      heightdelta = 1
+      dist = 0
+      startheight = ground_level
+      canattack = true
+   } HeightChangeMethod0
+
+   WaitForAttack = true
+} VehicleType

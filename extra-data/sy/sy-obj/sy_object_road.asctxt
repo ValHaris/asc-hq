@@ -1,0 +1,48 @@
+ObjectType {
+   Name = SY-GROUND
+   ID = 1305
+   groupid = 1
+   Weather = dry
+   canExistBeneathBuildings = true
+   visible_in_fogOfWar = true
+   LinkableObjects = 1306
+   Armor = 600
+   ;                def lTr mTr hvT lWh mWh hWh tro rlv mAC mSh BTO lAC hAC lSh hSh Hli hov
+   Movemalus_plus = 
+   Movemalus_abs =  20  20  20  20  25  25  25  15  10  25  25  20  25  25  25  25  25  10
+   AttackBonus_abs = -1
+   AttackBonus_plus = 0
+   DefenseBonus_abs = -1
+   DefenseBonus_plus = 0
+   Jamming_abs = -1
+   Jammming_plus = 1
+   Height = 117
+   ConstructionCost { 
+      Energy = 0
+      Material = 100
+      fuel = 40
+      Movement = 11
+   } ConstructionCost
+   RemovalCost { 
+      Energy = 0
+      Material = -80
+      fuel = 30
+      Movement = 30
+   } RemovalCost
+   NetBehaviour = NetToSelf 
+   growthRate = 0
+   TerrainAccess { 
+      terrain_any = lowland hard_sand soft_sand hillside installation swamp very_shallow_water shallow_water
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = lava water river deep_water mountains high_mountains
+   } TerrainAccess
+   TerrainProperties_Filter = railroad lowland hard_sand soft_sand hillside mountains high_mountains forest ditch installation mud morass swamp snow deep_snow large_rocks very_shallow_water shallow_water frozen_water pack_ice
+   TerrainProperties_Add = Road
+   dry { 
+      UseGFXpics = false
+      picture = sy_object_road.pcx 64
+      ImageReference = -1
+      Flippictures = 0
+   } dry
+} ObjectType

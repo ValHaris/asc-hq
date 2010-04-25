@@ -1,0 +1,10 @@
+itemfilter {
+   Vehicles = 12000-12999
+   Buildings = 8 9 12000-12999
+   Objects = 12000-12999
+   Terrain = 12000-12999
+   Technologies = 12000-12999
+   name = PBP ISG-PUs
+   activated = true
+} itemfilter
+   

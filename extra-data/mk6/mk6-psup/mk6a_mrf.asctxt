@@ -11,11 +11,11 @@ VehicleType {
    Features = ExternalRepair self_repairing 
    SelfRepairRate = 20
 
-   Tank.Fuel = 10000
-   Tank.Material = 10000
+   Tank.Fuel = 30000
+   Tank.Material = 20000
    TerrainAccess ->* VehicleType.hoover_terrain
    MovementSound = jet_pass.ogg
-   Movement -= 0 0 0 20 20 20 0 0 
+   Movement -= 0 0 0 20 40 40 0 0 
       
    Weapons { 
       Number = 1        

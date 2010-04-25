@@ -1,0 +1,8 @@
+ObjectType { 
+   ID = 12507
+   parent = 499
+   Name = Conzept X Wreckage
+   dry { 
+      picture = puv_hanni_w.png 1
+   } dry
+} ObjectType

@@ -1,0 +1,69 @@
+VehicleType { 
+   Name = ONION-X
+   ID = 12571
+   parent = 340 15000
+
+   Description = Verteidigungsschweber
+   Picture = pu_setupman_onion.png
+;   InfoImage = pu_setupman_onion.jpg
+;   InfoImageSmall = mk6a_defkind_k.png
+;   GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
+   Infotext = []
+   
+   Features = MoveDuringReactionFire
+   Category = Hoovercraft
+   Weight = 150
+   Armor = 800
+   View = 70
+
+   Tank.Material = 2000
+   Tank.Fuel = 12000
+   movement = 0 0 0 30 40 40 40 0
+   FuelConsumption = 50
+   Terrainaccess ->* VehicleType.heli_terrain
+   Height = ground_level low_level_flight medium_level_flight high_level_flight
+   Movementsound = sy_ground_s.ogg
+
+   WaitForAttack = true
+   Weapons { 
+      Number = 6
+      Weapon0 ->* VehicleType.TeccEMPAir
+      Weapon0.LaserRechargeCost.material = 100
+      Weapon0.LaserRechargeCost.fuel = 300
+      Weapon0.targets = submerged floating ground_level low_level_flight medium_level_flight high_level_flight orbit
+      Weapon0.HitAccuracy.d2 = 90
+      Weapon0.HitAccuracy.d1 = 95
+      Weapon0.HitAccuracy.u1 = 95
+      Weapon0.HitAccuracy.u2 = 90
+      Weapon0.MaxRange = 60
+      Weapon0.MinRange = 20
+      Weapon0.Punch@MaxRange = 85
+      Weapon0.Punch@MinRange = 100
+      Weapon0.ReactionFireShots = 1
+      Weapon0.WeaponEffectiveness.light_aircraft = 85
+      Weapon0.WeaponEffectiveness.medium_aircraft  = 85
+      Weapon0.WeaponEffectiveness.heavy_aircraft = 85
+
+      Weapon1 ->* VehicleType.Weapons.Weapon0
+      Weapon1.MaxRange = 50
+      Weapon1.Punch@MaxRange = 90
+
+      Weapon2 ->* VehicleType.Weapons.Weapon0
+      Weapon2.MaxRange = 40
+      Weapon2.Punch@MaxRange = 95
+
+      Weapon3 ->* VehicleType.Weapons.Weapon0
+      Weapon3.MaxRange = 30
+      Weapon3.Punch@MaxRange = 100
+
+      Weapon4 ->* VehicleType.Weapons.Weapon0
+      Weapon4.MaxRange = 20
+      Weapon4.MaxRange = 10
+      Weapon4.Punch@MaxRange = 100
+      Weapon4.Punch@MinRange = 110
+
+      Weapon5 ->* VehicleType.TDW
+      Weapon5.MaxRange = 40
+   } Weapons
+   
+} VehicleType

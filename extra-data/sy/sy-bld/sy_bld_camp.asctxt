@@ -1,0 +1,39 @@
+BuildingType { 
+   Name = Camp
+   ID = 1318
+   parent = 35
+
+   Infotext = []
+
+   Weather = dry
+   Fields = C2 D1 D2 D3 
+   Entry = D3
+   UseGFXpics = false
+   Pictures { 
+      dry = sy_bld_camp.pcx
+   } Pictures
+   RubbleObjects = false
+
+   ConstructionCost { 
+      Energy = 0
+      Material = 15000
+      fuel = 15000
+   } ConstructionCost
+
+   Features = AutoHarvestObjects 
+   
+   AutoHarvestObjects {
+      Objects = 
+      ObjectGroups = 10 11 21
+      Range = 10
+      MaxFieldsPerTurn = 10
+   } AutoHarvestObjects
+
+   StorageCapacity { 
+      ASCmode { 
+         Energy = 0
+         Material = 7000
+         fuel = 1000
+      } ASCmode
+   } StorageCapacity
+} BuildingType

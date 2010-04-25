@@ -1,0 +1,10 @@
+technology {
+   Name = Hyter
+   infotext = 
+   id = 1322
+   RelatedUnitID = 1322
+   parent = 1399
+   researchpoints *= 9
+   techlevel = 2
+   TechnologiesRequired = 1399,100003,100102,100305,100206,1305 
+} Technology

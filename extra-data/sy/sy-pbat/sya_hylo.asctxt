@@ -1,0 +1,27 @@
+VehicleType { 
+   Name = HYLO
+   parent = 1393 1394 1395 1398
+   ID = 1323
+
+   Description = light bomber
+   Picture = sya_hylo.png
+   Infotext = [Wie der Hytak gehört auch der Hylo zur Kleinjägerklasse. Seine Hauptaufgabe ist die Bekämpfung gegnerischer Bodentruppen. Dazu verfügt er über einen Plasmawerfer für den Nahbereich. Er sollte deshalb nicht gegen Einheiten mit Luftverteidigung eingesetzt werden. Die Panzerung der Kleinjäger ist gering und der Schaden am eigenen Rumpf wäre erheblich. Durch seine Schnelligkeit kann er aber effektiv für überraschende Angriffe auf ungeschützte Einheiten oder Stellungen eingesetzt werden. Ebenso ist die Zerstörung gegnerischer Infrastruktur eine lohnenswerte Aufgabe. Die Kleinjäger können auf allen Schiffs- und Trägertypen der SY stationiert werden.
+]
+
+   Armor = 300
+   Movement = 0 0 0 60 200 200 200 20 
+   MaxSurvivableStorm = 180
+   Weight = 50
+
+   Weapons { 
+      Initiative = 0
+      Number = 2
+      Weapon0 ->* VehicleType.SY_Bomber_Small 
+      Weapon0.Punch@MaxRange = 115
+      Weapon0.Punch@MinRange = 115
+
+      Weapon1 ->* VehicleType.SY_fighter_Small 
+      Weapon1.Punch@MaxRange = 50
+      Weapon1.Punch@MinRange = 50
+   } Weapons
+} VehicleType

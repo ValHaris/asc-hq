@@ -1,0 +1,80 @@
+BuildingType { 
+   Name = LUSSX BASE
+   ID = 1308
+   Armor = 2000
+   View = 142
+   Jamming = 40
+   ConstructionStages = 1
+   Weather = dry 
+   Fields = A2 B1 B2 B5  
+   UseGFXpics = false
+   Pictures { 
+      dry = sy_BLD_lussx.pcx
+   } Pictures
+   RubbleObjects = false
+   Entry = B5
+   Transportation { 
+      MaxLoadableUnits = 10
+      MaxLoadableUnitSize = 3000
+      MaxLoadableMass = 100000
+      CategoriesNOT = default
+      EntranceSystemNum = 2
+      EntranceSystem0 {
+        Mode = In out docking
+        UnitHeightAbs = orbit 
+        UnitHeightRel = -100
+        ContainerHeight = orbit
+        CategoriesNOT = 
+        DockingHeightAbs = orbit 
+        DockingHeightRel = -100 
+      } EntranceSystem0
+      EntranceSystem1 {
+        Mode = In out
+        UnitHeightAbs = high_level_flight 
+        UnitHeightRel = -100
+        ContainerHeight = orbit
+        CategoriesNOT = 
+        DockingHeightAbs =  
+        DockingHeightRel = -100 
+      } EntranceSystem1
+   } Transportation
+   Functions = Research Vehicle_Production Ammo_Production Recycling External_Loading Produce_Units_that_cannot_leave NoObjectChaining satelliteview
+   Techlevel = 0
+   TerrainAccess { 
+      terrain_any = Shallow_water Lowland High_mountains Road Runway Water Deep_water Hard_sand Soft_sand Mountains Very_shallow_water Lava Ditch Hillside Turret_foundation Installation River 
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = 
+   } TerrainAccess
+   MaxResearch = 100
+   NominalResearch = 50
+   ConstructionCost { 
+      Energy = 0
+      Material = 15000
+      fuel = 15000
+   } ConstructionCost
+   MaxResourceProduction { 
+      Energy = -350
+      Material = -350
+      fuel = -350
+   } MaxResourceProduction
+   defaultProduction {
+      energy = -350
+      material = -350
+      fuel = -350
+   } defaultProduction
+   StorageCapacity { 
+      BImode { 
+         Energy = 100000
+         Material = 100000
+         fuel = 100000
+      } BImode
+      ASCmode { 
+         Energy = 5000
+         Material = 30000
+         fuel = 30000
+      } ASCmode
+   } StorageCapacity
+   Height = orbit 
+   ExternalLoading = orbit 
+} BuildingType

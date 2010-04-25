@@ -6,7 +6,8 @@ VehicleType {
    Description = Leichter Kampfroboter
    Infotext = []
    Picture = mk6m_intruder.pcx
-   Infoimage = mk6m_intruder.jpg
+   InfoImage = mk6m_intruder.jpg
+   InfoImageSmall = mk6m_intruder_k.png
    GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
 
    Armor += 100

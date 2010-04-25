@@ -1,0 +1,57 @@
+VehicleType { 
+   Name = OKEANOS
+   parent = 355
+   ID = 12566
+   
+   Description = Spezial-Kreuzer
+   picture = pus_omega_okeanos.png
+   wreckageobject = 14023
+;   GuideSortHelp += 517 0 0 0 4 600 0 0 0 0
+   Infotext = [Spezialeinheit der Chi.]
+
+   Transportation ->* VehicleType.noTrans
+
+   Features += sonar self_repairing
+   Armor += 200
+   View = 70
+   Weight += 1000  
+   SelfRepairRate = 10
+
+   Movement += 0 0 10 0 0 0 0 0
+   FuelConsumption = 50
+   Tank.Fuel += 2000
+
+   Weapons { 
+      Number = 6
+      Weapon0 ->* VehicleType.Ship_Artillery 
+      Weapon0.MaxRange = 50
+      Weapon0.Ammo = 14
+      Weapon0.Punch@MaxRange = 100
+      Weapon0.Punch@MinRange = 130
+      Weapon0.ReactionFireShots = 2
+
+      Weapon1 ->* VehicleType.BigMiniGun 
+      Weapon1.Ammo = 20
+      Weapon1.MaxRange = 30
+
+      Weapon2 ->* VehicleType.SSM
+      Weapon2.MaxRange = 60
+      Weapon2.Ammo = 6
+      Weapon2.Punch@MaxRange = 105
+      Weapon2.Punch@MinRange = 105
+      Weapon2.ReactionFireShots = 1
+      
+      Weapon3 ->* VehicleType.SAMH
+      Weapon3.MaxRange = 60
+      Weapon3.Ammo = 10
+      
+      Weapon4 ->* VehicleType.SOM
+      Weapon4.MaxRange = 50
+      Weapon4.Ammo = 20
+
+      Weapon5 ->* VehicleType.DCS 
+      Weapon5.Ammo = 10
+      Weapon5.MaxRange = 20
+      Weapon5.ReactionFireShots = 2
+   } Weapons
+} VehicleType

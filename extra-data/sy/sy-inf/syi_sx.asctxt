@@ -1,0 +1,36 @@
+VehicleType { 
+   Name = SX
+   ID = 1329
+   parent = 1395 400 410
+
+   Description = Haustier
+   Picture = syi_sx.png
+   InfoImage = syi_sx.jpg
+   InfoImageSmall = syi_sx_k.png
+   Infotext = [Das Sx ist ein abgerichtetes Tier. Es sieht wie eine übergroße kompakte Spinne aus. Ob diese sich auf natürliche Wiese entwickelt oder durch Genmanipulation gezüchtet wurden ist nicht feststellbar. Auf jedem Fall haben sie sich aus gemeinsamen Vorfahren  der SY entwickelt. Der Rückenpanzer ist dick und fest. Die 3 Beinpaare ermöglichen große Geschwindigkeiten auch in unwegsamen Gelände. Besonders stark ausgeprägt, sind die scharfkantigen Kieferzangen. Diese Zerkleinerungswerkzeuge sind sogar in der Lage Bleche und kleinere metallische Verstrebungen zu durchtrennen. Projektil und andere Waffen können das Tier zwar verletzen, doch im direkten Nahkampf haben humanuide Soldaten keine Chance. Schon alleine die Sichtung dieser Tier löst bei einigen terranischen Soldaten Panikattacken aus.
+Größe:
+ca. 150m lang, 120cm breit, 75cm hoch
+]
+
+   Features = move_after_attack self_repairing jam_only_own_field
+   Armor = 200
+   Weight = 1
+   View = 29
+   Jamming = 20
+   Tank { 
+      Energy = 0
+      Material = 500
+      fuel = 800
+   } Tank
+   Movement = 0 0 0 60 0 0 0 0 
+   SelfRepairRate = 10
+   MovementSound = trampling.ogg
+
+   Weapons { 
+      Number = 1
+      Weapon0 ->* VehicleType.SY_Animal 
+      Weapon0.Punch@MaxRange = 130
+      Weapon0.Punch@MinRange = 130
+      Weapon0.name = scharfe Gebisszange
+   } Weapons
+} VehicleType

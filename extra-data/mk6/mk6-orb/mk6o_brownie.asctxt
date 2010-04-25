@@ -1,0 +1,74 @@
+VehicleType { 
+   Name = BROWNIE
+   ID = 15235
+   parent = 235 15000
+
+   Description = Space Jumper
+   Infotext = []
+   Picture = mk6o_brownie.png
+;   InfoImage = mk1o_vast.jpg
+   GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
+
+;   Armor += 100
+   View = 0
+
+   Movement = 0 0 0 20 0 0 0 40
+   Tank.Material += 10000
+   Tank.Fuel += 10000
+   Height = ground_level orbit 
+   TerrainAccess.Terrain_any = runway spaceport turret_foundation
+   TerrainAccess.Terrain_all = beacon
+
+   Jumpdrive ->* VehicleType.TeccnolsJump4
+   Jumpdrive.Height = orbit
+
+   Transportation.CategoriesNOT = default trooper light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle light_ship medium_ship heavy_ship helicopter hoovercraft
+   Transportation.EntranceSystemNum = 2
+   Transportation.EntranceSystem1 ->* VehicleType.GrIO
+
+   WaitForAttack = true
+   Weapons { 
+      Number = 3
+      Weapon0 ->* VehicleType.type_laser
+      Weapon0.Targets = low_level_flight medium_level_flight high_level_flight orbit
+      Weapon0.shotFrom = orbit ground_level
+      Weapon0.Ammo = 4
+      Weapon0.MaxRange += 10
+      Weapon0.Punch@MinRange += 8
+      Weapon0.HitAccuracy.0 = 100
+      Weapon0.HitAccuracy.u1 = 100
+      Weapon0.HitAccuracy.u2 = 95
+      Weapon0.HitAccuracy.u3 = 80
+
+      Weapon1 ->* VehicleType.type_laser 
+      Weapon1.Targets = orbit ground_level
+      Weapon1.shotFrom = orbit ground_level
+      Weapon1.MaxRange += 10
+      Weapon1.Ammo = 4
+      Weapon1.Punch@MaxRange += 5
+      Weapon1.Punch@MinRange += 8
+      Weapon1.HitAccuracy.0 = 100
+      Weapon1.HitAccuracy.d4 = 0
+      Weapon1.ReactionFireShots = 2
+
+      Weapon2 ->* VehicleType.ServiceGround
+      Weapon2.targets = floating ground_level orbit
+      Weapon2.shotfrom = ground_level orbit
+   } Weapons
+
+   HeightChangeMethodNum = 2
+   HeightChangeMethod0 {
+      movecost = 20
+      heightdelta = 4
+      dist = 0
+      startheight = ground_level
+      canattack = false
+   } HeightChangeMethod0
+   HeightChangeMethod1 {
+      movecost = 20
+      heightdelta = -4
+      dist = 0
+      startheight = orbit
+      canattack = false
+   } HeightChangeMethod1
+} VehicleType

@@ -1,0 +1,66 @@
+BuildingType { 
+   Name = ISG DEPOT
+   ConstructionStages = 1
+   Weather = dry
+   Fields = A1
+   UseGFXpics = false
+   Pictures {
+      dry = ISG_SPACEBASE.pcx
+   } Pictures
+   RubbleObjects = false
+   Entry = A1
+   notRemovable = true
+
+   ID = 12001
+   Armor = 100000
+   View = 0
+   Jamming = 0
+   transportation { 
+      MaxLoadableUnits = 30
+      MaxLoadableUnitSize = 100000
+      MaxLoadableMass = 100000
+      EntranceSystemNum = 1
+      EntranceSystem0 {
+        Mode = In out docking
+        UnitHeightAbs = low_level_flight 
+        UnitHeightRel = -100
+        ContainerHeight = low_level_flight
+        CategoriesNOT = 
+        DockingHeightAbs = low_level_flight 
+        DockingHeightRel = -100 
+      } EntranceSystem0
+   } transportation
+   Features = NoObjectChaining
+   Techlevel = 0
+   TerrainAccess { 
+      terrain_any = Shallow_water Lowland Swamp Forest High_mountains Road Railroad Harbour Runway Pipeline Buried_pipeline Water Deep_water Hard_sand Soft_sand Track_possible Small_rocks Mud Snow Deep_snow Mountains Very_shallow_water Large_rocks Lava Ditch Hillside Turret_foundation Morass Installation Pack_ice River Frozen_water 
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = 
+   } TerrainAccess
+   MaxResearch = 0
+   ConstructionCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } ConstructionCost
+   MaxResourceProduction { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } MaxResourceProduction
+   StorageCapacity { 
+      BImode { 
+         Energy = 900000
+         Material = 900000
+         fuel = 900000
+      } BImode
+      ASCmode { 
+         Energy = 900000
+         Material = 900000
+         fuel = 900000
+      } ASCmode
+   } StorageCapacity
+   Height = low_level_flight 
+   ExternalLoading = low_level_flight ground_level floating
+} BuildingType

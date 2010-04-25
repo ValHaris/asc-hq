@@ -1,0 +1,16 @@
+VehicleType { 
+   Name = MONS
+   ID = 15313
+   parent = 313
+   
+   Description = Anti Spionage Satellite
+   Infotext = [ - geheim -]
+   picture = mk6o_mons.png
+;   wreckageobject = 14019 14819
+   GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
+
+   Armor += 100
+   View += 10
+   Jamming += 5
+   Movement = 0 0 0 0 0 0 0 24
+} VehicleType

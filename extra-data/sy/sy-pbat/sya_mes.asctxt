@@ -1,0 +1,33 @@
+VehicleType { 
+   Name = MES
+   parent = 1393 1395 1398
+   ID = 1342
+
+   Description = stealth fighter
+   Picture = sya_mes.png
+   InfoImage = sya_mes.jpg
+   InfoImageSmall = sya_mes_k.png
+   WreckageObject = 1303
+   Infotext = [InfoImage = BananaJoe]
+
+   
+
+   Armor = 300
+   MaxSurvivableStorm = 180
+   Weight = 40
+   Jamming += 30
+
+   Height = low_level_flight medium_level_flight high_level_flight
+   Movement = 0 0 0 0 200 200 200 0 
+   Tank.fuel += 4000
+
+   Weapons { 
+      Number = 1
+      Weapon0 ->* VehicleType.SY_Fighter_Big 
+      Weapon0.shotFrom = medium_level_flight high_level_flight
+      Weapon0.targets = low_level_flight medium_level_flight high_level_flight orbit
+      Weapon0.Punch@MaxRange = 70
+      Weapon0.Punch@MinRange = 75
+      Weapon0.LaserRechargeCost.fuel -> VehicleType.Weapons.Weapon0.Punch@MinRange
+   } Weapons
+} VehicleType

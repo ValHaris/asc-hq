@@ -1,5 +1,5 @@
 Techadapter {
    ; WindPower.
-   Name = B5
+   Name = B39
    TechnologiesRequired = 15000
 } TechAdapter

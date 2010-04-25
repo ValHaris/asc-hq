@@ -3,10 +3,10 @@ VehicleType {
    ID = 15211
    parent = 211 15000
 
-;   Description = Robotverteidiger
-;   Infotext = []
-   Picture = mk6m_bullwark.pcx
+   Description = Robotverteidiger
+   Picture = mk6m_bullwark.png
    GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
+;   Infotext = []
 
    Armor += 50
 ;   Movement += 0 0 0 5 0 0 0 0

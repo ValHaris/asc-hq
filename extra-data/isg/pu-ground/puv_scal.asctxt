@@ -1,0 +1,45 @@
+VehicleType { 
+   Name = SCAL
+   parent = 1395 1399 1392 400
+   ID = 12573
+   
+   Description = Minenzerstoerer
+   Picture = puv_scal.png
+   Infotext = []
+
+   Armor = 330
+   View = 30
+   Jamming = 90
+   Height = ground_level low_level_flight 
+   Tank { 
+      Energy = 0
+      Material = 1000
+      fuel = 2000
+   } Tank
+   FuelConsumption = 10
+   Features += move_after_attack no_midair_refuel cruiserlanding mine_layer mineview
+
+   Movement = 0 0 0 90 100 0 0 0 
+   Weight = 5
+   Weapons { 
+      Number = 2
+      Weapon0 ->* VehicleType.SY_Fighter_small 
+      Weapon0.targets = floating ground_level low_level_flight medium_level_flight
+      Weapon0.MaxRange = 10
+      Weapon0.Ammo = 3
+      Weapon0.LaserRechargeRate = 1
+      Weapom0.LaserRechargeCost.fuel = 60
+      Weapon0.Punch@MaxRange = 55
+      Weapon0.Punch@MinRange = 60
+
+      Weapon1 ->* VehicleType.MineAir 
+      Weapon1.shotFrom = ground_level low_level_flight
+      Weapon1.targets = submerged floating ground_level
+      Weapon1.MaxRange = 30
+      Weapon1.Ammo = 0
+      Weapon1.Punch@MaxRange = 0
+      Weapon1.Punch@MinRange = 0
+      Weapon1.HitAccuracy.0 = 100
+      Weapon1.HitAccuracy.d2 = 100
+   } Weapons
+} VehicleType

@@ -1,0 +1,5 @@
+Techadapter {
+   ; Laserzaun
+   Name = o2658
+   TechnologiesRequired = 1399,100104,100313 
+} TechAdapter

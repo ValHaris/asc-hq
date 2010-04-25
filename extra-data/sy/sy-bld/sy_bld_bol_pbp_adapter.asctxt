@@ -1,0 +1,5 @@
+Techadapter {
+   ; Bol
+   Name = B1303
+   TechnologiesRequired = 1399
+} TechAdapter

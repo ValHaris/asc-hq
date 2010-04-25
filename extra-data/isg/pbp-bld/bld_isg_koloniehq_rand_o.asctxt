@@ -1,0 +1,12 @@
+ObjectType {
+   name = HQ Kolonie Ostrand
+   ID = 12025
+   parent = 12022
+   dry { 
+      picture = bld_isg_kolonieHQ_rand_O.png 1
+   } dry
+   Movemalus_plus = 0
+   Movemalus_abs = -1
+   TerrainProperties_Filter = 
+   TerrainProperties_Add = 
+} ObjectType

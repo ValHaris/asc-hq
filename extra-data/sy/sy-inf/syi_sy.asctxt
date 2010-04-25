@@ -1,0 +1,34 @@
+VehicleType { 
+   Name = SY
+   ID = 1308
+   parent = 1395 202
+
+   Description = trooper
+   Infotext = [Die Spezies SY hat sich aus einer insektioden Lebensform entwickelt und ähneln entfernt in Körperbau und Lebensweise der terranischen Termite. Über den Herkunftsort ist nur wenig bekannt. Es muß sich aber um eine karge heiße Welt gehandelt haben, denn die SY meiden unter allen Umständen das Wasser. Der gemeine SY ist ca. 240cm groß und verfügt über ein robustes Exoskelett mit 3 Paar Exremitäten. Ähnlich wie beim Humanuiden hat sich ein aufrechter Gang entwickelt. Neben dem Laufbeinpaar ist das obere Armpaar relativ stark ausgeprägt. Das untere oder auch mittlere Armpaar ist filigran und wird für feinmotorische Tätigkeiten benutzt. Der Kopfbereich ist dreieckig ausgeprägt mit der Spitze vorn, leicht nach unten ausgerichtet. Die SY verfügen über eine erstaunliche Regenerationsrate. Selbst abgetrennte Gliedmaßen wachsen in einem längeren Prozess wieder nach. So verwundert es auch nicht, das bei den SY bisher keinerlei Sänitätseinrichtungen zu sichten waren. Verwundete Soldaten ziehen sich nur kurz aus dem Kampf zurück, um dann gestärkt wieder eingreifen zu können. Der SY trägt üblicherweise eine schwere Stabwaffe, welche destruktive Energie aussendet. Sie zerstört beim Auftreffen die molekulare Struktur und ist deshalb sowohl gegen technische als auch organische Dinge/Körper effektiv.
+]
+   Picture = syi_sy.pcx
+   InfoImage = syi_sy.jpg
+   InfoImageSmall = syi_sy_k.png
+   GuideSortHelp += 0 0 0 0 20 0 0 0 0 0
+
+   Armor += 20
+   Jamming += 10
+   Transportation ->* VehicleType.TransLowTrooper
+   Transportation.MaxLoadableUnitSize = 1
+   Transportation.MaxLoadableMass = 1
+   Transportation.CategoriesNOT -> VehicleType.cargo_deftro_only.CategoriesNOT
+
+   Tank { 
+      Energy = 0
+      Material = 400
+      fuel = 1000
+   } Tank
+   Movement += 0 0 0 2 0 0 0 0 
+   SelfRepairRate = 10
+   Weapons {
+      Number = 1
+      Weapon0 ->* VehicleType.SY_Trooper 
+      Weapon0.Punch@MaxRange += 4
+      Weapon0.Punch@MinRange += 4
+   } Weapons
+} VehicleType

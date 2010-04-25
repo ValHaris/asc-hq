@@ -1,0 +1,17 @@
+BuildingType { 
+   Name = ISG Depot
+   parent = 12001
+   ConstructionStages = 1
+   Weather = dry 
+   Fields = B2 C3
+   UseGFXpics = false
+   Pictures { 
+      dry = ISG_NZ.pcx
+      } Pictures
+   RubbleObjects = false
+   Entry = C3
+   notRemovable = true
+
+   ID = 12014
+   Height = ground_level 
+} BuildingType

@@ -1,0 +1,88 @@
+VehicleType { 
+   Name = ISG BUILDER
+   parent = 401 402
+   ID = 12005
+
+   Description = ISG Bauschweber
+   Picture = isg_builder.png
+   Infotext = [#crt#Planetenransporter#crt# #crt#
+   Der BUILDER ist Eigentum der Interstellaren Gilde. Es darf nur zu Transportzwecken auf dem zugewiesenen Planeten eingesetzt werden. Offensiver Einsatz ist untersagt. Ersatz wird nur bei Naturkatastrophen gestellt.]
+
+   ConstructionCost { 
+      CalculationMethod = manual
+      Energy = 50000
+      Material = 50000
+      fuel = 0
+   } ConstructionCost
+
+  Transportation ->* VehicleType.TransTurretBig
+  Transportation.MaxLoadableUnits = 2
+  Transportation.MaxLoadableUnitSize = 6000
+  Transportation.MaxLoadableMass = 6000
+
+  JumpDrive {
+      Height = medium_level_flight
+      MaxDistance = 3000
+      consumption {
+         Energie = 0
+         Material = 1000
+         Fuel = 4000
+      } consumption
+      terrain_any = Spaceport Runway
+      terrain_all = 
+      terrain_not = forest small_rocks large_rocks bridge
+      terrain_kill = 
+   } JumpDrive
+
+   Features = self_repairing construct_specific_buildings no_midair_refuel icebreaker
+   Category = heavy_aircraft
+   Armor = 500
+   View = 0
+   Weight = 3000
+   Jamming = 0
+   MaxSurvivableStorm = 255
+   ResourceDrillingRange = 0
+   SelfRepairRate = 5
+
+   Height = submerged floating ground_level low_level_flight medium_level_flight high_level_flight orbit
+   Tank { 
+      Energy = 0
+      Material = 100000
+      fuel = 100000
+   } Tank
+   FuelConsumption = 200
+   Movement = 0 40 40 40 100 70 50 40 
+   TerrainAccess ->* VehicleType.hooverfull_terrain 
+   TerrainAccess.terrain_any = spaceport road runway hard_sand soft_sand lowland very_shallow_water shallow_water water deep_water river
+   MovementSound = ship_d_a_s.ogg
+
+   Construction { 
+      Buildings = 8 9 38 61
+      Vehicles = 1281 12007 12010
+      Objects = 12005 181 2108 2105 2153 2092 2095 2094 2654
+      ObjectsRemovable = 12005 2095 2094 2092
+      ObjectGroupsRemovable = 1 2 3 4 5 6 7 8 9 10 11 12 13 14 21
+   } Construction
+
+   WaitForAttack = false
+   Weapons { 
+      Initiative = 0
+      Number = 0
+   } Weapons
+
+   HeightChangeMethodNum = 2
+   HeightChangeMethod0 {
+      movecost = 10
+      heightdelta = 1
+      dist = 0
+      startheight = submerged floating ground_level low_level_flight medium_level_flight high_level_flight
+      canattack = true
+   } HeightChangeMethod0
+   HeightChangeMethod1 {
+      movecost = 10
+      heightdelta = -1
+      dist = 0
+      startheight = floating ground_level low_level_flight medium_level_flight high_level_flight orbit
+      canattack = true
+   } HeightChangeMethod1
+} VehicleType

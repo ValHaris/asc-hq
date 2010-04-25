@@ -1,0 +1,9 @@
+ObjectType {
+   name = HQ Kolonie Suedlandeplatz
+   ID = 12021
+   parent = 12020
+   Weather = dry
+   dry { 
+      picture = bld_isg_kolonieHQ_LZS.png 1
+   } dry
+} ObjectType

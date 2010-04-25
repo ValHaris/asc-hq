@@ -1,0 +1,61 @@
+ObjectType {
+   name = ISG ZONE NEW
+   ID = 12015
+   SecondaryIDs = 
+
+   Weather = dry
+   visible_in_fogOfWar = true
+   canExistBeneathBuildings = true
+   LinkableObjects =  
+   NetBehaviour = NetToSelf
+   Height = 119
+
+
+   Armor = 0
+   Movemalus_plus = 
+   Movemalus_abs =  10
+   AttackBonus_abs = 0
+   AttackBonus_plus = 0
+   DefenseBonus_abs = 0
+   DefenseBonus_plus = 0
+   Jamming_abs = 375
+   Jammming_plus = 
+
+   ConstructionCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+      Movement = 0
+   } ConstructionCost
+   RemovalCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+      Movement = 0
+   } RemovalCost
+   TerrainAccess { 
+      terrain_any = road runway Lowland Hard_sand Soft_sand very_shallow_water shallow_water water deep_water   
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = 
+   } TerrainAccess
+   TerrainProperties_Filter = Road railroad Hard_sand Soft_sand Lowland Ditch Hillside Mountains High_mountains Installation Turret_foundation Small_rocks Large_rocks Forest Swamp Very_shallow_water Shallow_water water deep_water Railroad Mud Snow Deep_snow Morass Frozen_water 
+   TerrainProperties_Add = runway spaceport beacon
+
+   dry { 
+      UseGFXpics = false
+      Picture = isg_zone_new.png 65
+      ImageReference =  [-1 -1  0  0  0  0  0 -1 -1  0
+                          0  0  0  0 -1  0  0  0  0  0
+                          0  0  0  0  0  0  0  0 -1  0
+                          0  0  0  0  0 -1  0  0  0  0
+                          0  0  0  0  0  0  0  0  0 -1
+                          0  0  0  0  0  0 -1  0  0  0
+                          0  0  0 -1 -1]
+;      FlipPictures   =  [ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+;                          0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+;                          0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0
+;                          0  0  0  0  0]
+      DisplayMethod = normal
+  } dry
+} ObjectType

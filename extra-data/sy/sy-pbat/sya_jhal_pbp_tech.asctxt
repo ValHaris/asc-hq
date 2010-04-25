@@ -1,0 +1,10 @@
+technology {
+   Name = Jhal
+   infotext = 
+   id = 1326
+   RelatedUnitID = 1326
+   parent = 1399
+   researchpoints *= 20
+   techlevel = 4
+   TechnologiesRequired = 1399,100003,100104,100305,100205,1323,1324
+} Technology

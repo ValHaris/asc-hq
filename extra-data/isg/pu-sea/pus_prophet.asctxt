@@ -1,0 +1,60 @@
+VehicleType { 
+   Name = Prophet
+   ID = 12528
+   parent = 401 5 
+
+   Description = Servicehovercraft
+   Picture = pus_prophet.png
+   WreckageObject = 12528
+   Infotext = [Der "Prophet" ist ein Multiservice-Hovercraft.
+
+Diese mächtige Einheit verfügt über einen besonders starken Antrieb und ist dadurch in der Lage, zwei schwere Einheiten zu transportieren. Dies zusätzlich zur Fähigkeit, nahezu alle Gebäude, Befestigungen und Turrets zu bauen, die das Volk der NeuHallwarianer zur Verfügung hat.
+Auf eine Bewaffnung wurde vollkommen verzichtet, um die ohnehin schon gewaltige Größe nicht weiter aufzublähen.
+
+Diese Einheit wurde "Prophet" genannt, nach unserem großen Oberst, der in weiser Voraussicht mit dieser Einheit Berge versetzt. Mit dieser Einheit kommen die Berge dorthin, wo unser großer Prophet sie haben möchte. So kann unser großer Prophet das Land bestellen, auf dass unser Volk gedeihe.
+]
+
+   Armor = 500
+   View = 50
+   
+   Transportation ->* VehicleType.TransTrainBunker
+   Transportation.MaxLoadableMass = 1100
+   Transportation.EntranceSystemNum = 2
+   Transportation.EntranceSystem0 ->* VehicleType.TurretOut
+   Transportation.EntranceSystem1 ->* VehicleType.GrIO
+   
+   Features = ExternalFuelTransfer ExternalMaterialTransfer automatic_resource_searching mineview construct_specific_buildings Vehicle_Production ExternalAmmoTransfer ExternalRepair Repair_Facility self_repairing Vehicle_Production
+   SelfRepairRate = 10
+   ResourceDrillingRange = 5
+   Weight = 150
+
+   Construction { 
+      Buildings = 1-7 10-23 26 29-32 35-37 
+      Vehicles = 1219 1278 1222 1221 1295 14004 1276
+      Objects = 1 2 3 9 10 30 44 45 1000 999 998 997 996 995 991 181 2153 2097 2098
+      ObjectsRemovable = 2096-2098
+      ObjectGroupsRemovable = 1 2 3 4 5 6 7 8 9 10 11 12 13 14 21
+   } Construction  
+   
+   Tank { 
+      Energy = 0
+      Material = 60000
+      fuel = 60000
+   } Tank
+   Movement = 0 0 0 90 0 0 0 0 
+
+   Weapons { 
+      Number = 9
+      Weapon0 ->* VehicleType.ServiceGround 
+      Weapon1 ->* Vehicletype.AmmoMG
+      Weapon2 ->* Vehicletype.AmmoCannon
+      Weapon3 ->* Vehicletype.AmmoSM
+      Weapon4 ->* Vehicletype.AmmoLM
+      Weapon5 ->* Vehicletype.AmmoCM
+      Weapon5.Ammo = 4
+      Weapon6 ->* Vehicletype.AmmoMine
+      Weapon7 ->* Vehicletype.AmmoTorp
+      Weapon8 ->* Vehicletype.AmmoBomb
+   } Weapons
+} VehicleType
+

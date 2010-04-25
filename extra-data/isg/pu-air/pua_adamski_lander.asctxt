@@ -1,0 +1,60 @@
+VehicleType { 
+   Name = ADAMSKI LANDER
+   ID = 12540
+   parent = 340 15000
+
+   Description = gepanzerter Transporter
+   Picture = pua_adamski_lander.png
+   InfoImage = pua_adamski_lander.jpg
+   InfoImageSmall = pua_adamski_lander_k.png
+   GuideSortHelp = 0 0 0 0 0 0 0 0 0 0
+
+   Transportation ->* VehicleType.TransBigTrooper
+   Transportation.MaxLoadableUnits = 8
+   Transportation.MaxLoadableMass = 40
+   Transportation.CargoMovementDivisor = 4
+   Transportation.EntranceSystemNum = 3
+   Transportation {
+      EntranceSystem1 {
+         Mode = out
+         UnitHeightAbs = ground_level
+         UnitHeightRel = -100
+         ContainerHeight = low_level_flight
+         CategoriesNOT = default trooper light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle light_aircraft medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship building|turret|object helicopter hoovercraft
+         DockingHeightAbs = 
+         DockingHeightRel = -100
+      } EntranceSystem1
+      EntranceSystem2 {
+         Mode = out
+         UnitHeightAbs = submerged
+         UnitHeightRel = -100
+         ContainerHeight = low_level_flight
+         CategoriesNOT = default trooper light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle light_aircraft medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship building|turret|object helicopter hoovercraft
+         DockingHeightAbs = 
+         DockingHeightRel = -100
+      } EntranceSystem2
+   } Transportation         
+   Armor = 1300
+   Weight = 300
+   View = 40
+   Features = MoveDuringReactionFire
+
+   Tank.Material = 2000
+   Tank.Fuel = 20000
+   movement += 0 0 0 30 60 50 30 0
+   MovementSound = aircraft_l_g.ogg
+
+   WaitForAttack = true
+   Weapons { 
+      Number = 4
+      Weapon0 ->* VehicleType.ADLS
+      Weapon0.MaxRange = 30
+      Weapon1 ->* VehicleType.SSM
+      Weapon1.MaxRange = 50
+      Weapon2 ->* VehicleType.DLS
+      Weapon2.MaxRange = 50
+      Weapon2.targets = low_level_flight medium_level_flight
+      Weapon3 ->* VehicleType.DLS
+   } Weapons
+   
+} VehicleType

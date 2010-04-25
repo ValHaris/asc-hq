@@ -1,0 +1,39 @@
+VehicleType { 
+   Name = TAXI
+   parent = 371
+   ID = 12567
+   Description = Transportluftkissenboot
+   picture = pus_taxi.png
+   wreckageobject = 14018 14818
+   Infotext = [Das Taxi stellt alles in den Schatten, was es bisher auf dem Markt der Luftkissenboote zu betrachten gab. Schatten ist hierbei wörtlich zu nehmen, denn durch seine gigantischen Ausmaße ist es nicht zu übersehen. Überraschungsangriffe sind also ausgeschlossen, hier gilt eher das Motto: schneller, größer, weiter, schöner. Riesiger Laderaum, hohe Reichweite, eine gute Panzerung und zeitloses modernes Design stellen die wesentlichen Merkmale dar. Der Grundgedanke, eine starke, schwere und träge Offensive muss auch mobil sein, war der Hintergrund. Die schon als ausgestorben und als nicht zukunftsfähig geltende Luftkissentechnik, erlebt im Taxi wahrlich eine Renaissance. Hier haben die Cromonischen Ingenieure ein Meisterwerk der Beförderungstechnik geschaffen.
+
+Wie es sich seinerzeit zugetragen haben soll:
+… der schon durch seine Erscheinung Ehrfurcht ausstrahlende Herrscher Taxi, war einmal mehr auf einem Rundgang durch seines stattlichen Anwesens. Er schritt durch den langen Gang Richtung seiner Machtzentrale. Er würdigte den modernen Kunstwerken an den Wänden rechts und links, die er so sehr liebte, keines Blickes. Taxi öffnete die schwere Holztür, welche sich ohne jegliches Quietschen und Knarren öffnen ließ. Er ließ sich hinter seinen alten feudalen dunklen Eichenschreibtisch in den schweren Ledersessel nieder. Den Kopf auf die rechte Hand gestützt, mit Daumen und Zeigefinger immer wieder über sein Kinn streichend, überlegte er. Er überlegte ohne eine Mine zu verziehen, ruhig und stoisch. Doch was war das? Ein Schmunzeln? Nein, das konnte nicht sein. Selbstgefällig stand Taxi auf und ging an seine Hausbar, nahm eine Flasche heraus: 1948er Macallan. Eine Stunde verging, der charismatische Herrscher genoss den Geschmack eines einzigen Glases immer noch. Doch nun war es Zeit zum Handeln, er rief die Entwickler, Ingenieure und Designer zu sich, um Sie zu unterweisen …
+]
+
+   Armor += 200
+   Features += moveduringreactionfire immune_to_mines
+   Weight = 300
+
+   Transportation ->* VehicleType.TransVehicleHeavy 
+   Transportation.MaxLoadableUnits = 10
+   Transportation.MaxLoadableMass = 800
+
+   FuelConsumption += 10
+   Movement += 0 0 0 10 0 0 0 0 
+   MaxSurvivableStorm = 210
+   TerrainAccess ->* VehicleType.hooverfull_terrain 
+   Terrainaccess.kill =
+
+   WaitForAttack = false
+   Weapons { 
+      Number = 2
+      Weapon0 ->* VehicleType.BigMiniGun 
+      Weapon0.Ammo = 20	  
+
+      Weapon1 ->* VehicleType.SAMH 
+      Weapon1.MaxRange = 30
+      Weapon1.Ammo = 10
+      Weapon1.ReactionFireShots = 2
+   } Weapons
+} VehicleType

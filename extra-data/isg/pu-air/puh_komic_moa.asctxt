@@ -1,0 +1,81 @@
+VehicleType { 
+   Name = MOA
+   ID = 12510
+   Parent = 400 401 402 409
+   Description = Jet Helicopter
+   Infotext = [Spezialeinheit der Karabiner.]
+   Picture = PUh_komic_moa.pcx
+   wreckageobject = 1287
+
+   Armor = 320
+   Jamming = 70
+   Features += jam_only_own_field
+   
+   Height = ground_level low_level_flight medium_level_flight high_level_flight
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 1400
+   } Tank
+   FuelConsumption = 16
+   Movement = 0 0 0 40 120 120 150 0 
+   Weight = 65
+   
+   WaitForAttack = true
+   Weapons { 
+      Initiative = 0
+      Number = 3
+      Weapon0 ->* VehicleType.CMGS 
+      Weapon0.MaxRange = 120
+      Weapon0.MinRange = 60
+      Weapon0.Ammo = 1
+      Weapon0.Punch@MaxRange = 100
+
+      Weapon1 ->* VehicleType.CMGS 
+      Weapon1.ShotFrom = low_level_flight
+      Weapon1.HitAccuracy.d1 = 100 
+      Weapon1.MaxRange = 100
+      Weapon1.Ammo = 1
+      Weapon1.Punch@MaxRange = 100
+      Weapon1.Punch@MinRange = 110
+
+      Weapon2 ->* VehicleType.Air_MG 
+
+   } Weapons
+   HeightChangeMethodNum = 5
+   HeightChangeMethod0 {
+      movecost = 10
+      heightdelta = 1
+      dist = 0
+      startheight = ground_level low_level_flight
+      canattack = true
+   } HeightChangeMethod0
+   HeightChangeMethod1 {
+      movecost = 5
+      heightdelta = -1
+      dist = 0
+      startheight = medium_level_flight
+      canattack = true
+   } HeightChangeMethod1
+   HeightChangeMethod2 {
+      movecost = 15
+      heightdelta = -1
+      dist = 0
+      startheight = low_level_flight
+      canattack = true
+   } HeightChangeMethod2
+   HeightChangeMethod3 {
+      movecost = 15
+      heightdelta = 1
+      dist = 1
+      startheight = medium_level_flight
+      canattack = true
+   } HeightChangeMethod3
+   HeightChangeMethod4 {
+      movecost = 10
+      heightdelta = -1
+      dist = 1
+      startheight = high_level_flight
+      canattack = true
+   } HeightChangeMethod4
+} VehicleType

@@ -1,0 +1,5 @@
+Techadapter {
+   ; Xentor
+   Name = 1302
+   TechnologiesRequired = 1302
+} TechAdapter

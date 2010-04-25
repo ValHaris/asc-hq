@@ -1,0 +1,62 @@
+VehicleType {
+   name = Parent Height Change SY Fighter 3
+   abstract = true
+   ID = 1396
+   HeightChangeMethodNum = 8
+   HeightChangeMethod0 {
+      movecost = 15
+      heightdelta = 1
+      dist = 0
+      startheight = deep_submerged ground_level
+      canattack = true
+   } HeightChangeMethod0
+   HeightChangeMethod1 {
+      movecost = 15
+      heightdelta = 2
+      dist = 0
+      startheight = submerged
+      canattack = true
+   } HeightChangeMethod1
+   HeightChangeMethod2 {
+      movecost = 35
+      heightdelta = 1
+      dist = 2
+      startheight = low_level_flight medium_level_flight
+      canattack = true
+   } HeightChangeMethod2
+   HeightChangeMethod3 {
+      movecost = 40
+      heightdelta = 1
+      dist = 2
+      startheight = high_level_flight
+      canattack = true
+   } HeightChangeMethod3
+   HeightChangeMethod4 {
+      movecost = 20
+      heightdelta = -1
+      dist = 0
+      startheight = submerged low_level_flight
+      canattack = true
+   } HeightChangeMethod4
+   HeightChangeMethod5 {
+      movecost = 20
+      heightdelta = -2
+      dist = 0
+      startheight = ground_level
+      canattack = true
+   } HeightChangeMethod5
+   HeightChangeMethod6 {
+      movecost = 25
+      heightdelta = -1
+      dist = 2
+      startheight = medium_level_flight high_level_flight orbit
+      canattack = true
+   } HeightChangeMethod6
+   HeightChangeMethod7 {
+      movecost = 25
+      heightdelta = -1
+      dist = 1
+      startheight = orbit
+      canattack = true
+   } HeightChangeMethod7
+} VehicleType

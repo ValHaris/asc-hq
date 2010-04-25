@@ -1,0 +1,67 @@
+VehicleType { 
+   Name = REHSTAR
+   parent = 1250
+   ID = 12516
+
+   Description = fliegende Festung
+   Infotext = [Spezialeinheit der Saxonier. Basiert grob auf dem Modell der alten Pterano, hat jedoch entscheidende Verbesserungen in Flugverhalten, Geschwindigkeit und Panzerung erfahren.]
+   Picture = PUa_rennreh_Rehstar.pcx
+
+   Armor += 40
+   Features = Move_After_Attack satelliteview MoveDuringReactionFire
+   SelfRepairRate = 5
+   Weight = 280
+
+   transportation { 
+      MaxLoadableUnits = 3
+      MaxLoadableUnitSize = 100
+      MaxLoadableMass = 100
+      CategoriesNOT -> VehicleType.cargo_drop.CategoriesNOT
+      EntranceSystemNum = 3
+      EntranceSystem0 ->* VehicleType.GrIO
+      EntranceSystem0.RequireUnitFunction = paratrooper
+      EntranceSystem1 ->* VehicleType.Drop
+      EntranceSystem1.Mode = In out
+      EntranceSystem2 ->* VehicleType.Para
+   } transportation
+
+   Height += high_level_flight 
+   Tank { 
+      fuel = 12000
+      material = 500
+   } Tank
+   FuelConsumption = 30
+   Movement = 0 0 0 65 160 179 160 0 
+   TerrainAccess ->* VehicleType.aircraft_terrain
+   Weapons { 
+      Number = 4
+      Weapon0 ->* Vehicletype.AAMH 
+      Weapon0.MaxRange = 30
+      Weapon0.Ammo = 8
+      Weapon0.Punch@MaxRange = 75
+      Weapon0.Punch@MinRange = 75
+      Weapon0.ReactionFireShots = 0
+
+      Weapon1 ->* VehicleType.AMO
+      Weapon1.MaxRange = 20
+      Weapon1.Ammo = 5
+      Weapon1.Punch@MaxRange = 75
+      Weapon1.Punch@MinRange = 75
+      Weapon2.ReactionFireShots = 0
+
+      Weapon2 ->* VehicleType.ASMH
+      Weapon2.MaxRange = 20
+      Weapon2.Ammo = 10
+      Weapon2.Punch@MaxRange = 82
+      Weapon2.Punch@MinRange = 82
+      Weapon2.ReactionFireShots = 0
+
+      Weapon3 ->* VehicleType.AirH_MG 
+      Weapon3.MaxRange = 20
+      Weapon3.Ammo = 10
+      Weapon3.Punch@MaxRange = 45
+      Weapon3.Punch@MinRange = 45
+      Weapon3.ReactionFireShots = 2
+
+   } Weapons
+} VehicleType

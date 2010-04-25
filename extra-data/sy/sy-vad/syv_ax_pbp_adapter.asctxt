@@ -1,0 +1,5 @@
+Techadapter {
+   ; AX
+   Name = 1331
+   TechnologiesRequired = 1331
+} TechAdapter

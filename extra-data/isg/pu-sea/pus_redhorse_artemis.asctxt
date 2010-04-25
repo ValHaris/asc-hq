@@ -1,0 +1,47 @@
+VehicleType { 
+   Name = Artemis
+   parent = 372 
+   ID = 12538
+   
+   Description = SAM Hoovercraft
+   Infotext = [Die Artemis ist die neueste Entwicklung des Keloskischen Expeditionskorps. Sie basiert auf dem Design des Magic, jedoch konnten bedeutende Fortschritte in verschiedenen Bereichen erzielt werden. So wurde die Reichwerte der Luftabwehrraketen deutlich erhöht. Dies war möglich, weil die Raketen durch das neuentwickelte Sensorsystem der Artemis keine eigenen Sensoren mehr benötigen. Die Gewichtsersparnis konnte in zusätzlichen Treibstoff umgesetzt werden. Damit sind jetzt auch Ziele im Orbit des Planeten bekämpfbar. Details zu diesem System sind streng geheim. Bekannt ist jedoch, daß die Kalibrierung der Sensoren am jeweiligen Einsatzort eine gewisse Zeit erfordert. Aus diesem Grund ist ein offensiver Einsatz der Artemis nicht möglich. Auch verringert sich konstruktionsbedingt die Schussweite gegenüber Objekten in Bodennähe. Um den Schutz dieses wertvollen Prototyps zu gewährleisten, wurde eine spezielle Panzerung entwickelt, die ihn bei gleichem Gewicht widerstandsfähiger als das Magic macht. Eine neuartige Beschichtung bietet weiterhin einen gewissen Schutz gegen die Erkennung durch elektronische Sensoren. Aufgrund der Probleme bei der Beschaffung bestimmter verwendeter Materialien wird diese Einheit aber wohl nie in größeren Stückzahlen gebaut werden können. Sie stellt wohl das Maximum dar, das sich derzeit aus dem Design der Hoovercrafts entwickeln läßt.]
+   picture = pus_redhorse_artemis.png
+   wreckageobject = 14016 14816
+
+   Armor += 70
+   View += 10
+   Jamming = 31
+   Features = MoveDuringReactionFire jam_only_own_field
+
+   Transportation {
+      MaxLoadableUnits = 2
+      MaxLoadableUnitSize = 6
+      MaxLoadableMass = 12
+   } Transportation
+
+   WaitForAttack = true
+   Weapons { 
+      Initiative = 20
+      Number = 4
+
+      Weapon0 ->* VehicleType.MiniGun
+
+      Weapon1 ->* VehicleType.SOM
+      Weapon1.MaxRange = 80
+      Weapon1.ReactionFireShots = 2
+
+      Weapon2 ->* VehicleType.SAMH
+	  Weapon2.targets = medium_level_flight high_level_flight
+      Weapon2.MaxRange = 70
+      Weapon2.Punch@MaxRange = 80	  
+	  Weapon2.Punch@MinRange = 80
+	  Weapon2.Ammo = 6
+
+      Weapon3 ->* VehicleType.smSAM
+	  Weapon3.targets = low_level_flight
+      Weapon3.MaxRange = 50
+      Weapon3.Punch@MaxRange = 75	  
+	  Weapon3.Punch@MinRange = 75
+	  Weapon3.Ammo = 6
+   } Weapons
+} VehicleType

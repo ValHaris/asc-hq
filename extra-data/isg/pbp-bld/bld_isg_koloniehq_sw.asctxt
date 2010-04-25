@@ -1,0 +1,45 @@
+ObjectType {
+   name = HQ Kolonie SUEDWEST
+   ID = 12022
+   Weather = dry
+   visible_in_fogOfWar = true
+   canExistBeneathBuildings = true
+   LinkableObjects = 
+   Armor = 0
+   Movemalus_plus = 0
+   Movemalus_abs = 10
+   AttackBonus_abs = 0
+   AttackBonus_plus = 0
+   DefenseBonus_abs = 0
+   DefenseBonus_plus = 0
+   Jamming_abs = -1
+   Jammming_plus = 
+   Height = 119
+   ConstructionCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+      Movement = 0
+   } ConstructionCost
+   RemovalCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+      Movement = 0
+   } RemovalCost
+   NoSelfChaining = true
+   TerrainAccess { 
+      terrain_any = Runway  
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = 
+   } TerrainAccess
+   TerrainProperties_Filter = swamp morass mud snow deep_snow forest small_rocks large_rocks 
+   TerrainProperties_Add = Installation
+   dry { 
+      UseGFXpics = false
+      picture = bld_isg_kolonieHQ_SW.png 1
+      ImageReference =  -1
+      FlipPictures   =  0
+   } dry
+} ObjectType

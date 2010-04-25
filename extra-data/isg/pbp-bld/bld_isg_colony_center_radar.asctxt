@@ -1,0 +1,74 @@
+BuildingType { 
+   Name = COLONY CENTER RADAR
+   ID = 12026
+
+   Armor = 100000
+   View = 160
+   Jamming = 0
+   Features = 
+
+   ConstructionStages = 1
+   Weather = dry 
+   Fields = A1
+   UseGFXpics = false
+   Pictures { 
+      dry = bld_isg_kolonieHQ_radar_unit.pcx
+   } Pictures
+   RubbleObjects = false
+   Entry = A1
+
+   Transportation { 
+      MaxLoadableUnits = 1
+      MaxLoadableUnitSize = 100
+      MaxLoadableMass = 100
+      CategoriesNOT =  
+      EntranceSystemNum = 1
+      EntranceSystem0 {
+        Mode = In out
+        UnitHeightAbs = ground_level
+        UnitHeightRel = -100
+        ContainerHeight = orbit
+        CategoriesNOT =  
+        DockingHeightAbs = 
+        DockingHeightRel = -100 
+      } EntranceSystem0
+    } Transportation
+   Techlevel = 0
+   TerrainAccess { 
+      terrain_any = Runway Spaceport 
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = 
+   } TerrainAccess
+   MaxResearch = 0
+   NominalResearch = 0
+   ConstructionCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } ConstructionCost
+   MaxResourceProduction { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } MaxResourceProduction
+   defaultProduction {
+      energy = 0
+      material = 0
+      fuel = 0
+   } defaultProduction
+   StorageCapacity { 
+      BImode { 
+         Energy = 0
+         Material = 0
+         fuel = 0
+      } BImode
+      ASCmode { 
+         Energy = 0
+         Material = 0
+         fuel = 0
+      } ASCmode
+   } StorageCapacity
+   Height = orbit 
+   ExternalLoading = ground_level floating
+} BuildingType

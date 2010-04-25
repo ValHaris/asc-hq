@@ -1,0 +1,10 @@
+technology {
+   Name = MARRIED
+   infotext = 
+   id = 15223
+   RelatedUnitID = 15223
+   parent = 15000
+   researchpoints *= 16
+   techlevel = 4
+   TechnologiesRequired = 15000,100002,100104,100202,100313,100315
+} Technology

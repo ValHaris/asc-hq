@@ -1,0 +1,48 @@
+VehicleType { 
+   Name = FASM
+   ID = 12521
+   parent = 364
+
+   Description = future attack submarine
+   Picture = pus_keyfinder_fasm.png
+   InfoImage = pus_keyfinder_fasm.jpg
+   Infotext = [Dieses U-Boot ist ein Prototyp einer neuen Angriffklasse. Im getauchten
+Zustand kann es auf feindliche Flieger und Orbitale Einheiten schießen und
+sich danach in den Tiefen der See verstecken. Ein neuartiger Antriebstyp
+macht dies möglich. Quelle des Antriebs ist ein IEFP (Integrated Full
+Electric Propulsion) Kernreaktor, der den Strom liefert und dem U-Boot die
+Möglichkeit gibt mehrere Wochen im getauchten Zustand zu verharren. Eine
+weitere Neuerung ist das die Large Missile vertikal im getauchten Zustand
+abgefeuert werden können. Das Leitwerk wurde in Pentaform ausgelegt und
+beherbergt damit eine weitere Innovation. Gerade in der Testphase ist dieses
+U-Boot zu beschützen, da die Panzerung noch nicht dem Stand heutiger U-Boote
+entspricht.
+InfoImage = http://navy-matters.beedall.com/]
+
+   Armor -= 200
+   Features += no_reactionfire   
+
+   Movement -= 11 11 10 0 0 0 0 0 
+
+   Weapons { 
+      Number = 3
+
+      Weapon0 ->* VehicleType.UTorp
+      Weapon0.Ammo = 6
+      Weapon0.Punch@MaxRange = 110
+      Weapon0.Punch@MinRange = 110
+
+      Weapon1 ->* VehicleType.SOM 
+      Weapon1.Ammo = 6
+      Weapon1.MaxRange = 90
+      Weapon1.Punch@MaxRange = 90
+      Weapon1.Punch@MinRange = 90
+
+      Weapon2 ->* VehicleType.SAMH
+      Weapon2.shotFrom = submerged floating
+      Weapon2.Ammo = 6
+      Weapon2.MaxRange = 70
+      Weapon2.Punch@MaxRange = 70
+      Weapon2.Punch@MinRange = 70
+   } Weapons
+} VehicleType

@@ -1,0 +1,41 @@
+BuildingType { 
+   Name = ISG Depot
+   ID = 12021
+   parent = 12001
+
+   Features = Selfdestruct_at_conquer ResourceSink
+   ConstructionStages = 1
+   Weather = dry 
+   Fields = B3
+   UseGFXpics = false
+   Pictures { 
+      dry = bld_isg_kolonieHQ.png
+      } Pictures
+   RubbleObjects = false
+   Entry = B3
+   Height = ground_level 
+   TerrainAccess { 
+      terrain_any = Runway  
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = 
+   } TerrainAccess
+
+   MaxResourceProduction { 
+      Energy = -1000
+      Material = -1000
+      fuel = -1000
+   } MaxResourceProduction
+   defaultProduction {
+      energy = -1000
+      material = -1000
+      fuel = -1000
+   } defaultProduction
+   StorageCapacity { 
+      ASCmode { 
+         Energy = 10000000
+         Material = 10000000
+         fuel = 10000000
+      } ASCmode
+   } StorageCapacity
+} BuildingType

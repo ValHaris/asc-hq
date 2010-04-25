@@ -1,0 +1,16 @@
+BuildingType { 
+   Name = SY Kolonie HQ
+   parent = 12020
+   ID = 1319
+
+   ConstructionStages = 1
+   Weather = dry
+   Fields = A5 A6 B5
+   UseGFXpics = false
+   Pictures { 
+      dry = sy_bld_kolonie.png
+   } Pictures
+   RubbleObjects = false
+   Entry = A6
+
+} BuildingType

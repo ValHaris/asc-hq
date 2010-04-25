@@ -1,0 +1,9 @@
+ObjectType { 
+   Name = Prophet Wreckage
+   ID = 12528
+   SecondaryIDs = 12112
+   parent = 499
+   dry { 
+      picture = pus_prophet_w.png 1
+   } dry
+} ObjectType

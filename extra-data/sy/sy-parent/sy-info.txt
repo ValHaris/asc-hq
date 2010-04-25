@@ -1,0 +1,118 @@
+SY ID ‹berblick
+
+parent
+1399 SY Base Tech
+1399 HC0
+1398 HC1
+1397 HC2
+1396 HC3
+1395 Weapon
+1394 Move
+1393 Fighter
+1392 Ground
+
+Versionserzwinger
+1380-1389
+
+Units
+             A T
+1300 Kool
+1301 Jhak
+1302 Xentor
+1303 Gorgol
+1304 Zah
+1305 Hytak
+1306 Kerg
+1307 SIS
+1308 SY
+1309 Tolg
+1310 Tris
+1311 Yb
+1312 Iox
+1313 XYX
+1314 To
+1315 Zeo
+1316 Morr
+1317 Druk
+1318 Laak
+1319 Ent
+1320 Nog
+1321 Syr
+1322 Hyter
+1323 Hylo
+1324 Xenos
+1325 Xebu
+1326 Jhal
+1327 Ksol
+1328 TOLA   X X
+1329 Sx     x x
+1330 Drus   x x
+1331 AX     X X
+1332 AY     X X
+1333 TROX   
+1334 TOX    X X
+1335 YZ
+1336 Xor
+1337 Myx    S‰urewerfer
+1338 Hyas
+1339 IMS
+1340 Ysol
+1341 Mejo   RadarSat
+1342 Mes
+1343 Krah
+1344 Pul
+1345 Sly
+1346 Yl
+1347 Liks
+1348 Tal
+1349 Tas
+1350 AD
+
+Objekte
+
+1300 LaserZaun
+1301 Krater
+1302 Groﬂer Krater
+1303 kleiner Krater
+1304 Trooper Wreck
+1305 Ground
+1306 Ground bridge
+1307 SGL
+1308 SGH
+1309 LOGO
+1310 Atombrand80
+1311 SGD
+1312 Atombrand2
+1313 Beacon10
+1314 beacon
+1315 Atombrand20
+
+
+Geb‰ude
+
+1300 Kxol          Mothership          -
+1301 Akk           Solargenerator      B1301
+1302 TEC           Factory             B1302
+1303 Bol           MaterialMine        B1303
+1305 Kxol Wreck    Wreckage Mothership -
+1306 Lussx Fuel                        B1306
+1307 Lussx Reaktor                     B1307
+1308 Lussx base                        B1308
+1309 Lussx Material                    B1309
+1310 SYA                               -
+1311 Ukax          Fuelmine            B1311
+1312 BunkerHQ      CommandHQ           -            
+1313 XBX           Jammerbuilding      B1313/1393
+1314 YBX           Yb-Starter          B1314/1394
+1315 TR            Radar               B1315/1395
+1316 RES
+1317 training
+1318 Camp
+1319 SY Kolonie HQ
+1320 SY Kolonie
+1321 SY Kolonie
+1322 SY Kolonie
+1323 SY Kolonie SSG
+1324 Sol
+1325 Flying factory
+1325 Depot

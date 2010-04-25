@@ -1,0 +1,34 @@
+VehicleType { 
+   Name = ORXIS
+   ID = 12501
+
+   parent = 1234
+   Description = [Schwerer Radarpanzer]
+   Infotext = [Bisher konnte weitreichende landgestützte Aufklärung nur mit dem ORION erfolgen. Da dieser Panzer jedoch sehr verwundbar ist, entwickelten die Ingenieure der Germatoner einen neuartige Panzerkonstruktion, welche alle notwendigen Eigenschaften erfüllt.
+Der ORXIS ist auf der Basis des AXIS erstellter Führungspanzer. Durch die Ausstattung mit einer Radaranlage, kann eine hohe Aufklärung des Schlachtfeldes stattfinden, sowie Angriffe gegen Helikopter und andere niedrigfliegende Einheiten effektiver ausgeführt werden. Ein höher liegender Panzerrumpf erlaubt nun auch unwegsameres Gelände zu durchfahren.Um dies zu erreichen, wurde die Panzerung geringfügig abgeschwächt und eine andere Bordwaffenkonstellation eingesetzt. Eine Vergrößerung des Tanks schaffte eine höhere Bewegungsfreiheit, welches zwingend notwendig ist um tief ins feindliche Hinterland einzudringen und aus eigenen Kräften auch den Rückzug durchführen zu können.<BR><BR>
+Somit stellt der ORXIS die logische Weiterentwicklung in der Panzergeschichte dar. Wurden Panzer früher nur als große, schwere Kampfkolosse gesehen, hat sich Ihre Aufgabe auf dem Schlachtfeld immer stärker gewandelt. Heutzutage wird oftmals auf Panzer gesetzt, welche schneller und vielseitiger einsatzbar sind. Genau diese Ziele verfolgte die Entwicklung des ORXIS.]
+   Picture = puv_rausi_orxis.pcx
+   InfoImage = puv_rausi_orxis.jpg
+
+   Armor += 300
+   View = 80
+   Weight += 10
+   Features += self_repairing
+   SelfRepairRate = 10
+
+   Tank { 
+      material += 3000
+      fuel += 2000
+   } Tank
+   FuelConsumption = 20
+   Movement += 0 0 0 10 0 0 0 0 
+   Weapons { 
+      Number = 3
+      Weapon0.Ammo += 10
+      Weapon0.Punch@MaxRange += 10
+      Weapon0.Punch@MinRange += 10
+
+      Weapon2 ->* VehicleType.Flak
+
+   } Weapons
+} VehicleType

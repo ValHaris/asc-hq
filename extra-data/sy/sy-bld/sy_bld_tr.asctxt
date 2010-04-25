@@ -1,0 +1,63 @@
+BuildingType { 
+   ID = 1315
+   parent = 498
+
+   Name = TR
+   Description = schwebender Sensor
+
+   Armor = 1200
+   View = 130
+   Jamming = 0
+   Transportation ->* BuildingType.Ellf
+
+   ConstructionStages = 1
+   Weather = dry 
+   Fields = A1 
+   UseGFXpics = false
+   Pictures { 
+      dry = sy_bld_tr.png
+   } Pictures
+   RubbleObjects = true
+   Rubble {
+      A1 = 1302
+   } Rubble
+   Entry = A1
+   Features = NoObjectChaining satelliteview sonar
+   Techlevel = 0
+   TerrainAccess { 
+      terrain_any = Lowland Road Runway Hard_sand Soft_sand hillside mountains installation ditch very_shallow_water shallow_water river 
+      terrain_all = 
+      terrain_not = 
+      terrain_kill =
+   } TerrainAccess
+   MaxResearch = 0
+   ConstructionCost { 
+      Energy = 0
+      Material = 12000
+      fuel = 15000
+   } ConstructionCost
+   MaxResourceProduction { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } MaxResourceProduction
+   defaultProduction {
+      energy = 
+      material = 
+      fuel = 
+   } defaultProduction
+   StorageCapacity { 
+      BImode { 
+         Energy = 100000
+         Material = 100000
+         fuel = 100000
+      } BImode
+      ASCmode { 
+         Energy = 100
+         Material = 100
+         fuel = 100
+      } ASCmode
+   } StorageCapacity
+   Height = low_level_flight
+   ExternalLoading =  
+} BuildingType

@@ -1,0 +1,153 @@
+VehicleType { 
+   Name = AZRAEEL
+   ID = 12557
+   parent = 218
+
+   Description = PU Undertaker
+   Picture = puv_undertaker_azraeel.png
+   InfoImage = puv_undertaker_azraeel.jpg
+   InfoImageSmall = puv_undertaker_azraeel_k.png
+   WreckageObject = 12557
+   Infotext = [Vor einiger Zeit ist es draconianischen Agenten gelungen, die Scelettons zu infiltrieren und die Pläne eines neuartigen Waffensystems zu erbeuten.
+AZRAEEL ist eine strategische Gefechtsfeldwaffe mit großer Durchschlagskraft, die bis auf Unterwassereinheiten, jedes Ziel wirkungsvoll und auf große Entfernung bekämpfen kann.
+Um das Gewicht der Primärwaffe, einer Partikelkanone, und die erforderlichen Energiegeneratoren sowie Treibstofftanks tragen zu können, wurde das gesamte Chassis aus Aluminium und Titan gefertigt. Um weiteres Gewicht einzusparen, wurde auf eine Panzerung weitgehend verzichtet und statt dessen ein Tarnschild integriert.
+Um die Feuerbereitschaft der Partikelkanone herzustellen sind umfangreiche Maßnahmen notwendig, wie das Justieren der Primärwaffe, die Verankerung im Boden und das Laden des Partikelemitters, was zu erheblichen aber notwendigen Zeitverzögerungen führt.
+Die beiden Zugmaschinen übernehmen nach Verankerung der Partikelkanone die Selbstverteidigung. Zu diesem Zweck wurden sie mit umfangreichen Boden- und Luftabwehrwaffen ausgerüstet.
+Nach dem Abfeuern der Primärwaffe kann AZRAEEL sehr schnell die Stellung wechseln, da das Einziehen der Verankerungen und das Ankoppeln der Zugmaschinen wenig Zeitaufwand erfordert.]
+   
+   Category = heavy_wheeled_vehicle
+   Weight = 100
+   View = 60
+   Jamming = 30
+   Features += Jam_Only_Own_field
+   
+   TerrainAccess ->* VehicleType.wheeled 
+   MovementSound = wheeled_l_g.ogg
+   Movement = 0 0 0 80 0 0 0 0 
+   FuelConsumption = 30
+   Tank.Fuel = 25000
+   Tank.material = 10000
+
+   WaitForAttack = true
+   Weapons {
+      Number = 4
+      Weapon0 {
+         Name = Partikelwaffe
+         Sound = puv_undertaker_azraeel.ogg
+         Type = laser shootable 
+         targets = medium_level_flight high_level_flight orbit 
+         shotFrom = ground_level 
+         MaxRange = 120
+         MinRange = 60
+         Ammo = 1
+         ReactionFireShots = 0
+	 LaserRechargeRate = 1
+         LaserRechargeCost {
+            energy = 0
+            material = 1000
+            fuel = 2000
+         } LaserRechargeCost
+         Punch@MaxRange = 75
+         Punch@MinRange = 90
+         HitAccuracy { 
+            d6 = 0
+            d5 = 0
+            d4 = 0
+            d3 = 0
+            d2 = 0
+            d1 = 0
+            0 = 0
+            u1 = 0
+            u2 = 100
+            u3 = 95
+            u4 = 90
+            u5 = 0
+            u6 = 0
+         } HitAccuracy
+      WeaponEffectiveness {      
+         trooper = 200
+         rail_vehicle = 200
+         building|turret|object = 200
+         hoovercraft = 200
+         helicopter = 200
+
+         light_tracked_vehicle = 200
+         medium_tracked_vehicle = 200
+         heavy_tracked_vehicle = 200
+
+         light_wheeled_vehicle = 200
+         medium_wheeled_vehicle = 200
+         heavy_wheeled_vehicle = 200
+         
+         light_ship = 200
+         medium_ship  = 200
+         heavy_ship = 200
+
+         light_aircraft = 100
+         medium_aircraft  = 100
+         heavy_aircraft = 100
+      } WeaponEffectiveness      
+      } Weapon0
+      Weapon1 {
+         Name = Partikelwaffe
+         Sound = puv_undertaker_azraeel.ogg
+         Type = laser shootable 
+         targets = floating ground_level low_level_flight 
+         shotFrom = ground_level 
+         MaxRange = 80
+         MinRange = 40
+         Ammo = 1
+         ReactionFireShots = 0
+	 LaserRechargeRate = 1
+         LaserRechargeCost {
+            energy = 0
+            material = 500
+            fuel = 1000
+         } LaserRechargeCost
+         Punch@MaxRange = 90
+         Punch@MinRange = 110
+         HitAccuracy { 
+            d6 = 0
+            d5 = 0
+            d4 = 0
+            d3 = 0
+            d2 = 0
+            d1 = 0
+            0 = 100
+            u1 = 70
+            u2 = 0
+            u3 = 0
+            u4 = 0
+            u5 = 0
+            u6 = 0
+         } HitAccuracy
+      WeaponEffectiveness {      
+         trooper = 100
+         rail_vehicle = 80
+         building|turret|object = 50
+         hoovercraft = 90
+         helicopter = 100
+
+         light_tracked_vehicle = 80
+         medium_tracked_vehicle = 70
+         heavy_tracked_vehicle = 60
+
+         light_wheeled_vehicle = 90
+         medium_wheeled_vehicle = 85
+         heavy_wheeled_vehicle = 80
+         
+         light_ship = 80
+         medium_ship  = 65
+         heavy_ship = 50
+
+         light_aircraft = 100
+         medium_aircraft  = 100
+         heavy_aircraft = 100
+      } WeaponEffectiveness      
+      } Weapon1
+      Weapon2 ->* VehicleType.BigMiniGun
+      Weapon2.Ammo = 10
+      Weapon3 ->* VehicleType.SAMH
+      Weapon3.Ammo = 10
+   } Weapons
+} VehicleType

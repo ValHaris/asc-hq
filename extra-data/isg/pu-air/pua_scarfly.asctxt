@@ -1,0 +1,26 @@
+VehicleType { 
+   Name = SCARFLY
+   parent = 82
+   ID = 12513
+
+   Description = flying fortress
+   Picture = pua_scarfly.png
+   Infotext = []
+
+   Features += self_repairing 
+   Armor = 750
+   View = 60
+   Jamming = 60
+   SelfRepairRate = 10
+   Weight = 575
+   Transportation ->* VehicleType.noTrans 
+
+   Height = ground_level low_level_flight medium_level_flight high_level_flight
+   Tank { 
+      Energy = 0
+      Material = 3000
+      fuel += 2000
+   } Tank
+   FuelConsumption = 40
+
+} VehicleType

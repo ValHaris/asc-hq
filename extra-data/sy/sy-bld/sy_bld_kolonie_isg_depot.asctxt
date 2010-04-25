@@ -1,0 +1,15 @@
+BuildingType { 
+   Name = ISG Depot
+   ID = 1322
+   parent = 12021
+
+   ConstructionStages = 1
+   Weather = dry 
+   Fields = A2
+   UseGFXpics = false
+   Pictures { 
+      dry = sy_bld_kolonie.png
+      } Pictures
+   RubbleObjects = false
+   Entry = A2
+} BuildingType
