@@ -2,7 +2,7 @@ ObjectType {
    name = small turret foundation
    ID = 2093
    groupID = 7
-   SecondaryIDs = 1400 22151
+   SecondaryIDs = 1400 22151 12405
 
    visible_in_fogOfWar = false
    canExistBeneathBuildings = false

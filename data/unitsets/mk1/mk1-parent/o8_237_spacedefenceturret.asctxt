@@ -9,7 +9,7 @@ VehicleType {
 
    Armor += 50
    View = 60
-   Features += satelliteview  ManualSelfDestruct
+   Features += satelliteview ManualSelfDestruct MoveDuringReactionFire
    TerrainAccess ->* VehicleType.Turret_only 
    Weapons { 
       Number = 2

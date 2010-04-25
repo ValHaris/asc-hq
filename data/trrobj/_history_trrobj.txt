@@ -2,6 +2,11 @@ ASC terrain System
 Advanced Strategic Command
 Specifications by GAMER
 Grafics by GAMER, Snuggels, ValHaris, Xyphagoroszh, Havanna Club, Uranius und Grom
+
+________________________
+Beta Nr. 10 - 2010
+-Kanal verbindet sich nicht mehr automatisch mit vsw,sw
+
 ________________________
 Beta Nr.7-2010
 -LTurret Attackbonus -1

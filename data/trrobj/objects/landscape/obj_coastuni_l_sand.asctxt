@@ -6,7 +6,7 @@ ObjectType {
 
    visible_in_fogOfWar = true
    LinkableObjects = 2690
-   LinkableTerrain = 2006 299
+   LinkableTerrain = 2006 299 2008 307 2004 2002
    NetBehaviour = 
    canExistBeneathBuildings = true
 

@@ -2,7 +2,7 @@ ObjectType {
    ID = 2092
    parent = 500
    Weather = dry much_snow 
-   Name = Beton 
+   Name = Beton See
    TechAdapterRequired = o2092
 
 ;                         ISG-Beton

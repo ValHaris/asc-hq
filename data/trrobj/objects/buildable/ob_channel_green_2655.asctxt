@@ -7,7 +7,7 @@ ObjectType {
 
    LinkableObjects = 
 ;                    vsw  sw  w   dw  o
-   LinkableTerrain = 2008 307 309 308 2009
+   LinkableTerrain =          309 308 2009
    NetBehaviour = NetToSelf NetToBorder AutoBorder
 
    Weather = dry much_snow snow_and_ice

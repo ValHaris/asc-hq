@@ -5,6 +5,10 @@ InfoImages: GAMER, Schicksal(3D), BananaJoe(3D)
 Spezifikationen: GAMER
 
 _______________________
+v82.3
+Basis: Bugfix: SpaceDefenceTurret + MdRF 
+Filter: MK1/ASc-Terrain aktualisiert
+
 v82.2
 -MK1: Pflege, Entwicklung und Bearbeitung durch GAMER eingestellt zum 16.04.2010
 -MK1: Vesuvius, MBV Turretervice

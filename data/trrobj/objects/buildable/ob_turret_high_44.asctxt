@@ -10,8 +10,8 @@ ObjectType {
    ;                def lTr mTr hvT lWh mWh hWh tro rlv mAC mSh BTO lAC hAC lSh hSh Hli hov
    Movemalus_plus = 
    Movemalus_abs =  20  20  20  20  20  20  20  20  30  20  30  20  20  20  30  30  15  30
-   AttackBonus_abs = -1
-   AttackBonus_plus = 2
+   AttackBonus_abs = 2
+   AttackBonus_plus = 0
    DefenseBonus_abs = 0
    DefenseBonus_plus = 0
    ViewBonus_plus = 10

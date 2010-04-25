@@ -16,10 +16,10 @@ ObjectType {
    ;                def lTr mTr hvT lWh mWh hWh tro rlv mAC mSh BTO lAC hAC lSh hSh Hli hov
    Movemalus_plus = 0
    Movemalus_abs =  20  20  20  20  20  20  20  20  30  20  30  20  20  20  30  30  15  30
-   AttackBonus_abs = -1
-   AttackBonus_plus = -1
-   DefenseBonus_abs = -1
-   DefenseBonus_plus = 3
+   AttackBonus_abs = 0
+   AttackBonus_plus = 0
+   DefenseBonus_abs = 3
+   DefenseBonus_plus = 0
    Jamming_abs = -1
    Jamming_plus = 5
    ViewBonus_plus = -5

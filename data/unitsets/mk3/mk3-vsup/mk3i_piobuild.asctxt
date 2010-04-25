@@ -12,7 +12,7 @@ VehicleType {
 
    Armor = 250
    Transportation ->* VehicleType.TransTurretMed 
-   Features += construct_vehicles construct_specific_buildings externalAmmoTransfer
+   Features += construct_vehicles construct_specific_buildings externalAmmoTransfer externalFuelTransfer externalMaterialTransfer
    Weight = 5
 
    Tank { 
@@ -31,9 +31,13 @@ VehicleType {
    } Construction
 
    Weapons {
-      Number = 2
+      Number = 4
       Weapon0 ->* VehicleType.MG_Trooper
-      Weapon0.Type = machinegun shootable ammo_transfer 
-      Weapon1 ->* VehicleType.ServiceGround
+      Weapon0.Ammo = 100 
+      Weapon1 ->* VehicleType.AmmoLM
+      Weapon1.Ammo = 20 
+      Weapon2 ->* VehicleType.AmmoSM
+      Weapon2.Ammo = 20 
+      Weapon3 ->* VehicleType.ServiceTurret
    } Weapons
 } VehicleType
