@@ -23,7 +23,7 @@ ID 12014 NZ ISG Depot
 ID 12015 ?
 ID 12016 Evak Pod
 ID 12017 ISG TRADESHIP
-ID 12018 Störschildgenerator (SSG)
+ID 12018 Stï¿½rschildgenerator (SSG)
 ID 12019 Command HQ
 ID 12020 KolonieHQ
 ID 12021 KolonieHQ-ISG Depot
@@ -91,8 +91,8 @@ ID 12100 Bug Krabbler
 ID 12500 Komic     Avatar       Air+orbit Defence tank grafic by Gamer
 ID 12501 Rausi     Orxis        Mix:Axis&Orion         grafik by Rausi
 off12502 (Sir Hacke Enduro       Kampfmotorrad          grafic by Gamer)
-ID 12503 Tigerking Dora         Schienengeschütz       grafic by Gamer
-ID 12504 Cushman   HI-OB        Schienengeschütz       grafics by Hastrubal/Gamer/BananaJoe
+ID 12503 Tigerking Dora         Schienengeschï¿½tz       grafic by Gamer
+ID 12504 Cushman   HI-OB        Schienengeschï¿½tz       grafics by Hastrubal/Gamer/BananaJoe
 ID 12505 SmokinMan
 ID 12506 Greg      MORMONE      heavy attack tank      grafic by Gamer
 ID 12507 Hanni     ConzeptX
@@ -102,7 +102,7 @@ ID 12507 Hanni     ConzeptX
 * OBJ ID 12404
 * OBJ ID 12405
 * OBJ ID 12406
-ID 12508           Aquila       Drohnenträgerraumschiff
+ID 12508           Aquila       Drohnentrï¿½gerraumschiff
 off  12509 Tengri    Lethos       Raketenpanzer          grafic by Gamer
 ID 12510 Komic2    MOA          CM Heli                grafic by Komic
 off  12511 GenSek        
@@ -175,3 +175,4 @@ ID 12574 Davion     DC
 ID 12575 Wult(MA)   Kukulcan
 ID 12576 Bahunabega DragonFly
 ID 12577 Unknown    Hermelin
+ID 12578 SDLG	    Seine Eminenz

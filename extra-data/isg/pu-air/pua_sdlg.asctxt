@@ -1,0 +1,59 @@
+VehicleType {
+	Name 						= Seine Eminenz
+	ID 							= 12578
+	parent						= 400 401 496 415
+
+	Description					= Service
+	Infotext					= [Die Spezialeinheit „Seine Eminenz“ wurde als riesiger fliegender Flugzeugträger entwickelt. Der extrem hohe Treibstoffverbrauch ist auf zwei wesentliche Ursachen zurückzuführen. Zu einen muss das sehr massige und schwere Flugobjekt in der Luft gehalten werden. Zum anderen wurden acht mächtige Spezialdüsentriebwerke eingebaut, welche auch in sich schwenkbar sind. Die sehr großen Seitenflügel dienen ebenfalls der Stabilität und dadurch wird diese große Serviceeinheit in die Lage versetzt auch bei hohen Windgeschwindigkeiten absolut reglos in der Luft zu verharren. Erwährenswert ist außerdem die außergewöhnliche Bauweise. Durch die Landebahn die von vorne nach hinten reicht, ist der Schiffsrumpf quasi hohl. Nur so ist es überhaupt möglich sind von hinten einem langsam fliegenden  Flugobjekt zu nähern und es in sich landen zulassen. Nach Reparaturarbeiten, Auftanken und Aufmunitionieren gleitet das Flugobjekt hinten wieder heraus und kann direkt ohne Unterbrechung weiterfliegen. Der Laderaum verfügt über alle Munitionsarten in ausreichender Anzahl. Die Entwickler stießen jedoch bald an physikalische Grenzen. Damit das übergroße Flugobjekt überhaupt ohne Gefahr zu zerbrechen starten und landen kann, mussten nachträglich einige Zusatz-Funktionen wieder ausgebaut werden. Es handelt sich daher um eine rein defensive Serviceeinheit. Damit zwei Einheiten gleichzeitig aufgenommen werden können, wurde alle Waffensystem entfernt. Daher ist zwingend Begleitschutz notwendig.]
+	WreckageObject				= 300 400
+	picture						= pua_sdlg.png
+
+	Features					= self_repairing Repair_Facility AutoHarvestObjects
+	Armor						= 500
+	View						= 51
+	Weight						= 2000
+	SelfRepairRate				= 10
+	MaxSurvivableStorm			= 160
+
+	Transportation ->* VehicleType.TransHvyCarrier
+	Transportation.MaxLoadableUnits = 2
+	Transportation.MaxLoadableMass = 250
+	Transportation.MaxLoadableUnitSize = 250
+	Transportation.EntranceSystem1 ->* VehicleType.Carrier_Air_high
+
+	Movement					= 0 0 0 65 65 75 0 0
+
+	FuelConsumption				= 350
+	Tank { 
+		Material				= 30000
+		fuel					= 70000
+	} Tank	
+
+	AutoHarvestObjects {
+		Objects = 
+		ObjectGroups 			= 10 11 13 15 21 
+		Range 					= 15
+		MaxFieldsPerTurn 		= 15
+	} AutoHarvestObjects
+
+	Weapons {
+		Number 					= 8
+
+		Weapon0 ->* VehicleType.ServiceGround
+		Weapon1	->* VehicleType.AmmoMine
+		Weapon1.Ammo				= 100
+		Weapon2	->* VehicleType.AmmoCannon
+		Weapon2.Ammo				= 200
+		Weapon3	->* VehicleType.AmmoMG
+		Weapon3.Ammo				= 200	
+		Weapon4	->* VehicleType.AmmoBomb
+		Weapon4.Ammo				= 100	
+		Weapon5	->* VehicleType.AmmoTorp
+		Weapon5.Ammo				= 50
+		Weapon6	->* VehicleType.AmmoSM
+		Weapon6.Ammo				= 100
+		Weapon7	->* VehicleType.AmmoLM
+		Weapon7.Ammo				= 100
+	} Weapons
+
+} VehicleType

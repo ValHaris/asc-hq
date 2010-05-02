@@ -97,9 +97,9 @@ VehicleType {
 		Weapon4	->* VehicleType.AmmoBomb
 		Weapon4.Ammo				= 50	
 		Weapon5	->* VehicleType.AmmoTorp
-		Weapon6.Ammo				= 50
+		Weapon5.Ammo				= 50
 		Weapon6	->* VehicleType.AmmoSM
-		Weapon7.Ammo				= 50
+		Weapon6.Ammo				= 50
 		Weapon7	->* VehicleType.AmmoLM
 		Weapon7.Ammo				= 100
 	} Weapons
