@@ -2,12 +2,18 @@ VehicleType {
    Name = KOMISSAR
    parent = 400 401 402 418 493  
    ID = 12511
+ 
    Description = command submarine
-   Infotext = [Spezialeinheit von GenSek.]
+   Picture = pus_komissar.pcx
+   Infotext = [Spezialeinheit]
+
+   Features += Repair_Facility self_repairing moveduringreactionfire sonar jam_only_own_field
    Armor = 1300
    View = 40
    Jamming = 40
-   Picture = PUs_gensek.pcx
+   SelfRepairRate = 5
+   Weight = 4000
+
    Transportation { 
       MaxLoadableUnits = 15
       MaxLoadableUnitSize = 150
@@ -19,21 +25,20 @@ VehicleType {
       EntranceSystem2 ->* VehicleType.SubIO
       EntranceSystem3 ->* VehicleType.Fl2Sub
    } Transportation
+
    Tank { 
       Energy = 0
       Material = 30000
       fuel = 45000
    } Tank
    FuelConsumption = 50
-   Features += Repair_Facility self_repairing moveduringreactionfire sonar jam_only_own_field
    Height = deep_submerged submerged floating 
    Movement = 66 66 50 0 0 0 0 
    TerrainAccess ->* VehicleType.mediumship_terrain
-   SelfRepairRate = 5
-   Weight = 12000
+
    Weapons { 
    
-         Number = 8
+      Number = 8
       Weapon0 ->* VehicleType.SAMH 
       Weapon0.Type = air_missile ammo_transfer shootable 
       Weapon0.shotFrom = submerged floating 
@@ -44,11 +49,11 @@ VehicleType {
       Weapon0.HitAccuracy.u3 = 80
       
       Weapon1 ->* VehicleType.UTorp
-      Weapon1.Type = torpedo ammo_transfer shootable 
+      Weapon1.Type = torpedo shootable 
       Weapon1.Ammo = 100
       
       Weapon2 ->* VehicleType.MiniGun
-      Weapon2.Type = machinegun ammo_transfer shootable
+      Weapon2.Type = machinegun shootable
       Weapon2.ReactionFireShots = 1
       Weapon2.Ammo = 200
       
