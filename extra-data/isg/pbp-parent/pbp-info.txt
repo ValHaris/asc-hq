@@ -1,4 +1,4 @@
-Interstellare Gilde
+﻿Interstellare Gilde
 Grafics and Stats by GAMER
 PBP v11.00
 
@@ -176,3 +176,4 @@ ID 12575 Wult(MA)   Kukulcan
 ID 12576 Bahunabega DragonFly
 ID 12577 Unknown    Hermelin
 ID 12578 SDLG	    Seine Eminenz
+ID 12579 Bajuware   Atlantis
