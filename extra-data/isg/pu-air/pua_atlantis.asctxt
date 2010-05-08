@@ -1,0 +1,97 @@
+VehicleType { 
+	Name			= Atlantis
+	ID			= 12579
+	parent			= 497 325 401
+
+	Description 		= MEGA Luftschiff
+	Infotext		= []
+	picture			= pua_atlantis.png
+
+	View			= 0
+	Jamming			= 0
+	Weight			= 2000
+	Armor			= 600
+	Features		= ExternalFuelTransfer MoveDuringReactionFire self_repairing Repair_Facility
+	SelfRepairRate	= 10
+   
+	Height = ground_level low_level_flight medium_level_flight high_level_flight
+	Movement = 0 0 0 65 40 50 60 0 
+	FuelConsumption	= 50
+	Tank { 
+		Material	= 40000
+		fuel		= 60000
+	} Tank	
+
+	Jumpdrive {
+		Height = medium_level_flight
+		MaxDistance = 250
+		consumption {
+			Energie = 0
+			Material = 3000
+			Fuel = 5000
+		} consumption
+		terrain_any = deep_water water river shallow_water very_shallow_water Road Runway Hard_sand Lowland Soft_sand Hillside Mountains High_mountains Ditch Turret_foundation Installation small_rocks Large_rocks Railroad Frozen_water Forest
+		terrain_all = 
+		terrain_not = 
+		terrain_kill = 
+	} Jumpdrive
+	
+	Transportation {
+		MaxLoadableUnits 		= 2
+		MaxLoadableMass 		= 400
+		MaxLoadableUnitSize 		= 290	
+	
+		CategoriesNOT = heavy_wheeled_vehicle heavy_tracked_vehicle light_ship medium_ship heavy_ship rail_vehicle hoovercraft building_turret_object
+
+		EntranceSystemNum 		= 3
+		EntranceSystem0	->* VehicleType.GrIO
+
+		Entrancesystem1 ->* VehicleType.carrier
+		CategoriesNOT = default
+		Entrancesystem1.UnitHeightRel	= 0
+		Entrancesystem1.UnitHeightAbs	= medium_level_flight high_level_flight
+		Entrancesystem1.ContainerHeight	= medium_level_flight high_level_flight
+
+		EntranceSystem2 ->* VehicleType.container_in_out
+		
+	} Transportation	
+
+	Weapons { 
+		Number = 10
+		
+		Weapon0.shotFrom 			= medium_level_flight high_level_flight
+		Weapon0.targets				= medium_level_flight high_level_flight
+		
+		Weapon1 ->* VehicleType.ServiceGround
+
+		Weapon2 ->* VehicleType.ML
+		Weapon2.targets				= low_level_flight medium_level_flight high_level_flight orbit
+		Weapon2.LaserRechargeRate		= 1
+		Weapon2.LaserRechargeCost.material	= 150
+		Weapon2.LaserRechargeCost.fuel		= 200
+		Weapon2.Punch@MaxRange			= 70
+		Weapon2.Punch@MinRange			= 75
+		Weapon2.Ammo 				= 5
+		Weapon2.ReactionFireShots 		= 2
+		Weapon2.MinRange			= 10
+		Weapon2.MaxRange			= 30
+		
+		Weapon2.HitAccuracy.u2			= 0
+		Weapon2.HitAccuracy.d2			= 0		
+		
+		Weapon3	->* VehicleType.AmmoMG
+		Weapon3.Ammo					= 100	
+		Weapon4	->* VehicleType.AmmoCannon
+		Weapon4.Ammo					= 100
+		Weapon5	->* VehicleType.AmmoBomb
+		Weapon5.Ammo					= 80	
+		Weapon6	->* VehicleType.AmmoTorp
+		Weapon6.Ammo					= 30
+		Weapon7	->* VehicleType.AmmoSM
+		Weapon7.Ammo					= 50
+		Weapon8	->* VehicleType.AmmoLM
+		Weapon8.Ammo					= 30
+		Weapon9 ->* VehicleType.AmmoMine
+		Weapon9.Ammo					= 50
+   } Weapons
+} VehicleType
