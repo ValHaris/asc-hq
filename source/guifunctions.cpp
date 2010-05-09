@@ -766,7 +766,11 @@ void DestructBuilding::execute(  const MapCoordinate& pos, ContainerBase* subjec
 {
     DestructBuildingCommand* dbc = dynamic_cast<DestructBuildingCommand*>( NewGuiHost::pendingCommand );
     if ( !dbc ) {
-        auto_ptr<DestructBuildingCommand> db ( new DestructBuildingCommand( actmap->getField(pos)->vehicle ));
+		Vehicle* unit = actmap->getField(pos)->vehicle;
+		if ( !unit )
+			return;
+
+        auto_ptr<DestructBuildingCommand> db ( new DestructBuildingCommand( unit ));
 
         vector<MapCoordinate> fields = db->getFields();
 
