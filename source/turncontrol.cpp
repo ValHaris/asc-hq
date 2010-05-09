@@ -219,6 +219,15 @@ bool NextTurnStrategy_AskUser::authenticate( GameMap* actmap ) const
    return authenticateUser( actmap );
 }
 
+bool NextTurnStrategy_Abort::continueWhenLastPlayer() const { 
+   return false;
+};  
+
+bool NextTurnStrategy_Abort::authenticate( GameMap* actmap) const
+{
+   return true;  
+}
+
 
 void next_turn ( GameMap* gamemap, const NextTurnStrategy& nextTurnStrategy, MapDisplayInterface* display, int playerView  )
 {

@@ -52,7 +52,7 @@ am_libunittests_la_OBJECTS = movementtest.lo attacktest.lo \
 	transfercontroltest.lo recyclingtest.lo diplomacytest.lo \
 	researchtest.lo objectconstructiontest.lo actiontest.lo \
 	eventtest.lo jumptest.lo testversionidentifier.lo \
-	streamencoding.lo
+	streamencoding.lo maptest.lo
 libunittests_la_OBJECTS = $(am_libunittests_la_OBJECTS)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -250,7 +250,7 @@ AM_CXXFLAGS = $(SDL_CFLAGS) $(SIGC_CFLAGS)  @LokiInclude@ -I$(top_srcdir)/source
 noinst_LTLIBRARIES = libunittests.la
 libunittests_la_SOURCES = movementtest.cpp attacktest.cpp unittestutil.cpp main.cpp ai-move1.cpp viewtest.cpp ai-service1.cpp transfercontroltest.cpp \
                           recyclingtest.cpp diplomacytest.cpp researchtest.cpp objectconstructiontest.cpp actiontest.cpp eventtest.cpp jumptest.cpp \
-                          testversionidentifier.cpp streamencoding.cpp
+                          testversionidentifier.cpp streamencoding.cpp maptest.cpp
 
 libunittests_la_LIBADD = @SDL_LIBS@
 EXTRA_DIST = $(srcdir)/*.h
@@ -314,6 +314,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/eventtest.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/jumptest.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/maptest.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/movementtest.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/objectconstructiontest.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/recyclingtest.Plo@am__quote@

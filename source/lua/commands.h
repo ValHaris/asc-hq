@@ -60,6 +60,9 @@ extern ActionResult setResearchGoal( GameMap* actmap, int actingPlayer, int tech
       
 extern void endTurn();
 
+//! ends a turn. All user interaction is avoided. Intended for unit tests and other automated tasks
+extern void endTurn_headLess(GameMap* gamemap);
+
 extern Vehicle* getSelectedUnit( GameMap* map );
 
 #endif

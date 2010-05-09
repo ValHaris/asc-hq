@@ -5821,6 +5821,29 @@ fail:
 }
 
 
+static int _wrap_endTurn_headLess(lua_State* L) {
+  int SWIG_arg = 0;
+  GameMap *arg1 = (GameMap *) 0 ;
+  
+  SWIG_check_num_args("endTurn_headLess",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("endTurn_headLess",1,"GameMap *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_GameMap,0))){
+    SWIG_fail_ptr("endTurn_headLess",1,SWIGTYPE_p_GameMap);
+  }
+  
+  endTurn_headLess(arg1);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_getSelectedUnit(lua_State* L) {
   int SWIG_arg = 0;
   GameMap *arg1 = (GameMap *) 0 ;
@@ -5835,6 +5858,29 @@ static int _wrap_getSelectedUnit(lua_State* L) {
   
   result = (Vehicle *)getSelectedUnit(arg1);
   SWIG_NewPointerObj(L,result,SWIGTYPE_p_Vehicle,0); SWIG_arg++; 
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_assertSuccess(lua_State* L) {
+  int SWIG_arg = 0;
+  ActionResult *arg1 = 0 ;
+  
+  SWIG_check_num_args("assertSuccess",1,1)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("assertSuccess",1,"ActionResult const &");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_ActionResult,0))){
+    SWIG_fail_ptr("assertSuccess",1,SWIGTYPE_p_ActionResult);
+  }
+  
+  assertSuccess((ActionResult const &)*arg1);
+  
   return SWIG_arg;
   
   if(0) SWIG_fail;
@@ -5893,7 +5939,9 @@ static const struct luaL_reg swig_commands[] = {
     { "cancelResearch", _wrap_cancelResearch},
     { "setResearchGoal", _wrap_setResearchGoal},
     { "endTurn", _wrap_endTurn},
+    { "endTurn_headLess", _wrap_endTurn_headLess},
     { "getSelectedUnit", _wrap_getSelectedUnit},
+    { "assertSuccess", _wrap_assertSuccess},
     {0,0}
 };
 

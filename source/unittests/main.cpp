@@ -41,6 +41,7 @@
 #include "testversionidentifier.h"
 #include "streamencoding.h"
 #include "tasks/taskcontainer.h"
+#include "maptest.h"
 
 
 void viewcomp( Player& player )
@@ -74,6 +75,7 @@ bool loadGameFromFile( const ASCString& filename )
 
 void runUnitTests()
 {
+   // testMaps();
    testMovement();   
    testStreamEncoding();
    testVersionIdentifier();

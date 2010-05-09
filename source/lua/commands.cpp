@@ -720,6 +720,11 @@ void endTurn()
    next_turn( actmap, NextTurnStrategy_OnlyCampaign(), &getDefaultMapDisplay() );
 }
 
+void endTurn_headLess( GameMap* gamemap )
+{
+   next_turn( gamemap, NextTurnStrategy_Abort(), NULL, -1 );
+}
+
 Vehicle* getSelectedUnit( GameMap* map )
 {
    MapField* fld = map->getField( map->getCursor() );

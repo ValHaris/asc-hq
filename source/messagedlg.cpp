@@ -571,6 +571,10 @@ void viewmessages ( const char* title, const MessagePntrContainer& msg, bool edi
 
 bool viewmessage ( const Message& message )
 {
+   //! maybe we are running in text mode
+   if ( PG_Application::GetScreen()==NULL )
+      return false;
+   
    assert( !legacyEventSystemActive() );
    IngameMessageViewer igm( "incoming message...", message );
    igm.Show();

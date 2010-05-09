@@ -24,13 +24,6 @@ class TestFailure : public ASCmsgException {
       }
 };
 
-class NextTurnStrategy_Abort : public NextTurnStrategy {
-   public:
-      bool continueWhenLastPlayer() const;
-      bool authenticate( GameMap* actmap) const;
-} ;
-
-
 extern Context createTestingContext( GameMap* gamemap );
 extern void testCargoMovement( Vehicle* veh, int movement );
 extern void testCargoMovementMax( Vehicle* veh, int movement );

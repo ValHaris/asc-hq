@@ -42,10 +42,10 @@ const int guiIconSpace = 5;
 const int guiIconColumnNum = 3;
 
 
-const int smallGuiIconSizeX = 30;
-const int smallGuiIconSizeY = 22;
+const int smallGuiIconSizeX = 49;
+const int smallGuiIconSizeY = 35;
 const int smallGuiIconSpace = 2;
-const float smallGuiIconSizeFactor = 0.6;
+const float smallGuiIconSizeFactor = 1;
 
 
 
@@ -131,9 +131,9 @@ SmallGuiButton::SmallGuiButton( PG_Widget *parent, const PG_Rect &r, GuiButton* 
   sigClick.connect ( SigC::slot( *host, &NewGuiHost::clearSmallIcons ));
   sigClick.connect ( SigC::slot( *guiButton, &GuiButton::exec ));
 
-  SetBackground( PRESSED, IconRepository::getIcon("empty-small-pressed.png").getBaseSurface() );
-  SetBackground( HIGHLITED, IconRepository::getIcon("empty-small-high.png").getBaseSurface() );
-  SetBackground( UNPRESSED, IconRepository::getIcon("empty-small.png").getBaseSurface() );
+  SetBackground( PRESSED, IconRepository::getIcon("empty-pressed.png").getBaseSurface() );
+  SetBackground( HIGHLITED, IconRepository::getIcon("empty-high.png").getBaseSurface() );
+  SetBackground( UNPRESSED, IconRepository::getIcon("empty.png").getBaseSurface() );
   SetBorderSize(0,0,0);
   SetDirtyUpdate(true);
 

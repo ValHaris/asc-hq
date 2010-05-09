@@ -214,3 +214,9 @@ void setCursorPosition( const GameMap* gamemap, const MapCoordinate& pos )
       if ( pos.x < gamemap->xsize && pos.y < gamemap->ysize )
          gamemap->getCursor() = pos;
 }
+
+void assertSuccess( const ActionResult& result )
+{
+   if ( result.successful() ) 
+      throw ASCmsgException(result.getMessage() );
+}

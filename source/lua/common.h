@@ -90,6 +90,7 @@ extern MapCoordinate getCursorPosition( const GameMap* gamemap );
 
 extern void setCursorPosition( const GameMap* gamemap, const MapCoordinate& pos );
 
+extern void assertSuccess( const ActionResult& result );
 
 #endif
 

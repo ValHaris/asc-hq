@@ -52,6 +52,13 @@ class NextTurnStrategy_AskUser : public NextTurnStrategy {
       bool authenticate( GameMap* actmap  ) const;  
 } ;
 
+class NextTurnStrategy_Abort : public NextTurnStrategy {
+   public:
+      bool continueWhenLastPlayer() const;
+      bool authenticate( GameMap* actmap) const;
+} ;
+
+
 
 /*! Ends the turn of the current player and runs AI until a player is human again
     \param playerView -2 = detect automatically; -1 = don't display anything; 0-7 = this player is watching
@@ -81,6 +88,7 @@ extern int findNextPlayer( GameMap* actmap, AbstractPlayerProcessing* playerProc
 
 //! skips the next player. This is for administrative use, for example if a player does not react
 extern void skipTurn( GameMap* gamemap );
+
 
 
 #endif

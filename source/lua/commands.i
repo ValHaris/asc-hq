@@ -61,8 +61,12 @@ extern ActionResult cancelResearch( GameMap* actmap, int actingPlayer );
 extern ActionResult setResearchGoal( GameMap* actmap, int actingPlayer, int techID );
 
 extern void endTurn();
+extern void endTurn_headLess( GameMap* gamemap );
 
 /** returns the unit under the cursor, provided that there is a unit and it belongs to the active player
     return NULL otherwise
 */
 extern Vehicle* getSelectedUnit( GameMap* map );
+
+//! throw an AssertionException if the result indicates failure
+extern void assertSuccess( const ActionResult& result );
