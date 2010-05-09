@@ -444,11 +444,12 @@ void tunitattacksunit :: setresult( const Context& context )
    if( av.damage >= 100 )
       log ( _attackedunit, _attackingunit );
 
+   if( dv.damage >= 100 )
+      log ( _attackingunit, _attackedunit );
+   
    GameAction* g = new InflictDamage( _attackedunit, dv.damage - _attackedunit->damage  );
    g->execute ( context );
    
-   if( dv.damage >= 100 )
-      log ( _attackingunit, _attackedunit );
 
    /* If the attacking vehicle was destroyed, remove it */
    if ( av.damage >= 100 ) {
