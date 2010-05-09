@@ -1,0 +1,41 @@
+VehicleType { 
+   Name = MUHS
+   parent = 610 
+   ID = 1482
+   
+   Description = support submarine
+   Infotext = []
+   picture = mk5s_muhs.pcx
+
+   Transportation ->* VehicleType.TransTurretMed
+   Transportation.EntranceSystemNum = 2
+   Transportation.EntranceSystem2 ->* VehicleType.SubIO
+   
+   Features = externalRepair Repair_Facility Sonar automatic_resource_searching construct_specific_buildings jam_only_own_field ExternalMaterialTransfer ExternalFuelTransfer ExternalAmmoTransfer
+   ResourceDrillingRange = 4
+  
+   Tank { 
+      Material = 30000
+      fuel = 30000
+   } Tank
+   Movement += 11 22 11 0 0 0 0 0
+   FuelConsumption = 20
+
+   Construction { 
+      Buildings = 13 16-19 61
+      Vehicles = 1422 1483 1419 1432 1433 1405
+      Objects = 995 996 997 998 999 1000 1400 14001 44 30 3
+      ObjectGroupsRemovable = 1 2 3 4 6 7 8 10 11 13 14 15
+   } Construction
+
+   Weapons {
+      Number = 4
+      Weapon0 ->* VehicleType.ServiceSpSub
+      Weapon1 ->* VehicleType.AmmoTorp
+      Weapon1.Ammo = 20
+      Weapon2 ->* VehicleType.AmmoCannon
+      Weapon2.Ammo = 50
+      Weapon3 ->* VehicleType.AmmoLM
+      Weapon3.Ammo = 30
+   } Weapons
+} VehicleType

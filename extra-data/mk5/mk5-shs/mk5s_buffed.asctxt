@@ -1,0 +1,36 @@
+VehicleType { 
+   Name = BUFFED
+   parent = 369
+   ID = 1481
+   
+   Description = transport ship
+   Infotext = [] 
+   picture = mk5s_buffed.pcx
+   GuideSortHelp += 0 0 0 0 5 0 0 0 0 0
+
+   Armor += 100
+   Transportation ->* VehicleType.TransShip
+   Transportation.MaxLoadableUnits = 16
+   Transportation.MaxLoadableUnitSize = 900
+   Transportation.MaxLoadableMass = 6000
+
+   Features += MoveDuringReactionFire Vehicle_Production NoProductionCustomization 
+
+;   Construction {
+;      VehiclesInternally = 1483 1485
+;      ProductionEfficiency = [   0   0   2
+;                                 0   1   0
+;                                 0   0   1 ]
+;   } Construction 
+
+   Weapons { 
+      Weapon5 ->* VehicleType.SAMH 
+      Weapon5.MaxRange = 60
+      Weapon5.Targets = high_level_flight orbit
+      Weapon5.Ammo = 100
+      Weapon5.HitAccuracy.u4 = 100
+      Weapon6 ->* VehicleType.SAM
+      Weapon6.MaxRange = 70
+      Weapon6.Ammo = 100
+   } Weapons
+} VehicleType

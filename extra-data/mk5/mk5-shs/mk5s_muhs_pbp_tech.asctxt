@@ -1,0 +1,10 @@
+technology {
+   Name = MUHS
+   infotext = 
+   id = 1482
+   RelatedUnitID = 1482
+   parent = 1499
+   researchpoints *= 12
+   techlevel = 3
+   TechnologiesRequired = 1499,100004,100103 
+} Technology
