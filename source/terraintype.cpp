@@ -167,7 +167,7 @@ TerrainType::Weather::~Weather()
 }
 
 
-const int terrain_version = 5;
+const int terrain_version = 6;
 
 
 void TerrainType::MoveMalus::read( tnstream& stream, int defaultValue, int moveMalusCount )
@@ -303,38 +303,32 @@ void TerrainType::Weather::write ( tnstream& stream ) const
 void TerrainType::read( tnstream& stream )
 {
    int version = stream.readInt();
-   if ( version == terrain_version || version == 1) {
-
-      stream.readInt(); // name = (char*)
-      id   = stream.readInt();
-
-      bool ___loadWeather[cwettertypennum];
-      for ( int ww = 0; ww < cwettertypennum; ww++ )
-         ___loadWeather[ww] = stream.readInt();
-
-      for ( int nf = 0; nf < 8; nf++ )
-         stream.readInt(); // neighbouringfield[nf]
-
-      name = stream.readString();
-
-      for ( int i=0; i<cwettertypennum ;i++ ) {
-         if ( ___loadWeather[i] ) {
-            weather[i] = new TerrainType::Weather ( this );
-            weather[i]->read( stream, version );
-         } else
-            weather[i] = NULL;
-
-      } /* endfor */
-
-   } else
+   if ( version > terrain_version || (version < 5 && version !=1) ) 
       throw tinvalidversion ( stream.getDeviceName(), terrain_version, version );
+      
+   stream.readInt(); 
+   id   = stream.readInt();
 
-   /*
-   if ( version >= 5 ) {
-      filename = stream.readString();
-      location = stream.readString();
-   }
-   */
+   bool ___loadWeather[cwettertypennum];
+   for ( int ww = 0; ww < cwettertypennum; ww++ )
+      ___loadWeather[ww] = stream.readInt();
+
+   for ( int nf = 0; nf < 8; nf++ )
+      stream.readInt(); // neighbouringfield[nf]
+
+   name = stream.readString();
+
+   for ( int i=0; i<cwettertypennum ;i++ ) {
+      if ( ___loadWeather[i] ) {
+         weather[i] = new TerrainType::Weather ( this );
+         weather[i]->read( stream, version );
+      } else
+         weather[i] = NULL;
+
+   } /* endfor */
+
+   if ( version >= 6 )
+      readClassContainer( secondaryIDs, stream );
 }
 
 
@@ -353,6 +347,8 @@ void TerrainType::write ( tnstream& stream ) const
    for ( int i = 0; i < cwettertypennum ; i++ ) 
       if ( weather[i] ) 
          weather[i]->write( stream );
+
+   writeClassContainer( secondaryIDs, stream );
 
    /*
    stream.writeString(filename);
