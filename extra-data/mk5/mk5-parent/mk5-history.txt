@@ -2,6 +2,10 @@ MK5 Outlaw
 Grafiken: GAMER
 InfoText: Hastrubal
 InfoImage: GAMER, BananaJoe
+
+________________________
+z84
+-Hoover, Techbugfix
 ________________________
 Bugfix:FBV Tank auf 15k erhöht
 ________________________
