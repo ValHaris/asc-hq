@@ -1,4 +1,4 @@
-maps/*.*
+maps/*
 mk4/mk4-bld/*.*
 mk4/mk4-for/*.*
 mk4/mk4-heli/*.*
