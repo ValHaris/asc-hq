@@ -11,9 +11,3 @@ pbp.ascdat: pbp.d
 clean-local:
 	rm -f pbp.ascdat pbp.d 
 
-
-dist-hook:
-	cp -pr $(srcdir)/buildings $(srcdir)/unitsets $(srcdir)/icons $(srcdir)/trrobj $(srcdir)/campaign $(distdir)
-	cp -p `find $(srcdir) -maxdepth 1 -type f` $(distdir)
-	rm -f $(distdir)/main.ascdat
-	
