@@ -1,6 +1,6 @@
 MAINTAINERCLEANFILES	= Makefile.in
 
-SUBDIRS 		= source data doc installer unittester
+SUBDIRS 		= source data doc installer unittester @extradatadir@
 EXTRA_DIST 		= asc.kdevelop AUTHORS COPYING ChangeLog INSTALL README TODO asc.lsm bootstrap asc.suse.spec
 AUTOMAKE_OPTIONS 	= foreign
 

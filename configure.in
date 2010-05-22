@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(asc, )
+AC_INIT(asc,2.4.83.1)
 
 AM_CONFIG_HEADER(config.h)
 AM_INIT_AUTOMAKE
@@ -58,9 +58,9 @@ if test "$GCC" = yes; then
                [ make them Redhat compatible ;) ]])
       fi
 
-      gcc_version29=`echo $gcc_version | grep 2.9`
+      gcc_version29=`echo $gcc_version | grep " 2.9"`
       if test "X$gcc_version29" != "X"; then
-         AC_MSG_WARN([ GCC $gcc_version detected. We don't support that any more. ])
+         AC_MSG_WARN([ GCC $gcc_version detected. We don't support GCC prior to version 3.0 any more. ])
       fi
    fi
 fi
@@ -638,6 +638,8 @@ AC_SUBST(asc_version)
 dnl this is a hack to prevent automake from interpreting the include statement; it would do so if it was directly in data/Makefile.am
 maindatainclude="include main.mak"
 AC_SUBST(maindatainclude)
+extradatainclude="include pbp.mak"
+AC_SUBST(extradatainclude)
 
 
 
@@ -680,11 +682,20 @@ AC_SUBST(VIDEOCODER)
 AC_SUBST(revellib)
 AC_SUBST(revellibfile)
    
+AC_ARG_ENABLE( extradata, AS_HELP_STRING([--enable-extradata], [Build extra data]), extradata=yes )
+   
 
 AC_MSG_NOTICE( Creating Makefile for main.ascdat )
 mkdir -p data
-perl -e 'print "main.d: "; @a=<>; chomp @a; print join(" \\\n\t", map ( $_ = "\$(srcdir)/" . $_ , @a )); print " ; touch main.d\n"; ' < $srcdir/data/files.txt > data/main.mak
+perl -e 'print "main.d: "; @a=<>; chomp @a; print join(" ", map ( $_ = "\$(srcdir)/" . $_ , @a )); print "\n\ttouch main.d\n"; ' < $srcdir/data/files.txt > data/main.mak
 
+if test x$extradata = xyes ; then 
+   mkdir -p extra-data
+   perl -e 'print "pbp.d: "; @a=<>; chomp @a; print join(" ", map ( $_ = "\$(srcdir)/" . $_ , @a )); print "\n\ttouch pbp.d\n"; ' < $srcdir/extra-data/files_pbp.txt > extra-data/pbp.mak
+
+   extradatadir=extra-data
+fi
+AC_SUBST(extradatadir)
 
 AC_CONFIG_FILES( [ Makefile \
        asc.spec \
@@ -740,6 +751,7 @@ AC_CONFIG_FILES( [ Makefile \
        data/sounds/Makefile \
        data/dialog/Makefile \
        data/music/Makefile \
+       extra-data/Makefile \
        installer/Makefile \
        installer/asc.nsi \
        unittester/Makefile ]) 

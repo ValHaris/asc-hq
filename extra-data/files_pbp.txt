@@ -1,5 +1,3 @@
-pbp.version
-pbpversion.ascdat
 maps/*.*
 mk4/mk4-bld/*.*
 mk4/mk4-for/*.*
@@ -25,18 +23,18 @@ mk4/mk4-vrok/*.*
 mk4/mk4-vsup/*.*
 mk4/mk4-obj/*.*
 mk4/mk4-parent/*.*
-isg/PBP-BLD/*.*
-isg/PBP-FOR/*.*
-isg/PBP-ISG/*.*
+isg/pbp-bld/*.*
+isg/pbp-for/*.*
+isg/pbp-isg/*.*
 isg/pbp-bugs/*.*
-isg/PBP-OBJ/*.*
+isg/pbp-obj/*.*
 isg/pu-air/*.*
 isg/pu-ground/*.*
 isg/pu-inaktiv/*.*
 isg/pu-sea/*.*
 isg/pu-mixed/*.*
 isg/pu-infoimages/*.*
-isg/PBP-Parent/*.*
+isg/pbp-parent/*.*
 mk5/mk5-bld/*.*
 mk5/mk5-for/*.*
 mk5/mk5-heli/*.*
@@ -53,7 +51,6 @@ mk5/mk5-shtu/*.*
 mk5/mk5-sta/*.*
 mk5/mk5-tank/*.*
 mk5/mk5-vad/*.*
-mk5/mk5-vari/*.*
 mk5/mk5-vfatr/*.*
 mk5/mk5-view/*.*
 mk5/mk5-vrok/*.*
@@ -83,7 +80,6 @@ mk6/mk6-vsup/*.*
 mk6/mk6-parent/*.*
 ma/ma-bld/*.*
 ma/ma-for/*.*
-ma/ma-heli/*.*
 ma/ma-inf/*.*
 ma/ma-jam/*.*
 ma/ma-obj/*.*
@@ -92,12 +88,10 @@ ma/ma-pbat/*.*
 ma/ma-pdro/*.*
 ma/ma-psup/*.*
 ma/ma-shb/*.*
-ma/ma-shh/*.*
 ma/ma-shs/*.*
 ma/ma-shtu/*.*
 ma/ma-sta/*.*
 ma/ma-tank/*.*
-ma/ma-train/*.*
 ma/ma-vad/*.*
 ma/ma-vari/*.*
 ma/ma-vfatr/*.*
@@ -121,4 +115,3 @@ sy/sy-vari/*.*
 sy/sy-vfatr/*.*
 sy/sy-view/*.*
 sy/sy-parent/*.*
-sy/sy-units/*.*
