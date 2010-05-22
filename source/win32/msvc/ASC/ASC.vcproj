@@ -987,6 +987,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\actions\actionavailability.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\actions\actioncontainer.cpp"
 					>
 				</File>
