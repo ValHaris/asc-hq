@@ -223,7 +223,7 @@ reqwx=2.4.0
 AM_PATH_WXCONFIG($reqwx, wxWin=1)
 if test "$wxWin" != 1; then
 	AC_MSG_ERROR([
-		wxWidgets $reqwx must be installed on your system.
+		wxWidgets $reqwx or later must be installed on your system.
 		
 		If you have a distribution supplied wxWidgets package installed,
 		perhaps the wxWidgets-devel package is missing. 

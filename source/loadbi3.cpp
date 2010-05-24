@@ -1468,11 +1468,15 @@ void tloadBImap :: LoadTXTFile ( char* filename )
    memset(txtbuffer, 0, txtsize+10000);
 
    char buf[1000];
-   fread ( buf, 1, 4, fp );
+   if ( fread ( buf, 1, 4, fp ) != 4)
+      throw treadafterend( filename );
+   
    if ( strncmp ( buf, "TPWM",4) == 0  ) {
       // The file is compressed.
 //      unsigned long tpwmsize=txtsize; // store the size of the compressed file.
-      fread(&txtsize, 4, 1, fp); // this is the uncompressed size.
+      if ( fread(&txtsize, 4, 1, fp) != 1 ) // this is the uncompressed size.
+         throw treadafterend( filename );
+      
       unsigned long outptr=0;
       txtbuffer=(char *)realloc(txtbuffer, txtsize+10000);
 
@@ -1496,9 +1500,12 @@ void tloadBImap :: LoadTXTFile ( char* filename )
          char code=0;
          char inbuf[16]; // worst case buffer usage is 8*2
          int inptr=0;
-         fread(&code, 1, 1, fp);
+         if ( fread(&code, 1, 1, fp) != 1 );
+            throw treadafterend( filename );
          char bitsset=((code>>7)&1)+((code>>6)&1)+((code>>5)&1)+((code>>4)&1)+((code>>3)&1)+((code>>2)&1)+((code>>1)&1)+((code>>0)&1);
-         fread(&inbuf, 8+bitsset, 1, fp);
+         if ( fread(&inbuf, 8+bitsset, 1, fp) != 1 )
+            throw treadafterend( filename );
+   
          for (int i=0; (i<8)&&(outptr<txtsize); i++)
          {
             if ((code&(0x80>>i))==0)
@@ -1523,7 +1530,8 @@ void tloadBImap :: LoadTXTFile ( char* filename )
       }
    } else {
       // The file is uncompressed.
-      fread(txtbuffer, txtsize, 1, fp);
+      if ( fread(txtbuffer, txtsize, 1, fp) != 1 )
+         throw treadafterend( filename );
    }
 
     txtbuffer[txtsize]=0;
