@@ -22148,7 +22148,7 @@ $as_echo "no (version $WX_VERSION is not new enough)" >&6; }
 
 if test "$wxWin" != 1; then
 	as_fn_error "
-		wxWidgets $reqwx must be installed on your system.
+		wxWidgets $reqwx or later must be installed on your system.
 
 		If you have a distribution supplied wxWidgets package installed,
 		perhaps the wxWidgets-devel package is missing.

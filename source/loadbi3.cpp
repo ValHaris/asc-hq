@@ -1499,12 +1499,14 @@ void tloadBImap :: LoadTXTFile ( char* filename )
       {
          char code=0;
          char inbuf[16]; // worst case buffer usage is 8*2
+         memset(inbuf,0,16);
          int inptr=0;
-         if ( fread(&code, 1, 1, fp) != 1 );
+         if ( fread(&code, 1, 1, fp) != 1 )
             throw treadafterend( filename );
          char bitsset=((code>>7)&1)+((code>>6)&1)+((code>>5)&1)+((code>>4)&1)+((code>>3)&1)+((code>>2)&1)+((code>>1)&1)+((code>>0)&1);
-         if ( fread(&inbuf, 8+bitsset, 1, fp) != 1 )
-            throw treadafterend( filename );
+         
+         int toread = min(8+bitsset, int(txtsize-outptr));
+         fread(&inbuf, toread, 1, fp);
    
          for (int i=0; (i<8)&&(outptr<txtsize); i++)
          {
@@ -1617,6 +1619,9 @@ void tloadBImap :: LoadFromFile( const char* path, const char* AFileName, Terrai
           actmap->maptitle = "imported BI map";
 
     } /* endtry */
+    catch ( treadafterend ) {
+       throw;
+    }
     catch ( tfileerror err ) {
        strcat ( missing, "\nA fatal error occured while accessing the file " );
        strcat ( missing, err.getFileName().c_str() );

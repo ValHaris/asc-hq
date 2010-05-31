@@ -3,7 +3,7 @@ BuildingType {
    parent = 12022
    ID = 12024
 
-   Features = Selfdestruct_at_conquer Repair_Facility Recycling
+   Features = Selfdestruct_at_conquer Repair_Facility Recycling Ammo_Production
    ConstructionStages = 1
    Weather = dry 
    Fields = B5
