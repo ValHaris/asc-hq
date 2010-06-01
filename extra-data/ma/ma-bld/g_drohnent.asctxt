@@ -28,7 +28,7 @@ BuildingType {
       CategoriesNOT = default hoovercraft Light_tracked_vehicle Medium_tracked_vehicle Heavy_tracked_vehicle Light_wheeled_vehicle Medium_wheeled_vehicle Heavy_wheeled_vehicle Medium_ship Heavy_Ship Rail_vehicle building|turret|object trooper
       EntranceSystemNum = 1
       EntranceSystem0 {
-        Mode = out docking
+        Mode = In out docking
         UnitHeightAbs = low_level_flight ground_level floating
         UnitHeightRel = -100
         ContainerHeight = ground_level
