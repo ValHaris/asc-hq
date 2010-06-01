@@ -522,7 +522,7 @@ class CargoDialog : public Panel
                if ( res.successful() )
                   cargomove.release();
             } else {
-               if ( container->getCarrier() ) {
+               if ( container->getCarrier() && !targetUnit ) {
                   auto_ptr<CargoMoveCommand> cargomove ( new CargoMoveCommand( draggedUnit ));
                   cargomove->setMode( CargoMoveCommand::moveOutwards );
                   ActionResult res = cargomove->execute ( createContext( getContainer()->getMap() ));
