@@ -723,17 +723,8 @@ bool UnitInfo::available( const MapCoordinate& pos, ContainerBase* subject, int 
 
 class DestructBuilding : public GuiFunction
 {
-    bool cancel;
 public:
-    DestructBuilding() : cancel(false) {};
-
     bool available( const MapCoordinate& pos, ContainerBase* subject, int num ) ;
-    bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num ) {
-        if ( key->keysym.sym == SDLK_ESCAPE ) {
-            cancel = true;
-            return true;
-        } else return false;
-    };
     void execute( const MapCoordinate& pos, ContainerBase* subject, int num );
     Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num ) {
         return IconRepository::getIcon("destructbuilding.png");
@@ -746,9 +737,6 @@ public:
 
 bool DestructBuilding::available( const MapCoordinate& pos, ContainerBase* subject, int num )
 {
-    if ( cancel )
-        return true;
-
     MapField* fld = actmap->getField(pos);
     if (!commandPending()) {
         if ( fld->vehicle )
