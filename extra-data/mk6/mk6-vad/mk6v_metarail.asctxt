@@ -7,6 +7,12 @@ VehicleType {
    Picture = mk6v_metarail.png
    Infotext = []
 
+   Tank {
+      Energy = 0
+      Material = 600
+      fuel = 1400
+   } Tank
+
    Weapons { 
       Weapon0 {
          Name = Ground-Air Railgun
