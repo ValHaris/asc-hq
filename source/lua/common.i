@@ -33,6 +33,11 @@ class MapCoordinate {
       MapCoordinate(int x, int y );
       bool valid();
       std::string toString();
+      
+      %immutable;
+      int x;
+      int y;
+      
 };
 
 

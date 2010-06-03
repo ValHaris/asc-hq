@@ -2281,6 +2281,54 @@ fail:
 }
 
 
+static int _wrap_MapCoordinate_x_get(lua_State* L) {
+  int SWIG_arg = 0;
+  MapCoordinate *arg1 = (MapCoordinate *) 0 ;
+  int result;
+  
+  SWIG_check_num_args("x",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("x",1,"MapCoordinate *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_MapCoordinate,0))){
+    SWIG_fail_ptr("MapCoordinate_x_get",1,SWIGTYPE_p_MapCoordinate);
+  }
+  
+  result = (int) ((arg1)->x);
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_MapCoordinate_y_get(lua_State* L) {
+  int SWIG_arg = 0;
+  MapCoordinate *arg1 = (MapCoordinate *) 0 ;
+  int result;
+  
+  SWIG_check_num_args("y",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("y",1,"MapCoordinate *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_MapCoordinate,0))){
+    SWIG_fail_ptr("MapCoordinate_y_get",1,SWIGTYPE_p_MapCoordinate);
+  }
+  
+  result = (int) ((arg1)->y);
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static void swig_delete_MapCoordinate(void *obj) {
 MapCoordinate *arg1 = (MapCoordinate *) obj;
 delete arg1;
@@ -2291,6 +2339,8 @@ static swig_lua_method swig_MapCoordinate_methods[] = {
     {0,0}
 };
 static swig_lua_attribute swig_MapCoordinate_attributes[] = {
+    { "x", _wrap_MapCoordinate_x_get, SWIG_Lua_set_immutable},
+    { "y", _wrap_MapCoordinate_y_get, SWIG_Lua_set_immutable},
     {0,0,0}
 };
 static swig_lua_class *swig_MapCoordinate_bases[] = {0};
