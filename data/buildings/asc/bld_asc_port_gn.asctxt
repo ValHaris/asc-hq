@@ -1,5 +1,5 @@
 BuildingType {
-   Name = Shipyard North
+   Name = Shipyard N
    ID = 16
    parent = 499
    Infotext = [Fertigungsanlage für Schiffe, incl. Munition, Reparatur und Wiederverwertung.]
@@ -11,13 +11,6 @@ BuildingType {
       dry = bld_ASC_port.png
    } Pictures
    RubbleObjects = false
-;   rubble {
-;      A1 = 76
-;      A2 = 77
-;      A3 = 78
-;      B1 = 76
-;      B3 = 77
-;   } rubble
    Entry = A4
    Armor = 2500
    Transportation { 

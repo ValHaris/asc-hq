@@ -29,7 +29,7 @@ Diese Einheit wurde "Prophet" genannt, nach unserem groﬂen Oberst, der in weiser
    Weight = 150
 
    Construction { 
-      Buildings = 1-7 10-23 26 29-32 35-37 
+      Buildings = 1-7 10-23 26 29-32 35-37 40 41
       Vehicles = 1219 1278 1222 1221 1295 14004 1276
       Objects = 1 2 3 9 10 30 44 45 1000 999 998 997 996 995 991 181 2153 2097 2098
       ObjectsRemovable = 2096-2098

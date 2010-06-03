@@ -1,5 +1,5 @@
 BuildingType {
-   Name = Shipyard South
+   Name = Shipyard S
    ID = 17
    parent = 16
    ConstructionStages = 1
@@ -9,12 +9,5 @@ BuildingType {
       dry = bld_ASC_port.png
    } Pictures
    RubbleObjects = false
-;   rubble {
-;      A1 = 76
-;      A2 = 77
-;      A3 = 78
-;      B1 = 76
-;      B3 = 77
-;   } rubble
    Entry = C2
 } BuildingType

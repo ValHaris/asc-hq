@@ -1,0 +1,5 @@
+Techadapter {
+   Name = B40
+   ;Bezeichnung der verknüpften Technologie: Shipyard NW
+   TechnologiesRequired = 100020
+} TechAdapter

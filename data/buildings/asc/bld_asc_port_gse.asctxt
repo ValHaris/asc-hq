@@ -1,13 +1,13 @@
 BuildingType {
-   Name = Shipyard NE
-   ID = 18
+   Name = Shipyard SE
+   ID = 41
    parent = 16
    ConstructionStages = 1
    Weather = dry
-   Fields = A2 A3 A5 A6 B5 
+   Fields = C2 C3 C5 C6 D3 
    Pictures { 
-      dry = bld_ASC_port_diag.png
+      dry = bld_ASC_port_diag2.png
    } Pictures
    RubbleObjects = false
-   Entry = A5
+   Entry = C3
 } BuildingType

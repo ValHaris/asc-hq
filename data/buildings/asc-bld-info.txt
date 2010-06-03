@@ -43,6 +43,8 @@ ID 36 ASC Farm
 ID 37 ASC Lumbercamp
 ID 38 ASC DeepCore
 ID 39 ASC Windrad
+ID 40 ASC Hafen groß Nordwest  -> 16
+ID 41 ASC Hafen groß Südost    -> 16
 
 MK4
 ID 61 Subbase
