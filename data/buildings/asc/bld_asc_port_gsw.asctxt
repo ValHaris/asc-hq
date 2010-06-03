@@ -1,5 +1,5 @@
 BuildingType {
-   Name = Shipyard South
+   Name = Shipyard SW
    ID = 19
    parent = 16
    ConstructionStages = 1
