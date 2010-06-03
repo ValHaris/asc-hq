@@ -575,8 +575,8 @@ ASC_MainScreenWidget::ASC_MainScreenWidget( PG_Application& application )
    int counter = 0;
    for ( CGameOptions::PanelDataContainer::iterator i = CGameOptions::Instance()->panelData.begin(); i != CGameOptions::Instance()->panelData.end(); ++i ) {
       if ( i->second.visible ) {
-         ++counter;
-         spawnPanel( i->first );
+         if ( spawnPanel( i->first ))
+            ++counter;
       }
    }
 
@@ -643,25 +643,39 @@ void displaymessage2( const char* formatstring, ... )
 
 
 
-void ASC_MainScreenWidget::spawnPanel ( const ASCString& panelName )
+bool ASC_MainScreenWidget::spawnPanel ( const ASCString& panelName )
 {
-   if ( panelName == "WindInfo" )
+   if ( panelName == "WindInfo" ) {
       spawnPanel ( WindInfo );
+      return true;
+   }
 
-   if ( panelName == "UnitInfo" )
+   if ( panelName == "UnitInfo" ) {
       spawnPanel ( UnitInfo );
+      return true;
+   }
    
-   if ( panelName == "GuiIcons" )
+   if ( panelName == "GuiIcons" ) {
       spawnPanel ( ButtonPanel );
+      return true;
+   }
 
-   if ( panelName == "OverviewMap" )
+   if ( panelName == "OverviewMap" ) {
       spawnPanel ( OverviewMap );
+      return true;
+   }
 
-   if ( panelName == "MapInfo" )
+   if ( panelName == "MapInfo" ) {
       spawnPanel ( MapControl );
+      return true;
+   }
 
-   if ( panelName == "ActionInfo" )
+   if ( panelName == "ActionInfo" ) {
       spawnPanel ( ActionInfo );
+      return true;
+   }
+   
+   return false;
 }
 
 void ASC_MainScreenWidget::spawnPanel ( Panels panel )

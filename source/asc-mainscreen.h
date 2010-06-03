@@ -60,7 +60,9 @@ class ASC_MainScreenWidget : public MainScreenWidget {
       ASC_MainScreenWidget( PG_Application& application );
       enum Panels { ButtonPanel, WindInfo, UnitInfo, OverviewMap, MapControl, ActionInfo };
       void spawnPanel ( Panels panel );
-      void spawnPanel ( const ASCString& panelName );
+      
+      //! spawns the panel with the given name. Returns true if such a panel exists, false otherwise
+      bool spawnPanel ( const ASCString& panelName );
    
       NewGuiHost* getGuiHost() { return guiHost; };
       DashboardPanel* getUnitInfoPanel() { return unitInfoPanel; };
