@@ -146,13 +146,13 @@ int mapeditorMainThread ( void* _mapname )
 
    } /* end try */
    catch ( ParsingError err ) {
-      displaymessage ( "Error parsing text file " + err.getMessage(), 2 );
+      fatalError ( "Error parsing text file " + err.getMessage() );
    }
    catch ( tfileerror err ) {
-      displaymessage ( " error loading file %s ",2, err.getFileName().c_str() );
+      fatalError ( "Error loading file " + err.getFileName() );
    } /* end catch */
    catch ( ASCmsgException err ) {
-      displaymessage ( "Error loading file %s ",2, err.getMessage().c_str() );
+      fatalError( "Error loading file " + err.getMessage() );
    }
 
    activefontsettings.font = schriften.arial8;
