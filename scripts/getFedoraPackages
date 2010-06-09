@@ -1,1 +1,1 @@
-yum install SDL-devel SDL_image-devel lua-devel SDL_mixer-devel wxGTK-devel libsigc++-devel SDL_sound-devel physfs-devel boost-devel
+yum install gcc-g++ SDL-devel SDL_image-devel lua-devel SDL_mixer-devel wxGTK-devel libsigc++-devel SDL_sound-devel physfs-devel boost-devel
