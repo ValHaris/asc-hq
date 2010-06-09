@@ -838,11 +838,13 @@ bool ASC_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
                
                case SDLK_F10: {
                   
-                  PG_ScrollBar* sb = new PG_ScrollBar( NULL, PG_Rect( 20, 50, 15, 400), PG_ScrollBar::VERTICAL, -1, "DLGScrollbar" );
-                  sb->SetPageSize(10);
-                  sb->SetRange(0, 100);
-                  sb->Show();
-                  
+                  Vehicle* v = actmap->getUnit( 570569 );
+                  if ( v ) {
+                     printf("Name: %s\n", v->typ->name.c_str() );
+                     printf("x: %d\n", v->getPosition().x );
+                     printf("y: %d\n", v->getPosition().y );
+                  } else
+                     printf("doesn't exist\n");
                }
             // testText();
             break;
