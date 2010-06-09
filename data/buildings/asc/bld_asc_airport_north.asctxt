@@ -1,24 +1,17 @@
 BuildingType {
-   Name = airport
+   Name = Airport North
    ID = 21
    parent = 10
    ConstructionStages = 1
    Weather = dry 
-   Fields = A2 A3 A4 B3 
+   Fields = C2 C3 D3 C4
    UseGFXpics = false
    Pictures { 
-      dry = bld_ASC_airport2.png
+      dry = bld_ASC_airport.png
       few_snow = bld_asc_airport.png
       much_snow = bld_asc_airport.png
-      snow_and_ice = bld_asc_airport_hs.png
+      snow_and_ice = bld_asc_airport.png
    } Pictures
    RubbleObjects = false
-;   RubbleObjects = true
-;   rubble {
-;      A2 = 76
-;      A3 = 77
-;      A4 = 78
-;      B3 = 76
-;   } rubble
-   Entry = A2
+   Entry = C2
 } BuildingType

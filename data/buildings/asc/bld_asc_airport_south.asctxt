@@ -1,5 +1,5 @@
 BuildingType {
-   Name = airport
+   Name = Airport South
    ID = 10
    parent = 499
    Infotext = [Produktionsanlage für Flugzeuge incl. Munitionsproduktion, Reparatur und Wiederverwertung.]
@@ -12,16 +12,9 @@ BuildingType {
       dry = bld_ASC_airport.png
       few_snow = bld_asc_airport.png
       much_snow = bld_asc_airport.png
-      snow_and_ice = bld_asc_airport_hs.png
+      snow_and_ice = bld_asc_airport.png
    } Pictures
    RubbleObjects = false
-;   RubbleObjects = true
-;   rubble {
-;      A2 = 76
-;      A3 = 77
-;      A4 = 78
-;      B3 = 76
-;   } rubble
    Entry = A4
    Transportation { 
       MaxLoadableUnits = 6
