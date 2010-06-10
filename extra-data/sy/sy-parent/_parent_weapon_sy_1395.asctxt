@@ -276,7 +276,7 @@ VehicleType {
          Punch@MaxRange = 70
          Punch@MinRange = 75
          LaserRechargeCost.fuel = 75
-	 LaserRechargeRate = 1
+	 LaserRechargeRate = 2
          ReactionFireShots = 2
          HitAccuracy { 
             d6 = 0
