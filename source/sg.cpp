@@ -1182,6 +1182,14 @@ void executeUserAction ( tuseractions action )
          mainScreenWidget->getMapDisplay()->toggleMapLayer("reactionfire");
          repaintMap();
          break;
+      case ua_viewUnitinfoOverlay:
+         mainScreenWidget->getMapDisplay()->toggleMapLayer("unitinfo");
+         repaintMap();
+         break;
+      case ua_viewUnitexperienceOverlay:
+         mainScreenWidget->getMapDisplay()->toggleMapLayer("unittraining");
+         repaintMap();
+         break;
       case ua_showsearchdirs: showSearchPath();
          break;
       case ua_changepassword:
