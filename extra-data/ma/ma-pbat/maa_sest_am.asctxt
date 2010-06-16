@@ -5,7 +5,14 @@ VehicleType {
 
    Description = Seekampf SEST
    Picture = maa_sest_am.pcx
-   Infotext = [Dieser Senkrechtstarter fuer die Schiffs- und U-Boot-bekaempfung.]
+   Infotext = [Der SEST AM ist ein speziell f�r die Bek�mpfung von Flottenverb�nden konzipierter Senkrechtstarter. Die Bewaffnung ist gegen�ber den herk�mmlichen SEST komplett umgebaut. Kanonen fehlen v�llig. Aus Gr�nden der Gewichtsersparnis ist die Panzerung teilweise ebenfalls etwas schw�cher.
+
+   
+So hat der SEST AM gen�gend Ladekapazit�t, um seine aus Torpedos und Bomben bestehende Ladung sicher und punktgenau ins Ziel zu bringen. Besonders die Antischiffstorpedos sind sehr gef�hrlich. Schon aus gro�er Entfernung abgeworfen, erfassen sie mit hoher Genauigkeit ihr Ziel und steuern dieses pfeilschnell an, wobei das pfeilschnell w�rtlich zu nehmen ist. Statt der sonst �blichen Schrauben, wird dieser Torpedo durch ein kleines Raketenaggregat angetrieben, wodurch das Ziel kaum die Chance auf Gegenma�nahmen hat. Die Standardtorpedos hingegen verf�gen durch das eingebaute Sonar auch �ber die M�glichkeit, getauchte U-Boote anzugreifen. In diesem Zusammenhang ist es allerdings wichtig zu wissen, da� der SEST AM �ber kein eigenes Sonarortungssystem verf�gt, sondern hierbei auf die Unterst�tzung von Sonardrohnen oder die Ortungsf�higkeiten der eigenen Flotte angewiesen ist. Sobald der Torpedo im Wasser ist, orientiert sich dieser dann selbst und trifft sein Ziel mit hoher Pr�zision. Beide Waffen sind aufgrund der Konstruktion etwas gr��er und schwerer als die bei anderen V�lkern im Einsatz befindlichen Pendants. So ist die Traglast des SEST AM auf je zwei St�ck dieser Torpedos begrenzt.
+Einige �bliche Wasserbomben zur U-Bootbek�mpfung runden das Waffenarsenal ab.
+
+
+Damit ist er hervorragend an seinen Einsatzzweck angepa�t. Leider geht dies zu Lasten seiner Verteidigungsf�higkeiten. Gegen Boden- und Lufteinheiten ist der SEST AM v�llig wehrlos, was besonders bei der Anwesenheit von Tragfl�chenbooten und Bodeneffektfahrzeugen im Kampfgebiet fatale Konsequenzen haben kann. Die Geschwaderf�hrer sind daher anzuweisen, stets im Verband mit entsprechenden Sicherungseinheiten zu agieren.]
 
    Armor += 20
    Movement = 0 0 0 30 170 170 0 0 
