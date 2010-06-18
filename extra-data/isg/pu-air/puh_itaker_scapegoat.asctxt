@@ -6,7 +6,8 @@ VehicleType {
    Description = trooper hunter
    picture = puh_itaker_scapegoat.png
    GuideSortHelp = 
-   Infotext = []
+   Infotext = [Der Scapegoat wurde konzipiert, um das Feuer der gegnerischen Luftwaffe auf sich zu lenken. Zu diesem Zweck wurde die Panzerung auf kosten des jetzt geringen Laderaums erhöht. Es ermöglicht nachrückenden Fliegern besser zum Ziel zu gelangen und einen wirksamen Angriff zu fliegen.   
+   ]
 
    Features += self_repairing
    SelfRepairRate = 5
