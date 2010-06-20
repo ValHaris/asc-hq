@@ -45,7 +45,7 @@ enum tuseractions { ua_repainthard,     ua_repaint, ua_help, ua_mainmenu, ua_mnt
                     ua_SDLinfo, ua_visibilityInfo, ua_locatefile, ua_viewfont, ua_resourceAnalysis, ua_unitproductionanalysis, ua_continuerecentnetworkgame, ua_gotoPosition, ua_loadrecentgame,
                     ua_showTechAdapter, ua_showUnitEndurance, ua_getMemoryFootprint, ua_viewlayerhelp, ua_showCargoLayer, ua_showMiningPower, ua_emailOptions, ua_createReminder, ua_undo, ua_redo,
                     ua_writeLuaCommands, ua_runLuaCommands, ua_recompteview, ua_unitGuideDialog, ua_turnUnitLeft, ua_turnUnitRight,
-                    ua_chooseTechnology, ua_actionManager, ua_viewReactionfireOverlay, ua_unitAiOptions, ua_showUsedPackages, ua_runOpenTasks, ua_taskManager };
+                    ua_chooseTechnology, ua_actionManager, ua_viewReactionfireOverlay, ua_unitAiOptions, ua_showUsedPackages, ua_runOpenTasks, ua_taskManager, ua_viewUnitinfoOverlay, ua_viewUnitexperienceOverlay };
 
 extern void executeUserAction ( tuseractions action );
 
