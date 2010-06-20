@@ -35,12 +35,13 @@
 #include "dialogs/vehicletypeselector.h"
 #include "gameoptions.h"
 #include "graphics/ColorTransform_PlayerColor.h"
-
+#include "dialogs/unitnaming.h"
 #include "actions/actioncontainer.h"
 #include "widgets/textrenderer.h"
 
 #include "sg.h"
 #include "spfst-legacy.h"
+#include "actions/renamecontainercommand.h"
 
 class WeaponInfoLine;
 
@@ -380,10 +381,15 @@ void DashboardPanel::showUnitData( Vehicle* veh, Building* bld, MapField* fld,  
 
    if ( veh ) {
       setLabelText( "unittypename", veh->typ->name );
-      if ( veh->name.empty() )
-         setLabelText( "unitname", veh->typ->description );
-      else
+      
+      if ( !veh->privateName.empty() && veh->getOwner() == veh->getMap()->getPlayerView() ) 
+         setLabelText( "unitname", ">" + veh->privateName + "<" );
+      else if ( !veh->name.empty() )
          setLabelText( "unitname", veh->name );
+      else
+         setLabelText( "unitname", veh->typ->description );
+      
+      
       setBargraphValue( "unitdamage", float(100-veh->damage) / 100  );
       setLabelText( "unitstatus", 100-veh->damage );
 
@@ -431,7 +437,12 @@ void DashboardPanel::showUnitData( Vehicle* veh, Building* bld, MapField* fld,  
    } else {
       if ( bld ) {
          setLabelText( "unittypename", bld->typ->name );
-         setLabelText( "unitname", bld->name );
+         
+         if ( !bld->privateName.empty() && bld->getOwner() == bld->getMap()->getPlayerView()) 
+            setLabelText( "unitname", ">" + bld->privateName + "<" );
+         else 
+            setLabelText( "unitname", bld->name );
+         
          setBargraphValue( "unitdamage", float(100-bld->damage) / 100  );
          setLabelText( "unitstatus", 100-bld->damage );
          setLabelText( "armor", bld->getArmor() );
@@ -510,10 +521,9 @@ UnitInfoPanel::UnitInfoPanel (PG_Widget *parent, const PG_Rect &r ) : DashboardP
       siw->sigMouseButtonUp.connect( SigC::slot( *this, &UnitInfoPanel::onClick ));
    }
 
-   PG_LineEdit* l = dynamic_cast<PG_LineEdit*>( parent->FindChild( "unitname", true ) );
+   PG_Label* l = dynamic_cast<PG_Label*>( parent->FindChild( "unitname", true ) );
    if ( l ) {
-      l->sigEditEnd.connect( SigC::slot( *this, &UnitInfoPanel::containerRenamed ));
-      l->sigEditUpdate.connect( SigC::slot( *this, &UnitInfoPanel::containerRenamed ));
+      l->sigMouseButtonUp.connect( SigC::slot( *this, &UnitInfoPanel::unitNaming ));
    }
 
    VehicleTypeSelectionItemFactory::showVehicleInfo.connect( SigC::slot( *this, &UnitInfoPanel::showUnitInfo ));
@@ -522,6 +532,18 @@ UnitInfoPanel::UnitInfoPanel (PG_Widget *parent, const PG_Rect &r ) : DashboardP
 void UnitInfoPanel::showUnitInfo( const VehicleType* vt )
 {
    // showUnitData( vt, NULL, true );
+}
+
+bool UnitInfoPanel::unitNaming()
+{
+   MapField* fld = actmap->getField( actmap->getCursor() );
+   if ( fld->getContainer() && RenameContainerCommand::avail( fld->getContainer() ) && fld->getContainer()->getOwner() == actmap->actplayer ) {
+      UnitNaming un( fld->vehicle );
+      un.Show();
+      un.RunModal();
+      updateFieldInfo();
+   }
+   return true;
 }
 
 

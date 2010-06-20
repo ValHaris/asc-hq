@@ -1000,7 +1000,7 @@ void Vehicle :: fillMagically( bool ammunition, bool resources )
 
 
 
-const int vehicleVersion = 7;
+const int vehicleVersion = 8;
 
 void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits ) const
 {
@@ -1170,6 +1170,8 @@ void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits ) const
     }
     
     stream.writeInt( view );
+    
+    stream.writeString( privateName );
 }
 
 void   Vehicle::read ( tnstream& stream )
@@ -1412,6 +1414,12 @@ void   Vehicle::readData ( tnstream& stream )
        view = stream.readInt();
     else
        view = typ->view;
+    
+    if ( version >= 8 )
+       privateName = stream.readString();
+    else
+       privateName = "";
+
 }
 
 MapCoordinate3D Vehicle :: getPosition ( ) const

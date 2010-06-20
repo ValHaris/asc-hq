@@ -372,6 +372,8 @@ Action not available
 Invalid map 
 23501
 Invalid diplomatic state
+23600
+Container does not exist
 30001
 Movement not available
 30002

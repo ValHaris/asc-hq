@@ -74,6 +74,7 @@ class UnitInfoPanel : public DashboardPanel {
      protected:
         bool onClick ( PG_MessageObject* obj, const SDL_MouseButtonEvent* event );
         void showUnitInfo( const VehicleType* vt );
+        bool unitNaming();
      public:
         UnitInfoPanel (PG_Widget *parent, const PG_Rect &r ) ;
 };

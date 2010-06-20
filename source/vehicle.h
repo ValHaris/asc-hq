@@ -223,6 +223,7 @@ class UnitHooveringLogic {
     //! returns the units name or, if it does not exist, the unit type's name or description
     ASCString    getName() const;
 
+   
     int getAmmo( int type, int num, bool queryOnly );
     int getAmmo( int type, int num ) const;
     int putAmmo( int type, int num, bool queryOnly );

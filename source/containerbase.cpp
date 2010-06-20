@@ -52,6 +52,16 @@ ContainerBase ::  ContainerBase ( const ContainerBaseType* bt, GameMap* map, int
    }
 }
 
+
+ASCString ContainerBase::getPrivateName() const
+{
+   if ( privateName.empty())
+      return getName();
+   else
+      return privateName;  
+}
+
+
 SigC::Signal1<void,ContainerBase*> ContainerBase :: anyContainerDestroyed;
 SigC::Signal1<void,ContainerBase*> ContainerBase :: anyContainerConquered;
 

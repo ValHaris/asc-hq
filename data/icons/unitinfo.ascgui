@@ -67,7 +67,7 @@ panel {
         
         WidgetNum = 1    
         Widget0 {
-           type = LineEdit
+           type = textoutput
            text = 
            TextAlign = LEFT
            FontColor = 0xffffff

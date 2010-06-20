@@ -131,6 +131,9 @@ class ContainerBase {
       //! a name given by the user or the map creator
       ASCString    name;
       
+      //! a name given by the user which is only visible to him and his allies. 
+      ASCString    privateName;
+      
       /** adds the unit to the cargo
          \param veh the unit to add 
          \param position specifies a specific cargo slot. 
@@ -301,6 +304,7 @@ class ContainerBase {
       virtual int getHeight() const = 0;
 
       virtual ASCString getName ( ) const = 0;
+      ASCString getPrivateName ( ) const;
       virtual void setName ( const ASCString& name );
 
       virtual int getAmmo( int type, int num, bool queryOnly )  = 0;

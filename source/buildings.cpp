@@ -426,7 +426,7 @@ Building :: ~Building ()
 }
 
 
-const int buildingstreamversion = -6;
+const int buildingstreamversion = -7;
 
 
 void Building :: write ( tnstream& stream, bool includeLoadedUnits ) const
@@ -497,6 +497,7 @@ void Building :: write ( tnstream& stream, bool includeLoadedUnits ) const
        stream.writeChar(0);
 
     stream.writeInt( view );
+    stream.writeString( privateName );
 }
 
 
@@ -681,6 +682,11 @@ void Building :: readData ( tnstream& stream, int version )
        view = stream.readInt();
     else
        view = typ->view;
+    
+    if ( version <= -7 )
+       privateName = stream.readString();
+    else
+       privateName = "";
 }
 
 ASCString Building::getName ( ) const

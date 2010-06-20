@@ -162,8 +162,9 @@ class  Building : public ContainerBase {
     void endRound( void );
 
     //! returns a name for the building. If the building itself has a name, it will be returned. If it doesn't, the name of the building type will be returned.
-    ASCString getName ( ) const;
+    ASCString getName() const;
 
+    
     int getAmmo( int type, int num, bool queryOnly );
     int getAmmo( int type, int num ) const;
     int putAmmo( int type, int num, bool queryOnly );

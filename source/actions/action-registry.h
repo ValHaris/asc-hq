@@ -73,7 +73,8 @@ namespace ActionRegistry {
                   DiplomacyCommand,
                   ChangeDiplomaticState,
                   DirectResearchCommand,
-                  InternalAmmoTransferCommand
+                  InternalAmmoTransferCommand,
+                  RenameContainerCommand
                         
    };
 };
