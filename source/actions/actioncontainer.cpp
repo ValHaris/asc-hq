@@ -199,14 +199,14 @@ bool ActionContainer::isActive_map( const Command* action ) const
 
 bool ActionContainer::isActive_req( const Command* action ) 
 {
-   if ( commandState_request.empty() )
-      commandState_request = commandState_map;
-   
    if ( commandState_request.find( action ) != commandState_request.end() )
       return commandState_request[action];
    else {
-      warningMessage("ActionContainer::isActive - invalid parameter");
-      return false;
+      commandState_request = commandState_map;
+      if ( commandState_request.find( action ) != commandState_request.end() )
+         return commandState_request[action];
+      else
+         return false;
    }
 }
 
