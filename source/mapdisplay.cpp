@@ -25,6 +25,7 @@
 
 #include <cmath>
 #include <limits>
+#include <sstream>
 
 #include "pgeventsupplier.h"
 
@@ -242,6 +243,7 @@ void PipeLayer::paintSingleField( const MapRenderer::FieldRenderInfo& fieldInfo,
 
 class ReactionFireLayer : public MapLayer {
       Surface& image;
+
    public: 
       ReactionFireLayer() : image ( IconRepository::getIcon("rf-icon.png")) {} ;
       bool onLayer( int layer ) { return layer == 17; };
@@ -258,7 +260,72 @@ void ReactionFireLayer::paintSingleField( const MapRenderer::FieldRenderInfo& fi
    }
 }
 
+//The Class UnitInfoLayer paint informations about the health and the fuel on the top of the unit
+class UnitInfoLayer : public MapLayer {
 
+   Surface& image;
+   void paintBar( const MapRenderer::FieldRenderInfo& fieldInfo, const SPoint& pos, int position, int max, int FromTop, int color, bool OverrideColor  )
+   {
+	   float FlLength = ((float)29 / (float)max * position);
+	   int length = floor(FlLength);
+	   int maxlength = 29;
+	   int paintcolor;
+	   if (OverrideColor == true) {
+		   if (length > 20)
+			   paintcolor = 0x00FF04;
+		   else if (length > 10)
+			   paintcolor = 0xFBFF00;
+		   else if (length >= 0)
+			   paintcolor = 0xFF0400;
+	   }
+	   else paintcolor = color;
+       paintFilledRectangle<4>( fieldInfo.surface, SPoint( pos.x + 9 , pos.y + FromTop), length, 3,  ColorMerger_ColoredOverwrite<4>( paintcolor ) );
+   };
+
+
+   public: 
+      UnitInfoLayer() : image ( IconRepository::getIcon("unitinfobg.png")) {} ;
+      bool onLayer( int layer ) { return layer == 17; };
+      void paintSingleField( const MapRenderer::FieldRenderInfo& fieldInfo,  int layer, const SPoint& pos );
+};
+
+void UnitInfoLayer::paintSingleField( const MapRenderer::FieldRenderInfo& fieldInfo,  int layer, const SPoint& pos )
+{
+   if ( fieldInfo.visibility > visible_ago) {
+      if ( fieldInfo.fld->vehicle ) {
+         MegaBlitter<colorDepth,colorDepth,ColorTransform_None,ColorMerger_AlphaMerge> blitter;
+	//paint the BGimage
+	blitter.blit( image, fieldInfo.surface, pos);
+	//paint the bars
+	//1. damage / health
+	paintBar( fieldInfo, pos, 100-fieldInfo.fld->vehicle->damage, 100, 1,  0, true );
+	//2. fuel
+	paintBar( fieldInfo, pos, fieldInfo.fld->vehicle->getTank().fuel, fieldInfo.fld->vehicle->getStorageCapacity().fuel, 4,  0xFFB700, false );
+         
+      }   
+   }
+}
+
+//The class UnitTraining paints the traininglevel at the bottom of the unit
+class UnitTrainingLayer : public MapLayer {
+
+   public: 
+      bool onLayer( int layer ) { return layer == 17; };
+      void paintSingleField( const MapRenderer::FieldRenderInfo& fieldInfo,  int layer, const SPoint& pos );
+};
+
+
+void UnitTrainingLayer::paintSingleField( const MapRenderer::FieldRenderInfo& fieldInfo,  int layer, const SPoint& pos )
+{
+   if ( fieldInfo.visibility > visible_ago) {
+      if ( fieldInfo.fld->vehicle ) {
+         MegaBlitter<colorDepth,colorDepth,ColorTransform_None,ColorMerger_AlphaMerge> blitter;
+ 	ASCString training = "unitlevel-" + ASCString::toString(fieldInfo.fld->vehicle->experience+1) +".png";
+	blitter.blit( IconRepository::getIcon(training), fieldInfo.surface, pos);
+         
+      }   
+   }
+}
 
 class WeaponRange : public SearchFields
 {
@@ -570,7 +637,9 @@ MapDisplayPG::MapDisplayPG ( MainScreenWidget *parent, const PG_Rect r )
    addMapLayer( new ContainerInfoLayer(), "container" );
    addMapLayer( new PipeLayer()         , "pipes" );
    addMapLayer( new ReactionFireLayer() , "reactionfire" );
-   
+   addMapLayer( new UnitInfoLayer()     , "unitinfo" );
+   addMapLayer( new UnitTrainingLayer() , "unittraining" );
+
    parent->lockOptionsChanged.connect( SigC::slot( *this, &MapDisplayPG::lockOptionsChanged ));
    GameMap::sigMapDeletion.connect( SigC::slot( *this, &MapDisplayPG::sigMapDeleted ));
 }

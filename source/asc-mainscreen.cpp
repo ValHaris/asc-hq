@@ -127,6 +127,7 @@ void Menu::addbutton( const char* name, int id )
 
 void Menu::setup()
 {
+  
    addfield ( "Glo~b~al" );
    addbutton ( "~O~ptions", ua_gamepreferences );
    addbutton ( "~S~ound options", ua_soundDialog );
@@ -187,17 +188,17 @@ void Menu::setup()
    currentMenu->addSeparator();
    addbutton ( "Unit Production Analysis", ua_unitproductionanalysis );
    addbutton ( "Mining Station Analysis", ua_showMiningPower );
-   
-   // addbutton ( "~R~esearch status", ua_showResearchStatus );
-
-   // addbutton ( "vehicle ~I~mprovement\tF7", ua_dispvehicleimprovement);
-
-
-   // addfield ( "~S~tatistics" );
-   
-//   addbutton ( "~R~esources ", ua_statisticdialog );
-   // addbutton ( "seperator");
-   // addbutton ( "~H~istory");
+	
+	// addbutton ( "~R~esearch status", ua_showResearchStatus );
+	
+	// addbutton ( "vehicle ~I~mprovement\tF7", ua_dispvehicleimprovement);
+	
+	
+	// addfield ( "~S~tatistics" );
+	
+	//   addbutton ( "~R~esources ", ua_statisticdialog );
+	// addbutton ( "seperator");
+   	// addbutton ( "~H~istory");
 
    addfield ( "~M~essage");
    addbutton ( "~n~ew message", ua_newmessage );
@@ -221,7 +222,10 @@ void Menu::setup()
    addbutton ( "toggle unit shading\t2", ua_toggleunitshading );
    addbutton ( "show ~P~ipeline net\t9", ua_viewPipeNet );
    addbutton ( "show ~V~isibility Range\t0", ua_visibilityInfo );
-   addbutton ( "show reaction~f~ire", ua_viewReactionfireOverlay );
+   currentMenu->addSeparator();
+   addbutton ( "show reaction~f~ire", ua_viewReactionfireOverlay );	
+   addbutton ( "show unit info\tctrl-1", ua_viewUnitinfoOverlay );
+   addbutton ( "show unit experience\tctrl-2", ua_viewUnitexperienceOverlay );
    currentMenu->addSeparator();
    addbutton ( "Button Panel", ua_viewButtonPanel );
    addbutton ( "Wind Panel", ua_viewWindPanel );
@@ -269,7 +273,7 @@ void Menu::setup()
    addbutton ( "~K~eys", ua_help );
    addbutton ( "~M~ap Layer", ua_viewlayerhelp );
    currentMenu->addSeparator();
-
+	
    addbutton ( "~A~bout", ua_viewaboutmessage );
 }
 
@@ -838,13 +842,11 @@ bool ASC_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
                
                case SDLK_F10: {
                   
-                  Vehicle* v = actmap->getUnit( 570569 );
-                  if ( v ) {
-                     printf("Name: %s\n", v->typ->name.c_str() );
-                     printf("x: %d\n", v->getPosition().x );
-                     printf("y: %d\n", v->getPosition().y );
-                  } else
-                     printf("doesn't exist\n");
+                  PG_ScrollBar* sb = new PG_ScrollBar( NULL, PG_Rect( 20, 50, 15, 400), PG_ScrollBar::VERTICAL, -1, "DLGScrollbar" );
+                  sb->SetPageSize(10);
+                  sb->SetRange(0, 100);
+                  sb->Show();
+                  
                }
             // testText();
             break;
@@ -889,6 +891,12 @@ bool ASC_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
 
             case SDLK_0: executeUserAction( ua_writescreentopcx );
                return true;
+
+            case SDLK_1: executeUserAction( ua_viewUnitinfoOverlay );
+              return true;
+
+            case SDLK_2: executeUserAction( ua_viewUnitexperienceOverlay );
+              return true;
 
             case SDLK_F10: {
                SDL_Surface* s = PG_Application::GetScreen();
