@@ -27,3 +27,8 @@ glob:source/unix/asc/asc
 glob:source/unix/asc/unittester
 glob:source/unix/mapeditor/asc_mapedit
 glob:stamp-h1
+glob:*.obj
+glob:*.lib
+glob:*.pdb
+glob:*.exe
+glob:*.idb
