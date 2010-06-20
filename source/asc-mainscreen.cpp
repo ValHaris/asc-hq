@@ -128,7 +128,6 @@ void Menu::addbutton( const char* name, int id )
 void Menu::setup()
 {
   
-   //Umpani @thecoder: ich habe mir mal erlaubt, das zur besseren Lesbarekeit etwas einzurücken. 
    addfield ( "Glo~b~al" );
    addbutton ( "~O~ptions", ua_gamepreferences );
    addbutton ( "~S~ound options", ua_soundDialog );
@@ -225,8 +224,8 @@ void Menu::setup()
    addbutton ( "show ~V~isibility Range\t0", ua_visibilityInfo );
    currentMenu->addSeparator();
    addbutton ( "show reaction~f~ire", ua_viewReactionfireOverlay );	
-   addbutton ( "show unit info\tctrl-u-1", ua_viewUnitinfoOverlay );
-   addbutton ( "show unit experience\tctrl-u-3", ua_viewUnitexperienceOverlay );
+   addbutton ( "show unit info\tctrl-1", ua_viewUnitinfoOverlay );
+   addbutton ( "show unit experience\tctrl-2", ua_viewUnitexperienceOverlay );
    currentMenu->addSeparator();
    addbutton ( "Button Panel", ua_viewButtonPanel );
    addbutton ( "Wind Panel", ua_viewWindPanel );
@@ -892,6 +891,12 @@ bool ASC_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
 
             case SDLK_0: executeUserAction( ua_writescreentopcx );
                return true;
+
+            case SDLK_1: executeUserAction( ua_viewUnitinfoOverlay );
+              return true;
+
+            case SDLK_2: executeUserAction( ua_viewUnitexperienceOverlay );
+              return true;
 
             case SDLK_F10: {
                SDL_Surface* s = PG_Application::GetScreen();
