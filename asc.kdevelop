@@ -44,7 +44,7 @@
     <run>
       <directoryradio>build</directoryradio>
       <customdirectory>/</customdirectory>
-      <mainprogram>/home/martin/asc/v2/amd64/source/unix/asc/asc</mainprogram>
+      <mainprogram>source/unix/asc/asc</mainprogram>
       <programargs></programargs>
       <terminal>false</terminal>
       <autocompile>true</autocompile>
@@ -52,7 +52,7 @@
         <envvar value="192.168.0.21:0" name="NDISPLAY" />
       </envvars>
       <globaldebugarguments></globaldebugarguments>
-      <globalcwd>/home/martin/asc/v2/amd64</globalcwd>
+      <globalcwd></globalcwd>
       <useglobalprogram>true</useglobalprogram>
       <autoinstall>false</autoinstall>
       <autokdesu>false</autokdesu>
@@ -204,7 +204,7 @@
   </kdevdocumentation>
   <ctagspart>
     <customArguments/>
-    <customTagfilePath>/home/martin/asc/v2/amd64/tags</customTagfilePath>
+    <customTagfilePath>tags</customTagfilePath>
     <activeTagsFiles/>
   </ctagspart>
 </kdevelop>
