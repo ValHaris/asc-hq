@@ -5,7 +5,12 @@ VehicleType {
    parent = 206
  
    Description = diving trooper
-   Infotext = [ ]
+   Infotext = [Navy Seals
+
+
+   Dieser Spezialist wurde fuer besondere Unterwasseraufträge ausgerüstet und ausgebildet. Die Kampfkraft ist hoch, besonders bei der Sabotage von Strassen- und Eisenbahnbrücken.
+   Seine Stealthfähigkeit lässt ihn fast unsichtbar an U-Boot Werften bzw. Unterseeische Depots
+   heranschleichen und dies dann im Handstreich einzunehmen. In Rudeln auftretend eine echte Plage.]
    picture = mk3i_Seals.png
    InfoImage = mk3i_seals.jpg
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
