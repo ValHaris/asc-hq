@@ -7,7 +7,7 @@ VehicleType {
    picture = pus_omega_okeanos.png
    wreckageobject = 14023
 ;   GuideSortHelp += 517 0 0 0 4 600 0 0 0 0
-   Infotext = [Spezialeinheit der Chi.]
+   Infotext = [Die Chi waren bereits beim Verlassen des bekannten Universums eine fortschrittliche Rasse. Als sie im 76. Zyklus in das bekannte Universum zurückkehrten, wusste niemand, welche Technik sie aus den Weiten des Universums neu mitgebracht hatten. Im System Tyr, Planet Lurd, wurde schließlich erstmals der Kreuzer Okeanos gesichtet, welcher deutlich von den Spezifikationen eines normalen Kreuzers abweicht. Der Okeanos ist nicht nur schneller, er verfügt auch über eine größere Reichweite, was die Aufklärung und die Reichweite der Boden- und Luftbewaffnung betrifft. Des Weiteren ist er – ergänzend zur Standardbewaffnung – in der Lage, sich mit Raketen gegen Orbitalziele zu wehren und verfügt über eine verbesserte U-Boot-Abwehr. Die Außenhaut ist aus einer speziellen, organischen Legierung, welche sich selbst heilt. Alles in Allem ist der Kreuzer Okeanos eine wertvolle Ergänzung in jedem Flottenverband.]
 
    Transportation ->* VehicleType.noTrans
 
