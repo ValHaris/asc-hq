@@ -267,8 +267,8 @@ class UnitInfoLayer : public MapLayer {
    void paintBar( const MapRenderer::FieldRenderInfo& fieldInfo, const SPoint& pos, int position, int max, int FromTop, int color, bool OverrideColor  )
    {
 	   float FlLength = ((float)29 / (float)max * position);
-	   int length = floor(FlLength);
-	   int maxlength = 29;
+	   int length = int(floor(FlLength));
+	   // int maxlength = 29;
 	   int paintcolor;
 	   if (OverrideColor == true) {
 		   if (length > 20)
