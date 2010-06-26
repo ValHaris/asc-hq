@@ -8,6 +8,9 @@ VehicleType {
 
    Der Javelin trägt 6 Antitank Raketen mit sich. Einsatzziel: Zerstörung gepanzerter Fahrzeuge.
    Gegen Infanterie schützt ein leichtes MG.]
+
+   Infotext_EN = [The Javelin is a manportable, fire-and-forget, antitank missile employed by dismounted infantry to defeat current and future threat armored combat vehicles.]
+
    Picture = mk1i_astrooper.pcx
    InfoImage = mk3i_javelin.jpg
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
