@@ -1218,7 +1218,9 @@ void       tloadBImap :: ReadSHOPPart( void )
            if ( fld->building ) {
 
 //              if ( battleisleversion == 3 )
-                 fld->building->name = GetStr( ShopNum + 2,16);   /*  bi3 macht das so  */ 
+              const char* shopStr = GetStr( ShopNum + 2,16);
+              if ( shopStr )
+                 fld->building->name = shopStr;   /*  bi3 macht das so  */ 
               /*
               else
                  ArrShop.NameStr = GetStr(FileShop.Name, 16);    //  bi2 wahrscheinlich so
