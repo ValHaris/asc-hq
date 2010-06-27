@@ -6,6 +6,11 @@ VehicleType {
 
    Picture = mk3v_fh77.png
    InfoImage = mk3v_fh77.jpg
+   Infotext = [FH 77
+
+   Die Feldhaubitze 77, kurz FH 77, ist eine radgestützte Artillerieeinheit mittlerer Reichweite.
+   Sie besitzt die Möglichkeit mit aktiviertem RF zu fahren.
+   Wie bei allen Artillerieeinheiten ist Schutz vor Panzer und Luftkampfeinheiten angebracht.]
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Category = medium_wheeled_vehicle

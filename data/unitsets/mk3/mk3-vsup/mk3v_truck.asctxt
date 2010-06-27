@@ -7,6 +7,10 @@ VehicleType {
    Description = Munitionstransporter
    Picture = mk3v_truck.png
    Infoimage = mk3v_truck.jpg
+   ; Wo kommt dieses InfoImage her? Wikipedia? Infotext war keiner vorhanden. Vee
+   Infotext = [Truck
+
+   Der Truck ist ein Munitionstransporter. Unverzichtbar im Feld um die Einheiten mit Munition zu versorgen. Weiters hat der Truck Platz für 2 Infanteristen. Der Verlust des Trucks kann verheerende Folgen für die kämpfende Truppe haben und ist unbedingt zu vermeiden.]
    Movement += 0 0 0 10 0 0 0 0 
    GuideSortHelp = 550 0 0 0 3 0 0 0 0 0
 
