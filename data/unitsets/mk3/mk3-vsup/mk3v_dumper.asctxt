@@ -8,7 +8,14 @@ VehicleType {
    picture = mk3v_dumper.png
    InfoImage = mk3v_dumper.jpg
    GuideSortHelp = 550 0 0 0 3 0 0 0 0 0
-   Infotext = [Material transpor unit
+   Infotext = [DUMPER
+
+   Der Dumper transportiert große Mengen Material an die Front zu den verschiedenen Baueinheiten. Dieser Transporter ist recht schwach gepanzert und hat keine Verteidigungsmöglichkeiten daher keinen direkten Beschuss aussetzen.
+   Material transport unit
+   
+   ImageInfo = Wikipedia Lastkraftwagen]
+   Infotext_EN = [Material transpor unit
+
    ImageInfo = Wikipedia Lastkraftwagen]
 
    Armor -= 50

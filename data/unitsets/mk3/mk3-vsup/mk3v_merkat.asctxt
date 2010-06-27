@@ -5,7 +5,10 @@ VehicleType {
    parent = 335
    
    Description = mine detector
-   Infotext = [One of the most defensively centered vehicles is the Mine Layer.
+   Infotext = [MERKAT
+
+   Eines der defensivsten Fahrzeuge ist der Minenleger. Ein Mechanismus im Boden gr‰bt ein Loch gibt dann wahlweise Panzer oder Infanterieminen hinein und schlieﬂt das Loch. So entsteht recht schnell ein Minenfeld. Der Merkat ist soweit modifiziert, dass er auch Minen findet und beseitigt. Eine starke Panzerung am vorderen Ausleger macht ihn gegen Minen immun. Das macht ihn auch unverzichtbar um gegnerische Minenfelder zu beseitigen.]
+   Infotext_EN = [One of the most defensively centered vehicles is the Mine Layer.
               It has a mechanism in its base that swiftly digs a hole in the
               ground, inserts one of two types of mines, and refills the hole.
               This system allows for quickly creating mine fields. The procedure

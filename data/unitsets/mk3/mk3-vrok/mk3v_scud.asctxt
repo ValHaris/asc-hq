@@ -5,7 +5,11 @@ VehicleType {
    parent = 301
 
    Description = SSM Long Range
-   InfoText = [InfoImage = Wikipedia]
+   InfoText = [SCUD
+
+   Der SCUD Werfer ist eine Vorrichtung zum Abfeuern von Boden-Boden-Raketen mit groﬂer Reichweite und hoher Durchschlagskraft. Diese Raketen sind gegen Infanterie allerdings nahezu wirkungslos. Als Faustregel gilt: Je grˆﬂer und station‰rer das Ziel, desto wirkungsvoller der Einschlag. Am Besten stationiert man diese Einheit neben einem Depot um eine regelm‰ﬂige Aufmunitionierung zu gew‰hrleisten. Alternativ kann eine schnelle Versorgung mit Munition durch Chinooks oder Trucks erreicht werden.
+
+   InfoImage = Wikipedia]
    Picture = mk3v_scud.png
    InfoImage = mk3v_scud.jpg
    GuideSortHelp = 505 414 0 0 3 0 0 0 0 0

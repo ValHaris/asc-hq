@@ -5,7 +5,11 @@ VehicleType {
    parent = 204
 
    Description = special operations
-   Infotext = []
+   Infotext = [SEK
+   
+   Das SEK, kurz für Spezial Einsatz Kommando, ist die bestgepanzerte Infanterieeinheit der Terraner. Ausgerüstet mit einer großkalibrigen tragbaren Kanone gegen Infanterie und 2 Hohlladungen gegen gepanzerte Ziele oder Türme ist das SEK ein ernstzunehmender Gegner. Standardmäßig ist auch noch das MG gegen Infantrie und niedrigfliegende Ziele. Die Haupteigenschaft ist jedoch die MAM (Move-Attack-Move) Fähigkeit die ihm ermöglicht, schnelle, harte Schläge auszuteilen und wieder zu verschwinden. Dabei hilft auch die Stealthfähigkeit.
+   
+   Wie bei allen Infanterieeinheiten gilt: Vorsicht vor den Scharfschützen!! Das gilt beim SEK doppelt, da die Ausbildung im Vergleich zu anderen Soldaten sehr teuer ist.]
    picture = mk3i_sek.png
    InfoImage = mk3i_sek.jpg
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0

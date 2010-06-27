@@ -8,7 +8,10 @@ VehicleType {
    infoImage = mk3v_ussl.jpg
    WreckageObject = 15578
    GuideSortHelp = 552 558 0 0 3 0 0 0 0 0
-   Infotext = [Transport Vehicles are large trucks in which a number of small
+   Infotext = [USSL
+
+   Diese Transport Fahrzeuge sind große Lastwagen welche bis zu 4 Einheiten transportieren können. Die effizienteste Nutzung ist die Verlegung der langsamen Artillerieeinheiten an die Front bzw. die Möglichkeit des schnellen Rückzugs. Aber Vorsicht! Der USSL ist nicht ausreichend gepanzert gegen direkten Beschuss und ohne Bewaffnung.]
+   Infotext_EN = [Transport Vehicles are large trucks in which a number of small
               vehicles or a couple of heavy vehicles can be stored for transport.
               Most vehicles, like tanks, don't benefit from transport very
               well. But for slower units like Heavy Artillery, transportation

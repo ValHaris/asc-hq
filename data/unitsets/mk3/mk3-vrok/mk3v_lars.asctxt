@@ -7,6 +7,12 @@ VehicleType {
    Description = Light Artillery Rocket System
    Picture = mk3v_lars.png
    InfoImage = mk3v_lars.jpg
+   ;Infotext_EN siehe parent->Infotext
+   Infotext = [LARS
+
+   LARS steht für Leichtes Artillerieraketensystem, einem Raketenpanzer der nicht so stark wie ein schwerer Kampfpanzer und nicht so schnell wie ein leichter Panzer ist. Allerdings besitzt er 8 ballistische Kurzstreckenraketen, die es ihm ermöglichen schwere Einheiten aus sicherer Distanz zu bekämpfen.
+
+   Brauchen Sie schnell Unterstützung und können nicht auf die Artillerie warten? Nehmen sie den Raketenpanzer!]
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Armor -= 50

@@ -5,7 +5,13 @@ VehicleType {
    parent = 219
    
    Description = missile air defence
-   Infotext = [The Patriot is an surface-to-air, mobile, air defense missile system.
+   Infotext = [PATRIOT
+
+   Die Patriot ist ein mobiles Luftabwehrsystem mit einer großen Reichweite bis in die obersten Luftschichten. Geeignet für stationäre Aufgaben weil nur ein langsame Bewegung möglich ist. Schwach gepanzert ist Schutz durch andere Einheiten nötig.
+
+   InfoImage = Wikipedia MIM-104 Patriot]
+   Infotext_EN = [The Patriot is an surface-to-air, mobile, air defense missile system.
+
                InfoImage = Wikipedia MIM-104 Patriot]
    Picture = MK3v_patriot.png
    InfoImage = mk3v_patriot.jpg

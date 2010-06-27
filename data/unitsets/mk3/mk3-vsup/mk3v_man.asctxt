@@ -5,7 +5,9 @@ VehicleType {
    parent = 335
 
    Description = tanker vehicle
-   Infotext = [Treibstoff transporter]
+   Infotext = [MAN
+
+   Der MAN ist das Tankfahrzeug der Terraner. Unverzichtbar bei raumgreifenden Vorstößen aber absolut wehr- und schutzlos. Halten Sie den Tanker bei schlechtem Wetter immer auf der Straße oder Weg da er sonst bewegungslos liegen bleibt und somit für die Truppe nutzlos wird.]
    picture = mk3v_man.png
    InfoImage = mk3v_man.jpg
    GuideSortHelp = 550 0 0 0 3 0 0 0 0 0
