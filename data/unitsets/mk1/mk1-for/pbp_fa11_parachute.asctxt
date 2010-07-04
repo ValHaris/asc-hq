@@ -1,5 +1,5 @@
  Technology {
-   name = "parachute technology"
+   name = "Parachute Technology"
    infotext = "advanced technology"
    id = 100311
    researchpoints = 1000

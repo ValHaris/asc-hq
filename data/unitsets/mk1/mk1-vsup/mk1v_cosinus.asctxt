@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = COSINUS
+   Name = Cosinus
    ID = 13
    parent = 336
    

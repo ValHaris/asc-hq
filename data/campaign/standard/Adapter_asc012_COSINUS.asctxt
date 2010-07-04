@@ -1,5 +1,5 @@
 Techadapter {
    Name = 13
-   ;Bezeichnung der verknüpften Technologie: COSINUS
+   ;Bezeichnung der verknüpften Technologie: Cosinus
    TechnologiesRequired = 101013
 } TechAdapter

@@ -1,6 +1,6 @@
 technology {
    Name = GASP 
-   infotext = Reserach project finished! AA-Ship avialable!
+   infotext = Research project finished! AA-Ship avalable!
    id = 101028
    RelatedUnitID = 28
    parent = 101914

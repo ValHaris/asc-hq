@@ -1,5 +1,5 @@
 BuildingType { 
-   Name = small vehicle plant
+   Name = Small Vehicle Plant
    ID = 1001
    TechAdapterRequired = 14701
    parent = 12 499

@@ -1,5 +1,5 @@
 TerrainType { 
-   Name = BLUE Ocean
+   Name = Blue Ocean
    ID = 2007
    parent = 516
    Weather = dry few_snow much_snow snow_and_ice

@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = TERRIBLE
+   Name = Terrible
    ID = 67
    parent = 235
 

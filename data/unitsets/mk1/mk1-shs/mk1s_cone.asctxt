@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = CONE
+   Name = Cone
    ID = 46
    parent = 419
 

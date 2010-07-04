@@ -1,5 +1,5 @@
 TerrainType { 
-   Name = green shallow water
+   Name = Green Shallow Water
    ID = 307
    parent = 514 
    dry { 

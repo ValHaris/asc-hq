@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = RASAK
+   Name = Rasak
    ID = 123
    parent = 327
 

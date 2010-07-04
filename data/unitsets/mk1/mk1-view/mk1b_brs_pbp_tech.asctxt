@@ -1,6 +1,6 @@
 technology {
-   Name = Radar Bunker
-   infotext = Forschungsprojekt abgeschlossen! Radar Bunker verfuegbar!
+   Name = BRS
+   infotext = Forschungsprojekt abgeschlossen! BRS verfuegbar!
    id = 111
    RelatedUnitID = 111
    parent = 100000

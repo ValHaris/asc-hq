@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = GUNNER
+   Name = Gunner
    ID = 106
    parent = 203
    Description = heavy attack trooper

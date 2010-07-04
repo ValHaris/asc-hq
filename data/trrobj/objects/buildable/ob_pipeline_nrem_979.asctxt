@@ -1,5 +1,5 @@
 ObjectType { 
-   name = pipeline (not removeable)
+   name = Pipeline (not removeable)
    ID = 979
    groupID = 0
    parent = 30

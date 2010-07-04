@@ -1,6 +1,6 @@
 technology {
    Name = Timber
-   infotext = Reserach project finished! Timber avialable!
+   infotext = Research project finished! Timber available!
    id = 101029
    RelatedUnitID = 29
    parent = 101914

@@ -1,5 +1,5 @@
  Technology {
-   name = "long range SAM technology"
+   name = "Long Range SAM Technology"
    infotext = "advanced technology"
    id = 100303
    researchpoints = 1000

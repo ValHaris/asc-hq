@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = BIGGUN
+   Name = Big Gun
    ID = 56
    parent = 320
    Description = main defence gun

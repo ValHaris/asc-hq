@@ -1,5 +1,5 @@
 Techadapter {
    Name = 30
-   ;Bezeichnung der verknüpften Technologie: BOLT
+   ;Bezeichnung der verknüpften Technologie: Bolt
    TechnologiesRequired = 101030
 } TechAdapter

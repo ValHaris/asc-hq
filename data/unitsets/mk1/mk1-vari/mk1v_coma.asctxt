@@ -1,5 +1,5 @@
 VehicleType {
-   Name = COMA
+   Name = Coma
    ID = 2
    parent = 251
    Description = medium artillery

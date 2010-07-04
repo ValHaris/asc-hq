@@ -1,6 +1,6 @@
 technology {
    Name = Inca
-   infotext = Reserach project finished! Inca avialable!
+   infotext = Research project finished! Inca available!
    id = 101054
    RelatedUnitID = 54
    parent = 101914

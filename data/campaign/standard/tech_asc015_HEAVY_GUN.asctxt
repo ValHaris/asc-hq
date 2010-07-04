@@ -1,6 +1,6 @@
 technology {
-   Name = HEAVY GUN
-   infotext = Reserach project finished! HEAVY GUN avialable!
+   Name = Heavy Gun
+   infotext = Research project finished! Heavy Gun available!
    id = 101110
    RelatedUnitID = 110
    parent = 101915

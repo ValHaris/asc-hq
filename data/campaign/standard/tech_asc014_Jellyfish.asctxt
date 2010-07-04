@@ -1,6 +1,6 @@
 technology {
    Name = Jellyfish
-   infotext = Reserach project finished! Jellyfish avialable!
+   infotext = Research project finished! Jellyfish available!
    id = 101027
    RelatedUnitID = 27
    parent = 101914

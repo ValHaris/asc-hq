@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = SQUID
+   Name = Squid
    parent = 363
    ID = 91
 

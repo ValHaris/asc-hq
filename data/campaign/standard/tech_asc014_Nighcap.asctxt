@@ -1,6 +1,6 @@
 technology {
-   Name = Nighcap
-   infotext = Reserach project finished! Nighcap avialable!
+   Name = Nightcap
+   infotext = Research project finished! Nightcap available!
    id = 101031
    RelatedUnitID = 31
    parent = 101914

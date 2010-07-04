@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = SPOR
+   Name = Spor
    ID = 118
    parent = 400 401 402 412
 

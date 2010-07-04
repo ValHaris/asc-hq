@@ -1,5 +1,5 @@
  Technology {
-   name = "aircraft carrier technology"
+   name = "Aircraft Carrier Technology"
    infotext = "conventional technology"
    id = 100209
    researchpoints = 300

@@ -1,6 +1,6 @@
 technology {
    Name = Monster WIG
-   infotext = Reserach project finished! Monster WIG avialable!
+   infotext = Research project finished! Monster WIG available!
    id = 101071
    RelatedUnitID = 71
    parent = 101914

@@ -1,5 +1,5 @@
 Techadapter {
    Name = 84
-   ;Bezeichnung der verknüpften Technologie: SILO
+   ;Bezeichnung der verknüpften Technologie: Silo
    TechnologiesRequired = 84
 } TechAdapter

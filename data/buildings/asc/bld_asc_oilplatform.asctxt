@@ -1,7 +1,7 @@
 BuildingType { 
-   Name = oilplattform
+   Name = Oilplatform
    ID = 13
-   Infotext = [ Oelforderplatform für Gewaesser in Kuestennähe. ]
+   Infotext = [ Oelforderplattform für Gewaesser in Kuestennähe. ]
    parent = 499 498
    Armor = 1500
    View = 40

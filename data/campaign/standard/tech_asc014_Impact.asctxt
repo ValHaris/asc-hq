@@ -1,6 +1,6 @@
 technology {
    Name = Impact
-   infotext = Reserach project finished! Impact avialable!
+   infotext = Research project finished! Impact available!
    id = 101021
    RelatedUnitID = 21
    parent = 101914

@@ -1,5 +1,5 @@
 ObjectType { 
-   name = high turret foundation
+   name = High Turret Foundation
    ID = 44
    groupID = 7
    Weather = dry much_snow

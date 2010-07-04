@@ -1,6 +1,6 @@
 technology {
    Name = Tsunami
-   infotext = Reserach project finished! Tsunami avialable!
+   infotext = Research project finished! Tsunami available!
    id = 101035
    RelatedUnitID = 35
    parent = 101914

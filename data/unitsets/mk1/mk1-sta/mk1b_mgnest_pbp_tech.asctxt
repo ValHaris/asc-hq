@@ -1,6 +1,6 @@
 technology {
-   Name = MGNest
-   infotext = Forschungsprojekt abgeschlossen! MGNest verfuegbar!
+   Name = MG Nest
+   infotext = Forschungsprojekt abgeschlossen! MG Nest verfuegbar!
    id = 104
    RelatedUnitID = 104
    parent = 100000

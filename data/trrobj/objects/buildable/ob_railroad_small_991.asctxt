@@ -1,5 +1,5 @@
 ObjectType { 
-   Name = small railroad
+   Name = Small Railroad
    ID = 991
    parent = 2
    LinkableObjects = 999 995 2 992 980

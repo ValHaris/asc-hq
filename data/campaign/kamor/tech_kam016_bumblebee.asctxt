@@ -1,6 +1,6 @@
 technology {
    Name = Bumblebee
-   infotext = Research project finished! BUMBLEBEE available!
+   infotext = Research project finished! Bumblebee available!
    id = 34101
    RelatedUnitID = 23
    parent = 34100

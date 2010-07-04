@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = SILO
+   Name = Silo
    ID = 84
    parent = 304
 

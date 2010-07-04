@@ -1,5 +1,5 @@
 ObjectType { 
-   Name = mountain plateau
+   Name = Mountain Plateau
    ID = 2609
    parent = 520
    LinkableObjects = 2600

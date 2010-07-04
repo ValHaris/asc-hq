@@ -1,6 +1,6 @@
 technology {
    Name = Terror
-   infotext = Reserach project finished! Terror avialable!
+   infotext = Research project finished! Terror available!
    id = 101090
    RelatedUnitID = 90
    parent = 101914

@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = FIX
+   Name = Fix
    ID = 39
    parent = 400 401 402 419
 

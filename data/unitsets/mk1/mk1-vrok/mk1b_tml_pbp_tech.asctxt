@@ -1,6 +1,6 @@
 technology {
-   Name = T.M.L.
-   infotext = Forschungsprojekt abgeschlossen! T.M.L. verfuegbar!
+   Name = TML
+   infotext = Forschungsprojekt abgeschlossen! TML verfuegbar!
    id = 76
    RelatedUnitID = 76
    parent = 100000

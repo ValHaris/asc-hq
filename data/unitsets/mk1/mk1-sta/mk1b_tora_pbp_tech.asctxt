@@ -1,6 +1,6 @@
 technology {
-   Name = TORA
-   infotext = Forschungsprojekt abgeschlossen! TORA verfuegbar!
+   Name = Tora
+   infotext = Forschungsprojekt abgeschlossen! Tora verfuegbar!
    id = 122
    RelatedUnitID = 122
    parent = 100000

@@ -1,5 +1,5 @@
 BuildingType {
-   Name = great vehicle plant
+   Name = Great Vehicle Plant
    ID = 11
    parent = 499
    InfoText = [Produktionsanlage für schwere Landfahrzeuge, incl. Munitionsproduktion, Reparatur und Wiederverwertung.]

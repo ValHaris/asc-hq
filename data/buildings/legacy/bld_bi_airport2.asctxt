@@ -1,5 +1,5 @@
 BuildingType { 
-   Name = airport
+   Name = Airport
    ID = 52
    TechAdapterRequired = 14752
    parent = 10 499

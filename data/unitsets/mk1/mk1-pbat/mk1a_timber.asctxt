@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = TIMBER
+   Name = Timber
    parent = 278
    ID = 29
    Description = Long-Range Bomber

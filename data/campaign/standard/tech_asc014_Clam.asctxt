@@ -1,6 +1,6 @@
 technology {
    Name = Clam
-   infotext = Reserach project finished! Clam avialable!
+   infotext = Research project finished! Clam available!
    id = 101036
    RelatedUnitID = 36
    parent = 101914

@@ -1,5 +1,5 @@
 Techadapter {
    Name = B4
-   ;Bezeichnung der verknüpften Technologie: Oeltower
+   ;Bezeichnung der verknüpften Technologie: Oiltower
    TechnologiesRequired = 100000
 } TechAdapter

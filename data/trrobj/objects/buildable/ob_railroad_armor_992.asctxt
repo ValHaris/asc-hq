@@ -1,5 +1,5 @@
 ObjectType { 
-   Name = armor railroad
+   Name = Armor Railroad
    ID = 992
    canExistBeneathBuildings = true
    Weather = dry much_snow

@@ -1,5 +1,5 @@
 Techadapter {
    Name = 102
-   ;Bezeichnung der verknüpften Technologie: ARMADILLO 2
+   ;Bezeichnung der verknüpften Technologie: Armadillo 2
    TechnologiesRequired = 101102
 } TechAdapter

@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = HOOVERCRAFT
+   Name = Hoovercraft
    ID = 5
    parent = 371 
 

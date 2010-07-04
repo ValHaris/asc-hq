@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = BOJE
+   Name = Buoy
    parent = 249
    ID = 119
 

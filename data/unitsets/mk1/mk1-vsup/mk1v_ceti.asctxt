@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = CETI
+   Name = Ceti
    ID = 11
    parent = 336
    

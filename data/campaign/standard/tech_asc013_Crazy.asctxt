@@ -1,6 +1,6 @@
 technology {
    Name = Crazy
-   infotext = Reserach project finished! Crazy avialable!
+   infotext = Research project finished! Crazy available!
    id = 101097
    RelatedUnitID = 97
    parent = 101913

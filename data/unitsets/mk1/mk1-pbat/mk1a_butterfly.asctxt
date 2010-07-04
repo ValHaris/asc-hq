@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = BUTTERFLY
+   Name = Butterfly
    ID = 69
    parent = 277
 

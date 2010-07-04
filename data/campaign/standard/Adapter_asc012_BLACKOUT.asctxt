@@ -1,5 +1,5 @@
 Techadapter {
    Name = 1
-   ;Bezeichnung der verknüpften Technologie: BLACKOUT
+   ;Bezeichnung der verknüpften Technologie: Blackout
    TechnologiesRequired = 101001
 } TechAdapter

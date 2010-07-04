@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = SURVEYOR
+   Name = Surveyor
    ID = 40
    parent = 335
    

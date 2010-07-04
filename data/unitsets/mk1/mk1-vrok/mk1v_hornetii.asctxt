@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = HORNET II
+   Name = Hornet 2
    ID = 114
    parent = 297
    Description = rocket tank

@@ -1,5 +1,5 @@
 ObjectType { 
-   Name = forest (nGrowth nDestr)
+   Name = Forest (nGrowth nDestr)
    ID = 989
    parent = 990
    Armor = 0

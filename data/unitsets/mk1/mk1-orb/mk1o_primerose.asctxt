@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = PRIMEROSE
+   Name = Primerose
    ID = 88
    parent = 232
 

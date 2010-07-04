@@ -1,5 +1,5 @@
 BuildingType { 
-   Name = vehicle plant
+   Name = Vehicle Plant
    ID = 1008
    Armor = 500
    parent = 53

@@ -1,5 +1,5 @@
 BuildingType { 
-   Name = oiltower
+   Name = Oiltower
    ID = 1212
    TechAdapterRequired = B1212
    parent = 4

@@ -1,6 +1,6 @@
 technology {
    Name = Reha
-   infotext = Reserach project finished! Reha avialable!
+   infotext = Research project finished! Reha available!
    id = 101081
    RelatedUnitID = 81
    parent = 101914

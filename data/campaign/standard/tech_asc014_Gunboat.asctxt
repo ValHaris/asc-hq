@@ -1,6 +1,6 @@
 technology {
    Name = Gunboat
-   infotext = Reserach project finished! Gunboat avialable!
+   infotext = Research project finished! Gunboat available!
    id = 101080
    RelatedUnitID = 80
    parent = 101914

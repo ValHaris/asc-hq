@@ -1,6 +1,6 @@
 technology {
    Name = Apogee
-   infotext = Reserach project finished! Apogee avialable!
+   infotext = Research project finished! Apogee available!
    id = 101037
    RelatedUnitID = 37
    parent = 101914

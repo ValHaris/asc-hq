@@ -1,5 +1,5 @@
 Techadapter {
    Name = B31
-   ;Bezeichnung der verknüpften Technologie: Solar Power Plant2
+   ;Bezeichnung der verknüpften Technologie: Solar Power Plant 2
    TechnologiesRequired = 100000
 } TechAdapter

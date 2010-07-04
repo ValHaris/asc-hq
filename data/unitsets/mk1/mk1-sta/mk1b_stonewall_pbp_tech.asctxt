@@ -1,6 +1,6 @@
 technology {
-   Name = Stone Wall
-   infotext = Forschungsprojekt abgeschlossen! Stone Wall verfuegbar!
+   Name = Stonewall
+   infotext = Forschungsprojekt abgeschlossen! Stonewall verfuegbar!
    id = 94
    RelatedUnitID = 94
    parent = 100000

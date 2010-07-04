@@ -1,5 +1,5 @@
 ObjectType { 
-   name = path
+   name = Path
    canExistBeneathBuildings = true
    ID = 9
    groupID = 1

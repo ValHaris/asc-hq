@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = SCOPE
+   Name = Scope
    ID = 9
    parent = 247
 

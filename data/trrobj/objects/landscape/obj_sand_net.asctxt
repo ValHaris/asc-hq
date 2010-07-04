@@ -1,5 +1,5 @@
 ObjectType { 
-   Name = Wuestenrand
+   Name = Desert Border
    ID = 2657
 
    visible_in_fogOfWar = true

@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = MG NEST
+   Name = MG Nest
    parent = 314
    ID = 104
 

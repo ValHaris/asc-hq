@@ -1,6 +1,6 @@
 technology {
-   Name = COSINUS
-   infotext = Reserach project finished! COSINUS avialable!
+   Name = Cosinus
+   infotext = Research project finished! Cosinus available!
    id = 101013
    RelatedUnitID = 13
    parent = 101000

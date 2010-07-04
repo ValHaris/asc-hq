@@ -1,6 +1,6 @@
 technology {
    Name = EXP 5
-   infotext = Reserach project finished! EXP 5 avialable!
+   infotext = Research project finished! EXP 5 available!
    id = 101105
    RelatedUnitID = 105
    parent = 101915

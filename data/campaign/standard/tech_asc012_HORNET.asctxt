@@ -1,6 +1,6 @@
 technology {
-   Name = HORNET
-   infotext = Reserach project finished! HORNET avialable!
+   Name = Hornet
+   infotext = Research project finished! Hornet available!
    id = 101007
    RelatedUnitID = 7
    parent = 101000

@@ -1,6 +1,6 @@
 technology {
    Name = SAM Trooper
-   infotext = Reserach project finished! SAM Trooper avialable!
+   infotext = Research project finished! SAM Trooper available!
    id = 101098
    RelatedUnitID = 98
    parent = 101913

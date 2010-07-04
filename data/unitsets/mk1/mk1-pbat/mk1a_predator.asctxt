@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = PREDATOR
+   Name = Predator
    ID = 70
    parent = 272
    Description = Stealth Fighter

@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = VERTIC
+   Name = Vertic
    parent = 338
    ID = 33
    

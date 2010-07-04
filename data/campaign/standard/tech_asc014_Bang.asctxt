@@ -1,6 +1,6 @@
 technology {
    Name = Bang
-   infotext = Reserach project finished! Bang avialable!
+   infotext = Research project finished! Bang available!
    id = 101020
    RelatedUnitID = 20
    parent = 101914

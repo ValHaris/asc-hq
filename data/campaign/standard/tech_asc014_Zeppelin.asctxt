@@ -1,6 +1,6 @@
 technology {
    Name = Zeppelin
-   infotext = Reserach project finished! Zeppelin avialable!
+   infotext = Research project finished! Zeppelin available!
    id = 101048
    RelatedUnitID = 48
    parent = 101914

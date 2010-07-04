@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = BURRO
+   Name = Burro
    parent = 400 401 402 412
    ID = 79
    

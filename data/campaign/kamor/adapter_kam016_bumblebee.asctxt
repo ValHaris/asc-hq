@@ -1,5 +1,5 @@
 Techadapter {
    Name = 23
-   ;Bezeichnung der verknüpften Technologie: BUMBLEBEE
+   ;Bezeichnung der verknüpften Technologie: Bumblebee
    TechnologiesRequired = 34101
 } TechAdapter

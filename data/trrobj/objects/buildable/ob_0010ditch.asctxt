@@ -1,5 +1,5 @@
 ObjectType { 
-   Name = ditch
+   Name = Ditch
    ID = 10
    groupID = 5
    Weather = dry 

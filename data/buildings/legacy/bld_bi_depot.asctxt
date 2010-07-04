@@ -1,5 +1,5 @@
 BuildingType {
-   Name = depot
+   Name = Depot
    ID = 54
    TechAdapterRequired = 14754
    parent = 2 499

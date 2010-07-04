@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = WEDGE
+   Name = Wedge
    parent = 360
    ID = 14
 

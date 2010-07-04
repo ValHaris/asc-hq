@@ -1,6 +1,6 @@
 technology {
    Name = Boomerang
-   infotext = Reserach project finished! Boomerang avialable!
+   infotext = Research project finished! Boomerang available!
    id = 101092
    RelatedUnitID = 92
    parent = 101914

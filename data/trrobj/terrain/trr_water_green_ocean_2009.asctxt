@@ -1,5 +1,5 @@
 TerrainType { 
-   Name = green ocean
+   Name = Green Ocean
    ID = 2009
    parent = 517
 

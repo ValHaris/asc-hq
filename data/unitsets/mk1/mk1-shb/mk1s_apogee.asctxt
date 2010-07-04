@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = APOGEE
+   Name = Apogee
    ID = 37
    parent = 357
 

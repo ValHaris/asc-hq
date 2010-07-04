@@ -1,6 +1,6 @@
 technology {
    Name = Fix
-   infotext = Reserach project finished! Fix avialable!
+   infotext = Research project finished! Fix available!
    id = 101039
    RelatedUnitID = 39
    parent = 101914

@@ -1,5 +1,5 @@
 TerrainType { 
-   Name = BLUE SW
+   Name = Blue SW
    ID = 299
    parent = 514
 

@@ -1,5 +1,5 @@
 ObjectType { 
-   Name = road
+   Name = Road
    ID = 1
    groupid = 1
    canExistBeneathBuildings = true

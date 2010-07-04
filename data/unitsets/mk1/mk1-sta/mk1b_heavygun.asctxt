@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = HEAVY GUN
+   Name = Heavy Gun
    ID = 110
    parent = 321
    

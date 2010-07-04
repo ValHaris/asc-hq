@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = SPEAR
+   Name = Spear
    ID = 73
    parent = 221
 

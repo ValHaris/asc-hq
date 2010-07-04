@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = COBRA
+   Name = Cobra
    ID = 63
    parent = 333
 

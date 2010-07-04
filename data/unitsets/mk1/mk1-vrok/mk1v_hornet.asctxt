@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = HORNET
+   Name = Hornet
    ID = 7
    parent = 296
 

@@ -1,6 +1,6 @@
 technology {
    Name = Swatter
-   infotext = Reserach project finished! Swatter avialable!
+   infotext = Research project finished! Swatter available!
    id = 101018
    RelatedUnitID = 18
    parent = 101913

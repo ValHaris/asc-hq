@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = FORT
+   Name = Fort
    ID = 49
    parent = 316
 

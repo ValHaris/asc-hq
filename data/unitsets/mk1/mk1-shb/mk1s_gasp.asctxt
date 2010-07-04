@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = GASP
+   Name = Gasp
    ID = 28
    parent = 355
    GuideSortHelp += 0 0 0 0 1 508 600 422 0 0

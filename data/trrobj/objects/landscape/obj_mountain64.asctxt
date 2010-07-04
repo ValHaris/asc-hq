@@ -1,5 +1,5 @@
 ObjectType { 
-   Name = mountains
+   Name = Mountains
    ID = 2600
    parent = 509
    LinkableObjects = 2609
