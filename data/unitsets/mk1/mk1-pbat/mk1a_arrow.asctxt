@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = ARROW
+   Name = Arrow
    parent = 270 
    ID = 19
 

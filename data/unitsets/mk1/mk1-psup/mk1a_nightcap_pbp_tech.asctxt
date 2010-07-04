@@ -1,6 +1,6 @@
 technology {
-   Name = Nighcap
-   infotext = Forschungsprojekt abgeschlossen! Nighcap verfuegbar!
+   Name = Nightcap
+   infotext = Forschungsprojekt abgeschlossen! Nightcap verfuegbar!
    id = 31
    RelatedUnitID = 31
    parent = 100000

@@ -1,6 +1,6 @@
 technology {
    Name = Argus
-   infotext = Reserach project finished! Argus avialable!
+   infotext = Research project finished! Argus available!
    id = 101032
    RelatedUnitID = 32
    parent = 101914

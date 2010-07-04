@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = BOLT
+   Name = Bolt
    ID = 30
    parent = 335
    

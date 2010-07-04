@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = INCA
+   Name = Inca
    parent = 382
    ID = 54
    Description = Attack Helicopter

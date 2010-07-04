@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = FOREST RANGER
+   Name = Forest Ranger
    ID = 62
    parent = 335
    

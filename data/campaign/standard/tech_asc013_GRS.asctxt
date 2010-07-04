@@ -1,6 +1,6 @@
 technology {
    Name = GRS
-   infotext = Reserach project finished! GRS avialable!
+   infotext = Research project finished! GRS available!
    id = 101095
    RelatedUnitID = 95
    parent = 101913

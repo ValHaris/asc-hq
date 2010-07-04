@@ -1,8 +1,8 @@
 BuildingType { 
-   Name = great oilplattform
+   Name = Great Oilplatform
    ID = 14
    parent = 499 498
-   Infotext = [Oelfoerderplatform fuer Gewaesser]
+   Infotext = [Oelfoerderplattform fuer Gewaesser]
    Armor = 2500
    View = 50
    ConstructionStages = 1

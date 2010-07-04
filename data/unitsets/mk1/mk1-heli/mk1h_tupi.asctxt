@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = TUPI
+   Name = Tupi
    parent = 381
    ID = 55
    

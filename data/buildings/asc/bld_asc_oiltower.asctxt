@@ -1,5 +1,5 @@
 BuildingType { 
-   Name = oiltower
+   Name = Oiltower
    ID = 4
    InfoText = [Oelfoerderanlage für Land.]
    parent = 499

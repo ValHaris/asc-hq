@@ -1,5 +1,5 @@
 BuildingType { 
-   Name = oilplattform
+   Name = Oilplatform
    ID = 1214
    TechAdapterRequired = 14814
    parent = 14 499 498

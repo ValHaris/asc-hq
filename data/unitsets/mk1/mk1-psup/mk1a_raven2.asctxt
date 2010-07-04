@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = RAVEN II
+   Name = Raven 2
    parent = 400 401 402 498 415
    ID = 116
 

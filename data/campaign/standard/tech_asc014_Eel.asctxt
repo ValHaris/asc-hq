@@ -1,6 +1,6 @@
 technology {
    Name = Eel
-   infotext = Reserach project finished! Eel avialable!
+   infotext = Research project finished! Eel available!
    id = 101034
    RelatedUnitID = 34
    parent = 101914

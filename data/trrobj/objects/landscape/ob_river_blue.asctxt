@@ -2,7 +2,7 @@ ObjectType {
 
    Weather = dry much_snow snow_and_ice
 
-   Name = BLUE River
+   Name = Blue River
    Parent = 518
    ID = 2653
 ;   GroupID = 18

@@ -1,5 +1,5 @@
 TerrainType { 
-   Name = Water blue
+   Name = Blue Water
    ID = 301
    SecondaryIDs = 300
    parent = 515

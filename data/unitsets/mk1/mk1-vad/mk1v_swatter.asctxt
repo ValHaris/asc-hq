@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = SWATTER
+   Name = Swatter
    ID = 18
    parent = 217
 

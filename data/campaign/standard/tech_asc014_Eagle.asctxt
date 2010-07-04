@@ -1,6 +1,6 @@
 technology {
    Name = Eagle
-   infotext = Reserach project finished! Eagle avialable!
+   infotext = Research project finished! Eagle available!
    id = 101052
    RelatedUnitID = 52
    parent = 101914

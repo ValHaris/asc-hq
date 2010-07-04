@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = VORTEX
+   Name = Vortex
    ID = 51
    Parent = 307
 

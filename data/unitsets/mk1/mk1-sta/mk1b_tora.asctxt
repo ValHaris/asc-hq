@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = TORA
+   Name = Tora
    ID = 122
    parent = 322
    

@@ -1,6 +1,6 @@
 technology {
    Name = CAD
-   infotext = Reserach project finished! CAD avialable!
+   infotext = Research project finished! CAD available!
    id = 101074
    RelatedUnitID = 74
    parent = 101913

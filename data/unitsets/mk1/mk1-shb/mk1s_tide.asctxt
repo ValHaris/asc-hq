@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = TIDE
+   Name = Tide
    parent = 352
    ID = 41
 

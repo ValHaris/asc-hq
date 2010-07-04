@@ -1,5 +1,5 @@
 TerrainType { 
-   Name = Black Background (not for use in MAPS)
+   Name = Black Background (not for use in Maps)
    ID = 9999
    Weather = dry light_rain heavy_rain few_snow much_snow snow_and_ice
 

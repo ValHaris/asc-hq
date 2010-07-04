@@ -1,5 +1,5 @@
 Techadapter {
    Name = 79
-   ;Bezeichnung der verknüpften Technologie: BURRO
+   ;Bezeichnung der verknüpften Technologie: Burro
    TechnologiesRequired = 101079
 } TechAdapter

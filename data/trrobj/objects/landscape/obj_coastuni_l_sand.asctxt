@@ -1,5 +1,5 @@
 ObjectType { 
-   Name = beach landside
+   Name = Beach Landside
    ID = 2689
    namingMethodNames = AddToTerrain
 ;   SecondaryIDs = 

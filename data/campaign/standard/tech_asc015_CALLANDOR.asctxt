@@ -1,6 +1,6 @@
 technology {
-   Name = CALLANDOR
-   infotext = Reserach project finished! CALLANDOR avialable!
+   Name = Callandor
+   infotext = Research project finished! Callandor available!
    id = 101058
    RelatedUnitID = 58
    parent = 101915

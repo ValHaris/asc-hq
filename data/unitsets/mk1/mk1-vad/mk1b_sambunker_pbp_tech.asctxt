@@ -1,6 +1,6 @@
 technology {
-   Name = SAM BUNKER
-   infotext = Forschungsprojekt abgeschlossen! SAM BUNKER verfuegbar!
+   Name = SAM Bunker
+   infotext = Forschungsprojekt abgeschlossen! SAM Bunker verfuegbar!
    id = 117
    RelatedUnitID = 117
    parent = 100000

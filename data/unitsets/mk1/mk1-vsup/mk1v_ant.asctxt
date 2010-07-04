@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = ANT
+   Name = Ant
    ID = 26
    parent = 336
    

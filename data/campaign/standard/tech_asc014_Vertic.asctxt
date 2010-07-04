@@ -1,6 +1,6 @@
 technology {
    Name = Vertic
-   infotext = Reserach project finished! Vertic avialable!
+   infotext = Research project finished! Vertic available!
    id = 101033
    RelatedUnitID = 33
    parent = 101914

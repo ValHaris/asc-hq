@@ -1,6 +1,6 @@
 technology {
    Name = Relago
-   infotext = Reserach project finished! Relago avialable!
+   infotext = Research project finished! Relago available!
    id = 101078
    RelatedUnitID = 78
    parent = 101914

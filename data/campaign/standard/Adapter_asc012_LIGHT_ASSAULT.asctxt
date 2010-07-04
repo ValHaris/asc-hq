@@ -1,5 +1,5 @@
 Techadapter {
    Name = 101
-   ;Bezeichnung der verknüpften Technologie: LIGHT ASSAULT
+   ;Bezeichnung der verknüpften Technologie: Light Assault
    TechnologiesRequired = 101101
 } TechAdapter

@@ -1,5 +1,5 @@
 Techadapter {
    Name = 94
-   ;Bezeichnung der verknüpften Technologie: Stone Wall
+   ;Bezeichnung der verknüpften Technologie: Stonewall
    TechnologiesRequired = 94
 } TechAdapter

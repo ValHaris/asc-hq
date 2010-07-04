@@ -1,6 +1,6 @@
 technology {
    Name = Streak
-   infotext = Reserach project finished! Streak avialable!
+   infotext = Research project finished! Streak available!
    id = 101038
    RelatedUnitID = 38
    parent = 101914

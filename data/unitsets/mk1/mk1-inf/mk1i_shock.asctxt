@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = SHOCK TROOPER
+   Name = Shock Trooper
    parent = 201
    ID = 17
 

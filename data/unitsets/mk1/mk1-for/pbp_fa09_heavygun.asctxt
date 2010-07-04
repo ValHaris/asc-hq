@@ -1,5 +1,5 @@
  Technology {
-   name = "heavy gun technology"
+   name = "Heavy Gun Technology"
    infotext = "advanced technology"
    id = 100309
    researchpoints = 1000

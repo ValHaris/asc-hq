@@ -1,5 +1,5 @@
 Techadapter {
    Name = 106
-   ;Bezeichnung der verknüpften Technologie: GUNNER
+   ;Bezeichnung der verknüpften Technologie: Gunner
    TechnologiesRequired = 34104
 } TechAdapter

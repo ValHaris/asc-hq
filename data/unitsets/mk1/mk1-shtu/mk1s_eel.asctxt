@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = EEL
+   Name = Eel
    parent = 364 
    ID = 34
 

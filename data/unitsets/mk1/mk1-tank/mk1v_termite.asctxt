@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = TERMITE
+   Name = Termite
    ID = 65
    parent = 290
 

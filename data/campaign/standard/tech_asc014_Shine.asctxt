@@ -1,6 +1,6 @@
 technology {
    Name = Shine
-   infotext = Reserach project finished! Shine avialable!
+   infotext = Research project finished! Shine available!
    id = 101115
    RelatedUnitID = 115
    parent = 101914

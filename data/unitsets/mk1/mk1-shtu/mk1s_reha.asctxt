@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = REHA
+   Name = Reha
    parent = 361
    ID = 81
 

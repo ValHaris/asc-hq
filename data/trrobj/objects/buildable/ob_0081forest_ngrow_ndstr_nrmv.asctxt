@@ -1,5 +1,5 @@
 ObjectType { 
-   Name = forest (nGr nDe nRe)
+   Name = Forest (nGr nDe nRe)
    ID = 81
    parent = 990
    Armor = 0

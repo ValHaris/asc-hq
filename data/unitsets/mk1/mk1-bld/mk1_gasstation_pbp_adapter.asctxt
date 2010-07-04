@@ -1,5 +1,5 @@
 Techadapter {
    Name = B6
-   ;Bezeichnung der verknüpften Technologie: Gasstation
+   ;Bezeichnung der verknüpften Technologie: Gas Station
    TechnologiesRequired = 100000
 } TechAdapter

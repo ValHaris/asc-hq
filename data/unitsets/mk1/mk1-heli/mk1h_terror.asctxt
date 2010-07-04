@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = TERROR
+   Name = Terror
    parent = 400 401 402 409 497
    ID = 90
    Description = trooper hunter

@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = BOOMERANG
+   Name = Boomerang
    parent = 271
    ID = 92
 

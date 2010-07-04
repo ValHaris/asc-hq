@@ -1,5 +1,5 @@
 Techadapter {
    Name = 31
-   ;Bezeichnung der verknüpften Technologie: Nighcap
+   ;Bezeichnung der verknüpften Technologie: Nightcap
    TechnologiesRequired = 31
 } TechAdapter

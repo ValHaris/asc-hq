@@ -1,6 +1,6 @@
 technology {
-   Name = PUNCH
-   infotext = Reserach project finished! PUNCH avialable!
+   Name = Punch
+   infotext = Research project finished! Punch available!
    id = 101057
    RelatedUnitID = 57
    parent = 101915

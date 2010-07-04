@@ -1,5 +1,5 @@
 ObjectType { 
-   Name = vortex wreckage
+   Name = Vortex wreckage
    ID = 451
    parent = 499
    dry { 

@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = STREAK
+   Name = Streak
    ID = 38
    parent = 354
 

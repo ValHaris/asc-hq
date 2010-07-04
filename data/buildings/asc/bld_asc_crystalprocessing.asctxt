@@ -1,5 +1,5 @@
 BuildingType { 
-   Name = CrystalProcessing
+   Name = Crystal Processing
    ID = 35
    parent = 499
 

@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = MONSTER WIG
+   Name = Monster WIG
    ID = 71
    parent = 368
    

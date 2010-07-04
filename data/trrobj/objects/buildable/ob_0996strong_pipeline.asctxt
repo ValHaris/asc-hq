@@ -1,5 +1,5 @@
 ObjectType { 
-   name = strong pipeline
+   name = Strong Pipeline
    ID = 996
    groupID = 22
    canExistBeneathBuildings = true

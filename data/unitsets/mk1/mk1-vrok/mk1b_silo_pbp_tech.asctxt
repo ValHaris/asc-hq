@@ -1,6 +1,6 @@
 technology {
-   Name = SILO
-   infotext = Forschungsprojekt abgeschlossen! SILO verfuegbar!
+   Name = Silo
+   infotext = Forschungsprojekt abgeschlossen! Silo verfuegbar!
    id = 84
    RelatedUnitID = 84
    parent = 100000

@@ -1,6 +1,6 @@
 technology {
    Name = Tide
-   infotext = Reserach project finished! Tide avialable!
+   infotext = Research project finished! Tide available!
    id = 101041
    RelatedUnitID = 41
    parent = 101914

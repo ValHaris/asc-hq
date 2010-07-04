@@ -1,6 +1,6 @@
 technology {
    Name = Raven
-   infotext = Reserach project finished! Raven avialable!
+   infotext = Research project finished! Raven available!
    id = 101015
    RelatedUnitID = 15
    parent = 101914

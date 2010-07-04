@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = BUMBLEBEE
+   Name = Bumblebee
    parent = 384
    ID = 23
    Description = Transport Helicopter

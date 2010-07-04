@@ -1,5 +1,5 @@
 Techadapter {
    Name = 104
-   ;Bezeichnung der verknüpften Technologie: MGNest
+   ;Bezeichnung der verknüpften Technologie: MG Nest
    TechnologiesRequired = 104
 } TechAdapter

@@ -1,5 +1,5 @@
 BuildingType { 
-   Name = training center
+   Name = Training Center
    ID = 57
    TechAdapterRequired = 14757
    Armor = 800

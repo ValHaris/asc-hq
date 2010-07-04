@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = SPIKE
+   Name = Spike
    ID = 64
    parent = 220
 

@@ -28,7 +28,7 @@ ObjectType {
       fuel = 0
       Movement = 0
    } RemovalCost
-   Name = track
+   Name = Track
    NoSelfChaining = false
    lifetime = 3
    TerrainAccess { 

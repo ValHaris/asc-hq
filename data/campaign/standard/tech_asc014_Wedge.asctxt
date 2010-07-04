@@ -1,6 +1,6 @@
 technology {
    Name = Wedge
-   infotext = Reserach project finished! Wedge avialable!
+   infotext = Research project finished! Wedge available!
    id = 101014
    RelatedUnitID = 14
    parent = 101914

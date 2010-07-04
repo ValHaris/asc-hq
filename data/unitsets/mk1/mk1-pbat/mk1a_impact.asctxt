@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = IMPACT
+   Name = Impact
    parent = 329
    ID = 21
    

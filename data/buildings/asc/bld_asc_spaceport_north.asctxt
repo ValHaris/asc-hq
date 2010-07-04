@@ -1,5 +1,5 @@
 BuildingType { 
-   Name = Spaceport north
+   Name = Spaceport North
    ID = 33
    InfoText = [Produktionsanlage für Orbitaltechnick. Die ANlage verfuegt uber eine direkte Abschussvorrichtung.]
    Armor = 2000

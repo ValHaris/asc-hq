@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = CALLANDOR
+   Name = Callandor
    ID = 58
    parent = 255
    Description = railroad gun

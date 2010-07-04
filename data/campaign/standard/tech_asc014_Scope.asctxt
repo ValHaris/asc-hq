@@ -1,6 +1,6 @@
 technology {
    Name = Scope
-   infotext = Reserach project finished! Scope avialable!
+   infotext = Research project finished! Scope available!
    id = 101009
    RelatedUnitID = 9
    parent = 101914

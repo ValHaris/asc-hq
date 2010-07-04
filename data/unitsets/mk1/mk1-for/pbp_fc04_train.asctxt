@@ -1,5 +1,5 @@
  Technology {
-   name = "train technology"
+   name = "Train Technology"
    infotext = "conventional technology"
    id = 100204
    researchpoints = 300

@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = LIGHT ASSAULT
+   Name = Light Assault
    ID = 101
    parent = 290
    Description = light assault tank

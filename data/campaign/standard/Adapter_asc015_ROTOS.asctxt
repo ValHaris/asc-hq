@@ -1,5 +1,5 @@
 Techadapter {
    Name = 109
-   ;Bezeichnung der verknüpften Technologie: ROTOS
+   ;Bezeichnung der verknüpften Technologie: Rotos
    TechnologiesRequired = 101109
 } TechAdapter

@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = WAKE
+   Name = Wake
    ID = 42
    parent = 366
 

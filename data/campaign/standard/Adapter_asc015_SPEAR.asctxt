@@ -1,5 +1,5 @@
 Techadapter {
    Name = 73
-   ;Bezeichnung der verknüpften Technologie: SPEAR
+   ;Bezeichnung der verknüpften Technologie: Spear
    TechnologiesRequired = 101073
 } TechAdapter

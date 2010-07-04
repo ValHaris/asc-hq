@@ -1,5 +1,5 @@
 BuildingType { 
-   Name = research institute
+   Name = Research Institute
    ID = 1205
    TechAdapterRequired = 14805
    parent = 22

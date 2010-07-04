@@ -1,5 +1,5 @@
 Techadapter {
    Name = B13
-   ;Bezeichnung der verknüpften Technologie: Oelplattform
+   ;Bezeichnung der verknüpften Technologie: Oilplatform
    TechnologiesRequired = 100000
 } TechAdapter

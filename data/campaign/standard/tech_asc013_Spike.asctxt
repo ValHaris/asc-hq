@@ -1,6 +1,6 @@
 technology {
    Name = Spike
-   infotext = Reserach project finished! Spike avialable!
+   infotext = Research project finished! Spike available!
    id = 101064
    RelatedUnitID = 64
    parent = 101913

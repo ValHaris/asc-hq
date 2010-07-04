@@ -1,6 +1,6 @@
 technology {
    Name = Fort
-   infotext = Reserach project finished! Fort avialable!
+   infotext = Research project finished! Fort available!
    id = 101049
    RelatedUnitID = 49
    parent = 101913

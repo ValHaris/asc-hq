@@ -1,5 +1,5 @@
 Techadapter {
    Name = 119
-   ;Bezeichnung der verknüpften Technologie: Boje
+   ;Bezeichnung der verknüpften Technologie: Buoy
    TechnologiesRequired = 100000 100208
 } TechAdapter

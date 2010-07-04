@@ -1,6 +1,6 @@
 technology {
    Name = Tupi
-   infotext = Reserach project finished! Tupi avialable!
+   infotext = Research project finished! Tupi available!
    id = 101055
    RelatedUnitID = 55
    parent = 101914

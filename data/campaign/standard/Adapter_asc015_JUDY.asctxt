@@ -1,5 +1,5 @@
 Techadapter {
    Name = 59
-   ;Bezeichnung der verknüpften Technologie: JUDY
+   ;Bezeichnung der verknüpften Technologie: Judy
    TechnologiesRequired = 101059
 } TechAdapter

@@ -1,5 +1,5 @@
 TerrainType { 
-   Name = BLUE DW
+   Name = Blue DW
    ID = 302
    parent = 517
    Weather = dry few_snow much_snow snow_and_ice

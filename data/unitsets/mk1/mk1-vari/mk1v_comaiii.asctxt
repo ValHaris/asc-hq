@@ -1,5 +1,5 @@
 VehicleType {
-   Name = COMA III
+   Name = Coma 3
    ID = 108
    parent = 253
 

@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = ALGUIN
+   Name = Alguin
    ID = 10
    parent = 336
    

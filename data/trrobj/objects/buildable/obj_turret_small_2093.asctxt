@@ -1,5 +1,5 @@
 ObjectType { 
-   name = small turret foundation
+   name = Small Turret Foundation
    ID = 2093
    groupID = 7
    SecondaryIDs = 1400 22151 12405

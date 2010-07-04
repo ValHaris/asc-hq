@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = NOVA
+   Name = Nova
    ID = 66
    parent = 291
    

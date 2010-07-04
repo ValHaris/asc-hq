@@ -1,6 +1,6 @@
 technology {
    Name = Dominator
-   infotext = Reserach project finished! Dominator avialable!
+   infotext = Research project finished! Dominator available!
    id = 101022
    RelatedUnitID = 22
    parent = 101914

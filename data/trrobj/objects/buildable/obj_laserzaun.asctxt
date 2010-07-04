@@ -1,7 +1,7 @@
 ObjectType {
    ID = 2658
    SecondaryIDs = 1300
-   Name = energy barrier
+   Name = Laser Barrier
    NamingMethod = replaceterrain
    Description =
    Infotext =

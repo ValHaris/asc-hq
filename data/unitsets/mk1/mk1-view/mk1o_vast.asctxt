@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = VAST
+   Name = Vast
    ID = 87
    parent = 246
 

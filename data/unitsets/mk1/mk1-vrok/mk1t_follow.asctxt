@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = FOLLOW
+   Name = Follow
    ID = 83
    parent = 299
 

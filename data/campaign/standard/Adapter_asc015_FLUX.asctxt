@@ -1,5 +1,5 @@
 Techadapter {
    Name = 72
-   ;Bezeichnung der verknüpften Technologie: FLUX
+   ;Bezeichnung der verknüpften Technologie: Flux
    TechnologiesRequired = 101072
 } TechAdapter

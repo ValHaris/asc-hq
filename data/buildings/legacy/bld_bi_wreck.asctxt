@@ -1,5 +1,5 @@
 BuildingType { 
-   Name = wreck
+   Name = Wreck
    ID = 1299
    Armor = 800
    View = 10

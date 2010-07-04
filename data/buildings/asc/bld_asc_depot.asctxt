@@ -1,5 +1,5 @@
 BuildingType { 
-   Name = depot
+   Name = Depot
    ID = 2
    parent = 499
    Infotext = [Depot

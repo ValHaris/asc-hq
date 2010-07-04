@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = NIGHTCAP
+   Name = Nightcap
    ID = 31
    parent = 325
 
