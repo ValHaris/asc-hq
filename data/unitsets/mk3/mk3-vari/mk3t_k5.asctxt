@@ -4,7 +4,11 @@ VehicleType {
    parent = 254
 
 ;   Description = railroad gun
-   InfoText = [InfoImage = Wikipedia]
+   InfoText = [Das Eisenbahngeschütz K5 besitzt eine mächtige 28 cm Kanone mit großer Reichweite, zum Verschießen von Granaten mit hoher Sprengkraft. Weit hinter der 
+   eigentlichen Front platziert, kann dieses Geschütz alle Bodenziele effektiv bekämpfen. Da die Kanone nicht während der Fahrt ausgerichtet werden kann, muss das K5
+   um feuern zu können, erst zum Stillstand gekommen sein. 
+   
+   InfoImage = Wikipedia]
    Picture = mk3t_k5.png
    InfoImage = mk3t_k5.jpg
    WreckageObject = 458

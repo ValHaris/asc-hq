@@ -4,7 +4,8 @@ VehicleType {
    WreckageObject = 15575
    parent = 292
    Description = Sturmgeschuetz
-   Infotext = []
+   Infotext = [Der dritte im Bunde der Tigerreihe, der Sturmtiger ist noch häufig im Einsatz. Seine erhöhte Reichweite seiner Kanone macht einen Einsatz hinter den Frontpanzern sinnvoll. 
+   Allerdings ist sein Munitionsvorrat sehr begrenzt und ein Munitionstransporter sollte immer in Reichweite sein.]
    Picture = MK3v_STURMTIGER.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 

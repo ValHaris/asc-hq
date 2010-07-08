@@ -5,7 +5,10 @@ VehicleType {
    WreckageObject = 15592
    
    Description = Infiltrator Squad
-   Infotext = [InfoImage = Wikipedia]
+   Infotext = [Der Wiesel ist ein kleines, schnelles Kettenfahrzeug zu Aufklärungszwecken. Mit einem Fallschirm ausgestattet, ermöglicht es einen Abwurf vom Flugzeug aus.
+	 Mit einem Infanteristen im Laderaum und seiner Schnelligkeit, ist der Wiesel prädestiniert für Überraschungsangriffe auf Depots, Städte, Fabriken u.ä.
+
+	 InfoImage = Wikipedia]
    picture = mk3v_wiesel.png
    InfoImage = mk3v_wiesel.jpg
    WreckageObject = 406

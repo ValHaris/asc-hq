@@ -8,6 +8,9 @@ VehicleType {
    Infotext = []
    picture = mk3v_tow.png
    WreckageObject = 406
+   Infotext		= [Auf einem schwach gepanzerten Chassis mit einem MG, befindet sich eine Abschussvorrichtung für panzerbrechende Raketen.
+	 Die beste Strategie für den TOW ist: Angriff – Feuern – Rückzug.
+ 	 Dank der leichten Bauweise und der Ausrüstung mit einem Fallschirm, kann der TOW auch für Luftlandeoperationen genutzt werden.]
    GuideSortHelp = 503 504 0 0 3 0 0 0 0 0
    
    Armor -= 100

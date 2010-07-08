@@ -5,7 +5,10 @@ VehicleType {
    WreckageObject = 15570
 
    Description = inter city cargo express
-   Infotext = [InfoImage = Wikipedia]
+   Infotext = [Zum schnellen Verlegen von großen Truppenkontingenten ist der ICCE-Schienentransporter die perfekte Wahl. Die 10 Stellplätze ermöglichen eine Beladung 
+   mit verschiedensten Einheiten. Sogar die Betankung innerhalb der Waggons ist möglich. Die Aufmunitionierung von Einheiten ist sogar extern ausführbar. 
+   
+   InfoImage = Wikipedia]
    picture = mk3t_icce.png
    InfoImage = mk3t_icce.jpg
    GuideSortHelp = 550 551 0 0 3 0 0 0 0 0

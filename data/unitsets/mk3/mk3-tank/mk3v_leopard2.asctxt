@@ -4,7 +4,10 @@ VehicleType {
    WreckageObject = 15558
    parent = 291
    Description = Battle Tank
-   InfoText = [InfoImage = Wikipedia Leopard2]
+   InfoText = [Der Zweite Panzerkampfwagen der Leopard-Reihe, ist der Leopard 2. Als mittelschwerer Panzer, mit guter Bewaffnung und Panzerung, verfügt er zudem über eine 
+   gute Geschwindigkeit. Er ist aber doch etwas schwächer als der Patton.
+   
+   InfoImage = Wikipedia Leopard2]
    Picture = mk3v_leopard2.png
    InfoImage = mk3v_leopard2.jpg
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0

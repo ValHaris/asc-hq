@@ -6,6 +6,7 @@ VehicleType {
    Description = medium tank
    Picture = mk3v_patton.png
    InfoImage = mk3v_patton.jpg
+   Infotext = [Der Patton ist ein sehr gut gelungenes Modell von einem mittelschweren Panzerkampfwagen. Sehr gute Panzerung, mächtige Kanone, ein Standard-MG und ein Flugabwehr-MG machen ihn für das Heer unverzichtbar.]
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Armor -= 30
