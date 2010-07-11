@@ -16,6 +16,9 @@ VehicleType {
    mehr für eine schnelle Reparatur zur Hand hatte. Nicht zu unterschätzen ist die Möglichkeit Minen zu entdecken und zu entfernen, insbesondere da der Bulldozer immun 
    gegen alle Arten von Minen ist. Genauso vorteilhaft ist die Fähigkeit Panzersperren und Schützengräben zu entfernen. Eine weitere wichtige Eigenschaft des Bulldozers 
    ist das Sammeln von Ressourcen, wie Holz Geröll, Stein, Schrott.]
+
+   Infotext_EN = [The Bulldozer is a fully tracked, low speed, medium drawbar pull bulldozer with a ripper or winch. It is used by engineer units.]
+
    picture = mk3v_bulldozer.png
    InfoImage = mk3v_bulldozer.jpg
    GuideSortHelp = 556 0 0 0 3 0 0 0 0 0

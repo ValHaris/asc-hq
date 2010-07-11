@@ -5,6 +5,7 @@ VehicleType {
    parent = 336
 
    Description = construction vehicle
+
    Infotext = [Neben dem Bulldozer ist der Elch das zweite wichtige Standbein der terranischen Pioniere. Sein Einsatzgebiet reicht dabei von der Verlegung von Pipelines, 
    über das Verlegen von Schienen, bis hin zum Bau von Straßen- und Eisenbahnbrücken. Da er auch Panzersperren errichten kann, ist es mit ihm möglich eine ordentliche 
    Verteidigungslinie zu installieren. Genauso kann er durch Entfernen der Panzersperren ein Loch in die feindliche Verteidigungslinie reißen. Pipelines kann er ober- 
@@ -17,6 +18,11 @@ VehicleType {
    picture = mk3v_elch.png
    infoImage = mk3v_elch.jpg
    GuideSortHelp = 556 0 0 0 3 0 0 0 0 0
+
+   Infotext_EN = [The Construction Vehicle is necessary for the construction of
+                 infrastructure such as bridges railroads and pipelines.
+                 A very important unit if you aspire a well defended, smoothly
+                 operating base.]
 
    Armor -= 50
 
