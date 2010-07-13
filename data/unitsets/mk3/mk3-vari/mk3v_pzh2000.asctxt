@@ -5,7 +5,11 @@ VehicleType {
    WreckageObject = 15605
 
    Description = heavy artillery
-   Infotext = [InfoImage = Wikipedia]
+   Infotext = [Die Panzerhaubitze 2000, kurz PzH 2000, ist die wichtigste Artillerieeinheit der Terraner. Die große Reichweite und die enorme Sprengkraft der Graneten 
+   macht sie so effektiv gegen alle Bodenziele. Durch das Ausrichten und Fixieren der PzH2000 ist ein Feuern aus der Bewegung heraus nicht möglich. Wie bei den meisten 
+   Artillerie Einheiten ist kein Eigenschutz und nur eine schwache Panzerung vorhanden. Deshalb ist sie vor direktem Angriff zu schützen.
+   
+   InfoImage = Wikipedia]
    Picture = mk3v_pzh2000.png
    InfoImage = mk3v_pzh2000.jpg
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0

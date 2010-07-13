@@ -1,0 +1,88 @@
+VehicleType { 
+	Name = BEOWULT
+	parent = 400 401 402 497
+	ID = 12580
+
+	Description = Sturmlandungsschiff
+	Picture = pua_wult2_beowult.png
+	Infotext = [Seine Herrlichkeit der Irdische WULT ging durch den Korridor von seinem Schlafzimmer zu seinem Arbeitszimmer. Ihm war gerade die verhängnisvolle Niederlage seiner 1. Flotte auf Allma gemeldet worden. Die Schwere dieser Niederlage hatte ihm die entscheidenen Probleme der rehanischen Waffensysteme vor Augen geführt. Nun plante er eine Anpassung:
+
+  Einen moblien Vorposten, der einen strategisch entscheidenen Posten unter Kontrolle bringt und dann auf den Entsatz durch die Streitkräfte der Theokratie wartet.
+
+  Zwei Zyklen später wandelte Seine Herrlichkeit bereits durch das Skelett des Sturmlandungsschiffes der BeoWULT Klasse. Es würde ein mächtiger Posten auf Feindesland werden, ein wahres WULTwerk. Er drehte dem Zentrum seines Schiffes den Rücken zu und verließ die mächtige Werft. Es würde noch mindestens 5 Zyklen dauern, biss das Schiff fertig werden würde. Es hatte immer wieder Änderungen an den Kernsystemen gegeben und diese würden auch weiterhin häufig vorkommen. Anfang des Z85 würde das Typschiff, die SHStLS BeoWULT vermutlich fertig werden. Die Zeit wird zeigen, ob dieses neue Waffensystem erfolgreich sein würde oder nicht.]
+  InfoImage = pua_wult2_beowult.jpg
+	Category = heavy_aircraft
+	MaxSurvivableStorm = 255
+
+	Features = Repair_Facility self_repairing
+
+	SelfRepairRate = 15
+	Armor = 900
+	Weight = 2500
+	Jamming = 0
+	View = 60
+
+	Transportation { 
+		MaxLoadableUnits = 14
+		MaxLoadableUnitSize = 250
+		MaxLoadableMass = 900
+		CategoriesNOT = heavy_wheeled_vehicle heavy_tracked_vehicle light_ship medium_ship heavy_ship light_aircraft medium_aircraft heavy_aircraft helicopter hoovercraft building|turret|object
+		CargoMovementDivisor = 1.8
+		EntranceSystemNum = 1
+		EntranceSystem0 ->* VehicleType.GrIO
+	} Transportation
+
+	Tank { 
+		Energy = 0
+		Material = 40000
+		fuel = 70000
+	} Tank
+
+	Movement = 0 0 0 41 90 100 110 130 
+	FuelConsumption = 16
+	TerrainAccess ->* VehicleType.heli_terrain
+	
+	Height = ground_level low_level_flight medium_level_flight high_level_flight orbit
+	
+   HeightChangeMethod0.movecost = 25
+   HeightChangeMethod1.movecost = 20
+   HeightChangeMethod2.movecost = 15
+   HeightChangeMethod3.movecost = 10
+   HeightChangeMethod4.movecost = 25
+      	
+	WaitForAttack = true
+	Weapons { 
+		Number = 4
+		
+		Weapon0 ->* VehicleType.SSM
+		Weapon0.shotFrom = ground_level
+		Weapon0.MaxRange = 90
+    Weapon0.MinRange = 50
+		Weapon0.Punch@MaxRange = 95
+		Weapon0.Punch@MinRange = 95
+		Weapon0.Ammo = 6
+		Weapon0.ReactionFireShots = 1
+		
+		Weapon1 ->* VehicleType.SSM 
+		Weapon1.shotFrom = ground_level
+		Weapon1.MaxRange = 50
+		Weapon1.MinRange = 30
+		Weapon1.Ammo = 6
+		Weapon1.Punch@MaxRange = 75
+		Weapon1.Punch@MinRange = 75
+		Weapon1.ReactionFireShots = 1	
+		Weapon1.WeaponEffectiveness.Trooper = 100
+
+		Weapon2 ->* vehicleType.SAMH
+		Weapon2.shotFrom = ground_level
+		Weapon2.Ammo = 12
+		Weapon2.Punch@MaxRange = 75
+		Weapon2.Punch@MinRange = 75	
+		Weapon2.ReactionFireShots = 2
+		
+		Weapon3 ->* VehicleType.MiniGun
+		Weapon3.shotFrom = ground_level
+		Weapon3.Ammo = 20
+		Weapon3.Reactionfireshots = 2		
+	} Weapons
+ } VehicleType

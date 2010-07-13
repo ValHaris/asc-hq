@@ -5,7 +5,10 @@ VehicleType {
    parent = 297
 
    Description = Multiple Rocket Launch System
-   InfoText = [InfoImage = Wikipedia]
+   InfoText = [Dieses Raketenwerfersystem verfügt über 6 durchschlagkräftige Raketen mit mittlerer Reichweite. Die schwache Panzerung verlangt eine Positionierung 
+   hinter den eigenen Einheiten. Der Angriff des MRLS aus der Entfernung schwächt die gegnerischen gepanzerten Einheiten, die eigenen Panzer eliminieren den Feind dann vollends.
+
+   InfoImage = Wikipedia]
    Picture = mk3v_mrls.png
    InfoImage = mk3v_mrls.jpg
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0

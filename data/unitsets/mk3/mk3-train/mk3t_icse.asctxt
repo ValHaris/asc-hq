@@ -5,7 +5,10 @@ VehicleType {
    WreckageObject = 15571
 
    Description = inter city support express
-   Infotext = [InfoImage = Wikipedia]
+   Infotext = [Der ICSE-Nachschubzug transportiert große Mengen an Treibstoff, Material und Munition. Das macht ihn so wichtig für die kämpfende Truppe bzw. für die 
+   Infrastrukturfahrzeuge. Ein Verlust des ICSE kann verheerende Auswirkungen auf eine Schlacht haben.
+   
+   InfoImage = Wikipedia]
    picture = mk3t_icse.png
    InfoImage = mk3t_icse.jpg
    GuideSortHelp = 550 552 0 0 3 0 0 0 0 0

@@ -5,7 +5,10 @@ VehicleType {
    parent = 220
 
    Description = anti aircraft tank
-   InfoText = [InfoImage = Wikipedia Roland (Rakete) ]
+   InfoText = [Das Waffensystem Roland ist ein Flugabwehrraketensystem zur Bekämpfung von Luftzielen bis in die obere Luftschichten. Die hohe Beweglichkeit, 
+   die große Reichweite der Raketen und die Fähigkeit mit aktivierten RF zu agieren, macht dieses System unverzichtbar für die Truppe.
+   
+   InfoImage = Wikipedia Roland (Rakete)]
    Picture = mk3v_roland.png
    InfoImage = mk3v_roland.jpg
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0

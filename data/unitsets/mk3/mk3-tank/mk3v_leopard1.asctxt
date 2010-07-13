@@ -6,6 +6,8 @@ VehicleType {
 
    Picture = mk3v_leopard1.png
    InfoImage = mk3v_leopard1.jpg
+   InfoText = [Leichte Panzer sind ökonomische Panzer. Sie sind nicht sehr schwer bewaffnet oder gepanzert, haben eine hohe Geschwindigkeit und sind kostengünstig in 
+   der Herstellung. Der Leopard ist sehr gut geeignet für schnelle Vorstöße.]
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Movement += 0 0 0 1 0 0 0 0 

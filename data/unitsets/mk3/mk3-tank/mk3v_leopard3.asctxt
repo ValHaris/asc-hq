@@ -4,7 +4,11 @@ VehicleType {
    WreckageObject = 15546
    parent = 293
    Description = [Main Battle Tank]
-   InfoText = [InfoImage = Sebastian Nast nast-sonderfahrzeuge.de]
+   InfoText = [Der Leopard 3 ist der Hauptkampfpanzer der terranischen Streitkräfte. Die enorme Panzerung macht es dem Feind sehr schwer ihn zu zerstören. 
+   Für einen so schweren Panzer ist seine Geschwindigkeit schon außergewöhnlich hoch. Die schwere Kanone fügt jedem potentiellen Gegner großen Schaden zu. Mehrere 
+   dieser Stahlkolosse in Händen von erfahrenden Besatzungen walzen alles im Weg nieder. 
+   
+   InfoImage = Sebastian Nast nast-sonderfahrzeuge.de]
    Picture = mk3v_leopard3.png
    InfoImage = mk3v_leopard3.jpg
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0

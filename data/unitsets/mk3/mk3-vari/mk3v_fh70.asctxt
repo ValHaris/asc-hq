@@ -8,7 +8,10 @@ VehicleType {
    Picture = mk3v_fh70.png
    InfoImage = mk3v_fh70.jpg
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
-   InfoText = [InfoImage = Wikipedia M777]
+   InfoText = [Die Feldhaubitze 70, kurz FH 70, ist eine leichte Artillerie mit mittlerer Reichweite. Der Vorteil dieser Einheit ist, die sofortige Feuerbereitschaft nach dem Halten.
+   Zur Selbstverteidigung dient nur ein leichtes MG. Direkter Feindkontakt ist zu vermeiden.
+   
+   InfoImage = Wikipedia M777]
 
    Armor -= 100
    Weight = 25

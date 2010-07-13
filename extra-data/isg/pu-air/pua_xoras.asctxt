@@ -1,0 +1,65 @@
+VehicleType { 
+   Name = XORAS
+   parent = 1396 1391 1395
+   ID = 12581
+
+   Description = Special Battle Ship
+   Infotext = [KlackKlickKlick war noch immer erschreckt über die geringe Effektivität der Bodenabwehr seines Schwarms. Die Erinnerung an die schweren Schläge hatte ihn nicht losgelassen und auf dem Stockflug hatte er eine Idee entwickelt. Er kannte das grobe Konzept des XOR, einer mächtigen Kampfdrohne, dass jedoch unter ähnlichen Schwächen litt, wie sein aktueller Schwarm. Doch dieses Konzept konnte er verändern, also begann er sofort mit den Überlegungen und Planungen. Die primäre Waffe versah er mit deutlich größeren Kondensatoren, die eine maximale Wirkung des SY-LASERs ermöglichten sollten. Dann verbesserte er noch die Feuerleitung und strukturierte den Rumpf der Drohne neu und schon hatte er eine neue mächtige Drohne, die den Schwarm gegen die schrecklichen Menschen schützen würde.]
+   Picture = pua_xoras.png
+
+   Armor = 1500
+   View = 90
+   Features += MoveDuringReactionFire satelliteview move_after_attack
+
+   Height = medium_level_flight high_level_flight orbit 
+   Jamming = 60
+   WaitForAttack = false
+   Tank { 
+      Energy = 0
+      Material = 6000
+      fuel = 12000
+   } Tank
+   FuelConsumption = 35
+   Movement = 0 0 0 0 0 70 80 80 
+   Weight = 3000
+   Transportation ->* VehicleType.TransSyCruiser 
+
+   Weapons { 
+      Number = 4
+      
+      Weapon0 ->* VehicleType.SY_Bomber_Big 
+      Weapon0.Punch@MaxRange = 130
+      Weapon0.Punch@MinRange = 150
+      Weapon0.LaserRechargeCost.fuel = 150
+      Weapon0.HitAccuracy.d1 = 0
+			Weapon0.HitAccuracy.d2 = 100
+			Weapon0.HitAccuracy.d3 = 90
+			
+			Weapon1 ->* VehicleType.SY_Bomber_Big
+      Weapon1.MaxRange = 40
+      Weapon1.Punch@MaxRange = 110
+      Weapon1.Punch@MinRange = 130
+      Weapon1.LaserRechargeCost.fuel = 130
+      Weapon1.HitAccuracy.d1 = 0
+			Weapon1.HitAccuracy.d2 = 100
+			Weapon1.HitAccuracy.d3 = 90
+			
+      Weapon2 ->* VehicleType.SY_Bomber_Big 
+      Weapon2.MaxRange = 60
+      Weapon2.MinRange = 20
+      Weapon2.Punch@MaxRange = 80
+      Weapon2.Punch@MinRange = 100
+      Weapon2.LaserRechargeCost.fuel = 130
+      Weapon2.Reactionfireshots = 0
+			Weapon2.HitAccuracy.d1 = 0
+			Weapon2.HitAccuracy.d2 = 100
+			Weapon2.HitAccuracy.d3 = 90			
+
+      Weapon3 ->* VehicleType.SY_Fighter_AD 
+      Weapon3.MaxRange = 30
+      Weapon3.Punch@MaxRange = 75
+      Weapon3.Punch@MinRange = 80
+      Weapon3.LaserRechargeCost.fuel = 80
+      Weapon3.Reactionfireshots = 2
+   } Weapons
+} VehicleType

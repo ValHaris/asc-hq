@@ -5,6 +5,8 @@ VehicleType {
    parent = 291
    Description = medium tank
    Picture = MK3v_tigerII.png
+   Infotext = [Der groﬂe Bruder des Tigers, der mittlere Panzer Tiger II, ist nur noch zum Bek‰mpfen von leichten Einheiten im Einsatz. Auch hier hat der Leopard 2 
+   ihm den Rang abgelaufen.] 
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Armor -= 150

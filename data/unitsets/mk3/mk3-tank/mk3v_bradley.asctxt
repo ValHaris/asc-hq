@@ -6,6 +6,8 @@ VehicleType {
    Description = anti infantry tank
    picture = mk3v_bradley.png
    infoimage = mk3v_bradley.jpg
+   Infotext		= [Der Anti-Infanterie-Panzer ist ein Spezialfahrzeug. Bewaffnet mit einem schnellfeuernden, modifizierten Maschinengewehr, ist sein einziger Zweck Infanteristen zu bekämpfen. 
+   Im Laderaum können noch 4 Infanteristen mitgeführt werden.]
 ;   WreckageObject = 463
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
 

@@ -8,7 +8,10 @@ VehicleType {
    Picture = mk3v_p1000.png
    InfoImage = mk3v_p1000.jpg
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
-   InfoText = [InfoImage = Sebastian Nast nast-sonderfahrzeuge.de]
+   InfoText = [Der P1000 ist der schwerste und größte Panzer der Terraner. Eine weitreichende Hauptwaffe mit großer Durchschlagskraft, ein AA-MG, ein 
+   Standard-MG und der Laderaum für 2 Infanteristen, machen ihn de facto zu einem fahrenden Bunker. Das große Gewicht bedingt seine geringe Geschwindigkeit. 
+   
+   InfoImage = Sebastian Nast nast-sonderfahrzeuge.de]
 
    Weight = 200
    Transportation ->* VehicleType.TransLowTrooper2 
