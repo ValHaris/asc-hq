@@ -8,7 +8,7 @@ VehicleType {
    Picture = pua_debor_satan.pcx
    WreckageObject = 1302
 
-   Features = ExternalRepair self_repairing ExternalFuelTransfer ExternalMaterialTransfer
+   Features = ExternalRepair self_repairing ExternalFuelTransfer ExternalMaterialTransfer ExternalAmmoTransfer
    Armor = 300
    View = 50
    MaxSurvivableStorm = 50
