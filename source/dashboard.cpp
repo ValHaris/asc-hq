@@ -538,7 +538,7 @@ bool UnitInfoPanel::unitNaming()
 {
    MapField* fld = actmap->getField( actmap->getCursor() );
    if ( fld->getContainer() && RenameContainerCommand::avail( fld->getContainer() ) && fld->getContainer()->getOwner() == actmap->actplayer ) {
-      UnitNaming un( fld->vehicle );
+      UnitNaming un( fld->getContainer() );
       un.Show();
       un.RunModal();
       updateFieldInfo();
