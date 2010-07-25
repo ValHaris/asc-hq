@@ -6,9 +6,12 @@ VehicleType {
    Description = Jagddrohne
    Picture = maa_uav_ua.pcx
   wreckageobject =
-   Infotext = [Unbemannte Kurzstreckenjagddrohne. Die aussgezeichnete Bewaffnung ermoeglicht sehr gute offensive 
-   Einsatzmöglichkeiten. Die Reichweite der Drohne ist stark eingeschraenkt und sie kann deshalb nicht ohne Traegerschiff oder 
-   Abwurfflugzeug operieren. Allerdings ist dies eh nur ein Einwegmodel, das der Bekaempfung von Marineeinheiten dient!!!]
+   Infotext = [Malanische Drohnen sind sehr spezielle HiTech-Waffen. Sie sind die kleinsten bekannten UAVs, recht preiswert und dabei doch sehr wirkungsvoll. Sie sind mit lediglich einer Waffe ausgerüstet, diese braucht sich allerdings vor den Waffen der üblichen Kampfflugzeuge nicht zu verstecken. Doch hat sie in der Regel nur einen oder zwei Schuß.
+Weiterhin sind sie die einzigen Flugzeuge der Malaner, welche auf High Air operieren können.
+Durch die fast filigrane Bauweise ist die Panzerung sehr dünn, der wirkungsvollste Schutz der Drohnen ist ihre geringe Größe, was einen Beschuß erschwert. Sie sind als typische Offensivwaffen konzipiert. Nachdem die Senkrechtstarter im Luftkampf das gegnerische Feuer auf sich gezogen haben, können die kleinen Drohnen dem Gegner durch ihre schiere Zahl große Verluste beibringen um einen massiven Gegenschlag möglichst zu vermeiden.
+Der Tank ist ebenfalls recht klein, was die Reichweite stark einschränkt. Die Drohnen sind daher immer auf entsprechende Supportereinheiten angewiesen. Auf See wird diese Aufgabe von den Flugzeugträgern erfüllt, während an Land lediglich der MAZU DC über die entsprechenden Vorrichtungen verfügt, eine anfliegende Drohne einzufangen. Die malanischen Drohnen können nicht auf herkömmlichen Landebahnen landen. Die Drohnengruppenführer sind daher angewiesen, den Trägereinheiten besonderen Schutz angedeihen zu lassen.
+
+Das UAV UA ist zur U-Boot-Bekämpfung gedacht. Es transportiert zwei sehr starke Wasserbomben und fliegt dabei etwas schneller als die anderen UAVs. Auch Taucher können mit hoher Effektivität bekämpft werden.]
 
    TerrainAccess.terrain_any =
    Tank.fuel = 500
