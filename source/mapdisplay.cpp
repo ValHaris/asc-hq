@@ -291,17 +291,20 @@ class UnitInfoLayer : public MapLayer {
 
 void UnitInfoLayer::paintSingleField( const MapRenderer::FieldRenderInfo& fieldInfo,  int layer, const SPoint& pos )
 {
-   if ( fieldInfo.visibility > visible_ago) {
-      if ( fieldInfo.fld->vehicle ) {
-         MegaBlitter<colorDepth,colorDepth,ColorTransform_None,ColorMerger_AlphaMerge> blitter;
-	//paint the BGimage
-	blitter.blit( image, fieldInfo.surface, pos);
-	//paint the bars
-	//1. damage / health
-	paintBar( fieldInfo, pos, 100-fieldInfo.fld->vehicle->damage, 100, 1,  0, true );
-	//2. fuel
-	paintBar( fieldInfo, pos, fieldInfo.fld->vehicle->getTank().fuel, fieldInfo.fld->vehicle->getStorageCapacity().fuel, 4,  0xFFB700, false );
-         
+
+
+     if ( fieldInfo.visibility > visible_ago) {
+       if ( fieldInfo.fld->vehicle ) {
+    	   if ( ( fieldInfo.fld->vehicle->getOwner() == fieldInfo.playerView ) || (fieldInfo.visibility == visible_all) || ((fieldInfo.fld->vehicle->height >= chschwimmend) && (fieldInfo.fld->vehicle->height <= chhochfliegend))) {
+    	  MegaBlitter<colorDepth,colorDepth,ColorTransform_None,ColorMerger_AlphaMerge> blitter;
+			//paint the BGimage
+			blitter.blit( image, fieldInfo.surface, pos);
+			//paint the bars
+			//1. damage / health
+			paintBar( fieldInfo, pos, 100-fieldInfo.fld->vehicle->damage, 100, 1,  0, true );
+			//2. fuel
+			paintBar( fieldInfo, pos, fieldInfo.fld->vehicle->getTank().fuel, fieldInfo.fld->vehicle->getStorageCapacity().fuel, 4,  0xFFB700, false );
+    	 }
       }   
    }
 }
@@ -317,11 +320,14 @@ class UnitTrainingLayer : public MapLayer {
 
 void UnitTrainingLayer::paintSingleField( const MapRenderer::FieldRenderInfo& fieldInfo,  int layer, const SPoint& pos )
 {
-   if ( fieldInfo.visibility > visible_ago) {
+    if ( fieldInfo.visibility > visible_ago) {
       if ( fieldInfo.fld->vehicle ) {
+   	   if ( ( fieldInfo.fld->vehicle->getOwner() == fieldInfo.playerView ) || (fieldInfo.visibility == visible_all) || ((fieldInfo.fld->vehicle->height >= chschwimmend) && (fieldInfo.fld->vehicle->height <= chhochfliegend))) {
+
          MegaBlitter<colorDepth,colorDepth,ColorTransform_None,ColorMerger_AlphaMerge> blitter;
- 	ASCString training = "unitlevel-" + ASCString::toString(fieldInfo.fld->vehicle->experience+1) +".png";
-	blitter.blit( IconRepository::getIcon(training), fieldInfo.surface, pos);
+		ASCString training = "unitlevel-" + ASCString::toString(fieldInfo.fld->vehicle->experience+1) +".png";
+		blitter.blit( IconRepository::getIcon(training), fieldInfo.surface, pos);
+   	   }
          
       }   
    }
