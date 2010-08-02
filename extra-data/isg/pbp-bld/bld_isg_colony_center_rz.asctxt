@@ -44,7 +44,7 @@ BuildingType {
       ASCmode { 
          Energy = 10000
          Material = 10000
-         fuel = 10000
+         fuel = 1000000
       } ASCmode
    } StorageCapacity
    Height = ground_level 

@@ -56,9 +56,9 @@ BuildingType {
          fuel = 900000
       } BImode
       ASCmode { 
-         Energy = 900000
-         Material = 900000
-         fuel = 900000
+         Energy = 100000000
+         Material = 100000000
+         fuel = 100000000
       } ASCmode
    } StorageCapacity
    Height = low_level_flight 
