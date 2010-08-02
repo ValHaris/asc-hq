@@ -15,7 +15,7 @@
 
 #include "../loadbi3.h"
 #include "../unitset.h"
-
+#include "../statistics.h"
 
 #include "unitcounting.h"
 #include "../widgets/textrenderer.h"
@@ -168,6 +168,10 @@ void showCargoSummary( MapField* fld )
       for ( int i = 1000; i < 1003; ++i )
          s += ASCString(Resources::name(i-1000)) + ": " + ASCString::toString( ammo[i] ) + "\n";
 
+      s += "\n";
+      s += "Strength index: " + ASCString::toString( StatisticsCalculator::strength(fld->vehicle, true ));
+      
+      
       ViewFormattedText vft("Ammo summary", s, PG_Rect( -1, -1, 300, 300 ));
       vft.Show();
       vft.RunModal();
