@@ -536,12 +536,18 @@ void UnitInfoPanel::showUnitInfo( const VehicleType* vt )
 
 bool UnitInfoPanel::unitNaming()
 {
-   MapField* fld = actmap->getField( actmap->getCursor() );
-   if ( fld->getContainer() && RenameContainerCommand::avail( fld->getContainer() ) && fld->getContainer()->getOwner() == actmap->actplayer ) {
-      UnitNaming un( fld->getContainer() );
+   ContainerBase* container = NULL;
+   if ( veh )
+      container = veh;
+   else
+      if ( bld )
+         container = bld;
+   
+   if ( container && RenameContainerCommand::avail( container ) && container->getOwner() == container->getMap()->actplayer ) {
+      UnitNaming un( container );
       un.Show();
       un.RunModal();
-      updateFieldInfo();
+      showUnitData( veh, bld, false, true );
    }
    return true;
 }
