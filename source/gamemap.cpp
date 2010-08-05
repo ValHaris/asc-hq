@@ -912,6 +912,7 @@ void GameMap :: write ( tnstream& stream )
     properties.write( stream );
     
    tasks->write( stream );
+
 }
 
 

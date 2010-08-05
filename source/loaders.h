@@ -35,6 +35,7 @@
 #include "ascstring.h"
 #include "sgstream.h"
 #include "messages.h"
+#include "graphics/blitter.h"
 
 
 
@@ -50,7 +51,7 @@ extern const char* tournamentextension;
 extern void  savemap( const ASCString& name, GameMap* gamemap );
 
 //! saves the game located in #actmap to the savegame file name
-extern void  savegame( const ASCString& name, GameMap* gamemap );
+extern void  savegame( const ASCString& name, GameMap* gamemap);
 
 
 typedef Loki::Functor<GameMap*, LOKI_TYPELIST_1(const ASCString&) > MapLoadingFunction;
@@ -127,12 +128,12 @@ class tnetworkloaders : public tgameloaders {
 };
 
 class tsavegameloaders : public tgameloaders {
+		void   			LoadMapimageFromSavegame( tnstream* strm, Surface& image );
         public:
            GameMap*        loadgame ( tnstream* strm );
            static GameMap*  loadGameFromFile ( const ASCString& name );
-
+           bool 			loadMapimageFromFile( const ASCString& filename, Surface& image);
            void            savegame ( tnstream* strm, GameMap* gamemap, bool writeReplays = true );
-
            void            savegame ( GameMap* gamemap, const ASCString& name );
 };
 
