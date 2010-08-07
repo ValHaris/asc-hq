@@ -2,7 +2,7 @@ VehicleType {
    parent = 278
    ID = 1243
 
-   Name = STORMBRINGER
+   Name = Stormbringer
    Description = Hoehenbomber
    Infotext = [Der Stormbringer ist eines der ältesten Flugzeuge der Cromoner. Seinerzeit war er ein absoluter Durchbruch in der Luftfahrttechnik und diente vornehmlich dazu, aus höheren Luftschichten Panzer mit seinen todbringenden Bomben anzugreifen. Das Operieren in derart großen Höhen sorgte dafür, dass der Stormbringer anfangs überhaupt nicht und später nur von sehr wenigen, ebenfalls neu entwickelten Einheiten angegriffen werden konnten. Dadurch vermochte er vor allem zu Beginn seiner militärischen Karriere ganze Panzerverbände zu vernichten, ohne dass er ernstzunehmende Gegenwehr hätte erwarten müssen. Selbst andere Luftwaffeneinheiten war früher nämlich nicht dazu in der Lage, sich gegen einen Angriff der Stormbringer-MGs zur Wehr zu setzen, wenn diese ihre Geschossgarben aus überhöhter Position auf den Gegner niederprasseln ließen.
 

@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = CROMOS
+   Name = Cromos
    ID = 1281
    parent = 235
 

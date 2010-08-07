@@ -1,5 +1,5 @@
 BuildingType {
-   Name = great vehicle plant
+   Name = Great Vehicle Plant
    parent = 499
    ConstructionStages = 1
    Weather = dry 

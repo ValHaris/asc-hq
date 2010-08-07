@@ -1,5 +1,5 @@
-VehicleType { 
-   Name = ANGEL
+VehicleType {
+   Name = Angel
    ID = 14012
    parent = 251
 

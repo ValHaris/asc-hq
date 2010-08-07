@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = POLAR
+   Name = Polar
    parent = 355
    ID = 1262
    

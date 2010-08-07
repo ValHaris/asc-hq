@@ -1,11 +1,11 @@
 VehicleType { 
-   Name = MENHIR
+   Name = Menhir
    ID = 1275
    parent = 221
    Description = Air Defence Zug
    Infotext = [Weiterer zum Kampf entwickelter Zug mit hoher Geschwindigkeit, dessen Geschuetze bei der 
                Bekaempfung von Bodenzielen allerdings nur kurze Reichweiten haben. Dafuer ist der
-               MENHIR mit weitreichenden Boden-Luft-Raketen ausgerüstet und kann somit angreifende 
+               Menhir mit weitreichenden Boden-Luft-Raketen ausgerüstet und kann somit angreifende 
                Tiefflieger schon im Vorfeld ihres Eintreffens wirksam bekämpfen.]
    Picture = mk4t_menhir.png
    wreckageobject = 14275

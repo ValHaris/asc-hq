@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = PIRATE
+   Name = Pirate
    ID = 1287
    Parent = 383
 

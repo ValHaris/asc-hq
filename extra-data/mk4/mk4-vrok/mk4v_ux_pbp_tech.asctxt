@@ -1,6 +1,6 @@
 technology {
-   Name = UX-2
-   infotext = Forschungsprojekt abgeschlossen! UX-2 verfügbar!
+   Name = UX
+   infotext = Forschungsprojekt abgeschlossen! UX verfügbar!
    id = 1233
    RelatedUnitID = 1233
    parent = 100020

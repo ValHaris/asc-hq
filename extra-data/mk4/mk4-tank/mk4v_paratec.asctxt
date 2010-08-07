@@ -1,11 +1,11 @@
 VehicleType { 
-   Name = PARATEC
+   Name = Paratec
    ID = 1238
    parent = 290
    Description = Luftlandepanzer
    Infotext = [ 
-Diese abgespeckte Version des TECCNO ist mit einem Fallschirm ausgeruestet, welches ihm ermoeglicht, sich aus 
-Transportflugzeugen abwerfen zu lassen. Er dient vor allem dazu Fallschirmspringer und PARAPLAMUM in feindlichem 
+Diese abgespeckte Version des Teccno ist mit einem Fallschirm ausgeruestet, welches ihm ermoeglicht, sich aus 
+Transportflugzeugen abwerfen zu lassen. Er dient vor allem dazu Fallschirmspringer und Paraplanum in feindlichem 
 Gebiet zu unterstuetzen.]
    Picture = mk4v_paratec.png
    wreckageobject = 14238

@@ -1,5 +1,5 @@
 BuildingType { 
-   Name = solarsatplant
+   Name = Solar Sat Plant
    parent = 498
    
    Transportation.EntranceSystem0 ->* BuildingType.OrbIOD

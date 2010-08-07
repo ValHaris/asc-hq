@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = ISG COMMAND UNIT
+   Name = ISG Command Unit
    parent = 400
    ID = 12006
 

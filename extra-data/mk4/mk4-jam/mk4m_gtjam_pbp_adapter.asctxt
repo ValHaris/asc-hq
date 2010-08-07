@@ -1,5 +1,5 @@
 Techadapter {
    Name = 14024
-   ;Bezeichnung der verknüpften Technologie: GT JAM
+   ;Bezeichnung der verknüpften Technologie: GT Jam
    TechnologiesRequired = 14024
 } TechAdapter

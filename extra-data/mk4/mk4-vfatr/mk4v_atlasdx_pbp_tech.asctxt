@@ -1,6 +1,6 @@
 technology {
    Name = Atlas DX
-   infotext = Forschungsprojekt abgeschlossen! AtlasDX verfügbar!
+   infotext = Forschungsprojekt abgeschlossen! Atlas DX verfügbar!
    id = 14020
    RelatedUnitID = 14020
    parent = 100020

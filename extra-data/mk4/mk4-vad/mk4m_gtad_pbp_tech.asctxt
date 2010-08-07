@@ -1,6 +1,6 @@
 technology {
-   Name = GT-AD
-   infotext = Forschungsprojekt abgeschlossen! GT-AD verfügbar!
+   Name = GT AD
+   infotext = Forschungsprojekt abgeschlossen! GT AD verfügbar!
    id = 14002
    RelatedUnitID = 14002
    parent = 100020

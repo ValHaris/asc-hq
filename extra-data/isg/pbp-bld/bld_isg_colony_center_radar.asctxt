@@ -1,5 +1,5 @@
 BuildingType { 
-   Name = COLONY CENTER RADAR
+   Name = Colony Center Radar
    ID = 12026
 
    Armor = 100000

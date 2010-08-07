@@ -1,6 +1,6 @@
 VehicleType { 
 
-   Name = DENEB
+   Name = Deneb
    ID = 1278
    parent = 237
    Description = Orbitalabwehr

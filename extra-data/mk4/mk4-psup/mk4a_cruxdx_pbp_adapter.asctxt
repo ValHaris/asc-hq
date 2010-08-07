@@ -1,5 +1,5 @@
 Techadapter {
    Name = 14022
-   ;Bezeichnung der verknüpften Technologie: CruxDX
+   ;Bezeichnung der verknüpften Technologie: Crux DX
    TechnologiesRequired = 14022
 } TechAdapter

@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = GT-SPEEDER
+   Name = GT Speeder
    ID = 14000
    parent = 208
 

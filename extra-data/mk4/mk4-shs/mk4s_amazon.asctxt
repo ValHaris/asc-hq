@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = AMAZON
+   Name = Amazon
    parent = 369
    ID = 1283
    

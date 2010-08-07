@@ -1,5 +1,5 @@
 Techadapter {
-   ; GreatVehicleMK4
+   ; Grea tVehicle MK4
    Name = B11
    TechnologiesRequired = 100020
 } TechAdapter

@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = SKULL
+   Name = Skull
    parent = 317
    ID = 1221
    GuideSortHelp += 0 0 0 0 4 600 0 0 0 0

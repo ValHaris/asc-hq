@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = PEGASUS
+   Name = Pegasus
    ID = 1285
    parent = 359
    Description = Flugzeugtraeger

@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = ELIXIR
+   Name = Elixir
    ID = 1214
    parent = 307
 

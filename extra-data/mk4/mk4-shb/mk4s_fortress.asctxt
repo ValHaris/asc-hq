@@ -1,5 +1,5 @@
 VehicleType { 
-   Name =  FORTRESS
+   Name =  Fortress
    ID = 1284
    parent = 356
    

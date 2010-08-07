@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = THUNDER Spy
+   Name = Thunder Spy
    parent = 425
    ID = 14034
    Description = Aufklärungsdrohne

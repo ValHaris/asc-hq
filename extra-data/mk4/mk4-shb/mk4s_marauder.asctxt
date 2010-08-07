@@ -1,6 +1,6 @@
 VehicleType {
    ID = 1289
-   Name = MARAUDER
+   Name = Marauder
    parent = 367
 
    Description = Torpedoschnellboot

@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = VISION RJ
+   Name = Vision RJ
    ID = 14019
    parent = 313
    

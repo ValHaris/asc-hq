@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = CRUX DX
+   Name = Crux DX
    parent = 401 402 415 496 
    ID = 14022
 

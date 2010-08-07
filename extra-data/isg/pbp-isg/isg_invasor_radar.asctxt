@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = ISG INVASOR Radar
+   Name = ISG Invasor Radar
    ID = 12011
    parent = 400 401 402 407
 

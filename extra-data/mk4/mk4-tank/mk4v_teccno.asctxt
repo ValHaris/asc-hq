@@ -2,7 +2,7 @@ VehicleType {
    ID = 1207
    parent = 290
 
-   Name = TECCNO
+   Name = Teccno
    Infotext = [Der Teccno ist der leichte Standardpanzer des cromonischen Heeres. Im Vergleich zu seinen Vorgängern wurde seine Panzerung etwas verstärkt. Außerdem erheilt er einen stärkeren Antrieb, sowie breitere Ketten, was ihm vor allem im Gelände einen kleinen Geschwindigkeitsvorteil verschafft. Dieser mag auf den ersten Blick zwar nur unwesentlich erscheinen, kann aber im entscheidenden Moment durchaus gefechtsentscheidend sein.
 
 Im Gegensatz zum Scorpion ist die Silhouette des Teccno etwas flacher, was vor allem der Tatsache geschuldet ist, dass er keinen drehbaren Turm besitzt. Vielmehr ist das 80mm-Geschütz direkt in die stark abgeschrägte Frontpartie integriert, lässt sich dabei jedoch auch in der Horizontalen in einem weitaus größeren Winkel schwenken, als dies bei richtigen Sturmgeschützen der Fall ist. Dieser große Wirkungsbereich sorgt gemeinsam mit der extremen Wendigkeit des Teccno dafür, dass der Richtschütze sein Ziel schnell genug auffassen kann, um auch mit der Feuergeschwindigkeit eines herkömmlichen, drehturmbestückten Panzers mithalten zu können.

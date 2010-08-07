@@ -1,5 +1,5 @@
 BuildingType { 
-   Name = ISG DEPOT
+   Name = ISG Depot
    ConstructionStages = 1
    Weather = dry
    Fields = A1

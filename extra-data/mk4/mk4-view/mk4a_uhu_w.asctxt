@@ -1,7 +1,7 @@
 ObjectType { 
    Parent = 400
    ID = 1241
-   Name = UHU Wreck
+   Name = Uhu Wreck
 
    dry { 
       picture = MK4a_uhu_w.png 1

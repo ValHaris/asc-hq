@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = ISG DEFENDER
+   Name = ISG Defender
    parent = 12006
    ID = 12007
 

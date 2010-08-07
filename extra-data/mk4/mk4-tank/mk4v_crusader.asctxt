@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = CRUSADER
+   Name = Crusader
    ID = 14011
    parent = 292
    Description = old heavy tank

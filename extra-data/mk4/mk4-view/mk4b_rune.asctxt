@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = RUNE
+   Name = Rune
    ID = 1219
    parent = 244
 

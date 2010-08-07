@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = ALGOL
+   Name = Algol
    ID = 1217
    parent = 335
 

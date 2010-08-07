@@ -1,6 +1,6 @@
 technology {
-   Name = CITA AD
-   infotext = Forschungsprojekt abgeschlossen! CITA AD verfügbar!
+   Name = Cita AD
+   infotext = Forschungsprojekt abgeschlossen! Cita AD verfügbar!
    id = 14021
    RelatedUnitID = 14021
    parent = 100020

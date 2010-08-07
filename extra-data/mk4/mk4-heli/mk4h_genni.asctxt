@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = GENNI
+   Name = Genni
    parent = 409
    ID = 14033
    Description = Generatorhubschrauber

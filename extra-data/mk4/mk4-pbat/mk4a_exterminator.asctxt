@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = EXTERMINATOR
+   Name = Exterminator
    parent = 329
    ID = 1271
 

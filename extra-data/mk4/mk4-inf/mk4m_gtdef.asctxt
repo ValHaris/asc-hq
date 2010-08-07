@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = GT DEFENDER
+   Name = GT Defender
    ID = 14008
    parent = 211
    

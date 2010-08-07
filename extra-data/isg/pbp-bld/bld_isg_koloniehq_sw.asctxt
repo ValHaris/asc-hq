@@ -1,5 +1,5 @@
 ObjectType {
-   name = HQ Kolonie SUEDWEST
+   name = HQ Kolonie Suedwest
    ID = 12022
    Weather = dry
    visible_in_fogOfWar = true

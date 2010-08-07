@@ -1,5 +1,5 @@
 BuildingType { 
-   Name = small vehicle plant
+   Name = Small Vehicle Plant
    ID = 22925
    Armor = 1000
    View = 20

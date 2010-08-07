@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = SHELL
+   Name = Shell
    parent = 363
    ID = 1260
 
@@ -10,7 +10,7 @@ VehicleType {
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
    InfoText = [Das Shell ist das Transport-U-Boot der Cromonischen Flotte. Es wurde ursprünglich nur zu Transportzwecken konzipiert, erfuhr jedoch in all den Jahren seit seiner Entstehung eine Vielzahl von Modifikationen, sodass es heute zu einem wahren Allrounder geworden ist.
 
-Selbstverständlich wird es auch heute noch zu Transportzwecken genutzt. Vor allem an den Stellen, wo ein Transport oberhalb der Wasseroberfläche aufgrund zu erwartender Feindeinwirkung, oder aus Gründen der Geheimhaltung nicht ratsam erscheint, kommt das Shell ins Spiel. Es verfügt, nach mehrmaliger Vergrößerung seines Frachtraumes, inzwischen über acht Stellplätze, die mit leichten und mittleren Rad- und Kettenfahrzeugen, Infanterie und sogar Hubschraubern belegt werden können. Da sich die Frachtluken jedoch seitlich am Schiffsrumpf befinden, ist an Starts oder Landungen von Helikoptern auf hoher See nicht zu denken. Daher können Helikopter das Shell auch nur betreten, wenn dieses an entsprechenden Kais vor Anker liegt, oder wenn es sie von anderen Transporteinheiten auf See direkt übernehmen kann. Da die Frachträume jedoch über eine Schleusenfunktion verfügen, ist es möglich, tauchfähige Einheiten, wie z.B. den GT-Dive, direkt unter Wasser auszusetzen, was mitunter für böse Überraschungen beim Gegner sorgen kann.
+Selbstverständlich wird es auch heute noch zu Transportzwecken genutzt. Vor allem an den Stellen, wo ein Transport oberhalb der Wasseroberfläche aufgrund zu erwartender Feindeinwirkung, oder aus Gründen der Geheimhaltung nicht ratsam erscheint, kommt das Shell ins Spiel. Es verfügt, nach mehrmaliger Vergrößerung seines Frachtraumes, inzwischen über acht Stellplätze, die mit leichten und mittleren Rad- und Kettenfahrzeugen, Infanterie und sogar Hubschraubern belegt werden können. Da sich die Frachtluken jedoch seitlich am Schiffsrumpf befinden, ist an Starts oder Landungen von Helikoptern auf hoher See nicht zu denken. Daher können Helikopter das Shell auch nur betreten, wenn dieses an entsprechenden Kais vor Anker liegt, oder wenn es sie von anderen Transporteinheiten auf See direkt übernehmen kann. Da die Frachträume jedoch über eine Schleusenfunktion verfügen, ist es möglich, tauchfähige Einheiten, wie z.B. den GT Dive, direkt unter Wasser auszusetzen, was mitunter für böse Überraschungen beim Gegner sorgen kann.
 
 Neben seiner Transporttätigkeit wird es vorrangig zu Versorgungszwecken eingesetzt. Es vermag benachbarte Einheiten mit Treibstoff, Material und Munition zu versorgen. Besonders hervorzuheben sind dabei sicherlich die 6 Cruise Missiles, die das Shell laden kann und welche vorrangig für die Versorgung von Schlacht-U-Booten der Pluto-Klasse bestimmt sind. Allerdings ist darauf zu achten, dass auch diese Service-Funktionen nur in aufgetauchtem Zustand zur Verfügung stehen, wodurch beide Boote für kurze Zeit angreifbar sind.
 

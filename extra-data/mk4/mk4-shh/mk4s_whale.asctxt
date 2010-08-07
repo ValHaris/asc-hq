@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = WHALE
+   Name = Whale
    parent = 371
    ID = 14018
    Description = Transportluftkissenboot

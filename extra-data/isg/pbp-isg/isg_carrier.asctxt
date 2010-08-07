@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = ISG CARRIER
+   Name = ISG Carrier
    parent = 401 497
    ID = 12004
 

@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = ALCOR
+   Name = Alcor
    ID = 1218
    parent = 336
 

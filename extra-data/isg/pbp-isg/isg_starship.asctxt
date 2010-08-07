@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = ISG STARSHIP
+   Name = ISG Starship
    parent = 401 497
    ID = 12000
 

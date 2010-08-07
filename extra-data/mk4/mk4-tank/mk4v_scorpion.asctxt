@@ -2,7 +2,7 @@ VehicleType {
    ID = 1294
    parent = 290
 
-   Name = SCORPION
+   Name = Scorpion
    Description = leichter Panzer
    Infotext = [Der Scorpion ist der Urvater aller modernen cromonischen Panzer. Er entstand bereits zu einer Zeit, als Fahrzeuge, die für ihre Besatzungen einen wirksamen Schutz gegen feindliche Granaten und Infanteriewaffen darstellten, noch eine Seltenheit waren.
 

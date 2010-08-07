@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = THUNDER SX
+   Name = Thunder SX
    parent = 425
    ID = 14006
    Description = Seeangriffsdrohne

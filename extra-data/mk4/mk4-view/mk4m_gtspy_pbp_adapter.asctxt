@@ -1,5 +1,5 @@
 Techadapter {
    Name = 1297
-   ;Bezeichnung der verknüpften Technologie: GT-Spy
+   ;Bezeichnung der verknüpften Technologie: GT Spy
    TechnologiesRequired = 1297
 } TechAdapter

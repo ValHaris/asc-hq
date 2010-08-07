@@ -2,7 +2,7 @@ VehicleType {
    ID = 1234
    parent = 293
 
-   Name = AXIS
+   Name = Axis
    Picture = mk4v_axis.png
    InfoImage = mk4v_axis.jpg
    wreckageobject = 14234

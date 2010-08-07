@@ -1,5 +1,5 @@
 BuildingType { 
-   Name = oilplattform
+   Name = Oilplatform
    ID = 22903
    parent = 14
 

@@ -1,5 +1,5 @@
 Techadapter {
    Name = 1257
-   ;Bezeichnung der verknüpften Technologie: Möwe
+   ;Bezeichnung der verknüpften Technologie: Moewe
    TechnologiesRequired = 1257
 } TechAdapter

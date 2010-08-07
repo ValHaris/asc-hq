@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = ALBATROS
+   Name = Albatros
    parent = 400 401 402 414 498
    ID = 1255
 

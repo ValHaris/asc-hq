@@ -1,5 +1,5 @@
 Techadapter {
    Name = 1231
-   ;Bezeichnung der verknüpften Technologie: Samurai 3
+   ;Bezeichnung der verknüpften Technologie: Sam 3
    TechnologiesRequired = 1231
 } TechAdapter

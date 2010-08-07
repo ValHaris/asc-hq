@@ -1,10 +1,10 @@
 VehicleType { 
-   Name = TAROS
+   Name = Taros
    ID = 1269
    parent = 419
 
    Description = Bauschiff
-   Infotext = [ Der TAROS ist die schwimmende Variante des GIGANT-Baufahrzeugs. Auf Basis des REX wurden Installationsanlagen integriert, die in kuerzester Zeit Straﬂen- und Eisenbahnbruecken sowie stationaere verteidigungsanlagen herstellen koennen.] 
+   Infotext = [ Der Taros ist die schwimmende Variante des Gigant-Baufahrzeugs. Auf Basis des Rex wurden Installationsanlagen integriert, die in kuerzester Zeit Straﬂen- und Eisenbahnbruecken sowie stationaere verteidigungsanlagen herstellen koennen.] 
    picture = mk4s_taros.png
    wreckageobject = 14269
    GuideSortHelp = 554 558 0 0 4 0 0 0 0 0

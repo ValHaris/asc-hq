@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = ZENIT
+   Name = Zenit
    ID = 1263
    parent = 357
    

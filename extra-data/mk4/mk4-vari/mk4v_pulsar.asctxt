@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = PULSAR A3
+   Name = Pulsar
    ID = 1211
    parent = 252
 

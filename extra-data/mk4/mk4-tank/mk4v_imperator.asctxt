@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = IMPERATOR
+   Name = Imperator
    ID = 1206
    parent = 294
 

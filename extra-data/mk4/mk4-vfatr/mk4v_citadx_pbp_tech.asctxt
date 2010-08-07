@@ -1,6 +1,6 @@
 technology {
    Name = Cita DX
-   infotext = Forschungsprojekt abgeschlossen! CitaDX verfügbar!
+   infotext = Forschungsprojekt abgeschlossen! Cita DX verfügbar!
    id = 14029
    RelatedUnitID = 14029
    parent = 100020

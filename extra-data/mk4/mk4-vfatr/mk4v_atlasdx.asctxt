@@ -1,13 +1,13 @@
 VehicleType { 
-   Name = ATLAS DX
+   Name = Atlas DX
    parent = 335
    ID = 14020
    
    Description = Drohnenstarter
-   Infotext = [ATLAS DX
+   Infotext = [Atlas DX
 Im Zuge der Entwicklung der unbemannten Drohnen stellte sich heraus, dass die kampfstarken und hochspezialisierten Drohen die Schwaeche aufwiesen nur von Startbahnen aufsteigen zu können. Aufgrund ihrer geringen Reichweite waeren sie dort nur zum punktuellen Einsatz gelangt. Da sich eine signifikante Steigerung der Reichweite selbst bei einem drastischen Abbau der Drohnenbewaffnung nicht erreichen liesz, wurden alternative Konzepte zur Gebrauchswertsteigerung geprueft.
 Letztlich setzte sich der Vorschlag durch, bestehende mobile Waffensysteme so zu modifizieren, dass einzelne oder mehrere Drohnen von ihnen aus starten koennen. Im Rahmen des SX-Kampfwertsteigerungsprogrammes wurden die erforderlichen Modifikationen in Angriff genommen. Bei den see- und bodengestuetzten Abschussvorrichtungen wurde dies durch ein mit Feststofftreibpatronen betriebenes Katapapult realisiert. Bei luftgestuetzten Systemen wurden bestehende Bombenschächte vergroeszert und mit einer  nach aussen schwenkbaren Ausklinkvorrichtung versehen.   
-Der ATLAS SX baut auf dem leistungsfaehigen ATLAS - Transporter auf und dient als bodengestuetzer mobiler Drohnenstarter. Er ist in der Lage eine Drohne zuegig in ihr Einsatzgebiet zu befoerdern und sie mittels Startkatapult starten zu lassen. 
+Der Atlas DX baut auf dem leistungsfaehigen Atlas - Transporter auf und dient als bodengestuetzer mobiler Drohnenstarter. Er ist in der Lage eine Drohne zuegig in ihr Einsatzgebiet zu befoerdern und sie mittels Startkatapult starten zu lassen. 
 ]
    picture = mk4v_atlasdx.png
    wreckageobject = 14020

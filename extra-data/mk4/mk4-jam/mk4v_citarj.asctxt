@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = CITA RJ
+   Name = Cita RJ
    parent = 337
    ID = 14025
 

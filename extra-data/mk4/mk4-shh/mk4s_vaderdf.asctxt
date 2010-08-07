@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = VADER DF
+   Name = Vader DF
    parent = 372
    ID = 1266
    

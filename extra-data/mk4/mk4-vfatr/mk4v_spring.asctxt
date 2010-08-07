@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = SPRING
+   Name = Spring
    parent = 336
    ID = 1274
    GuideSortHelp = 552 0 0 0 4 0 0 0 0 0

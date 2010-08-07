@@ -1,10 +1,10 @@
 VehicleType { 
-   Name = GIGANT
+   Name = Gigant
    ID = 14005
    parent = 336
    
    Description = Construction Vehicle
-   Infotext = [Der GIGANT uebernimmt Spezialaufgaben wie das Errichten der Medusa3 Stellungen und das Versetzen von größeren Geschuetztürmen und der Bunker Citadellen.]
+   Infotext = [Der Gigant uebernimmt Spezialaufgaben wie das Errichten der Medusa 3 Stellungen und das Versetzen von größeren Geschuetztürmen und der Bunker Citadellen.]
    picture = mk4v_gigant.png
    wreckageobject = 14005
 

@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = THUNDER GX
+   Name = Thunder GX
    parent = 425
    ID = 1296
    Description = Bodenangriffsdrohne

@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = GNOME
+   Name = Gnome
    ID = 14010
    parent = 335
 

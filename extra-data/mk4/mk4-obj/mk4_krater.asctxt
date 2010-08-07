@@ -26,7 +26,7 @@ ObjectType {
       fuel = 10
       Movement = 20
    } RemovalCost
-   Name = lava krater
+   Name = Lava Krater
    NoSelfChaining = false
    TerrainAccess { 
       terrain_any = Lowland Hard_sand Soft_sand Mountains Hillside high_mountains ditch installation road runway 
