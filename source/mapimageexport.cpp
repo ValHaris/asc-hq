@@ -1,6 +1,6 @@
 
 /***************************************************************************
-                             mapimageexport.cpp  
+                             mapimageexport.cpp
                              -------------------
     copyright            : (C) 2005 by Martin Bickel
     email                : bickel@asc-hq.org
@@ -14,7 +14,6 @@
  *   (at your option) any later version.                                   *
  *                                                                         *
  ***************************************************************************/
-
 
 #include "loadpcx.h"
 #include "mapdisplay.h"
@@ -42,14 +41,14 @@ void WholeMapRenderer::render()
 
 void WholeMapRenderer::renderVisibility()
 {
-   computeview( gamemap );   
+   computeview( gamemap );
    ColorMerger_AlphaMerge<4> cmam;
 
    PutPixel<4, ColorMerger_AlphaMerge > pp(surface);
 
    Surface& mask = IconRepository::getIcon("largehex.pcx");
    for ( int y = 0; y < gamemap->ysize; ++y )
-      for ( int x = 0; x < gamemap->xsize; ++x ) 
+      for ( int x = 0; x < gamemap->xsize; ++x )
          if ( fieldvisiblenow( gamemap->getField(x,y), gamemap->getPlayerView() )) {
             int view = -1;
             int maxview = 0;
@@ -62,7 +61,7 @@ void WholeMapRenderer::renderVisibility()
             if ( view >= 0 )
                for ( int yp = 0; yp < fieldsizey; ++yp)
                   for ( int xp = 0; xp < fieldsizex; ++xp)
-                     if ( mask.GetPixel(xp,yp) != 0xff ) 
+                     if ( mask.GetPixel(xp,yp) != 0xff )
                         pp.set( getFieldPos(x,y) + SPoint(xp,yp), gamemap->getPlayer( view ).getColor().MapRGBA( surface.getBaseSurface()->format, min(maxview,150)*2/3));
          }
 }
@@ -81,49 +80,67 @@ void WholeMapRenderer::writePNG( const ASCString& filename )
 void writemaptopcx ( GameMap* gamemap, bool addview )
 {
    ASCString name = selectFile( "*.png", false );
-   
+
    StatusMessageWindowHolder smw = MessagingHub::Instance().infoMessageWindow( "writing map to " + name );
-   
+
    if ( !name.empty() ) {
       WholeMapRenderer wmr( gamemap );
       wmr.render();
-      if ( addview ) 
+      if ( addview )
          wmr.renderVisibility();
-      
+
       wmr.writePNG( name );
    }
 }
 
 void writemaptostream ( GameMap* gamemap, int width, int height, tnstream& stream  )
 {
-	WholeMapRenderer wmr( gamemap );
-	wmr.render();
+   WholeMapRenderer wmr( gamemap );
+   wmr.render();
 
-	Surface dst = Surface::createSurface(width, height, 32, 0);
-    MegaBlitter< gamemapPixelSize, gamemapPixelSize,ColorTransform_None,ColorMerger_AlphaOverwrite,SourcePixelSelector_DirectZoom,TargetPixelSelector_Rect> blitter;
-    blitter.setSize( wmr.surface.w(), wmr.surface.h(), dst.w(), dst.h() );
+   Surface dst = Surface::createSurface(width, height, 32, 0);
+   MegaBlitter< gamemapPixelSize, gamemapPixelSize,ColorTransform_None,ColorMerger_AlphaOverwrite,SourcePixelSelector_DirectZoom,TargetPixelSelector_Rect> blitter;
+   blitter.setSize( wmr.surface.w(), wmr.surface.h(), dst.w(), dst.h() );
 
-    SDL_Rect clip;
-    clip.h = height;
-    clip.w = width;
-    blitter.setTargetRect( clip );
+   SDL_Rect clip;
+   clip.x = 0;
+   clip.y = 0;
+   clip.h = height;
+   clip.w = width;
+   blitter.setTargetRect( clip );
 
-    blitter.blit( wmr.surface, dst, SPoint(0, 0) );
+   blitter.blit( wmr.surface, dst, SPoint(0, 0) );
 
-    for ( int y = 0; y < dst.h(); ++y )
-       for ( int x = 0; x < dst.w(); ++x )
-       {
-    	   stream.writeInt( dst.GetPixel(x, y) );
-       }
+   stream.writeInt( 1 ); // version counter 
+   stream.writeInt( width );
+   stream.writeInt( height );
+   
+   for ( int y = 0; y < dst.h(); ++y ) {
+      for ( int x = 0; x < dst.w(); ++x ) {
+         stream.writeInt( dst.GetPixel(x, y) );
+      }
+   }
 }
 
-void loadmapfromstream ( Surface& image, int width, int height, tnstream& stream  )
+Surface loadmapfromstream ( tnstream& stream  )
 {
-    for ( int y = 0; y < height; ++y )
-       for ( int x = 0; x < width; ++x )
-       {
-    	   image.SetPixel(x,y, stream.readInt());
-       }
+   int version = stream.readInt();
+   if ( version != 1 )
+      throw tinvalidversion ( "Embedded map image", 1, version );
+   
+   int width = stream.readInt();
+   int height = stream.readInt();
+   assertOrThrow( width >= 0 && width <= 1000 );
+   assertOrThrow( height >= 0 && height <= 1000 );
+   
+   Surface image = Surface::createSurface( width, height , 32, 0);
+   
+   for ( int y = 0; y < height; ++y )
+      for ( int x = 0; x < width; ++x ) {
+         image.SetPixel(x,y, stream.readInt());
+      }
+      
+   return image; 
 }
 
 

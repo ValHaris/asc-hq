@@ -1,20 +1,20 @@
 /*
      This file is part of Advanced Strategic Command; http://www.asc-hq.de
      Copyright (C) 1994-1999  Martin Bickel  and  Marc Schellenberger
- 
+
      This program is free software; you can redistribute it and/or modify
      it under the terms of the GNU General Public License as published by
      the Free Software Foundation; either version 2 of the License, or
      (at your option) any later version.
- 
+
      This program is distributed in the hope that it will be useful,
      but WITHOUT ANY WARRANTY; without even the implied warranty of
      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
      GNU General Public License for more details.
- 
+
      You should have received a copy of the GNU General Public License
-     along with this program; see the file COPYING. If not, write to the 
-     Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
+     along with this program; see the file COPYING. If not, write to the
+     Free Software Foundation, Inc., 59 Temple Place, Suite 330,
      Boston, MA  02111-1307  USA
 */
 
@@ -35,8 +35,7 @@ class FileWidget: public SelectionWidget
       FileInfo fileInfo;
       ASCString time;
    public:
-      FileWidget( PG_Widget* parent, const PG_Point& pos, int width, const FileInfo* fi ) : SelectionWidget( parent, PG_Rect( pos.x, pos.y, width, 18 )), fileInfo( *fi )
-      {
+      FileWidget( PG_Widget* parent, const PG_Point& pos, int width, const FileInfo* fi ) : SelectionWidget( parent, PG_Rect( pos.x, pos.y, width, 18 )), fileInfo( *fi ) {
 #ifndef ctime_r
          char* c = ctime( &fileInfo.modificationTime );
          if ( c )
@@ -64,78 +63,82 @@ class FileWidget: public SelectionWidget
          SetTransparency( 255 );
       };
 
-      ASCString getName() const
-      {
+      ASCString getName() const {
          return fileInfo.name;
       };
 
    protected:
 
-      void display( SDL_Surface * surface, const PG_Rect & src, const PG_Rect & dst )
-      {
+      void display( SDL_Surface * surface, const PG_Rect & src, const PG_Rect & dst ) {
       }
       ;
 };
 
-SavegameWidget::SavegameWidget( PG_Widget* parent, const PG_Point& pos, int width, const FileInfo* fi ) : SelectionWidget( parent, PG_Rect( pos.x, pos.y, width, 110 )), fileInfo( *fi )
-      {
+SavegameWidget::SavegameWidget( PG_Widget* parent, const PG_Point& pos, int width, const FileInfo* fi )
+   : SelectionWidget( parent, PG_Rect( pos.x, pos.y, width, 110 )), fileInfo( *fi ), fileInformationLoaded(false)
+{
 #ifndef ctime_r
-         char* c = ctime( &fileInfo.modificationTime );
-         if ( c )
-            time = c;
-         else
-            time = "-";
+   char* c = ctime( &fileInfo.modificationTime );
+   if ( c )
+      time = c;
+   else
+      time = "-";
 #else
 
-         char c[100];
-         ctime_r( &fileInfo.modificationTime, c );
-         time  = c;
+   char c[100];
+   ctime_r( &fileInfo.modificationTime, c );
+   time  = c;
 #endif
 
 
-         int col2 = 120;
-         int HeightRow = 20;
+   int col2 = 120;
+   int HeightRow = 20;
 
-         Emboss* e = new Emboss( this, PG_Rect( 1, 1, Width()-5, Height()-2), true );
+   Emboss* e = new Emboss( this, PG_Rect( 1, 1, Width()-5, Height()-2), true );
 
-         PG_Label* lbl1 = new PG_Label( this, PG_Rect( col2, 10, Width()-col2-10, HeightRow ), fileInfo.name );
-         lbl1->SetFontSize( lbl1->GetFontSize()+2 );
+   PG_Label* lbl1 = new PG_Label( this, PG_Rect( col2, 10, Width()-col2-10, HeightRow ), fileInfo.name );
+   lbl1->SetFontSize( lbl1->GetFontSize()+2 );
 
-         PG_Label* lbl2 = new PG_Label( this, PG_Rect( col2, 10+HeightRow, Width()-col2-10, HeightRow ), time );
-         lbl2->SetFontSize( lbl2->GetFontSize() -2 );
+   mapTitleLabel = new PG_Label( this, PG_Rect( col2, 10+HeightRow, Width()-col2-10, HeightRow ), "" );
+   mapTitleLabel->SetFontSize( mapTitleLabel->GetFontSize() -2 );
+   
+   
+   PG_Label* lbl2 = new PG_Label( this, PG_Rect( col2, 10+HeightRow*2, Width()-col2-10, HeightRow ), time );
+   lbl2->SetFontSize( lbl2->GetFontSize() -2 );
 
-         PG_Label* lbl3 = new PG_Label( this, PG_Rect( col2, 10+HeightRow*2, Width()-col2-10, HeightRow ), fileInfo.location );
-         lbl3->SetFontSize( lbl3->GetFontSize() -2 );
+   PG_Label* lbl3 = new PG_Label( this, PG_Rect( col2, 10+HeightRow*3, Width()-col2-10, HeightRow ), fileInfo.location );
+   lbl3->SetFontSize( lbl3->GetFontSize() -2 );
 
+   if ( !alternateImage.valid() )
+      alternateImage = IconRepository::getIcon("nomappicture.png");
 
-
-         SetTransparency( 255 );
-      };
+   SetTransparency( 255 );
+};
 
 ASCString SavegameWidget::getName() const
 {
- return fileInfo.name;
+   return fileInfo.name;
 };
 
+
+Surface SavegameWidget::alternateImage;
 
 
 void SavegameWidget::display( SDL_Surface * surface, const PG_Rect & src, const PG_Rect & dst )
 {
-
-	   if ( !getClippingSurface().valid() )
-		  getClippingSurface() = Surface::createSurface( 100, 100, 32, 0 );
-	   getClippingSurface().Fill(0);
-	   tsavegameloaders loader;
-	   if ( !loader.loadMapimageFromFile(fileInfo.name, getClippingSurface() )) {
-		   PG_Draw::BlitSurface( IconRepository::getIcon("nomappicture.png").getBaseSurface(), src, surface, PG_Rect( dst.x+10, dst.y+5, dst.Width(), dst.Height() ));
-	   }
-	   else {
-		   PG_Draw::BlitSurface( getClippingSurface().getBaseSurface(), src, surface, PG_Rect( dst.x+10, dst.y+5, dst.Width(), dst.Height() ));
-	   }
+   if ( !fileInformationLoaded ) {
+      tsavegameloaders loader;
+      gfi = loader.loadMapimageFromFile( fileInfo.name );
+      fileInformationLoaded = true;
+      ASCString s = gfi.maptitle + " - " + gfi.playername + " turn " + ASCString::toString( gfi.turn );
+      mapTitleLabel->SetText( s );
+   }
+   if ( !gfi.image.valid()) {
+      PG_Draw::BlitSurface( alternateImage.getBaseSurface(), src, surface, PG_Rect( dst.x+10, dst.y+5, dst.Width(), dst.Height() ));
+   } else {
+      PG_Draw::BlitSurface( gfi.image.getBaseSurface(), src, surface, PG_Rect( dst.x+10, dst.y+5, dst.Width(), dst.Height() ));
+   }
 };
-
-
-Surface SavegameWidget::clippingSurface;
 
 
 
@@ -150,9 +153,9 @@ FileSelectionItemFactory::FileSelectionItemFactory( const ASCString& wildcard )
          pos = wildcard.find( ";", begin );
       } else
          begin = pos = ASCString::npos;
-         
+
       tfindfile ff ( w );
-   
+
       tfindfile::FileInfo fi;
       while ( ff.getnextname( fi) ) {
          FileInfo* fi2 = new FileInfo( fi.name, fi.location, fi.date, fi.directoryLevel );
@@ -250,9 +253,9 @@ FileSelectionWindow::FileSelectionWindow( PG_Widget *parent, const PG_Rect &r, c
       SetTitle( "Enter Filename" );
    else
       SetTitle( "Choose File" );
-   
+
    this->overwriteMessage = overwriteMessage;
-   
+
    factory = new FileSelectionItemFactory( fileWildcard );
    factory->filenameSelectedMouse.connect ( SigC::slot( *this, &FileSelectionWindow::fileNameSelected ));
    factory->filenameSelectedKeyb.connect ( SigC::slot( *this, &FileSelectionWindow::fileNameSelected ));
@@ -408,8 +411,8 @@ SavegameSelectionWindow::SavegameSelectionWindow( PG_Widget *parent, const PG_Re
 
 ASCString  selectSavegame( const ASCString& ext, bool load, bool overwriteMessage )
 {
-	   SavegameSelectionWindow ssw( NULL, PG_Rect( 10, 10, 700, 500 ), ext, !load, overwriteMessage  );
-	   ssw.Show();
-	   ssw.RunModal();
-	   return ssw.getFilename();
+   SavegameSelectionWindow ssw( NULL, PG_Rect( 10, 10, 700, 500 ), ext, !load, overwriteMessage  );
+   ssw.Show();
+   ssw.RunModal();
+   return ssw.getFilename();
 }

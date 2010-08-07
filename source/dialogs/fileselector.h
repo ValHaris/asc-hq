@@ -24,6 +24,7 @@
 #include "selectionwindow.h"
 #include "../paradialog.h"
 #include "../graphics/blitter.h"
+#include "../loaders.h"
 
 class FileSelectionItemFactory;
 class SavegameSelectionItemFactory;
@@ -45,8 +46,10 @@ class FileInfo
 class SavegameWidget: public SelectionWidget {
       FileInfo fileInfo;
       ASCString time;
-      static Surface clippingSurface;
-      Surface& getClippingSurface() { return clippingSurface; };
+      bool fileInformationLoaded;
+      GameFileInformation gfi;
+      PG_Label* mapTitleLabel;
+      static Surface alternateImage;
    public:
       SavegameWidget( PG_Widget* parent, const PG_Point& pos, int width, const FileInfo* fi );
       ASCString getName() const;

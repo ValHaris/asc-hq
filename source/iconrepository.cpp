@@ -26,6 +26,7 @@
 #include <cstring>
 #include <stdlib.h>
 #include <SDL_image.h>
+#include <set>
 
 #include "iconrepository.h"
 #include "basestrm.h"
@@ -33,6 +34,8 @@
 
 
 IconRepository::Repository IconRepository::repository;
+
+set<ASCString> errorsShown;
 
 Surface& IconRepository::getIcon( const ASCString& name )
 {
@@ -51,7 +54,10 @@ Surface& IconRepository::getIcon( const ASCString& name )
         return *repository[name];
      }
      catch ( tfileerror err ) {
-        errorMessage("could not load " + err.getFileName() );
+        if ( errorsShown.find( name ) == errorsShown.end() ) {
+            errorMessage("could not load " + err.getFileName() );
+            errorsShown.insert( name );
+        }
         if ( name != "dummy.png" )
            return getIcon( "dummy.png" );
         else

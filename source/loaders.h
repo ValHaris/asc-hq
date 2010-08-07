@@ -127,14 +127,21 @@ class tnetworkloaders : public tgameloaders {
            int             savenwgame ( tnstream* strm, const GameMap* gamemap );
 };
 
+class GameFileInformation {
+   public:
+      ASCString maptitle;
+      ASCString playername;
+      int turn;
+      Surface image;
+};
+
 class tsavegameloaders : public tgameloaders {
-		void   			LoadMapimageFromSavegame( tnstream* strm, Surface& image );
         public:
-           GameMap*        loadgame ( tnstream* strm );
+           GameMap* loadgame ( tnstream* strm );
            static GameMap*  loadGameFromFile ( const ASCString& name );
-           bool 			loadMapimageFromFile( const ASCString& filename, Surface& image);
-           void            savegame ( tnstream* strm, GameMap* gamemap, bool writeReplays = true );
-           void            savegame ( GameMap* gamemap, const ASCString& name );
+           GameFileInformation  loadMapimageFromFile( const ASCString& filename );
+           void  savegame ( tnstream* strm, GameMap* gamemap, bool writeReplays = true );
+           void  savegame ( GameMap* gamemap, const ASCString& name );
 };
 
 

@@ -20,8 +20,8 @@
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program; see the file COPYING. If not, write to the 
-    Free Software Foundation, Inc., 59 Temple Place, Suite 330, 
+    along with this program; see the file COPYING. If not, write to the
+    Free Software Foundation, Inc., 59 Temple Place, Suite 330,
     Boston, MA  02111-1307  USA
 */
 
@@ -62,7 +62,7 @@
 
 
 
-const int actsavegameversion  = 0xff62;
+const int actsavegameversion  = 0xff63;
 const int minsavegameversion  = 0xff31;
 const int actmapversion       = 0xfe51;
 const int minmapversion       = 0xfe24;
@@ -75,9 +75,9 @@ const int minreplayversion    = 0x0001;
 const int fileterminator = 0xa01a;
 
 
- const char* savegameextension = "*.sav";
- const char* mapextension = "*.map";
- const char* tournamentextension = ".ascpbm";
+const char* savegameextension = "*.sav";
+const char* mapextension = "*.map";
+const char* tournamentextension = ".ascpbm";
 
 bool suppressMapTriggerExecution = true;
 
@@ -89,28 +89,28 @@ void         seteventtriggers( GameMap* actmap )
 
    for ( int i = 0; i < 8; i++ )
       actmap->player[i].queuedEvents = 1;
-} 
+}
 
 
 
-  #define csm_typid32 1      /*  b1  */
-  #define csm_direction 2    /*  b1  */ 
-  #define csm_vehicle 4      /*  b1  */
-  #define csm_building 8     /*  b1  */
-  #define csm_height 32      /*  b1  */
-  #define csm_cnt2 64        /*  b1  */
-  #define csm_b3 128         /*  b1  */
+#define csm_typid32 1      /*  b1  */
+#define csm_direction 2    /*  b1  */
+#define csm_vehicle 4      /*  b1  */
+#define csm_building 8     /*  b1  */
+#define csm_height 32      /*  b1  */
+#define csm_cnt2 64        /*  b1  */
+#define csm_b3 128         /*  b1  */
 
-  #define csm_material 1     /*  b3  */
-  #define csm_fuel 2         /*  b3  */
-  #define csm_visible 4      /*  b3  */
-  #define csm_weather 16     /*  b3  */
-  #define csm_object 64      /*  b3  */
-  #define csm_b4 128         /* b3 */ 
+#define csm_material 1     /*  b3  */
+#define csm_fuel 2         /*  b3  */
+#define csm_visible 4      /*  b3  */
+#define csm_weather 16     /*  b3  */
+#define csm_object 64      /*  b3  */
+#define csm_b4 128         /* b3 */
 
-  #define csm_resources  1     /* b4 */
-  #define csm_connection 2     // b4
-  #define csm_newobject  4     // b4
+#define csm_resources  1     /* b4 */
+#define csm_connection 2     // b4
+#define csm_newobject  4     // b4
 
 
 
@@ -208,7 +208,7 @@ void      tspfldloaders:: writemessages ( void )
 
 
       ASCString& t = (*mi)->text;
-      
+
       mi++;
       stream->writeInt ( mi != spfld->messages.end() ? 1 : 0 );
 
@@ -253,7 +253,7 @@ class MessageIDequals : public unary_function<Message*,bool>{
 void      tspfldloaders:: readmessagelist( MessagePntrContainer& lst )
 {
    int i = stream->readInt();
-   
+
    while ( i ) {
       // MessageContainer::iterator mi = find ( spfld->messages.begin(), spfld->messages.end(), MessageIDequals ( i ));
       MessageContainer::iterator mi = spfld->messages.end();
@@ -271,7 +271,7 @@ void      tspfldloaders:: readmessagelist( MessagePntrContainer& lst )
 
 void      tspfldloaders:: readmessages ( void )
 {
-   int magic = stream->readInt(); 
+   int magic = stream->readInt();
    assertOrThrow( magic >= messageMinVersion  && magic <= messageVersion );
 
    while ( spfld->__loadmessages ) {
@@ -290,7 +290,7 @@ void      tspfldloaders:: readmessages ( void )
       int t = stream->readInt();
       int m = stream->readInt();
       msg->gametime.set ( t, m );
-      
+
       if ( magic >= 0xabcdf1 )
          msg->reminder = stream->readInt();
       else
@@ -300,7 +300,7 @@ void      tspfldloaders:: readmessages ( void )
 
       if ( msgtext )
          msg->text = stream->readString( true );
-      
+
    }
 
    for ( int i = 0; i < 8; i++ )
@@ -337,9 +337,9 @@ void   tspfldloaders::readoldevents ( void )
    if ( spfld->loadOldEvents ) {
       int  num = stream->readInt();
       while ( num ) {
-         for ( int i = 0;i < num; i++ )
+         for ( int i = 0; i < num; i++ )
             stream->readInt();
-         for ( int i = 0;i < num; i++ )
+         for ( int i = 0; i < num; i++ )
             stream->readInt();
 
          num  = stream->readInt();
@@ -364,38 +364,38 @@ void checkForUniqueUnitIDs( GameMap* gamemap )
 
 void    tspfldloaders::writemap ( void )
 {
-      checkForUniqueUnitIDs( spfld );
-       if ( !spfld )
-          displaymessage ( "tspfldloaders::writemap  ; no map to write ! ",2);
+   checkForUniqueUnitIDs( spfld );
+   if ( !spfld )
+      displaymessage ( "tspfldloaders::writemap  ; no map to write ! ",2);
 
-       spfld->write ( *stream );
+   spfld->write ( *stream );
 }
 
 
 void     tmaploaders::initmap ( void )
 {
-    spfld->game_parameter = NULL;
+   spfld->game_parameter = NULL;
 }
 
 
 void     tgameloaders::initmap ( void )
 {
-    spfld->game_parameter = NULL;
+   spfld->game_parameter = NULL;
 }
 
 
 void     tspfldloaders::readmap ( void )
 {
-    spfld = new GameMap;
+   spfld = new GameMap;
 
-    spfld->read ( *stream );
+   spfld->read ( *stream );
 }
 
 
 
 void tgameloaders :: writeAI ( )
 {
- #ifdef sgmain
+#ifdef sgmain
    int a = 0;
    for ( int i = 0; i< 8; i++ )
       if ( spfld->player[i].ai )
@@ -406,9 +406,9 @@ void tgameloaders :: writeAI ( )
    for ( int i = 0; i < 8; i++ )
       if ( spfld->player[i].ai )
          spfld->player[i].ai->write( *stream );
-  #else
+#else
    stream->writeInt(0);
-  #endif
+#endif
 }
 
 void tgameloaders :: readAI ( )
@@ -423,10 +423,10 @@ void tgameloaders :: readAI ( )
       } else {
          spfld->player[i].ai = NULL;
       }
- #else
+#else
    for ( int i = 0; i< 9; i++ )
       spfld->player[i].ai = NULL;
- #endif
+#endif
 }
 
 
@@ -459,21 +459,21 @@ void   tspfldloaders::writefields ( void )
    int cnt2;
 
    do {
-      cnt2 = 0; 
+      cnt2 = 0;
       MapField* fld = &spfld->field[l];
       /*
 
       RLE encoding not supported any more, since tfield is becomming too complex
 
-      if (l + 2 < cnt1) { 
-         l2 = l + 1; 
+      if (l + 2 < cnt1) {
+         l2 = l + 1;
          fld2 = &spfld->field[l2];
        asfasfdasfd
          while ((l2 + 2 < cnt1) && ( memcmp(fld2, fld, sizeof(*fld2)) == 0) ) {
             cnt2++;
             l2++;
             fld2 = &spfld->field[l2];
-         } 
+         }
       }
       */
 
@@ -482,21 +482,21 @@ void   tspfldloaders::writefields ( void )
       char b3 = 0;
       char b4 = 0;
 
-      if (fld->typ->terraintype->id > 255) 
-         b1 |= csm_typid32; 
-      if (fld->vehicle != NULL) 
-         b1 |= csm_vehicle; 
+      if (fld->typ->terraintype->id > 255)
+         b1 |= csm_typid32;
+      if (fld->vehicle != NULL)
+         b1 |= csm_vehicle;
       if ( (fld->bdt & getTerrainBitType( cbbuildingentry )).any() )
-         b1 |= csm_building; 
+         b1 |= csm_building;
 
 
-      if (cnt2 > 0) 
-         b1 |= csm_cnt2; 
+      if (cnt2 > 0)
+         b1 |= csm_cnt2;
 
-      if (fld->material > 0) 
-         b3 |= csm_material; 
-      if (fld->fuel > 0) 
-         b3 |= csm_fuel; 
+      if (fld->material > 0)
+         b3 |= csm_material;
+      if (fld->fuel > 0)
+         b3 |= csm_fuel;
 
       if (fld->typ != fld->typ->terraintype->weather[0])
          b3 |= csm_weather;
@@ -514,18 +514,18 @@ void   tspfldloaders::writefields ( void )
       if ( b4 )
          b3 |= csm_b4;
 
-      if ( b3 ) 
-         b1 |= csm_b3; 
+      if ( b3 )
+         b1 |= csm_b3;
 
       stream->writeChar( b1 );
 
-      if (b1 & csm_b3 ) 
+      if (b1 & csm_b3 )
          stream->writeChar ( b3 );
 
       if (b3 & csm_b4 )
          stream->writeChar ( b4 );
 
-      if (b1 & csm_cnt2 ) 
+      if (b1 & csm_cnt2 )
          stream->writeInt ( cnt2 );
 
       if (b3 & csm_weather ) {
@@ -533,30 +533,30 @@ void   tspfldloaders::writefields ( void )
          while ( fld->typ != fld->typ->terraintype->weather[k]    &&   k < cwettertypennum ) {
             k++;
          } /* endwhile */
-         
+
          if ( k == cwettertypennum ) {
             k = 0;
             displaymessage ( "invalid terrain ( weather not found ) at position %d \n",1,l );
-          }
+         }
          stream->writeInt ( k );
       }
 
-      if (b1 & csm_typid32 )                  
+      if (b1 & csm_typid32 )
          stream->writeInt ( fld->typ->terraintype->id );
       else
          stream->writeChar ( fld->typ->terraintype->id );
 
-      if (b1 & csm_vehicle ) 
+      if (b1 & csm_vehicle )
          fld->vehicle->write ( *stream );
 
 
-      if (b1 & csm_building ) 
+      if (b1 & csm_building )
          fld->building->write ( *stream );
 
-      if (b3 & csm_material ) 
+      if (b3 & csm_material )
          stream->writeChar ( fld->material );
 
-      if (b3 & csm_fuel ) 
+      if (b3 & csm_fuel )
          stream->writeChar ( fld->fuel );
 
       if (b3 & csm_visible )
@@ -617,7 +617,7 @@ void tspfldloaders::readfields ( void )
    assertOrThrow( spfld->ysize > 0 );
 
    spfld->allocateFields ( spfld->xsize , spfld->ysize );
-   
+
    if (spfld->field == NULL)
       displaymessage ( "Could not allocate memory for map ",2);
 
@@ -627,7 +627,7 @@ void tspfldloaders::readfields ( void )
    do {
       MapField* fld2;
 
-      if (cnt2 == 0) { 
+      if (cnt2 == 0) {
 
          fld2 = & spfld->field[l];
 
@@ -636,54 +636,54 @@ void tspfldloaders::readfields ( void )
          char b1, b3, b4;
          b1 = stream->readChar();
 
-         if (b1 & csm_b3 ) 
+         if (b1 & csm_b3 )
             b3 = stream->readChar();
-         else 
-            b3 = 0; 
+         else
+            b3 = 0;
 
          if (b3 & csm_b4 )
             b4 = stream->readChar();
          else
             b4 = 0;
 
-         if (b1 & csm_cnt2 ) 
+         if (b1 & csm_cnt2 )
             cnt2 = stream->readInt();
          else
-            cnt2 = 0; 
+            cnt2 = 0;
 
          int weather;
          if (b3 & csm_weather )
             weather = stream->readInt();
-         else 
+         else
             weather = 0;
 
          assertOrThrow( weather >= 0 && weather < cwettertypennum );
 
          int k;
 
-         if (b1 & csm_typid32 ) 
+         if (b1 & csm_typid32 )
             k = stream->readInt();
          else
             k = stream->readChar();
 
          pterraintype trn = terrainTypeRepository.getObject_byID ( k );
-         if ( !trn ) 
+         if ( !trn )
             throw InvalidID ( "terrain", k );
 
          fld2->typ = trn->weather[weather];
          if ( !fld2->typ ) {
             fld2->typ = trn->weather[0];
-            if ( !fld2->typ ) 
+            if ( !fld2->typ )
                throw InvalidID ( "terrain", k );
          }
 
          if (b1 & csm_direction )
-            stream->readChar();  // fld2->direction = 0; 
-            
+            stream->readChar();  // fld2->direction = 0;
+
 
          if (b1 & csm_vehicle ) {
-             fld2->vehicle = Vehicle::newFromStream ( spfld, *stream );
-             fld2->vehicle->setnewposition ( l%spfld->xsize, l/spfld->xsize );
+            fld2->vehicle = Vehicle::newFromStream ( spfld, *stream );
+            fld2->vehicle->setnewposition ( l%spfld->xsize, l/spfld->xsize );
          }
 
          if (b1 & csm_building ) {
@@ -691,14 +691,14 @@ void tspfldloaders::readfields ( void )
             fld2->bdt |= getTerrainBitType(cbbuildingentry);
          }
 
-         if (b3 & csm_material) 
+         if (b3 & csm_material)
             fld2->material = stream->readChar();
-         else 
-            fld2->material = 0; 
+         else
+            fld2->material = 0;
 
-         if (b3 & csm_fuel) 
+         if (b3 & csm_fuel)
             fld2->fuel = stream->readChar();
-         else 
+         else
             fld2->fuel = 0;
 
          if (b3 & csm_visible)
@@ -749,18 +749,17 @@ void tspfldloaders::readfields ( void )
                   id = stream->readInt();
                else
                   id = spfld->idManager.getNewNetworkID();
-               
+
                Mine m ( type, strength, player, spfld, id );
                if ( objectversion == 1 ) {
                   int endtime = minetime;
                   int lifetime = spfld->getgameparameter( GameParameter(cgp_antipersonnelmine_lifetime + m.type - 1));
                   if ( lifetime > 0  &&  endtime > 0 )
                      m.lifetimer = endtime - spfld->time.turn() + spfld->getgameparameter( GameParameter(cgp_antipersonnelmine_lifetime + m.type - 1));
+                  else if ( lifetime > 0 )
+                     m.lifetimer = lifetime;
                   else
-                     if ( lifetime > 0 )
-                        m.lifetimer = lifetime;
-                     else
-                        m.lifetimer = -1;
+                     m.lifetimer = -1;
                } else
                   m.lifetimer = minetime;
                fld2->mines.push_back ( m );
@@ -811,14 +810,13 @@ void tspfldloaders::readfields ( void )
                fld2->resourceview->materialvisible[i] = stream->readChar();
          }
 
-         if ( b4 & csm_connection ) 
+         if ( b4 & csm_connection )
             fld2->connection = stream->readInt();
-         
+
          if (b1 & csm_cnt2 )
             lfld = fld2;
 
-      } 
-      else {
+      } else {
          spfld->field[l].typ = lfld->typ;
          spfld->field[l].fuel = lfld->material;
          spfld->field[l].visible = lfld->visible;
@@ -827,7 +825,7 @@ void tspfldloaders::readfields ( void )
          for ( int i = 0; i < 8; i++ )
             spfld->field[l].view[i] = lfld->view[i];
          cnt2--;
-      } 
+      }
       l++ ;
    }  while (l < cnt1);
 
@@ -846,9 +844,9 @@ void   tspfldloaders::chainitems ( GameMap* actmap )
    int i = 0;
    for (int y = 0; y < actmap->ysize; y++)
       for (int x = 0; x < actmap->xsize; x++) {
-          MapField* fld = &actmap->field[i];
-          fld->setparams();
-          i++;
+         MapField* fld = &actmap->field[i];
+         fld->setparams();
+         i++;
       }
 }
 
@@ -869,8 +867,8 @@ tspfldloaders::tspfldloaders ( void )
 
 tspfldloaders::~tspfldloaders ( void )
 {
-  delete spfld;
-  spfld = NULL;
+   delete spfld;
+   spfld = NULL;
 }
 
 
@@ -891,10 +889,10 @@ tspfldloaders::~tspfldloaders ( void )
 
 
 int          tmaploaders::savemap( const ASCString& name, GameMap* gamemap )
-{ 
-   #ifdef logging
+{
+#ifdef logging
    logtofile ( "loaders / tmaploaders::savemap / started " );
-   #endif
+#endif
 
    tnfilestream filestream ( name, tnstream::writing );
 
@@ -907,11 +905,11 @@ int          tmaploaders::savemap( const ASCString& name, GameMap* gamemap )
    /*   Stream initialisieren, Dateiinfo schreiben , map schreiben          */
    /********************************************************************************/
    {
-       stream->writepchar ( getFullVersionString() );  // description is not used any more
-       stream->writeWord ( fileterminator );
-       stream->writeInt ( actmapversion  );
+      stream->writepchar ( getFullVersionString() );  // description is not used any more
+      stream->writeWord ( fileterminator );
+      stream->writeInt ( actmapversion  );
 
-       writemap ( );
+      writemap ( );
    }
 
    writefields ();
@@ -923,7 +921,7 @@ int          tmaploaders::savemap( const ASCString& name, GameMap* gamemap )
    spfld = NULL;
 
    return 0;
-} 
+}
 
 
 
@@ -934,29 +932,29 @@ void weatherSystemRequired()
 
 
 GameMap* tmaploaders::_loadmap( const ASCString& name )
-{ 
-    displayLogMessage ( 4, "loading map %s ... ", name.c_str() );
+{
+   displayLogMessage ( 4, "loading map %s ... ", name.c_str() );
 
-    tnfilestream filestream ( name, tnstream::reading);
+   tnfilestream filestream ( name, tnstream::reading);
 
-    stream = &filestream;
+   stream = &filestream;
 
-    char* description = NULL;
- 
-    stream->readpchar ( &description );
-    delete[] description;
- 
-    int w = stream->readWord();
- 
-    if ( w != fileterminator ) 
-       throw tinvalidversion ( name, fileterminator, w );
+   char* description = NULL;
+
+   stream->readpchar ( &description );
+   delete[] description;
+
+   int w = stream->readWord();
+
+   if ( w != fileterminator )
+      throw tinvalidversion ( name, fileterminator, w );
 
 
-    int version = stream->readInt();
- 
-    if ( version > actmapversion || version < minmapversion )
-       throw tinvalidversion ( name, actmapversion, version );
-   
+   int version = stream->readInt();
+
+   if ( version > actmapversion || version < minmapversion )
+      throw tinvalidversion ( name, actmapversion, version );
+
 
    displayLogMessage ( 8, "map, ");
    readmap ();
@@ -969,14 +967,14 @@ GameMap* tmaploaders::_loadmap( const ASCString& name )
    displayLogMessage ( 8, "fields, ");
    readfields ();
 
-   
+
    if(version == 0xfe50)
       weatherSystemRequired();
 
    version = stream->readInt();
-   if (version > actmapversion || version < minmapversion ) 
+   if (version > actmapversion || version < minmapversion )
       throw tinvalidversion ( name, actmapversion, version );
-   
+
 
    displayLogMessage ( 8, "chainItems, ");
    chainitems ( spfld );
@@ -993,7 +991,7 @@ GameMap* tmaploaders::_loadmap( const ASCString& name )
 
 
    displayLogMessage ( 8, "init for playing, ");
-   
+
    spfld->time.set ( 1, 0 );
    spfld->levelfinished = false;
    spfld->preferredFileNames.mapname[0] = name ;
@@ -1004,26 +1002,27 @@ GameMap* tmaploaders::_loadmap( const ASCString& name )
 
    GameMap* m  = spfld;
    spfld = NULL;
-   
+
    mapLoaded( m );
-   
+
    return m;
-} 
+}
 
 
 GameMap* eventLocalizationMap = NULL;
 
 
 
-void loadLocalizedMessageFile( GameMap* map, const ASCString& filename ) {
+void loadLocalizedMessageFile( GameMap* map, const ASCString& filename )
+{
    eventLocalizationMap = map;
-         
+
    LuaState state;
    LuaRunner runner( state );
    runner.runFile( filename );
    if ( !runner.getErrors().empty() )
       errorMessage( runner.getErrors() );
-         
+
    eventLocalizationMap = NULL;
 }
 
@@ -1032,27 +1031,27 @@ void loadLocalizedMessages( GameMap* map, const ASCString& name )
    Locale locale;
    ASCString filename = locale.getLocalizedFile( name );
    if( !filename.empty() && exist( filename ) )
-       loadLocalizedMessageFile( map, filename );
-  
+      loadLocalizedMessageFile( map, filename );
+
 }
 
 GameMap* tmaploaders::loadmap ( const ASCString& name )
 {
-     tmaploaders gl;
-     GameMap* map = gl._loadmap ( name );
+   tmaploaders gl;
+   GameMap* map = gl._loadmap ( name );
 #ifdef sgmain
-   loadLocalizedMessages( map, name );     
+   loadLocalizedMessages( map, name );
 #endif
-     return map;
-}     
-   
+   return map;
+}
+
 
 
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
   * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *  */ 
+  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *  */
 
 
 
@@ -1060,7 +1059,7 @@ GameMap* tmaploaders::loadmap ( const ASCString& name )
 void   tsavegameloaders::savegame( tnstream* strm, GameMap* gamemap, bool writeReplays )
 {
    PackageManager::storeData( gamemap );
-   
+
    stream = strm;
    spfld = gamemap;
 
@@ -1071,13 +1070,17 @@ void   tsavegameloaders::savegame( tnstream* strm, GameMap* gamemap, bool writeR
 
    //An Image of the Map will now be saved to the file.
    writemaptostream( spfld , 100, 100, *stream);
+   
+   stream->writeString( gamemap->maptitle );
+   stream->writeString( gamemap->getCurrentPlayer().getName() );
+   stream->writeInt( gamemap->time.turn() );
 
    writemap ();
 
    writemessages();
 
    writefields ( );
-   
+
    writedissections();
 
    if ( writeReplays && spfld->replayinfo ) {
@@ -1097,40 +1100,35 @@ void   tsavegameloaders::savegame( tnstream* strm, GameMap* gamemap, bool writeR
 
 
 void tsavegameloaders::savegame( GameMap* gamemap, const ASCString& name)
-{ 
+{
    tnfilestream filestream ( name, tnstream::writing );
    savegame ( &filestream, gamemap, true );
 }
 
-bool tsavegameloaders::loadMapimageFromFile( const ASCString& filename, Surface& image )
+GameFileInformation tsavegameloaders::loadMapimageFromFile( const ASCString& filename )
 {
-	try {
-	   tnfilestream filestream1( filename, tnstream::reading );
-	   image = Surface::createSurface(100,100,32,0);
+   GameFileInformation gfi;
+   try {
+      tnfilestream stream( filename, tnstream::reading );
 
-	   stream = &filestream1;
+      stream.readString(); // was: description
 
-	   stream->readString(); // was: description
+      int w = stream.readWord();
 
-	   int w = stream->readWord();
+      if ( w != fileterminator )
+         throw tinvalidversion ( stream.getDeviceName(), fileterminator, w );
 
-	   if ( w != fileterminator )
-	      throw tinvalidversion ( stream->getDeviceName(), fileterminator, w );
-
-	   int version = stream->readInt();
-
-	   if ( version >= 0xff62 ) {
-			   loadmapfromstream(image, 100,100, *stream);
-		   return true;
-	   }
-	   else {
-		   return false;
-	   }
-	}
-	catch(...)
-	{
-		return false;
-	}
+      int version = stream.readInt();
+      
+      if ( version >= 0xff63 ) {
+         gfi.image =  loadmapfromstream( stream );
+         gfi.maptitle = stream.readString();
+         gfi.playername = stream.readString();
+         gfi.turn = stream.readInt();
+      }
+   } catch(...) {
+   }
+   return gfi;
 }
 
 GameMap* tsavegameloaders::loadGameFromFile( const ASCString& filename )
@@ -1148,20 +1146,24 @@ GameMap*          tsavegameloaders::loadgame( tnstream* strm )
 
    int w = stream->readWord();
 
-   if ( w != fileterminator ) 
+   if ( w != fileterminator )
       throw tinvalidversion ( strm->getDeviceName(), fileterminator, w );
-   
+
    int version = stream->readInt();
 
-   if (version > actsavegameversion || version < minsavegameversion ) 
+   if (version > actsavegameversion || version < minsavegameversion )
       throw tinvalidversion ( strm->getDeviceName(), actsavegameversion, version );
 
    if ( version >= 0xff62 ) {
-	   //While loading the Savegame, it's not necessary to load the
-	   //Mapimage. So it will now be skipped.
-	   int temp;
-	   for ( int i = 0; i < (100*100); i++ )
-		   temp = stream->readInt();
+      // ignoring the map image
+      loadmapfromstream( *stream );
+   }
+   
+   if ( version >= 0xff63 ) {
+      // ignoring the map information
+      stream->readString();   
+      stream->readString();   
+      stream->readInt();
    }
 
    readmap ();
@@ -1180,14 +1182,14 @@ GameMap*          tsavegameloaders::loadgame( tnstream* strm )
    }
 
    readfields ( );
-   
+
    if(version == 0xff60)
       weatherSystemRequired();
-   
+
    readdissections();
 
    bool loadReplay = true;
-   if ( version >= 0xff35 ) 
+   if ( version >= 0xff35 )
       if ( !stream->readInt() )
          loadReplay = false;
 
@@ -1214,7 +1216,7 @@ GameMap*          tsavegameloaders::loadgame( tnstream* strm )
 
    mapLoaded( spfld );
 
-   
+
    GameMap* s = spfld;
    spfld = NULL;  // to avoid that is is deleted by the destructor of tsavegameloaders
    return s;
@@ -1222,25 +1224,25 @@ GameMap*          tsavegameloaders::loadgame( tnstream* strm )
 
 
 
-   /*****************************************************************************************************/
-   /*   Netzwerk                                                                                       */
-   /*****************************************************************************************************/
+/*****************************************************************************************************/
+/*   Netzwerk                                                                                       */
+/*****************************************************************************************************/
 
 
 
 
 int          tnetworkloaders::savenwgame( tnstream* strm, const GameMap* gamemap )
-{ 
-   
+{
+
    PackageManager::storeData( gamemap );
-   
+
    spfld = const_cast<GameMap*>(gamemap); // yes, this is bad, but spfld can't be made constant because it is also used for loading
-   
+
    stream = strm;
 
    stream->writepchar ( getFullVersionString() );  // description is not used any more
    stream->writeWord ( fileterminator );
- 
+
    stream->writeInt ( actnetworkversion );
 
    writemap ();
@@ -1264,14 +1266,14 @@ int          tnetworkloaders::savenwgame( tnstream* strm, const GameMap* gamemap
    spfld = NULL;
 
    return 0;
-} 
+}
 
 
 
 
 
 GameMap*  tnetworkloaders::loadnwgame( tnstream* strm )
-{ 
+{
    const char* name = "network game";
 
    stream = strm;
@@ -1298,12 +1300,12 @@ GameMap*  tnetworkloaders::loadnwgame( tnstream* strm )
       for ( int i = 0; i < 8; i++ )
          spfld->player[i].research.read_techs ( *stream );
 
-   
-   //NEW SaveData Weather  
+
+   //NEW SaveData Weather
    if(version == 0x0030)
       weatherSystemRequired();
-   
-   /*if(version > 0xfe28){  //Vielleicht minus 1     
+
+   /*if(version > 0xfe28){  //Vielleicht minus 1
      actmap->weatherSystem->read(*stream);
    }*/
    readmessages();
@@ -1333,11 +1335,11 @@ GameMap*  tnetworkloaders::loadnwgame( tnstream* strm )
    if ( version > 8 )
       readAI();
 
-   #ifdef sgmain
-   version = stream->readInt();   
+#ifdef sgmain
+   version = stream->readInt();
    if (version > actnetworkversion || version < minnetworkversion )
       throw tinvalidversion ( name, actnetworkversion, version );
-   #endif
+#endif
 
    chainitems ( spfld );
 
@@ -1348,7 +1350,7 @@ GameMap*  tnetworkloaders::loadnwgame( tnstream* strm )
    checkForUniqueUnitIDs( spfld );
 
    spfld->levelfinished = false;
-   
+
    // there was a bug that made the ammo amount underflow
    for ( int i = 0; i < 8; ++i)
       for ( Player::BuildingList::iterator b = spfld->player[i].buildingList.begin(); b != spfld->player[i].buildingList.end(); ++b )
@@ -1360,14 +1362,14 @@ GameMap*  tnetworkloaders::loadnwgame( tnstream* strm )
                (*b)->ammo[a] = 0;
             }
 
-   
-            
+
+
    GameMap* spfldcopy = spfld;
    spfld = NULL;
 
    mapLoaded( spfldcopy );
-   
-   
+
+
    return spfldcopy;
 
 }
@@ -1377,7 +1379,7 @@ GameMap*  tnetworkloaders::loadnwgame( tnstream* strm )
 
 
 
-ASCString getLuaQuote( bool open, int n ) 
+ASCString getLuaQuote( bool open, int n )
 {
    ASCString s =  open? "[[" : "]]";
    for ( int i =0; i < n; ++i )
@@ -1390,8 +1392,8 @@ ASCString luaQuote( const ASCString& text )
    int count = 0;
    while( text.find_first_of( getLuaQuote( true,  count )) != ASCString::npos ||
           text.find_first_of( getLuaQuote( false, count )) != ASCString::npos )
-          ++count;
-   
+      ++count;
+
    return getLuaQuote( true, count) + text + getLuaQuote( false, count );
 }
 
@@ -1406,7 +1408,7 @@ void writeMessageFile( GameMap* gamemap, tnstream& stream )
          stream.writeString ( "asc.setLocalizedEventMessage( map, " + ASCString::toString((*i)->id) + ", message )\n\n", false);
       }
    }
-   
+
    for ( int p = 0; p <= gamemap->getPlayerCount(); ++p ) {
       Player& player = gamemap->getPlayer(p);
       for ( Player::BuildingList::const_iterator b = player.buildingList.begin(); b != player.buildingList.end(); ++b ) {
@@ -1425,20 +1427,20 @@ void writeMessageFile( GameMap* gamemap, tnstream& stream )
 void  savemap( const ASCString& name, GameMap* gamemap )
 {
 
-   #ifdef logging
+#ifdef logging
    logtofile ( "loaders / savemap / started " );
-   #endif
+#endif
 
    try {
-     tmaploaders gl;
-     gl.savemap ( name, gamemap );
-     
-     
-     if ( CGameOptions::Instance()->saveEventMessagesExternal && gamemap->nativeMessageLanguage.length() ) {
-        tn_file_buf_stream messages ( name + "." + gamemap->nativeMessageLanguage, tnstream::writing );
-        writeMessageFile( gamemap, messages );
-     }
-     
+      tmaploaders gl;
+      gl.savemap ( name, gamemap );
+
+
+      if ( CGameOptions::Instance()->saveEventMessagesExternal && gamemap->nativeMessageLanguage.length() ) {
+         tn_file_buf_stream messages ( name + "." + gamemap->nativeMessageLanguage, tnstream::writing );
+         writeMessageFile( gamemap, messages );
+      }
+
    } /* endtry */
 
    catch ( tfileerror err ) {
@@ -1455,8 +1457,7 @@ void  savegame( const ASCString& name, GameMap* gamemap)
    try {
       tsavegameloaders gl;
       gl.savegame ( gamemap, name);
-   }
-   catch ( tfileerror err) {
+   } catch ( tfileerror err) {
       displaymessage( "error writing map to filename %s ", 1, err.getFileName().c_str() );
    } /* endcatch */
    catch ( ASCexception ) {
@@ -1485,8 +1486,7 @@ void  savereplay( GameMap* gamemap, int num )
       sgl.savegame ( &memstream, gamemap, false );
 
       memstream.writeInt ( actreplayversion );
-   }
-   catch ( ASCexception ) {
+   } catch ( ASCexception ) {
       displaymessage( "error saving replay information", 1 );
    } /* endcatch */
 }
@@ -1512,8 +1512,7 @@ GameMap*  loadreplay( MemoryStreamStorage* streambuf )
          throw tinvalidversion ( name, actreplayversion, version );
       }
 
-   }
-   catch ( InvalidID err ) {
+   } catch ( InvalidID err ) {
       displaymessage( err.getMessage().c_str(), 1 );
       replaymap = NULL;
    } /* endcatch */
@@ -1541,8 +1540,7 @@ GameMap* mapLoadingExceptionChecker( const ASCString& filename, MapLoadingFuncti
    GameMap* m = NULL;
    try {
       m = loader( filename );
-   }
-   catch ( InvalidID err ) {
+   } catch ( InvalidID err ) {
       displaymessage( err.getMessage().c_str(), 1 );
       return NULL;
    } /* endcatch */
@@ -1553,8 +1551,7 @@ GameMap* mapLoadingExceptionChecker( const ASCString& filename, MapLoadingFuncti
    catch ( StreamCompressionError err ) {
       displaymessage( "The file %s is corrupted.\nPlease obtain a new copy of that file", 1, filename.c_str() );
       return NULL;
-   }
-   catch ( tfileerror err) {
+   } catch ( tfileerror err) {
       displaymessage( "error reading map filename %s ", 1, err.getFileName().c_str() );
       return NULL;
    } /* endcatch */
@@ -1566,7 +1563,7 @@ GameMap* mapLoadingExceptionChecker( const ASCString& filename, MapLoadingFuncti
       displaymessage( "error loading file", 1 );
       return NULL;
    } /* endcatch */
-   
+
    return m;
 }
 
@@ -1598,17 +1595,17 @@ bool validatemapfile ( const ASCString& filename )
 
       int version = stream.readInt();
 
-      if (version > actmapversion || version < minmapversion ) 
+      if (version > actmapversion || version < minmapversion )
          throw tinvalidversion ( filename, actmapversion, version );
 
    } /* endtry */
 
    catch ( ... ) {
-       return false;
+      return false;
    } /* endcatch */
 
    return true;
-} 
+}
 
 
 
@@ -1632,19 +1629,19 @@ bool validateemlfile ( const ASCString& filename )
          throw tinvalidversion ( filename, fileterminator, (int) w );
 
       int version = stream.readInt();
-   
-      if (version > actnetworkversion || version < minnetworkversion ) 
+
+      if (version > actnetworkversion || version < minnetworkversion )
          throw tinvalidversion ( filename, actnetworkversion, version );
 
    } /* endtry */
 
    catch ( ASCexception ) {
-       return false;
+      return false;
    } /* endcatch */
 
 
    return true;
-} 
+}
 
 
 bool validatesavfile ( const ASCString& filename )
@@ -1672,11 +1669,11 @@ bool validatesavfile ( const ASCString& filename )
    } /* endtry */
 
    catch ( ASCexception ) {
-       return false;
+      return false;
    } /* endcatch */
 
    return true;
-} 
+}
 
 
 
@@ -1684,9 +1681,9 @@ bool validatesavfile ( const ASCString& filename )
 MapConinuationInfo findNextCampaignMap( int id  )
 {
    MapConinuationInfo mi;
-   
+
    tfindfile ff ( mapextension );
-   
+
    ASCString filename = ff.getnextname();
    while( !filename.empty() ) {
 
@@ -1717,8 +1714,7 @@ MapConinuationInfo findNextCampaignMap( int id  )
             mi.filename = filename;
             return mi;
          }
-      }
-      catch ( ... ) {
+      } catch ( ... ) {
       } /* endcatch */
 
       filename = ff.getnextname();
