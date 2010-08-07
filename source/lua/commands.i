@@ -24,7 +24,7 @@ class ActionResult {
 
 
 
-extern void displayActionError( const ActionResult& result );
+extern void displayActionError( const ActionResult& result, const std::string& additionalInfo = "" );
 
 
 ActionResult unitAttack( GameMap* actmap, int veh, const MapCoordinate& destination, int weapon = -1 );

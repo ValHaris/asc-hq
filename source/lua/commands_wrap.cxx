@@ -4678,7 +4678,34 @@ static swig_lua_class *swig_ActionResult_bases[] = {0};
 static const char *swig_ActionResult_base_names[] = {0};
 static swig_lua_class _wrap_class_ActionResult = { "ActionResult", &SWIGTYPE_p_ActionResult,0, swig_delete_ActionResult, swig_ActionResult_methods, swig_ActionResult_attributes, swig_ActionResult_bases, swig_ActionResult_base_names };
 
-static int _wrap_displayActionError(lua_State* L) {
+static int _wrap_displayActionError__SWIG_0(lua_State* L) {
+  int SWIG_arg = 0;
+  ActionResult *arg1 = 0 ;
+  std::string *arg2 = 0 ;
+  std::string temp2 ;
+  
+  SWIG_check_num_args("displayActionError",2,2)
+  if(!lua_isuserdata(L,1)) SWIG_fail_arg("displayActionError",1,"ActionResult const &");
+  if(!lua_isstring(L,2)) SWIG_fail_arg("displayActionError",2,"std::string const &");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_ActionResult,0))){
+    SWIG_fail_ptr("displayActionError",1,SWIGTYPE_p_ActionResult);
+  }
+  
+  temp2.assign(lua_tostring(L,2),lua_strlen(L,2)); arg2=&temp2;
+  displayActionError((ActionResult const &)*arg1,(std::string const &)*arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_displayActionError__SWIG_1(lua_State* L) {
   int SWIG_arg = 0;
   ActionResult *arg1 = 0 ;
   
@@ -4698,6 +4725,55 @@ static int _wrap_displayActionError(lua_State* L) {
 fail:
   lua_error(L);
   return SWIG_arg;
+}
+
+
+static int _wrap_displayActionError(lua_State* L) {
+  int argc;
+  int argv[3]={
+    1,2,3
+  };
+  
+  argc = lua_gettop(L);
+  if (argc == 1) {
+    int _v;
+    {
+      void *ptr;
+      if (lua_isuserdata(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_ActionResult, 0)) {
+        _v = 0;
+      } else {
+        _v = 1;
+      }
+    }
+    if (_v) {
+      return _wrap_displayActionError__SWIG_1(L);
+    }
+  }
+  if (argc == 2) {
+    int _v;
+    {
+      void *ptr;
+      if (lua_isuserdata(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_ActionResult, 0)) {
+        _v = 0;
+      } else {
+        _v = 1;
+      }
+    }
+    if (_v) {
+      {
+        _v = lua_isstring(L,argv[1]);
+      }
+      if (_v) {
+        return _wrap_displayActionError__SWIG_0(L);
+      }
+    }
+  }
+  
+  lua_pushstring(L,"Wrong arguments for overloaded function 'displayActionError'\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    displayActionError(ActionResult const &,std::string const &)\n"
+    "    displayActionError(ActionResult const &)\n");
+  lua_error(L);return 0;
 }
 
 
@@ -5961,7 +6037,7 @@ static const struct luaL_reg swig_commands[] = {
     { "setLocalizedContainerName", _wrap_setLocalizedContainerName},
     { "getCursorPosition", _wrap_getCursorPosition},
     { "loadGame", _wrap_loadGame},
-    { "displayActionError", _wrap_displayActionError},
+    { "displayActionError",_wrap_displayActionError},
     { "unitAttack",_wrap_unitAttack},
     { "unitMovement",_wrap_unitMovement},
     { "unitPutMine", _wrap_unitPutMine},

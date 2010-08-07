@@ -16,6 +16,7 @@
 #include "basestrm.h"
 
    class LuaCommandWriter : public AbstractCommandWriter {
+         int commandCounter;
       protected:
          void splitString( const ASCString& string );
          virtual void outputLine( const ASCString& line ) = 0;

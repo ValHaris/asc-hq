@@ -411,7 +411,7 @@ SavegameSelectionWindow::SavegameSelectionWindow( PG_Widget *parent, const PG_Re
 
 ASCString  selectSavegame( const ASCString& ext, bool load, bool overwriteMessage )
 {
-   SavegameSelectionWindow ssw( NULL, PG_Rect( 10, 10, 700, 500 ), ext, !load, overwriteMessage  );
+   SavegameSelectionWindow ssw( NULL, PG_Rect( -1, 10, 700, PG_Application::GetScreenHeight()-20), ext, !load, overwriteMessage  );
    ssw.Show();
    ssw.RunModal();
    return ssw.getFilename();

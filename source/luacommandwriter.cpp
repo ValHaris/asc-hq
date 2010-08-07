@@ -30,7 +30,7 @@ void LuaCommandWriter :: writeHeader()  {
    outputLine("map = asc.getActiveMap() \n");
 }
       
-LuaCommandWriter :: LuaCommandWriter ( )  {
+LuaCommandWriter :: LuaCommandWriter ( ) : commandCounter(0) {
 }
 
 void LuaCommandWriter :: printCommand( const ASCString& command ) {
@@ -38,7 +38,7 @@ void LuaCommandWriter :: printCommand( const ASCString& command ) {
       splitString(command);
    } else {
       outputLine("r = asc." + command + "\n" );
-      outputLine("if r:successful()==false then asc.displayActionError(r) end \n" );
+      outputLine("if r:successful()==false then asc.displayActionError(r, \"command " + ASCString::toString(++commandCounter) + "\") end \n" );
    }
 };
 

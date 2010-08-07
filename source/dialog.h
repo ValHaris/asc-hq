@@ -197,6 +197,6 @@ extern int editInt( const ASCString& title, int defaultValue, int minValue = 0, 
 
 
 class ActionResult;
-extern void displayActionError( const ActionResult& result );
+extern void displayActionError( const ActionResult& result, const ASCString& additionalInfo = "" );
 
 #endif

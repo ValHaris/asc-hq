@@ -2167,10 +2167,13 @@ int editInt( const ASCString& title, int defaultValue, int minValue, int maxValu
    return getid( title.c_str(), defaultValue, minValue, maxValue );
 }
 
-void displayActionError( const ActionResult& result )
+void displayActionError( const ActionResult& result, const ASCString& additionalInfo  )
 {
    ASCString s = getmessage(result.getCode());
    s += "\n" + result.getMessage();
+   if ( !additionalInfo.empty() )
+      s += "\n" + additionalInfo;
+   
    errorMessage( s );  
 }
 
