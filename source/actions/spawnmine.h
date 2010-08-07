@@ -35,6 +35,9 @@ class SpawnMine : public GameAction {
       int strength;
       int stackPosition;
       
+      int mapNetworkIdCounterBefore;
+      int mapNetworkIdCounterAfter;
+      
       SpawnMine( GameMap* map ) : GameAction( map ) {};
       template<class Child> friend GameAction* GameActionCreator( GameMap* map);
 

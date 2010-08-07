@@ -284,6 +284,7 @@ class GameMap {
             VehicleLookupCache vehicleLookupCache; 
             
             friend class SpawnUnit;
+            friend class SpawnMine;
             friend class GameMap;
                         
             
