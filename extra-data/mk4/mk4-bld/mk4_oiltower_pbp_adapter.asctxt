@@ -1,5 +1,5 @@
 Techadapter {
-   ; OilTowerMK4
+   ; Oiltower MK4
    Name = B1212
    TechnologiesRequired = 100020
 } TechAdapter

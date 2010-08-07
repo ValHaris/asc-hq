@@ -1,6 +1,6 @@
 technology {
-   Name = UHU
-   infotext = Forschungsprojekt abgeschlossen! UHU verfügbar!
+   Name = Uhu
+   infotext = Forschungsprojekt abgeschlossen! Uhu verfügbar!
    id = 1241
    RelatedUnitID = 1241
    parent = 100020

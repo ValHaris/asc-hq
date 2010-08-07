@@ -1,5 +1,5 @@
 BuildingType { 
-   Name = research institute
+   Name = Research Institute
    ID = 22915
    parent = 499 498
    

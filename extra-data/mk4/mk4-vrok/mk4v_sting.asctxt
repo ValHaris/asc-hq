@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = STING
+   Name = Sting
    ID = 1209
    parent = 296
 

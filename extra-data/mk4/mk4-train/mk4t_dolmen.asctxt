@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = DOLMEN
+   Name = Dolmen
    parent = 400 401 402 412
    ID = 1224
    

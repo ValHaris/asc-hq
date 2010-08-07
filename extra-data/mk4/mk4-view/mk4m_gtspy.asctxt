@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = GT-SPY
+   Name = GT Spy
    ID = 1297
    parent = 241
 

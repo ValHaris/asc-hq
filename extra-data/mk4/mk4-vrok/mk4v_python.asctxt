@@ -1,10 +1,10 @@
 VehicleType { 
-   Name = PYTHON
+   Name = Python
    ID = 1227
    parent = 298
 
    Description = Raketenpanzer
-   Infotext = [ Leistungsstarker Boden-Boden-Raketenpanzer mit veraenderten Abschussvorrichtungen und staerkerer Panzerung als der STING. ]
+   Infotext = [ Leistungsstarker Boden-Boden-Raketenpanzer mit veraenderten Abschussvorrichtungen und staerkerer Panzerung als der Sting. ]
    Picture = mk4v_python.png
    InfoImage = mk4v_python.jpg
    wreckageobject = 14227

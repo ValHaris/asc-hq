@@ -1,5 +1,5 @@
-VehicleType { 
-   Name = MEDUSA
+VehicleType {
+   Name = Medusa
    ID = 1220
    parent = 219
 

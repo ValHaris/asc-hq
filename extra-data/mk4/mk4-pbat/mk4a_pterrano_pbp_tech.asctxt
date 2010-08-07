@@ -1,6 +1,6 @@
 technology {
-   Name = Pterrano
-   infotext = Forschungsprojekt abgeschlossen! Pterrano verfügbar!
+   Name = Pterano
+   infotext = Forschungsprojekt abgeschlossen! Pterano verfügbar!
    id = 1250
    RelatedUnitID = 1250
    parent = 100020

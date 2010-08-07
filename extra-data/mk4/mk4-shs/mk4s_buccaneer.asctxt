@@ -1,7 +1,7 @@
 VehicleType { 
    ID = 1288
    parent = 419
-   Name = BUCCANEER
+   Name = Buccaneer
    
    Description = Minelayer-Icebreaker
    Infotext = [Stark motorisiertes Unterstuetzungfahrzeug. Es raeumt fuer andere Flotteneinheiten Gewaesser von Minen 

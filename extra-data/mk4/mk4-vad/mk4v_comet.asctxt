@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = COMET
+   Name = Comet
    ID = 1229
    parent = 217
 

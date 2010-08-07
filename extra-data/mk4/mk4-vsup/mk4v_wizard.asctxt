@@ -1,9 +1,9 @@
 VehicleType { 
-   Name = WIZARD
+   Name = Wizard
    ID = 1268
    parent = 335
    Description = Baufahrzeug
-   Infotext = [Das WIZARD Baufahrzeug ist absolut notwendig, beim Vorstoss tief
+   Infotext = [Das Wizard Baufahrzeug ist absolut notwendig, beim Vorstoss tief
               ins feindliche Territorium. Es ist als einziges Landfahrzeug
               in der Lage Gebäude zu errichten und so die Versorgung und eventuell
               Neuproduktion an die Front zu verlegen.]

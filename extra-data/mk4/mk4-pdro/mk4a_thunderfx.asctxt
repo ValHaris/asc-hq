@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = THUNDER FX
+   Name = Thunder FX
    parent = 425
    ID = 1244
    Description = Luft Jagddrohne

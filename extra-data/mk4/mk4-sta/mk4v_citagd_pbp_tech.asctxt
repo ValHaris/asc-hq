@@ -1,6 +1,6 @@
 technology {
-   Name = CitaGD
-   infotext = Forschungsprojekt abgeschlossen! Citadelle verfügbar!
+   Name = Cita GD
+   infotext = Forschungsprojekt abgeschlossen! Cita GD verfügbar!
    id = 14028
    RelatedUnitID = 14028
    parent = 100020

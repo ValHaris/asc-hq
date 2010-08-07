@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = SPECTRUM
+   Name = Spectrum
    parent = 325
    ID = 1248
 

@@ -1,5 +1,5 @@
 Techadapter {
    Name = 14009
-   ;Bezeichnung der verknüpften Technologie: Ultimate
+   ;Bezeichnung der verknüpften Technologie: GT Ultimate
    TechnologiesRequired = 14009
 } TechAdapter

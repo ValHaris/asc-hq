@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = GENOM
+   Name = Genom
    parent = 271
    ID = 1246
 

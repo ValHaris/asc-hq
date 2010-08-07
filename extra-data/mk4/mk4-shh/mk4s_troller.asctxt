@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = TROLLER
+   Name = Troller
    parent = 372
    ID = 14017
    

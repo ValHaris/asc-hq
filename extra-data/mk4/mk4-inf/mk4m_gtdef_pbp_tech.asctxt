@@ -1,6 +1,6 @@
 technology {
-   Name = GT-Def
-   infotext = Forschungsprojekt abgeschlossen! GT-Def verfügbar!
+   Name = GT Defender
+   infotext = Forschungsprojekt abgeschlossen! GT Defender verfügbar!
    id = 14008
    RelatedUnitID = 14008
    parent = 100020

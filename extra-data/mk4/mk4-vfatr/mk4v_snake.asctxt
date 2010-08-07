@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = SNAKE
+   Name = Snake
    parent = 336
    ID = 1208
    GuideSortHelp = 552 423 0 0 4 0 0 0 0 0

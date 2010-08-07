@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = ATLAS
+   Name = Atlas
    parent = 335
    ID = 1223
    

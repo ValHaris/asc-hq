@@ -1,16 +1,16 @@
 VehicleType { 
-   Name = PLANUM LL
+   Name = Paraplanum
    ID = 1239
    parent = 336 
 
    Description = Luftlandebaufahrzeug
    picture = mk4v_paraplanum.png
    WreckageObject = 14239
-   Infotext = [Nach den ersten Luftlandeeinsätzen mittels Paratrax- und Parademon-Einheiten, eröffnete sich ein großes Problem bei derartigen Operationen: Einmal abgeworfen, waren diese Einheiten nahezu komplett auf sich allein gestellt. Gelang es ihnen nicht, sich effektiv in einem Gebiet festzusetzen, oder wieder Anschluss an eigene, reguläre Truppenteile zu finden, waren sie mangels Nachschub und aufgrund nicht vorhandener Reparaturmöglichkeiten einem massiven feindlichen Gegenstoß nahezu schutzlos ausgeliefert. Nicht selten kam es dabei zu Situationen, in denen der gesamte abgesprungene Verband restlos aufgerieben wurde.
+   Infotext = [Nach den ersten Luftlandeeinsätzen mittels Paratec- und Parademon-Einheiten, eröffnete sich ein großes Problem bei derartigen Operationen: Einmal abgeworfen, waren diese Einheiten nahezu komplett auf sich allein gestellt. Gelang es ihnen nicht, sich effektiv in einem Gebiet festzusetzen, oder wieder Anschluss an eigene, reguläre Truppenteile zu finden, waren sie mangels Nachschub und aufgrund nicht vorhandener Reparaturmöglichkeiten einem massiven feindlichen Gegenstoß nahezu schutzlos ausgeliefert. Nicht selten kam es dabei zu Situationen, in denen der gesamte abgesprungene Verband restlos aufgerieben wurde.
 
-Um eine Möglichkeit zu schaffen, einmal abgesetzte Fallschirmtruppen auch während des Einsatzes unterstützen zu können, kam man auf die Idee, dies per Lufttransport zu bewerkstelligen. Transportflugzeuge, wie z.B. die Crux, benötigen zum aufsetzen jedoch zwingend eine Landebahn, die aber natürlich nicht immer und überall in gegnerischem Gebiet zur Verfügung steht. Daher brauchte man nun wiederum eine Einheit, die ebenfalls mit dem Fallschirm abspringen und vor Ort eine Landepiste errichten konnte. So war der Planum LL geboren.
+Um eine Möglichkeit zu schaffen, einmal abgesetzte Fallschirmtruppen auch während des Einsatzes unterstützen zu können, kam man auf die Idee, dies per Lufttransport zu bewerkstelligen. Transportflugzeuge, wie z.B. die Crux, benötigen zum aufsetzen jedoch zwingend eine Landebahn, die aber natürlich nicht immer und überall in gegnerischem Gebiet zur Verfügung steht. Daher brauchte man nun wiederum eine Einheit, die ebenfalls mit dem Fallschirm abspringen und vor Ort eine Landepiste errichten konnte. So war der Paraplanum geboren.
 
-Ausgestattet mit einem großen Fallschirm, sowie einem vergrößerten Stauraum für Baumaterialien, kann ein Planum LL aus einem geeigneten Lufttransporter abgeworfen werden und vor Ort mit dem Bau einer Landebahn beginnen, während Paratrax und Parademon das Gebiet und das Baufahrzeug vor näherrückenden Feindeinheiten sichern. Ist eine Landebahn erst einmal errichtet, können weitere Transportmaschinen landen und diejenigen Bodentruppen aussetzen, welche nicht über eine Para-Funktion verfügen. So kann eine Luftlandung sehr schnell auch durch schwere Panzer, Golem Types und Artillerie unterstützt, und somit ein Brückenkopf mit mehr Feuerkraft errichtet werden.]
+Ausgestattet mit einem großen Fallschirm, sowie einem vergrößerten Stauraum für Baumaterialien, kann ein Paraplanum aus einem geeigneten Lufttransporter abgeworfen werden und vor Ort mit dem Bau einer Landebahn beginnen, während Paratec und Parademon das Gebiet und das Baufahrzeug vor näherrückenden Feindeinheiten sichern. Ist eine Landebahn erst einmal errichtet, können weitere Transportmaschinen landen und diejenigen Bodentruppen aussetzen, welche nicht über eine Para-Funktion verfügen. So kann eine Luftlandung sehr schnell auch durch schwere Panzer, Golem Types und Artillerie unterstützt, und somit ein Brückenkopf mit mehr Feuerkraft errichtet werden.]
 
    Armor -= 150
    Features += paratrooper 

@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = ISG JAMMER
+   Name = ISG Jammer
    parent = 400 422
    ID = 12010
 

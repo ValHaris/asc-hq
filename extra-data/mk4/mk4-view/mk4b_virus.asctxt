@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = VIRUS
+   Name = Virus
    ID = 1276
    parent = 249
    Description = Sonarmine

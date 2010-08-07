@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = CITADELLE
+   Name = Citadelle
    parent = 337
    ID = 1235
    GuideSortHelp = 0 0 0 0 4 600 0 0 0 0

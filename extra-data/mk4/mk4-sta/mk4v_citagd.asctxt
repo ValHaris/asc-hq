@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = CITA GD
+   Name = Cita GD
    parent = 337 322
    ID = 14028
    Description = ground defence bunker

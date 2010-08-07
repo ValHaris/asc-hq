@@ -1,6 +1,6 @@
 technology {
-   Name = Paratrax
-   infotext = Forschungsprojekt abgeschlossen! Paratrax verfügbar!
+   Name = Paratec
+   infotext = Forschungsprojekt abgeschlossen! Paratec verfügbar!
    id = 1238
    RelatedUnitID = 1238
    parent = 100020

@@ -1,5 +1,5 @@
 ObjectType {
-   name = ISG NEUTRAL SOLO ZONE
+   name = ISG Neutral Solo Zone
    ID = 12005
    Weather = dry
    visible_in_fogOfWar = true

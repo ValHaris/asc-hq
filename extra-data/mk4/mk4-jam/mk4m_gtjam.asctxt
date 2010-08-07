@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = GT JAM
+   Name = GT Jam
    ID = 14024
    parent = 306
 

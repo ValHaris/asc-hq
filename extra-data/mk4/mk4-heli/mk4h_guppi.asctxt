@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = GUPPI
+   Name = Guppi
    parent = 384
    ID = 1252
    Description = Transporthubschrauber

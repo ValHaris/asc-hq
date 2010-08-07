@@ -3,12 +3,12 @@ VehicleType {
    ID = 14003
    SecondaryIDs = 14403
 
-   Name = DICTATOR 
+   Name = Dictator
    Description = Fahrende Festung
    Infotext = [Dieser riesige Panzer ist ueberdurchschnittlich stark gepanzert, verfuegt ueber weitreichende Kanonen und 
    eine eigene Raketenbatterie. Das hohe Gewicht fuehrt trotz geringer Marschgeschwindigkeit zu hohem Treibstoffverbrauch. 
-   Immerhin hat der DICTATOR im Unterschied zum IMPERATOR einen groeszeren Tank und damit eine groeszere Reichweite. 
-   Er ist damit im Vergleich zum IMPERATOR etwas besser als strategischer Durchbruchspanzer geeignet. Als Verteidiger 
+   Immerhin hat der Dictator im Unterschied zum Imperator einen groeszeren Tank und damit eine groeszere Reichweite. 
+   Er ist damit im Vergleich zum Imperator etwas besser als strategischer Durchbruchspanzer geeignet. Als Verteidiger 
    eingesetzt kann ihm allenfalls anhaltender schwerer Fernartilliebeschuss gefaehrlich werden. Aber selbst diese 
    Bedrohung kann er durch einen vorgetragenen Gegenangriff unter Einsatz seiner weitreichenden Geschuetze abwenden.]
    Picture = mk4v_dictator.png

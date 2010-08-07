@@ -1,6 +1,6 @@
 technology {
-   Name = GT JAM
-   infotext = Forschungsprojekt abgeschlossen! GT JAM verfuegbar!
+   Name = GT Jam
+   infotext = Forschungsprojekt abgeschlossen! GT Jam verfuegbar!
    id = 14024
    RelatedUnitID = 14024
    parent = 100020

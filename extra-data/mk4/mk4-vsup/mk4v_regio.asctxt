@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = REGIO
+   Name = Regio
    ID = 1270
    parent = 336
    

@@ -2,7 +2,7 @@ VehicleType {
    ID = 14032
    parent = 1234
 
-   Name = ORXER
+   Name = Orxer
    Description = [Prätorianischer Radarpanzer]
    Picture = mk4v_orxer.png
    InfoImage = mk4v_orxer.jpg

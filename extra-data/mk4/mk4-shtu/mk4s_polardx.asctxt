@@ -1,14 +1,14 @@
 VehicleType { 
-   Name = POLAR DX
+   Name = Polar DX
    parent = 355
    ID = 14014
    Description = Drohnen-Kreuzer
-   Infotext = [POLAR DX
+   Infotext = [Polar DX
 Im Zuge der Entwicklung der unbemannten Drohnen stellte sich heraus, dass die kampfstarken und hochspezialisierten Drohen die Schwaeche aufwiesen nur von Startbahnen aufsteigen zu können. Aufgrund ihrer geringen Reichweite waeren sie dort nur zum punktuellen Einsatz gelangt. Da sich eine signifikante Steigerung der Reichweite selbst bei einem drastischen Abbau der Drohnenbewaffnung nicht erreichen liesz, wurden alternative Konzepte zur Gebrauchswertsteigerung geprueft.
 Letztlich setzte sich der Vorschlag durch, bestehende mobile Waffensysteme so zu modifizieren, dass einzelne oder mehrere Drohnen von ihnen aus starten koennen. Im Rahmen des SX-Kampfwertsteigerungsprogrammes wurden die erforderlichen Modifikationen in Angriff genommen. Bei den see- und bodengestuetzten Abschussvorrichtungen wurde dies durch ein mit Feststofftreibpatronen betriebenes Katapapult realisiert. Bei luftgestuetzten Systemen wurden bestehende Bombenschächte vergroeszert und mit einer  nach aussen schwenkbaren Ausklinkvorrichtung versehen.   
 
-Die der Drohnenentwicklung angepasste Weiterentwicklung des POLAR ähnelt der DX-Variante der HYDRA-Reihe. Auch hier wurden 
- Landeplätze für Drohnen der THUNDER-Reihe eingebaut. Zugunsten dieser Umbauten mußte jedoch auf einen Teil der 
+Die der Drohnenentwicklung angepasste Weiterentwicklung des Polar ähnelt der DX-Variante der Hydra-Reihe. Auch hier wurden 
+ Landeplätze für Drohnen der Thunder-Reihe eingebaut. Zugunsten dieser Umbauten mußte jedoch auf einen Teil der 
 ursprünglichen Bewaffnung, das HeliDeck und das Sonarsystem verzichtet werden. Durch diesen Umstand, sowie durch den 
 Ausbau der Wasserbombenwerfer, ist er nunmehr wehrlos gegen feindliche U-Boote.]
    picture = mk4s_polardx.png

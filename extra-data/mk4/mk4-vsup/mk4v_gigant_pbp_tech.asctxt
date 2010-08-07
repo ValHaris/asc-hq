@@ -1,6 +1,6 @@
 technology {
-   Name = GIGANT
-   infotext = Forschungsprojekt abgeschlossen! GIGANT verfügbar!
+   Name = Gigant
+   infotext = Forschungsprojekt abgeschlossen! Gigant verfügbar!
    id = 14005
    RelatedUnitID = 14005
    parent = 100020

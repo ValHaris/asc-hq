@@ -1,6 +1,6 @@
 technology {
    Name = Vision RJ
-   infotext = Forschungsprojekt abgeschlossen! Vision GA verfügbar!
+   infotext = Forschungsprojekt abgeschlossen! Vision RJ verfügbar!
    id = 14019
    RelatedUnitID = 14019
    parent = 100020

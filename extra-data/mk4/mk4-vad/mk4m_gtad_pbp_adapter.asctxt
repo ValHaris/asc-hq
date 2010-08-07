@@ -1,5 +1,5 @@
 Techadapter {
    Name = 14002
-   ;Bezeichnung der verknüpften Technologie: GT-AD
+   ;Bezeichnung der verknüpften Technologie: GT AD
    TechnologiesRequired = 14002
 } TechAdapter

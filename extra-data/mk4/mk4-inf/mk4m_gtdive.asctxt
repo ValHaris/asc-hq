@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = GT DIVE
+   Name = GT Dive
    ID = 1237
    parent = 213
 

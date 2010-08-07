@@ -2,7 +2,7 @@ VehicleType {
    parent = 280
    ID = 14013
 
-   Name = USURIUS
+   Name = Usurius
    Description = Tarnbomber
    Infotext = [Informationen sind als -geheim- eingestuft.]
    Picture = mk4a_usurius.png

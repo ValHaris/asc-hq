@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = VISION SPY
+   Name = Vision Spy
    ID = 1272
    parent = 246
 

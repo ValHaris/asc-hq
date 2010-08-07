@@ -1,5 +1,5 @@
 Techadapter {
    Name = 14029
-   ;Bezeichnung der verknüpften Technologie: AtlasDX
+   ;Bezeichnung der verknüpften Technologie: Cita DX
    TechnologiesRequired = 14029
 } TechAdapter

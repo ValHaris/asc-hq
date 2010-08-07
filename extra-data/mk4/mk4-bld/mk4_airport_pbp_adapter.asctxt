@@ -1,5 +1,5 @@
 Techadapter {
-   ; AirPortMK4
+   ; Airport MK4
    Name = B10
    TechnologiesRequired = 100020
 } TechAdapter

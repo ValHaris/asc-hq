@@ -1,5 +1,5 @@
 Techadapter {
    Name = 14007
-   ;Bezeichnung der verknüpften Technologie: Hydra SX
+   ;Bezeichnung der verknüpften Technologie: Hydra DX
    TechnologiesRequired = 14007
 } TechAdapter

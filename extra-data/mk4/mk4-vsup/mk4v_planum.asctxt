@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = PLANUM
+   Name = Planum
    ID = 1201
    parent = 336
 

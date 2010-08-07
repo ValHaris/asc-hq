@@ -1,5 +1,5 @@
 BuildingType { 
-   Name = Protomaterie Reactor
+   Name = Protomaterie Reaktor
    parent = 499
    ConstructionStages = 1
    Weather = dry few_snow much_snow snow_and_ice

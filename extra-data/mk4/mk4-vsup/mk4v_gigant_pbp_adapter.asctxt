@@ -1,5 +1,5 @@
 Techadapter {
    Name = 14005
-   ;Bezeichnung der verknüpften Technologie: GIGANT
+   ;Bezeichnung der verknüpften Technologie: Gigant
    TechnologiesRequired = 14005
 } TechAdapter

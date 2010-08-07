@@ -1,7 +1,7 @@
 BuildingType { 
    ID = 12017
 
-   Name = ISG TRADESHIP
+   Name = ISG Tradeship
    Description = Lastenraumschiff
    InfoText = [ Das ISG TRADERSHIP ist ein Großraumtransporter. Es befördert deutlich mehr Einheiten als ein ISG Starship. Durch die enorme Masse kann es nur auf einem Raumhafen landen und besitzt keinen planetaren Sprungantrieb. An dessen Stelle wurde ein Atomkraftwerk und eine Servicestation eingerichtet.]
 

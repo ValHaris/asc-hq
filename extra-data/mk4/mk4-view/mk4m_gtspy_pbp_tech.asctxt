@@ -1,6 +1,6 @@
 technology {
-   Name = GT-Spy
-   infotext = Forschungsprojekt abgeschlossen! GT-Spy verfügbar!
+   Name = GT Spy
+   infotext = Forschungsprojekt abgeschlossen! GT Spy verfügbar!
    id = 1297
    RelatedUnitID = 1297
    parent = 100020

@@ -1,5 +1,5 @@
 BuildingType { 
-   Name = Protomaterie Reactor
+   Name = Protomaterie Reaktor
    parent = 499 498
    
    Transportation ->* BuildingType.Esmall

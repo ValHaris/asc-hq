@@ -1,5 +1,5 @@
 Techadapter {
    Name = B9
-   ;Bezeichnung der verknüpften Technologie: Raffinery
+   ;Bezeichnung der verknüpften Technologie: Raffinerie
    TechnologiesRequired = 100102
 } TechAdapter

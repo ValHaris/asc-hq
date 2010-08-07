@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = HYDRA
+   Name = Hydra
    parent = 352
    ID = 1264
 

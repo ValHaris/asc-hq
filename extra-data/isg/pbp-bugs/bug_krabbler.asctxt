@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = KRABBLER
+   Name = Krabbler
    ID = 12100
    parent = 1395 400 410
    AIJobOverride = fight

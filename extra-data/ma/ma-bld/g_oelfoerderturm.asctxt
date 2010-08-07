@@ -1,5 +1,5 @@
 BuildingType { 
-   Name = oiltower
+   Name = Oiltower
    parent = 499 498
    
    Transportation ->* BuildingType.Esmall

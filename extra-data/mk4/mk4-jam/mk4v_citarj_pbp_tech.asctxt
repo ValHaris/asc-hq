@@ -1,6 +1,6 @@
 technology {
    Name = Cita RJ
-   infotext = Forschungsprojekt abgeschlossen! Citadelle verfügbar!
+   infotext = Forschungsprojekt abgeschlossen! Cita RJ verfügbar!
    id = 14025
    RelatedUnitID = 14025
    parent = 100020

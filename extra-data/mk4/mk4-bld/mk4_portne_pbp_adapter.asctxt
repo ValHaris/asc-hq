@@ -1,5 +1,5 @@
 Techadapter {
-   ; PortNEMK4
+   ; Port NE MK4
    Name = B18
    TechnologiesRequired = 100020
 } TechAdapter

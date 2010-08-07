@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = SPHINX
+   Name = Sphinx
    ID = 1292
    parent = 224
 

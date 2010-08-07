@@ -1,5 +1,5 @@
 Techadapter {
    Name = 1241
-   ;Bezeichnung der verknüpften Technologie: UHU
+   ;Bezeichnung der verknüpften Technologie: Uhu
    TechnologiesRequired = 1241
 } TechAdapter

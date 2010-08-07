@@ -1,5 +1,5 @@
 Techadapter {
-   ; TrainingMK4
+   ; Training Center MK4
    Name = B23
    TechnologiesRequired = 100020
 } TechAdapter

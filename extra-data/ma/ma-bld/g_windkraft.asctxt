@@ -1,5 +1,5 @@
 BuildingType { 
-   Name = wind power plant
+   Name = Wind Power Plant
    ID = 22904
    parent = 498 499
    

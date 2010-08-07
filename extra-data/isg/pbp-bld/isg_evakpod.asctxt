@@ -1,6 +1,6 @@
 BuildingType { 
    ID = 12016
-   Name = ISG EvakPod
+   Name = ISG Evak Pod
 
    ConstructionStages = 1
    Weather = dry

@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = GHOST
+   Name = Ghost
    parent = 390
    ID = 1242
 

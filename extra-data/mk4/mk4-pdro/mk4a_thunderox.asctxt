@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = THUNDER OX
+   Name = Thunder OX
    parent = 425
    ID = 14001
    Description = AntiOrbital Jagddrohne

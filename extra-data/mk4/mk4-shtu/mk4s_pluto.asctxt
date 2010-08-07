@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = PLUTO
+   Name = Pluto
    parent = 365
    ID = 1267
 

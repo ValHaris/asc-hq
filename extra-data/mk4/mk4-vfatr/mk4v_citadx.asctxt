@@ -1,10 +1,10 @@
 VehicleType { 
-   Name = CITA DX
+   Name = Cita DX
    parent = 337
    ID = 14029
    
    Description = Drohnenservicebunker
-   Infotext = [CITA DX
+   Infotext = [Cita DX
 Im Zuge der Entwicklung der unbemannten Drohnen stellte sich heraus, dass die kampfstarken und hochspezialisierten Drohen 
 die Schwaeche aufwiesen nur von Startbahnen aufsteigen zu können. Aufgrund ihrer geringen Reichweite waeren sie dort nur 
 zum punktuellen Einsatz gelangt. Da sich eine signifikante Steigerung der Reichweite selbst bei einem drastischen Abbau der 
@@ -14,7 +14,7 @@ Drohnen von ihnen aus starten koennen. Im Rahmen des DX-Kampfwertsteigerungsprog
 Modifikationen in Angriff genommen. Bei den see- und bodengestuetzten Abschussvorrichtungen wurde dies durch ein mit 
 Feststofftreibpatronen betriebenes Katapapult realisiert. Bei luftgestuetzten Systemen wurden bestehende Bombenschächte 
 vergroeszert und mit einer  nach aussen schwenkbaren Ausklinkvorrichtung versehen.   
-Der CITA SX baut auf dem leistungsfaehigen CITA - Mobilbunker auf und dient als bodengestuetze mobile Drohnenservicestation. 
+Der Cita DX baut auf dem leistungsfaehigen Cita - Mobilbunker auf und dient als bodengestuetze mobile Drohnenservicestation. 
 Er ist in der Lage mehere Drohne zuegig aufzutanken und aufzumunitionieren und sie mittels Startkatapult starten zu lassen. 
 ]
 

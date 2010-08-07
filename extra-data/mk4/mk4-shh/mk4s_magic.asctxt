@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = MAGIC
+   Name = Magic
    parent = 372 
    ID = 14016
    

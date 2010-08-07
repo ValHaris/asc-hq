@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = GT-AD
+   Name = GT AD
    ID = 14002
    parent = 216
    Description = Air Defence Golem Type

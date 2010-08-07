@@ -1,10 +1,10 @@
 VehicleType { 
-   Name = UHU
+   Name = Uhu
    parent = 247
    ID = 1241
 
    Description = Aufklaerer
-   Infotext = [Der U.H.U. ist ein Aufklaerungsflugzeug mit guter Reichweite und grossartiger Feinderkennung. Der Flieger verfüght ueber die Moeglichkeit, sehr lange in der Luft zu bleiben. Fehlende Waffensysteme machen eine Eigenverteidigung jedoch unmöglich. Besonders ueber stark frequentiertem Feindgebiet muessen eigene Abfangjaeger den U.H.U. begleiten. ]
+   Infotext = [Der Uhu ist ein Aufklaerungsflugzeug mit guter Reichweite und grossartiger Feinderkennung. Der Flieger verfüght ueber die Moeglichkeit, sehr lange in der Luft zu bleiben. Fehlende Waffensysteme machen eine Eigenverteidigung jedoch unmöglich. Besonders ueber stark frequentiertem Feindgebiet muessen eigene Abfangjaeger den U.H.U. begleiten. ]
    Picture = mk4a_uhu.png
    InfoImage = mk4a_uhu.jpg
    wreckageobject = 1241 14841

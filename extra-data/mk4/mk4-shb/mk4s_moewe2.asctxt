@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = MOEWE 2
+   Name = Moewe 2
    ID = 14015
    parent = 367
 
