@@ -23,9 +23,38 @@
 
 #include "selectionwindow.h"
 #include "../paradialog.h"
+#include "../graphics/blitter.h"
 
-class FileInfo;
 class FileSelectionItemFactory;
+class SavegameSelectionItemFactory;
+
+class FileInfo
+{
+   public:
+      ASCString name;
+      ASCString location;
+      time_t modificationTime;
+      int level;
+      FileInfo( const ASCString& filename, const ASCString& filelocation, time_t time, int directorylevel  ) : name( filename), location( filelocation ), modificationTime( time ), level( directorylevel )
+      {}
+      FileInfo( const FileInfo& fi ) : name( fi.name ), location( fi.location ), modificationTime( fi.modificationTime ), level ( fi.level )
+      {}
+}
+;
+
+class SavegameWidget: public SelectionWidget {
+      FileInfo fileInfo;
+      ASCString time;
+      static Surface clippingSurface;
+      Surface& getClippingSurface() { return clippingSurface; };
+   public:
+      SavegameWidget( PG_Widget* parent, const PG_Point& pos, int width, const FileInfo* fi );
+      ASCString getName() const;
+   protected:
+      void display( SDL_Surface * surface, const PG_Rect & src, const PG_Rect & dst );
+
+};
+
 
 class FileSelectionWindow : public ASC_PG_Dialog {
       ASCString filename;
@@ -75,5 +104,55 @@ class FileSelectionItemFactory: public SelectionItemFactory  {
 
 extern ASCString  selectFile( const ASCString& ext, bool load, bool overwriteMessage = true );
 
-#endif
 
+class SavegameSelectionWindow : public ASC_PG_Dialog {
+      ASCString filename;
+      ASCString wildcard;
+      bool saveFile;
+      bool overwriteMessage;
+      SavegameSelectionItemFactory* factory;
+
+   protected:
+      void fileNameSelected( const ASCString& filename );
+      void fileNameEntered( ASCString filename );
+   public:
+      /*! \param wildcard may be several wildcards concatenated by ';' */
+      SavegameSelectionWindow( PG_Widget *parent, const PG_Rect &r, const ASCString& fileWildcard, bool save, bool overwriteMessage );
+      ASCString getFilename() { return filename; };
+};
+
+
+class SavegameSelectionItemFactory: public SelectionItemFactory  {
+   protected:
+      typedef deallocating_vector<FileInfo*> Items;
+      Items::iterator it;
+
+   private:
+      Items items;
+
+   public:
+      /** \param wildcard may be several wildcards concatenated by ';' */
+      SavegameSelectionItemFactory( const ASCString& wildcard );
+
+      static bool comp ( const FileInfo* i1, const FileInfo* i2 );
+
+      void restart();
+
+      int getLevel( const ASCString& name );
+
+      SelectionWidget* spawnNextItem( PG_Widget* parent, const PG_Point& pos );
+
+      SigC::Signal1<void,const ASCString& > filenameSelectedMouse;
+      SigC::Signal1<void,const ASCString& > filenameSelectedKeyb;
+      SigC::Signal1<void,const ASCString& > filenameMarked;
+
+      void itemMarked( const SelectionWidget* widget );
+
+      void itemSelected( const SelectionWidget* widget, bool mouse );
+};
+
+
+
+extern ASCString  selectSavegame( const ASCString& ext, bool load, bool overwriteMessage = true );
+
+#endif

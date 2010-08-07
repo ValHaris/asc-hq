@@ -348,7 +348,8 @@ bool loadGame( bool mostRecent )
             s1 = fi.name;
          }
    } else {
-      s1 = selectFile( savegameextension, true );
+     // s1 = selectFile( savegameextension, true );
+	   s1 = selectSavegame( savegameextension, true );
    }
 
    if ( !s1.empty() ) {
@@ -379,7 +380,7 @@ void saveGame( bool as )
       nameavail = 1;
 
    if ( as || !nameavail ) {
-      s1 = selectFile( savegameextension, false);
+      s1 = selectSavegame( savegameextension, false);
    } else
       s1 = actmap->preferredFileNames.savegame[actmap->actplayer];
 
@@ -933,7 +934,7 @@ void executeUserAction ( tuseractions action )
                if ( !actmap->player[ actmap->actplayer ].ai )
                   actmap->player[ actmap->actplayer ].ai = new AI ( actmap, actmap->actplayer );
 
-               savegame ( "aistart.sav", actmap );
+               savegame ( "aistart.sav", actmap);
                actmap->player[ actmap->actplayer ].ai->run( &getDefaultMapDisplay() );
             }
          }
@@ -967,7 +968,7 @@ void executeUserAction ( tuseractions action )
                actmap->player[ actmap->actplayer ].ai = new AI ( actmap, actmap->actplayer );
 
             if ( AI* ai = dynamic_cast<AI*>( actmap->player[ actmap->actplayer ].ai )) {
-               savegame ( "ai-bench-start.sav", actmap );
+               savegame ( "ai-bench-start.sav", actmap);
                ai->run( true, &getDefaultMapDisplay() );
             }
          }

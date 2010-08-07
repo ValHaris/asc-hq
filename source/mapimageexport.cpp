@@ -24,6 +24,7 @@
 #include "spfst.h"
 #include "iconrepository.h"
 #include "viewcalculation.h"
+#include "graphics/blitter.h"
 
 WholeMapRenderer :: WholeMapRenderer ( GameMap* actmap ) : gamemap ( actmap )
 {
@@ -93,5 +94,36 @@ void writemaptopcx ( GameMap* gamemap, bool addview )
    }
 }
 
+void writemaptostream ( GameMap* gamemap, int width, int height, tnstream& stream  )
+{
+	WholeMapRenderer wmr( gamemap );
+	wmr.render();
+
+	Surface dst = Surface::createSurface(width, height, 32, 0);
+    MegaBlitter< gamemapPixelSize, gamemapPixelSize,ColorTransform_None,ColorMerger_AlphaOverwrite,SourcePixelSelector_DirectZoom,TargetPixelSelector_Rect> blitter;
+    blitter.setSize( wmr.surface.w(), wmr.surface.h(), dst.w(), dst.h() );
+
+    SDL_Rect clip;
+    clip.h = height;
+    clip.w = width;
+    blitter.setTargetRect( clip );
+
+    blitter.blit( wmr.surface, dst, SPoint(0, 0) );
+
+    for ( int y = 0; y < dst.h(); ++y )
+       for ( int x = 0; x < dst.w(); ++x )
+       {
+    	   stream.writeInt( dst.GetPixel(x, y) );
+       }
+}
+
+void loadmapfromstream ( Surface& image, int width, int height, tnstream& stream  )
+{
+    for ( int y = 0; y < height; ++y )
+       for ( int x = 0; x < width; ++x )
+       {
+    	   image.SetPixel(x,y, stream.readInt());
+       }
+}
 
 

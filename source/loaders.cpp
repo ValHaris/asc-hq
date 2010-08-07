@@ -54,6 +54,7 @@
 #include "lua/luastate.h"
 #include "packagemanager.h"
 #include "i18n.h"
+#include "mapimageexport.h"
 
 #ifdef sgmain
 # include "ai/ai.h"
@@ -61,7 +62,7 @@
 
 
 
-const int actsavegameversion  = 0xff61;
+const int actsavegameversion  = 0xff62;
 const int minsavegameversion  = 0xff31;
 const int actmapversion       = 0xfe51;
 const int minmapversion       = 0xfe24;
@@ -1056,10 +1057,6 @@ GameMap* tmaploaders::loadmap ( const ASCString& name )
 
 
 
-
-
-
-
 void   tsavegameloaders::savegame( tnstream* strm, GameMap* gamemap, bool writeReplays )
 {
    PackageManager::storeData( gamemap );
@@ -1071,6 +1068,10 @@ void   tsavegameloaders::savegame( tnstream* strm, GameMap* gamemap, bool writeR
    stream->writeWord( fileterminator );
 
    stream->writeInt( actsavegameversion );
+
+   //An Image of the Map will now be saved to the file.
+   writemaptostream( spfld , 100, 100, *stream);
+
    writemap ();
 
    writemessages();
@@ -1087,23 +1088,54 @@ void   tsavegameloaders::savegame( tnstream* strm, GameMap* gamemap, bool writeR
 
    writeAI();
 
+
+
    stream->writeInt( actsavegameversion );
 
    spfld = NULL;
 }
 
 
-void         tsavegameloaders::savegame( GameMap* gamemap, const ASCString& name)
+void tsavegameloaders::savegame( GameMap* gamemap, const ASCString& name)
 { 
    tnfilestream filestream ( name, tnstream::writing );
    savegame ( &filestream, gamemap, true );
 }
 
+bool tsavegameloaders::loadMapimageFromFile( const ASCString& filename, Surface& image )
+{
+	try {
+	   tnfilestream filestream1( filename, tnstream::reading );
+	   image = Surface::createSurface(100,100,32,0);
 
+	   stream = &filestream1;
+
+	   stream->readString(); // was: description
+
+	   int w = stream->readWord();
+
+	   if ( w != fileterminator )
+	      throw tinvalidversion ( stream->getDeviceName(), fileterminator, w );
+
+	   int version = stream->readInt();
+
+	   if ( version >= 0xff62 ) {
+			   loadmapfromstream(image, 100,100, *stream);
+		   return true;
+	   }
+	   else {
+		   return false;
+	   }
+	}
+	catch(...)
+	{
+		return false;
+	}
+}
 
 GameMap* tsavegameloaders::loadGameFromFile( const ASCString& filename )
 {
-   tnfilestream filestream ( filename, tnstream::reading );
+   tnfilestream filestream( filename, tnstream::reading );
    tsavegameloaders gl;
    return gl.loadgame( &filestream );
 }
@@ -1123,7 +1155,14 @@ GameMap*          tsavegameloaders::loadgame( tnstream* strm )
 
    if (version > actsavegameversion || version < minsavegameversion ) 
       throw tinvalidversion ( strm->getDeviceName(), actsavegameversion, version );
-   
+
+   if ( version >= 0xff62 ) {
+	   //While loading the Savegame, it's not necessary to load the
+	   //Mapimage. So it will now be skipped.
+	   int temp;
+	   for ( int i = 0; i < (100*100); i++ )
+		   temp = stream->readInt();
+   }
 
    readmap ();
 
@@ -1411,11 +1450,11 @@ void  savemap( const ASCString& name, GameMap* gamemap )
 
 }
 
-void  savegame( const ASCString& name, GameMap* gamemap )
+void  savegame( const ASCString& name, GameMap* gamemap)
 {
    try {
       tsavegameloaders gl;
-      gl.savegame ( gamemap, name );
+      gl.savegame ( gamemap, name);
    }
    catch ( tfileerror err) {
       displaymessage( "error writing map to filename %s ", 1, err.getFileName().c_str() );
