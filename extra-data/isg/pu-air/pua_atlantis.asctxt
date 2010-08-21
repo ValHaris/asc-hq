@@ -5,7 +5,7 @@ VehicleType {
 
 	Description 		= MEGA Luftschiff
 	Infotext		= []
-	Picture			= pua_atlantis2.png
+	Picture			= pua_atlantis.png
 
 	View			= 0
 	Jamming			= 0
