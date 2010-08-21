@@ -39,6 +39,7 @@ Die Waffensysteme sind sowohl im Boden als auch im Luftkampf gut einsetbar. Besi
       Weapon1 ->* VehicleType.SY_Fighter_AD
       Weapon1.sound = lasergun.ogg 
       Weapon1.ReactionfireShots = 1
+      Weapon1.LaserRechargeRate	= 1
 
    } Weapons
 } VehicleType
