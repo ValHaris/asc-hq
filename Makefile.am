@@ -28,7 +28,7 @@ hgtag:
 	hg tag ASC`scripts/getversion source/strtmesg.cpp | sed s/\\\\./-/g`
 
 hgpbptag:
-	hg tag -f PBP
+	hg tag -f PBP ASC`scripts/getversion source/strtmesg.cpp | sed s/\\\\./-/g`
 
 dist-hook:
 	rm -rf `find $(distdir) -name CVS -o -name "*.ascdat" -o -name asc2_dlg.zip -o -name "*~" -o -name .cvsignore -o -name ".#*"`
