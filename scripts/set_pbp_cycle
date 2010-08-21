@@ -1,0 +1,32 @@
+#!/usr/bin/perl
+use strict;
+
+my $cycle = $ARGV[0];
+die "missing cycle number parameter" unless $cycle;
+
+
+sub processFile {
+	my $file = shift();
+	my $command = shift();
+	my @buf;
+	open (F, $file) or die "reading $file : $!";
+	@buf= <F>;
+	close F;
+
+	open (F, ">$file") or die "writing $file : $!";
+	foreach ( @buf ) {
+		eval ( $command );
+		print F $_;
+	}
+	close F;
+}
+
+my $rep1 = 's/2\.4\.\d+\.\d+/2.4.$cycle.0/;';
+
+processFile( "source/strtmesg.cpp", $rep1 );
+
+processFile( "data/ascdatacoreversion.asctxt", $rep1 );
+
+processFile( "extra-data/isg/pbp-parent/pbpversion.asctxt", $rep1 . 's/version\s*=\s*\d+$/version = ' . $cycle . '/i;');
+
+processFile( "source/dataversioncheck.cpp", $rep1 . 's/pbpversion = \"\d+\"/pbpversion = \"' . $cycle . '\"/i;' );
