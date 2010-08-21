@@ -94,7 +94,7 @@ SavegameWidget::SavegameWidget( PG_Widget* parent, const PG_Point& pos, int widt
    int col2 = 120;
    int HeightRow = 20;
 
-   Emboss* e = new Emboss( this, PG_Rect( 1, 1, Width()-5, Height()-2), true );
+   new Emboss( this, PG_Rect( 1, 1, Width()-5, Height()-2), true );
 
    PG_Label* lbl1 = new PG_Label( this, PG_Rect( col2, 10, Width()-col2-10, HeightRow ), fileInfo.name );
    lbl1->SetFontSize( lbl1->GetFontSize()+2 );
