@@ -34,11 +34,17 @@ Ein Laak kann nicht einfach abgeschossen werden, er muß praktisch zerstört werde
       Weapon0.Punch@MaxRange = 75
       Weapon0.Punch@MinRange = 100
       Weapon0.LaserRechargeCost.fuel = 130
+      Weapon0.HitAccuracy.d1 = 0
+			Weapon0.HitAccuracy.d2 = 100
+			Weapon0.HitAccuracy.d3 = 85
 
       Weapon1 ->* VehicleType.SY_Bomber_Big 
       Weapon1.Punch@MaxRange = 110
       Weapon1.Punch@MinRange = 120
       Weapon1.LaserRechargeCost.fuel = 120
+      Weapon1.HitAccuracy.d1 = 0
+			Weapon1.HitAccuracy.d2 = 100
+			Weapon1.HitAccuracy.d3 = 85
 
       Weapon2 ->* VehicleType.SY_Fighter_AD 
       Weapon2.MaxRange = 30
