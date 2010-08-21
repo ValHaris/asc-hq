@@ -123,12 +123,12 @@ ID 12525 Greg3
 ID 12526 Ares
 ID 12527 Sirhacke  Sirtaki 	Support		(ehemals Zapp)
 ID 12528 Prophet
-off12529 Khan      Pussycat
+ID 12529 MoS      Pussycat
 off12530 Grom2     Grimm
 ID 12531 Shadow     Shadow
-ID 12532 Gambit
+ID 12532 Gambit	    Gambit
 off12533 Bundy      Pak-Fa
-off12534 Rhiow      Beshaba
+ID 12534 Gambit     Beshaba
 off12535 Lucius     Neptun
 ID 12536 Kral       Kormoran
 ID 12537 Excalibur  Clustius
@@ -154,7 +154,7 @@ ID 12553 BananJoe   Omega
 off 12554 Chewie     DoomsdayXXL
 ID 12555 NoBear     Exodus
 ID 12556 vanBuckel  Speed
-ID 12557 Undertaker Azrael
+ID 12557 BananJoe2 Azrael
 ID 12558 BloodyMary Damokles
 ID 12559 Redhorse2  Cleaner
 ID 12560 GAMER      SYG
@@ -166,7 +166,7 @@ ID 12565 Localhorst KMAX
 ID 12566 Omega      Okeanos
 ID 12567 Taxi
 ID 12568 Shadow(3)  Wellos
-ID 12569 Gambit(2)  Poor
+off12569 Gambit(2)  DIVORCED
 ID 12570 Cataldo    Serpente
 ID 12571 Setupman   Onion-X
 ID 12572 Banana(3)  Baal
@@ -177,3 +177,6 @@ ID 12576 Bahunabega DragonFly
 ID 12577 Unknown    Hermelin
 ID 12578 SDLG	    Seine Eminenz
 ID 12579 Bajuware   Atlantis
+ID 12580 Wult(2)    Beowult
+ID 12581 KlackKlickKlick   Xoras
+ID 12582 DrStrangelove   HAC

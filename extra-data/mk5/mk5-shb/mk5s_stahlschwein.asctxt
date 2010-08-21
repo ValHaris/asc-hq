@@ -12,6 +12,7 @@ VehicleType {
    Transportation ->* VehicleType.noTrans 
    Tank.Material = 0
    Features += move_after_attack icebreaker
+   TerrainAccess ->* VehicleType.icebreaker_terrain
 
    WaitForAttack = true
    Weapons {

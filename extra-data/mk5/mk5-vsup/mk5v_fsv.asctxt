@@ -1,7 +1,7 @@
 VehicleType { 
    Name = FSV 4x4
    ID = 1412
-   parent = 400 401 402 411
+   parent = 400 401 402 335
 
    Description = Offroad Transporter
    Infotext = [Das "Maedchen fuer Alles". Der FSV 4x4 ist das Landtransportfahrzeug der "Outlaw". Dementsprechend hat es vielseitige Aufgaben zu uebernehem. Truppen-, Waffen-, Material- und Treibstofftransport, ausserdem den Transport der Defensivwaffen. Er ist nur schwach gepanzert und hat nur ein MG zur Verteidigung. Niemals offensiven Kraeften aussetzen.]
