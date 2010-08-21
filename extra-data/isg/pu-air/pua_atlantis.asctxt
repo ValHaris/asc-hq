@@ -5,7 +5,7 @@ VehicleType {
 
 	Description 		= MEGA Luftschiff
 	Infotext		= []
-	picture			= pua_atlantis.png
+	Picture			= pua_atlantis2.png
 
 	View			= 0
 	Jamming			= 0
@@ -41,18 +41,20 @@ VehicleType {
 		MaxLoadableMass 		= 400
 		MaxLoadableUnitSize 		= 290	
 	
-		CategoriesNOT = heavy_wheeled_vehicle heavy_tracked_vehicle light_ship medium_ship heavy_ship rail_vehicle hoovercraft building_turret_object
+		CategoriesNOT = heavy_wheeled_vehicle heavy_tracked_vehicle light_ship medium_ship heavy_ship rail_vehicle hoovercraft
 
 		EntranceSystemNum 		= 3
 		EntranceSystem0	->* VehicleType.GrIO
 
 		Entrancesystem1 ->* VehicleType.carrier
-		CategoriesNOT = default
 		Entrancesystem1.UnitHeightRel	= 0
 		Entrancesystem1.UnitHeightAbs	= medium_level_flight high_level_flight
 		Entrancesystem1.ContainerHeight	= medium_level_flight high_level_flight
+		EntranceSystem1.CategoriesNOT = default
 
 		EntranceSystem2 ->* VehicleType.container_in_out
+		EntranceSystem2.CategoriesNOT = default trooper light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle light_aircraft medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship helicopter hoovercraft
+		
 		
 	} Transportation	
 
@@ -72,13 +74,10 @@ VehicleType {
 		Weapon2.Punch@MaxRange			= 70
 		Weapon2.Punch@MinRange			= 75
 		Weapon2.Ammo 				= 5
-		Weapon2.ReactionFireShots 		= 2
 		Weapon2.MinRange			= 10
 		Weapon2.MaxRange			= 30
-		
-		Weapon2.HitAccuracy.u2			= 0
-		Weapon2.HitAccuracy.d2			= 0		
-		
+		Weapon2.HitAccuracy.u2			= 80
+		Weapon2.HitAccuracy.d2			= 80
 		Weapon3	->* VehicleType.AmmoMG
 		Weapon3.Ammo					= 100	
 		Weapon4	->* VehicleType.AmmoCannon
