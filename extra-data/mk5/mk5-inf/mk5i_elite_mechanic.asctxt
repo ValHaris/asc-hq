@@ -13,6 +13,9 @@ VehicleType {
    WreckageObject = 1416
 
    Transportation ->* VehicleType.TransTurretBig 
+   Transportation.EntranceSystemNum = 2
+   Transportation.EntranceSystem1 ->* VehicleType.SubIO
+   
    Features += construct_specific_buildings construct_vehicles paratrooper ExternalRepair automatic_resource_searching ExternalFuelTransfer ExternalMaterialTransfer ExternalAmmoTransfer
    ResourceDrillingRange = 2
    SelfRepairRate = 20
@@ -24,6 +27,8 @@ VehicleType {
    } Tank
    Movement = 0 44 0 55 0 0 0 0 
    Height = submerged ground_level 
+   
+   TerrainAccess.terrain_kill = lava
 
    Construction { 
       Buildings = 26 35-37 1400 1401
