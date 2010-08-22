@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = SPACESHUTTLE
+   Name = Spaceshuttle
    parent = 231
    ID = 521
 

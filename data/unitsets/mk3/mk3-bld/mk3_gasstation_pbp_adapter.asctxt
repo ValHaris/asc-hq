@@ -1,5 +1,5 @@
 Techadapter {
-   ; GasStationMK3
+   ; Gas Station MK3
    Name = B6
    TechnologiesRequired = 100010
 } TechAdapter

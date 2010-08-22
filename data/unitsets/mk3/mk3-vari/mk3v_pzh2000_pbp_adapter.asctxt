@@ -1,5 +1,5 @@
 Techadapter {
-   ; PzH
+   ; PzH 2000
    Name = 605
    TechnologiesRequired = 605
 } TechAdapter

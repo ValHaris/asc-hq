@@ -3,7 +3,7 @@ ObjectType {
 
    ID = 15823
 
-   Name = Seals Wreck
+   Name = Navy Seals Wreck
    RemovalCost { 
       Energy = 0
       Material = -100

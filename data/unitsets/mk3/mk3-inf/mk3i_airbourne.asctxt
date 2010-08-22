@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = AIRBORNE
+   Name = Airborne
    ID = 613
    WreckageObject = 15613
    parent = 207

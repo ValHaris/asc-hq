@@ -3,7 +3,7 @@ ObjectType {
 
    ID = 15593
 
-   Name = Notstrom Wreck
+   Name = Notstromaggregat Wreck
 
    dry { 
       picture = mk3b_notstrom_w.png 1

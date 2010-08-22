@@ -1,5 +1,5 @@
 Techadapter {
-   ; PortNorthMK3
+   ; Port North MK3
    Name = B16
    TechnologiesRequired = 100010
 } TechAdapter

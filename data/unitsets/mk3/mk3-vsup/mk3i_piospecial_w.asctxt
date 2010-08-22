@@ -3,7 +3,7 @@ ObjectType {
 
    ID = 15549
 
-   Name = Special Pioneer Wreck
+   Name = Special Pioneers Wreck
 
    dry { 
       picture = mk3i_piospecial_w.png 1

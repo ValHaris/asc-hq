@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = LONGTRACK
+   Name = Longtrack
    ID = 557
    parent = 242
 

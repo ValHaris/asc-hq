@@ -1,5 +1,5 @@
 Techadapter {
-   ; SmallVehicleMK3
+   ; Small Vehicle Plant MK3
    Name = B12
    TechnologiesRequired = 100010
 } TechAdapter

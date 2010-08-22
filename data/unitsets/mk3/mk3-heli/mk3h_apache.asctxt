@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = APACHE
+   Name = Apache
    parent = 382
    ID = 504
    WreckageObject = 15504 15804

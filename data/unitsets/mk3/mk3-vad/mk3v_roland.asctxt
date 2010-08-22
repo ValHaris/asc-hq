@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = ROLAND
+   Name = Roland
    ID = 532
    WreckageObject = 15532
    parent = 220

@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = KORNUTA
+   Name = Kornuta
    ID = 545
    WreckageObject = 15545
    parent = 308

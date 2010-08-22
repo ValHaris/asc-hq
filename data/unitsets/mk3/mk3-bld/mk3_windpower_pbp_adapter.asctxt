@@ -1,5 +1,5 @@
 Techadapter {
-   ; WindPowerMk3
+   ; Wind Power Plant Mk3
    Name = B39
    TechnologiesRequired = 100010
 } TechAdapter

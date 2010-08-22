@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = IOWA
+   Name = Iowa
    ID = 541
    WreckageObject = 15541
    parent = 357

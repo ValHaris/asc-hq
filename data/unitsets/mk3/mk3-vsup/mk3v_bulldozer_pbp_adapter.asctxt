@@ -1,5 +1,5 @@
 Techadapter {
-   ; Bulldozer
+   ; Bulldozer D7G
    Name = 540
    TechnologiesRequired = 540
 } TechAdapter

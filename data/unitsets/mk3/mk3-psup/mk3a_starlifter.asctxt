@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = STARLIFTER
+   Name = Starlifter
    parent = 401 402 415 496
    ID = 519
    WreckageObject = 15519 15819

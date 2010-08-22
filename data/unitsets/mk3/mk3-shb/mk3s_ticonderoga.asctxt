@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = TICONDEROGA
+   Name = Ticonderoga
    parent = 356
    ID = 566
    WreckageObject = 15566

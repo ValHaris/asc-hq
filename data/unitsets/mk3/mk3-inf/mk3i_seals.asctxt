@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = NAVY SEALS
+   Name = Navy Seals
    ID = 523
    WreckageObject = 15523
    parent = 206

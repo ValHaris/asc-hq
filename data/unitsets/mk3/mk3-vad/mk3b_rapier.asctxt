@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = RAPIER
+   Name = Rapier
    ID = 531
    WreckageObject = 15531
    parent = 222

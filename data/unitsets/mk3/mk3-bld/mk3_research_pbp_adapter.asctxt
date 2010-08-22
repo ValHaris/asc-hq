@@ -1,5 +1,5 @@
 Techadapter {
-   ; ResearchMK3
+   ; Research MK3
    Name = B22
    TechnologiesRequired = 100010
 } TechAdapter

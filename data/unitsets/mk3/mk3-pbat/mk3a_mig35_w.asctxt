@@ -3,7 +3,7 @@ ObjectType {
 
    ID = 15506
 
-   Name = MiG35 Wreck
+   Name = MiG-35 Wreck
 
    dry { 
       picture = mk3a_mig35_w.png 1

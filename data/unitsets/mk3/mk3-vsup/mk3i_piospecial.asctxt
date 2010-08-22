@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = SPECIAL PIONEERS
+   Name = Special Pioneers
    ID = 549
    WreckageObject = 15549
    parent = 400 401 402 410

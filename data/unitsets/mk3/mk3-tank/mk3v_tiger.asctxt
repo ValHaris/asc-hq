@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = TIGER
+   Name = Tiger
    ID = 595
    WreckageObject = 15595
    parent = 290

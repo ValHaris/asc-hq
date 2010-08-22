@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = HAWKEYE
+   Name = Hawkeye
    parent = 400 401 402 414 498
    ID = 501
    WreckageObject = 15501 15801

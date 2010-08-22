@@ -3,7 +3,7 @@ ObjectType {
 
    ID = 15544
 
-   Name = PRD Wreck
+   Name = PRD 12 Wreck
 
    RemovalCost { 
       Energy = 0

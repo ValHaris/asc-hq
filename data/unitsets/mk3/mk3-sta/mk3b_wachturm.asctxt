@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = WACHTURM
+   Name = Wachturm
    parent = 318
    ID = 572
    WreckageObject = 15572

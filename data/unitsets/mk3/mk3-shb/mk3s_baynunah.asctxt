@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = BAYNUNAH
+   Name = Baynunah
    parent = 352
    ID = 582
    WreckageObject = 15582

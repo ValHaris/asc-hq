@@ -3,7 +3,7 @@ ObjectType {
 
    ID = 15555
 
-   Name = Leopard1 Wreck
+   Name = Leopard 1 Wreck
 
    dry { 
       picture = mk3v_leopard1_w.png 1

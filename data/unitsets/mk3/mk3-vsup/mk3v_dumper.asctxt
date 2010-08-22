@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = DUMPER
+   Name = Dumper
    parent = 335
    ID = 577
    WreckageObject = 15577
@@ -8,7 +8,7 @@ VehicleType {
    picture = mk3v_dumper.png
    InfoImage = mk3v_dumper.jpg
    GuideSortHelp = 550 0 0 0 3 0 0 0 0 0
-   Infotext = [DUMPER
+   Infotext = [Dumper
 
    Der Dumper transportiert große Mengen Material an die Front zu den verschiedenen Baueinheiten. Dieser Transporter ist recht schwach gepanzert und hat keine Verteidigungsmöglichkeiten daher keinen direkten Beschuss aussetzen.
    Material transport unit

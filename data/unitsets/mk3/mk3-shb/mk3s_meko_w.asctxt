@@ -3,7 +3,7 @@ ObjectType {
 
    ID = 15588
 
-   Name = Meko Wreck
+   Name = Meko A200 Wreck
 
    dry { 
       picture = mk3s_meko_w.png 1

@@ -1,11 +1,11 @@
 VehicleType { 
-   Name = POMORNIK
+   Name = Pomornik
    parent = 371
    ID = 589
    WreckageObject = 15589 15889
    
    Description = air cushion vehicle
-   InfoText = [POMORNIK
+   InfoText = [Pomornik
    
    Luftkissenfahrzeugen stehen sowohl ebene Flächen als auch Flüsse und küstennahe Gewässer als Operationsgebiet offen. Da sie hierbei auch noch hohe Geschwindigkeiten erreichen, sind sie ideale Transporter für amphibische Operationen und Truppenverlegungen. Hinzu kommt eine mittlere Panzerung und mittlere MG-Bewaffnung. Der Laderaum ist sehr groß und fasst bis zu 4 Einheiten der verschiedensten Klassen. Ebenso können erhebliche Mengen an Treibstoff , Material und Munition mitgeführt und benachbarte Einheiten im Kampfgebiet, allerdings nur intern, befüllt werden. Hinweis: Aufgrund ihrer Wichtigkeit sollten direkte Kampfhandlungen dieser Einheit unbedingt vermieden werden!
    

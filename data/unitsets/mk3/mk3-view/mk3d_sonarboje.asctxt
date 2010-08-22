@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = SONARBOJE
+   Name = Sonarboje
    parent = 249
    ID = 621
    
