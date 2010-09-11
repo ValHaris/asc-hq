@@ -5,7 +5,6 @@ VehicleType {
 
    Description = espionage unit
    Picture = sy_ent.pcx
-   WreckageObject = 1301
    Infotext = [Diese kleinen Sonden sind effektive Unterstützungseinheiten, sowohl im Kampf gegen getarnte Gegner, als auch bei der Aufspürung von U-Booten. Durch die fehlenden Schiffstechnologienen und dadurch auch fehlender U-Boottechnologie mußte ein wirksamer Schutz gegen unter Wasser befindliche Einheiten entwickelt werden. Da die normalen Fluzeugsensoren des Tris nicht unter Wasser funktionieren, wurde der Ent dahingehend modifiziert. Er sucht nun für die Xebu-Jäger die Ziele, welche diese dann effizient bekämpfen können. Die Sonde ist klein, leicht, nur schwer zu entdecken
  und passt in jeden Hangar. Sie verfügt über keine Landevorrichtung und kann auch nicht im Orbit agieren und ist daher zwingend auf eine Trägereinheit angewiesen. Obwohl die Sonde im Kergträger gebaut werden kann , wird dort primär der Tris zur Überwachung eingesetzt. Der Ent ist daher auf dem Moor oder dem Nog zu finden und auch die YBX Station kann die Ents bauen und versorgen.
 ]

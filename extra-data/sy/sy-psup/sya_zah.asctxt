@@ -6,7 +6,6 @@ VehicleType {
    Description = construction unit
    Infotext = [Dieser Bauschweber ist ein riesieges mächtiges Fluggerät. Zwei Kugelförmige Tanks beinhalten die verschiedensten Rohmaterialien für den Bau von Gebäuden und Verteidigungsanlagen. Aus der Unterseite ragen riesiege Tentakeln, die über integrierte Röhrensysteme die Materialienen vor Ort zu den verschiedensten Bauteilen zusammenfügen und modelieren können. Der Bauschweber ist ausschliesslich von Arbeitern bevölkert. So effektiv er auch im Errichten von Gebäuden ist, so ineffektiv ist seine Bewaffnung und seine Verteidigungsbereitschaft. Er muß zwingend beschützt werden und sollte unter keinen Umständen in Kampfhandlungen verwickelt werden. Die gelagerten Rohstoffe sind dafür zu wertvoll. Beobachtungen sagen aus, das SY-Arbeiter gegnerische Einheiten vollständig ignorieren. Allerdings sind sie meistens niemals wirklich alleine unterwegs. Ein Angriff auf SY Arbeiter hatte in den meisten Fällen fatale Konsequenzen. Plötzlich erschienen aus dem Nichts SY Jäger und löschten die Angreifer brutal aus, selbst wenn es sich nur um ein Versehen gehandelt hat.]
    Picture = sya_zah.png
-   WreckageObject = 1301
 
    Features += construct_specific_buildings construct_vehicles ExternalFuelTransfer ExternalMaterialTransfer
    Armor = 500

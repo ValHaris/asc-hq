@@ -5,7 +5,6 @@ VehicleType {
 
    Description = light fighter
    Picture = sya_hyter.png
-   WreckageObject = 1303
    Infotext = [Die athmosphaerentauglichen Triebwerke ermoeglichen sehr gute
               Beschleunigungswerte, sind aber nur bedingt in der Lage den Hyter
               ausserhalb der Lufthuelle zu bewegen.]
