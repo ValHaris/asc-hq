@@ -5,7 +5,21 @@ VehicleType {
    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
 
    Description = Geschuetzturm
-   Infotext = []
+   Infotext = [
+   Der Ionstar ist der stärkste Geschützturm, über den das Heer der Cromoner verfügen kann. Ursprünglich als reine Küstenbatterie konzipiert, sollte es dem Ionstar möglich sein, mit seinem überlangen 125mm-Geschütz sämtliche Schiffe wirkungsvoll bekämpfen zu können, noch ehe sie selbst in Feuerreichweite kamen. Doch spätestens seit dem Auftauchen schwerer Kreuzer und Schlachtschiffe auf See, kann dieses Konzept getrost als veraltet bezeichnet werden, da die großen Kanonen dieser schweren Pötte der des Ionstar inzwischen schon weit überlegen sind. Gegen überschwere Schiffseinheiten wird der Ionstar damit in der Neuzeit immer den Kürzeren ziehen. Gegen kleine und mittlere Schiffe jedoch, bis hin zum normalen Durchschnitts-Kreuzer, kann er auch heute noch sehr wirkungsvoll eingesetzt werden.
+
+
+Heutzutage greift der Ionstar vermehrt auch in den reinen Landkampf ein. Es geht die Legende um, dass ein in die Enge getriebener Kommandant der Heerestruppen aus der Not heraus eine auf dem Weg zur Küste befindliche Ladung Ionstars kurzerhand einkassierte, direkt an die Front umleitete und sie auf eiligst errichtete Fundamente stellen ließ. Mit der geballten Feuerkraft dieser Geschütztürme gelang es ihm schließlich, den gegnerischen Angriff in allerletzter Sekunde abzuschlagen. Seit diesem Tage tun cromonische Ionstar auch innerhalb der Heerestruppen regulär ihren Dienst. Meist in einem Gigant oder Lurat transportiert, werden sie in der hinteren Reihe oft auf gängige Turret-Fundamente gestellt, um den eigenen Truppen einen sicheren Rückhalt geben zu können, oder um die vordersten Linien bei Einbruchsversuchen in die gegnerische HKL zu unterstützen.
+
+
+Dabei kommen ihm seine starke Panzerung, seine hohe Feuerkraft, sowie seine Flexibilität sehr zu gute! Seine Hülle besteht aus einer enormen Menge an Stahlbeton, ummantelt von einer widerstandsfähigen Metalllegierung. Dadurch erhöhte sich sein Gewicht zwar drastisch - den Konstrukteuren gelang es mit dieser Kombination jedoch, auf sehr kostengünstige Weise einen Panzerungswert zu erreichen, der dem eines Sam-3-Panzers entspricht. Dadurch ist er in der Anschaffung sogar noch günstiger, als sein kleiner Bruder - der Skull.
+
+
+Sein Hauptgeschütz hat einen Wirkungsbereich, der dem der Fortress-Geschütze gleich kommt. Damit feuert er sogar noch weiter, als die Artillerieeinheiten der Pulsar-Klasse. Außerdem sind seine Granaten noch ein ganzes Stück durchschlagskräftiger, als alles andere, was das cromonische Heer sonst an ballistischen Geschützen zu bieten hat. Ein weiterer Vorteil ist sein leistungsfähiges RF-Gerät, das faktisch im Dauerbetrieb arbeiten kann. In Verbindung mit einer speziellen Reserveladevorrichtung kann der Ionstar daher zweimal schnell hintereinander auf plötzlich auftauchende Gegner feuern. Zudem wurde auf der Spitze des Turmes noch ein leichtes Maschinengewehr mit geringer Reichweite installiert, welches den Ionstar nicht nur vor Tieffliegern schützen kann, sondern auch vor leichten Infanterieeinheiten, die dem Geschützturm z.B. mit Hafthohlladungen zu Leibe rücken wollen.
+
+
+Sein teilstationäres Turretdasein ist Fluch und Segen zugleich! Zwar ist er den festinstallierten Bunkern der anderen Völker oftmals in Reichweite und Durchschlagskraft unterlegen - andererseits kann er mit ein wenig Aufwand seine Position immer wieder variieren und sich so den sich ständig ändernden Gegebenheiten einer Schlacht flexibel anpassen. Es sei abschließend noch erwähnt, dass ein Ionstar nicht direkt nach dem Aussetzen auf ein Turret-Fundament feuern kann, da er erst aufwändig ausgerichtet werden muss, um auch bei gößeren Schussdistanzen eine optimale Treffergenauigkeit erzielen zu können.
+   ]
    picture = mk4b_ionstar.png
    InfoImage = mk4b_ionstar.jpg
    wreckageobject = 1222
