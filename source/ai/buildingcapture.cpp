@@ -331,9 +331,10 @@ void AI :: checkConquer( )
 
    // do something useful with units that are not used for capturing buildings
    for ( Player::VehicleList::iterator vi = getPlayer().vehicleList.begin(); vi != getPlayer().vehicleList.end(); vi++ )
-      if ( (*vi)->aiparam[getPlayerNum()]->getJob() == AiParameter::job_conquer &&
-           (*vi)->aiparam[getPlayerNum()]->getTask() == AiParameter::tsk_nothing )
-           (*vi)->aiparam[getPlayerNum()]->setNextJob();
+      if ( (*vi)->aiparam[getPlayerNum()] )
+         if ( (*vi)->aiparam[getPlayerNum()]->getJob() == AiParameter::job_conquer &&
+            (*vi)->aiparam[getPlayerNum()]->getTask() == AiParameter::tsk_nothing )
+            (*vi)->aiparam[getPlayerNum()]->setNextJob();
 
 }
 

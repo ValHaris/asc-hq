@@ -129,6 +129,7 @@ class tnetworkloaders : public tgameloaders {
 
 class GameFileInformation {
    public:
+      GameFileInformation() : turn(0) {};
       ASCString maptitle;
       ASCString playername;
       int turn;
