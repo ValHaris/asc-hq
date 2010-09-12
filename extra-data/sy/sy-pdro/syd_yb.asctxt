@@ -5,7 +5,7 @@ VehicleType {
    
    Description = small terraformer
    Picture = syd_yb.png
-   WreckageObject = 982
+   WreckageObject = 983 1311
    Infotext = [Diese Sonde hat nur einen Zweck. Vernichtung. Im Grunde ist es ein fliegender Sprengsatz, der bei Ankuft im Zielgebiet detoniert. Die besitzt nur die minimalsten Systeme , die zu diesem Zweck erforderlich sind. Die Panzerung hält praktisch nur einen Faustschlag aus. Der Treibstoff reicht nur für eine geringe Entfernung. Das Triebwerk ist nicht abgeschirmt und somit leicht aufspürbar. Sie besitz keine Scanner und kann nur in aufgeklärten Gebiet verwendet werden. Effektiv einsetzbar ist diese Einheit nur, wenn der Gegner über keine Defensiveinrichtungen in der Gegend besitzt. Ebenso muß bedacht werden, das diese Einheit nur 1x und ohne Wiederkehr eingesetzt werden kann. Neue Typen dieser Waffe sind mit einem kleinen Terraform-Sprengkopf ausgerüstet. Die Auswirkungen sind lokal begrenzt.]
 
    ConstructionCost { 

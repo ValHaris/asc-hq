@@ -5,7 +5,7 @@ VehicleType {
 
    Description = genmanipulierter Riesenwurm
    Picture = syi_ad.png
-   WreckageObject = 983 1311
+   WreckageObject = 1308
 ;   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
    Infotext = [Der AD ist ein genmanipulierter Riesenwurm. In seinem natürlichen Zustand ist seine Erscheinung ebenfalls eine sehr bemerkenswerte Erfahrung. Es lebt in der Erde 
    und nur die Maulöffnung schaut aus er Erde hervor. Die größte Exemplate werden bis zu 20m lang. Sie jagen ihr Beute, indem sie kleine Larven gezieht auf die Opfer abschiessen. 
