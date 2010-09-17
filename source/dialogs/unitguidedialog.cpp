@@ -497,10 +497,10 @@ void DataTab::setData()
 
 		
 		{
-			int tank = currentUnit->calcProductionsCost().resource( 0 );
+			int tank = currentUnit->calcProductionCost().resource( 0 );
 			if( compareType != NULL )
 			{
-				tank = tank - compareType->calcProductionsCost().resource( 0 );
+				tank = tank - compareType->calcProductionCost().resource( 0 );
 			}
 			itoa( tank, buffer, 10 );
 			
@@ -508,10 +508,10 @@ void DataTab::setData()
 		}
 
 		{
-			int tank = currentUnit->calcProductionsCost().resource( 1 );
+			int tank = currentUnit->calcProductionCost().resource( 1 );
 			if( compareType != NULL )
 			{
-				tank = tank - compareType->calcProductionsCost().resource( 1 );
+				tank = tank - compareType->calcProductionCost().resource( 1 );
 			}
 			itoa( tank, buffer, 10 );
 			
@@ -519,10 +519,10 @@ void DataTab::setData()
 		}
 
 		{
-			int tank = currentUnit->calcProductionsCost().resource( 2 );
+			int tank = currentUnit->calcProductionCost().resource( 2 );
 			if( compareType != NULL )
 			{
-				tank = tank - compareType->calcProductionsCost().resource( 2 );
+				tank = tank - compareType->calcProductionCost().resource( 2 );
 			}
 			itoa( tank, buffer, 10 );
 			

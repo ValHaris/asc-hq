@@ -298,7 +298,7 @@ extern const char*  cvehiclefunctions[];
         void write ( tnstream& stream ) const ;
         void runTextIO ( PropertyContainer& pc );
         ~VehicleType ( );
-        Resources calcProductionsCost();
+        Resources calcProductionCost();
 
         int getMoveMalusType() const {
            return movemalustyp;
@@ -325,6 +325,7 @@ extern const char*  cvehiclefunctions[];
         static BitSet convertOldFunctions( int abilities, const ASCString& location );
     private:
         void setupRemovableObjectsFromOldFileLayout();
+        ASCString costCalculator;
  };
 
 

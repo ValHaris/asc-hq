@@ -86,7 +86,8 @@ nodist_asc_mapedit_OBJECTS = edgen.$(OBJEXT) edglobal.$(OBJEXT) \
 	versionidentifier.$(OBJEXT) package.$(OBJEXT) \
 	packagemanager.$(OBJEXT) packagerepository.$(OBJEXT) \
 	dataversioncheck.$(OBJEXT) i18n.$(OBJEXT) \
-	accessconstraints-editor.$(OBJEXT)
+	accessconstraints-editor.$(OBJEXT) \
+	unitcostcalculator-standard.$(OBJEXT)
 asc_mapedit_OBJECTS = $(nodist_asc_mapedit_OBJECTS)
 am__DEPENDENCIES_1 =
 asc_mapedit_DEPENDENCIES = $(top_builddir)/source/sdl/libsdl.la \
@@ -324,7 +325,7 @@ explosivemines.cpp legacynetworkloaders.cpp statistics.cpp \
 player.cpp cannedmessages.cpp mapimageexport.cpp mainscreenwidget.cpp windowing.cpp \
 playercolor.cpp campaignactionrecorder.cpp luacommandwriter.cpp versionidentifier.cpp \
 package.cpp packagemanager.cpp packagerepository.cpp dataversioncheck.cpp i18n.cpp \
-accessconstraints-editor.cpp
+accessconstraints-editor.cpp unitcostcalculator-standard.cpp
 
 asc_mapedit_LDADD = $(top_builddir)/source/sdl/libsdl.la \
 $(top_builddir)/source/libs/triangul/libtriangul.la $(BZIP2_LIBS) \
@@ -508,6 +509,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/textfileparser.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/textfiletags.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/typen.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unitcostcalculator-standard.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unitset.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vehicle.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vehicletype.Po@am__quote@

@@ -33,7 +33,8 @@ legacynetworkloaders.cpp player.cpp cannedmessages.cpp reactionfire.cpp mapimage
 containercontrols.cpp containerbase-functions.cpp windowing.cpp turncontrol.cpp unitset.cpp \
 playercolor.cpp pg_mapdisplay.cpp autotraining.cpp researchexecution.cpp luacommandwriter.cpp \
 campaignactionrecorder.cpp loggingoutput.cpp versionidentifier.cpp package.cpp packagemanager.cpp \
-packagerepository.cpp dataversioncheck.cpp i18n.cpp accessconstraints-game.cpp contextutils.cpp
+packagerepository.cpp dataversioncheck.cpp i18n.cpp accessconstraints-game.cpp contextutils.cpp \
+unitcostcalculator-standard.cpp
 
 commonLibs =  $(top_builddir)/source/libs/triangul/libtriangul.la \
 $(top_builddir)/source/ai/libai.la $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
