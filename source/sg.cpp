@@ -1271,6 +1271,9 @@ void executeUserAction ( tuseractions action )
       case ua_taskManager: taskManager( actmap );
          break;
          
+      case ua_createUnitCostList: createUnitCostList();
+         break;
+         
       default:;
       };
 }
