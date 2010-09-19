@@ -4,7 +4,9 @@ VehicleType {
    parent = 222
 
    Description = Luftabwehrkanone
-   Picture = MK5b_ADG.pcx
+   Picture = mk5b_adg.pcx
+   InfoImage = mk5b_adg.jpg
+   InfoImageSmall = mk5b_adg_k.png
    Infotext = [ Extrem weitreichendes Flugabwehrgeschuetz dessen Geschosse mit einer ueberdurchschnittlichen 
    Geschwindigkeit abgefeuert werden. Die Treffergenauigkeit ist enorm und die Schaeden an den 
    gegnerischen Maschienen betraechtlich. Fehlende Bodenverteidigung macht staendigen Schutz notwendig.]
