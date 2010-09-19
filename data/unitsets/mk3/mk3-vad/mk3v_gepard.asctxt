@@ -1,14 +1,23 @@
 VehicleType { 
    Name = GEPARD
    ID = 533
-   WreckageObject = 15533
    parent = 218
+
    Description = anti aircraft tank
-   Infotext = [Air defense cannon tank Gepard
-   InfoImage = Wikipedia]
    Picture = mk3v_gepard.png
+   WreckageObject = 15533
+   InfoImage = mk3v_gepard.jpg
    InfoImage = mk3v_gepard.jpg
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+
+   Infotext = [Der Flugabwehrkanonenpanzer Gepard (FlakPz Gepard) ist ein autonomer, allwetterkampffähiger FlaK-Panzer.
+               Der Gepard wurde primär entwickelt, um im taktischen Rahmen des Gefechts der verbundenen Waffen den mobilen Panzer- und Panzergrenadiertruppen Schutz vor tieffliegenden 
+               Flugzeugen und Kampfhubschraubern zu geben. Deswegen besitzt er bezüglich Gefechtsfeldmobilität und Motorleistung vergleichbare Eigenschaften wie die damals eingesetzten 
+               oder in der Entwicklung stehenden Panzer Leopard 1, Marder und Jaguar. Der Gepard ist auch in der Lage, im Objektschutz wertvolle stationäre Ziele (beispielsweise Flugplätze 
+               oder Brücken) zu schützen. Gemäß der Einsatzdoktrin des Kalten Krieges kann er unter ABC-Vollschutz eingesetzt werden.
+               Die Auswahl der Bewaffnung berücksichtigte insbesondere die Bekämpfung von stark gepanzerten Kampfhubschraubern, dessen Panzerung effektiv Schutz vor Geschossen bis zum 
+               Kaliber 23 Millimeter (mm) bietet.
+               Quelle Bild und Text: Wikipedia]
    
    Armor -= 20
    Movement += 0 0 0 10 0 0 0 0 
