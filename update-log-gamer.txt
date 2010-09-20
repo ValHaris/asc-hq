@@ -1,0 +1,5 @@
+Update Log GAMER
+
+Radargebäude: Description+Infotext eingefügt, InfoImage eingefügt+Grafik, InfoImageSmall eingefügt +Grafik
+MK5 ADG: InfoImage eingefügt+Grafik, InfoImageSmall eingefügt +Grafik
+MK5 Irongun: InfoImage eingefügt+Grafik, InfoImageSmall eingefügt +Grafik

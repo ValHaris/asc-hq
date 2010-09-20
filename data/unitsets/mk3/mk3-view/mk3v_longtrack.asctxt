@@ -7,8 +7,16 @@ VehicleType {
    Description = radar vehicle
    Picture = mk3v_longtrack.png
    InfoImage = mk3v_longtrack.jpg
+   InfoImageSmall = mk3v_longtrack_k.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
-   InfoText = [InfoImage = Wikipedia P-40 (Long Track)]
+   InfoText = [Die P-40, Spitzname „Eisenschwein; (NATO-Code: Long Track)) „ ist eine mobile Radarstation auf dem Basisfahrzeug 426 U. Der originale russische Designator lautet 1S12. 
+               Unter dem Namen P-40 diente das Radargerät zur Zielzuweisung für Einheiten der Truppenluftabwehr und hat eine Reichweite von etwa 9 Feldern.
+               Das Fahrzeug ist eine modifizierte Variante des Artillerieschleppers AT-T. Als Antriebsmotor findet ein 12-Zylinder-4-Takt-Dieselmotor mit einer Leistung von 342 kW (465 PS) 
+               Verwendung, der der Radarstation bei einem Gerätegewicht von 35 Tonnen eine Höchstgeschwindigkeit von 55 km/h verleiht. Die Stromversorgung des Gerätes erfolgt über einen 
+               eingebauten 400-Hz-Generator, der durch eine Gas-Turbine angetrieben wird. Die Besatzung besteht aus sechs Mann.
+               Der Sender besteht aus vier in Reihe geschalteten Amplitronen als Senderöhren, die durch eine Wanderfeldröhre angesteuert werden. Einzelne Senderöhren konnten abgeschaltet 
+               und somit die Sendeleistung partiell verringert werden.
+               Ouelle Bild und Text: Wikipedia P-40 (Long Track)]
 
    Armor -= 50
    View += 5
