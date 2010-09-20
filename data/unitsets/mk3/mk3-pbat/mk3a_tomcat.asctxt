@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = TOMCAT
+   Name = Tomcat
    parent = 273
    ID = 564
    WreckageObject = 15564 15864

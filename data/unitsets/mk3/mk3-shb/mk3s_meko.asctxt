@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = MEKO A200
+   Name = Meko A200
    parent = 353
    ID = 588
    WreckageObject = 15588

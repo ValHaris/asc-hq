@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = MISTRAL
+   Name = Mistral
    ID = 526
    WreckageObject = 15526
    parent = 215

@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = SPACELAB
+   Name = Spacelab
    ID = 562
    WreckageObject = 15562 15862
    parent = 235

@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = SEA SHADOW
+   Name = Sea Shadow
    parent = 352
    ID = 561
    WreckageObject = 15561
@@ -8,11 +8,11 @@ VehicleType {
    Description = stealth ship
    picture = mk3s_seashadow.png
    InfoImage = mk3s_seashadow.jpg
-   Infotext = [Nach dem Erfolg der Tarnkappentechnologie bei Flugzeugen wurde auch damit begonnen, diese auf Schiffe anzuwenden. Eine der ersten Anwendungen ist die SEA SHADOW. Das Schiff ist aufgrund seiner ebenmäßigen Oberfläche und einer Stealth-Beschichtung schwer zu orten, es könnte sich im Radarbild auch um einen DD21 oder eine Arsenal handeln. 
+   Infotext = [Nach dem Erfolg der Tarnkappentechnologie bei Flugzeugen wurde auch damit begonnen, diese auf Schiffe anzuwenden. Eine der ersten Anwendungen ist die Sea Shadow. Das Schiff ist aufgrund seiner ebenmäßigen Oberfläche und einer Stealth-Beschichtung schwer zu orten, es könnte sich im Radarbild auch um einen DD21 oder eine Arsenal handeln. 
 
-Die SEA SHADOW ist nur mit einem schweren MG bewaffnet. Sie kann damit Schiffe bekämpfen und auch Flugzeuge in niedriger und mittlerer Höhe unter Beschuss nehmen. Ihre Hauptaufgabe ist jedoch die Versorgung der Flotte mit Munition. Da die Hauptwaffen der terranischen Marine aus Raketen bestehen, werden allerdings keine Granaten transportiert. Auch sind keine großen Treibstoffdepots vorhanden. Dafür jedoch ein kleiner Materialtank, dessen Inhalt bei Bedarf z.B. an Reparaturschiffe weitergegeben werden kann. 
+Die Sea Shadow ist nur mit einem schweren MG bewaffnet. Sie kann damit Schiffe bekämpfen und auch Flugzeuge in niedriger und mittlerer Höhe unter Beschuss nehmen. Ihre Hauptaufgabe ist jedoch die Versorgung der Flotte mit Munition. Da die Hauptwaffen der terranischen Marine aus Raketen bestehen, werden allerdings keine Granaten transportiert. Auch sind keine großen Treibstoffdepots vorhanden. Dafür jedoch ein kleiner Materialtank, dessen Inhalt bei Bedarf z.B. an Reparaturschiffe weitergegeben werden kann. 
 
-Im Gegensatz zu den großen Versorgungsschiffen kann die SEA SHADOW auch im Flachwasser navigieren und demzufolge sogar Küstenbefestigungen oder am Ufer postierte Landeinheiten versorgen. Zur Not kann sie auch Trooper und sehr leichte Fahrzeuge transportieren. Eingeladene Pioniere können die Lagerkapazität des Schiffes deutlich erhöhen.
+Im Gegensatz zu den großen Versorgungsschiffen kann die Sea Shadow auch im Flachwasser navigieren und demzufolge sogar Küstenbefestigungen oder am Ufer postierte Landeinheiten versorgen. Zur Not kann sie auch Trooper und sehr leichte Fahrzeuge transportieren. Eingeladene Pioniere können die Lagerkapazität des Schiffes deutlich erhöhen.
 ] 
 
    Armor -= 50

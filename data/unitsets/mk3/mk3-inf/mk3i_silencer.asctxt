@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = SILENCER
+   Name = Silencer
    ID = 525
    WreckageObject = 15525
    parent = 205

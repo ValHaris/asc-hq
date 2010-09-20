@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = LCC BLUE RIDGE
+   Name = LCC Blue Ridge
    parent = 358
    ID = 614
    WreckageObject = 15614

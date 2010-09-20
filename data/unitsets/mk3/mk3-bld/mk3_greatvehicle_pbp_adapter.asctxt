@@ -1,5 +1,5 @@
 Techadapter {
-   ; GreatVehicleMK3
+   ; Great Vehicle Plant MK3
    Name = B11
    TechnologiesRequired = 100010
 } TechAdapter

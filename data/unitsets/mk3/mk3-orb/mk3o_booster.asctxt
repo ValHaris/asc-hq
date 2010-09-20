@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = BOOSTER
+   Name = Booster
    parent = 230
    ID = 520
    WreckageObject = 15520 15820

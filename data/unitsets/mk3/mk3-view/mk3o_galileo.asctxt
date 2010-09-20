@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = GALILEO
+   Name = Galileo
    Id = 527
    WreckageObject = 15527 15827
    parent = 246 

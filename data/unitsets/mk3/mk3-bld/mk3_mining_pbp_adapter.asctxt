@@ -1,5 +1,5 @@
 Techadapter {
-   ; MiningMK3
+   ; Mining MK3
    Name = B1
    TechnologiesRequired = 100010
 } TechAdapter

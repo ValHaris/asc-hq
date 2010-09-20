@@ -3,7 +3,7 @@ ObjectType {
 
    ID = 15528
 
-   Name = A-Sat Wreck
+   Name = A-Sat-X53 Wreck
 
    dry { 
       picture = mk3o_asatx53_w.png 1

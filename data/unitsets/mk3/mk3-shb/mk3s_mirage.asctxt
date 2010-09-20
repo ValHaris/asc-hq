@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = MIRAGE
+   Name = Mirage
    parent = 351
    ID = 581
    WreckageObject = 15581

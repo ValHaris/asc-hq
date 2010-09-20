@@ -1,11 +1,11 @@
 VehicleType { 
-   Name = MERKAT
+   Name = Merkat
    ID = 619
    WreckageObject = 15619
    parent = 335
    
    Description = mine detector
-   Infotext = [MERKAT
+   Infotext = [Merkat
 
    Eines der defensivsten Fahrzeuge ist der Minenleger. Ein Mechanismus im Boden gr‰bt ein Loch gibt dann wahlweise Panzer oder Infanterieminen hinein und schlieﬂt das Loch. So entsteht recht schnell ein Minenfeld. Der Merkat ist soweit modifiziert, dass er auch Minen findet und beseitigt. Eine starke Panzerung am vorderen Ausleger macht ihn gegen Minen immun. Das macht ihn auch unverzichtbar um gegnerische Minenfelder zu beseitigen.]
    Infotext_EN = [One of the most defensively centered vehicles is the Mine Layer.

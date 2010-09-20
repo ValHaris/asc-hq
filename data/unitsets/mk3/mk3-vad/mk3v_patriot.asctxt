@@ -1,11 +1,11 @@
 VehicleType { 
-   Name = PATRIOT
+   Name = Patriot
    ID = 556
    WreckageObject = 15556
    parent = 219
    
    Description = missile air defence
-   Infotext = [PATRIOT
+   Infotext = [Patriot
 
    Die Patriot ist ein mobiles Luftabwehrsystem mit einer großen Reichweite bis in die obersten Luftschichten. Geeignet für stationäre Aufgaben weil nur ein langsame Bewegung möglich ist. Schwach gepanzert ist Schutz durch andere Einheiten nötig.
 

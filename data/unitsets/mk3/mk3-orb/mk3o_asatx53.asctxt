@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = A-SAT-X53
+   Name = A-Sat-X53
    ID = 528
    WreckageObject = 15528 15828
    parent = 232

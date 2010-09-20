@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = BULLDOZER D7G
+   Name = Bulldozer D7G
    ID = 540
    WreckageObject = 15540
    parent = 336

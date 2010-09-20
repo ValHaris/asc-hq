@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = GAINFUL
+   Name = Gainful
    ID = 553
    WreckageObject = 15553
    parent = 224

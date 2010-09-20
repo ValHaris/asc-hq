@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = BLACKBIRD
+   Name = Blackbird
    parent = 248
    ID = 518
    WreckageObject = 15518 15818
@@ -8,7 +8,7 @@ VehicleType {
    Picture = mk3a_blackbird.png
    InfoImage = mk3a_blackbird.jpg
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
-   Infotext = [Blackbird hat einen einzigen Zweck: Feindliche Einheiten zu suchen und zu finden. Blackbird ist in der Lage sogar Satteliten zu orten und kann dabei auf grund des hohen Stealthwertes unentdeckt bleiben. Es ist schnell und schwer gepanzert für seine Klasse. Das ideale Flugzeug für Aufklärungsmissionen über Feindgebiet.
+   Infotext = [Der Blackbird hat einen einzigen Zweck: Feindliche Einheiten zu suchen und zu finden. Der Blackbird ist in der Lage sogar Satelliten zu orten und kann dabei auf grund des hohen Stealthwertes unentdeckt bleiben. Er ist schnell und schwer gepanzert für seine Klasse. Das ideale Flugzeug für Aufklärungsmissionen über Feindgebiet.
 
 Balckbird is a single purpose aircraft.
 Use it to spot enemy assets, including sattelites, while its high stealthvalue keeps it hidden from enemy radar. Blackbird is fast and heavily armored for its class, so it is ideal for performing assault recon.

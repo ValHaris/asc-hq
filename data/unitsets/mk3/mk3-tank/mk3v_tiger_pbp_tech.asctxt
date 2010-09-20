@@ -1,5 +1,5 @@
 technology {
-   Name = TigerPanzer
+   Name = Tiger
    infotext = 
    id = 595
    RelatedUnitID = 595

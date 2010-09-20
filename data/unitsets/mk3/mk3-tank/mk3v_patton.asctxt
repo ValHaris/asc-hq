@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = PATTON
+   Name = Patton
    ID = 534
    WreckageObject = 15534
    parent = 292

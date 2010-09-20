@@ -1,5 +1,5 @@
 Techadapter {
-   ; SolarPowerMK3
+   ; Solar Power Plant MK3
    Name = B31
    TechnologiesRequired = 100010
 } TechAdapter

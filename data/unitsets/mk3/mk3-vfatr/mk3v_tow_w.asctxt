@@ -3,7 +3,7 @@ ObjectType {
 
    ID = 15626
 
-   Name = Tow Wreck
+   Name = TOW Wreck
 
    dry { 
       picture = mk3v_tow_w.png 1

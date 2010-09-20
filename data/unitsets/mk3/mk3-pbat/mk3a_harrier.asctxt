@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = HARRIER
+   Name = Harrier
    parent = 338
    ID = 530
 

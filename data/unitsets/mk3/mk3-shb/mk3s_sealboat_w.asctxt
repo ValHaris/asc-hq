@@ -3,7 +3,7 @@ ObjectType {
 
    ID = 15586
 
-   Name = Seashadow Wreck
+   Name = Sealboat Wreck
 
    dry { 
       picture = mk3s_seashadow_w.png 1

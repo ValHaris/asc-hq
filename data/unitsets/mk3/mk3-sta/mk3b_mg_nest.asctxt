@@ -1,11 +1,11 @@
 VehicleType { 
-   Name = MG NEST
+   Name = MG-Nest
    parent = 314
    ID = 573
    WreckageObject = 15573
    
    Description = Verteidigungsstellung
-   Infotext = [ Durch Sandsäcke geschützte MG Stellung]
+   Infotext = [Durch Sandsäcke geschützte MG Stellung]
    picture = MK3b_mg_nest.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 

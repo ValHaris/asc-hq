@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = ARMY RANGER	
+   Name = Army Ranger
    ID = 524
    WreckageObject = 15524
    parent = 203

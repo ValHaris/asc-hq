@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = MIG-35
+   Name = MiG-35
    parent = 272
    ID = 506
    WreckageObject = 15506 15806

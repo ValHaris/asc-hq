@@ -3,7 +3,7 @@ ObjectType {
 
    ID = 15543
 
-   Name = TAK Wreck
+   Name = TAK 3015 Wreck
 
    dry { 
       picture = mk3s_tak_w.png 1

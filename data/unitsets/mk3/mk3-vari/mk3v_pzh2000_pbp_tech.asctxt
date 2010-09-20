@@ -1,5 +1,5 @@
 technology {
-   Name = PzH
+   Name = PzH 2000
    infotext = 
    id = 605
    RelatedUnitID = 605

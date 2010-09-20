@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = KASPIAN SM
+   Name = Kaspian Sea Monster
    ID = 559
    WreckageObject = 15559
    parent = 368

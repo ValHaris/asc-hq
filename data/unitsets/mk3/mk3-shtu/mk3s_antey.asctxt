@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = ANTEY
+   Name = Antey
    parent = 365
    ID = 542
    WreckageObject = 15542
