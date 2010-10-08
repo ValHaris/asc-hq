@@ -1,0 +1,6 @@
+Techadapter {
+   Name = o15002
+   ;Bezeichnung der verknüpften Technologie: JumpField
+   TechnologiesRequired = 15000
+   RequireAllListedTechnologies = false
+} TechAdapter

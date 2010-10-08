@@ -6,6 +6,8 @@ ObjectType {
 
    visible_in_fogOfWar = false
    canExistBeneathBuildings = false
+   TechAdapterRequired = o2093
+   RequireAllListedTechAdapter = true
 
    LinkableObjects = 
    NoSelfChaining = true

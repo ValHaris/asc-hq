@@ -1,10 +1,15 @@
 ObjectType { 
    Name = Armor Railroad
    ID = 992
+
    canExistBeneathBuildings = true
-   Weather = dry much_snow
    visible_in_fogOfWar = false
+
    LinkableObjects = 999 995 2 991 980
+   TechAdapterRequired = o992
+   RequireAllListedTechAdapter = true
+
+   Weather = dry much_snow
    Armor = 1000
    ;                def lTr mTr hvT lWh mWh hWh tro rlv mAC mSh BTO lAC hAC lSh hSh Hli hov
    Movemalus_plus = 10  10  10  10  13  13  13  5   1   20  13  0   20  20  13  13  20  13

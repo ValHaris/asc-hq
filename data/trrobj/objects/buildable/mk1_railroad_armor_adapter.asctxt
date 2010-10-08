@@ -1,0 +1,6 @@
+Techadapter {
+   Name = o992
+   ;Bezeichnung der verknüpften Technologie: Railroad armor
+   TechnologiesRequired = 100000
+   RequireAllListedTechnologies = false
+} TechAdapter

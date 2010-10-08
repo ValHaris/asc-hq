@@ -2,11 +2,16 @@ ObjectType {
    Name = JumpField
    ID = 15002
    groupID =
+
    visible_in_fogOfWar = false
    LinkableObjects = 
-   Height = 118
    NoSelfChaining = true
+   TechAdapterRequired = o15002
+   RequireAllListedTechAdapter = true
+
+
    lifetime = 3
+   Height = 118
 
    Armor = 200
    ConstructionCost { 

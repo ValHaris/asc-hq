@@ -77,6 +77,10 @@ unitsets/mk1/mk1-jam/*.asctxt
 unitsets/mk1/mk1-jam/*.pcx
 unitsets/mk1/mk1-jam/*.jpg
 unitsets/mk1/mk1-jam/*.png
+unitsets/mk1/mk1-obj/*.asctxt
+unitsets/mk1/mk1-obj/*.pcx
+unitsets/mk1/mk1-obj/*.jpg
+unitsets/mk1/mk1-obj/*.png
 unitsets/mk1/mk1-orb/*.asctxt
 unitsets/mk1/mk1-orb/*.pcx
 unitsets/mk1/mk1-orb/*.jpg
@@ -158,6 +162,10 @@ unitsets/mk3/mk3-inf/*.jpg
 unitsets/mk3/mk3-heli/*.asctxt
 unitsets/mk3/mk3-heli/*.png
 unitsets/mk3/mk3-heli/*.jpg
+unitsets/mk3/mk3-obj/*.asctxt
+unitsets/mk3/mk3-obj/*.pcx
+unitsets/mk3/mk3-obj/*.jpg
+unitsets/mk3/mk3-obj/*.png
 unitsets/mk3/mk3-orb/*.asctxt
 unitsets/mk3/mk3-orb/*.png
 unitsets/mk3/mk3-orb/*.jpg

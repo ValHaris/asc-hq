@@ -1,0 +1,6 @@
+Techadapter {
+   Name = o2099
+   ;Bezeichnung der verknüpften Technologie: Stacheldraht
+   TechnologiesRequired = 100010
+   RequireAllListedTechnologies = false
+} TechAdapter

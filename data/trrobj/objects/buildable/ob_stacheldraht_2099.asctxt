@@ -4,9 +4,10 @@ ObjectType {
 
    Name = Razor Wire
 
-   Weather = dry much_snow snow_and_ice
 
    visible_in_fogOfWar = false
+   TechAdapterRequired = o2099
+   RequireAllListedTechAdapter = true
 
    Height = 117 
    Armor = 600
@@ -14,6 +15,7 @@ ObjectType {
    LinkableObjects = 
    NetBehaviour = NetToSelf NetToBorder AutoBorder
 
+   Weather = dry much_snow snow_and_ice
    ;                def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
    Movemalus_abs = -1
    Movemalus_plus =  50  10   7   5 120 100  80  50  35  50  50  50  50  50  50  50  50 100

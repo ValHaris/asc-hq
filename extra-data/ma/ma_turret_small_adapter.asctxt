@@ -1,0 +1,6 @@
+Techadapter {
+   Name = o2093
+   ;Bezeichnung der verknüpften Technologie: Turret Small
+   TechnologiesRequired = 22000
+   RequireAllListedTechnologies = false
+} TechAdapter
