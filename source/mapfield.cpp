@@ -214,10 +214,10 @@ bool  MapField :: addobject( const ObjectType* obj, int dir, bool force, MapFiel
 
          objects.push_back ( o );
 
+         sortobjects();
          if ( dir == -1 )
             calculateobject( getx(), gety(), true, obj, gamemap );
 
-         sortobjects();
          if ( objectRemovalStrategy )
             setparams( objectRemovalStrategy );
          else
