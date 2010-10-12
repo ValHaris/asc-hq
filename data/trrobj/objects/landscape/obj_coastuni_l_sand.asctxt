@@ -8,6 +8,7 @@ ObjectType {
    LinkableObjects = 2690
    LinkableTerrain = 2006 299 2008 307 2004 2002
    NetBehaviour = 
+   GrowOnUnits = true
    canExistBeneathBuildings = true
 
    Armor = 0

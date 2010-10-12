@@ -37,7 +37,7 @@ ObjectType {
    Weather = dry few_snow much_snow snow_and_ice
    dry { 
       TerrainAccess { 
-         terrain_any = very_shallow_water shallow_water water 
+         terrain_any = very_shallow_water shallow_water water hard_sand
          terrain_all = 
          terrain_not = 
          terrain_kill = 
