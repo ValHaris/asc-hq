@@ -21,7 +21,7 @@ VehicleType {
    Movement -= 0 0 0 20 50 50 0 0 
       
    Construction { 
-      Buildings = 1 2 4 6 7 13-14 16-20 23 30-32 35-37 39 40 41 15001-15015 15033
+      Buildings = 1 2 4 6 7 13-14 16-20 23 30 32 35-37 39 40 41 15001-15015 15033
       Vehicles = 15304 15222 15244 15238 15318
       Vehiclesinternally =
 ;				          JuTur
