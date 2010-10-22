@@ -189,12 +189,6 @@ int main(int argc, char *argv[] )
       exit(0);
    }
 
-   if ( cl->w() )
-      fullscreen = SDL_FALSE;
-
-   if ( cl->f() )
-      fullscreen = SDL_TRUE;
-
    MessagingHub::Instance().setVerbosity( cl->r() );
    StdIoErrorHandler stdIoErrorHandler(false);
    MessagingHub::Instance().exitHandler.connect( SigC::bind( SigC::slot( exit_asc ), -1 ));

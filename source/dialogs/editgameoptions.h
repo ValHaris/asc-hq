@@ -32,11 +32,11 @@ extern void editGameOptions ( bool mainApp = true );
 class GetVideoModes {
    public:
       typedef vector<ASCString> VList;
+      typedef pair<int,int> ModeRes;
    private:
       SDL_Rect **modes;
       VList list;
 
-      typedef pair<int,int> ModeRes;
       vector <ModeRes > listedmodes;
      
       static bool comparator( const ModeRes& a, const ModeRes& b );
@@ -51,6 +51,8 @@ class GetVideoModes {
       int gety( int index );
 
       int findmodenum( int x, int y );
+      
+      ModeRes getBest();
     
 };
 

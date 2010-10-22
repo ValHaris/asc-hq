@@ -167,6 +167,17 @@ int GetVideoModes::findmodenum( int x, int y ) {
    return 0;
 }
       
+      
+GetVideoModes::ModeRes GetVideoModes::getBest() 
+{
+   ModeRes res = make_pair(-1,-1);
+   
+   for ( int j = 0; j < listedmodes.size(); ++j )
+      if ( listedmodes[j].first >= res.first && listedmodes[j].second >= res.second )
+         res = listedmodes[j];
+   
+   return res;
+}      
 
 
 

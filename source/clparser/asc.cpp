@@ -51,8 +51,8 @@ Cmdline::Cmdline(int argc, char *argv[]) throw (string)
   _executable += argv[0];
 
   /* default values */
-  _x = 1024;
-  _y = 768;
+  _x = -1;
+  _y = -1;
   _r = 0;
   _w = false;
   _f = false;

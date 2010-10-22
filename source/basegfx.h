@@ -419,8 +419,8 @@ class collategraphicoperations {
 
 #pragma pack()
 
-//! this variable determines whether the next call to initgraphics will open a window or a fullscreen session
-extern int fullscreen;
+// this variable determines whether the next call to initgraphics will open a window or a fullscreen session
+// extern int fullscreen;
 
 //! sets the caption of the main window
 extern void setWindowCaption ( const char* s );

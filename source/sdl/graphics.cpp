@@ -29,7 +29,6 @@
 #include "sdlstretch.cpp"
 
 SDL_Surface *screen = NULL;
-int fullscreen = 1;
 
 
 void setWindowCaption ( const char* s )

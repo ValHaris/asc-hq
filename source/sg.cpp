@@ -1558,17 +1558,82 @@ class ResourceLogger: public SigC::Object {
 };
 
 
+class ScreenResolutionSetup {
+      Cmdline& cli;
+      int x,y;
+      bool fullscreen;
+   public:
+      ScreenResolutionSetup( Cmdline& commandLine );
+      
+      int getWidth() { return x; };
+      int getHeight() { return y; };
+      bool isFullscreen() { return fullscreen; };
+   
+};
+
+ScreenResolutionSetup::ScreenResolutionSetup( Cmdline& commandLine ) : cli( commandLine )
+{
+   if ( SDL_Init( SDL_INIT_VIDEO ) ) 
+      fatalError( ASCString("Unable to init SDL: ") +  SDL_GetError());
+  
+   putenv(const_cast<char*>("SDL_VIDEO_CENTERED=1")) ;
+   
+   fullscreen = true;
+   
+   if ( cli.w() )
+      fullscreen = false;
+
+   if ( cli.f() )
+      fullscreen = true;
+   
+   if ( CGameOptions::Instance()->forceWindowedMode && !cli.f() )  // cl->f == force fullscreen command line param
+      fullscreen = false;
+
+   int xr = -1;
+   int yr = -1;
+   // determining the graphics resolution
+   
+   if ( CGameOptions::Instance()->xresolution != -1 )
+      xr = CGameOptions::Instance()->xresolution;
+   if ( cli.x() != -1 )
+      xr = cli.x();
+
+   if ( CGameOptions::Instance()->yresolution != -1 )
+      yr = CGameOptions::Instance()->yresolution;
+   if ( cli.y() != -1 )
+      yr = cli.y();
+
+   
+   GetVideoModes gvm;
+   
+   GetVideoModes::ModeRes best = gvm.getBest();
+   if ( xr == -1 )
+      xr = best.first;
+   if ( yr == -1 )
+      yr = best.second;
+   
+   
+   if ( CGameOptions::Instance()->graphicsDriver.compare_ci("default") != 0 ) {
+      static char buf[100];
+      strcpy(buf, "SDL_VIDEODRIVER=" );
+      strncat( buf, CGameOptions::Instance()->graphicsDriver.c_str(), 100 - strlen(buf));
+      buf[99] = 0;
+      putenv( buf );
+   }
+
+   if ( xr == -1 )
+      xr = 1024;
+   
+   if ( yr == -1 )
+      yr = 768;
+   
+   x = xr;
+   y = yr;
+}
 
 
 int main(int argc, char *argv[] )
 { 
-
-//    LoggingOutputHandler logger2( "c:/users/martin/my documents/");
-
-
-   putenv(const_cast<char*>("SDL_VIDEO_CENTERED=1")) ;
-
-  
    assert ( sizeof(PointerSizedInt) == sizeof(int*));
 
    // we should think about replacing clparser with libpopt
@@ -1586,12 +1651,6 @@ int main(int argc, char *argv[] )
       printf( "%s", msg.c_str() );
       exit(0);
    }
-
-   if ( cl->w() )
-      fullscreen = SDL_FALSE;
-
-   if ( cl->f() )
-      fullscreen = SDL_TRUE;
 
    MessagingHub::Instance().setVerbosity( cl->r() );
    StdIoErrorHandler stdIoErrorHandler(false);
@@ -1620,30 +1679,6 @@ int main(int argc, char *argv[] )
 
    LoggingOutputHandler logger( getSearchPath( 0 ));
    
-   if ( CGameOptions::Instance()->forceWindowedMode && !cl->f() )  // cl->f == force fullscreen command line param
-      fullscreen = SDL_FALSE;
-
-   int xr = 1024;
-   int yr = 768;
-   // determining the graphics resolution
-   
-   if ( CGameOptions::Instance()->xresolution != 1024 )
-      xr = CGameOptions::Instance()->xresolution;
-   if ( cl->x() != 1024 )
-      xr = cl->x();
-
-   if ( CGameOptions::Instance()->yresolution != 768 )
-      yr = CGameOptions::Instance()->yresolution;
-   if ( cl->y() != 768 )
-      yr = cl->y();
-
-   if ( CGameOptions::Instance()->graphicsDriver.compare_ci("default") != 0 ) {
-      static char buf[100];
-      strcpy(buf, "SDL_VIDEODRIVER=" );
-      strncat( buf, CGameOptions::Instance()->graphicsDriver.c_str(), 100 - strlen(buf));
-      buf[99] = 0;
-      putenv( buf );
-   }
 
    
    SoundSystem soundSystem ( CGameOptions::Instance()->sound.muteEffects, CGameOptions::Instance()->sound.muteMusic, cl->q() || CGameOptions::Instance()->sound.off );
@@ -1661,6 +1696,8 @@ int main(int argc, char *argv[] )
 
    cursorMoved.connect( updateFieldInfo );
 
+   
+   ScreenResolutionSetup screenResolutionSetup ( *cl );
    int flags = 0;
 
    if ( CGameOptions::Instance()->hardwareSurface )
@@ -1668,18 +1705,16 @@ int main(int argc, char *argv[] )
    else
       flags |= SDL_SWSURFACE;
 
-   if ( fullscreen )
+   if ( screenResolutionSetup.isFullscreen() )
       flags |= SDL_FULLSCREEN;
 
    app.setIcon( "program-icon.png" );
    bool initialized = false;
-   if ( !app.InitScreen( xr, yr, 32, flags)) {
+   if ( !app.InitScreen( screenResolutionSetup.getWidth(), screenResolutionSetup.getHeight(), 32, flags)) {
       if ( flags & SDL_FULLSCREEN ) {
          GetVideoModes gvm;
          if ( gvm.getList().size() > 0 ) {
-            xr = gvm.getx(0);
-            yr = gvm.gety(0);
-            if ( app.InitScreen( xr, yr, 32, flags)) 
+            if ( app.InitScreen( gvm.getx(0), gvm.gety(0), 32, flags)) 
                initialized = true;
          }
       }

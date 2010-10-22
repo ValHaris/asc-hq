@@ -235,11 +235,11 @@ int main(int argc, char *argv[] )
 
    signal ( SIGINT, SIG_IGN );
 
-   fullscreen = !CGameOptions::Instance()->mapeditWindowedMode;
+   bool fullscreen = !CGameOptions::Instance()->mapeditWindowedMode;
    if ( cl->f() )
-      fullscreen = 1;
+      fullscreen = true;
    if (  cl->w() )
-      fullscreen = 0;
+      fullscreen = false;
 
    checkDataVersion();
 

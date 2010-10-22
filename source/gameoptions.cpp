@@ -269,7 +269,7 @@ void CGameOptions::setDefaults ( void )
    endturnquestion=false;
    // smallmapactive=1;
    units_gray_after_move=false;
-   mapzoom=75;
+   mapzoom=100;
    mapzoomeditor=60;
    // startupcount=0;
    // dontMarkFieldsNotAccessible_movement=0;
@@ -314,8 +314,8 @@ void CGameOptions::setDefaults ( void )
 
    setDefaultDirectories();
 
-   xresolution = 1024;
-   yresolution = 768;
+   xresolution = -1;
+   yresolution = -1;
 
    mapeditor_xresolution = 1024;
    mapeditor_yresolution = 740;
