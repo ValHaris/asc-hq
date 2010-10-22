@@ -113,17 +113,17 @@ void TaskContainer::startTurn( Player& player )
 void TaskContainer::store( const Command& command )
 {
    if ( command.getState() == Command::Run ) {
-      if ( newTasks == NULL )
-         newTasks = new MemoryStreamStorage();
-      
       const TaskInterface* ti = dynamic_cast<const TaskInterface*>( &command );
-      if ( !ti ) 
-         fatalError( "Trying to store a task that does not implement the TaskInterface\n" + command.getDescription());
-      
-      MemoryStream memstream( newTasks, tnstream::appending );
-      memstream.writeInt( yetAnotherTask );
-      command.write( memstream, false);
-      lastPlayer = gamemap->actplayer;
+      if ( ti ) {
+         
+         if ( newTasks == NULL )
+            newTasks = new MemoryStreamStorage();
+         
+         MemoryStream memstream( newTasks, tnstream::appending );
+         memstream.writeInt( yetAnotherTask );
+         command.write( memstream, false);
+         lastPlayer = gamemap->actplayer;
+      }
    }
 }
                          
