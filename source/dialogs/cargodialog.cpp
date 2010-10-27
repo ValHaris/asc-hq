@@ -2606,13 +2606,13 @@ ASCString MoveUnitIntoInnerContainer::getName( const MapCoordinate& pos, Contain
 
 
 
-class VehicleWidget: public VehicleTypeBaseWidget
+class VehicleWidget: public VehicleBaseWidget
 {
    private:
       Vehicle* veh;
    public:
       VehicleWidget( PG_Widget* parent, const PG_Point& pos, int width, Vehicle* unit )
-            : VehicleTypeBaseWidget( parent, pos, width, unit->typ, unit->getMap()->getPlayer(unit) ) {
+            : VehicleBaseWidget( parent, pos, width, unit, unit->getMap()->getPlayer(unit) ) {
          veh = unit;
       };
 
