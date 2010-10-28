@@ -20,7 +20,6 @@ VehicleType {
    Tank.Material = 8000
    Height = ground_level orbit
    TerrainAccess.Terrain_any = runway spaceport turret_foundation
-   TerrainAccess.Terrain_all = beacon
    Jumpdrive ->* VehicleType.TeccnolsJump6
    Jumpdrive.MaxDistance = 80
    Jumpdrive.consumption.Material = 300
@@ -33,6 +32,8 @@ VehicleType {
       Weapon0.name = Ionenkanone
       Weapon0.sound = lasergun.ogg
       Weapon0.MaxRange = 80
+      Weapon0.ShotFrom = ground_level orbit
+      Weapon0.Targets = ground_level low_level_flight medium_level_flight high_level_flight
       Weapon0.MinRange = 40
       Weapon0.Punch@MaxRange = 100
       Weapon0.Punch@MinRange = 120
