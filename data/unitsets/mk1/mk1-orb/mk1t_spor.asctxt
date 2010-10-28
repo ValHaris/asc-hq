@@ -13,7 +13,7 @@ VehicleType {
    InfoImage = BananaJoe]
 
    WaitForAttack = true
-   Features += move_after_attack
+   Features += move_after_attack MoveDuringReactionFire
    Weight = 250
 
    Tank { 
