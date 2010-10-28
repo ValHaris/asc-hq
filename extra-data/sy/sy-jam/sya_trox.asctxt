@@ -9,7 +9,7 @@ Obwohl alle SY durch ihre organische Hüllenpanzerung eine erhebliche Tarnkapazit
    GuideSortHelp = 0 311 0 0 20 0 0 0 0 0
    Picture = sya_trox.pcx
 
-   Armor = 400
+   Armor = 220
    Category = light_aircraft
    Jamming = 35
 
