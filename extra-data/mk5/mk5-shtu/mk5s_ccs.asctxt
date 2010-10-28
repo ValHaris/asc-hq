@@ -7,7 +7,7 @@ VehicleType {
    picture = mk5s_ccs.pcx
 
    Armor -= 100
-   Features += satelliteview Vehicle_Production NoProductionCustomization
+   Features += satelliteview
 
    Transportation.MaxLoadableUnits = 15
    Transportation.CategoriesNOT = heavy_tracked_vehicle heavy_wheeled_vehicle medium_ship heavy_ship heavy_aircraft rail_vehicle

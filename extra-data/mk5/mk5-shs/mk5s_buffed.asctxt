@@ -14,7 +14,7 @@ VehicleType {
    Transportation.MaxLoadableUnitSize = 900
    Transportation.MaxLoadableMass = 6000
 
-   Features += MoveDuringReactionFire Vehicle_Production NoProductionCustomization 
+   Features += MoveDuringReactionFire
 
 ;   Construction {
 ;      VehiclesInternally = 1483 1485
