@@ -11,6 +11,7 @@ VehicleType {
 
    Features = MoveDuringReactionFire cruiserlanding no_midair_refuel
    Armor += 100
+   View += 10
 
    WaitForAttack = false
    Weapons { 
