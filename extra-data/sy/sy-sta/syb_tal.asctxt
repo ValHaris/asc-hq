@@ -9,7 +9,7 @@ VehicleType {
    WreckageObject = 1308
 ;   InfoImage = mk3b_ss74.jpg
 ;   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
-
+	 Armor = 750
    Jamming = 39
    Features += jam_only_own_field self_repairing
    SelfRepairRate = 15

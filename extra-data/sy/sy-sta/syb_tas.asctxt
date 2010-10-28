@@ -9,7 +9,7 @@ VehicleType {
 ;   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
    Infotext = []
 
-   Armor -= 50
+   Armor = 750
    Weight = 200
    Category = Trooper
    Jamming = 39
