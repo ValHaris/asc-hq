@@ -13,7 +13,7 @@ Beim Einsatz von Defkind sind aber zwei wichtige Punkte zu beachten: Die massive
 
    Category = heavy_aircraft
    Weight = 300
-   Armor += 100
+   Armor += 160
    View = 0
    jamming = 0
    Features -= Jam_Only_Own_Field Move_After_Attack
@@ -35,6 +35,7 @@ Beim Einsatz von Defkind sind aber zwei wichtige Punkte zu beachten: Die massive
       Weapon0.Punch@MaxRange = 75
       Weapon0.Punch@MinRange = 75
       Weapon0.ReactionFireShots = 2
+      Weapon0.Ammo = 8
       Weapon1 ->* VehicleType.AMO
       Weapon1.MaxRange = 60
       Weapon1.Punch@MaxRange = 80
