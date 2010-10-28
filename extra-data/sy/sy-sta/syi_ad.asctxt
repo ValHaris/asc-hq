@@ -12,7 +12,7 @@ VehicleType {
    Die SY erschufen aus diesen Kreaturen extrem gefährliche Kämpfer. Ihre Laven sind flugfähig und können Gegner auf grosse Distance aufspüren und angreifen. Der Wurm kann seine 
    Position wechseln, ist aber nur in der Erde überlebensfähig.]
 
-   Armor += 100
+   Armor = 500
    Jamming = 39
    Features += jam_only_own_field self_repairing
    SelfRepairRate = 10
@@ -23,6 +23,7 @@ VehicleType {
    Tank.Fuel = 10000
    Tank.Material = 5000
    Weapons {
+   		Number = 1
       Weapon0 ->* VehicleType.type_laser
       Weapon0.Name = Dronenschacht 
 ;      Weapon0.Sound = cannon_very_big_s.ogg
