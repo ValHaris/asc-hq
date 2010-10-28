@@ -19,10 +19,10 @@ VehicleType {
    MovementSound = mechstepfast.ogg
 
    Weapons {
-      Number = 3 
+      Number = 2 
       Weapon0 ->* VehicleType.NLS
       Weapon0.Punch@MaxRange += 10
       Weapon0.Punch@MinRange += 10
-      Weapon2 ->* VehicleType.Weapons.Weapon0
+      Weapon1 ->* VehicleType.AntiMine
    } Weapons
 } VehicleType
