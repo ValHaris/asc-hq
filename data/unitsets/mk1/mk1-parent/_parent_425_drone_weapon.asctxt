@@ -30,6 +30,6 @@ VehicleType {
 
    HeightChangeMethod0.dist = 3
    HeightChangeMethod1.startheight = low_level_flight
-   HeightChangeMethod3.dist = 3
+   HeightChangeMethod5.dist = 3
 
 } VehicleType
