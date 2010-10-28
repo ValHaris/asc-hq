@@ -21,6 +21,8 @@ VehicleType {
 
    Armor += 100
    Weapons { 
+   
+   		Weapon0.MaxRange = 80
 
       Weapon1.Punch@MaxRange -= 2
       Weapon1.Punch@MinRange -= 2
