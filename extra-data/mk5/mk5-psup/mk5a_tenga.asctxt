@@ -1,6 +1,6 @@
 VehicleType { 
    Name = Tenga
-   parent = 400 401 402 414
+   parent = 400 401 402 414 498
    ID = 1475
 
    Description = Transport Wasserflugzeug
@@ -62,19 +62,4 @@ VehicleType {
       Weapon8 ->* VehicleType.ServiceGround
    } Weapons
 
-   HeightChangeMethodNum = 2
-   HeightChangeMethod0 {
-      movecost = 25
-      heightdelta = 1
-      dist = 1
-      startheight = ground_level low_level_flight
-      canattack = true
-   } HeightChangeMethod0
-   HeightChangeMethod1 {
-      movecost = 25
-      heightdelta = -1
-      dist = 1
-      startheight = low_level_flight medium_level_flight
-      canattack = true
-   } HeightChangeMethod1
 } VehicleType
