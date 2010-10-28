@@ -11,7 +11,7 @@ VehicleType {
 
    Transportation ->* VehicleType.TransBigTrooper
    Transportation.MaxLoadableUnits = 8
-   Transportation.MaxLoadableMass = 40
+   Transportation.MaxLoadableMass = 48
    Transportation.CargoMovementDivisor = 4
    Transportation.EntranceSystemNum = 3
    Transportation {
@@ -51,6 +51,7 @@ VehicleType {
       Weapon0.MaxRange = 30
       Weapon1 ->* VehicleType.SSM
       Weapon1.MaxRange = 50
+      Weapon1.Ammo = 4
       Weapon2 ->* VehicleType.DLS
       Weapon2.MaxRange = 50
       Weapon2.targets = low_level_flight medium_level_flight
