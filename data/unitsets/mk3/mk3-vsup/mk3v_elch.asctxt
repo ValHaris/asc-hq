@@ -31,7 +31,7 @@ VehicleType {
       fuel = 5000
    } Tank
    FuelConsumption = 14
-   Movement = 0 0 0 70 0 0 0 0 
+   Movement = 0 0 0 77 0 0 0 0 
    TerrainAccess ->* VehicleType.Offroad 
    TerrainAccess.terrain_any = road runway railroad hard_sand lowland soft_sand ditch hillside Frozen_water
 
