@@ -5,6 +5,7 @@ BuildingType {
 
    Infotext = [Windnergiekraftwerk]
    Armor = 800
+   Features = NoObjectChaining
    MaxResourceProduction { 
       Energy = 3000
    } MaxResourceProduction

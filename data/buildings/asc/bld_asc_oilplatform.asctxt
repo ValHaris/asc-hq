@@ -18,7 +18,7 @@ BuildingType {
 
    Functions = Mining_Station 
    TerrainAccess { 
-      terrain_any = Shallow_water Water Very_shallow_water river
+      terrain_any = Shallow_water Water Very_shallow_water
       terrain_all = 
       terrain_not = 
       terrain_kill = lava deep_water
