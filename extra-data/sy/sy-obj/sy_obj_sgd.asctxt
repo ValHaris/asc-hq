@@ -10,6 +10,7 @@ ObjectType {
    visible_in_fogOfWar = true
    LinkableObjects = 
    Armor = 300
+   TechAdapterRequired = o1311
 
    Weather = dry
    ;                def lTr mTr hvT lWh mWh hWh tro rlv mAC mSh BTO lAC hAC lSh hSh Hli hov

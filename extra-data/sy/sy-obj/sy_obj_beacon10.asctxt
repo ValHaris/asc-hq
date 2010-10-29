@@ -7,6 +7,7 @@ ObjectType {
    Height = 200
    NoSelfChaining = true
    lifetime = 10
+   TechAdapterRequired = o1313
 
    Armor = 200
    ConstructionCost { 

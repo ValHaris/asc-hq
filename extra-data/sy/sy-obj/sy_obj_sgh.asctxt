@@ -9,6 +9,7 @@ ObjectType {
    LinkableObjects = 
    Armor = 300
    growthRate = 0.12
+   TechAdapterRequired = o1308
 
    Weather = dry
    ;                def lTr mTr hvT lWh mWh hWh tro rlv mAC mSh BTO lAC hAC lSh hSh Hli hov

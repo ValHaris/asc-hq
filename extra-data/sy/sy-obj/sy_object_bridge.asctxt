@@ -6,6 +6,9 @@ ObjectType {
    canExistBeneathBuildings = true
    visible_in_fogOfWar = true
    LinkableObjects = 1305
+   TechAdapterRequired = o1306
+
+
    Armor = 600
    ;                def lTr mTr hvT lWh mWh hWh tro rlv mAC mSh BTO lAC hAC lSh hSh Hli hov
    Movemalus_plus = 
