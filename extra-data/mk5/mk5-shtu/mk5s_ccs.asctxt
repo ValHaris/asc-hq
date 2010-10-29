@@ -27,10 +27,8 @@ VehicleType {
    Weapons { 
       Number = 7
       Weapon0 ->* VehicleType.MiniGun
-      Weapon0.Type = machinegun shootable ammo_transfer
       Weapon0.Ammo = 200
       Weapon1 ->* VehicleType.SAMH
-      Weapon1.Type = air_missile shootable ammo_transfer
       Weapon1.ShotFrom = submerged floating
       Weapon1.Ammo = 60
       Weapon2 ->* VehicleType.AmmoCannon 
