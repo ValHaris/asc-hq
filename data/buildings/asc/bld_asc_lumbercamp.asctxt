@@ -4,6 +4,7 @@ BuildingType {
    parent = 35
 
    Infotext = []
+   Armor = 2500
 
    Weather = dry
    Fields = A2 A3 A4 B3
