@@ -3,7 +3,7 @@ VehicleType {
    parent = 372 
    ID = 14016
    
-   Description = SAM Hoovercraft
+   Description = SAM Hovercraft
    Infotext = [Wie man es von den cromonischen Militärkonstrukteuren her nicht anders kennt, fiel ihnen und ihrem Spezialisierungswahn irgendwann auch der Vader DF zum Opfer. Ziel war es, ein reines Luftabwehr-Hoovercraft zu entwickeln. Dazu wurde der alte Vader DF etwas verlängert und die Munitions-Kapazität des Boden-Luft-Raketenwerfers auf dem Dach um 60% erhöht. Die Kanone wurde entfernt und durch ein leichtes Maschinengewehr ersetzt, welches jedoch allenfalls noch zur Bekämpfung von Infanterieeinheiten geeignet ist. Aufgrund des kleinen Kalibers dieser Spaß-Waffe, sollte man von Angriffen gegen gepanzerte Ziele tunlichst absehen.
 
 Da sich konstruktionsbedingt die Reichweite der Fla-Raketen nicht vergrößern ließ, baute man jedoch noch ein MdRF-Gerät mit ein, sodass der Magic noch mehr Ähnlichkeit mit einer mobilen, bodengestützten Fla-Rak-Einheit bekam.

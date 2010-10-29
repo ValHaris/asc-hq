@@ -7,6 +7,9 @@ VehicleType {
    Description = SAM medium range
    Picture = Mk3v_gainful.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+      Infotext = [Der Flug-Abwehr-Raketen-Panzer Gainful, kurz FlaRakPz, Gainful besitzt 3 Luft-Boden-Raketen mit großer Reichweite, die Flugziele bis in die höchsten Luftschichten 
+      attackieren kann. Durch das aufwendige Ausrichten auf das Ziel ist ein feuern aus der Bewegung heraus nicht möglich. Genauso kann man allzu nahe gekommene Ziele nicht bekämpfen. 
+      Da braucht der Gainful unterstützende Abwehreinheiten. In der Nähe sollte ein Munitionstransporter oder ein Depot vorhanden sein.]
 
    Armor -= 20
 
