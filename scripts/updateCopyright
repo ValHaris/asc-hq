@@ -1,0 +1,4 @@
+perl -ibak -n -p -e 's/((Copyright)|(\(C\)))(\s*\d{4})(\s*-\s*)(\d{4})/$1$4${5}2010/g;' `find . -name "*.cpp" -o -name "*.h" | grep -v source/tools` 
+
+# we don't need any backups, we have the files in version control
+rm `find . -name "*.cppbak" -o -name "*.hbak"`
