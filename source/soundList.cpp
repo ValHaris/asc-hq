@@ -4,7 +4,7 @@
 
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
-    Copyright (C) 1994-2005  Martin Bickel  
+    Copyright (C) 1994-2010  Martin Bickel  
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
