@@ -43,6 +43,21 @@ class VehicleTypeBaseWidget: public SelectionWidget  {
       static int buttonXPos( int width, int num );  
 };
 
+class VehicleBaseWidget: public SelectionWidget  {
+      const Vehicle* v;
+      static Surface clippingSurface;
+      Surface& getClippingSurface() { return clippingSurface; };
+      const Player& actplayer;
+      bool info();
+   public:
+      VehicleBaseWidget( PG_Widget* parent, const PG_Point& pos, int width, const Vehicle* vehicle, const Player& player );
+      ASCString getName() const;
+
+   protected:
+      void display( SDL_Surface * surface, const PG_Rect & src, const PG_Rect & dst );
+      static int buttonXPos( int width, int num );
+};
+
 class VehicleTypeResourceWidget: public VehicleTypeBaseWidget  {
    public:
       VehicleTypeResourceWidget( PG_Widget* parent, const PG_Point& pos, int width, const VehicleType* vehicletype, int lackingResources, const Resources& cost, const Player& player );

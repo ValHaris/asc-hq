@@ -37,7 +37,6 @@ VehicleTypeBaseWidget :: VehicleTypeBaseWidget( PG_Widget* parent, const PG_Poin
    PG_Label* lbl2 = new PG_Label( this, PG_Rect( col1, lineheight, 3 * sw, lineheight ), vt->description );
    lbl2->SetFontSize( lbl2->GetFontSize() -2 );
 
-
    PG_Button* b = new PG_Button( this, PG_Rect( buttonXPos(width, 0 ), Height()/2-lineheight, 2*lineheight, 2*lineheight ));
    b->SetIcon( IconRepository::getIcon( "blue-i.png").getBaseSurface() );
    b->sigClick.connect( SigC::slot( *this, &VehicleTypeBaseWidget::info ));
@@ -78,6 +77,66 @@ void VehicleTypeBaseWidget::display( SDL_Surface * surface, const PG_Rect & src,
 }
 
 Surface VehicleTypeBaseWidget::clippingSurface;
+
+VehicleBaseWidget :: VehicleBaseWidget( PG_Widget* parent, const PG_Point& pos, int width, const Vehicle* vehicle, const Player& player ) : SelectionWidget( parent, PG_Rect( pos.x, pos.y, width, fieldsizey+10 )), v( vehicle ), actplayer(player)
+{
+   int col1 = 50;
+   int lineheight  = 18;
+
+   int sw = (width - col1 - 10) / 6;
+
+   PG_Label* lbl1 = new PG_Label( this, PG_Rect( col1, 0, 3 * sw, lineheight ), v->typ->name );
+   lbl1->SetFontSize( lbl1->GetFontSize() -2 );
+
+   PG_Label* lbl2 = new PG_Label( this, PG_Rect( col1, lineheight, 3 * sw, lineheight ), v->typ->description );
+   lbl2->SetFontSize( lbl2->GetFontSize() -3 );
+
+   if ( v->getName() != v->typ->name ) {
+	   PG_Label* lbl3 = new PG_Label( this, PG_Rect( col1, lineheight * 2, 3 * sw, lineheight), '>'+v->getName()+'<');
+	   lbl3->SetFontSize( lbl3->GetFontSize() -3 );
+	   lbl3->SetFontColor(0xff0000);
+   }
+
+   PG_Button* b = new PG_Button( this, PG_Rect( buttonXPos(width, 0 ), Height()/2-lineheight, 2*lineheight, 2*lineheight ));
+   b->SetIcon( IconRepository::getIcon( "blue-i.png").getBaseSurface() );
+   b->sigClick.connect( SigC::slot( *this, &VehicleBaseWidget::info ));
+
+   SetTransparency( 255 );
+};
+
+int VehicleBaseWidget::buttonXPos( int width, int num )
+{
+   int col1 = 50;
+   int sw = (width - col1 - 10) / 6;
+   return col1 + 3 * sw + (10 + sw) * num;
+}
+
+
+
+bool VehicleBaseWidget::info()
+{
+   unitInfoDialog( v->typ );
+   return true;
+}
+
+
+ASCString VehicleBaseWidget::getName() const
+{
+   return v->getName();
+};
+
+void VehicleBaseWidget::display( SDL_Surface * surface, const PG_Rect & src, const PG_Rect & dst )
+{
+   if ( !getClippingSurface().valid() )
+      getClippingSurface() = Surface::createSurface( fieldsizex + 10, fieldsizey + 10, 32, 0 );
+
+   getClippingSurface().Fill(0);
+
+   v->typ->paint( getClippingSurface(), SPoint(5,5), actplayer.getPlayerColor(), 0 );
+   PG_Draw::BlitSurface( getClippingSurface().getBaseSurface(), src, surface, dst);
+}
+
+Surface VehicleBaseWidget::clippingSurface;
 
 
 
