@@ -1607,10 +1607,19 @@ ScreenResolutionSetup::ScreenResolutionSetup( Cmdline& commandLine ) : cli( comm
    GetVideoModes gvm;
    
    GetVideoModes::ModeRes best = gvm.getBest();
-   if ( xr == -1 )
-      xr = best.first;
-   if ( yr == -1 )
-      yr = best.second;
+   if ( xr == -1 ) {
+      if ( fullscreen )
+         xr = best.first;
+      else
+         xr = best.first - 100;
+   }
+   
+   if ( yr == -1 ) {
+      if ( fullscreen ) 
+         yr = best.second;
+      else
+         yr = best.second - 100;
+   }
    
    
    if ( CGameOptions::Instance()->graphicsDriver.compare_ci("default") != 0 ) {
