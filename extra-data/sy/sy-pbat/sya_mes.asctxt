@@ -7,7 +7,6 @@ VehicleType {
    Picture = sya_mes.png
    InfoImage = sya_mes.jpg
    InfoImageSmall = sya_mes_k.png
-   WreckageObject = 1303
    Infotext = [InfoImage = BananaJoe]
 
    

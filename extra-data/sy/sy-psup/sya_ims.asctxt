@@ -6,8 +6,6 @@ VehicleType {
    Description = construction unit
    Infotext = [Ernte und Infrastuktur Baueinheit.]
    Picture = sya_ims.png
-   WreckageObject = 1301
-
    Armor = 500
    Jamming = 39
    Features += construct_specific_buildings construct_vehicles ExternalFuelTransfer ExternalMaterialTransfer
