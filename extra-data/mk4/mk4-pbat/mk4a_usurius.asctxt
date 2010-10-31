@@ -4,7 +4,21 @@ VehicleType {
 
    Name = Usurius
    Description = Tarnbomber
-   Infotext = [Informationen sind als -geheim- eingestuft.]
+   Infotext = [
+Der Entwurf des Usurius´ ist recht neu und im Allgemeinen wird er als der letzte große Durchbruch bei der Entwicklung cromonischer Flugzeuge angesehen. Mit den immer weiter voranschreitenden Verbesserungen, die bei den Luftwaffen der anderen Völker vonstatten gingen, wurden bei den Cromonern in der Neuzeit einige deutliche Defizite sichtbar: Man verfügte zwar über die Höhenbomber der Stormbringer-Klasse - diese waren jedoch eher langsam; andere Bomber, wie Exterminator und Condor, konnten zu schnell vom Feind aufgespürt und vernichtet werden; der Ghost blieb aufgrund seiner Selbsttarnung zwar lange unsichtbar, hatte aber nur einen unzureichenden Munitionsvorrat gegen Bodenziele an Bord...
+
+
+Zu Beginn der Entwicklung standen für den Usurius anfangs zwei Modelle zur Verfügung: das Erste war ein getarnter Höhenbomber mit weitreichenden Raketen und einer großen Anzahl Bomben an Bord - das Zweite war der Tarnbomber, als den wir den Usurius heute kennen. Warum man sich im Endeffekt für diese Variante entschied, wird deutlich, wenn man einen Blick auf die erreichbare Höchstgeschwindigkeit wirft: Wäre das erste Modell nur unwesentlich schneller als ein Stormbringer gewesen, so erreicht der Usurius heutzutage, aufgrund seines neuartigen und speziell für ihn entwickelten Triebwerks, Spizengeschwindigkeiten, die man bis dahin in der cromonischen Luftwaffe noch nicht kannte. Selbst die bis dahin schnellsten Einheiten - Genom und Copra - sehen bei einem Rennen unter Volllast, den Usurius sehr schnell nur noch von hinten.
+
+
+Leider mussten zugunsten dieser enormen Höchstgeschwindigkeit diverse Abstriche bei der Bewaffnung gemacht werden. Der Tarbomber verfügt nämlich nur über ein leichtes Standard-MG im Bug. Dazu gesellen sich zwei Luft-Boden-Raketen an den äußersten Enden der Tragflächen, die auch aus mittlerer Höhe abgefeuert werden können, jedoch über keine große Reichweite verfügen. Weiterhin finden sich unter den Tragflächen noch insgesamt vier Bomben wieder: zwei Splitterbomben gegen Infanterie, sowie zwei schwere Bomben mit panzerbrechender Wirkung. Allerdings muss darauf hingewiesen werden, dass diese Bomben ausschließlich im Tiefflug ausgeklinkt werden können.
+
+
+Dieses Manko schränkt das Aufgabengebiet des Usurius leider wieder etwas ein. Aufgrund seiner Stealth-Fähigkeiten - die mit denen des Ghost vergleichbar sind - bleibt er zum einen sehr lange unentdeckt. Zum anderen muss er aber sehr nahe an den Feind heran, um diesen bekämpfen zu können. In kleineren Gefechten, oder gegen einzeln opperierende Feindeinheiten schützt ihn seine Tarnung lange genug, um seine Waffen sicher ins Ziel bringen und den Gegner unter Feuer nehmen zu können, noch ehe dieser weiß, was ihm blüht. In größeren Gefechten hingegen, wo seine Selbsttarnung durch die meist hohe Aufklärungsdichte des Gegners schnell egalisiert wird, ist er nur dann effektiv und gefahrlos einsetzbar, wenn er durch zusätzliche eigene Radarstörer unterstützt werden kann, oder aber die gegnerische Flugabwehr bereits ausgeschaltet wurde.
+
+
+Seine Panzerung ist recht ansehnlich und liegt etwa in dem Bereich von der des Genoms. Allerdings hat seine spezielle und neuartige Konstruktion noch einen weiteren, gravierenden Nachteil: bis zum heutigen Tage ist es noch keinem Konstrukteur gelungen, einen entsprechenden Stutzen zur Luftbetankung zu integrieren! Der Usurius ist daher zwingend auf Flugplätze oder Flugzeugträger angewiesen, von denen er sich nie allzu weit entfernen sollte. Zwar ist der Tank größer als bei herkömmlichen Jägern ausgefallen - im Gegensatz zum Stormbringer hingegen, beträgt sein Fassungsvermögen nur gut zwei Drittel. Ein Usurius, der sich zu weit von seinem Flugfeld oder seinem Träger entfernt, wird daher zwangsläufig als Totalverlust am Boden zerschellen, wenn der Pilot nicht schnell genug umkehrt.
+]
    Picture = mk4a_usurius.png
    wreckageobject = 14013 14813
    GuideSortHelp = 511 279 0 0 4 0 0 0 0 0

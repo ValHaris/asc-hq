@@ -4,7 +4,27 @@ VehicleType {
    parent = 336
    
    Description = Construction Vehicle
-   Infotext = [Der Gigant uebernimmt Spezialaufgaben wie das Errichten der Medusa 3 Stellungen und das Versetzen von größeren Geschuetztürmen und der Bunker Citadellen.]
+   Infotext = [
+Der Gigant ist nicht nur das Baufahrzeug des cromonischen Heeres für spezielle Gebäude, sondern auch auf anderen Gebieten ein echtes Multitalent. Seine Hauptaufgabengebiete liegen selbstverständlich in der Errichtung von Spezialgebäuden, jedoch auch in Bau, Transport und Support der cromonischen Turrets.
+
+
+Neben dem Hafen und dem Solarkraftwerk, baut der Gigant auch noch das Atomkraftwerk, sowie diejenigen Gebäude, die an Land zur Ausbeutung regenerativer Material- und Treibstoffquellen genutzt werden. Namentlich betrifft dies die Farm, das Holzfällerlager, sowie die Kristallverarbeitungsanlage. Außerdem ist er als einzigstes Fahrzeug dazu im Stande, die Radarstörstationen - auch Jamming Stations genannt - zu errichten. Weiterhin kann er nicht nur die Hybrid-Abwehrstation Medusa 3 direkt im Felde herstellen und platzieren, sondern auch die Kamikazeboje Virus.
+
+
+Sein enorm großer Treibstoff- und Materialtank erlaubt es ihm dabei, geraume Zeit ohne Nachschub auszukommen und mehrere Gebäude hintereinander zu errichten.
+
+
+Seine Hauptaufgaben in Frontnähe liegen vor allem in der Unterstützung der Turret-Abteilungen. Aufgrund seines großen Laderaumes, welcher mit einer flexibel verschiebbaren Trennwand in zwei separate Bereiche unterteilt werden kann, ist der Gigant als einziger landgestützter Transporter dazu in der Lage, auch die schwereren cromonischen Turrets aufzunehmen und sie vor allem auch wieder an geeigneten Positionen aufzustellen. Hierbei arbeitet der Gigant oftmals mit Einheiten der Lurat-Klasse zusammen. Letztere errichten ein Turretfundament und der Gigant platziert seinen Inhalt darauf. Da der Laderaum des Lurat selbst zu klein ist, um die schweren Turrets z.B. der Deneb-Klasse aufnehmen zu können, ist eine Verwendung von Gigant-Fahrzeugen in diesen Fällen unumgänglich!
+
+
+Die Aufgaben des Gigant gehen aber, vor allem im Turret-Sektor, weit über die eines reinen Transporters hinaus! So kann er mit einem ansehnlichen Vorrat an schweren Raketen aufwarten und damit leergeschossene Raketentürme wieder einsatzbereit machen. Außerdem verfügt er noch über einen Multifunktionsausleger, welcher zur Reparatur beschädigter Geschütztürme verwendet wird. Dieser Ausleger hat eine sehr große Reichweite und ermöglicht es somit einem kundigen Ingenieur, auch höher gelegene Schadstellen am Geschützturm problemlos erreichen und auszubessern zu können.
+
+
+Der Gigant ist ein Kettenfahrzeug, was bei seiner Größe kaum verwundert. Trotz allem ist er selbst in schwierigem Gelände noch recht schnell unterwegs. Diese Geländegängigkeit ist oftmals auch bitter notwendig, da es das Kampfgeschehen mitunter zwingend erforderlich machen kann, fernab jeder Straße Turrets auszusetzen, oder Jamming Stations zu errichten.
+
+
+Von der Panzerung her entspricht der Gigant in etwa dem normalen Baufahrzeug-Standard der cromonischen Heerestruppen. Im eigenen Hinterland stellt dies auch kein Problem dar und ist dort vollkommen ausreichend. Sollte jedoch Feindkontakt drohen, oder der Gegner weitreichende Geschütze auffahren, ist äußerste Vorsicht geboten! Die Besatzungen der Gigant-Baufahrzeuge stammen durchweg aus dem zivilen Sektor und verfügen über keinerlei Kampfausbildung. Unter diesem Aspekt betrachtet, wirkt die Panzerung schon erschreckend gering - vor allem wenn man bedenkt, welchen Gesamtwert ein solches Fahrzeug mit gefüllten Tanks und besetztem Laderaum darstellt. Es lässt sich natürlich nicht immer verhindern, dass ein Gigant - vor allem bei Transportvorgängen - auch einmal in der ersten oder zweiten Reihe auftaucht. Ein erfahrener Kommandant sollte jedoch darauf bedacht sein, diese Aufenthalte stets so kurz wie nur irgend möglich zu gestalten.
+]
    picture = mk4v_gigant.png
    wreckageobject = 14005
 

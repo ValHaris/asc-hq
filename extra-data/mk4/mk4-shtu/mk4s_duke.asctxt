@@ -4,12 +4,12 @@ VehicleType {
    ID = 1291
    
    Description = Heli-Trans U-Boot
-   Infotext = [Unterseeboot mit Helicopterbasis. Diese auf dem Pluto basierende U-Boot dient als 
-   		seegestützte Basis für eine Helicopterstaffel. Es bietet nicht nur Transportmöglichkeit
-   		und Schutz, sondern auch kompletten Service für die Hubschrauben. Die Raketenbatterien
-   		wurden dafürausgebaut und der Torpedovorrat verringert. Da sich das Träger-U-Boot öfter
-   		an die Wasseroberfläche begeben muß, damit die Hubschrauber starten können, wurden 
-   		Flakgeschütze montiert. Es sind dringend Jagtuboote als Begleitschutz abzustellen. ]
+   Infotext = [DUKE
+
+
+Unterseeboot mit Helikopterbasis. Dieses auf dem Pluto basierende U-Boot dient als tauchfähiger Helikopter- und Drohnenträger. Es bietet nicht nur Transportmöglichkeit und Schutz, sondern auch kompletten Service sowohl für Helikopter als auch für die Drohnen der Thunder Reihe.
+Die Raketenbatterien wurden verkleinert und der Torpedovorrat verringert; es wurden Flugabwehrkanonen eingebaut um den Flakschutz im aufgetauchten Zustand zu verbessern.
+Geleitschutz sollte verfügbar sein. ]
    picture = mk4s_duke.png
    wreckageobject = 14291
 
