@@ -555,7 +555,6 @@ void         calculateobject( int       x,
 
    if ( oi2 ) {
      oi2->setDir ( c );
-     fld->setparams();
    }
 
 }
