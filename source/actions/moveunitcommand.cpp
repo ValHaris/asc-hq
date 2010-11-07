@@ -82,12 +82,23 @@ bool MoveUnitCommand :: longDistAvailable( const MapCoordinate& pos )
 
 }
 
+void MoveUnitCommand::changeCoordinates( const MapCoodinateVector& delta )
+{
+   destination += delta;
+}
+
+MoveUnitCommand::MoveUnitCommand( GameMap* map ) : UnitCommand( map ) 
+{
+   map->sigCoordinateShift.connect( SigC::slot( *this, &MoveUnitCommand::changeCoordinates ));
+}
+
 
 
 MoveUnitCommand :: MoveUnitCommand ( Vehicle* unit )
    : UnitCommand ( unit ), flags(0), verticalDirection(0), multiTurnMovement(false)
 {
-   
+   if ( unit )
+      unit->getMap()->sigCoordinateShift.connect( SigC::slot( *this, &MoveUnitCommand::changeCoordinates ));
 }
 
 

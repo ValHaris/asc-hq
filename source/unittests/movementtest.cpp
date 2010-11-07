@@ -225,12 +225,42 @@ void testLongDistMovement()
    
    veh = game->getField(9,17)->vehicle;
    moveUnitTest(  game.get(), veh, airport, 3 );
-   
 }
+
+
+void testMapResizeWithMovement()
+{
+   auto_ptr<GameMap> game ( startMap("unittest-moveland.map"));
+   Vehicle* veh = game->getField(9,16)->vehicle;
+  
+   assertOrThrow( veh != NULL );
+   
+   auto_ptr<MoveUnitCommand> muc ( new MoveUnitCommand( veh ));
+   muc->searchFields();
+   muc->setDestination( MapCoordinate(3,2) );
+   ActionResult res = muc->execute( createTestingContext( veh->getMap() ));
+   if ( res.successful() )
+      muc.release();
+   else
+      throw ActionResult(res);
+   
+   game->resize(10,10,10,10);
+   
+   next_turn( game.get(), NextTurnStrategy_Abort(), NULL, -1 );
+   runTasks( game.get() );
+   
+   next_turn( game.get(), NextTurnStrategy_Abort(), NULL, -1 );
+   runTasks( game.get() );
+   
+   assertOrThrow( MapCoordinate( 13,12 ) == veh->getPosition() );
+  
+}
+
 
 
 void testMovement() 
 {
+   testMapResizeWithMovement();
    testLongDistMovement();
    testMovementFieldsReachable();
    testMovement1();

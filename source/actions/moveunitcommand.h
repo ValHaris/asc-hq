@@ -23,6 +23,7 @@
 #define MoveUnitCommandH
 
 #include <set>
+#include <sigc++/sigc++.h>
 
 #include "unitcommand.h"
 #include "taskinterface.h"
@@ -32,7 +33,7 @@
 #include "../astar2.h"
 
 
-class MoveUnitCommand : public UnitCommand, public TaskInterface {
+class MoveUnitCommand : public UnitCommand, public TaskInterface, public SigC::Object {
    
    public:
       static bool avail ( Vehicle* eht );
@@ -54,8 +55,10 @@ class MoveUnitCommand : public UnitCommand, public TaskInterface {
       int verticalDirection;
       bool multiTurnMovement;
       
-      MoveUnitCommand( GameMap* map ) : UnitCommand( map ) {};
+      MoveUnitCommand( GameMap* map ); 
       template<class Child> friend GameAction* GameActionCreator( GameMap* map);
+      
+      void changeCoordinates( const MapCoodinateVector& delta );
       
    protected:
       void readData ( tnstream& stream );

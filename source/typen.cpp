@@ -292,6 +292,13 @@ ASCString Resources::toString() const
 }
 
 
+MapCoordinate& MapCoordinate::operator+=( const MapCoodinateVector& delta )
+{
+   x += delta.dx;
+   y += delta.dy;
+   return *this;
+}
+
 void MapCoordinate::move(int width, int height) {
    x +=width;
    y +=height;

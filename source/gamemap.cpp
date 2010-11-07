@@ -1758,6 +1758,9 @@ int  GameMap::resize( int top, int bottom, int left, int right )  // positive: l
 
    overviewMapHolder.resetSize();
 
+   if ( left || top ) 
+      sigCoordinateShift( MapCoodinateVector(left,top));
+   
    return 0;
 }
 

@@ -185,6 +185,19 @@ struct GameTime {
 };
 
 
+//! represents a change of a MapCoordinate
+class MapCoodinateVector {
+   int dx;
+   int dy;
+   friend class MapCoordinate;
+   
+   public:
+      MapCoodinateVector( int dx, int dy ) {
+         this->dx = dx;
+         this->dy = dy;
+      }
+};
+
 //! Coordinate on the twodimensional map
 class MapCoordinate {
          public:
@@ -195,6 +208,7 @@ class MapCoordinate {
             bool operator< ( const MapCoordinate& mc ) const { return y < mc.y || ( y == mc.y && x < mc.x );};
             bool operator== ( const MapCoordinate& mc ) const { return y == mc.y && x == mc.x;};
             bool operator!= ( const MapCoordinate& mc ) const { return y != mc.y || x != mc.x;};
+            MapCoordinate& operator+=( const MapCoodinateVector& delta );
             void write( tnstream& stream ) const { stream.writeInt ( 3000 ); stream.writeInt ( x ); stream.writeInt ( y); };
             void read( tnstream& stream ) {
                int vers = stream.readInt ( );
@@ -205,7 +219,7 @@ class MapCoordinate {
                y = stream.readInt ( );
             };
             bool valid() const { return x >= 0 && y >= 0 ; } ;
-	         void move(int width, int height);
+            void move(int width, int height);
             ASCString toString(bool coordinates = false) const;
       };
 
