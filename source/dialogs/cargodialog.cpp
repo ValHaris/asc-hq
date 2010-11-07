@@ -326,8 +326,6 @@ class CargoInfoWindow;
 class CargoDialog : public Panel
 {
 
-      ContainerControls containerControls;
-
       GuiIconHandler guiIconHandler;
 
       ContainerBase* container;
@@ -659,10 +657,6 @@ class CargoDialog : public Panel
       GameMap* getMap() {
          if ( container ) return container->getMap();
          else return NULL;
-      };
-
-      ContainerControls& getControls() {
-         return containerControls;
       };
 
       SigC::Signal0<void>  sigCargoChanged;
@@ -1767,7 +1761,7 @@ class DamageBarWidget : public PG_ThemeWidget
 
 
 CargoDialog ::CargoDialog (PG_Widget *parent, ContainerBase* cb )
-      : Panel( parent, PG_Rect::null, "cargodialog", false ), containerControls( cb ), container(cb), setupOK(false), cargoWidget(NULL), researchWindow( NULL ), matterWindow(NULL)
+      : Panel( parent, PG_Rect::null, "cargodialog", false ), container(cb), setupOK(false), cargoWidget(NULL), researchWindow( NULL ), matterWindow(NULL)
 {
    shutdownImmediately = false;
 
@@ -2862,8 +2856,6 @@ ASCString RecycleUnitCommandButton :: getName( const MapCoordinate& pos, Contain
    Vehicle* veh = dynamic_cast<Vehicle*>(subject);
    if ( !veh )
       return "";
-
-   ContainerControls cc ( parent.getContainer() );
 
    ASCString s = getCommandName( parent.getContainer() ) + " unit - ";
 

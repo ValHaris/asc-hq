@@ -45,19 +45,5 @@ class ContainerConstControls {
 
 };
 
-class ContainerControls : public ContainerConstControls {
-      ContainerBase* container;
-
-      GameMap* getMap();
-      Player& getPlayer();
-      int getPlayerNum();
-      
-   public:
-      ContainerControls( ContainerBase* cb ) : ContainerConstControls( cb ), container( cb ) {};
-
-      //! only to be used by the AI, this doesn't consume any resources, so the unit must be discarded
-      Vehicle* produceUnitHypothetically( const VehicleType* type );
-
-};
 
 #endif

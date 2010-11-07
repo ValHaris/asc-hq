@@ -350,7 +350,6 @@ void AI::VehicleTypeEfficiencyCalculator::calc()
 
 AI::AiResult  AI :: container ( ContainerBase* cb )
 {
-   ContainerControls cc( cb );
    AiResult result;
 
    // move idle units out
@@ -432,8 +431,6 @@ AI::AiResult AI::buildings( int process )
    for ( Player::BuildingList::iterator bi = getPlayer().buildingList.begin(); bi != getPlayer().buildingList.end(); bi++ ) {
       buildingCounter++;
       displaymessage2("processing building %d", buildingCounter );
-
-      ContainerControls bc( *bi );
 
       int unitCounter = 0;
       for ( vector<Vehicle*>::const_iterator j=  (*bi)->getCargo().begin(); j != (*bi)->getCargo().end(); j++ ) {
@@ -931,7 +928,7 @@ void AI::production()
                       ProductionRating& pr = p->second;
 
                       if ( find ( lockedBuildings.begin(), lockedBuildings.end(), pr.bld ) == lockedBuildings.end()) {
-                         ContainerControls bc( pr.bld );
+                         ContainerConstControls bc( pr.bld );
                          int lack = bc.unitProductionPrerequisites( pr.vt, true );
                          if  ( !lack && pr.bld->vehicleUnloadSystem ( pr.vt, 255 ) ) {
                             try {

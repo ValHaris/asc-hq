@@ -27,25 +27,9 @@ const GameMap* ContainerConstControls::getMap() const
 }
 
 
-GameMap* ContainerControls::getMap()
-{
-   return container->getMap();
-}
-
 const Player& ContainerConstControls::getPlayer() const
 {
    return getMap()->player[ getMap()->actplayer ];
-}
-
-
-Player& ContainerControls::getPlayer()
-{
-   return getMap()->player[ getMap()->actplayer ];
-}
-
-int ContainerControls::getPlayerNum()
-{
-   return getMap()->actplayer;
 }
 
 
@@ -81,31 +65,4 @@ int  ContainerConstControls::unitProductionPrerequisites( const VehicleType* typ
    return l;
 }
 
-
-
-Vehicle* ContainerControls::produceUnitHypothetically( const VehicleType* type )
-{
-   if ( !unitProductionAvailable() )
-      return NULL;
-   
-   if ( unitProductionPrerequisites( type, true ))
-      return NULL;
-
-   
-   Vehicle* vehicle = new Vehicle ( type, getMap(), getPlayerNum() );
-   vehicle->setnewposition( container->getPosition() );
-
-   if ( getMap()->getgameparameter(cgp_bi3_training) >= 1 ) {
-      int cnt = 0;
-
-      for ( Player::BuildingList::iterator bi = getMap()->player[getMap()->actplayer].buildingList.begin(); bi != getMap()->player[getMap()->actplayer].buildingList.end(); bi++ )
-         if ( (*bi)->typ->hasFunction( ContainerBaseType::TrainingCenter  ) )
-            cnt++;
-
-      vehicle->experience += cnt * getMap()->getgameparameter(cgp_bi3_training);
-      if ( vehicle->experience > maxunitexperience )
-         vehicle->experience = maxunitexperience;
-   }
-   return vehicle;
-}
 
