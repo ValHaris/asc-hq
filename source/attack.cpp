@@ -375,38 +375,6 @@ void tunitattacksunit :: setup ( Vehicle* &attackingunit, Vehicle* &attackedunit
 
 
 
-void tunitattacksunit :: setresult ( void )
-{
-   _attackingunit->experience = av.experience;
-   _attackingunit->ammo[ av.weapnum ] = av.weapcount;
-
-   _attackingunit->postAttack( reactionfire );
-
-   _attackingunit->reactionfire.weaponShots[ av.weapnum]--;
-   _attackingunit->reactionfire.nonattackableUnits.push_back ( _attackedunit->networkid );
-
-   _attackedunit->damage    = dv.damage;
-   _attackingunit->damage    = av.damage;
-
-   if ( _respond ) {
-      _attackedunit->experience = dv.experience;
-      _attackedunit->ammo[ dv.weapnum ] = dv.weapcount;
-   }
-
-   /* If the attacking vehicle was destroyed, remove it */
-   if ( _attackingunit->damage >= 100 ) {
-     delete *_pattackingunit;
-     *_pattackingunit = NULL;
-   }
-
-   /* If the attacked vehicle was destroyed, remove it */
-   if ( _attackedunit->damage >= 100 ) {
-     delete *_pattackedunit;
-     *_pattackedunit = NULL;
-   }
-   gamemap->time.set ( gamemap->time.turn(), gamemap->time.move()+1);
-}
-
 void log( const Vehicle* attacker, const Vehicle* attackee )
 {
    if( CGameOptions::Instance()->logKillsToConsole ) 
@@ -553,32 +521,6 @@ void tunitattacksbuilding :: setup ( Vehicle* attackingunit, int x, int y, int w
 }
 
 
-void tunitattacksbuilding :: setresult ( void )
-{
-   // _attackingunit->experience = av.experience;
-   _attackingunit->ammo[ av.weapnum ] = av.weapcount;
-
-   _attackingunit->postAttack( false );
-
-   _attackingunit->damage    = av.damage;
-   _attackedbuilding->damage    = dv.damage;
-
-   /* Remove the attacking unit if it was destroyed */
-   if ( _attackingunit->damage >= 100 ) {
-      delete _attackingunit;
-      _attackingunit = NULL;
-   }
-
-
-   /* Remove attacked building if it was destroyed */
-   if ( _attackedbuilding->damage >= 100 ) {
-     delete _attackedbuilding ;
-     _attackedbuilding = NULL;
-   }
-
-   gamemap->time.set ( gamemap->time.turn(), gamemap->time.move()+1);
-}
-
 void tunitattacksbuilding :: setresult( const Context& context )
 {
    MapCoordinate target = _attackedbuilding->getPosition();
@@ -675,25 +617,6 @@ void tmineattacksunit :: setup ( const MapCoordinate& position, int minenum, Veh
    dv.height = attackedunit->height;
 }
 
-
-void tmineattacksunit :: setresult ( void )
-{
-   if ( _minenum == -1 ) {
-      for ( MapField::MineContainer::iterator m = _mineposition->mines.begin(); m != _mineposition->mines.end(); )
-         if ( m->attacksunit ( _attackedunit ))
-            m = _mineposition->mines.erase ( m );
-         else
-            m++;
-   } else
-      _mineposition->removemine ( _minenum );
-
-   _attackedunit->damage = dv.damage;
-
-   /* Remove the mined vehicle if it was destroyed */
-   if ( dv.damage >= 100 ) 
-     *_pattackedunit = NULL;
-
-}
 
 void tmineattacksunit :: setresult( const Context& context )
 {
@@ -815,31 +738,6 @@ void tunitattacksobject :: setup ( Vehicle* attackingunit, int obj_x, int obj_y,
 }
 
 
-void tunitattacksobject :: setresult ( void )
-{
-   // _attackingunit->experience = av.experience;
-   _attackingunit->ammo[ av.weapnum ] = av.weapcount;
-
-   _attackingunit->postAttack( false );
-
-   _obji->damage    = dv.damage;
-   _attackingunit->damage    = av.damage;
-
-   /* Remove the object if it was destroyed */
-   if ( _obji->damage >= 100 ) {
-      _attackingunit->getMap()->getField ( _x, _y )-> removeObject ( _obji->typ );
-   }
-
-   /* Remove the attacking unit if it was destroyed */
-   if ( _attackingunit->damage >= 100 ) {
-      delete _attackingunit;
-      _attackingunit = NULL;
-   }
-
-
-   gamemap->time.set ( gamemap->time.turn(), gamemap->time.move()+1);
-
-}
 
 void tunitattacksobject :: setresult( const Context& context )
 {

@@ -1081,7 +1081,7 @@ void trunreplay :: execnextreplaymove ( void )
                                     }
                                     if ( battle.av.damage < ad2 || battle.dv.damage > dd2 )
                                        error(MapCoordinate(x2,y2), "severe replay inconsistency:\nresult of attack differ !\nexpected target damage: %d ; recorded target damage: %d\nexpected attacker damage: %d ; recorded attacker damage: %d", battle.av.damage,ad2 ,battle.dv.damage, dd2);
-                                    battle.setresult ();
+                                    battle.setresult( createReplayContext() );
 
                                     if ( battle.av.damage >= 100 || battle.dv.damage >= 100 )
                                        computeview( actmap );
@@ -1105,7 +1105,7 @@ void trunreplay :: execnextreplaymove ( void )
                                     }
                                     if ( battle.av.damage != ad2 || battle.dv.damage != dd2 )
                                        error(MapCoordinate(x2,y2), "severe replay inconsistency:\nresult of attack differ !\nexpected target damage: %d ; recorded target damage: %d\nexpected attacker damage: %d ; recorded attacker damage: %d", battle.av.damage,ad2 ,battle.dv.damage, dd2);
-                                    battle.setresult ();
+                                    battle.setresult( createReplayContext() );
 
                                     if ( battle.av.damage >= 100 || battle.dv.damage >= 100 )
                                        computeview( actmap );
@@ -1125,7 +1125,7 @@ void trunreplay :: execnextreplaymove ( void )
                                     }
                                     if ( battle.av.damage != ad2 || battle.dv.damage != dd2 )
                                        error(MapCoordinate(x2,y2), "severe replay inconsistency:\nresult of attack differ !\nexpected target damage: %d ; recorded target damage: %d\nexpected attacker damage: %d ; recorded attacker damage: %d", battle.av.damage,ad2 ,battle.dv.damage, dd2);
-                                    battle.setresult ();
+                                    battle.setresult( createReplayContext() );
 
                                     if ( battle.av.damage >= 100 || battle.dv.damage >= 100 )
                                        computeview( actmap );
