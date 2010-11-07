@@ -46,7 +46,7 @@ void testAiMovement2()
        The point of this test is that the AI should move MoveAttackMove - capable units 
        out of the way to continue attacking with further units */
    
-   assertOrThrow( veh->damage >= 40 );
+   assertOrThrow( veh->damage >= 35 );
 }
 
 void testAiMovement3() 
@@ -65,7 +65,7 @@ void testAiMovement3()
    The point of this test is that the AI should move MoveAttackMove - capable units 
    out of the way to continue attacking with further units */
    
-   assertOrThrow( veh->damage >= 70 );
+   assertOrThrow( veh->damage >= 64 );
 }
 
 
@@ -165,7 +165,7 @@ void testAiHeliMovement1()
    next_turn( game.get(), NextTurnStrategy_Abort(), NULL, -1 );
    
    // at least one attack
-   assertOrThrow( heli->experience >= 1  );
+   assertOrThrow( heli->experience_offensive >= 1  );
    
    // attacked from flying level
    assertOrThrow( heli->damage == 0  );

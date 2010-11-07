@@ -92,8 +92,10 @@ class GetTargetImage : public FightVisitor {
 
 class AttackPanel : public Panel {
        tfight& engine;
-       int attacker_exp;
-       int defender_exp;
+       int attacker_exp_offensive;
+       int attacker_exp_defensive;
+       int defender_exp_offensive;
+       int defender_exp_defensive;
    public:
       AttackPanel ( tfight& engine_ ) ;
       void setBarGraphValue( const ASCString& widgetName, float fraction ) { Panel::setBargraphValue( widgetName, fraction ); };
@@ -118,8 +120,10 @@ AttackPanel::AttackPanel ( tfight& engine_ ) : Panel( PG_Application::GetWidgetB
    registerSpecialDisplay( "defender_level" );
    registerSpecialDisplay( "attacker_weaponsymbol" );
    registerSpecialDisplay( "defender_weaponsymbol" );
-   attacker_exp = engine.av.experience;
-   defender_exp = engine.dv.experience;
+   attacker_exp_offensive = engine.av.experience_offensive;
+   attacker_exp_defensive = engine.av.experience_defensive;
+   defender_exp_offensive = engine.dv.experience_offensive;
+   defender_exp_defensive = engine.dv.experience_defensive;
 }
 
 
@@ -144,11 +148,11 @@ void AttackPanel::painter ( const PG_Rect &src, const ASCString& name, const PG_
       return;
    }
    if ( name  == "attacker_unitexp" ) {
-      s.Blit( IconRepository::getIcon("experience" + ASCString::toString(attacker_exp) + ".png"), SPoint(dst.x, dst.y) );
+      s.Blit( IconRepository::getIcon("experience" + ASCString::toString(attacker_exp_offensive) + ".png"), SPoint(dst.x, dst.y) );
       return;
    }
    if ( name  == "defender_unitexp" ) {
-      s.Blit( IconRepository::getIcon("experience" + ASCString::toString(defender_exp) + ".png"), SPoint(dst.x, dst.y) );
+      s.Blit( IconRepository::getIcon("experience" + ASCString::toString(defender_exp_defensive) + ".png"), SPoint(dst.x, dst.y) );
       return;
    }
    if ( name  == "attacker_level" && engine.av.height ) {

@@ -144,7 +144,9 @@ void Vehicle :: init ( void )
 
    damage = 0;
 
-   experience = 0;
+   experience_offensive = 0;
+   experience_defensive = 0;
+   
    attacked = false;
 
    if ( typ ) {
@@ -323,9 +325,13 @@ void Vehicle::transform ( const VehicleType* type )
 void Vehicle :: postRepair ( int oldDamage )
 {
    for ( int i = 0; i < experienceDecreaseDamageBoundaryNum; i++)
-      if ( oldDamage > experienceDecreaseDamageBoundaries[i] && damage < experienceDecreaseDamageBoundaries[i] )
-         if ( experience > 0 )
-            experience-=1;
+      if ( oldDamage > experienceDecreaseDamageBoundaries[i] && damage < experienceDecreaseDamageBoundaries[i] ) {
+         if ( experience_offensive > 0 )
+            experience_offensive -= 1;
+         
+         if ( experience_defensive > 0 )
+            experience_defensive -= 1;
+      }
 }
 
 
@@ -1000,7 +1006,7 @@ void Vehicle :: fillMagically( bool ammunition, bool resources )
 
 
 
-const int vehicleVersion = 8;
+const int vehicleVersion = 9;
 
 void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits ) const
 {
@@ -1012,8 +1018,9 @@ void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits ) const
 
     int bm = cem_version;
 
-    if ( experience )
+    if ( experience_offensive )
        bm |= cem_experience;
+    
     if ( damage    )
        bm |= cem_damage;
 
@@ -1072,7 +1079,7 @@ void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits ) const
     stream.writeInt( min( vehicleVersion, UNITVERSIONLIMIT )  );
 
     if ( bm & cem_experience )
-         stream.writeChar ( experience );
+         stream.writeChar ( experience_offensive );
 
     if ( bm & cem_damage )
          stream.writeChar ( damage );
@@ -1172,6 +1179,8 @@ void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits ) const
     stream.writeInt( view );
     
     stream.writeString( privateName );
+    
+    stream.writeInt( experience_defensive );
 }
 
 void   Vehicle::read ( tnstream& stream )
@@ -1200,10 +1209,10 @@ void   Vehicle::readData ( tnstream& stream )
        version = stream.readInt();
 
     if ( bm & cem_experience )
-       experience = stream.readChar();
+       experience_offensive = stream.readChar();
     else
-       experience = 0;
-
+       experience_offensive = 0;
+    
     if ( bm & cem_damage )
        damage = stream.readChar();
     else
@@ -1419,7 +1428,11 @@ void   Vehicle::readData ( tnstream& stream )
        privateName = stream.readString();
     else
        privateName = "";
-
+    
+    if ( version >= 9 )
+       experience_defensive = stream.readInt();
+    else
+       experience_defensive = experience_offensive;
 }
 
 MapCoordinate3D Vehicle :: getPosition ( ) const

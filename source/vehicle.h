@@ -86,7 +86,10 @@ class UnitHooveringLogic {
     
     int          ammo[16];
     int          weapstrength[16];
-    int          experience;
+    
+    
+    int          experience_offensive;
+    int          experience_defensive;
 
     //! did the unit already attack this turn
     bool         attacked;

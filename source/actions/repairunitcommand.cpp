@@ -165,20 +165,35 @@ ActionResult RepairUnitCommand::go ( const Context& context )
    else
       return res;
    
-   int experience = target->experience;
+   int experience_o = target->experience_offensive;
+   int experience_d = target->experience_defensive;
    for ( int i = 0; i < experienceDecreaseDamageBoundaryNum; i++)
-      if ( oldDamage > experienceDecreaseDamageBoundaries[i] && newDamage < experienceDecreaseDamageBoundaries[i] )
-         if ( experience > 0 )
-            experience-=1;
+      if ( oldDamage > experienceDecreaseDamageBoundaries[i] && newDamage < experienceDecreaseDamageBoundaries[i] ) {
+         if ( experience_o > 0 )
+            experience_o -= 1;
+            
+         if ( experience_d > 0 )
+            experience_d -= 1;
+      }
    
-   if ( experience != target->experience ) {
-      auto_ptr<ChangeUnitProperty> expChange ( new ChangeUnitProperty( target, ChangeUnitProperty::Experience, experience ));
+   if ( experience_o != target->experience_offensive ) {
+      auto_ptr<ChangeUnitProperty> expChange ( new ChangeUnitProperty( target, ChangeUnitProperty::ExperienceOffensive, experience_o ));
       ActionResult res = expChange->execute( context );
       if ( res.successful() )
          expChange.release();
       else
          return res;
    }
+   
+   if ( experience_d != target->experience_defensive ) {
+      auto_ptr<ChangeUnitProperty> expChange ( new ChangeUnitProperty( target, ChangeUnitProperty::ExperienceDefensive, experience_d ));
+      ActionResult res = expChange->execute( context );
+      if ( res.successful() )
+         expChange.release();
+      else
+         return res;
+   }
+   
    
    auto_ptr<ConsumeResource> resource ( new ConsumeResource( getContainer(), cost ));
    res = resource->execute( context );

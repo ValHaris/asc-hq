@@ -117,6 +117,7 @@ DashboardPanel::DashboardPanel ( PG_Widget *parent, const PG_Rect &r, const ASCS
    registerSpecialDisplay( "windarrow" );
 
    registerSpecialDisplay( "unitexp" );
+   registerSpecialDisplay( "unitexpdefensive" );
    registerSpecialDisplay( "unit_level" );
    registerSpecialDisplay( "unit_pic" );
    for ( int i = 0; i < 10; ++i)
@@ -249,11 +250,19 @@ void DashboardPanel::painter ( const PG_Rect &src, const ASCString& name, const 
       if ( name == "unitexp" ) {
          int experience = 0;
          if ( veh )
-            experience = veh->experience;
+            experience = veh->experience_offensive;
 
          screen.Blit( IconRepository::getIcon("experience" + ASCString::toString(experience) + ".png"), SPoint(dst.x, dst.y) );
       }
 
+      if ( name == "unitexpdefensive" ) {
+         int experience = 0;
+         if ( veh )
+            experience = veh->experience_defensive;
+
+         screen.Blit( IconRepository::getIcon("experience" + ASCString::toString(experience) + ".png"), SPoint(dst.x, dst.y) );
+      }
+      
       if ( name == "unit_level" ) {
          int height1 = 0;
          int height2 = 0;

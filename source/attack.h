@@ -93,7 +93,8 @@ class tfight : public AttackFormula
          int strength;
          int armor;
          int damage;
-         int experience;
+         int experience_offensive;
+         int experience_defensive;
          int defensebonus;
          int attackbonus;
          float hemming;

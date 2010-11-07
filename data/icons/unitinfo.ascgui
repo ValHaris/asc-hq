@@ -8,7 +8,7 @@ panel {
       width = 162
       height = 115  
 
-      WidgetNum = 5
+      WidgetNum = 6
       
       Widget0 {
         type = image
@@ -28,17 +28,33 @@ panel {
         type = image
         Filename = exp-field.png
         x = 5
-        y = 25
-        ToolTipHelp = unit experience
+        y = 2
+        ToolTipHelp = unit experience (offensive)
         
         WidgetNum = 1      
         Widget0 {
            type = SpecialDisplay
            x = 2
            y = 2
-	        name = unitexp
+           name = unitexp
         } Widget0
      } Widget1
+
+     Widget5 {
+        type = image
+        Filename = exp-field.png
+        x = 5
+        y = 40
+        ToolTipHelp = unit experience (defensive)
+        
+        WidgetNum = 1      
+        Widget0 {
+           type = SpecialDisplay
+           x = 2
+           y = 2
+           name = unitexpdefensive
+        } Widget0
+     } Widget5
 
      Widget2 {
         type = image

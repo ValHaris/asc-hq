@@ -324,7 +324,7 @@ void UnitTrainingLayer::paintSingleField( const MapRenderer::FieldRenderInfo& fi
    	   if ( ( fieldInfo.fld->vehicle->getOwner() == fieldInfo.playerView ) || (fieldInfo.visibility == visible_all) || ((fieldInfo.fld->vehicle->height >= chschwimmend) && (fieldInfo.fld->vehicle->height <= chhochfliegend))) {
 
          MegaBlitter<colorDepth,colorDepth,ColorTransform_None,ColorMerger_AlphaMerge> blitter;
-		ASCString training = "unitlevel-" + ASCString::toString(fieldInfo.fld->vehicle->experience+1) +".png";
+		ASCString training = "unitlevel-" + ASCString::toString(fieldInfo.fld->vehicle->experience_offensive+1) +".png";
 		blitter.blit( IconRepository::getIcon(training), fieldInfo.surface, pos);
    	   }
          

@@ -156,12 +156,12 @@ void tfight :: calc ( void )
 
    if ( av.strength ) { 
       float absstrength = float(av.strength )
-                          * ( 1 + strength_experience ( av.experience ) + strength_attackbonus ( av.attackbonus ) )
+                          * ( 1 + strength_experience ( av.experience_offensive ) + strength_attackbonus ( av.attackbonus ) )
                           * strength_damage ( av.damage ) 
                           * dv.hemming;
 
       float absdefense = float(dv.armor / armordivisor )
-                          * ( 1 + defense_defensebonus ( dv.defensebonus ) + defense_experience ( dv.experience ) );
+                          * ( 1 + defense_defensebonus ( dv.defensebonus ) + defense_experience ( dv.experience_defensive ) );
 
       int w = int( ceil(dv.damage + absstrength / absdefense * 1000 / damagefactor ));
 
@@ -182,28 +182,30 @@ void tfight :: calc ( void )
          av.weapcount = 0;
 
 
-      av.experience++;
+      av.experience_offensive++;
 
-//      if ( dist <= 10 && dv.strength > 0 )
-//         av.experience += 1;
+      if ( dist <= 10 && dv.strength > 0 )
+         av.experience_offensive += 1;
 
       if ( dv.damage >= 100 ) 
-         av.experience += 1;
+         av.experience_offensive += 1;
 
+      if ( av.experience_offensive > maxunitexperience )
+         av.experience_offensive = maxunitexperience;
 
-
-      if ( av.experience > maxunitexperience )
-         av.experience = maxunitexperience;
-
+      dv.experience_defensive += 1;
+      if ( dv.experience_defensive > maxunitexperience )
+         dv.experience_defensive = maxunitexperience;
+      
    } 
 
    if ( dv.strength ) { 
       float absstrength = float(dv.strength )
-                          * ( 1 + strength_experience ( dv.experience ) + strength_attackbonus ( dv.attackbonus ) )
+                          * ( 1 + strength_experience ( dv.experience_offensive ) + strength_attackbonus ( dv.attackbonus ) )
                           * strength_damage ( dv.damage ) ;
 
       float absdefense = float(av.armor / armordivisor)
-                          * ( 1 + defense_defensebonus ( av.defensebonus )+ defense_experience ( av.experience ));
+                          * ( 1 + defense_defensebonus ( av.defensebonus )+ defense_experience ( av.experience_defensive ));
 
       int w = int( ceil(av.damage + absstrength / absdefense * 1000 / damagefactor ));
 
@@ -222,13 +224,18 @@ void tfight :: calc ( void )
          dv.weapcount = 0;
 
       if ( av.damage >= 100 ) {
-         dv.experience += 2;
-         if ( dv.experience > maxunitexperience )
-            dv.experience = maxunitexperience;
+         dv.experience_offensive += 2;
+         if ( dv.experience_offensive > maxunitexperience )
+            dv.experience_offensive = maxunitexperience;
 
       } else
-        if ( dv.experience < maxunitexperience )
-           dv.experience++;
+        if ( dv.experience_offensive < maxunitexperience )
+           dv.experience_offensive++;
+        
+      av.experience_defensive += 1;
+      if ( av.experience_defensive > maxunitexperience )
+         av.experience_defensive = maxunitexperience;
+        
    } 
 
    if ( av.kamikaze ) 
@@ -283,7 +290,8 @@ void tunitattacksunit :: setup ( Vehicle* &attackingunit, Vehicle* &attackedunit
                         * attackingunit->typ->weapons.weapon[_weapon].targetingAccuracy[attackedunit->typ->movemalustyp] / 100 ));
    av.armor  = attackingunit->getArmor();
    av.damage     = attackingunit->damage;
-   av.experience  = attackingunit->experience;
+   av.experience_offensive  = attackingunit->experience_offensive;
+   av.experience_defensive  = attackingunit->experience_defensive;
    av.hemming    = 1;
    av.weapnum    = _weapon;
    av.weapcount  = attackingunit->ammo [ _weapon ];
@@ -355,7 +363,8 @@ void tunitattacksunit :: setup ( Vehicle* &attackingunit, Vehicle* &attackedunit
 
    dv.armor = attackedunit->getArmor();
    dv.damage    = attackedunit->damage;
-   dv.experience = attackedunit->experience;
+   dv.experience_offensive = attackedunit->experience_offensive;
+   dv.experience_defensive = attackedunit->experience_defensive;
    if ( dist <= maxmalq && attackingunit->height < chtieffliegend )
       dv.hemming = strength_hemming ( attackingunit->xpos, attackingunit->ypos, attackedunit );
    else
@@ -374,12 +383,11 @@ void tunitattacksunit :: setup ( Vehicle* &attackingunit, Vehicle* &attackedunit
 }
 
 
-
 void log( const Vehicle* attacker, const Vehicle* attackee )
 {
    if( CGameOptions::Instance()->logKillsToConsole ) 
       std::cout << attackee->getOwner() << ";" << attacker->getOwner() << ";" << attackee->typ->id  << ";"
-            << attackee->typ->name  << ";" << attackee->experience << ";" << attacker->getMap()->time.turn() <<  "\n" ;
+            << attackee->typ->name  << ";" << attackee->experience_offensive << ";" << attacker->getMap()->time.turn() <<  "\n" ;
 }
 
 void tunitattacksunit :: setresult( const Context& context )
@@ -387,8 +395,11 @@ void tunitattacksunit :: setresult( const Context& context )
    int nwid = _attackingunit->networkid;
    GameMap* map = _attackingunit->getMap();
    
-   GameAction* a = new ChangeUnitProperty( _attackingunit, ChangeUnitProperty::Experience, av.experience );
+   GameAction* a = new ChangeUnitProperty( _attackingunit, ChangeUnitProperty::ExperienceOffensive, av.experience_offensive );
    a->execute ( context );
+   
+   GameAction* a2 = new ChangeUnitProperty( _attackingunit, ChangeUnitProperty::ExperienceDefensive, av.experience_defensive );
+   a2->execute ( context );
    
    GameAction* b = new ConsumeAmmo( _attackingunit, _attackingunit->typ->weapons.weapon[av.weapnum].getScalarWeaponType(), av.weapnum, _attackingunit->ammo[ av.weapnum ] - av.weapcount );
    b->execute ( context );
@@ -399,12 +410,16 @@ void tunitattacksunit :: setresult( const Context& context )
    c->execute ( context );
    
    if ( _respond ) {
-      GameAction* d = new ChangeUnitProperty( _attackedunit, ChangeUnitProperty::Experience, dv.experience );
+      GameAction* d = new ChangeUnitProperty( _attackedunit, ChangeUnitProperty::ExperienceOffensive, dv.experience_offensive );
       d->execute ( context );
       
       GameAction* e = new ConsumeAmmo( _attackedunit, _attackedunit->typ->weapons.weapon[dv.weapnum].getScalarWeaponType(), dv.weapnum, _attackedunit->ammo[ dv.weapnum ] - dv.weapcount );
       e->execute ( context );
    }
+   
+   GameAction* d2 = new ChangeUnitProperty( _attackedunit, ChangeUnitProperty::ExperienceDefensive, dv.experience_defensive );
+   d2->execute ( context );
+   
    
    GameAction* f = new InflictDamage( _attackingunit, av.damage - _attackingunit->damage );
    f->execute ( context );
@@ -479,7 +494,8 @@ void tunitattacksbuilding :: setup ( Vehicle* attackingunit, int x, int y, int w
 
    av.armor = attackingunit->getArmor();
    av.damage    = attackingunit->damage;
-   av.experience = attackingunit->experience;
+   av.experience_offensive = attackingunit->experience_offensive;
+   av.experience_defensive = attackingunit->experience_defensive;
    av.hemming    = 1;
    av.weapnum    = _weapon;
    av.weapcount  = attackingunit->ammo [ _weapon ];
@@ -509,7 +525,8 @@ void tunitattacksbuilding :: setup ( Vehicle* attackingunit, int x, int y, int w
 
    dv.armor = _attackedbuilding->getArmor();
    dv.damage    = _attackedbuilding->damage;
-   dv.experience = 0;
+   dv.experience_offensive = 0;
+   dv.experience_defensive = 0;
    dv.hemming    = 1;
    dv.weapnum = -1;
 
@@ -590,7 +607,8 @@ void tmineattacksunit :: setup ( const MapCoordinate& position, int minenum, Veh
 
    av.armor = 1;
    av.damage = 0;
-   av.experience = 0;
+   av.experience_offensive = 0;
+   av.experience_defensive = 0;
    av.defensebonus = 0;
    av.hemming    = 1;
    av.weapnum = 0;
@@ -605,7 +623,8 @@ void tmineattacksunit :: setup ( const MapCoordinate& position, int minenum, Veh
    dv.strength = 0;
    dv.armor = attackedunit->getArmor();
    dv.damage    = attackedunit->damage;
-   dv.experience = attackedunit->experience;
+   dv.experience_offensive = attackedunit->experience_offensive;
+   dv.experience_defensive = attackedunit->experience_defensive;
    dv.defensebonus = 0;
    dv.hemming    = 1;
    dv.weapnum = 0;
@@ -702,7 +721,8 @@ void tunitattacksobject :: setup ( Vehicle* attackingunit, int obj_x, int obj_y,
 
    av.armor = attackingunit->getArmor();
    av.damage    = attackingunit->damage;
-   av.experience = attackingunit->experience;
+   av.experience_offensive = attackingunit->experience_offensive;
+   av.experience_defensive = attackingunit->experience_defensive;
    av.weapnum    = _weapon;
    av.weapcount   = attackingunit->ammo [ _weapon ];
    av.kamikaze   = attackingunit->typ->hasFunction( ContainerBaseType::KamikazeOnly  );
@@ -728,7 +748,8 @@ void tunitattacksobject :: setup ( Vehicle* attackingunit, int obj_x, int obj_y,
 
    dv.armor = _obji->typ->armor;
    dv.damage    = _obji->damage;
-   dv.experience = 0;
+   dv.experience_offensive = 0;
+   dv.experience_defensive = 0;
 
    dv.defensebonus = 0; // field  -> getdefensebonus();
    dv.hemming    = 1;
@@ -736,7 +757,6 @@ void tunitattacksobject :: setup ( Vehicle* attackingunit, int obj_x, int obj_y,
    dv.kamikaze = 0;
    dv.height = 0;
 }
-
 
 
 void tunitattacksobject :: setresult( const Context& context )

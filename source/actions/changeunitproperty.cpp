@@ -36,7 +36,8 @@ ChangeUnitProperty::ChangeUnitProperty( Vehicle* vehicle, Property property, int
 ASCString ChangeUnitProperty::getPropertyName( Property property )
 {
    switch ( property ) {
-      case Experience: return "Experience";
+      case ExperienceOffensive: return "Offensive Experience";
+      case ExperienceDefensive: return "Defensive Experience";
       case Movement: return "Movement";
       case AttackedFlag: return "AttackedFlag";
       case Height: return "Height";
@@ -99,7 +100,8 @@ GameActionID ChangeUnitProperty::getID() const
 int ChangeUnitProperty::getUnitProperty()
 {
    switch ( property ) {
-      case Experience: return getUnit()->experience;
+      case ExperienceOffensive: return getUnit()->experience_offensive;
+      case ExperienceDefensive: return getUnit()->experience_defensive;
       case Movement:   return getUnit()->getMovement( false, false );
       case AttackedFlag: return getUnit()->attacked;
       case Height: return getUnit()->height;
@@ -113,8 +115,11 @@ int ChangeUnitProperty::getUnitProperty()
 void ChangeUnitProperty::setUnitProperty( Property property, int value, const Context& context )
 {
    switch ( property ) {
-      case Experience: 
-         getUnit()->experience = value;
+      case ExperienceOffensive: 
+         getUnit()->experience_offensive = value;
+         break;
+      case ExperienceDefensive: 
+         getUnit()->experience_defensive = value;
          break;
       case Movement:
          getUnit()->setMovement( value, 0 );

@@ -47,7 +47,9 @@ bool TrainUnitCommand :: avail ( const ContainerBase* carrier, const Vehicle* un
    if ( unit->getCarrier() != carrier )
       return false;
    
-   if( unit->experience >= min( unit->getMap()->getgameparameter( cgp_maxtrainingexperience ), maxunitexperience))
+   int maxExp = min( unit->getMap()->getgameparameter( cgp_maxtrainingexperience ), maxunitexperience);
+   if(    unit->experience_offensive >= maxExp
+       && unit->experience_defensive >= maxExp )
       return false;
    
    if ( unit->attacked )
@@ -97,18 +99,32 @@ ActionResult TrainUnitCommand::go ( const Context& context )
    if ( !avail( getContainer(), unit ))
       return ActionResult( 22101 );
    
-   int newexp = unit->experience + getMap()->getgameparameter( cgp_trainingIncrement );
-   int maxexp = min( unit->getMap()->getgameparameter( cgp_maxtrainingexperience ), maxunitexperience);
-   if ( newexp > maxexp )
-      newexp = maxexp;
+   int newexp_o = unit->experience_offensive + getMap()->getgameparameter( cgp_trainingIncrement );
+   int newexp_d = unit->experience_defensive + getMap()->getgameparameter( cgp_trainingIncrement );
    
-   auto_ptr<ChangeUnitProperty> train ( new ChangeUnitProperty( unit, ChangeUnitProperty::Experience, newexp ));
-   ActionResult res = train->execute( context );
-   if ( res.successful() )
-      train.release();
+   int maxexp = min( unit->getMap()->getgameparameter( cgp_maxtrainingexperience ), maxunitexperience);
+   if ( newexp_o > maxexp )
+      newexp_o = maxexp;
+   
+   if ( newexp_d > maxexp )
+      newexp_d = maxexp;
+   
+   if ( newexp_o != unit->experience_offensive ) {
+      auto_ptr<ChangeUnitProperty> train ( new ChangeUnitProperty( unit, ChangeUnitProperty::ExperienceOffensive, newexp_o ));
+      ActionResult res = train->execute( context );
+      if ( res.successful() )
+         train.release();
+   }
          
+   if ( newexp_d != unit->experience_defensive ) {
+      auto_ptr<ChangeUnitProperty> train ( new ChangeUnitProperty( unit, ChangeUnitProperty::ExperienceDefensive, newexp_d ));
+      ActionResult res = train->execute( context );
+      if ( res.successful() )
+         train.release();
+   }
+   
    auto_ptr<ChangeUnitProperty> train2 ( new ChangeUnitProperty( unit, ChangeUnitProperty::AttackedFlag, 1 ));
-   res = train2->execute( context );
+   ActionResult res = train2->execute( context );
    if ( res.successful() )
       train2.release();
    

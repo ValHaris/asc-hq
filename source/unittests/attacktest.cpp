@@ -23,9 +23,14 @@ void testAttack()
    assertOrThrow( veh != NULL );
    assertOrThrow( veh->getMovement() == 100 );
    
+   assertOrThrow( veh->experience_offensive == 0 );
+   assertOrThrow( veh->experience_defensive == 0 );
+   
    attack( veh, MapCoordinate( 3,5) );
    
    assertOrThrow( veh->getMovement() == 0 );
+   assertOrThrow( veh->experience_offensive == 2 );
+   assertOrThrow( veh->experience_defensive == 1 );
    
    testCargoMovement( veh, 50 );
    
@@ -39,8 +44,12 @@ void testAttack()
    Vehicle* mam = game->getField(4,4)->vehicle;
    assertOrThrow( mam != NULL );
    assertOrThrow( mam->getMovement() == 100 );
+   assertOrThrow( mam->experience_offensive == 0 );
+   assertOrThrow( mam->experience_defensive == 0 );
    
    attack( mam, MapCoordinate( 3,5) );
+   assertOrThrow( mam->experience_offensive == 1 );
+   assertOrThrow( mam->experience_defensive == 0 );
    
    assertOrThrow( mam->getMovement() == 100 );
    testCargoMovement( mam, 100 );
