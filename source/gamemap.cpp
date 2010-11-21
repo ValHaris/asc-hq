@@ -2245,7 +2245,8 @@ GameMap :: ReplayInfo :: ~ReplayInfo ( )
   }
 }
 
-GameParameterSettings gameParameterSettings[gameparameternum ] = {
+GameParameterSettings gameParameterSettings[gameparameternum ] = { 
+      // name                                  default               min  max          EventChangable legace   description
       {  "LifetimeTrack",                      1,                    1,   maxint,             true,   false,   "lifetime of tracks"},//       cgp_fahrspur                        
       {  "LifetimeBrokenIce",                  2,                    1,   maxint,             true,   false,   "freezing time of icebreaker fairway"},   //       cgp_eis,                            
       {  "MoveFromInaccessibleFields",         1,                    0,   1,                  true,   false,    "move vehicles from unaccessible fields"},   //       cgp_movefrominvalidfields,          
@@ -2280,6 +2281,9 @@ GameParameterSettings gameParameterSettings[gameparameternum ] = {
       {  "ObjectsGrowOnOtherObjects",          1,                    0,   1,                  false,  false,   "Objects can grow on fields with other objects"  },  //       cgp_objectGrowOnOtherObjects
       {  "ResearchOutputMultiplier",           1,                    1,   maxint,             false,  false,   "Multiplies the research output of all labs"  },  //       cgp_researchOutputMultiplier
       {  "ProduceOnlyResearchedStuffInternally", 0,                  0,   1,                  true,   false,   "Produce only researched stuff internally" },
-      {  "ProduceOnlyResearchedStuffExternally", 1,                  0,   1,                  true,   false,   "Produce only researched stuff externally" }
+      {  "ProduceOnlyResearchedStuffExternally", 1,                  0,   1,                  true,   false,   "Produce only researched stuff externally" },
+      {  "ExperienceAt90PercentBonus",         20,                   3,   1000,               false,  false,   "Experience level to achieve 90% bonus" },   // cgp_experienceAt90percentbonus
+      {  "maxAttackExperienceBonus",           100,                  0,   1000,               false,  false,   "Max attack bonus for experience (percent)" },  // maxAttackExperienceBonus
+      {  "maxDefenseExperienceBonus",          100,                  0,   1000,               false,  false,   "Max defense bonus for experience (percent)" }  // maxDefenseExperienceBonus
 };
 

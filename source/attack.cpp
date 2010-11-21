@@ -118,19 +118,24 @@ float AttackFormula :: strength_damage ( int damage )
 
 float AttackFormula :: strength_experience ( int experience )
 {
-	float e =		(experience < 0)
-				?	0	
-				:	experience ;
-   return e/maxunitexperience * 2.875 / gamemap->getgameparameter( cgp_experienceDivisorAttack );
+   if ( experience < 0 )
+      return 0.0;
+   // =1+(($B$33-1)*(1-(0.1^(1/$B$34))^B48))
+   float ninety = gamemap->getgameparameter( cgp_experienceAt90percentbonus );
+   float maxExpBonus = ((float)gamemap->getgameparameter( cgp_maxAttackExperienceBonus ))/100.0;
+   float e = maxExpBonus * ( 1.0 - pow( pow( 0.1, 1.0/ninety), experience ));
+   return e;
 }
 
 float AttackFormula :: defense_experience ( int experience )
 {
-   float e =		(experience < 0)
-				?	0
-				:	experience ;
-
-   return e/maxunitexperience * 1.15 / gamemap->getgameparameter( cgp_experienceDivisorDefense );
+   if ( experience < 0 )
+      return 0.0;
+   
+   float ninety = gamemap->getgameparameter( cgp_experienceAt90percentbonus );
+   float maxExpBonus = ((float)gamemap->getgameparameter( cgp_maxDefenseExperienceBonus ))/100.0;
+   float e = maxExpBonus * (1.0 - pow( pow( 0.1, 1.0/ninety), experience ));
+   return e;
 }
 
 float AttackFormula :: strength_attackbonus ( int abonus )

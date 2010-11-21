@@ -70,7 +70,7 @@ const int choehenstufennum =  8;
 const int maxbuildingpicnum  = 8;
 
 //! The maximum experience value of a #Vehicle
-const int maxunitexperience = 23;
+const int maxunitexperience = 1000000;
 
 
 //! The number of different resources that ASC uses

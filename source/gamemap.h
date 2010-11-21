@@ -72,7 +72,7 @@ class ActionRecorder {
 
 
 //! The number of game paramters that can be specified for each map.
-const int gameparameternum = 35;
+const int gameparameternum = 38;
 
 enum GameParameter { cgp_fahrspur, // 0
        cgp_eis,
@@ -108,7 +108,10 @@ enum GameParameter { cgp_fahrspur, // 0
        cgp_objectGrowOnOtherObjects,
        cgp_researchOutputMultiplier,
        cgp_produceOnlyResearchedStuffInternally,
-       cgp_produceOnlyResearchedStuffExternally };
+       cgp_produceOnlyResearchedStuffExternally,
+       cgp_experienceAt90percentbonus,       // 35
+       cgp_maxAttackExperienceBonus,
+       cgp_maxDefenseExperienceBonus };
 
 
 struct GameParameterSettings {
