@@ -571,6 +571,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\unitcostcalculator-standard.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\unitset.cpp"
 				>
 			</File>
@@ -592,6 +596,10 @@
 			</File>
 			<File
 				RelativePath="..\..\..\viewcalculation.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\weaponrangelayer.cpp"
 				>
 			</File>
 			<File
