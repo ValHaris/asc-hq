@@ -94,7 +94,8 @@ am__objects_1 = soundList.$(OBJEXT) typen.$(OBJEXT) \
 	packagemanager.$(OBJEXT) packagerepository.$(OBJEXT) \
 	dataversioncheck.$(OBJEXT) i18n.$(OBJEXT) \
 	accessconstraints-game.$(OBJEXT) contextutils.$(OBJEXT) \
-	unitcostcalculator-standard.$(OBJEXT)
+	unitcostcalculator-standard.$(OBJEXT) \
+	weaponrangelayer.$(OBJEXT)
 nodist_asc_OBJECTS = $(am__objects_1) sg.$(OBJEXT) \
 	gamedialog.$(OBJEXT)
 asc_OBJECTS = $(nodist_asc_OBJECTS)
@@ -349,7 +350,7 @@ containercontrols.cpp containerbase-functions.cpp windowing.cpp turncontrol.cpp 
 playercolor.cpp pg_mapdisplay.cpp autotraining.cpp researchexecution.cpp luacommandwriter.cpp \
 campaignactionrecorder.cpp loggingoutput.cpp versionidentifier.cpp package.cpp packagemanager.cpp \
 packagerepository.cpp dataversioncheck.cpp i18n.cpp accessconstraints-game.cpp contextutils.cpp \
-unitcostcalculator-standard.cpp
+unitcostcalculator-standard.cpp weaponrangelayer.cpp
 
 commonLibs = $(top_builddir)/source/libs/triangul/libtriangul.la \
 $(top_builddir)/source/ai/libai.la $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
@@ -576,6 +577,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vehicletype.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/versionidentifier.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/viewcalculation.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/weaponrangelayer.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/windowing.Po@am__quote@
 
 .cpp.o:

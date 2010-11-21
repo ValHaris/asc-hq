@@ -105,7 +105,7 @@ class MapRenderer {
 
 
 class MapLayer {
-      bool active;
+   bool active;
    protected:
       MapLayer() : active(true) {};
    public:
@@ -115,6 +115,7 @@ class MapLayer {
       virtual void paintSingleField( const MapRenderer::FieldRenderInfo& fieldInfo,  int layer, const SPoint& pos ) = 0;
       virtual ~MapLayer() {};
 };
+
 
 
 

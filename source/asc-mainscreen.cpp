@@ -45,6 +45,7 @@
 #include "widgets/textrenderer-addons.h"
 #include "spfst-legacy.h"
 
+#include "weaponrangelayer.h"
 #include "dialogs/fileselector.h"
 
 #include "actions/moveunitcommand.h"
@@ -289,96 +290,6 @@ Menu::Menu ( PG_Widget *parent, const PG_Rect &rect)
 
 
 
-class UnitWeaponRangeLayer : public MapLayer {
-   Surface& icon1;
-   Surface& icon2;
-   GameMap* gamemap;
-
-   map<MapCoordinate,int> fields;
-
-   void markField( const MapCoordinate& pos )
-   {
-      fields[pos] |= 1;
-   }
-
-      bool addUnit( Vehicle* veh )
-      {
-         if ( fieldvisiblenow ( getfield ( veh->xpos, veh->ypos ))) {
-            int found = 0;
-            for ( int i = 0; i < veh->typ->weapons.count; i++ ) {
-               if ( veh->typ->weapons.weapon[i].shootable() ) {
-                  circularFieldIterator( gamemap,veh->getPosition(), veh->typ->weapons.weapon[i].maxdistance/minmalq, (veh->typ->weapons.weapon[i].mindistance+maxmalq-1)/maxmalq, FieldIterationFunctor( this, &UnitWeaponRangeLayer::markField )  );
-                  found++;
-               }
-            }
-            if ( found )
-               fields[veh->getPosition()] |= 2;
-            
-            return found;
-         } else
-            return false;
-      };
-
-      void reset()
-      {
-         fields.clear();
-      }
-   public:
-
-      void operateField( GameMap* actmap, const MapCoordinate& pos )
-      {
-         if ( !pos.valid() )
-            return;
-         
-         if ( gamemap && gamemap != actmap ) 
-            reset();
-
-         gamemap = actmap;
-         
-         if ( fields.find( pos ) != fields.end() ) {
-            if ( fields[pos] & 2 ) {
-               reset();
-               setActive(false);
-               statusMessage("Weapon range layer disabled");
-               repaintMap();
-               return;
-            }
-         }
-         
-         if ( actmap->getField( pos )->vehicle ) {
-            if ( addUnit( actmap->getField( pos )->vehicle ) ) {
-               setActive(true);
-               statusMessage("Weapon range layer enabled");
-               repaintMap();
-            }
-         }
-      }
-      
-      UnitWeaponRangeLayer() : icon1 ( IconRepository::getIcon( "markedfield-red.png")), icon2 ( IconRepository::getIcon( "markedfield-red2.png")), gamemap(NULL) {
-         // cursorMoved.connect( SigC::slot( *this, UnitWeaponRangeLayer::cursorMoved ));
-      }
-
-      bool onLayer( int layer ) { return layer == 17; };
-      
-      void paintSingleField( const MapRenderer::FieldRenderInfo& fieldInfo,  int layer, const SPoint& pos )
-      {
-         if ( fieldInfo.gamemap != gamemap && gamemap) {
-            reset();
-            gamemap = NULL;
-            return;
-         }
-         
-         if ( fieldInfo.visibility >= visible_ago) {
-            if ( fields.find( fieldInfo.pos ) != fields.end() ) {
-               int p = fields[fieldInfo.pos];
-               if ( p & 1 )
-                  fieldInfo.surface.Blit( icon1, pos );
-               if ( p & 2 )
-                  fieldInfo.surface.Blit( icon2, pos );
-            }
-         }
-      }
-};
 
 
 

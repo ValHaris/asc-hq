@@ -35,6 +35,7 @@
 class Menu;
 class NewGuiHost;
 class MapDisplayPG;
+class UnitWeaponRangeLayer;
 
 class SelectionItemWidget : public PG_Widget {
       const Placeable* it;
@@ -102,6 +103,9 @@ public:
 
     void addContextAction( ContextAction* contextAction );
    
+    
+    void showWeaponRange( GameMap* gamemap, const MapCoordinate& pos );
+    
 protected:
 
     bool clickOnMap( const MapCoordinate& field, const SPoint& pos, bool changed, int button, int prio);
@@ -124,6 +128,8 @@ protected:
     ~Maped_MainScreenWidget() { };
    private:
       bool runContextAction  (PG_PopupMenu::MenuItem* menuItem );
+      UnitWeaponRangeLayer* weaponRangeLayer;
+      
 };
 
 //! displays a message in the status line of ASC

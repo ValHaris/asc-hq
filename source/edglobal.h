@@ -27,7 +27,7 @@
 
 extern int infomessage( char* formatstring, ... );
 
-const int execactionscount = 115;
+const int execactionscount = 116;
 
 extern const char*  execactionnames[execactionscount];
 
@@ -146,7 +146,8 @@ enum tuseractions {
      act_runLuaScript,
      act_runTranslationScript,
      act_dumpAllTerrain,
-     act_dumpAllObjects
+     act_dumpAllObjects,
+     act_showweapnrange
 
  };
 

@@ -111,7 +111,6 @@ void ContainerInfoLayer::paintSingleField( const MapRenderer::FieldRenderInfo& f
    }
 }
 
-
  
 class ResourceGraphLayer : public MapLayer {
       void paintBar( const MapRenderer::FieldRenderInfo& fieldInfo, const SPoint& pos, int row, int amount, int color ) {

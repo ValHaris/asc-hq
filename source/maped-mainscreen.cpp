@@ -43,6 +43,9 @@
 #include "gameoptions.h"
 #include "widgets/dropdownselector.h"
 #include "dialogs/fileselector.h"
+#include "weaponrangelayer.h"
+
+#include "mapdisplay.h"
 
 Maped_MainScreenWidget*  mainScreenWidget = NULL ;
 
@@ -183,6 +186,7 @@ void Menu::setup()
     addbutton ( "edit map ~P~arameters",        act_setmapparameters );
     addbutton ( "setup item ~F~ilters\tctrl+h",  act_setunitfilter );
     addbutton ( "select ~G~raphic set",         act_selectgraphicset );
+    addbutton ( "show weapon range\tctrl+r", act_showweapnrange );
 
    addfield ("~D~evelopment");
     addbutton ( "Dump ~B~uilding",          act_dumpBuilding );
@@ -500,7 +504,17 @@ Maped_MainScreenWidget::Maped_MainScreenWidget( PG_Application& application )
    addContextAction( new ContextMenu::FieldResources );
    addContextAction( new ContextMenu::DeleteTopObject );
    addContextAction( new ContextMenu::DeleteAllObjects );
+   
+   weaponRangeLayer = new UnitWeaponRangeLayer();
+   mapDisplay->addMapLayer( weaponRangeLayer, "weaprange" );
+   
 }
+
+void Maped_MainScreenWidget::showWeaponRange( GameMap* gamemap, const MapCoordinate& pos )
+{
+   weaponRangeLayer->operateField( gamemap, pos );
+}
+
 
 void Maped_MainScreenWidget::playerChanged( int player )
 {
@@ -843,7 +857,7 @@ bool Maped_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
             return true;
                         
          case 18: // R
-            execaction_ev(act_repaintdisplay);
+            execaction_ev(act_showweapnrange);
             return true;
    
          case 19 :  // S

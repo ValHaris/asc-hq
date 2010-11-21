@@ -28,7 +28,7 @@ explosivemines.cpp legacynetworkloaders.cpp playercolor.cpp statistics.cpp \
 player.cpp cannedmessages.cpp mapimageexport.cpp mainscreenwidget.cpp windowing.cpp \
 campaignactionrecorder.cpp luacommandwriter.cpp versionidentifier.cpp package.cpp \
 packagemanager.cpp packagerepository.cpp dataversioncheck.cpp i18n.cpp \
-accessconstraints-editor.cpp unitcostcalculator-standard.cpp
+accessconstraints-editor.cpp unitcostcalculator-standard.cpp weaponrangelayer.cpp
 
 asc_pbpedit_LDADD   	= $(top_builddir)/source/sdl/libsdl.la \
 $(top_builddir)/source/libs/triangul/libtriangul.la $(BZIP2_LIBS) \

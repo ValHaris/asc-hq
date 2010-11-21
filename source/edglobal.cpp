@@ -179,7 +179,8 @@
         "Run Lua Script",
 	"Run Translation Script",
 	"Dump all Terrain",
-	"Dump all Objects"
+	"Dump all Objects",
+        "show weapon range"
 	 };
 
 
@@ -1025,6 +1026,11 @@ void execaction_pg(int code)
          selectAndRunLuaScript( "*.map.*" );
          repaintMap();
          break;
+      case act_showweapnrange:
+         mainScreenWidget->showWeaponRange( actmap, actmap->getCursor() );
+         displaymap();
+         break;
+         
          
    };
 }
