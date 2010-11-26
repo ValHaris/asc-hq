@@ -156,7 +156,7 @@ class EditMapParameters : public ASC_PG_Dialog {
       }
 
    public:
-      EditMapParameters( GameMap* actmap, PG_Widget* parent ) : ASC_PG_Dialog( parent, PG_Rect( 50, 50, 500, 400 ), "Edit Map Parameters")
+      EditMapParameters( GameMap* actmap, PG_Widget* parent ) : ASC_PG_Dialog( parent, PG_Rect( -1, -1, 750, 500 ), "Edit Map Parameters")
       {
          gpew = new GameParameterEditorWidget ( actmap, this, PG_Rect( 10, GetTitlebarHeight(), Width() - 20, Height() - GetTitlebarHeight() - 40 ));
          PG_Button* ok = new PG_Button( this, PG_Rect( Width() - 100, Height() - 40, 90, 30), "OK" );
