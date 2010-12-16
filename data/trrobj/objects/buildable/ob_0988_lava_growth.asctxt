@@ -5,5 +5,10 @@ ObjectType {
    GroupID = 14
 
    growthRate = 0.11
+   dry {
+
+   picture = ob_0988_lava_growth.png 64
+
+   } dry
 
 } ObjectType
