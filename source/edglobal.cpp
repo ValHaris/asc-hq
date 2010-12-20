@@ -812,20 +812,14 @@ void execaction_pg(int code)
                                if (choice_dlg("Map not saved ! Save now ?","~y~es","~n~o") == 1) 
                                   k_savemap(false);
 
-                            GameMap* oldmap = actmap;
-                            actmap = NULL;
                             try {
                                 k_loadmap();
                             }
-                            catch ( ... ) {
-                                displaymessage ( "error loading file",1 );
+                            catch (ASCmsgException message ) {
+                               errorMessage( "Could not load map:\n" + message.getMessage());
                             }
-                            if ( !actmap ) {
-                                actmap = oldmap;
-                                oldmap = NULL;
-                            } else {
-                               delete oldmap;
-                               oldmap = NULL;
+                            catch ( ... ) {
+                               errorMessage ( "error loading file" );
                             }
                             displaymap();
                           } 

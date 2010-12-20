@@ -634,18 +634,19 @@ void         k_loadmap(void)
         if ( !mp )
             return;
 
-        delete actmap;
-        actmap =  mp;
-
-        if ( actmap->campaign.avail && !actmap->campaign.directaccess && !actmap->codeWord.empty() ) {
+        /*
+        if ( mp->campaign.avail && !mp->campaign.directaccess && !mp->codeWord.empty() ) {
             tlockdispspfld ldsf;
             removemessage();
             Password pwd;
-            pwd.setUnencoded ( actmap->codeWord );
-            enterpassword ( pwd );
+            pwd.setUnencoded ( mp->codeWord );
+            if ( enterpassword ( pwd ) == ;
         } else
             removemessage();
-
+*/
+        
+         delete actmap;
+         actmap =  mp;
 
         displaymap();
         mapsaved = true;
@@ -1577,7 +1578,7 @@ void         UnitPropertyEditor::init(  )
     addeingabe(29, namebuffer, 0, 100);
 
     addbutton("E~x~p of Unit",50,120,250,140,2,1,1,true);
-    addeingabe(1, &unit->experience, 0, maxunitexperience);
+    addeingabe(1, &unit->experience_offensive, 0, maxunitexperience);
 
     addbutton("~D~amage of Unit",50,160,250,180,2,1,2,true);
     addeingabe(2, &unit->damage, 0, 100 );
@@ -3787,7 +3788,8 @@ void copyVehicleData( Vehicle* source, Vehicle* target, GameMap* targetMap, int*
     target->height = source->height;
     target->tank = source->getTank();
     target->name = source->name;
-    target->experience = source->experience;
+    target->experience_offensive = source->experience_offensive;
+    target->experience_defensive = source->experience_defensive;
     target->damage = source->damage;
 
 
