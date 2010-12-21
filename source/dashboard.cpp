@@ -131,8 +131,10 @@ DashboardPanel::DashboardPanel ( PG_Widget *parent, const PG_Rect &r, const ASCS
    GameMap::sigMapDeletion.connect( SigC::slot( *this, &DashboardPanel::reset ));
 
    PG_Widget* w = parent->FindChild( "unitexp", true );
+   /*
    if ( w )
       w->sigMouseButtonDown.connect( SigC::slot( *this, &DashboardPanel::viewExperienceOverview ));
+   */
 };
 
 bool DashboardPanel::viewExperienceOverview()
