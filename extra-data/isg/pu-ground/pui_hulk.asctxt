@@ -1,0 +1,83 @@
+VehicleType { 
+   Name = Hulk
+   ID = 12583
+   parent = 202
+
+   Description = Devl Hulk
+   Infotext = [Der Devl Hulk ist in Wut versetzt eine Kampfmaschine. Sein Faustschlag ist tödlich gegen jeden Infanteristen. Er sammelt alles ein, mit dem er in Rage umsichwerfen kann. Schleudert er ein Panzerwrack gegen große und langsame Einheiten, so nehmen diese schweren Schaden. Der Hulk springt bis in mittlere Luftschichten. Diese Fortbewegung ermöglicht ihm eine große Reichweite. In Friedenszeiten pflanzt er Bäume und Palmen.]
+   Picture = pui_hulk.png
+   InfoImage = pui_hulk.jpg
+   InfoImageSmall = pui_hulk_k.png
+   
+   Tank.Material = 12000
+   Tank.Fuel = 12000
+   SelfRepairRate = 15
+   Jamming = 0
+   MaxSurvivableStorm = 100
+   Features = conquer_buildings self_repairing move_after_attack no_midair_refuel no_reactionfire
+   FuelConsumption = 0
+   Movement = 0 0 0 100 0 5 0 0 
+   
+   Armor = 537
+   Height = ground_level medium_level_flight
+   
+   HeightChangeMethodNum = 2
+   HeightChangeMethod0 {
+      movecost = 3
+      heightdelta = 2
+      dist = 2
+      startheight = ground_level
+      canattack = true
+   } HeightChangeMethod0
+   HeightChangeMethod1 {
+      movecost = 1
+      heightdelta = -2
+      dist = 2
+      startheight = medium_level_flight
+      canattack = true
+   } HeightChangeMethod1
+
+   Weapons { 
+   	Number = 2
+      Weapon0 ->* VehicleType.ML
+      Weapon0.name = Faustschlag
+      Weapon0.Sound = building_collapse_s.ogg
+      Weapon0.Ammo = 4
+      Weapon0.MaxRange = 10
+      Weapon0.Punch@MaxRange = 130
+      Weapon0.Punch@MinRange = 130
+      Weapon0.targets = floating ground_level low_level_flight medium_level_flight
+      Weapon0.shotFrom = ground_level medium_level_flight
+      Weapon0.LaserRechargecost.Fuel = 100
+      Weapon0.LaserRechargecost.Material = 0
+      Weapon0.Reactionfire = 0
+      Weapon0.HitAccuracy.d1 = 100
+      Weapon0.HitAccuracy.u1 = 0
+      Weapon0.HitAccuracy.d2 = 0
+      Weapon0.HitAccuracy.u2 = 0
+      Weapon0.WeaponEffectiveness.trooper = 120
+      
+      Weapon1 ->* VehicleType.Panzerfaust
+      Weapon1.Type = laser shootable 
+      Weapon1.name = Felswurf
+      Weapon1.Sound = building_collapse_s.ogg
+      Weapon1.Ammo = 1
+      Weapon1.Punch@MaxRange = 130
+      Weapon1.Punch@MinRange = 130
+      Weapon1.MinRange = 20
+      Weapon1.MaxRange = 20
+      Weapon1.shotFrom = ground_level medium_level_flight
+      Weapon1.targets = floating ground_level
+      Weapon1.LaserRechargecost.Fuel = 100
+      Weapon1.LaserRechargecost.Material = 1000
+      Weapon1.LaserRechargeRate = 1
+      Weapon1.Reactionfire = 0
+      Weapon1.HitAccuracy.d2 = 90
+      Weapon1.WeaponEffectiveness.building|turret|object = 120
+   } Weapons
+   Construction { 
+      Objects = 181 2106
+      ObjectsRemovable = 1205
+      ObjectGroupsRemovable = 10 11 13 21
+   } Construction
+} VehicleType
