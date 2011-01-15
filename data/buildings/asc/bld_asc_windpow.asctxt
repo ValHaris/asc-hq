@@ -6,7 +6,7 @@ BuildingType {
    Infotext = [Windenergiekraftwerk]
 
    Armor = 1000
-   Functions = Wind_Power_Plant 
+   Features = Wind_Power_Plant 
    MaxResourceProduction { 
       Energy = 5000
    } MaxResourceProduction
