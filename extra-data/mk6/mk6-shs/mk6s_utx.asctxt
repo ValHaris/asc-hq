@@ -8,6 +8,7 @@ VehicleType {
    picture = mk6s_utx.png
    WreckageObject = 436
    GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
+   Features += mine_layer mineview
 
    Transportation ->* VehicleType.TransSubmarine 
 
@@ -18,7 +19,7 @@ VehicleType {
 
    Construction.ObjectGroupsRemovable = 9 15
    Weapons { 
-      Initiative = 0
-      Number = 0
+      Number = 1
+      Weapon0 ->* VehicleType.AntiMine
    } Weapons
 } VehicleType
