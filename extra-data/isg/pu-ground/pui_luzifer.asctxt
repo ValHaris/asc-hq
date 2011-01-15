@@ -57,6 +57,7 @@ Luzifer ist Infanterist und seine Waffe ist ein Flammenschwert. Er kann sich auf
       Weapon0 ->* VehicleType.ML
       Weapon0.Sound = burning.ogg
       Weapon0.Ammo = 4
+      Weapon0.MaxRange = 10
       Weapon0.Punch@MaxRange = 100
       Weapon0.Punch@MinRange = 100
       Weapon0.targets = ground_level
