@@ -17,13 +17,19 @@ VehicleType {
    movement += 0 0 0 20 40 40 40 0
 
    Weapons { 
-      Number = 6
+      Number = 7
       Weapon0 ->* VehicleType.ServiceGround
       Weapon1 ->* VehicleType.AmmoCM
       Weapon2 ->* VehicleType.AmmoLM
+      Weapon2.Ammo = 50
       Weapon3 ->* VehicleType.AmmoSM
+      Weapon3.Ammo = 50
       Weapon4 ->* VehicleType.AmmoCannon
+      Weapon4.Ammo = 50
       Weapon5 ->* VehicleType.AmmoTorp
+      Weapon5.Ammo = 50
+      Weapon6 ->* VehicleType.AmmoBomb 
+      Weapon6.Ammo = 50
    } Weapons
    
 } VehicleType
