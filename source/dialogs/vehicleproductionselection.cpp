@@ -190,11 +190,23 @@ bool VehicleProduction_SelectionWindow::eventKeyDown(const SDL_KeyboardEvent* ke
    if ( mod )
       return false;
 
-   if ( key->keysym.sym == SDLK_ESCAPE ) {
-      closeWindow();
-      return true;
-   }
+   switch ( key->keysym.sym ) {
+      case SDLK_ESCAPE:
+         closeWindow();
+         return true;
+         
+      case SDLK_PLUS:
+         addProductionLine();
+         QuitModal();
+         return true;
 
+      case SDLK_MINUS:
+         removeProductionLine();
+         QuitModal();
+         return true;
+         default:;
+   }
+   
    return false;
 }
 
@@ -252,6 +264,7 @@ VehicleProduction_SelectionWindow::VehicleProduction_SelectionWindow( PG_Widget 
       new PG_ToolTipHelp( b3, "Remove production line");
    }
 };
+
 
 bool VehicleProduction_SelectionWindow::addProductionLine()
 {
