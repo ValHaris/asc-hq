@@ -12,13 +12,14 @@ VehicleType {
 
    Armor -= 100
    View = 0
-   Tank.Fuel = 10000
-   Tank.Material = 5000
+   Tank.Fuel = 10400
+   Tank.Material = 5050
    Jumpdrive ->* VehicleType.TeccnolsJump3
 
    Weapons {
       Weapon0 ->* VehicleType.type_large_missile 
       Weapon0.Punch@MaxRange = 105
       Weapon0.Punch@MinRange = 105
+      Weapon1 ->* VehicleType.NLS
    } Weapons
 } VehicleType
