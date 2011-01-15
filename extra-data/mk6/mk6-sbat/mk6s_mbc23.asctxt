@@ -8,11 +8,18 @@ VehicleType {
    InfoImage = mk6s_mbc20.jpg
    GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
 
-   Features += sonar jam_only_own_field
+   Features = MoveDuringReactionFire sonar jam_only_own_field 
    Jamming = 65
    View += 10
    Height = floating submerged
    Movement += 0 40 0 0 0 0 0 0 
+   Transportation ->* VehicleType.notrans
+   
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 6000
+   } Tank
 
    Weapons { 
       Number = 4

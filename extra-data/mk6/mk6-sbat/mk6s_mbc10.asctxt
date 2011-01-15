@@ -13,8 +13,15 @@ VehicleType {
    Jamming = 65
    View += 10
 
-   Features += sonar jam_only_own_field 
+   Features = MoveDuringReactionFire sonar jam_only_own_field 
    Terrainaccess ->* VehicleType.mediumship_terrain
+   Transportation ->* VehicleType.notrans
+   
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 5500
+   } Tank
 
    Weapons { 
       Initiative = 0
