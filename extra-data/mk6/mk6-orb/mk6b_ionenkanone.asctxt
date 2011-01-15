@@ -9,7 +9,7 @@ VehicleType {
    GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
    Infotext = []
    
-   Features += MoveDuringReationFire
+   Features += MoveDuringReationFire ManualSelfDestruct
    Jumpdrive ->* VehicleType.TeccnolsJump3
    Features = 
    View = 0
