@@ -10,7 +10,7 @@ VehicleType {
    GuideSortHelp = 550 0 0 0 6 0 0 0 0 0
 
    Armor = 750
-   Features += ExternalFuelTransfer ExternalMaterialTransfer
+   Features += ExternalFuelTransfer ExternalMaterialTransfer ExternalAmmoTransfer
    Category = heavy_tracked_vehicle
 
    Movement -= 0 0 0 10 0 0 0 0 
@@ -19,7 +19,7 @@ VehicleType {
 
    Weapons { 
       Initiative = 0
-      Number = 2
+      Number = 5
       Weapon0 ->* VehicleType.def_MG
       Weapon0.Name = Nadel Laser System
       Weapon0.Type = Laser shootable 
@@ -29,5 +29,15 @@ VehicleType {
       Weapon0.LaserRechargeCost.fuel = 40
 
       Weapon1 ->* VehicleType.ServiceGround 
+
+      Weapon2 ->* VehicleType.AmmoLM 
+      Weapon2.Ammo = 20
+      
+      Weapon3 ->* VehicleType.AmmoSM 
+      Weapon3.Ammo = 20
+
+      Weapon4 ->* VehicleType.AmmoCannon 
+      Weapon4.Ammo = 20
+
    } Weapons
 } VehicleType
