@@ -7,4 +7,5 @@ technology {
    researchpoints *= 9
    techlevel = 2
    TechnologiesRequired = 22000 22002 22013 22016
+   ; MA-Basetech MA-TL2 MA-Aircraft MA-Drohnen
 } Technology

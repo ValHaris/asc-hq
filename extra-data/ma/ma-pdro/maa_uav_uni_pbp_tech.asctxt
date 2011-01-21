@@ -6,5 +6,6 @@ technology {
    parent = 22000
    researchpoints *= 27
    techlevel = 5
-   TechnologiesRequired = 22000 22005 22013 22016
+   TechnologiesRequired = 22000 22005 22013 22016 22200 22204 22209
+   ; MA-Basetech MA-TL5 MA-Aircraft MA-Drohnen - Einheiten: UAV LA, UAV OA, UAV BOM
 } Technology
