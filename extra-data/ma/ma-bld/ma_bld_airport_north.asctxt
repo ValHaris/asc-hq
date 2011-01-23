@@ -1,26 +1,26 @@
 BuildingType {
-   Name = Flughafen
+   Name = Flughafen Nord
    parent = 499
    ConstructionStages = 1
    Weather = dry 
-   Fields = A2 A3 A4 B3 
+   Fields = C2 C3 D3 C4
   UseGFXpics = false
    Pictures { 
-      dry = g_Airport.pcx
-      few_snow = g_Airport.pcx
-      much_snow = g_Airport.pcx
-      snow_and_ice = g_Airport.pcx
+      dry = ma_bld_airport.png
+      few_snow = ma_bld_airport.png
+      much_snow = ma_bld_airport.png
+      snow_and_ice = ma_bld_airport.png
    } Pictures
 ;   RubbleObjects = false
    RubbleObjects = true
    rubble {
-      A2 = 76
-      A3 = 77
-      A4 = 78
-      B3 = 76
+      C2 = 76
+      C3 = 77
+      C4 = 78
+      D3 = 76
    } rubble
-   Entry = A4
-   ID = 22928
+   Entry = C2
+   ID = 22927
    Armor = 1000
    View = 40
    Jaming = 0
