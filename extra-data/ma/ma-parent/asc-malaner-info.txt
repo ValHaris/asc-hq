@@ -212,7 +212,8 @@ ID 22922    Öltank
 ID 22923    Lager
 ID 22925    kl. Fabrik
 ID 22926    gr. Fabrik
-ID 22928    Flughafen
+ID 22927    Flughafen Nord
+ID 22928    Flughafen Süd
 ID 22929    Drohnentower
 ID 22930    Hafen
 (ID 22931    U-Boot-Basis)
