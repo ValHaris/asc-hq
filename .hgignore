@@ -32,3 +32,4 @@ glob:*.lib
 glob:*.pdb
 glob:*.exe
 glob:*.idb
+glob:.*.swp
