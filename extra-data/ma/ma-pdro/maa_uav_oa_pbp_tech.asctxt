@@ -6,5 +6,6 @@ technology {
    parent = 22000
    researchpoints *= 20
    techlevel = 4
-   TechnologiesRequired = 22000 22004 22013 22016 22205 
+   TechnologiesRequired = 22000 22004 22013 22016 22200
+   ; MA-Basetech MA-TL4 MA-Aircraft MA-Drohnen - Einheit: UAV LA
 } Technology

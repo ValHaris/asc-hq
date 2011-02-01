@@ -1,0 +1,80 @@
+BuildingType {
+   Name = Flughafen Sued
+   parent = 499
+   ConstructionStages = 1
+   Weather = dry 
+   Fields = A2 A3 A4 B3 
+  UseGFXpics = false
+   Pictures { 
+      dry = ma_bld_airport.png
+      few_snow = ma_bld_airport.png
+      much_snow = ma_bld_airport.png
+      snow_and_ice = ma_bld_airport.png
+   } Pictures
+;   RubbleObjects = false
+   RubbleObjects = true
+   rubble {
+      A2 = 76
+      A3 = 77
+      A4 = 78
+      B3 = 76
+   } rubble
+   Entry = A4
+   ID = 22928
+   Armor = 1000
+   View = 40
+   Jaming = 0
+   Transportation { 
+      MaxLoadableUnits = 6
+      MaxLoadableUnitSize = 600
+      MaxLoadableMass = 1000000
+      CategoriesNOT = default hoovercraft Medium_tracked_vehicle Heavy_tracked_vehicle Medium_wheeled_vehicle Heavy_wheeled_vehicle Light_ship Medium_ship Heavy_Ship Rail_vehicle building|turret|object
+     EntranceSystemNum = 2
+      EntranceSystem0 {
+        Mode = In out docking
+        UnitHeightAbs = ground_level
+        UnitHeightRel = -100
+        ContainerHeight = ground_level
+        CategoriesNOT = 
+        DockingHeightAbs = ground_level
+        DockingHeightRel = -100 
+      } EntranceSystem0
+    EntranceSystem1 {
+        Mode = out
+        UnitHeightAbs = low_level_flight
+        UnitHeightRel = -100
+        ContainerHeight = ground_level
+        CategoriesNOT = medium_aircraft heavy_aircraft helicopter
+        DockingHeightAbs = 
+        DockingHeightRel = -100 
+        MoveCost = 40 
+      } EntranceSystem1
+  } Transportation
+   Features = Vehicle_Production Ammo_Production Repair_Facility Recycling selfdestruct_at_conquer
+   Techlevel = 0
+   MaxResearch = 0
+   ConstructionCost { 
+      Energy = 0
+      Material = 9000
+      fuel = 9000
+   } ConstructionCost
+   MaxResourceProduction { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } MaxResourceProduction
+   StorageCapacity { 
+      BImode { 
+         Energy = 1000000000
+         Material = 1000000000
+         fuel = 1000000000
+      } BImode
+      ASCmode { 
+         Energy = 0
+         Material = 0
+         fuel = 0
+      } ASCmode
+   } StorageCapacity
+   Height = ground_level 
+   ExternalLoading =  
+} BuildingType

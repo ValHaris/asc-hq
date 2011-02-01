@@ -7,4 +7,5 @@ technology {
    researchpoints *= 20
    techlevel = 4
    TechnologiesRequired = 22000 22004 22013 22016 22203 
+   ; MA-Basetech MA-TL4 MA-Aircraft MA-Drohnen - Einheit: UAV UA
 } Technology
