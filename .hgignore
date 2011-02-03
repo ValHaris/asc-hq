@@ -26,6 +26,7 @@ glob:source/tools/linux/asc_weaponguide
 glob:source/unix/asc/asc
 glob:source/unix/asc/unittester
 glob:source/unix/mapeditor/asc_mapedit
+glob:source/unix/pbpedit/asc_pbpedit
 glob:stamp-h1
 glob:*.obj
 glob:*.lib
