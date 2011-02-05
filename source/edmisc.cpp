@@ -3030,6 +3030,8 @@ void transformMap ( )
     vector<int> buildingtranslation;
     vector<int> vehicletranslation;
     vector<int> o2ot_translation;
+    vector<ASCString> techAdapterTranslation;
+    
     try {
         tnfilestream s ( filename, tnstream::reading );
 
@@ -3048,6 +3050,9 @@ void transformMap ( )
         if ( pc.find( "Object2ObjTerrainTranslation" ))
             pc.addIntegerArray( "Object2ObjTerrainTranslation", o2ot_translation );
 
+        if ( pc.find( "TechAdapterTranslation" ))
+           pc.addStringArray( "TechAdapterTranslation", techAdapterTranslation );
+        
         delete tpg;
     }
     catch ( ParsingError err ) {
@@ -3089,6 +3094,10 @@ void transformMap ( )
         return;
     }
 
+    if ( techAdapterTranslation.size() % 2 ) {
+       displaymessage ( "Map Translation : TechAdapterTranslation - Invalid number of entries ", 1);
+       return;
+    }
 
 
     for ( int y = 0; y < actmap->ysize; y++ )
@@ -3229,6 +3238,20 @@ void transformMap ( )
 
             (*i)->setProductionLines( prod );
         }
+        
+        Research& r = actmap->getPlayer(p).research;
+        for ( vector<ASCString>::iterator tat = techAdapterTranslation.begin(); tat != techAdapterTranslation.end();  ) {
+           ASCString from = *(tat++);
+           ASCString to = *(tat++);
+           
+           vector<ASCString> triggeredAdapters( r.triggeredTechAdapter.begin(),  r.triggeredTechAdapter.end() );
+           replace( triggeredAdapters.begin(), triggeredAdapters.end(), from, to );
+           r.triggeredTechAdapter.clear();
+           r.triggeredTechAdapter.insert( triggeredAdapters.begin(), triggeredAdapters.end() );
+                                         
+           replace( r.predefinedTechAdapter.begin(), r.predefinedTechAdapter.end(), from, to );
+        }
+
     }
 
 // for ( int i = 0; i < vehicleTypeRepository.getNum(); ++i )
