@@ -4,6 +4,6 @@ itemfilter {
    Objects = 401-408 410-414 416 418 424-428 430 434-437 439 443 446 450-451 457-459 462-466 471-473 483 489 491 24000-24999
    Terrain = 
    Technologies = 0-499 100000
-   name = MK1 Rehaner (standart asc)
+   name = MK1 Rehaner (standard ASC campaign)
 } itemfilter
    
