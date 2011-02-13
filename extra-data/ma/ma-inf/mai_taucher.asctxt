@@ -5,7 +5,7 @@ VehicleType {
    Description = Special Taucher
    Infotext = [Dieser Trooper ist in der Lage zu tauchen. Die Kanone ist nur fuer den Kampf gegen Trooper geeignet, die Bomb entwickelt erstaunlich Wirkung gegen Schiffe, ist aber auch gegen Landeinheiten bis auf Trooper einsetzbar.]
    Armor += 20
-   Jamming = 0
+   Jamming = 11
    Picture = MAi_Taucher.pcx
    Weapons { 
       Weapon0 ->* VehicleType.SniperSmall 
