@@ -19,6 +19,7 @@ VehicleType {
    Weapons { 
       Number = 1
       Weapon0 ->* VehicleType.C4 
+      Weapon0.Ammo = 1
       Weapon0.Punch@MaxRange = 100
       Weapon0.Punch@MinRange = 100
       Weapon0.WeaponEffectiveness.default = 100      
