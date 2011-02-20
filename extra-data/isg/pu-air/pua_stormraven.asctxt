@@ -1,0 +1,67 @@
+VehicleType { 
+   Name = Stormraven
+   parent = 90
+   ID = 12585
+
+   Description = Landungsschiff 
+   Infotext = [Das Stormraven kann kleinere Lasten vom "Blood of Vengeance" auf den Boden transportieren. Es ist hochwertiger Elektronik ausgestattet und mit den variablen Schubdüsen extrem schnell und wendig. Haupteinsatzzweck ist aber die Evakuierung der Spacemarines und leichte Luftunterstützung für Kommandotrupps. Infoimage: lexicanum.de]
+   Picture = pua_stormraven.png
+   InfoImage = pua_stormraven.jpg
+
+   Weight = 60
+   Armor = 350
+   View = 40
+   Jamming = 0
+   Features += move_after_attack no_midair_refuel sonar moveduringreactionfire
+   Category = medium_aircraft 
+   
+   Height = ground_level low_level_flight medium_level_flight high_level_flight orbit
+   WaitForAttack = false
+   Movement = 0 0 0 60 190 170 150 10 
+   FuelConsumption = 30
+   Tank.fuel = 6000 
+   
+   Transportation ->* VehicleType.TransHeli 
+   Transportation.MaxLoadableUnits = 12
+   Transportation.MaxLoadableUnitSize = 40
+   Transportation.MaxLoadableMass = 40
+   Transportation.EntranceSystemNum = 5
+   Transportation.EntranceSystem4 ->* VehicleType.ParaDevice
+   
+   HeightChangeMethod0.movecost = 30
+   HeightChangeMethod0.dist = 1
+   HeightChangeMethod1.movecost = 30
+   HeightChangeMethod1.dist = 1
+   HeightChangeMethod2.movecost = 40
+   HeightChangeMethod2.dist = 1
+   HeightChangeMethod3.movecost = 15
+   HeightChangeMethod3.dist = 1
+   HeightChangeMethod4.movecost = 5
+   HeightChangeMethod5.dist = 1
+   HeightChangeMethod5.movecost = 5
+   Weapons { 
+      Number = 3
+      Weapon0 ->* VehicleType.MiniGun 
+      Weapon0.Ammo = 8
+      Weapon0.shotFrom = ground_level
+      Weapon0.MaxRange = 10
+      Weapon1 ->* VehicleType.Air_MG 
+      Weapon1.targets = floating ground_level
+      Weapon1.shotFrom = low_level_flight
+      Weapon1.MaxRange = 20
+      Weapon1.Ammo = 8
+      Weapon1.Punch@MaxRange = 45
+      Weapon1.Punch@MinRange = 55
+      Weapon1.HitAccuracy.d1 = 100
+      Weapon1.HitAccuracy.0 = 0  
+      Weapon1.ReactionFireShots = 0     
+      Weapon2 ->* VehicleType.ASM 
+      Weapon2.shotFrom = low_level_flight
+      Weapon2.MaxRange = 20
+      Weapon2.Ammo = 4
+      Weapon2.Punch@MaxRange = 80
+      Weapon2.Punch@MinRange = 80
+      Weapon2.ReactionFireShots = 0
+   } Weapons
+
+} VehicleType

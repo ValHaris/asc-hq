@@ -1,0 +1,59 @@
+VehicleType { 
+   Name = Drop Pod
+   parent = 400 401 402 403
+   ID = 12587
+
+   Description = Landungskapsel
+   Infotext = [Landungskapseln werden im Orbit eines Planeten vom "Blood of Vengeance" abgeworfen und transportieren maximal 5 Space Marines oder 2 Mechs. Dieses Einwegtransportsystem wird nach der Landung auf dem Planeten zerstört. Infoimage: by alan2525 battlefield40k.com ]
+   picture = puo_blood_of_vengeance_droppod.png
+   InfoImage = puo_blood_of_vengeance_droppod.jpg
+
+   Armor = 100
+   View = 0
+   Features = ManualSelfDestruct no_reactionfire
+   Weight = 151
+   MaxSurvivableStorm = 150
+   Category = medium_aircraft 
+   Movement = 0 0 0 0 0 0 0 10 
+   Height = ground_level low_level_flight medium_level_flight high_level_flight orbit
+   
+   FuelConsumption = 1
+   Tank.fuel = 5   
+
+   Transportation ->* VehicleType.TransBigTrooper
+   Transportation.MaxLoadableUnits = 5
+   Transportation.MaxLoadableMass = 10
+   Transportation.CargoMovementDivisor = 4
+
+   TerrainAccess ->* VehicleType.trooper_terrain 
+   
+   HeightChangeMethodNum = 3
+   
+   HeightChangeMethod0 {
+      movecost = 0
+      heightdelta = -1
+      dist = 0
+      startheight = low_level_flight
+      canattack = true
+   } HeightChangeMethod0
+   HeightChangeMethod1 {
+      movecost = 0
+      heightdelta = -1
+      dist = 1
+      startheight = medium_level_flight high_level_flight
+      canattack = true
+   } HeightChangeMethod1
+      HeightChangeMethod2 {
+      movecost = 0
+      heightdelta = -1
+      dist = 0
+      startheight = orbit
+      canattack = true
+   } HeightChangeMethod2
+
+
+   Weapons { 
+      Initiative = 0
+      Number = 0
+   } Weapons
+} VehicleType
