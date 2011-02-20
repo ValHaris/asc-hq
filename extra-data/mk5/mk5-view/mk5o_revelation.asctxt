@@ -11,6 +11,6 @@ VehicleType {
    Jamming = 60
 
    Armor -= 200
-   View += 20
+   View += 10
    Movement -= 0 0 0 0 0 0 0 10
 } VehicleType

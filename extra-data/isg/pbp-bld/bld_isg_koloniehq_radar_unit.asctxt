@@ -13,8 +13,8 @@ BuildingType {
 
    ID = 12000
    Armor = 5000
-   View = 159
-   Jamming = 20
+   View = 210
+   Jamming = 0
    transportation { 
       MaxLoadableUnits = 1
       MaxLoadableUnitSize = 5

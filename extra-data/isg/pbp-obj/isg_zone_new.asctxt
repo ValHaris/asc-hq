@@ -14,11 +14,11 @@ ObjectType {
    Armor = 0
    Movemalus_plus = 
    Movemalus_abs =  10
-   AttackBonus_abs = 0
+   AttackBonus_abs = -7
    AttackBonus_plus = 0
    DefenseBonus_abs = 0
    DefenseBonus_plus = 0
-   Jamming_abs = 375
+   Jamming_abs = 367
    Jammming_plus = 
 
    ConstructionCost { 

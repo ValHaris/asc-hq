@@ -1,0 +1,89 @@
+VehicleType { 
+   Name = Blood of Vengeance
+   ID = 12586
+   parent = 235 15000
+   
+   Description = Angriffskreuzer
+   Picture = puo_Blood_of_Vengeance.png
+   InfoImage = puo_blood_of_vengeance.jpg
+   InfoText = [Der Angriffskreuzer "Blood of Vengeance" führte im dritten Krieg um Armageddon die Blood Angels zu Ruhm und Ehre.
+   Dieser wurde den Erfordernissen des ISG-Raumes angepasst und ist auf Grund der ISG-Beschränkungen nur eine Reminiszenz an den "Blood of Vengeance". Da sich die imperialen Waffensysteme nicht replizieren lassen, wurden die erforschten cromonischen Waffen adaptiert. So verfügt der Kreuzer über ein sehr gutes Verteidigungssystem. 
+   Automatisch agierende, schnellfeuernde Systeme (NBVS) bekämpfen auch kleinste Ziele auf kurze Distanz. Flakbatterien in größerer Stückzahl sichern das Schiff über den Nahbereich hin ab. 
+   Dieses kann allerdings ganz kleine Ziele nicht mehr erfassen. Anfliegende Ziele werden schon auch größerer Entfernung durch 
+   große Raketen automatisch bekämpft. Allerdings benötigt die Zielaufschaltung einige Zeit, in der die Rakete schon abgefeuert wurde. Lediglich die Plasmabombe erinnert an die Wirksamkeit der imperalen Waffen.
+   An Bord befinden sich bis zu 6 Landungskapseln. Diese können aus dem Orbit abgeworfen werden. Zudem kann das Stormraven auf dem Hangar landen.  Infoimage: lexicanum.de]
+   
+	 Weight = 1500
+   Armor = 900
+   Features = self_repairing automatic_resource_searching moveduringreactionfire
+   WaitForAttack = false
+   
+   Transportation { 
+   		MaxLoadableUnits = 36
+      MaxLoadableUnitSize = 340
+      MaxLoadableMass = 1056
+      CategoriesNOT = default medium_wheeled_vehicle heavy_wheeled_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle light_aircraft heavy_aircraft light_ship medium_ship heavy_ship helicopter hoovercraft building|turret|object
+      EntranceSystemNum = 1
+      EntranceSystem0 ->* VehicleType.OrbIO
+      EntranceSystem0.CategoriesNOT = default trooper light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle light_aircraft heavy_aircraft light_ship medium_ship heavy_ship helicopter hoovercraft building|turret|object
+      EntranceSystem0.MoveCost = 10
+      EntranceSystem0.DisableAttack = false
+   } Transportation
+
+	 Tank.Fuel += 16000
+   
+   Movement = 0 0 0 0 0 0 0 150
+   FuelConsumption = 100
+      Height = orbit
+   
+   Weapons { 
+      Number = 4
+			Weapon0 ->* VehicleType.MiniGun
+			Weapon0.name = NBVS
+			Weapon0.targets = high_level_flight orbit
+			Weapon0.shotFrom = orbit
+			Weapon0.Punch@MaxRange = 50
+			Weapon0.Punch@MinRange = 50
+			Weapon0.MaxRange = 10
+			Weapon0.Ammo = 80
+			Weapon0.ReactionFireShots = 4
+			Weapon0.HitAccuracy.0 = 100
+			Weapon0.HitAccuracy.d1 = 95
+			
+      Weapon1 ->* VehicleType.Orbit_Cannon
+      Weapon1.name = Flak-Batterie
+      Weapon1.Type = cannon shootable 
+      Weapon1.targets = high_level_flight orbit
+      Weapon1.Punch@MaxRange = 65
+      Weapon1.shotFrom = orbit
+			Weapon1.MinRange = 20
+			Weapon1.MaxRange = 20
+      Weapon1.ReactionFireShots = 3
+      Weapon1.Ammo = 60
+      Weapon1.WeaponEffectiveness.trooper = 0
+      
+      Weapon2 ->* VehicleType.OAM 
+      Weapon2.name = OAM
+      Weapon2.Punch@MaxRange = 80
+      Weapon2.Punch@MinRange = 80
+      Weapon2.MinRange = 30
+      Weapon2.MaxRange = 40
+      Weapon2.ReactionFireShots = 2
+      Weapon2.Ammo = 40
+      Weapon2.WeaponEffectiveness.trooper = 0
+      
+      Weapon3 ->* Vehicletype.Plasmabomb
+      Weapon3.name = Plasmabombe
+      Weapon3.sound = bomb_s.ogg
+      Weapon3.targets = submerged floating ground_level 
+      Weapon3.shotFrom = orbit
+      Weapon3.Punch@MaxRange = 120
+      Weapon3.Punch@MinRange = 140
+      Weapon3.ReactionFireShots = 0
+      Weapon3.HitAccuracy.d4 = 100
+      Weapon3.HitAccuracy.d5 = 60
+
+   } Weapons
+
+
+} VehicleType
