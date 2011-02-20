@@ -4,7 +4,7 @@ BuildingType {
    Parent = 12025
 
    View = 100
-   Jamming = 20
+   Jamming = 0
 
    ConstructionStages = 1
    Weather = dry 
