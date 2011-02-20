@@ -22,7 +22,7 @@ VehicleType {
       
    Construction { 
       Buildings = 1 2 4 6 7 13-14 16-20 23 30 32 35-37 39 40 41 15001-15015 15033
-      Vehicles = 15304 15222 15223 15244 15238 15318 15322 
+      Vehicles = 15304 15222 15223 15224 15244 15238 15318 15322
       Vehiclesinternally =
 ;				          JuTur
       Objects = 44 2098 2096 2097 996 997 15003
