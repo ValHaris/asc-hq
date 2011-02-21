@@ -9,7 +9,7 @@ VehicleType {
    GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
    Infotext = []
    
-   Features += MoveDuringReationFire
+   Features += MoveDuringReactionFire
    Jumpdrive ->* VehicleType.TeccnolsJump3
    View = 0
    Tank.Fuel = 17000
