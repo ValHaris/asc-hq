@@ -400,6 +400,13 @@ void DashboardPanel::showUnitData( Vehicle* veh, Building* bld, MapField* fld,  
       else
          setLabelText( "unitname", veh->typ->description );
       
+      setLabelText( "unitoffensiveexperience", veh->experience_offensive );
+      setLabelText( "unitdefensiveexperience", veh->experience_defensive );
+      
+      
+      AttackFormula af( veh->getMap() );
+      setLabelText( "unitattackincrease", int( af.strength_experience( veh->experience_defensive ) * 100));
+      setLabelText( "unitdefenseincrease", int( af.defense_experience( veh->experience_defensive ) * 100));
       
       setBargraphValue( "unitdamage", float(100-veh->damage) / 100  );
       setLabelText( "unitstatus", 100-veh->damage );
@@ -499,6 +506,11 @@ void DashboardPanel::showUnitData( Vehicle* veh, Building* bld, MapField* fld,  
 
       setLabelText( "fuelrange", "-" );
       setLabelText( "movepoints", "" );
+      setLabelText( "unitoffensiveexperience", "" );
+      setLabelText( "unitdefensiveexperience", "" );
+      setLabelText( "unitattackincrease", "");
+      setLabelText( "unitdefenseincrease", "");
+      
    }
    for ( int i = weaponsDisplayed; i < 10; ++i ) {
       ASCString ps = ASCString::toString(i);
