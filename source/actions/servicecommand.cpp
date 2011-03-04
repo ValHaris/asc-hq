@@ -212,7 +212,7 @@ ASCString ServiceCommand::getDescription() const
 {
    ASCString s = "Service ";
    
-   if ( getContainer() ) {
+   if ( getContainer(true) ) {
       s += " by " + getContainer()->getName();
    }
    return s;
