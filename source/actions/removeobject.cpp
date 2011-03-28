@@ -24,6 +24,7 @@
 
 #include "../vehicle.h"
 #include "../gamemap.h"
+#include "../viewcalculation.h"
      
 RemoveObject::RemoveObject( GameMap* gamemap, const MapCoordinate& position, int objectID )
    : GameAction( gamemap ), pos(position), objectBuffer(NULL)
@@ -117,6 +118,8 @@ ActionResult RemoveObject::undoAction( const Context& context )
    Object* o = fld->checkForObject( ot );
    if ( !o )
       return ActionResult( 21502 );
+   
+   computeview( getMap() );
    
    MemoryStream memstream( objectBuffer, tnstream::reading );
    o->read( memstream );
