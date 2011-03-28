@@ -407,10 +407,10 @@ void tunitattacksunit :: setresult( const Context& context )
    if ( !reactionfire ) {
       GameAction* a = new ChangeUnitProperty( _attackingunit, ChangeUnitProperty::ExperienceOffensive, av.experience_offensive );
       a->execute ( context );
-   }
    
-   GameAction* a2 = new ChangeUnitProperty( _attackingunit, ChangeUnitProperty::ExperienceDefensive, av.experience_defensive );
-   a2->execute ( context );
+      GameAction* a2 = new ChangeUnitProperty( _attackingunit, ChangeUnitProperty::ExperienceDefensive, av.experience_defensive );
+      a2->execute ( context );
+   }
    
    GameAction* b = new ConsumeAmmo( _attackingunit, _attackingunit->typ->weapons.weapon[av.weapnum].getScalarWeaponType(), av.weapnum, _attackingunit->ammo[ av.weapnum ] - av.weapcount );
    b->execute ( context );
@@ -428,8 +428,10 @@ void tunitattacksunit :: setresult( const Context& context )
       e->execute ( context );
    }
    
-   GameAction* d2 = new ChangeUnitProperty( _attackedunit, ChangeUnitProperty::ExperienceDefensive, dv.experience_defensive );
-   d2->execute ( context );
+   if ( !reactionfire ) {
+      GameAction* d2 = new ChangeUnitProperty( _attackedunit, ChangeUnitProperty::ExperienceDefensive, dv.experience_defensive );
+      d2->execute ( context );
+   }
    
    
    GameAction* f = new InflictDamage( _attackingunit, av.damage - _attackingunit->damage );
