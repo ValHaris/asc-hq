@@ -109,7 +109,7 @@ const int gameActionToken = 0x12003496;
       
 void GameAction::read ( tnstream& stream )
 {
-   displayLogMessage(1, "reading " + ASCString::toString(getID()) + "\n");
+   displayLogMessage(9, "reading " + ASCString::toString(getID()) + "\n");
    
    int version = stream.readInt();
    if ( version > currentGameActionVersion )
