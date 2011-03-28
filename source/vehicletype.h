@@ -181,6 +181,8 @@ extern const char*  cvehiclefunctions[];
         //! the filename from which the image was loaded
         ASCString imageFilename;
         
+        ASCString unitCostCalculatorName;
+        
     public:
         static const int legacyVehicleFunctionNum = 29;
         

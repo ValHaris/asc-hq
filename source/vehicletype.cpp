@@ -33,6 +33,7 @@
 #include "graphics/blitter.h"
 #include "graphics/ColorTransform_PlayerColor.h"
 #include "unitcostcalculator-standard.h"
+#include "unitcostcalculator-pbp.h"
 
 /*
 const char*  cvehiclefunctions[cvehiclefunctionsnum+1]  = {
@@ -1076,6 +1077,7 @@ void VehicleType::runTextIO ( PropertyContainer& pc )
 
 
    pc.openBracket ( "ConstructionCost" );
+   pc.addString( "CalculationFunction", unitCostCalculatorName, "standard" );
    productionCost.runTextIO ( pc );
    int costCalcMethod = 0;
    pc.addNamedInteger( "CalculationMethod", costCalcMethod, productionCostCalculationMethodNum, productionCostCalculationMethod,  0 );
@@ -1323,6 +1325,12 @@ void VehicleType :: HeightChangeMethod :: write ( tnstream& stream ) const
 Resources VehicleType :: calcProductionCost()
 {
    static UnitCostCalculator* standard = new StandardUnitCostCalculator();
-   // static UnitCostCalculator* pbp2 = new UnitCostCalculator2
-   return standard->productionCost( this );
+   static UnitCostCalculator* pbp = new PBPUnitCostCalculator();
+   
+   if ( unitCostCalculatorName.toLower() == "pbp" )
+      return pbp->productionCost( this );
+   else if ( unitCostCalculatorName.toLower() == "standard" )
+      return standard->productionCost( this );
+   else throw ASCmsgException("Invalid cost calculator for unit " + ASCString::toString( id ));
+         
 }
