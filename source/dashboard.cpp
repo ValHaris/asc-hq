@@ -20,7 +20,7 @@
  *                                                                         *
  ***************************************************************************/
 
- #include "sigc++/retype.h"
+#include "sigc++/retype.h"
 
 #include "dashboard.h"
 #include "graphics/blitter.h"
@@ -45,67 +45,65 @@
 
 class WeaponInfoLine;
 
-class WeaponInfoPanel : public Panel {
-        int weaponCount;
-        static ASCString name;
+class WeaponInfoPanel : public Panel
+{
+      int weaponCount;
+      static ASCString name;
 
-        vector<WeaponInfoLine*> weaponInfoLines;
+      vector<WeaponInfoLine*> weaponInfoLines;
 
-     protected:
-        bool onClick ( PG_MessageObject* obj, const SDL_MouseButtonEvent* event );
-        void painter ( const PG_Rect &src, const ASCString& name, const PG_Rect &dst);
+   protected:
+      bool onClick ( PG_MessageObject* obj, const SDL_MouseButtonEvent* event );
+      void painter ( const PG_Rect &src, const ASCString& name, const PG_Rect &dst);
 
-	     bool eventMouseMotion(const SDL_MouseMotionEvent* motion);
+      bool eventMouseMotion(const SDL_MouseMotionEvent* motion);
 
-     public:
-        WeaponInfoPanel (PG_Widget *parent, const Vehicle* veh, const VehicleType* vt ) ;
-        void showWeapon( const SingleWeapon* weap = NULL );
+   public:
+      WeaponInfoPanel (PG_Widget *parent, const Vehicle* veh, const VehicleType* vt ) ;
+      void showWeapon( const SingleWeapon* weap = NULL );
 
-        // virtual bool   eventMouseButtonDown (const SDL_MouseButtonEvent *button);
-        bool   eventMouseButtonUp (const SDL_MouseButtonEvent *button);
-        
-        static const ASCString& WIP_Name();
-        // void eval();
+      // virtual bool   eventMouseButtonDown (const SDL_MouseButtonEvent *button);
+      bool   eventMouseButtonUp (const SDL_MouseButtonEvent *button);
+
+      static const ASCString& WIP_Name();
+      // void eval();
 };
 
+const int experienceIcons = 24;
 
 
-class ExperienceOverview : public PG_Widget {
+class ExperienceOverview : public PG_Widget
+{
       static const int columns = 4;
    protected:
-      bool 	eventMouseButtonUp (const SDL_MouseButtonEvent *button)
-      {
+      bool  eventMouseButtonUp (const SDL_MouseButtonEvent *button) {
          QuitModal();
          return true;
       };
 
-      static PG_Rect getSize( const PG_Point& pos )
-      {
+      static PG_Rect getSize( const PG_Point& pos ) {
          const Surface& s = IconRepository::getIcon("experience0.png");
-         return PG_Rect( pos.x, pos.y, columns * s.w(), (maxunitexperience + columns-1)/columns * s.h() );
+         return PG_Rect( pos.x, pos.y, columns * s.w(), (experienceIcons + columns-1)/columns * s.h() );
       }
-      
+
    public:
-      ExperienceOverview( const PG_Point& pos, int exp = -1 ) : PG_Widget( NULL, getSize(pos), true )
-      {
+      ExperienceOverview( const PG_Point& pos, int exp = -1 ) : PG_Widget( NULL, getSize(pos), true ) {
          // PG_Application::GetApp()->sigMouseButtonUp.connect( SigC::slot( *this, &ExperienceOverview::QuitModal ));
       }
 
 
-      int RunModal()
-      {
+      int RunModal() {
          SetCapture();
          return PG_Widget::RunModal();
       }
 
-      void 	eventDraw (SDL_Surface *surface, const PG_Rect &rect) 
-      {
+      void  eventDraw (SDL_Surface *surface, const PG_Rect &rect) {
          const Surface& s = IconRepository::getIcon("experience0.png");
          int width = s.w();
          int height = s.h();
 
          Surface s2 = Surface::Wrap( surface );
-         for ( int i = 0; i <= maxunitexperience; ++i ) 
+         for ( int i = 0; i < experienceIcons; ++i )
             s2.Blit( IconRepository::getIcon("experience" + ASCString::toString(i) + ".png"), SPoint( i % columns * width , i/columns*height) );
       }
 };
@@ -127,14 +125,12 @@ DashboardPanel::DashboardPanel ( PG_Widget *parent, const PG_Rect &r, const ASCS
    registerSpecialDisplay( "field_weather" );
 
    ContainerBase::anyContainerDestroyed.connect( SigC::slot( *this, &DashboardPanel::containerDeleted ));
-   
+
    GameMap::sigMapDeletion.connect( SigC::slot( *this, &DashboardPanel::reset ));
 
    PG_Widget* w = parent->FindChild( "unitexp", true );
-   /*
    if ( w )
       w->sigMouseButtonDown.connect( SigC::slot( *this, &DashboardPanel::viewExperienceOverview ));
-   */
 };
 
 bool DashboardPanel::viewExperienceOverview()
@@ -154,7 +150,7 @@ void DashboardPanel::containerDeleted( ContainerBase* c )
 {
    if ( c == veh )
       veh = NULL;
-   
+
    if ( c == bld )
       bld = NULL;
 }
@@ -168,7 +164,7 @@ bool DashboardPanel::containerRenamed( PG_LineEdit* lineEdit )
       else
          lineEdit->SetText( veh->name );
    }
-   
+
    if ( bld ) {
       if ( bld->getMap()->actplayer == bld->getOwner() )
          bld->name = lineEdit->GetText();
@@ -183,7 +179,7 @@ void DashboardPanel::reset(GameMap& map)
 {
    if ( veh && veh->getMap() == &map )
       veh = NULL;
-   
+
    if ( bld && bld->getMap() == &map )
       bld = NULL;
 }
@@ -194,7 +190,7 @@ void DashboardPanel::registerSpecialDisplay( const ASCString& name )
 {
    SpecialDisplayWidget* sdw = dynamic_cast<SpecialDisplayWidget*>( FindChild( name, true ) );
    if ( sdw )
-     sdw->display.connect( SigC::slot( *this, &DashboardPanel::painter ));
+      sdw->display.connect( SigC::slot( *this, &DashboardPanel::painter ));
 }
 
 
@@ -221,8 +217,8 @@ void DashboardPanel::painter ( const PG_Rect &src, const ASCString& name, const 
       blitter.blit( IconRepository::getIcon("show_playercolor.png"), screen, SPoint(dst.x, dst.y));
       return;
    }
-   
-   
+
+
    if ( name == "field_weather" ) {
       MapCoordinate mc = actmap->getCursor();
       if ( actmap && mc.valid() && fieldvisiblenow( actmap->getField(mc), actmap->getPlayerView() ) ) {
@@ -233,7 +229,8 @@ void DashboardPanel::painter ( const PG_Rect &src, const ASCString& name, const 
                                               "terrain_weather_heavyrain.png",
                                               "terrain_weather_lightsnow.png",
                                               "terrain_weather_heavysnow.png",
-                                              "terrain_weather_ice.png" };
+                                              "terrain_weather_ice.png"
+                                             };
 
          blitter.blit ( IconRepository::getIcon(weathernames[actmap->getField(mc)->getWeather()]), screen, SPoint(dst.x, dst.y) );
       }
@@ -243,67 +240,82 @@ void DashboardPanel::painter ( const PG_Rect &src, const ASCString& name, const 
 
 
 
-   
+
    if ( veh && !fieldvisiblenow( veh->getMap()->getField( veh->getPosition() ), veh->getMap()->getPlayerView() ))
       return;
+
    
 
-
-      if ( name == "unitexp" ) {
-         int experience = 0;
-         if ( veh )
-            experience = veh->experience_offensive;
-
-         screen.Blit( IconRepository::getIcon("experience" + ASCString::toString(experience) + ".png"), SPoint(dst.x, dst.y) );
-      }
-
-      if ( name == "unitexpdefensive" ) {
-         int experience = 0;
-         if ( veh )
-            experience = veh->experience_defensive;
-
-         screen.Blit( IconRepository::getIcon("experience" + ASCString::toString(experience) + ".png"), SPoint(dst.x, dst.y) );
-      }
-      
-      if ( name == "unit_level" ) {
-         int height1 = 0;
-         int height2 = 0;
-         int player = actmap->actplayer;
-         if ( veh ) {
-            height1 = veh->height;
-            height2 = veh->typ->height;
-            player = veh->getOwner();
-         }
-
-         for ( int i = 0; i < 8; ++i ) {
-            if ( height1 & (1 << i )) {
-               MegaBlitter<4,4,ColorTransform_PlayerTrueCol,ColorMerger_PlainOverwrite> blitter;
-               blitter.setColor( actmap->player[player].getColor() );
-               // blitter.setPlayer( player );
-               blitter.blit( IconRepository::getIcon("height-b" + ASCString::toString(i) + ".png"), screen, SPoint(dst.x, dst.y + (7-i) * 13));
-            } else
-               if ( height2 & (1 << i ))
-                  screen.Blit( IconRepository::getIcon("height-a" + ASCString::toString(i) + ".png"), SPoint(dst.x, dst.y + (7-i) * 13 ) );
-
-         }
-      }
-
-      if ( name == "unit_pic" ) {
-         if ( veh )
-           veh->typ->paint( screen, SPoint( dst.x, dst.y ), veh->getOwningPlayer().getPlayerColor() );
-      }
-
+   if ( name == "unitexp" ) {
+      int idx = 0;
       if ( veh ) {
-         int pos = 0;
-         for ( int i = 0; i < veh->typ->weapons.count; ++i) {
-            if ( !veh->typ->weapons.weapon[i].service() && pos < 10 ) {
-               if ( name == "symbol_weapon" + ASCString::toString(pos) )
-                  screen.Blit( IconRepository::getIcon(SingleWeapon::getIconFileName( veh->typ->weapons.weapon[i].getScalarWeaponType()) + "-small.png"), SPoint(dst.x, dst.y));
+         int experience = veh->experience_offensive;
+         AttackFormula af ( veh->getMap() );
 
-               ++pos;
-             }
-          }
+         idx = (int) (experienceIcons * af.strength_experience( experience ) / af.strength_experience( maxunitexperience ));
+         if ( idx >= experienceIcons )
+            idx = 23;
+         if ( idx < 0 )
+            idx = 0;
       }
+
+      screen.Blit( IconRepository::getIcon("experience" + ASCString::toString(idx) + ".png"), SPoint(dst.x, dst.y) );
+   }
+
+   if ( name == "unitexpdefensive" ) {
+      int idx = 0;
+      if ( veh ) {
+         int experience = veh->experience_offensive;
+         AttackFormula af ( veh->getMap() );
+
+         idx = (int) (experienceIcons * af.defense_experience( experience ) / af.defense_experience( maxunitexperience ));
+         if ( idx >= experienceIcons )
+            idx = 23;
+         if ( idx < 0 )
+            idx = 0;
+      }
+
+      screen.Blit( IconRepository::getIcon("experience" + ASCString::toString(idx) + ".png"), SPoint(dst.x, dst.y) );
+   }
+
+   if ( name == "unit_level" ) {
+      int height1 = 0;
+      int height2 = 0;
+      int player = actmap->actplayer;
+      if ( veh ) {
+         height1 = veh->height;
+         height2 = veh->typ->height;
+         player = veh->getOwner();
+      }
+
+      for ( int i = 0; i < 8; ++i ) {
+         if ( height1 & (1 << i )) {
+            MegaBlitter<4,4,ColorTransform_PlayerTrueCol,ColorMerger_PlainOverwrite> blitter;
+            blitter.setColor( actmap->player[player].getColor() );
+            // blitter.setPlayer( player );
+            blitter.blit( IconRepository::getIcon("height-b" + ASCString::toString(i) + ".png"), screen, SPoint(dst.x, dst.y + (7-i) * 13));
+         } else if ( height2 & (1 << i ))
+            screen.Blit( IconRepository::getIcon("height-a" + ASCString::toString(i) + ".png"), SPoint(dst.x, dst.y + (7-i) * 13 ) );
+
+      }
+   }
+
+   if ( name == "unit_pic" ) {
+      if ( veh )
+         veh->typ->paint( screen, SPoint( dst.x, dst.y ), veh->getOwningPlayer().getPlayerColor() );
+   }
+
+   if ( veh ) {
+      int pos = 0;
+      for ( int i = 0; i < veh->typ->weapons.count; ++i) {
+         if ( !veh->typ->weapons.weapon[i].service() && pos < 10 ) {
+            if ( name == "symbol_weapon" + ASCString::toString(pos) )
+               screen.Blit( IconRepository::getIcon(SingleWeapon::getIconFileName( veh->typ->weapons.weapon[i].getScalarWeaponType()) + "-small.png"), SPoint(dst.x, dst.y));
+
+            ++pos;
+         }
+      }
+   }
 
 }
 
@@ -340,17 +352,16 @@ void DashboardPanel::eval()
       else
          unitspeed = maxint;
 
-       int windspeed = actmap->weather.windSpeed*maxwindspeed ;
-       if ( unitspeed < 255*256 ) {
-          if ( windspeed > unitspeed*9/10 )
-             setBarGraphColor( "winddisplay", 0xff0000  );
-          else
-             if ( windspeed > unitspeed*66/100 )
-                setBarGraphColor( "winddisplay", 0xffff00  );
-             else
-                setBarGraphColor( "winddisplay", 0x00ff00  );
-       } else
-          setBarGraphColor( "winddisplay", 0x00ff00  );
+      int windspeed = actmap->weather.windSpeed*maxwindspeed ;
+      if ( unitspeed < 255*256 ) {
+         if ( windspeed > unitspeed*9/10 )
+            setBarGraphColor( "winddisplay", 0xff0000  );
+         else if ( windspeed > unitspeed*66/100 )
+            setBarGraphColor( "winddisplay", 0xffff00  );
+         else
+            setBarGraphColor( "winddisplay", 0x00ff00  );
+      } else
+         setBarGraphColor( "winddisplay", 0x00ff00  );
 
    } else {
       setLabelText( "terrain_harbour", "" );
@@ -369,7 +380,7 @@ void DashboardPanel::eval()
       } else {
 
          Building* bld = fld->building;
-         if ( bld && fieldvisiblenow( fld, actmap->getPlayerView() ) ) 
+         if ( bld && fieldvisiblenow( fld, actmap->getPlayerView() ) )
             showUnitData( NULL, bld, fld );
          else
             showUnitData( NULL, NULL, fld );
@@ -384,30 +395,30 @@ void DashboardPanel::showUnitData( Vehicle* veh, Building* bld, MapField* fld,  
    int weaponsDisplayed = 0;
    this->veh = veh;
    this->bld = bld;
-   
+
    bool bulk = PG_Application::GetBulkMode();
    if ( redraw )
       PG_Application::SetBulkMode(true);
-      
+
 
    if ( veh ) {
       setLabelText( "unittypename", veh->typ->name );
-      
-      if ( !veh->privateName.empty() && veh->getOwner() == veh->getMap()->getPlayerView() ) 
+
+      if ( !veh->privateName.empty() && veh->getOwner() == veh->getMap()->getPlayerView() )
          setLabelText( "unitname", ">" + veh->privateName + "<" );
       else if ( !veh->name.empty() )
          setLabelText( "unitname", veh->name );
       else
          setLabelText( "unitname", veh->typ->description );
-      
+
       setLabelText( "unitoffensiveexperience", veh->experience_offensive );
       setLabelText( "unitdefensiveexperience", veh->experience_defensive );
-      
-      
+
+
       AttackFormula af( veh->getMap() );
       setLabelText( "unitattackincrease", int( af.strength_experience( veh->experience_defensive ) * 100));
       setLabelText( "unitdefenseincrease", int( af.defense_experience( veh->experience_defensive ) * 100));
-      
+
       setBargraphValue( "unitdamage", float(100-veh->damage) / 100  );
       setLabelText( "unitstatus", 100-veh->damage );
 
@@ -455,12 +466,12 @@ void DashboardPanel::showUnitData( Vehicle* veh, Building* bld, MapField* fld,  
    } else {
       if ( bld ) {
          setLabelText( "unittypename", bld->typ->name );
-         
-         if ( !bld->privateName.empty() && bld->getOwner() == bld->getMap()->getPlayerView()) 
+
+         if ( !bld->privateName.empty() && bld->getOwner() == bld->getMap()->getPlayerView())
             setLabelText( "unitname", ">" + bld->privateName + "<" );
-         else 
+         else
             setLabelText( "unitname", bld->name );
-         
+
          setBargraphValue( "unitdamage", float(100-bld->damage) / 100  );
          setLabelText( "unitstatus", 100-bld->damage );
          setLabelText( "armor", bld->getArmor() );
@@ -488,8 +499,8 @@ void DashboardPanel::showUnitData( Vehicle* veh, Building* bld, MapField* fld,  
                   objectFound = true;
                   break;
                }
-         } 
-         if ( !objectFound ) 
+         }
+         if ( !objectFound )
             setBargraphValue( "unitdamage", 0  );
          setLabelText( "unitstatus", "" );
 
@@ -510,7 +521,7 @@ void DashboardPanel::showUnitData( Vehicle* veh, Building* bld, MapField* fld,  
       setLabelText( "unitdefensiveexperience", "" );
       setLabelText( "unitattackincrease", "");
       setLabelText( "unitdefenseincrease", "");
-      
+
    }
    for ( int i = weaponsDisplayed; i < 10; ++i ) {
       ASCString ps = ASCString::toString(i);
@@ -519,7 +530,7 @@ void DashboardPanel::showUnitData( Vehicle* veh, Building* bld, MapField* fld,  
       setLabelText( "status_ammo" + ps, "" );
       setBargraphValue( "bar_ammo" + ps, 0 );
    }
-   
+
    if ( redraw ) {
       if ( !bulk )
          PG_Application::SetBulkMode(false);
@@ -562,10 +573,9 @@ bool UnitInfoPanel::unitNaming()
    ContainerBase* container = NULL;
    if ( veh )
       container = veh;
-   else
-      if ( bld )
-         container = bld;
-   
+   else if ( bld )
+      container = bld;
+
    if ( container && RenameContainerCommand::avail( container ) && container->getOwner() == container->getMap()->actplayer ) {
       UnitNaming un( container );
       un.Show();
@@ -580,7 +590,7 @@ bool UnitInfoPanel::onClick ( PG_MessageObject* obj, const SDL_MouseButtonEvent*
 {
 
    static const bool modalWeaponInfo = true;
-   
+
    SpecialInputWidget* siw = dynamic_cast<SpecialInputWidget*>(obj);
    if ( siw ) {
       if ( event->button == SDL_BUTTON_RIGHT ) {
@@ -603,7 +613,7 @@ bool UnitInfoPanel::onClick ( PG_MessageObject* obj, const SDL_MouseButtonEvent*
                   wip->RunModal();
                   delete wip;
                } // else
-              //     PG_Application::
+               //     PG_Application::
             }
             return true;
          }
@@ -624,19 +634,18 @@ bool UnitInfoPanel::onClick ( PG_MessageObject* obj, const SDL_MouseButtonEvent*
    return false;
 }
 
-class WeaponInfoLine: public PG_Image {
+class WeaponInfoLine: public PG_Image
+{
       const SingleWeapon* weapon;
       const VehicleType* veh;
       WeaponInfoPanel* wip;
       static WeaponInfoLine* displayed;
    public:
       WeaponInfoLine( WeaponInfoPanel* parent, const PG_Point& p, SDL_Surface* image, const SingleWeapon* weap, const VehicleType* vehicle )
-           : PG_Image( parent, p, image, false ), weapon(weap), veh ( vehicle ), wip(parent)
-      {
+         : PG_Image( parent, p, image, false ), weapon(weap), veh ( vehicle ), wip(parent) {
       };
 
-      void painter ( const PG_Rect &src, const ASCString& name, const PG_Rect &dst)
-      {
+      void painter ( const PG_Rect &src, const ASCString& name, const PG_Rect &dst) {
          Surface screen = Surface::Wrap( PG_Application::GetScreen() );
          if ( name == "weapon_symbol1" )
             screen.Blit( IconRepository::getIcon(SingleWeapon::getIconFileName( weapon->getScalarWeaponType()) + "-small.png"), SPoint(dst.x, dst.y));
@@ -660,27 +669,23 @@ class WeaponInfoLine: public PG_Image {
 
       };
 
-      void registerSpecialDisplay( const ASCString& name )
-      {
+      void registerSpecialDisplay( const ASCString& name ) {
          SpecialDisplayWidget* sdw = dynamic_cast<SpecialDisplayWidget*>( FindChild( name, true ) );
          if ( sdw )
             sdw->display.connect( SigC::slot( *this, &WeaponInfoLine::painter ));
       };
 
-	   void eventMouseEnter()
-      {
+      void eventMouseEnter() {
          wip->showWeapon( weapon );
          displayed = this;
       };
 
-      void eventMouseLeave()
-      {
+      void eventMouseLeave() {
          if ( displayed == this )
             wip->showWeapon();
       };
 
-      bool activate()
-      {
+      bool activate() {
          if ( displayed != this ) {
             wip->showWeapon( weapon);
             displayed = this;
@@ -745,7 +750,7 @@ WeaponInfoPanel::WeaponInfoPanel (PG_Widget *parent, const Vehicle* veh, const V
    setLabelText( "weapon_moveaftershoot", vt->hasFunction( ContainerBaseType::MoveAfterAttack  ) ? "yes" : "no" );
 
    /*
-   for ( int i = 0; i < cmovemalitypenum; ++i ) 
+   for ( int i = 0; i < cmovemalitypenum; ++i )
       setLabelText( ASCString("weapon_efficiency_") + unitCategoryTags[i], cmovemalitypes[i] );
       */
 }
@@ -792,7 +797,7 @@ void WeaponInfoPanel::showWeapon( const SingleWeapon* weap )
          setLabelText( "weapon_efficiency_" + ASCString::toString(i), "" );
    }
 
-                                   // grey light grey  yellow,    blue      red        green
+   // grey light grey  yellow,    blue      red        green
    static const int colors[6] = { 0x969595, 0xdfdfdf, 0xfac914,  0x5383e6,   0xff5e5e, 0x08ce37 };
 
    for ( int i = 0; i< cmovemalitypenum; ++i)
@@ -800,17 +805,14 @@ void WeaponInfoPanel::showWeapon( const SingleWeapon* weap )
          int col;
          if ( weap->targetingAccuracy[i] < 10 )
             col = colors[0] ;
+         else if ( weap->targetingAccuracy[i] < 30 )
+            col = colors[1] ;
+         else if ( weap->targetingAccuracy[i] < 80 )
+            col = colors[3] ;
+         else if ( weap->targetingAccuracy[i] < 120 )
+            col = colors[2];
          else
-            if ( weap->targetingAccuracy[i] < 30 )
-               col = colors[1] ;
-            else
-               if ( weap->targetingAccuracy[i] < 80 )
-                  col = colors[3] ;
-               else
-                  if ( weap->targetingAccuracy[i] < 120 )
-                     col = colors[2];
-                  else
-                     col = colors[4];
+            col = colors[4];
          setLabelColor( ASCString("weapon_efficiency_") + unitCategoryTags[i], col );
          setLabelText( ASCString("weapon_efficiency_") + unitCategoryTags[i], weap->targetingAccuracy[i]  );
       } else
@@ -835,7 +837,7 @@ bool   WeaponInfoPanel::eventMouseButtonUp (const SDL_MouseButtonEvent *button)
 {
    if ( Panel::eventMouseButtonUp( button ))
       return true;
-   
+
    if ( button->button == SDL_BUTTON_RIGHT ) {
       QuitModal();
       return true;
@@ -846,7 +848,7 @@ bool   WeaponInfoPanel::eventMouseButtonUp (const SDL_MouseButtonEvent *button)
 
 bool WeaponInfoPanel::eventMouseMotion(const SDL_MouseMotionEvent* motion)
 {
-   for ( int i = 0; i < weaponInfoLines.size();++i )
+   for ( int i = 0; i < weaponInfoLines.size(); ++i )
       if ( weaponInfoLines[i]->IsMouseInside() )
          return weaponInfoLines[i]->activate();
    return false;
@@ -864,14 +866,14 @@ MapInfoPanel::MapInfoPanel (PG_Widget *parent, const PG_Rect &r, MapDisplayPG* m
 {
    assert( mapDisplay );
    this->mapDisplay = mapDisplay;
-   
+
    zoomSlider = dynamic_cast<PG_Slider*>( FindChild( "zoomscroller", true ) );
    if ( zoomSlider ) {
       zoomSlider->SetRange(0,75); // results in zoomlevels from 100 - 25
       zoomSlider->sigSlide.connect( SigC::slot( *this, &MapInfoPanel::scrollTrack ));
       mapDisplay->newZoom.connect( SigC::slot( *this, &MapInfoPanel::zoomChanged ));
       zoomSlider->SetPosition( 100 - mapDisplay->getZoom() );
-   }   
+   }
 
    const int labelnum = 5;
    const char* label[labelnum] = { "pipes", "container", "resources", "visibilityvalue", "reactionfire" };
@@ -880,20 +882,20 @@ MapInfoPanel::MapInfoPanel (PG_Widget *parent, const PG_Rect &r, MapDisplayPG* m
       if ( mapDisplay->layerActive( label[i] )
          )
          layerChanged( true, label[i]);
-      if ( cb ) 
+      if ( cb )
          cb->sigClick.connect( SigC::bind( SigC::slot( *this, &MapInfoPanel::checkBox ), label[i] ));
-   }      
-   
+   }
+
    mapDisplay->layerChanged.connect( SigC::slot( *this, &MapInfoPanel::layerChanged ));
-      
+
    PG_Button* b = dynamic_cast<PG_Button*>( FindChild( "weaprange", true ) );
    if ( b )
       b->sigClick.connect( SigC::slot( *this, &MapInfoPanel::showWeaponRange ));
-   
+
    PG_Button* b2 = dynamic_cast<PG_Button*>( FindChild( "moverange", true ) );
    if ( b2 )
       b2->sigClick.connect( SigC::slot( *this, &MapInfoPanel::showMovementRange ));
-   
+
 }
 
 void MapInfoPanel::layerChanged( bool state, const ASCString& label )
@@ -958,7 +960,7 @@ void ActionInfoPanel::update( GameMap* map )
       /*
       vector<ASCString> list;
       map->actions.getActionDescriptions( list );
-      
+
       ASCString s;
       for ( vector<ASCString>::const_iterator i = list.begin(); i != list.end(); ++i )
          s += *i + "\n";
