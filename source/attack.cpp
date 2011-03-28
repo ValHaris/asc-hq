@@ -192,8 +192,10 @@ void tfight :: calc ( void )
       if ( dist <= 10 && dv.strength > 0 )
          av.experience_offensive += 1;
 
+      /*
       if ( dv.damage >= 100 ) 
          av.experience_offensive += 1;
+      */
 
       if ( av.experience_offensive > maxunitexperience )
          av.experience_offensive = maxunitexperience;
@@ -228,12 +230,14 @@ void tfight :: calc ( void )
       else
          dv.weapcount = 0;
 
+      /*
       if ( av.damage >= 100 ) {
          dv.experience_offensive += 2;
          if ( dv.experience_offensive > maxunitexperience )
             dv.experience_offensive = maxunitexperience;
 
       } else
+      */
         if ( dv.experience_offensive < maxunitexperience )
            dv.experience_offensive++;
         
@@ -400,8 +404,10 @@ void tunitattacksunit :: setresult( const Context& context )
    int nwid = _attackingunit->networkid;
    GameMap* map = _attackingunit->getMap();
    
-   GameAction* a = new ChangeUnitProperty( _attackingunit, ChangeUnitProperty::ExperienceOffensive, av.experience_offensive );
-   a->execute ( context );
+   if ( !reactionfire ) {
+      GameAction* a = new ChangeUnitProperty( _attackingunit, ChangeUnitProperty::ExperienceOffensive, av.experience_offensive );
+      a->execute ( context );
+   }
    
    GameAction* a2 = new ChangeUnitProperty( _attackingunit, ChangeUnitProperty::ExperienceDefensive, av.experience_defensive );
    a2->execute ( context );
