@@ -584,6 +584,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\unitcostcalculator-pbp.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\unitcostcalculator-standard.cpp"
 				>
 			</File>
