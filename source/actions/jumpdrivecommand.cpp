@@ -196,8 +196,9 @@ ActionResult JumpDriveCommand::go ( const Context& context )
    computeview( getMap(), 0, false, &context );
    
 
+   int unitOwner = unit->getOwner();
    srfu.checkfield( dest3D, unit, context );
-   srfu.finalCheck( unit->getOwner(), context );
+   srfu.finalCheck( unitOwner, context );
 
    
    if ( context.display )

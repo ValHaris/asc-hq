@@ -970,7 +970,8 @@ public:
         } else {
             JumpDriveCommand* jdc = dynamic_cast<JumpDriveCommand*>(NewGuiHost::pendingCommand);
             if ( jdc ) {
-                jdc->setDestination( pos );
+               NewGuiHost::pendingCommand = NULL;
+               jdc->setDestination( pos );
                 actmap->cleartemps(7);
                 ActionResult res = jdc->execute( createContext( actmap ));;
                 mapChanged( actmap );
@@ -979,7 +980,6 @@ public:
                     delete NewGuiHost::pendingCommand;
                     displayActionError( res );
                 }
-                NewGuiHost::pendingCommand = NULL;
                 updateFieldInfo();
             }
         }
