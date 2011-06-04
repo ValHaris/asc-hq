@@ -11,8 +11,8 @@ VehicleType {
 
    ConstructionCost { 
       CalculationMethod = manual
-      Energy = 60000
-      Material = 60000
+      Energy = 0
+      Material = 0
       fuel = 0
    } ConstructionCost
 

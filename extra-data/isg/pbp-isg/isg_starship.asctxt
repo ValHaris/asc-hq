@@ -18,9 +18,9 @@ VehicleType {
    Weight = 100000
    Features = self_repairing icebreaker no_midair_refuel
    transportation { 
-      MaxLoadableUnits = 48
+      MaxLoadableUnits = 53
       MaxLoadableUnitSize = 20000
-      MaxLoadableMass = 40000
+      MaxLoadableMass = 50000
       CargoMovementDivisor = 1.5
       EntranceSystemNum = 2
       EntranceSystem0 ->* VehicleType.GrIO
@@ -30,8 +30,8 @@ VehicleType {
    } transportation
    ConstructionCost { 
       CalculationMethod = manual
-      Energy = 60000
-      Material = 60000
+      Energy = 0
+      Material = 0
       fuel = 0
    } ConstructionCost
 

@@ -7,7 +7,6 @@ VehicleType {
    Infotext = [#crt#Raumtransporter#crt# #crt#]
    Picture = mao_RaumS.pcx
 
-   Transportation.MaxLoadableMass += 7000
 
   JumpDrive {
       terrain_any = Spaceport runway
@@ -22,7 +21,7 @@ VehicleType {
    Jamming = 0
 
    Height = ground_level orbit 
-   Movement = 0 0 0 60 0 0 0 150 
+   Movement = 0 0 0 60 0 0 0 100 
 
    HeightChangeMethodNum = 2
    HeightChangeMethod0 {
