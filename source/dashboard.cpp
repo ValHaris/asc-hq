@@ -411,17 +411,21 @@ void DashboardPanel::showUnitData( Vehicle* veh, Building* bld, MapField* fld,  
       else
          setLabelText( "unitname", veh->typ->description );
 
+      // shows the number of experience points
       setLabelText( "unitoffensiveexperience", veh->experience_offensive );
       setLabelText( "unitdefensiveexperience", veh->experience_defensive );
 
 
+      // shows the bonus that the units gets because of its experience (in percent)
       AttackFormula af( veh->getMap() );
       setLabelText( "unitattackincrease", int( af.strength_experience( veh->experience_defensive ) * 100));
       setLabelText( "unitdefenseincrease", int( af.defense_experience( veh->experience_defensive ) * 100));
 
+      // the health of the unit
       setBargraphValue( "unitdamage", float(100-veh->damage) / 100  );
-      setLabelText( "unitstatus", 100-veh->damage );
+      setLabelText( "unitstatus", 100-veh->damage ); 
 
+      // the resources of the unit
       setBargraphValue( "unitfuel", veh->getStorageCapacity().fuel ? float( veh->getTank().fuel) / veh->getStorageCapacity().fuel : 0  );
       setLabelText( "unitfuelstatus", veh->getTank().fuel );
       setBargraphValue( "unitmaterial", veh->getStorageCapacity().material ? float( veh->getTank().material) / veh->getStorageCapacity().material : 0  );
@@ -429,6 +433,7 @@ void DashboardPanel::showUnitData( Vehicle* veh, Building* bld, MapField* fld,  
       setBargraphValue( "unitenergy", veh->getStorageCapacity().energy ? float( veh->getTank().energy) / veh->getStorageCapacity().energy : 0  );
       setLabelText( "unitenergystatus", veh->getTank().energy );
 
+      // the time until the unit crashes because it is running out of fuel
       int endurance = UnitHooveringLogic::getEndurance( veh );
       if ( endurance >= 0 )
          setLabelText( "unitEndurance", endurance );
