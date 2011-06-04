@@ -8,10 +8,10 @@ BuildingType {
    Armor = 1000
    Functions = Solar_Power_Plant 
    MaxResourceProduction { 
-      Energy = 3000
+      Energy = 4000
    } MaxResourceProduction
    defaultProduction {
-      energy = 3000
+      energy = 4000
    } defaultProduction
 
    ConstructionStages = 1
@@ -25,8 +25,8 @@ BuildingType {
    Entry = B3
    ConstructionCost { 
       Energy = 0
-      Material = 12500
-      fuel = 11500
+      Material = 13000
+      fuel = 13000
    } ConstructionCost
 
    Transportation { 

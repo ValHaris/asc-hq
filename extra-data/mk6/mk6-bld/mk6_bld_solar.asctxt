@@ -4,8 +4,6 @@ BuildingType {
    parent = 15
    
    Description = Solarturmkraftwerk
-   InfoImage = mk6_bld_solar.jpg
-   InfoImageSmall = mk6_solar_k.png
    Infotext = [Beim Solarturmkraftwerk, auch Zentralreceiverkraftwerke genannt, handelt es sich zumeist um Dampfkraftwerke mit solarer Dampferzeugung. Die bislang mit Öl, Gas oder Kohle 
                befeuerte Brennkammer wird durch eine solare „Brennkammer“ auf einem Turm ersetzt. Bei Sonnenschein richten sich hunderte bis tausende automatisch positionierende Spiegel 
                (Heliostate) so aus, dass das Sonnenlicht auf den zentralen Absorber (Receiver) reflektiert wird. Durch starke Konzentration der Sonneneinstrahlung entstehen an der Spitze 
@@ -23,5 +21,21 @@ BuildingType {
    } Pictures
    RubbleObjects = false
    Entry = A2
+   ConstructionCost { 
+      Energy = 0
+      Material = 10500
+      fuel = 10500
+   } ConstructionCost
 
+   MaxResourceProduction { 
+      Energy = 3000
+   } MaxResourceProduction
+   defaultProduction {
+      energy = 3000
+   } defaultProduction
+   StorageCapacity { 
+      ASCmode { 
+         Energy = 2250
+      } ASCmode
+   } StorageCapacity
 } BuildingType

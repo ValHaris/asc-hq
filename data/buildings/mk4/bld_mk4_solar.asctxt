@@ -27,5 +27,10 @@ BuildingType {
    defaultProduction {
       energy = 5000
    } defaultProduction
+   StorageCapacity { 
+      ASCmode { 
+         Energy = 3750
+      } ASCmode
+   } StorageCapacity
 
 } BuildingType
