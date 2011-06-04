@@ -265,7 +265,7 @@ void DashboardPanel::painter ( const PG_Rect &src, const ASCString& name, const 
    if ( name == "unitexpdefensive" ) {
       int idx = 0;
       if ( veh ) {
-         int experience = veh->experience_offensive;
+         int experience = veh->experience_defensive;
          AttackFormula af ( veh->getMap() );
 
          idx = (int) (experienceIcons * af.defense_experience( experience ) / af.defense_experience( maxunitexperience ));
