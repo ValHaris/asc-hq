@@ -98,6 +98,12 @@ TransferHandler& ServiceCommand::getTransferHandler()
       throw ActionResult( 22002 );
       
    transferHandler = new TransferHandler( getContainer(), getDestination() );
+   
+   orgValues.clear();
+   TransferHandler::Transfers& transfers = transferHandler->getTransfers();
+   for ( TransferHandler::Transfers::iterator i = transfers.begin(); i != transfers.end(); ++i )
+      orgValues[ (*i)->getID()] = (*i)->getAmount( (*i)->getDstContainer() );
+   
    return *transferHandler;
 }
  
@@ -151,7 +157,7 @@ ActionResult ServiceCommand::go ( const Context& context )
 }
 
 
-static const int ServiceCommandVersion = 1;
+static const int ServiceCommandVersion = 2;
 
 void ServiceCommand :: readData ( tnstream& stream )
 {
@@ -169,6 +175,16 @@ void ServiceCommand :: readData ( tnstream& stream )
       int value = stream.readInt();
       values[key] = value;
    }
+   
+   orgValues.clear();
+   if ( version >= 2 ) {
+      int size = stream.readInt();
+      for ( int i = 0; i < size; ++i )  {
+         int key = stream.readInt();
+         int value = stream.readInt();
+         orgValues[key] = value;
+      }
+   }
 }
 
 void ServiceCommand :: writeData ( tnstream& stream ) const
@@ -185,6 +201,12 @@ void ServiceCommand :: writeData ( tnstream& stream ) const
       stream.writeInt( i->second );
    }
       
+   stream.writeInt( orgValues.size() );
+   for ( Values::const_iterator i = orgValues.begin(); i != orgValues.end(); ++i ) {
+      stream.writeInt( i->first );
+      stream.writeInt( i->second );
+   }
+   
 }
 
 
