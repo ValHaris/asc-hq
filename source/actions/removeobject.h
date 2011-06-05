@@ -31,6 +31,9 @@ class RemoveObject : public GameAction {
       MapCoordinate pos;
       int objectID;
       
+      // the number of objects that where additionally removed, because they depended on the original one
+      int additionalObjectCount;
+      
       RemoveObject( GameMap* map ) : GameAction( map ) {};
       template<class Child> friend GameAction* GameActionCreator( GameMap* map);
       

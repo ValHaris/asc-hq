@@ -30,6 +30,7 @@ RemoveObject::RemoveObject( GameMap* gamemap, const MapCoordinate& position, int
    : GameAction( gamemap ), pos(position), objectBuffer(NULL)
 {
    this->objectID = objectID;
+   additionalObjectCount = 0;
 }
       
       
@@ -40,11 +41,13 @@ ASCString RemoveObject::getDescription() const
 }
       
       
+static const int removeObjectStreamVersion = 2;      
+      
 void RemoveObject::readData ( tnstream& stream ) 
 {
    int version = stream.readInt();
-   if ( version != 1 )
-      throw tinvalidversion ( "RemoveObject", 1, version );
+   if ( version < 1 || version > removeObjectStreamVersion )
+      throw tinvalidversion ( "RemoveObject", removeObjectStreamVersion, version );
    
    objectID = stream.readInt();
    pos.read( stream );
@@ -54,13 +57,17 @@ void RemoveObject::readData ( tnstream& stream )
       objectBuffer->readfromstream( &stream );  
    } else
       objectBuffer = NULL;
-   
+      
+   if ( version >= 2 ) 
+      additionalObjectCount = stream.readInt();
+   else
+      additionalObjectCount = 0;
 };
       
       
 void RemoveObject::writeData ( tnstream& stream ) const
 {
-   stream.writeInt( 1 );
+   stream.writeInt( removeObjectStreamVersion );
    stream.writeInt( objectID );
    pos.write( stream );
    
@@ -70,6 +77,7 @@ void RemoveObject::writeData ( tnstream& stream ) const
    } else
       stream.writeInt( 0 );
    
+   stream.writeInt( additionalObjectCount );
 };
 
 
@@ -77,6 +85,35 @@ GameActionID RemoveObject::getID() const
 {
    return ActionRegistry::RemoveObject;
 }
+
+
+class ObjectRemovalStrategy2 : public MapField::ObjectRemovalStrategy {
+      tnstream& buffer;
+      int counter;
+   public:
+      ObjectRemovalStrategy2( tnstream& objectBuffer ) 
+         : buffer( objectBuffer ), counter( 0 )
+      {}
+      
+      virtual void removeObject( MapField* fld, const ObjectType* objectType ) {
+         for ( MapField::ObjectContainer::iterator o = fld->objects.begin(); o != fld->objects.end();  ) {
+            if ( o->typ == objectType ) {
+               buffer.writeInt( o->typ->id );
+               o->write( buffer );
+               ++counter;
+               o = fld->objects.erase( o );
+            } else
+               ++o ;
+         }
+      };
+      
+      int getCounter() 
+      {
+         return counter;
+      }
+   
+};
+
 
 ActionResult RemoveObject::runAction( const Context& context )
 {
@@ -96,7 +133,12 @@ ActionResult RemoveObject::runAction( const Context& context )
    MemoryStream memstream( objectBuffer, tnstream::writing );
    o->write( memstream );
    
-   if ( fld->removeObject( ot, true ) )
+   ObjectRemovalStrategy2 removalStrat( memstream );
+   
+   bool result = fld->removeObject( ot, true, &removalStrat );
+   additionalObjectCount = removalStrat.getCounter();
+   
+   if ( result )
       return ActionResult(0);
    else
       return ActionResult(21508);
@@ -123,6 +165,21 @@ ActionResult RemoveObject::undoAction( const Context& context )
    
    MemoryStream memstream( objectBuffer, tnstream::reading );
    o->read( memstream );
+   
+   for ( int i = 0; i < additionalObjectCount; ++i ) {
+      int id  = memstream.readInt();
+      
+      ObjectType* aot = getMap()->getobjecttype_byid( id );
+      if ( !aot )
+         return ActionResult( 21501 );
+      
+      fld->addobject( aot, -1, true );
+      Object* o = fld->checkForObject( aot );
+      if ( !o )
+         return ActionResult( 21502 );
+      
+      o->read( memstream );
+   }
    
    return ActionResult(0);
 }
