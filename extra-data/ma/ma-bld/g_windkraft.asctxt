@@ -29,27 +29,27 @@ BuildingType {
    MaxResearch = 0
    ConstructionCost { 
       Energy = 0
-      Material = 10000
-      fuel = 10000
+      Material = 12000
+      fuel = 12000
    } ConstructionCost
    MaxResourceProduction { 
-      Energy = 5000
+      Energy = 6000
       Material = 0
       fuel = 0
    } MaxResourceProduction
    defaultProduction {
-      energy = 5000
+      energy = 6000
       material = 
       fuel = 
    } defaultProduction
    StorageCapacity { 
       BImode { 
-         Energy = 3000
+         Energy = 4000
          Material = 0
          fuel = 0
       } BImode
       ASCmode { 
-         Energy = 3000
+         Energy = 4000
          Material = 0
          fuel = 0
       } ASCmode

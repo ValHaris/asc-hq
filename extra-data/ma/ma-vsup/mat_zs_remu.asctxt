@@ -4,7 +4,11 @@ VehicleType {
    ID = 22822
 
    Description = Reparatur & Munitionszug
-   Infotext = []
+   Infotext = [Der ZS REMU ist als fahrende Reparaturwerkstatt und Munitionstransporter konzipiert. So verfügt er über große Material- und Munitionsdepots sowie Treibstofftanks mitsamt den dazugehörigen Generatoren und Werkzeugen.
+   
+Er kann weitgehend autark auch größere Zugbataillone aufmunitionieren und reparieren, insbesondere, wenn er von ZS RoTT begleitet wird. Dazu ist er so groß gebaut, dass die zu wartenden Züge durch ihn hindurchfahren und so von allen 4 Seiten in einem Durchgang repariert werden können.
+
+Der ZS REMU ist darüber hinaus recht schnell unterwegs, was ihm ermöglicht, in Feuerpausen in Frontnähe zu operieren und sich dann wieder zurückzuziehen. Generell bedarf er jedoch trotz seiner mittleren Panzerung aufgrund seiner Größe zusätzlichen Schutzes und sollte normalerweise gut gedeckt im Hinterland operieren.]
    Picture = mat_zs_ReMu.pcx
 
 

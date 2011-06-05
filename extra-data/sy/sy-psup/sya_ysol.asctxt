@@ -10,7 +10,7 @@ VehicleType {
    Height = ground_level low_level_flight medium_level_flight high_level_flight orbit 
    Jamming = 20
    WaitForAttack = false
-   Features = jam_only_own_field self_repairing
+
    SelfRepairRate = 10
 
   JumpDrive {
@@ -37,7 +37,6 @@ VehicleType {
       EntranceSystem1.DisableAttack = true
    } Transportation
 
-   Movement = 0 0 0 30 80 90 100 150 
    TerrainAccess { 
       terrain_any = spaceport
       terrain_all = 

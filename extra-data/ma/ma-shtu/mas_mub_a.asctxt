@@ -15,7 +15,7 @@ Es handelt sich alles in allem um eine sehr gelungene Konstruktion, die für jede
    Features += MoveDuringReactionFire move_after_attack
    Armor += 300
    View = 40
-
+   Weight = 2300
    Tank.fuel = 15000
    FuelConsumption = 30
    Movement += 11 11 10 0 0 0 0 0 

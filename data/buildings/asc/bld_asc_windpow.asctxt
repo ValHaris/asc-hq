@@ -8,10 +8,10 @@ BuildingType {
    Armor = 1000
    Features = Wind_Power_Plant 
    MaxResourceProduction { 
-      Energy = 5000
+      Energy = 6000
    } MaxResourceProduction
    defaultProduction {
-      energy = 5000
+      energy = 6000
    } defaultProduction
 
    ConstructionStages = 1
@@ -28,8 +28,8 @@ BuildingType {
    Entry = A2
    ConstructionCost { 
       Energy = 0
-      Material = 10000
-      fuel = 10000
+      Material = 12000
+      fuel = 12000
    } ConstructionCost
 
    Transportation { 
@@ -41,7 +41,7 @@ BuildingType {
 
    StorageCapacity { 
       ASCmode { 
-         Energy = 3000
+         Energy = 4000
       } ASCmode
    } StorageCapacity
 } BuildingType

@@ -3,15 +3,17 @@ VehicleType {
    parent = 22998 273
    ID = 22503
    Description = distance VTO
-   Infotext = [Um den SEST AAM weiter zu verbessern, wurde der SEST AAR entwickelt. Die Planer sahen noch Potential durch die Weiterentwicklung der Waffentechnik und neue Panzerungsmöglichkeiten.
+   Infotext = [Um den SEST AAM weiter zu verbessern, wurde der SEST AAR entwickelt. Die Planer sahen noch Potential durch die Weiterentwicklung der Waffentechnik und neue Panzerungsmöglichkeiten. 
    
    
-Zunächst wurden die Kanonen nicht mehr ober- und unterhalb des Rumpfes montiert. Dadurch können jetzt sämtliche Waffen gegen fliegende Ziele in allen Luftschichten eingesetzt werden. Das stellt ein absolutes Novum für die malanischen Senkrechtstarter dar. Da die Kanonen dadurch nicht mehr um 360 Grad drehbar sind, rechneten die Piloten damit, daß es schwieriger werden würde, feindliche Jäger abzuschießen. Allerdings zeigte sich schnell, daß die Maschinen im Luftkampf von den Piloten sowieso mehr oder weniger auf das Ziel ausgerichtet werden, so daß es kaum Probleme mit der Zielerfassung gab.
+Zunächst wurden die Kanonen nicht mehr ober- und unterhalb des Rumpfes montiert. Dadurch können jetzt sämtliche Waffen gegen fliegende Ziele in allen Luftschichten eingesetzt werden. Das stellt ein absolutes Novum für die malanischen Senkrechtstarter dar. Da die Kanonen dadurch nicht mehr um 360 Grad drehbar sind, rechneten die Piloten damit, daß es schwieriger werden würde, feindliche Jäger abzuschießen. 
+Allerdings zeigte sich schnell, daß die Maschinen im Luftkampf von den Piloten sowieso mehr oder weniger auf das Ziel ausgerichtet werden, so daß es kaum Probleme mit der Zielerfassung gab. 
 
-Das zweite Kanonenpaar stellt eine Spezialkonstruktion dar. Der extrem lange Lauf, welcher in die Tragfläche integriert ist, ist kaum beweglich. Ein Einsatz der Waffe im Nahkampf ist daher nicht möglich. Als Munition werden spezielle panzerbrechende Geschosse mit einem sehr großen Treibsatz benutzt. Die damit erzielten hohen Mündungsgeschwindigkeiten ermöglichen nunmehr die Bekämpfung von sehr weit entfernten Zielen mit recht hoher Präzision. Da die Magazine für beide Waffen in die Tragflächen integriert werden mußten, ist der Munitionsvorrat leider begrenzt. Ein längerer Verbleib im Kampfgebiet ist ohne Versorger damit nicht möglich.
+Das zweite Kanonenpaar stellt eine Spezialkonstruktion dar. Der extrem lange Lauf, welcher in die Tragfläche integriert ist, ist kaum beweglich. Ein Einsatz der Waffe im Nahkampf ist daher nicht möglich. Als Munition werden spezielle panzerbrechende Geschosse mit einem sehr großen Treibsatz benutzt. 
+Die damit erzielten hohen Mündungsgeschwindigkeiten ermöglichen nunmehr die Bekämpfung von sehr weit entfernten Zielen mit recht hoher Präzision. Da die Magazine für beide Waffen in die Tragflächen integriert werden mußten, ist der Munitionsvorrat leider begrenzt. Ein längerer Verbleib im Kampfgebiet ist ohne Versorger damit nicht möglich.
+Deshalb wird der AAR eher zur Unterstützung denn als Hauptkampfjäger eingesetzt. Auch für ihn gilt wie beim AAM, daß er keinerlei Möglichkeiten hat, sich gegen Bodenziele zu verteidigen. 
 
-
-Deshalb wird der AAR eher zur Unterstützung denn als Hauptkampfjäger eingesetzt. Auch für ihn gilt wie beim AAM, daß er keinerlei Möglichkeiten hat, sich gegen Bodenziele zu verteidigen. Die neuartige Panzerung ist zwar recht stabil, doch sind die Piloten angehalten, feindliches Flarak-Feuer zu umgehen und sich auf die Reichweite Ihrer Kanonen zu verlassen.]
+Die neuartige Panzerung ist zwar recht stabil, doch sind die Piloten angehalten, feindliches Flarak-Feuer zu umgehen und sich auf die Reichweite Ihrer Kanonen zu verlassen.]
    Picture = maa_sest_aar.pcx
 
    Armor += 30

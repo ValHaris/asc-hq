@@ -1,7 +1,7 @@
 VehicleType { 
    Name = META RAIL
    ID = 15225
-   parent = 224
+   parent = 224 15000
 
    Description = AirDefence Railgun
    Picture = mk6v_metarail.png
@@ -9,25 +9,36 @@ VehicleType {
 
    Tank {
       Energy = 0
-      Material = 600
-      fuel = 1400
+      Material = 650
+      fuel = 1800
    } Tank
 
    Weapons { 
+   Number = 2
       Weapon0 {
          Name = Ground-Air Railgun
          sound = lasergun.ogg
          Type = Laser shootable 
-	 LaserRechargeRate = 1
+	       LaserRechargeRate = 1
          LaserRechargeCost {
             energy = 0
             material = 150
             fuel = 400
          } LaserRechargeCost
          MaxRange = 70
-         Ammo = 1
+         Ammo = 3
          Punch@MaxRange = 70
          Punch@MinRange = 90
       } Weapon0
+    Weapon1 ->* VehicleType.MG45med
+    Weapon1.Name = Nadel Laser System
+    Weapon1.Sound = weapon10_s.ogg
+    Weapon1.Type = Laser shootable
+    Weapon1.ReactionFireShots = 2
+    Weapon1.LaserRechargeRate = 1
+    Weapon1.LaserRechargeCost.energy = 0
+    Weapon1.LaserRechargeCost.material = 5
+    Weapon1.LaserRechargeCost.fuel = 40
+    Weapon1.Ammo = 10
    } Weapons
 } VehicleType
