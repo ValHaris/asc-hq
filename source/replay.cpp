@@ -923,7 +923,13 @@ void trunreplay :: removeActionCursor ( void )
 
 void trunreplay :: execnextreplaymove ( void )
 {
-   displayLogMessage( 8, "executing replay move %d\n", movenum );
+   
+   static int lastTicker = ticker;
+   
+   if ( lastTicker + 10 < ticker ) {
+      displayLogMessage( 8, "executing replay move %d\n", movenum );
+      lastTicker = ticker;
+   }
 
    if ( !replayRecorder || !replayRecorder->isRunning())
       displaymessage2("executing replay move %d\n", movenum );
