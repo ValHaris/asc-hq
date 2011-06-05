@@ -214,13 +214,15 @@ ASCString ServiceCommand :: getCommandString() const
 {
    ASCString c;
    for ( Values::const_iterator i = values.begin(); i != values.end(); ++i ) {
-      ASCString s;
-      s.format("serviceCommand ( map, %d, %d, %d, %d)", getContainerID(), destinationContainerID, i->first, i->second );
-      
-      if ( c.length() )
-         c += "\n";
-      
-      c += s;
+      if ( i->second != orgValues.find(i->first)->second) {
+         ASCString s;
+         s.format("serviceCommand ( map, %d, %d, %d, %d)", getContainerID(), destinationContainerID, i->first, i->second );
+         
+         if ( c.length() )
+            c += "\n";
+         
+         c += s;
+      }
    }
    return c;
 }
