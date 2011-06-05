@@ -45,6 +45,7 @@ class ServiceCommand : public ContainerCommand {
       //! key is the id of the transferrable, value is the destination amount
       typedef map<int,int> Values;
       Values values;
+      Values orgValues;
       
       bool destinationSpecified;
       int destinationContainerID;
