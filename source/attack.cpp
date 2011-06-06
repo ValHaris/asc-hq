@@ -695,8 +695,8 @@ void tunitattacksobject :: setup ( Vehicle* attackingunit, int obj_x, int obj_y,
    } else
       _weapon  = weapon;
 
-   const SingleWeapon *weap = &attackingunit->typ->weapons.weapon[weapon];
-   av.strength  = int ( ceil( attackingunit->weapstrength[weapon]
+   const SingleWeapon *weap = &attackingunit->typ->weapons.weapon[_weapon];
+   av.strength  = int ( ceil( attackingunit->weapstrength[_weapon]
                         * WeapDist::getWeaponStrength(weap, targetField->getWeather(), dist, attackingunit->height, _obji->typ->getEffectiveHeight() )
                         * attackingunit->typ->weapons.weapon[_weapon].targetingAccuracy[cmm_building] / 100 ));
 
