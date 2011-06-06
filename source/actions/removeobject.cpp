@@ -119,7 +119,7 @@ ActionResult RemoveObject::undoAction( const Context& context )
    if ( !o )
       return ActionResult( 21502 );
    
-   computeview( getMap() );
+   //computeview( getMap() );
    
    MemoryStream memstream( objectBuffer, tnstream::reading );
    o->read( memstream );
