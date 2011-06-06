@@ -76,19 +76,19 @@ bool loadGameFromFile( const ASCString& filename )
 void runUnitTests()
 {
    // testMaps();
+   testAttack();
+   testObjectConstruction();
    testMovement();   
    testStreamEncoding();
    testVersionIdentifier();
    testJumpdrive();
    testEvents();
    testActions();
-   testObjectConstruction();
    testResearch();
    testDiplomacy();
    testRecycling();
    testTransferControl();
    testAiService();
-   testAttack();
    testAiMovement();
    testView();
 }     
