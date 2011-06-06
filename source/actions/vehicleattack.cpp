@@ -116,14 +116,16 @@ ActionResult VehicleAttackAction::runAction( const Context& context )
    
    bool somethingDestroyed = battle->dv.damage >= 100 || battle->av.damage >= 100;
    
-   RecalculateAreaView rav ( getMap(), target, maxViewRange / maxmalq + 1, &context );
-   if ( somethingDestroyed )
-      rav.removeView();
+   // RecalculateAreaView rav ( getMap(), target, maxViewRange / maxmalq + 1, &context );
+   // if ( somethingDestroyed )
+   //   rav.removeView();
    
    battle->setresult ( context );
 
    if ( somethingDestroyed )
-      rav.addView();
+      computeview( getMap(), 0, false, &context );
+     // rav.addView();
+      
 
    if ( context.display && shown )
       context.display->displayMap();
