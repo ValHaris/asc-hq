@@ -44,7 +44,7 @@
     <run>
       <directoryradio>build</directoryradio>
       <customdirectory>/</customdirectory>
-      <mainprogram>/home/martin/asc/v2/amd64/source/unix/asc/unittester</mainprogram>
+      <mainprogram>/home/martin/asc/v2/amd64/source/unix/asc/asc</mainprogram>
       <programargs>-q</programargs>
       <terminal>false</terminal>
       <autocompile>true</autocompile>
