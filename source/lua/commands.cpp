@@ -60,6 +60,7 @@
 #include "../actions/diplomacycommand.h"
 #include "../actions/cancelresearchcommand.h"
 #include "../actions/directresearchcommand.h"
+#include "../actions/renamecontainercommand.h"
 
 GameMap* loadGameLua( const char* filename )
 {
@@ -736,4 +737,24 @@ Vehicle* getSelectedUnit( GameMap* map )
    else
       return NULL;
 }
+
+ActionResult renameContainer( GameMap* actmap, int unitID, const ASCString& publicName, const ASCString& privateName )
+{
+   if ( !actmap )
+      return ActionResult( 23500 );
+   
+   Vehicle* v = actmap->getUnit( unitID );
+   if ( !v )
+      return ActionResult(23410);
+   
+   
+   auto_ptr<RenameContainerCommand> rcc ( new RenameContainerCommand(v) );
+   rcc->setName( publicName, privateName );
+   ActionResult res = rcc->execute( createContext( actmap ) );
+   if ( res.successful() ) 
+      rcc.release();
+   
+   return res;
+}
+
 

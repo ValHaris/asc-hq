@@ -59,6 +59,8 @@ extern ActionResult cargoUnitMove( GameMap* actmap, int unitID, int targetContai
 extern ActionResult setDiplomacy( GameMap* actmap, int actingPlayer, int towardsPlayer, bool sneak, int newState );
 extern ActionResult cancelResearch( GameMap* actmap, int actingPlayer );
 extern ActionResult setResearchGoal( GameMap* actmap, int actingPlayer, int techID );
+extern ActionResult renameContainer( GameMap* actmap, int unitID, const std::string& publicName, const std::string& privateName );
+
 
 extern void endTurn();
 extern void endTurn_headLess( GameMap* gamemap );
