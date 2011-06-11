@@ -146,6 +146,14 @@ class CancelMovement : public GuiFunctions::Cancel
    public:
       CancelMovement ( PG_Widget& masterParent ) : parent( masterParent)  {};
 
+      bool available( const MapCoordinate& pos, ContainerBase* subject, int num )
+      {
+         if ( !NewGuiHost::pendingCommand )
+            parent.QuitModal();
+         
+         return true;
+      }
+
       void execute( const MapCoordinate& pos, ContainerBase* subject, int num ) {
          GuiFunctions::Cancel::execute( pos, subject, num );
          parent.QuitModal();

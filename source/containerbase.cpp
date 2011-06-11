@@ -43,6 +43,8 @@ ContainerBase ::  ContainerBase ( const ContainerBaseType* bt, GameMap* map, int
    maxplus = baseType->maxplus;
    repairedThisTurn = 0;
   
+   plus = baseType->defaultProduction;
+   
    for ( int i = 0; i < map->getVehicleTypeNum(); ++i ) {
       const VehicleType* vt = map->getvehicletype_bypos(i);
       if ( vt ) 

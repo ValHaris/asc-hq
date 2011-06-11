@@ -69,7 +69,6 @@ Building :: Building ( GameMap* actmap, const MapCoordinate& _entryPosition, con
 
    if ( chainToField )
       chainbuildingtofield ( entryPosition, setupImages );
-   plus = typ->defaultProduction;
 }
 
 

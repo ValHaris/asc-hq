@@ -136,7 +136,7 @@ class  MapField {
         \param force remove the object even if there are obstacles on the field (like a building standing on the object)
         \returns if the removal was successful
     */
-    bool removeObject ( const ObjectType* obj, bool force = false );
+    bool removeObject ( const ObjectType* obj, bool force = false, ObjectRemovalStrategy* objectRemovalStrategy = NULL );
 
     //! sorts the objects. Since objects can be on different levels of height, the lower one must be displayed first
     void sortobjects ( void );
