@@ -39,6 +39,7 @@ class DestructContainer : public ContainerAction {
       int hostingCarrier;
       int cargoSlot;
       bool suppressWreckage;
+      bool hadViewOnMap;
       
       DestructContainer( GameMap* map ) : ContainerAction( map ), unitBuffer(NULL), hostingCarrier(0), cargoSlot(-1), suppressWreckage(false) {};
       template<class Child> friend GameAction* GameActionCreator( GameMap* map);
