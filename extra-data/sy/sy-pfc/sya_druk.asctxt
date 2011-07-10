@@ -13,7 +13,6 @@ Die Waffensysteme sind sowohl im Boden als auch im Luftkampf gut einsetbar. Besi
    Armor = 750
    Weight = 500
    Height = low_level_flight medium_level_flight high_level_flight orbit 
-   Jamming = 55
    Features += MoveDuringReactionFire move_after_attack
    Transportation ->* VehicleType.TransSyDestroyer 
 
