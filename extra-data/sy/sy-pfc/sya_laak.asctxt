@@ -12,7 +12,7 @@ Ein Laak kann nicht einfach abgeschossen werden, er muß praktisch zerstört werde
    Features += MoveDuringReactionFire move_after_attack satelliteview
    Armor = 1000
    View = 60
-   Jamming = 50
+   Jamming -= 5
 
    Tank { 
       Energy = 0

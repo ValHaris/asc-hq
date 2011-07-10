@@ -23,6 +23,7 @@ Waffensystem: Hochenergielaser
    Armor = 950
    Weight = 3000
    View = 60
+   Jamming -= 5
 
    Height = medium_level_flight high_level_flight orbit 
    WaitForAttack = false
