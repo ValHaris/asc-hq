@@ -22,7 +22,7 @@ Die Waffensysteme sind sowohl im Boden als auch im Luftkampf gut einsetbar. Besi
       fuel = 10000
    } Tank
    FuelConsumption = 20
-   Movement = 0 0 0 0 120 130 140 140 
+   Movement = 0 0 0 0 100 110 120 120 
    TerrainAccess ->* VehicleType.SY_Air
 
    Weapons { 
