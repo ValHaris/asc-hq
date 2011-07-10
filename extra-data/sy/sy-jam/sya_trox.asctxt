@@ -11,13 +11,13 @@ Obwohl alle SY durch ihre organische Hüllenpanzerung eine erhebliche Tarnkapazit
 
    Armor = 220
    Category = light_aircraft
-   Jamming = 35
+   Jamming = 34
 
    Height = low_level_flight medium_level_flight high_level_flight orbit
    WaitForAttack = false
    FuelConsumption = 30
    Features = self_repairing cruiserlanding
-   Movement = 0 0 0 0 140 140 140 30 
+   Movement = 0 0 0 0 120 120 120 30 
    Weight = 6
    TerrainAccess ->* VehicleType.SY_Air
 
