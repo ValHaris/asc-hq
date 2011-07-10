@@ -7,6 +7,7 @@ VehicleType {
    Infotext = [ Das OCS HT System ist ein einfaches Ortungssystem. Leider ist die Technik sehr störanfällig. Deshalb konnten keine Waffen oder Defensivsysteme eingebaut werden. Das System ist nicht in der Lage eigenständig zu starten oder zu Landen, und muss deshalb ständig versorgt und beschützt werden.]
    Picture = mk5o_ocs.pcx
 
-   Armor -= 80
+   Armor += 10
    View -= 5
+   Movement += 0 0 0 0 0 0 0 10
 } VehicleType
