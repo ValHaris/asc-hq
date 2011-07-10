@@ -39,7 +39,7 @@ BuildingType {
    Entry = A1
 
    MaxResourceProduction { 
-      Energy = 2000
+      Energy = 1800
       Material = 0
       fuel = 0
    } MaxResourceProduction
@@ -50,12 +50,12 @@ BuildingType {
    } defaultProduction
    StorageCapacity { 
       BImode { 
-         Energy = 10000
+         Energy = 3200
          Material = 0
          fuel = 0
       } BImode
       ASCmode { 
-         Energy = 4000
+         Energy = 3200
          Material = 0
          fuel = 0
       } ASCmode
