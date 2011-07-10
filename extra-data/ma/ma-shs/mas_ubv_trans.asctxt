@@ -10,6 +10,8 @@ VehicleType {
 
    Transportation ->* VehicleType.TransShip
    Transportation.CategoriesNOT = medium_ship heavy_ship building|turret|object
+   Transportation.MaxLoadableUnits = 27
+   Transportation.MaxLoadableMass = 8800
 
    Features += ExternalMaterialTransfer ExternalFuelTransfer
    Weight = 3500
