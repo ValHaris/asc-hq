@@ -22,6 +22,17 @@ VehicleType {
    Movement = 0 0 0 60 0 0 0 60 
    SelfRepairRate = 10
    Weight = 90000
+   transportation { 
+      MaxLoadableUnits = 59
+      MaxLoadableUnitSize = 20000
+      MaxLoadableMass = 55000
+      CargoMovementDivisor = 1.5
+      EntranceSystemNum = 2
+      EntranceSystem0 ->* VehicleType.GrIO
+      EntranceSystem0.DisableAttack = true
+      EntranceSystem1 ->* VehicleType.OrbIO
+      EntranceSystem1.DisableAttack = true
+   } transportation
    TerrainAccess { 
       terrain_any = runway spaceport
       terrain_all = 
