@@ -3,23 +3,28 @@ VehicleType {
    ID = 12557
    parent = 218
 
-   Description = PU Undertaker
+   Description = Partikelkanone
    Picture = puv_undertaker_azraeel.png
    InfoImage = puv_undertaker_azraeel.jpg
    InfoImageSmall = puv_undertaker_azraeel_k.png
    WreckageObject = 12557
-   Infotext = [Vor einiger Zeit ist es draconianischen Agenten gelungen, die Scelettons zu infiltrieren und die Pläne eines neuartigen Waffensystems zu erbeuten.
+   Infotext = [Nach dem Untergang der Scelettons fand Undertaker mit einigen wenigen Getreuen Unterschlupf bei den Nietzscheanern. Im Gegenzug für das gewährte Asyl überließ er den Nietzscheanern die Baupläne für seine Geheimwaffe.
+
 AZRAEEL ist eine strategische Gefechtsfeldwaffe mit großer Durchschlagskraft, die bis auf Unterwassereinheiten, jedes Ziel wirkungsvoll und auf große Entfernung bekämpfen kann.
+
 Um das Gewicht der Primärwaffe, einer Partikelkanone, und die erforderlichen Energiegeneratoren sowie Treibstofftanks tragen zu können, wurde das gesamte Chassis aus Aluminium und Titan gefertigt. Um weiteres Gewicht einzusparen, wurde auf eine Panzerung weitgehend verzichtet und statt dessen ein Tarnschild integriert.
+
 Um die Feuerbereitschaft der Partikelkanone herzustellen sind umfangreiche Maßnahmen notwendig, wie das Justieren der Primärwaffe, die Verankerung im Boden und das Laden des Partikelemitters, was zu erheblichen aber notwendigen Zeitverzögerungen führt.
+
 Die beiden Zugmaschinen übernehmen nach Verankerung der Partikelkanone die Selbstverteidigung. Zu diesem Zweck wurden sie mit umfangreichen Boden- und Luftabwehrwaffen ausgerüstet.
+
 Nach dem Abfeuern der Primärwaffe kann AZRAEEL sehr schnell die Stellung wechseln, da das Einziehen der Verankerungen und das Ankoppeln der Zugmaschinen wenig Zeitaufwand erfordert.]
    
    Category = heavy_wheeled_vehicle
    Weight = 100
    View = 60
    Jamming = 30
-   Features += Jam_Only_Own_field
+   Features += Jam_Only_Own_field move_after_attack 
    
    TerrainAccess ->* VehicleType.wheeled 
    MovementSound = wheeled_l_g.ogg

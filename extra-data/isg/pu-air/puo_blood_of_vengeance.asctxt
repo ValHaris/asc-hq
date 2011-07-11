@@ -16,7 +16,7 @@ VehicleType {
 	 Weight = 1500
    Armor = 900
    Features = self_repairing automatic_resource_searching moveduringreactionfire
-   WaitForAttack = false
+   WaitForAttack = true
    
    Transportation { 
    		MaxLoadableUnits = 36
@@ -28,6 +28,7 @@ VehicleType {
       EntranceSystem0.CategoriesNOT = default trooper light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle light_aircraft heavy_aircraft light_ship medium_ship heavy_ship helicopter hoovercraft building|turret|object
       EntranceSystem0.MoveCost = 10
       EntranceSystem0.DisableAttack = false
+      CargoMovementDivisor = 1.1
    } Transportation
 
 	 Tank.Fuel += 16000
