@@ -4,9 +4,9 @@ VehicleType {
    ID = 12588
 
    Description = Tarnkappenjaeger
-   Infotext = []
+   Infotext = [(Infoimage by BananaJoe]
    picture = pua_nemesis.png
-   InfoImage = 
+   InfoImage = pua_nemesis.jpg
    wreckageobject = 1242 14842
 
    Armor += 30

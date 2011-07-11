@@ -43,7 +43,7 @@ FaroukSadat, Forschungsminister auf Mantis A und enger Verwandter von CarlosMont
    
    Construction { 
       Buildings = 1 2 4-7 10-23 26 30-32 35-37 40 41
-      Vehicles = 510 511 531 572 573 574 579 617 621 624 625
+      Vehicles =  49 93 61 56 95 104 110
       Objects = 2 3 10 30 44 995 996 997 998 999 1000 2096 2097 2098
    } Construction
    CategoriesProduceable = default

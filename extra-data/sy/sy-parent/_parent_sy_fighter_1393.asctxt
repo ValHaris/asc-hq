@@ -15,7 +15,7 @@ VehicleType {
       Material =
    } ConstructionCost
    Height = ground_level low_level_flight medium_level_flight high_level_flight orbit 
-   Jamming = 75
+   Jamming = 65
    WaitForAttack = false
    Tank { 
       Energy = 0

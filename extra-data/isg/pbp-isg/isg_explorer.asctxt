@@ -10,13 +10,13 @@ VehicleType {
       
    ConstructionCost { 
       CalculationMethod = manual
-      Energy = 60000
-      Material = 60000
+      Energy = 0
+      Material = 0
       fuel = 0
    } ConstructionCost
 
    transportation { 
-      MaxLoadableUnits = 20
+      MaxLoadableUnits = 30
       MaxLoadableUnitSize = 3000
       MaxLoadableMass = 5000
       CargoMovementDivisor = 1.5

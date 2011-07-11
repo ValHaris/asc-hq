@@ -9,7 +9,6 @@ VehicleType {
 
    Armor = 750
    Height = low_level_flight medium_level_flight high_level_flight orbit 
-   Jamming = 55
    Features += MoveDuringReactionFire
 
    Tank { 

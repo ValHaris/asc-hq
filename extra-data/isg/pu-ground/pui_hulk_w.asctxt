@@ -1,0 +1,21 @@
+ObjectType { 
+   ID = 12583
+   parent = 2040
+   Name = Hulk Wreckage
+   Movemalus_plus = 0
+      ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+   Movemalus_abs =   25  25  25  25  25  25  25  15  25  25  25  16  25  25  25  25  25  25
+ 
+   AttackBonus_abs = -1
+   AttackBonus_plus = 0
+   DefenseBonus_abs = -1
+   DefenseBonus_plus = 6
+   Jamming_abs = -1
+   Jammming_plus = 10
+   RemovalCost { 
+      Energy = 0
+      Material = -5000
+      fuel = 500
+      Movement = 60
+   } RemovalCost
+} ObjectType
