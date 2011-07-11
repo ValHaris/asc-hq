@@ -37,12 +37,12 @@ BuildingType {
       fuel = 15000
    } ConstructionCost
  MaxResourceProduction { 
-      Energy = 4000
+      Energy = 3300
       Material = 0
       fuel = 0
    } MaxResourceProduction
    defaultProduction {
-      energy = 4000
+      energy = 3300
       material = 0
       fuel = 
    } defaultProduction

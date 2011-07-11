@@ -8,13 +8,14 @@ VehicleType {
    Picture = pui_hulk.png
    InfoImage = pui_hulk.jpg
    InfoImageSmall = pui_hulk_k.png
+   WreckageObject = 12583
    
    Tank.Material = 12000
    Tank.Fuel = 12000
    SelfRepairRate = 15
    Jamming = 0
    MaxSurvivableStorm = 100
-   Features = conquer_buildings self_repairing move_after_attack no_midair_refuel no_reactionfire
+   Features = conquer_buildings self_repairing move_after_attack no_midair_refuel no_reactionfire paratrooper
    FuelConsumption = 0
    Movement = 0 0 0 100 0 5 0 0 
    
@@ -56,6 +57,7 @@ VehicleType {
       Weapon0.HitAccuracy.d2 = 0
       Weapon0.HitAccuracy.u2 = 0
       Weapon0.WeaponEffectiveness.trooper = 120
+      Weapon0.WeaponEffectiveness.default = 100
       
       Weapon1 ->* VehicleType.Panzerfaust
       Weapon1.Type = laser shootable 

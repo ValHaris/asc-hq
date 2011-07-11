@@ -11,8 +11,8 @@ VehicleType {
    Weight = 60
    Armor = 350
    View = 40
-   Jamming = 0
-   Features += move_after_attack no_midair_refuel sonar moveduringreactionfire
+   Jamming = 80
+   Features += move_after_attack no_midair_refuel sonar moveduringreactionfire Jam_Only_Own_field
    Category = medium_aircraft 
    
    Height = ground_level low_level_flight medium_level_flight high_level_flight orbit
