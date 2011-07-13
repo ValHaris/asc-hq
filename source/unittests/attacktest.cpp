@@ -107,7 +107,44 @@ void testAttack2()
 } 
 
       
+void testAttack3()
+{
+   auto_ptr<GameMap> game ( startMap("unittest-attack-view.map"));
+   
+   Vehicle* assault = game->getField(4,9)->vehicle;
+   assertOrThrow( assault != NULL );
+   
+   Vehicle* ari = game->getField(4,11)->vehicle;
+   assertOrThrow( ari != NULL );
+   
+   MapCoordinate r( 5, 8);
+   MapCoordinate j( 5,11);
+   
+   MapField* fld = game->getField( MapCoordinate(0,0)); 
+   assertOrThrow( fieldvisiblenow(fld) == true ); 
+   
+   attack( assault, r );
+   
+   assertOrThrow( fieldvisiblenow(fld) == true ); 
+   
+   
+   MapField* fld2 = game->getField( MapCoordinate(6,8));  
+   assertOrThrow( fieldvisiblenow(fld2) == false ); 
+   
+   attack( ari, j );
+   
+   assertOrThrow( fieldvisiblenow(fld2) == true ); 
+   
+   ActionResult res = game->actions.undo( createTestingContext( game.get() ) );
+   assertOrThrow( res.successful() );
+   
+   assertOrThrow( fieldvisiblenow(fld2) == false ); 
+   
+} 
+      
+      
 void testAttack() {
+   testAttack3();
    testAttack2();
    testAttack1();
 }
