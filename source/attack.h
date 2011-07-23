@@ -45,6 +45,9 @@ class AttackFormula
    protected:
       GameMap* gamemap;
    public:
+      
+      static const int experienceIcons = 24;
+      
       AttackFormula( GameMap* gamemap );
       float strength_experience ( int experience );
       float strength_damage ( int damage );
@@ -53,9 +56,8 @@ class AttackFormula
       float defense_experience ( int experience );
       float defense_defensebonus ( int defensebonus );
       static float getHemmingFactor ( int relDir );  // 0 <= reldir <= sidenum-2
-      virtual ~AttackFormula()
-      {}
-      ;
+      int getIconIndex(int experience, bool offensive );
+      virtual ~AttackFormula() {} ;
 };
 
 

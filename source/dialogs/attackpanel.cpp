@@ -148,11 +148,11 @@ void AttackPanel::painter ( const PG_Rect &src, const ASCString& name, const PG_
       return;
    }
    if ( name  == "attacker_unitexp" ) {
-      s.Blit( IconRepository::getIcon("experience" + ASCString::toString(attacker_exp_offensive) + ".png"), SPoint(dst.x, dst.y) );
+      s.Blit( IconRepository::getIcon("experience" + ASCString::toString( engine.getIconIndex( attacker_exp_offensive, true ) ) + ".png"), SPoint(dst.x, dst.y) );
       return;
    }
    if ( name  == "defender_unitexp" ) {
-      s.Blit( IconRepository::getIcon("experience" + ASCString::toString(defender_exp_defensive) + ".png"), SPoint(dst.x, dst.y) );
+      s.Blit( IconRepository::getIcon("experience" + ASCString::toString( engine.getIconIndex( defender_exp_defensive, false ) ) + ".png"), SPoint(dst.x, dst.y) );
       return;
    }
    if ( name  == "attacker_level" && engine.av.height ) {

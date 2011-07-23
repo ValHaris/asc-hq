@@ -151,6 +151,26 @@ float AttackFormula :: defense_defensebonus ( int defensebonus )
    return d/8;
 }
 
+int AttackFormula :: getIconIndex( int experience, bool offensive )
+{
+   int idx;
+   if ( offensive )
+      idx = (int) (experienceIcons  * strength_experience( experience ) / strength_experience( maxunitexperience ));
+   else
+      idx = (int) (experienceIcons * defense_experience( experience ) / defense_experience( maxunitexperience ));
+      
+   if ( idx >= experienceIcons )
+      idx = experienceIcons-1;
+   
+   if ( idx < 0 )
+      idx = 0;
+   
+   if ( idx > experience )
+      idx = experience;
+   
+   return idx;
+}
+
 
 
 void tfight :: calc ( void )

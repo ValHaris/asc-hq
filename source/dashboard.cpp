@@ -69,8 +69,6 @@ class WeaponInfoPanel : public Panel
       // void eval();
 };
 
-const int experienceIcons = 24;
-
 
 class ExperienceOverview : public PG_Widget
 {
@@ -83,7 +81,7 @@ class ExperienceOverview : public PG_Widget
 
       static PG_Rect getSize( const PG_Point& pos ) {
          const Surface& s = IconRepository::getIcon("experience0.png");
-         return PG_Rect( pos.x, pos.y, columns * s.w(), (experienceIcons + columns-1)/columns * s.h() );
+         return PG_Rect( pos.x, pos.y, columns * s.w(), (AttackFormula::experienceIcons + columns-1)/columns * s.h() );
       }
 
    public:
@@ -103,7 +101,7 @@ class ExperienceOverview : public PG_Widget
          int height = s.h();
 
          Surface s2 = Surface::Wrap( surface );
-         for ( int i = 0; i < experienceIcons; ++i )
+         for ( int i = 0; i < AttackFormula::experienceIcons; ++i )
             s2.Blit( IconRepository::getIcon("experience" + ASCString::toString(i) + ".png"), SPoint( i % columns * width , i/columns*height) );
       }
 };
@@ -249,16 +247,8 @@ void DashboardPanel::painter ( const PG_Rect &src, const ASCString& name, const 
    if ( name == "unitexp" ) {
       int idx = 0;
       if ( veh ) {
-         int experience = veh->experience_offensive;
          AttackFormula af ( veh->getMap() );
-
-         idx = (int) (experienceIcons * af.strength_experience( experience ) / af.strength_experience( maxunitexperience ));
-         if ( idx >= experienceIcons )
-            idx = 23;
-         if ( idx < 0 )
-            idx = 0;
-         if ( idx > experience )
-            idx = experience;
+         idx = af.getIconIndex( veh->experience_offensive, true );
       }
 
       screen.Blit( IconRepository::getIcon("experience" + ASCString::toString(idx) + ".png"), SPoint(dst.x, dst.y) );
@@ -267,16 +257,8 @@ void DashboardPanel::painter ( const PG_Rect &src, const ASCString& name, const 
    if ( name == "unitexpdefensive" ) {
       int idx = 0;
       if ( veh ) {
-         int experience = veh->experience_defensive;
          AttackFormula af ( veh->getMap() );
-
-         idx = (int) (experienceIcons * af.defense_experience( experience ) / af.defense_experience( maxunitexperience ));
-         if ( idx >= experienceIcons )
-            idx = 23;
-         if ( idx < 0 )
-            idx = 0;
-         if ( idx > experience )
-            idx = experience;
+         idx = af.getIconIndex( veh->experience_defensive, false );
       }
       screen.Blit( IconRepository::getIcon("experience" + ASCString::toString(idx) + ".png"), SPoint(dst.x, dst.y) );
    }  
