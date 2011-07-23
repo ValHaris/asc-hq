@@ -3,17 +3,17 @@ panel {
    WidgetNum = 4
    Widget0 {
       type = area
-      x = 5
+      x = 2
       y = 10
-      width = 162
+      width = 165
       height = 115  
 
-      WidgetNum = 6
+      WidgetNum = 7
       
       Widget0 {
         type = image
         Filename = unit-hole.png
-        x = 36
+        x = 40
         y = 4
         WidgetNum = 1
         Widget0 {
@@ -24,12 +24,103 @@ panel {
         } widget0
      } widget0
 
+     widget6 {
+        type = dummy
+        x = 35
+        y = 3
+        width = 40
+        height = 70
+        ChildWidgets = EPwertO EPO BoWertO PercentO EPwertD EPD BoWertD PercentD
+        
+        textalign = right
+        FontSize = 7
+        FontColor = 0xffffff
+
+        EPWertO {
+           type = TextOutput
+           name = unitoffensiveexperience
+           ToolTipHelp = unitoffensiveexperience
+           x = 0
+           y = 0
+           width = 11
+           height = 7
+           ToolTipHelp = experience points (offensive) 
+       } EPwertO
+       EPO {
+            type = StaticText
+            x = 13
+            y = 0
+            width = 10
+            height = 7
+            Text = EP
+            textalign = left
+       } EPO
+        BoWertO {
+           type = TextOutput
+           name = unitattackincrease
+           ToolTipHelp = unitoffensiveexperience
+           x = 0
+           y = 7
+           width = 11
+           height = 7
+           ToolTipHelp = attackbonus (offensive) 
+       } BowertO
+       PercentO {
+            type = StaticText
+            x = 13
+            y = 7
+            width = 
+            height = 7
+            Text = %
+            textalign = left
+       } PercentO
+
+        BoWertD {
+           type = TextOutput
+           name = unitdefenseincrease
+           ToolTipHelp = unitdefensiveexperience
+           x = 0
+           y = 52
+           width = 11
+           height = 7
+           ToolTipHelp = defencebonus  
+       } BoWertD
+       PercentD {
+            type = StaticText
+            x = 13
+            y = 52
+            width = 
+            height = 7
+            Text = %
+            textalign = left
+       } PercentD
+        EPWertD {
+           type = TextOutput
+           name = unitdefensiveexperience
+           ToolTipHelp = unitdefensiveexperience
+           x = 0
+           y = 59
+           width = 11
+           height = 7
+           ToolTipHelp = experience points (defensive) 
+       } EPwertD
+       EPD {
+            type = StaticText
+            x = 13
+            y = 59
+            width = 10
+            height = 7
+            Text = EP
+            textalign = left
+       } EPD
+     } widget6
+     
      Widget1 {
         type = image
         Filename = exp-field.png
         x = 5
         y = 2
-        ToolTipHelp = unit experience (offensive)
+        ToolTipHelp = unit experience level (offensive) 
         
         WidgetNum = 1      
         Widget0 {
@@ -38,13 +129,14 @@ panel {
            y = 2
            name = unitexp
         } Widget0
+
      } Widget1
 
      Widget5 {
         type = image
         Filename = exp-field.png
         x = 5
-        y = 40
+        y = 41
         ToolTipHelp = unit experience (defensive)
         
         WidgetNum = 1      
@@ -99,7 +191,7 @@ panel {
 
      widget4 {
         type = dummy
-        x = 104
+        x = 105
         y = 1
         width = 55
         height = 66
