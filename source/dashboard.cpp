@@ -257,6 +257,8 @@ void DashboardPanel::painter ( const PG_Rect &src, const ASCString& name, const 
             idx = 23;
          if ( idx < 0 )
             idx = 0;
+         if ( idx > experience )
+            idx = experience;
       }
 
       screen.Blit( IconRepository::getIcon("experience" + ASCString::toString(idx) + ".png"), SPoint(dst.x, dst.y) );
@@ -273,10 +275,11 @@ void DashboardPanel::painter ( const PG_Rect &src, const ASCString& name, const 
             idx = 23;
          if ( idx < 0 )
             idx = 0;
+         if ( idx > experience )
+            idx = experience;
       }
-
       screen.Blit( IconRepository::getIcon("experience" + ASCString::toString(idx) + ".png"), SPoint(dst.x, dst.y) );
-   }
+   }  
 
    if ( name == "unit_level" ) {
       int height1 = 0;
