@@ -2282,7 +2282,7 @@ GameParameterSettings gameParameterSettings[gameparameternum ] = {
       {  "ResearchOutputMultiplier",           1,                    1,   maxint,             false,  false,   "Multiplies the research output of all labs"  },  //       cgp_researchOutputMultiplier
       {  "ProduceOnlyResearchedStuffInternally", 0,                  0,   1,                  true,   false,   "Produce only researched stuff internally" },
       {  "ProduceOnlyResearchedStuffExternally", 1,                  0,   1,                  true,   false,   "Produce only researched stuff externally" },
-      {  "ExperienceAt90PercentBonus",         20,                   3,   1000,               false,  false,   "Experience level to achieve 90% bonus" },   // cgp_experienceAt90percentbonus
+      {  "ExperienceAt90PercentBonus",         25,                   3,   1000,               false,  false,   "Experience level to achieve 90% bonus" },   // cgp_experienceAt90percentbonus
       {  "maxAttackExperienceBonus",           100,                  0,   1000,               false,  false,   "Max attack bonus for experience (percent)" },  // maxAttackExperienceBonus
       {  "maxDefenseExperienceBonus",          100,                  0,   1000,               false,  false,   "Max defense bonus for experience (percent)" }  // maxDefenseExperienceBonus
 };
