@@ -1,0 +1,20 @@
+#! /bin/sh
+
+if test "X$1" = X--speed; then
+   export CXXFLAGS="-O3 -g -Wall -ansi "
+#-floop-interchange -floop-strip-mine -floop-block
+   export CFLAGS="-O3 -g -Wall"
+else
+   export CXXFLAGS="-O0 -g -Wall -ansi"
+   export CFLAGS="-O0 -g -Wall"
+fi
+
+export CC="ccache gcc"
+export CXX="ccache g++"
+
+if test "X$1" = X--coverage; then
+   export CXXFLAGS="$CXXFLAGS -fprofile-arcs -ftest-coverage "
+   export CFLAGS="$CFLAGS   -fprofile-arcs -ftest-coverage "
+fi
+
+./configure --enable-unittestcoverage --enable-extradata
