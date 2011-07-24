@@ -403,7 +403,7 @@ void DashboardPanel::showUnitData( Vehicle* veh, Building* bld, MapField* fld,  
 
       // shows the bonus that the units gets because of its experience (in percent)
       AttackFormula af( veh->getMap() );
-      setLabelText( "unitattackincrease", int( af.strength_experience( veh->experience_defensive ) * 100));
+      setLabelText( "unitattackincrease", int( af.strength_experience( veh->experience_offensive ) * 100));
       setLabelText( "unitdefenseincrease", int( af.defense_experience( veh->experience_defensive ) * 100));
 
       // the health of the unit
