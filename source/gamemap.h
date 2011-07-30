@@ -180,7 +180,9 @@ class GameMap {
       void operator= ( const GameMap& map );
       bool dialogsHooked;
    public:
-      
+      int serverMapID;
+
+
       static const int maxTotalPlayers = 8;
       
       //! the size of the map

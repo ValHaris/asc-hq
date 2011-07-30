@@ -224,14 +224,13 @@ void OverviewMapHolder::clearmap( GameMap* actmap )
 GameMap :: GameMap ( void )
    : actions(this), actionRecorder(NULL), overviewMapHolder( *this ), network(NULL), packageData(NULL)
 {
+   serverMapID = 0;
    randomSeed = rand();
    dialogsHooked = false;
 
    eventID = 0;
 
    state = Normal;
-
-   int i;
 
    xsize = 0;
    ysize = 0;
@@ -242,7 +241,7 @@ GameMap :: GameMap ( void )
 
    _resourcemode = 0;
 
-   for ( i = 0; i < 9; ++i ) {
+   for ( int i = 0; i < 9; ++i ) {
       player[i].setParentMap ( this, i );
       if ( i == 0 )
          player[i].stat = Player::human;
@@ -265,9 +264,6 @@ GameMap :: GameMap ( void )
    game_parameter = NULL;
    mineralResourcesDisplayed = 0;
 
-   // sigPlayerUserInteractionBegins.connect( SigC::bind( SigC::slot( GameMap::setPlayerMode ), NormalManual));
-   // sigPlayerUserInteractionEnds.connect( SigC::bind( SigC::slot( GameMap::setPlayerMode ), NormalAuto));
-
 
 #ifdef WEATHERGENERATOR
    weatherSystem  = new WeatherSystem(this, 1, 0.03);
@@ -278,7 +274,6 @@ GameMap :: GameMap ( void )
    nativeMessageLanguage = "en_US";
    
    sigMapCreation( *this );
-   
 }
 
 GameMap::Campaign::Campaign()
@@ -294,12 +289,11 @@ void GameMap :: guiHooked()
    dialogsHooked = true;
 }
 
-const int tmapversion = 33;
+const int tmapversion = 34;
 
 void GameMap :: read ( tnstream& stream )
 {
    int version;
-   int i;
 
    xsize = stream.readWord();
    ysize = stream.readWord();
@@ -363,19 +357,19 @@ void GameMap :: read ( tnstream& stream )
       
    for ( int j = 0; j < 4; j++ )
       stream.readChar(); // was: different wind in different altitudes
-   for ( i = 0; i< 12; i++ )
+   for ( int i = 0; i< 12; i++ )
       stream.readChar(); // dummy
 
    _resourcemode = stream.readInt();
 
    int alliances[8][8];
    if ( version <= 10 )
-      for ( i = 0; i < 8; i++ )
+      for ( int i = 0; i < 8; i++ )
          for ( int j = 0; j < 8; j++ )
             alliances[j][i] = stream.readChar();
 
    int dummy_playername[9];
-   for ( i = 0; i< 9; i++ ) {
+   for ( int i = 0; i< 9; i++ ) {
       player[i].existanceAtBeginOfTurn = stream.readChar();
       stream.readInt(); // dummy
       stream.readInt(); // dummy
@@ -442,16 +436,16 @@ void GameMap :: read ( tnstream& stream )
    bool alliance_names_not_used_any_more[8];
    if ( version <= 9 ) {
       ___loadLegacyNetwork  = stream.readInt();
-      for ( i = 0; i < 8; i++ )
+      for ( int i = 0; i < 8; i++ )
          alliance_names_not_used_any_more[i] = stream.readInt(); // dummy
    } else {
       ___loadLegacyNetwork = false;
-      for ( i = 0; i < 8; i++ )
+      for ( int i = 0; i < 8; i++ )
          alliance_names_not_used_any_more[i] = 0;
    }
 
    if ( version <= 12 ) {
-      for ( i = 0; i< 8; i++ ) {
+      for ( int i = 0; i< 8; i++ ) {
          stream.readWord(); // cursorpos.position[i].cx = 
          stream.readWord(); // cursorpos.position[i].sx = 
          stream.readWord(); // cursorpos.position[i].cy = 
@@ -476,20 +470,20 @@ void GameMap :: read ( tnstream& stream )
    }
 
    int exist_humanplayername[9];
-   for ( i = 0; i < 8; i++ )
+   for ( int i = 0; i < 8; i++ )
       exist_humanplayername[i] = stream.readInt();
    exist_humanplayername[8] = 0;
 
 
    int exist_computerplayername[9];
-   for ( i = 0; i < 8; i++ )
+   for ( int i = 0; i < 8; i++ )
       exist_computerplayername[i] = stream.readInt();
    exist_computerplayername[8] = 0;
 
    supervisorpasswordcrc.read ( stream );
 
    if ( version <= 10 )
-      for ( i = 0; i < 8; i++ )
+      for ( int i = 0; i < 8; i++ )
          stream.readChar(); // alliances_at_beginofturn[i] = 
 
    stream.readInt(); // was objectcrc = (Object*containercrcs)
@@ -502,7 +496,7 @@ void GameMap :: read ( tnstream& stream )
    playerView = stream.readInt();
    lastjournalchange.abstime = stream.readInt();
 
-   for ( i = 0; i< 8; i++ )
+   for ( int i = 0; i< 8; i++ )
       bi_resource[i].read ( stream );
 
    int preferredfilenames = stream.readInt();
@@ -513,14 +507,14 @@ void GameMap :: read ( tnstream& stream )
 
    stream.readInt(); // dummy
    mineralResourcesDisplayed = stream.readInt();
-   for ( i = 0; i< 9; i++ )
+   for ( int i = 0; i< 9; i++ )
        player[i].queuedEvents = stream.readInt();
 
-   for ( i = 0; i < 19; i++ )
+   for ( int i = 0; i < 19; i++ )
        stream.readInt();
 
    int _oldgameparameter[8];
-   for ( i = 0; i < 8; i++ )
+   for ( int i = 0; i < 8; i++ )
        _oldgameparameter[i] = stream.readInt();
 
    if ( version >= 11 ) 
@@ -703,6 +697,9 @@ void GameMap :: read ( tnstream& stream )
     if ( version >= 33 ) 
        tasks->read( stream );
     
+    if ( version >= 34 )
+       serverMapID = stream.readInt();
+
 }
 
 
@@ -722,7 +719,6 @@ void GameMap :: write ( tnstream& stream )
    stream.writeInt (1); // dummy
    stream.writeString ( codeWord );
 
-   
    
    stream.writeInt( campaign.avail  );
    stream.writeChar( actplayer );
@@ -913,6 +909,7 @@ void GameMap :: write ( tnstream& stream )
     
    tasks->write( stream );
 
+   stream.writeInt( serverMapID );
 }
 
 

@@ -103,7 +103,6 @@ class Player : public SigC::Object {
       void userInteractionBegins( Player& p );
       void turnEnds( Player& p );
       
-      
    public:
       Player();
 
@@ -224,11 +223,12 @@ class Player : public SigC::Object {
 
       bool operator==( const Player& otherPlayer) const;
       
+      int serverPlayerID;
+
    private:   
       ASCString       name;
       DI_Color        color;
       void sendQueuedMessages();
-                 
 };
 
 

@@ -197,6 +197,7 @@ Player :: Player()
    queuedEvents = 0;
    ASCversion = 0;
    color = 0;
+   serverPlayerID = 0;
 }
 
 void Player :: setParentMap( GameMap* map, int pos )
@@ -315,7 +316,7 @@ bool Player::exist() const
 }
 
 
-const int playerVersion = 2; 
+const int playerVersion = 3; 
 
 void Player::read ( tnstream& stream )
 {
@@ -323,13 +324,14 @@ void Player::read ( tnstream& stream )
    if ( version > playerVersion )
       throw tinvalidversion ( "Player", playerVersion, version );
    
-   // to be filled with future attributes
+   if ( playerVersion >= 3 )
+      serverPlayerID = stream.readInt();
 }
 
 void Player::write ( tnstream& stream ) const
 {
    stream.writeInt( playerVersion );
-   // to be filled with future attributes
+   stream.writeInt( serverPlayerID );
 }
 
 
