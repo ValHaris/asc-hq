@@ -378,7 +378,9 @@ void GameMap :: read ( tnstream& stream )
       else
          player[i].research.read ( stream );
 
-      player[i].ai = (BaseAI*)stream.readInt() ;
+      // player[i].ai = (BaseAI*)
+      stream.readInt() ;
+      player[i].ai = NULL;
       player[i].stat = Player::PlayerStatus ( stream.readChar() );
       stream.readChar(); // dummy
       dummy_playername[i] = stream.readInt();

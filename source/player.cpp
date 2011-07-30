@@ -324,7 +324,7 @@ void Player::read ( tnstream& stream )
    if ( version > playerVersion )
       throw tinvalidversion ( "Player", playerVersion, version );
    
-   if ( playerVersion >= 3 )
+   if ( version >= 3 )
       serverPlayerID = stream.readInt();
 }
 
