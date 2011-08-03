@@ -4563,6 +4563,107 @@ static int _wrap_GameMap_getField(lua_State* L) {
 }
 
 
+static int _wrap_GameMap_setServerMapID(lua_State* L) {
+  int SWIG_arg = 0;
+  GameMap *arg1 = (GameMap *) 0 ;
+  int arg2 ;
+  
+  SWIG_check_num_args("setServerMapID",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("setServerMapID",1,"GameMap *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("setServerMapID",2,"int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_GameMap,0))){
+    SWIG_fail_ptr("GameMap_setServerMapID",1,SWIGTYPE_p_GameMap);
+  }
+  
+  arg2 = (int)lua_tonumber(L, 2);
+  (arg1)->setServerMapID(arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_GameMap_setTitle(lua_State* L) {
+  int SWIG_arg = 0;
+  GameMap *arg1 = (GameMap *) 0 ;
+  std::string *arg2 = 0 ;
+  std::string temp2 ;
+  
+  SWIG_check_num_args("setTitle",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("setTitle",1,"GameMap *");
+  if(!lua_isstring(L,2)) SWIG_fail_arg("setTitle",2,"std::string const &");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_GameMap,0))){
+    SWIG_fail_ptr("GameMap_setTitle",1,SWIGTYPE_p_GameMap);
+  }
+  
+  temp2.assign(lua_tostring(L,2),lua_strlen(L,2)); arg2=&temp2;
+  (arg1)->setTitle((std::string const &)*arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_GameMap_getServerMapID(lua_State* L) {
+  int SWIG_arg = 0;
+  GameMap *arg1 = (GameMap *) 0 ;
+  int result;
+  
+  SWIG_check_num_args("getServerMapID",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("getServerMapID",1,"GameMap const *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_GameMap,0))){
+    SWIG_fail_ptr("GameMap_getServerMapID",1,SWIGTYPE_p_GameMap);
+  }
+  
+  result = (int)((GameMap const *)arg1)->getServerMapID();
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_GameMap_getTitle(lua_State* L) {
+  int SWIG_arg = 0;
+  GameMap *arg1 = (GameMap *) 0 ;
+  std::string result;
+  
+  SWIG_check_num_args("getTitle",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("getTitle",1,"GameMap const *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_GameMap,0))){
+    SWIG_fail_ptr("GameMap_getTitle",1,SWIGTYPE_p_GameMap);
+  }
+  
+  result = ((GameMap const *)arg1)->getTitle();
+  lua_pushlstring(L,(&result)->data(),(&result)->size()); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_GameMap_width(lua_State* L) {
   int SWIG_arg = 0;
   GameMap *arg1 = (GameMap *) 0 ;
@@ -4685,6 +4786,10 @@ delete arg1;
 }
 static swig_lua_method swig_GameMap_methods[] = {
     {"getField", _wrap_GameMap_getField}, 
+    {"setServerMapID", _wrap_GameMap_setServerMapID}, 
+    {"setTitle", _wrap_GameMap_setTitle}, 
+    {"getServerMapID", _wrap_GameMap_getServerMapID}, 
+    {"getTitle", _wrap_GameMap_getTitle}, 
     {"width", _wrap_GameMap_width}, 
     {"height", _wrap_GameMap_height}, 
     {"getPlayer", _wrap_GameMap_getPlayer}, 
@@ -4773,19 +4878,94 @@ fail:
 static int _wrap_Player_setName(lua_State* L) {
   int SWIG_arg = 0;
   Player *arg1 = (Player *) 0 ;
-  char *arg2 = (char *) 0 ;
+  std::string *arg2 = 0 ;
+  std::string temp2 ;
   
   SWIG_check_num_args("setName",2,2)
   if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("setName",1,"Player *");
-  if(!lua_isstring(L,2)) SWIG_fail_arg("setName",2,"char const *");
+  if(!lua_isstring(L,2)) SWIG_fail_arg("setName",2,"std::string const &");
   
   if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Player,0))){
     SWIG_fail_ptr("Player_setName",1,SWIGTYPE_p_Player);
   }
   
-  arg2 = (char *)lua_tostring(L, 2);
-  (arg1)->setName((char const *)arg2);
+  temp2.assign(lua_tostring(L,2),lua_strlen(L,2)); arg2=&temp2;
+  (arg1)->setName((std::string const &)*arg2);
   
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_Player_setPlayerID(lua_State* L) {
+  int SWIG_arg = 0;
+  Player *arg1 = (Player *) 0 ;
+  int arg2 ;
+  
+  SWIG_check_num_args("setPlayerID",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("setPlayerID",1,"Player *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("setPlayerID",2,"int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Player,0))){
+    SWIG_fail_ptr("Player_setPlayerID",1,SWIGTYPE_p_Player);
+  }
+  
+  arg2 = (int)lua_tonumber(L, 2);
+  (arg1)->setPlayerID(arg2);
+  
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_Player_getPlayerID(lua_State* L) {
+  int SWIG_arg = 0;
+  Player *arg1 = (Player *) 0 ;
+  int result;
+  
+  SWIG_check_num_args("getPlayerID",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("getPlayerID",1,"Player const *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Player,0))){
+    SWIG_fail_ptr("Player_getPlayerID",1,SWIGTYPE_p_Player);
+  }
+  
+  result = (int)((Player const *)arg1)->getPlayerID();
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_Player_getName(lua_State* L) {
+  int SWIG_arg = 0;
+  Player *arg1 = (Player *) 0 ;
+  std::string result;
+  
+  SWIG_check_num_args("getName",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("getName",1,"Player const *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Player,0))){
+    SWIG_fail_ptr("Player_getName",1,SWIGTYPE_p_Player);
+  }
+  
+  result = ((Player const *)arg1)->getName();
+  lua_pushlstring(L,(&result)->data(),(&result)->size()); SWIG_arg++;
   return SWIG_arg;
   
   if(0) SWIG_fail;
@@ -4829,6 +5009,9 @@ static swig_lua_method swig_Player_methods[] = {
     {"exist", _wrap_Player_exist}, 
     {"isHuman", _wrap_Player_isHuman}, 
     {"setName", _wrap_Player_setName}, 
+    {"setPlayerID", _wrap_Player_setPlayerID}, 
+    {"getPlayerID", _wrap_Player_getPlayerID}, 
+    {"getName", _wrap_Player_getName}, 
     {"getResearch", _wrap_Player_getResearch}, 
     {0,0}
 };

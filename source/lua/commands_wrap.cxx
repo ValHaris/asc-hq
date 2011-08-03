@@ -3625,6 +3625,54 @@ static swig_lua_class *swig_Properties_bases[] = {0};
 static const char *swig_Properties_base_names[] = {0};
 static swig_lua_class _wrap_class_Properties = { "Properties", &SWIGTYPE_p_Properties,_wrap_new_Properties, swig_delete_Properties, swig_Properties_methods, swig_Properties_attributes, swig_Properties_bases, swig_Properties_base_names };
 
+static int _wrap_GameMap_getServerMapID(lua_State* L) {
+  int SWIG_arg = 0;
+  GameMap *arg1 = (GameMap *) 0 ;
+  int result;
+  
+  SWIG_check_num_args("getServerMapID",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("getServerMapID",1,"GameMap const *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_GameMap,0))){
+    SWIG_fail_ptr("GameMap_getServerMapID",1,SWIGTYPE_p_GameMap);
+  }
+  
+  result = (int)((GameMap const *)arg1)->getServerMapID();
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_GameMap_getTitle(lua_State* L) {
+  int SWIG_arg = 0;
+  GameMap *arg1 = (GameMap *) 0 ;
+  std::string result;
+  
+  SWIG_check_num_args("getTitle",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("getTitle",1,"GameMap const *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_GameMap,0))){
+    SWIG_fail_ptr("GameMap_getTitle",1,SWIGTYPE_p_GameMap);
+  }
+  
+  result = ((GameMap const *)arg1)->getTitle();
+  lua_pushlstring(L,(&result)->data(),(&result)->size()); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_GameMap_width(lua_State* L) {
   int SWIG_arg = 0;
   GameMap *arg1 = (GameMap *) 0 ;
@@ -3746,6 +3794,8 @@ GameMap *arg1 = (GameMap *) obj;
 delete arg1;
 }
 static swig_lua_method swig_GameMap_methods[] = {
+    {"getServerMapID", _wrap_GameMap_getServerMapID}, 
+    {"getTitle", _wrap_GameMap_getTitle}, 
     {"width", _wrap_GameMap_width}, 
     {"height", _wrap_GameMap_height}, 
     {"getPlayer", _wrap_GameMap_getPlayer}, 
@@ -3831,6 +3881,54 @@ fail:
 }
 
 
+static int _wrap_Player_getPlayerID(lua_State* L) {
+  int SWIG_arg = 0;
+  Player *arg1 = (Player *) 0 ;
+  int result;
+  
+  SWIG_check_num_args("getPlayerID",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("getPlayerID",1,"Player const *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Player,0))){
+    SWIG_fail_ptr("Player_getPlayerID",1,SWIGTYPE_p_Player);
+  }
+  
+  result = (int)((Player const *)arg1)->getPlayerID();
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_Player_getName(lua_State* L) {
+  int SWIG_arg = 0;
+  Player *arg1 = (Player *) 0 ;
+  std::string result;
+  
+  SWIG_check_num_args("getName",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("getName",1,"Player const *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Player,0))){
+    SWIG_fail_ptr("Player_getName",1,SWIGTYPE_p_Player);
+  }
+  
+  result = ((Player const *)arg1)->getName();
+  lua_pushlstring(L,(&result)->data(),(&result)->size()); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_Player_getResearch(lua_State* L) {
   int SWIG_arg = 0;
   Player *arg1 = (Player *) 0 ;
@@ -3863,6 +3961,8 @@ static swig_lua_method swig_Player_methods[] = {
     {"getPosition", _wrap_Player_getPosition}, 
     {"exist", _wrap_Player_exist}, 
     {"isHuman", _wrap_Player_isHuman}, 
+    {"getPlayerID", _wrap_Player_getPlayerID}, 
+    {"getName", _wrap_Player_getName}, 
     {"getResearch", _wrap_Player_getResearch}, 
     {0,0}
 };

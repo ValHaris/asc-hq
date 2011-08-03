@@ -239,11 +239,18 @@ class Properties {
 
 class GameMap {
    public:
+      
 #ifdef mapeditor
       // in ASC, the scripts are not able to access all fields, as they are running in a user context
       MapField* getField( int x, int y );
       MapField* getField( const MapCoordinate& pos );
+      void setServerMapID( int id );
+      void setTitle( const std::string& title );
+      
 #endif      
+      int getServerMapID() const;
+      std::string getTitle() const;
+      
       int width() const;
       int height() const;
       Player& getPlayer( int p );
@@ -259,8 +266,11 @@ class Player {
       bool exist() const;
       bool isHuman() const;
 #ifdef mapeditor
-      void setName( const char* name );
+      void setName( const std::string& name );
+      void setPlayerID( int id );
 #endif      
+      int getPlayerID() const;
+      std::string getName() const;
       Research& getResearch();
 };
 
