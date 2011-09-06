@@ -116,14 +116,14 @@ Resources PBPUnitCostCalculator :: productionCost( const VehicleType* vehicle )
       unitfactor = 13;
    } else if ( vehicle->movemalustyp == MoveMalusType::helicopter ) {
         // Rotorgetriebene Luftfahrzeuge
-      unitfactor = 14;
+      unitfactor = 15;
    } else if ( vehicle->movemalustyp == MoveMalusType::light_aircraft ) {
    	// kleine Flugzeuge ( Drohnen, Satelliten )
-      unitfactor = 13;
+      unitfactor = 14;
    } else if ( vehicle->movemalustyp == MoveMalusType::medium_aircraft ) {
-      unitfactor = 15;
-   } else if ( vehicle->movemalustyp == MoveMalusType::heavy_aircraft ) {
       unitfactor = 16;
+   } else if ( vehicle->movemalustyp == MoveMalusType::heavy_aircraft ) {
+      unitfactor = 17;
    } else if ( vehicle->movemalustyp == MoveMalusType::rail_vehicle ) {
 	// Schienenfahrzeuge
       unitfactor = 9;
@@ -198,27 +198,27 @@ Resources PBPUnitCostCalculator :: productionCost( const VehicleType* vehicle )
   
    // Zuschlag fuer Triebwerke
    if (maxmoverange > 40 ) {
-      typecostm += (maxmoverange-40)*unitfactor*0.5;
+      typecostm += (maxmoverange-40)*unitfactor*0.6;
    }
    // Zuschlag fuer Triebwerke
    if (maxmoverange > 80 ) {
-      typecostm += (maxmoverange-80)*unitfactor*0.5;
+      typecostm += (maxmoverange-80)*unitfactor*0.6;
    }
    // Zuschlag fuer Triebwerke 2
    if (maxmoverange > 120 ) {
-      typecostm += (maxmoverange-120)*unitfactor*0.5;
+      typecostm += (maxmoverange-120)*unitfactor*0.6;
    }
    // Zuschlag fuer Triebwerke 3
    if (maxmoverange > 160 ) {
-      typecostm += (maxmoverange-160)*unitfactor*0.5;
+      typecostm += (maxmoverange-160)*unitfactor*0.6;
    }
    // Zuschlag fuer Triebwerke 4
    if (maxmoverange > 200 ) {
-      typecostm += (maxmoverange-200)*unitfactor*0.5;
+      typecostm += (maxmoverange-200)*unitfactor*0.6;
    }
    // Zuschlag fuer Triebwerke 5
    if (maxmoverange > 240 ) {
-      typecostm += (maxmoverange-240)*unitfactor*0.5;
+      typecostm += (maxmoverange-240)*unitfactor*0.6;
    }
 
 
@@ -226,7 +226,11 @@ Resources PBPUnitCostCalculator :: productionCost( const VehicleType* vehicle )
    // Part IV - weaponcost
 
    // generelle Waffenreichweite, einmaliger Zuschlag
-
+   
+   // Kostenbegrenzung
+   if (maxweaponrange > 200 ) {
+      maxweaponrange = 200;
+   }
    // Waffenreichweitenzuschlag Kurzstrecke
    if (maxweaponrange > 19 ) {
       weaponcostm += (maxweaponrange-10)*80;
@@ -282,22 +286,8 @@ Resources PBPUnitCostCalculator :: productionCost( const VehicleType* vehicle )
          if (vehicle->weapons.weapon[W].service() ) {
             weaponsinglecostm += 1000;
          }
-         // Waffenreichweitenzuschlag Kurzstrecke
-         if (vehicle->weapons.weapon[W].maxdistance > 19 ) {
-            weaponsinglecostm += (vehicle->weapons.weapon[W].maxdistance-10)*unitfactor/100*80;
-         }
-         // Waffenreichweitenzuschlag Mittelstrecke
-         if (vehicle->weapons.weapon[W].maxdistance > 69 ) {
-            weaponsinglecostm += (vehicle->weapons.weapon[W].maxdistance-60)*unitfactor/100*140;
-         }
-         // Waffenreichweitenzuschlag Langstrecke
-         if (vehicle->weapons.weapon[W].maxdistance > 99 ) {
-            weaponsinglecostm += (vehicle->weapons.weapon[W].maxdistance-90)*unitfactor/100*200;
-         }
-         // Waffenreichweitenzuschlag Interkontinental
-         if (vehicle->weapons.weapon[W].maxdistance > 129 ) {
-            weaponsinglecostm += (vehicle->weapons.weapon[W].maxdistance-120)*unitfactor/100*250;
-         }
+         // Waffenreichweitenzuschlag
+         weaponsinglecostm += vehicle->weapons.weapon[W].maxdistance*unitfactor/2;
          //Move during reaction fire(MDRF) - Move After Attack(MAM) - No Attack After Move(NAAM) - ReactionFire(RF)
          int weaponspecial = 0;
          int weaponRF = vehicle->weapons.weapon[W].reactionFireShots*weaponsinglecostm/2;
