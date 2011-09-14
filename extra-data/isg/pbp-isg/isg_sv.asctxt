@@ -10,7 +10,7 @@ VehicleType {
 
    Category = heavy_aircraft
    Armor = 200000
-   View = 300
+   View = 0
    Jamming = 100
    Features = ExternalFuelTransfer ExternalMaterialTransfer self_repairing immune_to_mines construct_vehicles ExternalRepair MoveDuringReactionFire Move_after_attack
    MaxSurvivableStorm = 255

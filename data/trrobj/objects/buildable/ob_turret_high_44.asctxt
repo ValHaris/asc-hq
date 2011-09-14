@@ -17,7 +17,7 @@ ObjectType {
    ViewBonus_plus = 10
    Jamming_abs = -1
    Jamming_plus = -5
-   Height = 118
+   Height = 114
    ConstructionCost { 
       Energy = 0
       Material = 800
