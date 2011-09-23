@@ -22,7 +22,7 @@ VehicleType {
       Buildings = 13 14 50
       Vehicles = 1221 1222 1219 1278
       Objects = 1000 2 30 44 999 997 996 995
-      ObjectsRemovable = 
+      ObjectsRemovable = 996
       ObjectGroupsRemovable = 2 4 6 7 9 12 14 15
    } Construction
    Weapons { 
