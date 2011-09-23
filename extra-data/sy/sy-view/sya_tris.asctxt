@@ -23,7 +23,7 @@ Primäre Aufgabe: Aufklärung
 
    Features = satelliteview self_repairing jam_only_own_field cruiserlanding
    Armor = 220
-   Weight = 6
+   Weight = 39
    View = 100
    Category = light_aircraft
 

@@ -22,15 +22,17 @@ Einsatzbereich: Luftraumüberwachung
 ]
 
    Armor = 320
-   Movement = 0 0 0 40 220 220 220 20 
+   Weight = 60
+   Movement = 0 0 0 40 220 220 220 40 
+   Height = low_level_flight medium_level_flight high_level_flight orbit
    MaxSurvivableStorm = 180
-   Weight = 50
+
    Weapons { 
-      Initiative = 0
       Number = 1
       Weapon0 ->* VehicleType.SY_Fighter_Small 
       Weapon0.Punch@MaxRange = 68
       Weapon0.Punch@MinRange = 68
-      Weapon0.LaserRechargeCost.fuel -> VehicleType.Weapons.Weapon0.Punch@MinRange
+      Weapon0.LaserRechargeCost.fuel = 130
+      Weapon0.LaserRechargeCost.material = 70
    } Weapons
 } VehicleType

@@ -21,32 +21,25 @@ Hinweis: Einheiten, die im Tiefflug entladen werden, koennen nicht angreifen.
       MaxLoadableUnitSize = 1200
       MaxLoadableMass = 1200
       CategoriesNOT = medium_aircraft heavy_aircraft rail_vehicle heavy_ship medium_ship
-      CargoMovementDivisor = 1.8
+      CargoMovementDivisor = 1.4
       EntranceSystemNum = 4
       EntranceSystem0 ->* VehicleType.GrIO
+      EntranceSystem0.CategoriesNOT = trooper default
       EntranceSystem1 {
         Mode = in out docking
-        UnitHeightAbs = low_level_flight
-        UnitHeightRel = 0
+        UnitHeightAbs = ground_level
+        UnitHeightRel = -100
         ContainerHeight = low_level_flight
-        CategoriesNOT = light_aircraft medium_aircraft heavy_aircraft helicopter light_ship medium_ship heavy_ship
-        DockingHeightAbs = low_level_flight
-        DockingHeightRel = 0 
-        Movecost = 30
+        CategoriesNOT -> VehicleType.cargo_turret_only.CategoriesNOT
+        DockingHeightAbs = ground_level
+        DockingHeightRel = -100 
         DisableAttack = true
       } EntranceSystem1
       EntranceSystem2 ->* VehicleType.OrbIO
       EntranceSystem2.CategoriesNOT = default
-      EntranceSystem3 {
-        Mode = out
-        UnitHeightAbs = ground_level
-        UnitHeightRel = -100
-        ContainerHeight = low_level_flight
-        CategoriesNOT = 
-        DockingHeightAbs = low_level_flight
-        DockingHeightRel = -100 
-        RequireUnitFunction = onlyTransMove
-      } EntranceSystem3
+      EntranceSystem3 ->* VehicleType.GrIO
+      EntranceSystem3.MoveCost = 10
+      EntranceSystem3.CategoriesNOT -> VehicleType.cargo_deftro_only.CategoriesNOT
    } Transportation
 
    Tank { 

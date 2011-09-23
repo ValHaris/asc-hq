@@ -3,14 +3,14 @@ VehicleType {
    parent = 1396 1391 1395
    ID = 1318
 
-   Description = Cruiser
+   Description = Kreuzer
    Picture = sya_laak.png
    Infotext = [Dieser Kreuzer ist eine mächtige Erscheinung am Himmel. Neben dem Xor trägt er die schwersten Waffensysteme mit sich. Die Bewaffnung ist multifunktionell und auch defensiv. Die Basissektion ist wesentlich größer das die der Zerstörer und kann auch schwere Jäger aufnehmen. Wie alle Schiffsklassen ist auch der Laak nicht landefähig. Um den Zentralkörper fügt sich ein schwer gepanzertes Exoskelett. An der Unterseite befinden sich schwere Plasmawerfer für den Bodenkampf. Der Antrieb funktioniert analog des Druk. Die seitlichen Rückstossantriebe ermögliche eine hervorragende Wendigkeit. Leider ist durch die Vielzahl der Waffen und Aufbauten die Tarnfähigkeit der Hülle stark eingeschränkt.
 Ein Laak kann nicht einfach abgeschossen werden, er muß praktisch zerstört werden. In früheren Kriegen wurden komplette Abfangjägerstaffeln eingesetzt, um diesen Kreuzer vom Himmel zu holen.
 ]
 
    Features += MoveDuringReactionFire move_after_attack satelliteview
-   Armor = 1000
+   Armor = 900
    View = 60
    Jamming -= 5
 
@@ -21,7 +21,7 @@ Ein Laak kann nicht einfach abgeschossen werden, er muß praktisch zerstört werde
    } Tank
    Height = medium_level_flight high_level_flight orbit 
    FuelConsumption = 30
-   Movement = 0 0 0 0 0 90 100 110 
+   Movement = 0 0 0 0 0 90 90 120 
    Weight = 1000
    Transportation ->* VehicleType.TransSyCruiser 
 
@@ -33,24 +33,27 @@ Ein Laak kann nicht einfach abgeschossen werden, er muß praktisch zerstört werde
       Weapon0.MinRange = 20
       Weapon0.Punch@MaxRange = 75
       Weapon0.Punch@MinRange = 100
-      Weapon0.LaserRechargeCost.fuel = 130
+      Weapon0.LaserRechargeCost.fuel = 300
+      Weapon0.LaserRechargeCost.material = 200
       Weapon0.HitAccuracy.d1 = 0
-			Weapon0.HitAccuracy.d2 = 100
-			Weapon0.HitAccuracy.d3 = 85
+      Weapon0.HitAccuracy.d2 = 100
+      Weapon0.HitAccuracy.d3 = 85
 
       Weapon1 ->* VehicleType.SY_Bomber_Big 
       Weapon1.Punch@MaxRange = 110
       Weapon1.Punch@MinRange = 120
-      Weapon1.LaserRechargeCost.fuel = 120
+      Weapon1.LaserRechargeCost.fuel = 240
+      Weapon1.LaserRechargeCost.material = 120
       Weapon1.HitAccuracy.d1 = 0
-			Weapon1.HitAccuracy.d2 = 100
-			Weapon1.HitAccuracy.d3 = 85
+      Weapon1.HitAccuracy.d2 = 100
+      Weapon1.HitAccuracy.d3 = 85
 
       Weapon2 ->* VehicleType.SY_Fighter_AD 
       Weapon2.MaxRange = 30
       Weapon2.Punch@MaxRange = 72
       Weapon2.Punch@MinRange = 80
-      Weapon2.LaserRechargeCost.fuel = 80
+      Weapon2.LaserRechargeCost.fuel = 160
+      Weapon2.LaserRechargeCost.material = 80
 
    } Weapons
 } VehicleType

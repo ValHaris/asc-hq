@@ -3,7 +3,7 @@ VehicleType {
    parent = 1397 1391 1395
    ID = 1330
 
-   Description = Destroyer
+   Description = defensiver Zerstoerer
    Infotext = [Neben dem Druk ist der Drus ein weiterer Verteter der Zerstörerklasse. Hülle und Antrieb sind analog des Druk. Einzig die Waffensysteme unterscheiden die beiden. Er ist einzig und allein dafür konstruiert, gegnersiche Kampfflieger auf Distance zu halten. Dafür wurde die Waffensystem auf defensive Lanstreckenabwehr umgebaut. Die permanete Überwachung und Erfassung der verschiedensten Luftziele ermöglichen eine effektive Verteidigung gegen aus allen Richtungen angreifende Gegner. Der Drus befindet sich immer inmitten des Schwarms und deckt so die Jäger, Schiffe und Orbitalkanonen gegen direkte Angriffe ab. Er sollte seine Position so wählen, das anfliegende Flugzeuge immer zuerst in die Reichweite der Drus geraten, bevor die in feuerreichte der anderen Einheiten kommen.]
    Picture = sya_drus.png
 
@@ -17,7 +17,7 @@ VehicleType {
       fuel = 12000
    } Tank
    FuelConsumption = 25
-   Movement = 0 0 0 0 120 130 140 140 
+   Movement = 0 0 0 0 100 110 110 130 
    Weight = 500
    TerrainAccess ->* VehicleType.SY_Air
    Transportation ->* VehicleType.TransSyDestroyer 

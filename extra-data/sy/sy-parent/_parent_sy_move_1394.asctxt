@@ -5,17 +5,17 @@ VehicleType {
    Parent = 401
 
    SY_Air { 
-      terrain_any =  
+      terrain_any = 
       terrain_all = 
       terrain_not =  
-      terrain_kill = Lava 
+      terrain_kill = lowland hard_sand soft_sand mountains high_mountains installation turret_foundation ditch very_shallow_water shallow_water river water deep_water Lava 
    } SY_Air
 
    SY_fighter_ground { 
-      terrain_any = Lowland Road Runway Hard_sand soft_sand frozen_water Spaceport
+      terrain_any = Spaceport
       terrain_all = 
-      terrain_not = forest large_rocks small_rocks deep_snow installation bridge hillside
-      terrain_kill = Lava 
+      terrain_not = 
+      terrain_kill = lowland hard_sand soft_sand mountains high_mountains installation turret_foundation ditch very_shallow_water shallow_water river water deep_water Lava 
    } SY_fighter_ground
 
    SY_Multi_Service { 
@@ -57,10 +57,10 @@ VehicleType {
 
    TransSyDestroyer {
       MaxLoadableUnits = 1
-      MaxLoadableUnitSize = 50
-      MaxLoadableMass = 50
+      MaxLoadableUnitSize = 0
+      MaxLoadableMass = 0
       CategoriesNOT = trooper light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship building|turret|object hoovercraft default helicopter
-      EntranceSystemNum = 1
+      EntranceSystemNum = 0
       EntranceSystem0 {
         Mode = in out docking
         UnitHeightAbs = medium_level_flight high_level_flight orbit
@@ -76,9 +76,9 @@ VehicleType {
 
    TransSyCruiser {
       MaxLoadableUnits = 2
-      MaxLoadableUnitSize = 80
-      MaxLoadableMass = 100
-      CategoriesNOT = trooper light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle heavy_aircraft light_ship medium_ship heavy_ship building|turret|object hoovercraft default helicopter
+      MaxLoadableUnitSize = 40
+      MaxLoadableMass = 80
+      CategoriesNOT = trooper light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship building|turret|object hoovercraft default helicopter
       CargoMovementDivisor = 1.8
       EntranceSystemNum = 1
       EntranceSystem0 {
@@ -89,15 +89,15 @@ VehicleType {
         CategoriesNOT = 
         DockingHeightAbs = medium_level_flight high_level_flight orbit
         DockingHeightRel = 0 
-        Movecost = 20
+        Movecost = 30
         RequireUnitFunction = cruiserlanding
       } EntranceSystem0
    } TransSyCruiser
 
    TransSyBattleShip {
       MaxLoadableUnits = 3
-      MaxLoadableUnitSize = 100
-      MaxLoadableMass = 200
+      MaxLoadableUnitSize = 40
+      MaxLoadableMass = 120
       CategoriesNOT = trooper light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle light_ship medium_ship heavy_ship building|turret|object hoovercraft default helicopter
       CargoMovementDivisor = 1.8
       EntranceSystemNum = 1
@@ -109,15 +109,15 @@ VehicleType {
         CategoriesNOT = 
         DockingHeightAbs = medium_level_flight high_level_flight orbit
         DockingHeightRel = 0 
-        Movecost = 20
+        Movecost = 30
         RequireUnitFunction = cruiserlanding
       } EntranceSystem0
    } TransSyBattleShip
    
    TransSyCarrier {
-      MaxLoadableUnits = 18
-      MaxLoadableUnitSize = 150
-      MaxLoadableMass = 2000
+      MaxLoadableUnits = 15
+      MaxLoadableUnitSize = 100
+      MaxLoadableMass = 1300
       CategoriesNOT = trooper light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle light_ship medium_ship heavy_ship building|turret|object hoovercraft helicopter
       CargoMovementDivisor = 1.8
       EntranceSystemNum = 1

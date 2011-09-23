@@ -14,7 +14,7 @@ VehicleType {
    View = 60
    Jamming = 39
    SelfRepairRate = 6
-   Weight = 2
+   Weight = 10
 
    Height = low_level_flight medium_level_flight high_level_flight
    Tank { 

@@ -149,8 +149,8 @@ VehicleType {
        	 LaserRechargeRate = 2
          LaserRechargeCost {
             energy = 0
-            material = 30
-            fuel = 70
+            material = 70
+            fuel = 140
          } LaserRechargeCost
          Punch@MaxRange = 70
          Punch@MinRange = 70
@@ -195,14 +195,39 @@ VehicleType {
    } SY_TankL
 
    SY_TankL_Air ->* VehicleType.SY_TankL
-   SY_TankL_Air.targets = low_level_flight medium_level_flight
-   SY_TankL_Air.MaxRange = 30
-   SY_TankL_Air.Punch@MaxRange = 75
-   SY_TankL_Air.Punch@MinRange = 80
-   SY_TankL_Air.HitAccuracy.0 = 0
-   SY_TankL_Air.HitAccuracy.u1 = 100
-   SY_TankL_Air.HitAccuracy.u2 = 95
-   SY_TankL_Air.ReactionFireShots = 2
+   SY_TankL_Air {
+      targets = low_level_flight medium_level_flight
+      MaxRange = 30
+      Punch@MaxRange = 75
+      Punch@MinRange = 80
+      HitAccuracy.0 = 0
+      HitAccuracy.u1 = 100
+      HitAccuracy.u2 = 95
+      ReactionFireShots = 2
+      WeaponEffectiveness {      
+         trooper = 100
+         rail_vehicle = 250
+         building|turret|object = 250
+         hoovercraft = 250
+         helicopter = 100
+
+         light_tracked_vehicle = 200
+         medium_tracked_vehicle = 250
+         heavy_tracked_vehicle = 300
+
+         light_wheeled_vehicle = 200
+         medium_wheeled_vehicle = 250
+         heavy_wheeled_vehicle = 300
+         
+         light_ship = 200
+         medium_ship  = 250
+         heavy_ship = 300
+
+         light_aircraft = 100
+         medium_aircraft  = 100
+         heavy_aircraft = 100
+      } WeaponEffectiveness
+   } SY_TankL_Air
 
    SY_TankL_AirH ->* VehicleType.SY_TankL_Air
    SY_TankL_AirH.targets = low_level_flight medium_level_flight high_level_flight
@@ -222,8 +247,8 @@ VehicleType {
 	 LaserRechargeRate = 2
          LaserRechargeCost {
             energy = 0
-            material = 50
-            fuel = 100
+            material = 100
+            fuel = 200
          } LaserRechargeCost
          HitAccuracy { 
             d6 = 0
@@ -275,7 +300,8 @@ VehicleType {
          MaxRange = 30
          Punch@MaxRange = 70
          Punch@MinRange = 75
-         LaserRechargeCost.fuel = 75
+         LaserRechargeCost.fuel = 150
+         LaserRechargeCost.material = 75
 	 LaserRechargeRate = 2
          ReactionFireShots = 2
          HitAccuracy { 
@@ -295,22 +321,22 @@ VehicleType {
          } HitAccuracy
          WeaponEffectiveness {      
             trooper = 200
-            rail_vehicle = 200
-            building|turret|object = 200
-            hoovercraft = 200
+            rail_vehicle = 250
+            building|turret|object = 300
+            hoovercraft = 250
             helicopter = 100
    
             light_tracked_vehicle = 200
-            medium_tracked_vehicle = 200
-            heavy_tracked_vehicle = 200
+            medium_tracked_vehicle = 250
+            heavy_tracked_vehicle = 300
    
             light_wheeled_vehicle = 200
-            medium_wheeled_vehicle = 200
-            heavy_wheeled_vehicle = 200
+            medium_wheeled_vehicle = 250
+            heavy_wheeled_vehicle = 300
             
             light_ship = 200
-            medium_ship  = 200
-            heavy_ship = 200
+            medium_ship  = 250
+            heavy_ship = 300
    
             light_aircraft = 100
             medium_aircraft  = 100
@@ -331,8 +357,8 @@ VehicleType {
 	 LaserRechargeRate = 1
          LaserRechargeCost {
             energy = 0
-            material = 40
-            fuel = 80
+            material = 80
+            fuel = 160
          } LaserRechargeCost
          HitAccuracy { 
             d6 = 0
@@ -350,23 +376,23 @@ VehicleType {
             u6 = 0
          } HitAccuracy
       WeaponEffectiveness {      
-         trooper = 200
-         rail_vehicle = 200
-         building|turret|object = 200
-         hoovercraft = 200
+         trooper = 100
+         rail_vehicle = 250
+         building|turret|object = 300
+         hoovercraft = 250
          helicopter = 100
 
          light_tracked_vehicle = 200
-         medium_tracked_vehicle = 200
-         heavy_tracked_vehicle = 200
+         medium_tracked_vehicle = 250
+         heavy_tracked_vehicle = 300
 
          light_wheeled_vehicle = 200
-         medium_wheeled_vehicle = 200
-         heavy_wheeled_vehicle = 200
+         medium_wheeled_vehicle = 250
+         heavy_wheeled_vehicle = 300
          
          light_ship = 200
-         medium_ship  = 200
-         heavy_ship = 200
+         medium_ship  = 250
+         heavy_ship = 300
 
          light_aircraft = 100
          medium_aircraft  = 100
@@ -387,8 +413,8 @@ VehicleType {
 	 LaserRechargeRate = 2
          LaserRechargeCost {
             energy = 0
-            material = 30
-            fuel = 60
+            material = 60
+            fuel = 120
          } LaserRechargeCost
          HitAccuracy { 
             d6 = 0
@@ -429,6 +455,62 @@ VehicleType {
          heavy_aircraft = 100
       } WeaponEffectiveness
    } SY_Fighter_Small
+   
+   SY_Fighter_Def { 
+         Type = Laser shootable 
+         sound = laser.ogg
+         targets =  low_level_flight medium_level_flight high_level_flight
+         shotFrom = low_level_flight medium_level_flight high_level_flight
+         MaxRange = 10
+         MinRange = 10
+         Ammo = 6
+         Punch@MaxRange = 60
+         Punch@MinRange = 60
+	 LaserRechargeRate = 2
+         LaserRechargeCost {
+            energy = 0
+            material = 30
+            fuel = 60
+         } LaserRechargeCost
+         HitAccuracy { 
+            d6 = 0
+            d5 = 0
+            d4 = 0
+            d3 = 0
+            d2 = 0
+            d1 = 90
+            0 = 100
+            u1 = 90
+            u2 = 0
+            u3 = 0
+            u4 = 0
+            u5 = 0
+            u6 = 0
+         } HitAccuracy
+      WeaponEffectiveness {      
+         trooper = 100
+         rail_vehicle = 250
+         building|turret|object = 250
+         hoovercraft = 250
+         helicopter = 100
+
+         light_tracked_vehicle = 200
+         medium_tracked_vehicle = 250
+         heavy_tracked_vehicle = 300
+
+         light_wheeled_vehicle = 200
+         medium_wheeled_vehicle = 250
+         heavy_wheeled_vehicle = 300
+         
+         light_ship = 200
+         medium_ship  = 250
+         heavy_ship = 300
+
+         light_aircraft = 100
+         medium_aircraft  = 100
+         heavy_aircraft = 100
+      } WeaponEffectiveness
+   } SY_Fighter_Def
 
    SY_Bomber_Big { 
          Type = Laser shootable 
@@ -442,8 +524,8 @@ VehicleType {
 	      LaserRechargeRate = 1
          LaserRechargeCost {
             energy = 0
-            material = 50
-            fuel = 100
+            material = 100
+            fuel = 200
          } LaserRechargeCost
          HitAccuracy { 
             d6 = 0
@@ -460,13 +542,35 @@ VehicleType {
             u5 = 0
             u6 = 0
          } HitAccuracy
-         cantHit = 
+      WeaponEffectiveness {      
+         trooper = 100
+         rail_vehicle = 100
+         building|turret|object = 120
+         hoovercraft = 100
+         helicopter = 120
+
+         light_tracked_vehicle = 80
+         medium_tracked_vehicle = 100
+         heavy_tracked_vehicle = 100
+
+         light_wheeled_vehicle = 80
+         medium_wheeled_vehicle = 100
+         heavy_wheeled_vehicle = 100
+         
+         light_ship = 80
+         medium_ship  = 100
+         heavy_ship = 100
+
+         light_aircraft = 120
+         medium_aircraft  = 120
+         heavy_aircraft = 120
+      } WeaponEffectiveness
    } SY_Bomber_Big
 
    SY_Bomber_Small { 
          Type = Laser shootable 
          targets =  floating ground_level
-         shotFrom = low_level_flight medium_level_flight high_level_flight
+         shotFrom = low_level_flight medium_level_flight
          MaxRange = 10
          MinRange = 10
          Ammo = 6
@@ -475,15 +579,15 @@ VehicleType {
 	 LaserRechargeRate = 1
          LaserRechargeCost {
             energy = 0
-            material = 40
-            fuel = 80
+            material = 80
+            fuel = 160
          } LaserRechargeCost
          HitAccuracy { 
             d6 = 0
             d5 = 0
             d4 = 0
-            d3 = 85
-            d2 = 98
+            d3 = 0
+            d2 = 95
             d1 = 100
             0 = 0
             u1 = 0
@@ -493,7 +597,29 @@ VehicleType {
             u5 = 0
             u6 = 0
          } HitAccuracy
-         cantHit = 
+      WeaponEffectiveness {      
+         trooper = 100
+         rail_vehicle = 250
+         building|turret|object = 250
+         hoovercraft = 250
+         helicopter = 100
+
+         light_tracked_vehicle = 200
+         medium_tracked_vehicle = 250
+         heavy_tracked_vehicle = 300
+
+         light_wheeled_vehicle = 200
+         medium_wheeled_vehicle = 250
+         heavy_wheeled_vehicle = 300
+         
+         light_ship = 200
+         medium_ship  = 250
+         heavy_ship = 300
+
+         light_aircraft = 100
+         medium_aircraft  = 100
+         heavy_aircraft = 100
+      } WeaponEffectiveness
    } SY_Bomber_Small
 
 ;-------------------

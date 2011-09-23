@@ -18,19 +18,19 @@ VehicleType {
    Features += sonar
 
    Height = deep_submerged submerged low_level_flight medium_level_flight high_level_flight 
-   Movement = 110 110 20 20 170 170 170 0 
-   Weight = 45
+   Movement = 110 110 0 0 170 170 170 0 
+   Weight = 100
    TerrainAccess ->* VehicleType.SY_Multi_Ice
 
    Weapons { 
-      Initiative = 0
       Number = 3
       Weapon0 ->* VehicleType.SY_Bomber_Big 
       Weapon0.targets = deep_submerged submerged floating 
       Weapon0.shotfrom = deep_submerged submerged
       Weapon0.Punch@MaxRange = 115
       Weapon0.Punch@MinRange = 125
-      Weapon0.LaserRechargeCost.fuel = 125
+      Weapon0.LaserRechargeCost.fuel = 250
+      Weapon0.LaserRechargeCost.material = 125
       Weapon0.HitAccuracy.d1 = 90
       Weapon0.HitAccuracy.0 = 100
       Weapon0.HitAccuracy.u1 = 100
@@ -39,14 +39,14 @@ VehicleType {
       Weapon1.targets = submerged floating 
       Weapon1.Punch@MaxRange = 105
       Weapon1.Punch@MinRange = 115
-      Weapon1.LaserRechargeCost.fuel = 115
+      Weapon1.LaserRechargeCost.fuel = 230
+      Weapon1.LaserRechargeCost.material = 115
 
-      Weapon2 ->* VehicleType.SY_fighter_Small 
-      Weapon2.targets = floating ground_level low_level_flight medium_level_flight high_level_flight
-      Weapon2.shotfrom = low_level_flight medium_level_flight high_level_flight
+      Weapon2 ->* VehicleType.SY_fighter_def
       Weapon2.Punch@MaxRange = 70
       Weapon2.Punch@MinRange = 70
-      Weapon2.LaserRechargeCost.fuel = 70
+      Weapon2.LaserRechargeCost.fuel = 140
+      Weapon2.LaserRechargeCost.material = 70
 
    } Weapons
 

@@ -7,7 +7,7 @@ VehicleType {
    Picture = sya_kerg.png
    Infotext = [Der Kerg ist der Kern eines SY-Schwarms. Er ist ein Trägerschiff und kann bis zu 20 Jägerund andere kleiner Flugkörper aufnehmen.
 Der Schwarm besteht neben dem Kerg aus 4 Zerstörern (Drus/Druk) 2 Kreuzern (Laak) und einem Schlachtschiff (Xor).
-Der Kerg selbst besteht aus zwei abgeflachten Kugelnsegmenten die durch verschiedene Verstrebungen miteinander verbunden sind. Die verstrebungen sind aerodynamisch luftberuhigend kostruiert. Sie verringern die durch Umströmung entstehenden Verwirbelungen. Dadurch kann der Kerg auch in mittleren Luftschichten eine annehmbare Geschwindigkeit erreichen.
+Der Kerg selbst besteht aus zwei abgeflachten Kugelsegmenten die durch verschiedene Verstrebungen miteinander verbunden sind. Die verstrebungen sind aerodynamisch luftberuhigend kostruiert. Sie verringern die durch Umströmung entstehenden Verwirbelungen. Dadurch kann der Kerg auch in mittleren Luftschichten eine annehmbare Geschwindigkeit erreichen.
 Das vordere Segment enthält den Hangarbereich, das hintere den Triebwerksbereich und Leiteinrichtungen. Aufgrund der Größe und des Gewichts ist der Kerg nicht landefähig. Ebenso ist die Stealthfähigkeit der Hülle gegenüber Jägern verringert.
 
 Technische Daten:
