@@ -7,7 +7,7 @@ VehicleType {
    Picture = syv_morr.png
    Infotext = [Der Morr ist die landgestützte Kommandozentrale der Sy.]
 
-   Features += moveduringreactionfire InternalRepair
+   Features += moveduringreactionfire Repair_Facility 
    Armor = 1600
    Weight = 1000
    View = 85
