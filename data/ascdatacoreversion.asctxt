@@ -2,16 +2,16 @@ package {
    Name = ASCdata
    Description = The main data package that comes with every ASC installation
 
-   Version = 2.4.95.0
+   Version = 2.4.97.0
 
    DependencyCount = 2
    Dependency0 {
       package = ASC
-      version = 2.4.95.0
+      version = 2.4.97.0
    } Dependency0
    Dependency1 {
       package = ASCdata
-      version = 2.4.95.0
+      version = 2.4.97.0
    } Dependency1
 
 } package
