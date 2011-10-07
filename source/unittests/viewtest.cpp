@@ -23,7 +23,7 @@ void testView3()
    Vehicle* ari = game->getField(5,2)->vehicle;
    
    MapField* field = game->getField(0,12);
-   MapField* field2 = game->getField(2,7);
+   MapField* field2 = game->getField(3,10);
    
    
    assertOrThrow( fieldVisibility(field) == visible_not );
