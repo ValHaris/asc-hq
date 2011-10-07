@@ -16,6 +16,32 @@
 #include "unittestutil.h"
 
 
+void testView3() 
+{
+   auto_ptr<GameMap> game ( startMap("unittest-jammingdestroyview.map"));
+   
+   Vehicle* ari = game->getField(5,2)->vehicle;
+   
+   MapField* field = game->getField(0,12);
+   MapField* field2 = game->getField(2,7);
+   
+   
+   assertOrThrow( fieldVisibility(field) == visible_not );
+   assertOrThrow( fieldVisibility(field2) == visible_not );
+   
+   attack( ari, MapCoordinate(3,8));
+  
+   assertOrThrow( fieldVisibility(field) == visible_not );
+   assertOrThrow( fieldVisibility(field2) == visible_now );
+
+   ActionResult res = game->actions.undo( createTestingContext( game.get() ) );  
+   assertOrThrow( res.successful() );
+   
+   assertOrThrow( fieldVisibility(field) == visible_not );
+   assertOrThrow( fieldVisibility(field2) == visible_not );
+   
+}
+
 void testView1() 
 {
    auto_ptr<GameMap> game ( startMap("unittest-view1.map"));
@@ -83,4 +109,5 @@ void testView()
 {
    testView1();
    testView2();
+   testView3();
 } 

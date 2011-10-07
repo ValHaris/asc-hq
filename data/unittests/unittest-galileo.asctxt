@@ -1,0 +1,126 @@
+VehicleType { 
+   Transportation { 
+      EntranceSystemNum = 0
+      MaxLoadableUnits = 0
+      MaxLoadableUnitSize = 2147483647
+      MaxLoadableMass = 2147483647
+      CategoriesNOT = 
+   } Transportation
+   Name = Unittest Galileo
+   Description = espionage satellite
+   Infotext = [The Communications Satellite is an orbital unit designed to discover
+              surface activity. Since the Satellite is out of range (and even
+              out of view) of most enemy units, it is ideally suited to monitor
+              enemy operations. Its internal sensor array also allows it to
+              spot enemy sattelites.]
+   ID = 1000000527
+   SecondaryIDs = 
+   View = 120
+   Jamming = 40
+   InfoImage = 
+   InfoImageSmall = 
+   MaxResourceProduction { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } MaxResourceProduction
+   ResourceExtractionEfficiency { 
+      Material = 1024
+      Fuel = 1024
+   } ResourceExtractionEfficiency
+   StorageCapacity { 
+      BImode { 
+         Energy = 0
+         Material = 0
+         fuel = 500
+      } BImode
+      ASCmode { 
+         Energy = 0
+         Material = 0
+         fuel = 500
+      } ASCmode
+   } StorageCapacity
+   MaxResearch = 0
+   NominalResearch = 0
+   MaxResearchpointsDefault = 0
+   DefaultProduction { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } DefaultProduction
+   CategoriesProduceable = default light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle trooper rail_vehicle medium_aircraft medium_ship building|turret|object light_aircraft heavy_aircraft light_ship heavy_ship helicopter hoovercraft 
+   AutoHarvestObjects { 
+      objects = 
+      objectGroups = 
+      Range = 0
+      MaxFieldsPerTurn = 2147483647
+   } AutoHarvestObjects
+   Construction { 
+      VehiclesInternally = 
+      ProductionEfficiency = 1.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 1.000000 
+   } Construction
+   Armor = 300
+   Picture = unittest-galileo.png
+   Height = ground_level orbit 
+   WaitForAttack = false
+   FuelConsumption = 5
+   Features = automatic_resource_searching jam_only_own_field 
+   Movement = 0 0 0 20 0 0 0 30 
+   Category = light_aircraft
+   MaxSurvivableStorm = 0
+   ResourceDrillingRange = 5
+   SelfRepairRate = 0
+   WreckageObject = 15527 15827 
+   Transportation { 
+      CargoMovementDivisor = 2.000000
+   } Transportation
+   Weight = 25
+   TerrainAccess { 
+      terrain_any = 
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = Shallow_water Swamp Water Deep_water Very_shallow_water Lava River 
+   } TerrainAccess
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+      ObjectsRemovable = 
+      ObjectGroupsBuildable = 
+      ObjectGroupsRemovable = 
+      UnitConstructionMoveCostPercentage = 50
+      UnitConstructionMinDistance = 1
+      UnitConstructionMaxDistance = 1
+   } Construction
+   Weapons { 
+      Number = 0
+   } Weapons
+   AIJobOverride = undefined
+   MovementSound = satellite_s.ogg
+   KillSound = 
+   HeightChangeMethodNum = 0
+   TechAdapterRequired = 527 
+   RequireAllListedTechAdapter = true
+   ConstructionCost { 
+      Energy = 16850
+      Material = 14380
+      fuel = 0
+      CalculationMethod = manual
+      Calculator = standard
+   } ConstructionCost
+   guideSortHelp = 516 246 0 0 3 0 0 0 0 0 
+   JumpDrive { 
+      Height = 
+      consumption { 
+         Energy = 0
+         Material = 0
+         fuel = 0
+      } consumption
+      terrain_any = Shallow_water Lowland Swamp Forest High_mountains Road Railroad Harbour Runway Pipeline Buried_pipeline Water Deep_water Hard_sand Soft_sand Track_possible Small_rocks Mud Snow Deep_snow Mountains Very_shallow_water Large_rocks Lava Ditch Hillside Turret_foundation Morass Installation Pack_ice River Frozen_water bridge lava_barrier spaceport beacon fire 
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = 
+      MaxDistance = 2147483647
+   } JumpDrive
+   ObjectsLayedByMovement = 
+} VehicleType

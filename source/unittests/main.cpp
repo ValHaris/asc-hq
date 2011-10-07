@@ -75,6 +75,7 @@ bool loadGameFromFile( const ASCString& filename )
 
 void runUnitTests()
 {
+   testView();
    // testMaps();
    testAttack();
    testObjectConstruction();
@@ -90,7 +91,6 @@ void runUnitTests()
    testTransferControl();
    testAiService();
    testAiMovement();
-   testView();
 }     
       
 
