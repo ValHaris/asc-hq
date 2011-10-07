@@ -78,9 +78,6 @@ const char* cgeneralnetcontrol[4] = {       "store",  "move out", "stop storing"
 const char*  cwettertypen[cwettertypennum] = {"dry (standard)","light rain", "heavy rain", "few snow", "lot of snow", "lot of snow + ice"};
 const char*  resourceNames[3]  = {"energy", "material", "fuel"};
 
-//! when repairing a unit, the experience of the unit is decreased by one when passing each of these damage levels
-const int experienceDecreaseDamageBoundaries[experienceDecreaseDamageBoundaryNum] = { 80, 60, 40, 20 };
-
 const int directionangle [ sidenum ] = 
  { 0, -53, -127, -180, -180 -53 , -180 -127 };
 

@@ -165,16 +165,8 @@ ActionResult RepairUnitCommand::go ( const Context& context )
    else
       return res;
    
-   int experience_o = target->experience_offensive;
-   int experience_d = target->experience_defensive;
-   for ( int i = 0; i < experienceDecreaseDamageBoundaryNum; i++)
-      if ( oldDamage > experienceDecreaseDamageBoundaries[i] && newDamage < experienceDecreaseDamageBoundaries[i] ) {
-         if ( experience_o > 0 )
-            experience_o -= 1;
-            
-         if ( experience_d > 0 )
-            experience_d -= 1;
-      }
+   int experience_o = max( 0, target->experience_offensive - Vehicle::getRepairExperienceDecrease( oldDamage, newDamage ));
+   int experience_d = max( 0, target->experience_defensive - Vehicle::getRepairExperienceDecrease( oldDamage, newDamage ));
    
    if ( experience_o != target->experience_offensive ) {
       auto_ptr<ChangeUnitProperty> expChange ( new ChangeUnitProperty( target, ChangeUnitProperty::ExperienceOffensive, experience_o ));

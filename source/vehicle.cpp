@@ -196,6 +196,16 @@ bool Vehicle :: canRepair( const ContainerBase* item ) const
           (item == this && typ->autorepairrate ) ;
 }
 
+    //! the percentage of experience that is removed when repairing a fully damaged unit
+    static const int repairExperienceDecrease = 20;
+
+    
+int Vehicle::getRepairExperienceDecrease( int oldDamage, int newDamage )
+{
+   return (oldDamage - newDamage) * repairExperienceDecrease / 100 + 1;
+}
+    
+
 int Vehicle :: putResource ( int amount, int resourcetype, bool queryonly, int scope, int player )
 {
    //  if units start using/storing resources that will not be stored in the unit itself, the replays will fail !
@@ -324,14 +334,14 @@ void Vehicle::transform ( const VehicleType* type )
 
 void Vehicle :: postRepair ( int oldDamage )
 {
-   for ( int i = 0; i < experienceDecreaseDamageBoundaryNum; i++)
-      if ( oldDamage > experienceDecreaseDamageBoundaries[i] && damage < experienceDecreaseDamageBoundaries[i] ) {
-         if ( experience_offensive > 0 )
-            experience_offensive -= 1;
-         
-         if ( experience_defensive > 0 )
-            experience_defensive -= 1;
-      }
+   int expDelta = getRepairExperienceDecrease( oldDamage, damage );
+   experience_offensive -= expDelta;
+   if ( experience_offensive < 0 )
+      experience_offensive = 0;
+   
+   experience_defensive -= expDelta;
+   if ( experience_defensive < 0 )
+      experience_defensive  = 0;
 }
 
 

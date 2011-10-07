@@ -418,11 +418,6 @@ extern  const char*  choehenstufen[8] ;
 extern ASCString heightToString( int bitmappedHeight );
       
 
-
-const int experienceDecreaseDamageBoundaryNum = 4;
-extern const int experienceDecreaseDamageBoundaries[experienceDecreaseDamageBoundaryNum];
-
-
 /////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////
 /// Constants that specify the layout of ASC
