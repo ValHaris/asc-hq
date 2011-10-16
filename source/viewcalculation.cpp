@@ -535,7 +535,7 @@ void RecalculateAreaView::removeFieldView( const MapCoordinate& pos )
    if ( !fld )
       return;
    
-   if ( fld->getContainer() && fld->getContainer()->getOwner() < fld->getContainer()->getMap()->getPlayerCount() ) {
+   if ( (fld->vehicle || fld->getBuildingEntrance()) && fld->getContainer()->getOwner() < fld->getContainer()->getMap()->getPlayerCount() ) {
       if ( context ) 
          (new ViewRegistration( fld->getContainer(), ViewRegistration::RemoveView ))->execute(*context);
       else 
@@ -550,7 +550,7 @@ void RecalculateAreaView::addFieldView( const MapCoordinate& pos )
       return;
    
    
-   if ( fld->getContainer() && fld->getContainer()->getOwner() < fld->getContainer()->getMap()->getPlayerCount() ) { //excluding neutral buildings here
+   if ( (fld->vehicle || fld->getBuildingEntrance()) && fld->getContainer()->getOwner() < fld->getContainer()->getMap()->getPlayerCount() ) { //excluding neutral buildings here
       if ( context ) 
          (new ViewRegistration( fld->getContainer(), ViewRegistration::AddView ))->execute(*context);
       else
