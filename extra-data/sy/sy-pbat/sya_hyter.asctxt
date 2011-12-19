@@ -23,8 +23,9 @@ VehicleType {
       Weapon0.LaserRechargeCost.fuel = 150
       Weapon0.LaserRechargeCost.material = 70
 
-      Weapon1 ->* VehicleType.SY_Fighter_def
+      Weapon1 ->* VehicleType.SY_Fighter_Small
       Weapon1.targets = floating ground_level low_level_flight medium_level_flight high_level_flight 
+      Weapon1.shotFrom = ground_level low_level_flight medium_level_flight high_level_flight
       Weapon1.Punch@MaxRange = 60
       Weapon1.Punch@MinRange = 60
       Weapon1.LaserRechargeCost.fuel = 120
