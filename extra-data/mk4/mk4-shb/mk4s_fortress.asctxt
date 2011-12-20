@@ -1,1 +1,49 @@
-VehicleType {    Name =  Fortress   ID = 1284   parent = 356      Description = Schwerer Kreuzer   picture = mk4s_fortress.png   wreckageobject = 14284   GuideSortHelp += 517 0 0 0 4 0 0 0 0 0   Infotext = [Schlachtkreuzer bilden eine eigene Klasse kampfstarker Schiffe, die zwischen Kreuzern und Schlachtschiffen einzuordnen sind. Sie entstanden ursprünglich aus dem Bestreben kleinerer Völker, die Kampfkraft echter Schlachtschiffe zu erreichen, ohne die immensen Kosten solcher Einheiten zu verursachen. Deshalb sind sie jedoch auch immer ein Kompromiß. Ihr Hauptgeschütz erreicht zwar fast die Reichweite und Durchschlagskraft eines Schlachtschiffes. Allerdings ist die Panzerung meist deutlich geringer und sie verfügen in der Regel über schwächere Sekundärwaffen , welche speziell bei der Verteidigung gegen gegnerische Angreifer notwendig sind. So sind sie zwar normalen Kreuzern überlegen, werden aber auf sich allein gestellt doch schnell zur Beute gut organisierter Verbände kleinerer Schiffe.Die Fortress ist ein typisches Beispiel für diesen Schiffstyp. Ihre Hauptwaffe stellt ein gewaltiges 38 cm Zwillingsgeschütz dar, welches ebensogut auf einem Schlachtschiff eingesetzt werden könnte. Unterstützt wird dieses dabei von zwei Geschützen des Kalibers 30,5 cm, welche auch zur Abwehr gegnerischer Angriffe nützlich sind. Die Luftabwehr allerdings, speziell gegen hochfliegende Bomber, ist deutlich schwächer als beispielsweise bei Kreuzern. Entsprechender Schutz durch Polar oder Flugzeugträger ist deshalb angeraten. Erfreulicherweise ist die Panzerung der Fortress ziemlich stark, was ihr die Möglichkeit bietet, auch im stärksten Kampfgetümmel mitzuhalten. Die Besatzung ist dabei in der Lage, kleinere Schäden noch auf See zu beheben. Allerdings sind die Kosten für diese Schiffe nicht unerheblich und reichen nun doch an die der Zenith-Klasse heran. Problematisch ist dabei auch, daß die Fortress die Schwäche der Schlachtschiffe teilt, gegen U-Boot-Angriffe wehrlos zu sein. Sie muß deshalb unbedingt von Zerstörern und Kreuzern begleitet werden! Durch diese Nachteile konnten sich die Schlachtkreuzer auch nicht entscheidend durchsetzen und führen immer noch ein Schattendasein unter den echten Schlachtschiffen. ]   Transportation ->* VehicleType.noTrans   Features -= Repair_Facility   Tank.Material = 0   Weapons {       Number = 4      Weapon0 ->* VehicleType.Artillery       Weapon0.MaxRange = 70      Weapon0.MinRange = 30      Weapon0.Ammo = 14      Weapon0.Punch@MaxRange = 100      Weapon0.Punch@MinRange = 140      Weapon0.ReactionFireShots = 0      Weapon1 ->* VehicleType.Artillery       Weapon1.MaxRange = 40      Weapon1.MinRange = 20      Weapon1.Ammo = 14      Weapon1.Punch@MaxRange = 90      Weapon1.Punch@MinRange = 120      Weapon1.ReactionFireShots = 2            Weapon2 ->* VehicleType.Ship_Gun       Weapon2.MaxRange = 30      Weapon2.Ammo = 14      Weapon2.Punch@MaxRange = 85      Weapon2.Punch@MinRange = 100      Weapon2.ReactionFireShots = 2      Weapon2.WeaponEffectiveness.light_ship = 100      Weapon2.WeaponEffectiveness.medium_ship = 100      Weapon3 ->* VehicleType.Ship_Flak       Weapon3.ReactionFireShots = 3      Weapon3.Ammo = 12   } Weapons} VehicleType
+VehicleType { 
+   Name =  Fortress
+   ID = 1284
+   parent = 356
+   
+   Description = Schwerer Kreuzer
+   picture = mk4s_fortress.png
+   wreckageobject = 14284
+   GuideSortHelp += 517 0 0 0 4 0 0 0 0 0
+   Infotext = [Schlachtkreuzer bilden eine eigene Klasse kampfstarker Schiffe, die zwischen Kreuzern und Schlachtschiffen einzuordnen sind. Sie entstanden ursprï¿½nglich aus dem Bestreben kleinerer Vï¿½lker, die Kampfkraft echter Schlachtschiffe zu erreichen, ohne die immensen Kosten solcher Einheiten zu verursachen. Deshalb sind sie jedoch auch immer ein Kompromiï¿½. Ihr Hauptgeschï¿½tz erreicht zwar fast die Reichweite und Durchschlagskraft eines Schlachtschiffes. Allerdings ist die Panzerung meist deutlich geringer und sie verfï¿½gen in der Regel ï¿½ber schwï¿½chere Sekundï¿½rwaffen , welche speziell bei der Verteidigung gegen gegnerische Angreifer notwendig sind. So sind sie zwar normalen Kreuzern ï¿½berlegen, werden aber auf sich allein gestellt doch schnell zur Beute gut organisierter Verbï¿½nde kleinerer Schiffe.
+Die Fortress ist ein typisches Beispiel fï¿½r diesen Schiffstyp. Ihre Hauptwaffe stellt ein gewaltiges 38 cm Zwillingsgeschï¿½tz dar, welches ebensogut auf einem Schlachtschiff eingesetzt werden kï¿½nnte. Unterstï¿½tzt wird dieses dabei von zwei Geschï¿½tzen des Kalibers 30,5 cm, welche auch zur Abwehr gegnerischer Angriffe nï¿½tzlich sind. Die Luftabwehr allerdings, speziell gegen hochfliegende Bomber, ist deutlich schwï¿½cher als beispielsweise bei Kreuzern. Entsprechender Schutz durch Polar oder Flugzeugtrï¿½ger ist deshalb angeraten. Erfreulicherweise ist die Panzerung der Fortress ziemlich stark, was ihr die Mï¿½glichkeit bietet, auch im stï¿½rksten Kampfgetï¿½mmel mitzuhalten. Die Besatzung ist dabei in der Lage, kleinere Schï¿½den noch auf See zu beheben. Allerdings sind die Kosten fï¿½r diese Schiffe nicht unerheblich und reichen nun doch an die der Zenith-Klasse heran. Problematisch ist dabei auch, daï¿½ die Fortress die Schwï¿½che der Schlachtschiffe teilt, gegen U-Boot-Angriffe wehrlos zu sein. Sie muï¿½ deshalb unbedingt von Zerstï¿½rern und Kreuzern begleitet werden! Durch diese Nachteile konnten sich die Schlachtkreuzer auch nicht entscheidend durchsetzen und fï¿½hren immer noch ein Schattendasein unter den echten Schlachtschiffen. ]
+
+   Transportation ->* VehicleType.noTrans
+   Features -= Repair_Facility
+   Tank.Material = 0
+
+   Weapons { 
+      Number = 4
+      Weapon0 ->* VehicleType.Artillery 
+      Weapon0.MaxRange = 70
+      Weapon0.MinRange = 30
+      Weapon0.Ammo = 14
+      Weapon0.Punch@MaxRange = 100
+      Weapon0.Punch@MinRange = 140
+      Weapon0.ReactionFireShots = 0
+
+      Weapon1 ->* VehicleType.Artillery 
+      Weapon1.MaxRange = 40
+      Weapon1.MinRange = 20
+      Weapon1.Ammo = 14
+      Weapon1.Punch@MaxRange = 90
+      Weapon1.Punch@MinRange = 120
+      Weapon1.ReactionFireShots = 2
+      
+      Weapon2 ->* VehicleType.Ship_Gun 
+      Weapon2.MaxRange = 30
+      Weapon2.Ammo = 14
+      Weapon2.Punch@MaxRange = 85
+      Weapon2.Punch@MinRange = 100
+      Weapon2.ReactionFireShots = 2
+      Weapon2.WeaponEffectiveness.light_ship = 100
+      Weapon2.WeaponEffectiveness.medium_ship = 100
+
+      Weapon3 ->* VehicleType.Ship_Flak 
+      Weapon3.ReactionFireShots = 3
+      Weapon3.Ammo = 12
+
+   } Weapons
+} VehicleType
