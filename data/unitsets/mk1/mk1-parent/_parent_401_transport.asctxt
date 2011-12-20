@@ -382,7 +382,7 @@
       MaxLoadableUnitSize = 900
       MaxLoadableMass = 1800
       CargoMovementDivisor = 1.4
-      CategoriesNOT -> VehicleType.cargo_trtrain.CategoriesNOT
+      CategoriesNOT = medium_ship heavy_ship rail_vehicle medium_aircraft heavy_aircraft
       EntranceSystemNum = 1
       EntranceSystem0 ->* VehicleType.GrIO
       EntranceSystem0.DisableAttack = true
