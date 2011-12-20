@@ -1,10 +1,22 @@
 BuildingType {
-   Name = airport
+   Name = SY Airport
    ID = 1325
    parent = 10
+
    Infotext = [Produktionsanlage für Flugzeuge incl. Munitionsproduktion, Reparatur und Wiederverwertung.]
+
    Armor = 2000
+   Features = Vehicle_Production Ammo_Production Repair_Facility Recycling Produce_Units_that_cannot_leave
+   CategoriesProduceable = default light_Aircraft medium_Aircraft heavy_aircraft
+   ConstructionCost { 
+      Energy = 0
+      Material = 15000
+      fuel = 15000
+   } ConstructionCost
+   ExternalLoading = 
+
    ConstructionStages = 1
+   Height = high_level_flight 
    Weather = dry 
    Fields = A2 A4 B2 B3 B4 
    UseGFXpics = false
@@ -23,6 +35,7 @@ BuildingType {
       B4 = 
    } rubble
    Entry = B3
+
    Transportation { 
       MaxLoadableUnits = 8
       MaxLoadableUnitSize = 3000
@@ -50,13 +63,4 @@ BuildingType {
         DisableAttack = false
       } EntranceSystem1
    } Transportation
-   Features = Vehicle_Production Ammo_Production Repair_Facility Recycling
-   CategoriesProduceable = default light_Aircraft medium_Aircraft heavy_aircraft
-   ConstructionCost { 
-      Energy = 0
-      Material = 15000
-      fuel = 15000
-   } ConstructionCost
-   Height = high_level_flight 
-   ExternalLoading = 
 } BuildingType

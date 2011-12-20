@@ -1,0 +1,42 @@
+VehicleType { 
+   Name = Z100
+   parent = 425
+   ID = 12014
+
+   Description = ISG Solardrohne
+   picture = isg_z100.png
+   InfoImage = isg_z100.jpg
+   InfoImageSmall = isg_z100_k.png
+   wreckageobject = 
+   GuideSortHelp += 0 0 0 0 0 0 0 0 0 0
+   Infotext = [ ISG Sondereinheit zum Start des 100. Zyklus des PBP. Die Z100 Drohne ist ein Langstreckenaufklaerer mit Tarnkapazitaeten. Groesse und Aussehen sind einem Vogel nachempfunden. Die Radaranlagen des Gegners koennen sie deshalb erst sehr spaet identifizieren. Der Antrieb ist rein elektrisch und basiert auf Solartechnologie. Die Aussenverkleidung ist praktisch ein einziger Lichtenergieumwandler. Dadurch ist die Z100 in der Lage ohne aufzutanken staendig in der Luft zu bleiben. ]
+
+   ConstructionCost { 
+      CalculationMethod = manual
+      energy = 0
+      material = 0
+      fuel = 0
+   } ConstructionCost
+
+   View = 110
+   Jamming = 41
+   Features = jam_only_own_field satelliteview self_repairing
+   SelfRepairRate = 20
+   Weight = 40
+
+
+   Height = ground_level low_level_flight medium_level_flight high_level_flight 
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } Tank
+   FuelConsumption = 0
+
+   HeightChangeMethod1.startheight = low_level_flight medium_level_flight
+
+   Weapons { 
+      Number = 0
+   } Weapons
+
+} VehicleType

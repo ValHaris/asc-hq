@@ -20,13 +20,13 @@ ObjectType {
    AttackBonus_plus = 0
    DefenseBonus_abs = 0
    DefenseBonus_plus = 0
-   Jamming_abs = 25
+   Jamming_abs = 20
    Jamming_plus = 0
 
    ConstructionCost { 
       Energy = 0
-      Material = 2000
-      fuel = 1000
+      Material = 4000
+      fuel = 2000
       Movement = 40
    } ConstructionCost
    RemovalCost { 

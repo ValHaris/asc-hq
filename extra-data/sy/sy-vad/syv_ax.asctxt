@@ -12,11 +12,15 @@ VehicleType {
    WaitForAttack = true
    Weapons { 
       Number = 3
-      Weapon0 ->* VehicleType.SY_AirL 
-      Weapon0.Punch@MaxRange -= 5
-      Weapon0.Punch@MinRange += 5
+      Weapon0 ->* VehicleType.SY_AirL
+      Weapon0.MaxRange = 50
+      Weapon0.Punch@MaxRange = 70
+      Weapon0.Punch@MinRange = 75
+      Weapon0.LaserRechargeCost.material = 75
+      Weapon0.LaserRechargeCost.fuel = 200
       
       Weapon1 ->* VehicleType.SY_AirL
+      Weapon1.ReactionFireShots = 2
 
       Weapon2 ->* VehicleType.SY_TankL
       Weapon2.ReactionFireShots = 0

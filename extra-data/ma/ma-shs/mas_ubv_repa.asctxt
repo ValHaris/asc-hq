@@ -22,6 +22,7 @@ VehicleType {
    FuelConsumption = 29
    Movement = 66 66 66 0 0 0 0 0 
    TerrainAccess ->* VehicleType.bigship_terrain 
+   TerrainAccess.terrain_not = forest small_rocks large_rocks installation very_shallow_water shallow_water
 
    Construction { 
       Buildings = 

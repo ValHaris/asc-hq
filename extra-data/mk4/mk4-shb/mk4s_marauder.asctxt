@@ -24,7 +24,6 @@ Im Zusammenarbeit mit den beiden Varianten der Moewe-Reihe, stellt der Marauder 
    GuideSortHelp = 518 420 0 0 4 601 0 0 0 0
 
    Weapons { 
-      Initiative = 0
       Number = 3
       Weapon0 ->* VehicleType.STorp 
       Weapon0.shotFrom = floating ground_level
@@ -36,7 +35,7 @@ Im Zusammenarbeit mit den beiden Varianten der Moewe-Reihe, stellt der Marauder 
       Weapon1 ->* vehicleType.MG40med
       Weapon1.Ammo = 6
 
-      Weapon2 ->* VehicleType.UTorp 
+      Weapon2 ->* VehicleType.SUSTorp 
       Weapon2.shotFrom = floating ground_level
       Weapon2.Ammo = 2
 
