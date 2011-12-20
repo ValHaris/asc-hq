@@ -15,7 +15,7 @@ VehicleType {
       Initiative = 30
       Number = 1
       Weapon0 ->* VehicleType.SSM 
-      Weapon0.MaxRange = 50
+      Weapon0.MaxRange = 40
       Weapon0.MinRange = 20
       Weapon0.Ammo = 6
       Weapon0.Punch@MaxRange = 100
