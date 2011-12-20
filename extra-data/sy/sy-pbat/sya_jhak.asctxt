@@ -16,13 +16,14 @@ VehicleType {
    Weapons { 
       Number = 2
       
-      Weapon0 ->* VehicleType.SY_Fighter_Big 
+      Weapon0 ->* VehicleType.SY_Fighter_Big
       Weapon0.Punch@MaxRange = 78
       Weapon0.Punch@MinRange = 82
       Weapon0.LaserRechargeCost.fuel = 160
       Weapon0.LaserRechargeCost.material = 80
       
       Weapon1 ->* VehicleType.SY_fighter_Big
+      Weapon1.Ammo = 1
       Weapon1.MaxRange = 30
       Weapon1.MinRange = 20
       Weapon1.Punch@MaxRange = 75

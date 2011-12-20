@@ -12,7 +12,7 @@ VehicleType {
    Movement = 0 0 0 40 180 190 190 0 
    Weight = 100
 
-   Weapons { 
+   Weapons {
       Number = 3
       Weapon0 ->* VehicleType.SY_Bomber_Big
       Weapon0.shotFrom = low_level_flight medium_level_flight 
@@ -22,6 +22,11 @@ VehicleType {
       Weapon0.LaserRechargeCost.material = 130
 
       Weapon1 ->* VehicleType.SY_Bomber_Big
+      Weapon1.shotFrom = medium_level_flight high_level_flight
+      Weapon1.HitAccuracy.d3 = 95
+      Weapon1.HitAccuracy.d2 = 100
+      Weapon1.HitAccuracy.d1 = 0
+      Weapon1.MaxRange = 10
       Weapon1.Punch@MaxRange = 100
       Weapon1.Punch@MinRange = 100
       Weapon1.LaserRechargeCost.fuel = 400
