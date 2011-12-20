@@ -1,13 +1,1 @@
-VehicleType { 
-   Name = Firebird
-   parent = 380
-   ID = 1282
-
-   Description = Kampfhubschrauber
-   picture = mk4h_firebird.png
-   wreckageobject = 1282 14882
-   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
-   InfoText = [Der Firebird ist der Urvater aller cromonischen Helikopter. Er ist mit Maschinenkanonen und leichten Raketen zur Bekämpfung von Bodenzielen ausgerüstet. Damals war diese Bewaffnung noch ausreichend, um effektive Angriffe zu fliegen. Durch die ständige Weiterentwicklung der Waffentechnik ist sein Einsatz jedoch mit immer größeren Risiken verbunden, da er dabei leicht ein Opfer der gegnerischen Luftabwehr wird. Hierbei ist auch die schwache Panzerung von Nachteil, was durch seine relativ hohe Geschwindigkeit nicht wettgemacht wird. Signifikante Verbesserungen ließ die Konstruktion des Chassis nicht zu, so daß seine Einsatzmöglichkeiten immer geringer wurden. Lediglich seine günstigen Baukosten machen ihn für Einsätze gegen schlecht bewaffnete Gegener interessant. Hierbei müssen aber trotzdem Verluste in Kauf genommen werden. ]
-
-   MovementSound = heli_h_s.ogg
-} VehicleType
+VehicleType {    Name = Firebird   parent = 380   ID = 1282   Description = Kampfhubschrauber   picture = mk4h_firebird.png   wreckageobject = 1282 14882   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0   InfoText = [Der Firebird ist der Urvater aller cromonischen Helikopter. Er ist mit Maschinenkanonen und leichten Raketen zur Bekämpfung von Bodenzielen ausgerüstet. Damals war diese Bewaffnung noch ausreichend, um effektive Angriffe zu fliegen. Durch die ständige Weiterentwicklung der Waffentechnik ist sein Einsatz jedoch mit immer größeren Risiken verbunden, da er dabei leicht ein Opfer der gegnerischen Luftabwehr wird. Hierbei ist auch die schwache Panzerung von Nachteil, was durch seine relativ hohe Geschwindigkeit nicht wettgemacht wird. Signifikante Verbesserungen ließ die Konstruktion des Chassis nicht zu, so daß seine Einsatzmöglichkeiten immer geringer wurden. Lediglich seine günstigen Baukosten machen ihn für Einsätze gegen schlecht bewaffnete Gegener interessant. Hierbei müssen aber trotzdem Verluste in Kauf genommen werden. ]   MovementSound = heli_h_s.ogg   Jamming = 21     Weapons {      Weapon0.WeaponEffectiveness.default = 175      Weapon0.WeaponEffectiveness.trooper = 175         Weapon1.WeaponEffectiveness.light_wheeled_vehicle = 160      Weapon1.WeaponEffectiveness.light_tracked = 140      Weapon1.WeaponEffectiveness.light_ship = 140   } Weapons} VehicleType
