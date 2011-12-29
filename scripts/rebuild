@@ -17,4 +17,4 @@ if test "X$1" = X--coverage; then
    export CFLAGS="$CFLAGS   -fprofile-arcs -ftest-coverage "
 fi
 
-./configure --enable-unittestcoverage --enable-extradata
+./configure --enable-unittestcoverage --enable-extradata $*
