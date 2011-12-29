@@ -595,7 +595,7 @@ fi
 
 
 AC_MSG_CHECKING(distinct size_t type)
-AC_COMPILE_IFELSE( [
+AC_COMPILE_IFELSE( [AC_LANG_SOURCE( [
     #include <string>
    void foo( int i ) {};
    void foo( size_t i ) {};
@@ -606,13 +606,13 @@ AC_COMPILE_IFELSE( [
      foo(t);
      return 0;
    }  
-], size_t_type=distinct )
+])], size_t_type=distinct )
 
 if test "x$size_t_type" = x ; then
   AC_MSG_RESULT(no)
 
   AC_MSG_CHECKING(size_t conversion)
-  AC_COMPILE_IFELSE( [
+  AC_COMPILE_IFELSE([AC_LANG_SOURCE( [
     #include <string>
     void foo( int i ) {};
     void foo( unsigned int i ) {};
@@ -622,7 +622,7 @@ if test "x$size_t_type" = x ; then
        foo(t);
        return 0;
     }  
-   ], AC_MSG_RESULT("yes"),AC_MSG_ERROR("Failed to compile size_t distinction check. Please contact bugs@asc-hq.org ")  )
+   ])], AC_MSG_RESULT("yes"),AC_MSG_ERROR("Failed to compile size_t distinction check. Please contact bugs@asc-hq.org ")  )
 
 else
   CXXFLAGS="$CXXFLAGS -DSIZE_T_not_identical_to_INT"
