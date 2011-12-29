@@ -5,7 +5,9 @@ AC_INIT(asc,2.4.100.0)
 AM_CONFIG_HEADER(config.h)
 AM_INIT_AUTOMAKE
 AM_MAINTAINER_MODE
+AC_CONFIG_MACRO_DIR([m4])
 
+ACLOCAL_AMFLAGS="-I m4"
 
 if test -f $srcdir/source/strtmesg.cpp; then
    dnl extracting the version number from the source code
