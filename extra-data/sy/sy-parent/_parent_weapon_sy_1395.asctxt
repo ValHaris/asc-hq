@@ -542,7 +542,7 @@ VehicleType {
             material = 100
             fuel = 200
          } LaserRechargeCost
-         HitAccuracy { 
+         HitAccuracy {
             d6 = 0
             d5 = 0
             d4 = 0
@@ -561,7 +561,7 @@ VehicleType {
          default = 0
          trooper = 25
          rail_vehicle = 100
-         building|turret|object = 120
+         building|turret|object = 110
          hoovercraft = 100
          helicopter = 120
 
@@ -722,23 +722,23 @@ VehicleType {
             u6 = 0
          } HitAccuracy
       WeaponEffectiveness {      
-         trooper = 80
-         rail_vehicle = 50
-         building|turret|object = 50
-         hoovercraft = 100
+         trooper = 100
+         rail_vehicle = 250
+         building|turret|object = 250
+         hoovercraft = 250
          helicopter = 100
 
-         light_tracked_vehicle = 90
-         medium_tracked_vehicle = 70
-         heavy_tracked_vehicle = 50
+         light_tracked_vehicle = 200
+         medium_tracked_vehicle = 250
+         heavy_tracked_vehicle = 300
 
-         light_wheeled_vehicle = 100
-         medium_wheeled_vehicle = 80
-         heavy_wheeled_vehicle = 70
+         light_wheeled_vehicle = 200
+         medium_wheeled_vehicle = 250
+         heavy_wheeled_vehicle = 300
          
-         light_ship = 80
-         medium_ship  = 60
-         heavy_ship = 40
+         light_ship = 200
+         medium_ship  = 250
+         heavy_ship = 300
 
          light_aircraft = 100
          medium_aircraft  = 100
