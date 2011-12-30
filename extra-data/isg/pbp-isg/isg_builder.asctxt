@@ -60,8 +60,8 @@ VehicleType {
       Buildings = 8 9 38 61
       Vehicles = 1281 12007 12010
       Objects = 12005 181 2108 2105 2153 2092 2095 2094 2654
-      ObjectsRemovable = 12005 2095 2094 2092
-      ObjectGroupsRemovable = 1 2 3 4 5 6 7 8 9 10 11 12 13 14 21
+      ObjectsRemovable = 12005 2095 2094 2092 992 2658
+      ObjectGroupsRemovable = 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 21
    } Construction
 
    WaitForAttack = false
