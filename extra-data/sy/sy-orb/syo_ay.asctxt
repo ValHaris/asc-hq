@@ -5,8 +5,8 @@ VehicleType {
 
    Description = orbital air defence
    Picture = syo_ay.pcx
-   Infotext = [Diese Abwehrstellung symbolisiert eine sy-typische Komponente. Die Verbundenheit mit dem Fliegen. Zwar besitzt diese Luftabwehr-Stellung keinen eigenen Antrieb, aber im Gegensatz zu ihren humanuiden Gegenstücken befindet sie sich nicht am Boden, sondern in einem geostationären Orbit. Am Boden wäre diese Stellung auch nicht so effektiv, da sie auf Laserbasis arbeitet. Tieffliegende Ziele könnten dann nur auf kurze Distance bekämpft werden. Die Position im Orbit hat diese Einschränkungen nicht. Allerdings muß die Lufthülle des Planeten mit den Lasern durchdrungen werden. Mit zunehmender Reichweite wird der Strahl dadurch abgeschwächt. Die Bauweise ist Diskus-ähnlich. Am Rand des Diskus befinden sich mehrere Laseremitter. Dadurch kann der AY in alle Richtungen gleichzeitig feuern.
-Die Position im Orbit birgt für die humanuiden Völker einige Probleme. Die Stellung läßt sich nicht mit den üblichen Langstreckewaffen ausschalten. Entweder müssen schwere Abfangjäger die Stellung angreifen oder Boden/Seegestütze Antiorbitalwaffen. Mit der Hilfe von Gorgol-Einheiten kann diese Einheit im Orbit direkt versetzt werden.
+   Infotext = [Diese Abwehrstellung symbolisiert eine SY-typische Komponente. Die Verbundenheit mit dem Fliegen. Zwar besitzt diese Luftabwehr-Stellung keinen eigenen Antrieb, aber im Gegensatz zu ihren humanuiden Gegenstücken befindet sie sich nicht am Boden, sondern in einem geostationären Orbit. Am Boden wäre diese Stellung auch nicht so effektiv, da sie auf Laserbasis arbeitet. Tieffliegende Ziele könnten dann nur auf kurze Distance bekämpft werden. Die Position im Orbit hat diese Einschränkungen nicht. Allerdings muß die Lufthülle des Planeten mit den Lasern durchdrungen werden. Mit zunehmender Reichweite wird der Strahl dadurch abgeschwächt. Die Bauweise ist Diskus-ähnlich. Am Rand des Diskus befinden sich mehrere Laseremitter. Dadurch kann der AY in alle Richtungen gleichzeitig feuern.
+Die Position im Orbit birgt für die humanuiden Völker einige Probleme. Die Stellung läßt sich nicht mit den üblichen Langstreckewaffen ausschalten. Entweder müssen schwere Abfangjäger die Stellung angreifen oder Boden/Seegestütze Antiorbitalwaffen. Mit der Hilfe von Gorgol-Einheiten kann diese Einheit im Orbit direkt ausgesetzt werden.
 ]
 
    Armor += 100
@@ -27,7 +27,7 @@ Die Position im Orbit birgt für die humanuiden Völker einige Probleme. Die Stell
       Weapon0.LaserRechargeCost.fuel = 300
       Weapon0.LaserRechargeCost.material = 150
 
-      Weapon1 ->* VehicleType.Weapons.Weapon0 
+      Weapon1 ->* VehicleType.SY_OrbAL 
       Weapon1.Targets = orbit high_level_flight medium_level_flight low_level_flight
       Weapon1.LaserRechargeCost.fuel = 150
       Weapon1.LaserRechargeCost.material = 75
