@@ -14,7 +14,7 @@ VehicleType {
    Features = construct_vehicles externalFuelTransfer externalMaterialTransfer externalAmmoTransfer
 
    Tank { 
-      Material = 22000
+      Material = 25000
       fuel = 30000
    } Tank
    FuelConsumption = 20
