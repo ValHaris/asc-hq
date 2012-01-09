@@ -166,8 +166,8 @@ MapCoordinate3D AI::RefuelConstraint::getNearestRefuellingPosition ( bool buildi
 {
    findPath();
 
-   int fuel = veh->getResource(maxint, 2, true);
    /*
+   int fuel = veh->getResource(maxint, 2, true);
    int x1,y1,x2,y2;
    x1 = max(veh->xpos - fuel / veh->typ->fuelConsumption, 0 );
    y1 = max(veh->ypos - fuel / veh->typ->fuelConsumption, 0 );
