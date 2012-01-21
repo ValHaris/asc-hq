@@ -291,7 +291,7 @@ class ContainerBase {
       int getMaxRepair ( const ContainerBase* item, int newDamage, Resources& cost, bool ignoreCost = false  ) const;
       int repairItem   ( ContainerBase* item, int newDamage = 0 );
       
-      //! returns the amount of damate that can still be repaired this turn
+      //! returns the amount of damage that can still be repaired this turn
       virtual int repairableDamage() const = 0;
 
     //@}

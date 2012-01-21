@@ -215,6 +215,10 @@ class ContainerBaseType: public MapItemType, public LoadableItemType, public Mem
         //! the number of reseach points for which the plus settings apllies
      int          nominalresearchpoints;
 
+     //! if the unit is repaired in the field (that is, not inside a transport or building), it can only be repaired up to this level
+     //! 0 would result in a complete repair being possible, 20 that it can only be restored to 20% damage (80% health).
+     int  minFieldRepairDamage;
+     
      Resources    maxplus;
 
         //! if a new building is constructed, this will be the resource production of the building

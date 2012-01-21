@@ -130,9 +130,13 @@ int ContainerBase :: getMaxRepair ( const ContainerBase* item, int newDamage, Re
    if ( newDamage > item->damage )
       newDamage = item->damage;
 
-   if ( item == this )
+   if ( item == this ) {
       if ( damage - repairableDamage() > newDamage )
          newDamage = damage - repairableDamage();
+   } else if ( item->getCarrier() != this ) {
+      if ( newDamage < item->baseType->minFieldRepairDamage )
+         newDamage = item->baseType->minFieldRepairDamage;
+   }
 
    int toRepair = item->damage - newDamage;
 

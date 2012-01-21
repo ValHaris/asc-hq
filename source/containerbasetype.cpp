@@ -88,6 +88,7 @@ ContainerBaseType :: ContainerBaseType ()
    vehicleCategoriesProduceable = 0xfffffff;
    autoHarvest.range = 0;
    autoHarvest.maxFieldsPerTurn = maxint;
+   minFieldRepairDamage = 0;
 }
 
 bool ContainerBaseType::hasFunction( ContainerFunctions function ) const
@@ -242,6 +243,8 @@ void ContainerBaseType :: runTextIO ( PropertyContainer& pc )
    pc.addIntRangeArray ( "VehiclesInternally", vehiclesInternallyProduceable, false );
    productionEfficiency.runTextIO("ProductionEfficiency", pc, productionEfficiency );
    pc.closeBracket();
+   
+   pc.addInteger("minFieldRepairDamage", minFieldRepairDamage , 0 );
 }
 
 
@@ -284,7 +287,7 @@ int  ContainerBaseType :: vehicleUnloadable ( const VehicleType* vehicleType, in
 }
 
 
-const int containerBaseTypeVersion = 7;
+const int containerBaseTypeVersion = 8;
 
 
 void ContainerBaseType :: read ( tnstream& stream )
@@ -327,6 +330,11 @@ void ContainerBaseType :: read ( tnstream& stream )
 	 }
    if ( version >= 7 ) 
       infoImageSmallFilename = stream.readString();
+   
+   if ( version >= 8 )
+      minFieldRepairDamage = stream.readInt();
+   else
+      minFieldRepairDamage  = 0;
 }
 
 void ContainerBaseType :: write ( tnstream& stream ) const
@@ -352,6 +360,7 @@ void ContainerBaseType :: write ( tnstream& stream ) const
    writeClassContainer( vehiclesInternallyProduceable, stream );
    productionEfficiency.write( stream );
    stream.writeString( infoImageSmallFilename );
+   stream.writeInt( minFieldRepairDamage  );
 }
 
 const int containerBaseTypeTransportVersion = 3;
