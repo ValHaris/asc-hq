@@ -134,7 +134,8 @@ void Building :: convert ( int player, bool recursive )
          }
 
    #endif
-   if ( color < 8*8 )
+   bool hadViewOnMap = viewOnMap;
+   if ( color < 8*8  && hadViewOnMap)
       removeview();
 
    Player::BuildingList::iterator i = find ( gamemap->player[oldcol].buildingList.begin(), gamemap->player[oldcol].buildingList.end(), this );
@@ -145,7 +146,7 @@ void Building :: convert ( int player, bool recursive )
 
    color = player * 8;
 
-   if ( player < 8 )
+   if ( hadViewOnMap && player < 8 )
       addview();
 
    if ( recursive )
