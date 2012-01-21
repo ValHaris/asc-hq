@@ -434,6 +434,13 @@ void DashboardPanel::showUnitData( Vehicle* veh, Building* bld, MapField* fld,  
             ++pos;
          }
       }
+      
+      if ( veh->typ->infoImageSmallFilename.length() > 0 ) {
+         setImage( "Selected3DImageSmall", veh->typ->infoImageSmallFilename, this );
+         show( "Selected3DImageSmall" );
+      } else
+         hide( "Selected3DImageSmall" );
+      
    } else {
       if ( bld ) {
          setLabelText( "unittypename", bld->typ->name );
@@ -488,6 +495,7 @@ void DashboardPanel::showUnitData( Vehicle* veh, Building* bld, MapField* fld,  
 
       setLabelText( "fuelrange", "-" );
       setLabelText( "movepoints", "" );
+      hide( "Selected3DImageSmall" );
    }
    for ( int i = weaponsDisplayed; i < 10; ++i ) {
       ASCString ps = ASCString::toString(i);
@@ -547,7 +555,7 @@ bool UnitInfoPanel::unitNaming()
       UnitNaming un( container );
       un.Show();
       un.RunModal();
-      showUnitData( veh, bld, false, true );
+      showUnitData( veh, bld, NULL, true );
    }
    return true;
 }
