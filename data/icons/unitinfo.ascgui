@@ -1,125 +1,22 @@
 panel {
-   height = 320
+   height = 363
    WidgetNum = 4
    Widget0 {
       type = area
       x = 2
       y = 10
       width = 165
-      height = 115  
+      height = 168  
 
-      WidgetNum = 7
-      
-      Widget0 {
-        type = image
-        Filename = unit-hole.png
-        x = 40
-        y = 4
-        WidgetNum = 1
-        Widget0 {
-          type = SpecialDisplay
-          name = unit_pic
-          x = 11
-          y = 9
-        } widget0
-     } widget0
+      WidgetNum = 8
 
-     widget6 {
-        type = dummy
-        x = 35
-        y = 3
-        width = 40
-        height = 70
-        ChildWidgets = EPwertO EPO BoWertO PercentO EPwertD EPD BoWertD PercentD
-        
-        textalign = right
-        FontSize = 7
-        FontColor = 0xffffff
+; 1. Erfahrungspunktsymbol Offensiv
 
-        EPWertO {
-           type = TextOutput
-           name = unitoffensiveexperience
-           ToolTipHelp = unitoffensiveexperience
-           x = 0
-           y = 0
-           width = 11
-           height = 7
-           ToolTipHelp = experience points (offensive) 
-       } EPwertO
-       EPO {
-            type = StaticText
-            x = 13
-            y = 0
-            width = 10
-            height = 7
-            Text = EP
-            textalign = left
-       } EPO
-        BoWertO {
-           type = TextOutput
-           name = unitattackincrease
-           ToolTipHelp = unitoffensiveexperience
-           x = 0
-           y = 7
-           width = 11
-           height = 7
-           ToolTipHelp = attackbonus (offensive) 
-       } BowertO
-       PercentO {
-            type = StaticText
-            x = 13
-            y = 7
-            width = 
-            height = 7
-            Text = %
-            textalign = left
-       } PercentO
-
-        BoWertD {
-           type = TextOutput
-           name = unitdefenseincrease
-           ToolTipHelp = unitdefensiveexperience
-           x = 0
-           y = 52
-           width = 11
-           height = 7
-           ToolTipHelp = defencebonus  
-       } BoWertD
-       PercentD {
-            type = StaticText
-            x = 13
-            y = 52
-            width = 
-            height = 7
-            Text = %
-            textalign = left
-       } PercentD
-        EPWertD {
-           type = TextOutput
-           name = unitdefensiveexperience
-           ToolTipHelp = unitdefensiveexperience
-           x = 0
-           y = 59
-           width = 11
-           height = 7
-           ToolTipHelp = experience points (defensive) 
-       } EPwertD
-       EPD {
-            type = StaticText
-            x = 13
-            y = 59
-            width = 10
-            height = 7
-            Text = EP
-            textalign = left
-       } EPD
-     } widget6
-     
      Widget1 {
         type = image
         Filename = exp-field.png
-        x = 5
-        y = 2
+        x = 15
+        y = 5
         ToolTipHelp = unit experience level (offensive) 
         
         WidgetNum = 1      
@@ -132,11 +29,25 @@ panel {
 
      } Widget1
 
+; 2. Erfahrungspunksymbol Defensiv
+
+
+     Widget7 {
+          type = image
+          Filename = shield.png
+          x = 1
+          y = 45
+          width = 14
+          height = 14
+          ToolTipHelp = Defensive
+     } Widget7
+
+
      Widget5 {
         type = image
         Filename = exp-field.png
-        x = 5
-        y = 41
+        x = 15
+        y = 38
         ToolTipHelp = unit experience (defensive)
         
         WidgetNum = 1      
@@ -148,11 +59,188 @@ panel {
         } Widget0
      } Widget5
 
+
+; 2. Bereich Grafik der Units 
+      
+      Widget0 {
+        type = dummy
+        x = 1
+        y = 71
+        ChildWidgets = AreaUnit Area3D
+
+        AreaUnit {
+          type = area
+          x = 3
+          y = 1
+          width = 50
+          height = 50 
+          ChildWidgets = unit
+          unit {
+            type = SpecialDisplay
+            name = unit_pic
+            x = 1
+            y = 1
+          } unit
+        } AreaUnit
+
+        Area3D { 
+          type = area
+          x = 57
+          y = 1
+          width = 98
+          height = 50 
+          ChildWidgets = Selected3DSmall
+          Selected3DSmall {
+            type = image
+            x = 1
+            y = 1 
+            name = Selected3DImageSmall
+          } Selected3DSmall
+        } Area3D 
+
+      } widget0
+
+; Erfahrungspunkte
+
+     widget6 {
+        type = dummy
+        x = 45
+        y = 3
+        width = 55
+        height = 70
+        ChildWidgets = EPwertO EPO BoWertO PercentO EPwertD EPD BoWertD PercentD
+        
+        textalign = right
+        FontSize = 9
+        FontColor = 0xffffff
+
+        EPWertO {
+          type = image
+          Filename = text-hole.png
+          x = 0
+          y = 0
+          widgetnum = 1
+          Widget0 {
+             type = TextOutput
+             textalign = center
+             name = unitoffensiveexperience
+             ToolTipHelp = unitoffensiveexperience
+             x = 1
+             y = 2
+             width = 30
+             height = 11
+             ToolTipHelp = experience points (offensive) 
+          } Widget0
+       } EPwertO
+       EPO {
+          type = StaticText
+          x = 35
+          y = 2
+          width = 24
+          height = 12
+          Text = EP
+          textalign = left
+          FontSize = 11
+          FontColor = 0x37a377
+       } EPO
+        BoWertO {
+          type = image
+          Filename = text-hole.png
+          x = 0
+          y = 16
+          widgetnum = 1
+          Widget0 {
+             type = TextOutput
+             textalign = center
+             name = unitattackincrease
+             ToolTipHelp = unitoffensiveexperience
+             x = 1
+             y = 2
+             width = 30
+             height = 11
+             ToolTipHelp = attackbonus (offensive) 
+          } Widget0
+       } BowertO
+       PercentO {
+            type = StaticText
+            x = 35
+            y = 18
+            width = 24
+            height = 12
+            Text = %
+            textalign = left
+            FontSize = 11
+	    FontColor = 0x37a377
+       } PercentO
+
+        EPWertD {
+          type = image
+          Filename = text-hole.png
+          x = 0
+          y = 33
+          widgetnum = 1
+          Widget0 {
+             type = TextOutput
+             textalign = center
+             name = unitdefensiveexperience
+             ToolTipHelp = unitdefensiveexperience
+             x = 1
+             y = 2
+             width = 32
+             height = 11
+             ToolTipHelp = experience points (defensive) 
+          } Widget0
+       } EPwertD
+       EPD {
+          type = StaticText
+          x = 35
+          y = 34
+          width = 24
+          height = 12
+          Text = EP
+          textalign = left
+          FontSize = 11
+          FontColor = 0x37a377
+       } EPD
+        BoWertD {
+          type = image
+          Filename = text-hole.png
+          x = 0
+          y = 49
+          widgetnum = 1
+          Widget0 {
+             type = TextOutput
+             textalign = center
+             name = unitdefenseincrease
+             ToolTipHelp = unitdefensiveexperience
+             x = 1
+             y = 2
+             width = 30
+             height = 11
+             ToolTipHelp = attackbonus (defensive) 
+          } Widget0
+       } BoWertD
+
+       PercentD {
+          type = StaticText
+          x = 35
+          y = 50
+          width = 24
+          height = 12
+          Text = %
+          textalign = left
+          FontSize = 11
+          FontColor = 0x37a377
+       } PercentD
+     } widget6
+     
+; Bereich Namen (Text)
+
      Widget2 {
         type = image
         Filename = textbox.png
         x = 5
-        y = 71
+        y = 125
         
         WidgetNum = 1      
         Widget0 {
@@ -160,9 +248,9 @@ panel {
            TextAlign = LEFT
            FontColor = 0xffffff
            Fontsize = 11
-           x = 7
+           x = 4
            y = 5
-           y2 = -4
+           y2 = -2
            name = unittypename
         } Widget0
      } Widget2
@@ -171,7 +259,7 @@ panel {
         type = image
         Filename = textbox.png
         x = 5
-        y = 91
+        y = 145
         
         WidgetNum = 1    
         Widget0 {
@@ -180,14 +268,16 @@ panel {
            TextAlign = LEFT
            FontColor = 0xffffff
            Fontsize = 9
-           x = 5
-           y = 3
+           x = 4
+           y = 4
            transparency = 255
            bordersize = 0
-           y2 = -3
+           y2 = -2
            name = unitname
         } Widget0
       } Widget3
+
+; Bereich Move/Range/Armor/?
 
      widget4 {
         type = dummy
@@ -213,7 +303,7 @@ panel {
               ToolTipHelp = movement points
    
               x = 3
-              y = 4
+              y = 3
               x2 = -3
               height = 10
           } Widget0
@@ -241,7 +331,7 @@ panel {
             type = Textoutput
             name = fuelrange
             x = 3
-            y = 4
+            y = 3
             x2 = -3
             height = 10
          } Widget0
@@ -269,7 +359,7 @@ panel {
            ToolTipHelp = armor
 
            x = 3
-           y = 4
+           y = 3
            x2 = -3
            height = 10
           } Widget0
@@ -307,7 +397,7 @@ panel {
            ToolTipHelp = time until unit runs out of fuel (without move)
 
            x = 3
-           y = 4
+           y = 3
            x2 = -3
            height = 10
           } Widget0
@@ -317,11 +407,13 @@ panel {
      } widget4
   } Widget0
 
+; Bereich Armor - Fuel - Material - Energie
+
   Widget1 {
       type = area
-      x = 5
-      y = 128
-      width = 162
+      x = 2
+      y = 180
+      width = 165
       height = 40
       widgetnum = 4
       Widget0 {
@@ -365,7 +457,7 @@ panel {
            ToolTipHelp = health
 
            x = 14
-           y = 5
+           y = 4
            width = 71
            height = 9
        } Widget1
@@ -402,7 +494,7 @@ panel {
            name = unitfuelstatus
            ToolTipHelp = fuel
            x = 14
-           y = 17
+           y = 16
            width = 71
            height = 9
         } Widget3
@@ -442,7 +534,7 @@ panel {
         Widget1 {
            type = Textoutput
            textalign = Right
-           FontSize = 8
+           FontSize = 9
            FontColor = 0xffffff
            name = unitmaterialstatus
            ToolTipHelp = material
@@ -465,7 +557,7 @@ panel {
          Widget3 {
            type = TextOutput
            textalign = Right
-           FontSize = 8
+           FontSize = 9
            FontColor = 0xffffff
            name = unitenergystatus
            ToolTipHelp = energy
@@ -478,12 +570,12 @@ panel {
      } widget3
   } widget1
       
-
+; Bereich Waffenanzeige
 
    Widget2 {
       type = SpecialInput
-      x = 5
-      y = 171
+      x = 2
+      y = 217
       width = 114
       height = 145
       widgetnum = 1
@@ -580,70 +672,70 @@ panel {
              type = TextOutput
              name = punch_weapon0
              x = 0
-             y = 5
+             y = 4
              height = 9
            } Widget0
            Widget1 {
              type = TextOutput
              name = punch_weapon1
              x = 0
-             y = 18
+             y = 17
              height = 9
            } Widget1
            Widget2 {
              type = TextOutput
              name = punch_weapon2
              x = 0
-             y = 31
+             y = 30
              height = 9
            } Widget2
            Widget3 {
              type = TextOutput
              name = punch_weapon3
              x = 0
-             y = 44
+             y = 43
              height = 9
            } Widget3
            Widget4 {
              type = TextOutput
              name = punch_weapon4
              x = 0
-             y = 57
+             y = 56
              height = 9
            } Widget4
            Widget5 {
              type = TextOutput
              name = punch_weapon5
              x = 0
-             y = 70
+             y = 69
              height = 9
            } Widget5
            Widget6 {
              type = TextOutput
              name = punch_weapon6
              x = 0
-             y = 83
+             y = 82
              height = 9
            } Widget6
            Widget7 {
              type = TextOutput
              name = punch_weapon7
              x = 0
-             y = 96
+             y = 95
              height = 9
            } Widget7
            Widget8 {
              type = TextOutput
              name = punch_weapon8
              x = 0
-             y = 109
+             y = 108
              height = 9
            } Widget8
            Widget9 {
              type = TextOutput
              name = punch_weapon9
              x = 0
-             y = 122
+             y = 121
              height = 9
            } Widget9
          } widget1
@@ -663,70 +755,70 @@ panel {
              type = TextOutput
              name = RF_weapon0
              x = 0
-             y = 5
+             y = 4
              height = 9
            } Widget0
            Widget1 {
              type = TextOutput
              name = RF_weapon1
              x = 0
-             y = 18
+             y = 17
              height = 9
            } Widget1
            Widget2 {
              type = TextOutput
              name = RF_weapon2
              x = 0
-             y = 31
+             y = 30
              height = 9
            } Widget2
            Widget3 {
              type = TextOutput
              name = RF_weapon3
              x = 0
-             y = 44
+             y = 43
              height = 9
            } Widget3
            Widget4 {
              type = TextOutput
              name = RF_weapon4
              x = 0
-             y = 57
+             y = 56
              height = 9
            } Widget4
            Widget5 {
              type = TextOutput
              name = RF_weapon5
              x = 0
-             y = 70
+             y = 69
              height = 9
            } Widget5
            Widget6 {
              type = TextOutput
              name = RF_weapon6
              x = 0
-             y = 83
+             y = 82
              height = 9
            } Widget6
            Widget7 {
              type = TextOutput
              name = RF_weapon7
              x = 0
-             y = 96
+             y = 95
              height = 9
            } Widget7 
            Widget8 {
              type = TextOutput
              name = RF_weapon8
              x = 0
-             y = 109
+             y = 108
              height = 9
            } Widget8
            Widget9 {
              type = TextOutput
              name = RF_weapon9
              x = 0
-             y = 122
+             y = 121
              height = 9
            } Widget9
         } widget2
@@ -754,7 +846,7 @@ panel {
             type = TextOutput
             name = status_ammo0
             x = 0
-            y = 5
+            y = 4
             height = 9
           } Widget1
           Widget2 {
@@ -769,7 +861,7 @@ panel {
             type = TextOutput
             name = status_ammo1
             x = 0
-            y = 18
+            y = 17
             height = 9
           } Widget3
           Widget4 {
@@ -784,7 +876,7 @@ panel {
             type = TextOutput
             name = status_ammo2
             x = 0
-            y = 31
+            y = 30
             height = 9
           } Widget5
           Widget6 {
@@ -799,7 +891,7 @@ panel {
             type = TextOutput
             name = status_ammo3
             x = 0
-            y = 44
+            y = 43
             height = 9
           } Widget7
           Widget8 {
@@ -814,7 +906,7 @@ panel {
             type = TextOutput
             name = status_ammo4
             x = 0
-            y = 57
+            y = 56
             height = 9
           } Widget9
           Widget10 {
@@ -829,7 +921,7 @@ panel {
             type = TextOutput
             name = status_ammo5
             x = 0
-            y = 70
+            y = 69
             height = 9
           } Widget11
           Widget12 {
@@ -844,7 +936,7 @@ panel {
             type = TextOutput
             name = status_ammo6
             x = 0
-            y = 83
+            y = 82
             height = 9
           } Widget13
           Widget14 {
@@ -859,7 +951,7 @@ panel {
             type = TextOutput
             name = status_ammo7
             x = 0
-            y = 96
+            y = 95
             height = 9
           } Widget15
           Widget16 {
@@ -874,7 +966,7 @@ panel {
             type = TextOutput
             name = status_ammo8
             x = 0
-            y = 109
+            y = 108
             height = 9
           } Widget17
           Widget18 {
@@ -889,7 +981,7 @@ panel {
             type = TextOutput
             name = status_ammo9
             x = 0
-            y = 122
+            y = 121
             height = 9
           } Widget19
         } widget3
@@ -914,19 +1006,21 @@ panel {
    
    } Widget2
 
+; Bereich Höhenstufen
+
    Widget3 {
       type = area
-      x = 122
-      y = 171
+      x = 128
+      y = 225
       width = 40
-      height = 145
+      height = 133
       widgetnum = 1
       widget0 {
          type = image
          Filename = level_display.png
          ToolTipHelp = levels of height
          x = 5
-         y = 20
+         y = 12
          widgetnum = 1
          widget0 {
            type = specialdisplay
