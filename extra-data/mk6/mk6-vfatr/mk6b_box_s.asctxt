@@ -5,14 +5,14 @@ VehicleType {
 ;   GuideSortHelp = 339 0 0 0 6 0 0 0 0 0
 
    Description = Service Jump Box
-   Infotext = []
+   Infotext = [ Die Box S ist eine reine ServiceStation und ist vollgestopft mit diversen vollautomatischen Reparaturanlagen. Aufgrund der starken Standardisierung der Teccnols Streitkraefte, können fast alle Waffengattungen hier direkten Service erhalten.]
    picture = mk6b_box_s.png
 ;   WreckageObject = 14235
 
    JumpDrive ->* VehicleType.TeccnolsJump1
-   JumpDrive.MaxDistance = 400
-   JumpDrive.consumption.Material = 200
-   JumpDrive.consumption.Fuel = 1000
+   JumpDrive.MaxDistance = 500
+   JumpDrive.consumption.Material = 300
+   JumpDrive.consumption.Fuel = 3000
 
    View = 0
    Features = MoveDuringReactionFire externalRepair externalFuelTransfer externalMaterialTransfer externalAmmoTransfer

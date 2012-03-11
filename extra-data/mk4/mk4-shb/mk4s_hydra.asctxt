@@ -10,7 +10,9 @@ VehicleType {
    wreckageobject = 14264
    GuideSortHelp += 517 0 0 0 4 601 0 0 0 0
 
-   Features += sonar
+   Features += sonar Repair_Facility
+   Transportation ->* VehicleType.TransCorvette
+   Tank.Material += 2000
 
    Weapons { 
       Initiative = 0

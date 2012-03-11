@@ -34,7 +34,7 @@ VehicleType {
    TerrainAccess {
       terrain_any = Spaceport shallow_water water deep_water river
       terrain_all =
-      terrain_not = small_rocks large_rocks forest
+      terrain_not = very_shallow_water small_rocks large_rocks forest
       terrain_kill = lava
    } TerrainAccess
    Tank { 

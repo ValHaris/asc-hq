@@ -636,7 +636,7 @@ LRHEPT {
 
    TeccnolsJump3 {
       Height = ground_level
-      MaxDistance = 350
+      MaxDistance = 250
       consumption {
          Energie = 0
          Material = 5000

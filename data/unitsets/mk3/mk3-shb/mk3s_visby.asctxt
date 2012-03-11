@@ -18,15 +18,12 @@ Da bei der Visby alle Waffen unter Deck installiert wurden, ist leider kein Plat
    InfoImage = Wikipedia Visby-Klasse ]
 
    jamming = 61
-   Transportation ->* VehicleType.TransCruiserSmall 
-   Features += jam_only_own_field sonar
+   Transportation ->* VehicleType.TransCorvette 
+   Features += jam_only_own_field sonar Repair_Facility
 
-   Tank { 
-      Material = 2000
-   } Tank
+   Tank.Material += 2000
 
    Weapons { 
-      Initiative = 0
       Number = 6
       Weapon0 ->* VehicleType.Ship_Gun 
       Weapon0.Ammo = 10

@@ -12,8 +12,8 @@ VehicleType {
 
    JumpDrive ->* VehicleType.TeccnolsJump1
    JumpDrive.MaxDistance = 500
-   JumpDrive.consumption.Material = 80
-   JumpDrive.consumption.Fuel = 800
+   JumpDrive.consumption.Material = 100
+   JumpDrive.consumption.Fuel = 1000
 
    Armor -= 300
    View = 0
@@ -26,7 +26,7 @@ VehicleType {
 
    Movement = 0 0 0 14 0 0 0 0 
    Tank.Material = 400
-   Tank.Fuel = 2000
+   Tank.Fuel = 3000
    TerrainAccess ->* VehicleType.heli_terrain 
 
    Weapons { 

@@ -27,7 +27,7 @@ Aufgrund seines Aufgabengebietes und seiner vielfältigen Einsatzmöglichkeiten si
    Tank.Fuel = 10000
 
    Construction.ObjectGroupsRemovable = 2 3 4 5 6 7 8 10 11 13 21
-   Construction.ObjectsRemovable = 992 988 2658
+   Construction.ObjectsRemovable = 992 988
 
    Weapons { 
       Number = 2

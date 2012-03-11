@@ -6,12 +6,13 @@ VehicleType {
    GuideSortHelp = 340 0 0 0 6 0 0 0 0 0
 
    Description = Invasion Jump Box
-   Infotext = []
+   Infotext = [ Die Box I ist eine Spezialkostruktion fuer den Transport ueber sehr grosse Entfernungen. Ihre Sprungreichweite betraegt 100 Felder. Sie
+kann bis zu 4 kleine Roboter aufnehmen. Um ans Ziel zu gelangen benoetigt die Box ein markiertes Feld (Beacon). Dieses kann z.B. durch ein Signal erzeugt werden, welches durch einen Damon Aufklaerer abgeworfen wurde.]
    picture = mk6b_box_i.png
 ;   WreckageObject = 14235
 
    JumpDrive ->* VehicleType.TeccnolsJump3
-   Jumpdrive.MaxDistance = 1100
+   Jumpdrive.MaxDistance = 1000
    JumpDrive.consumption.Material = 500
    JumpDrive.consumption.Fuel = 5000
 
