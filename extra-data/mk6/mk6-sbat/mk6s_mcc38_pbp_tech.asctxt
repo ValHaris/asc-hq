@@ -1,0 +1,10 @@
+technology {
+   Name = MCC 38
+   infotext = 
+   id = 15111
+   RelatedUnitID = 15111
+   parent = 15000
+   researchpoints *= 27
+   techlevel = 5
+   TechnologiesRequired = 15000,100004,100105,100211,100305,100210,100209,15107
+} Technology

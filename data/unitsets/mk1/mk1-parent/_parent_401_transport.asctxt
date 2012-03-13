@@ -9,6 +9,9 @@
       fuel = 
    } ConstructionCost
 
+   WreckageObject = 497 496
+
+
 
 ; ----------------------------------------------------------------------------------------------------------------
 ; -----   E X A M P L E S   --------------------------------------------------------------------------------------
@@ -68,6 +71,10 @@
    cargo_trtrain {
       CategoriesNOT = hoovercraft medium_ship heavy_ship rail_vehicle medium_aircraft heavy_aircraft
    } cargo_trtrain
+
+   cargo_corvette {
+      CategoriesNOT = trooper light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle light_aircraft medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship building|turret|object hoovercraft default
+   } cargo_corvette
 
    cargo_cruiser {
       CategoriesNOT = light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle heavy_aircraft light_ship medium_ship heavy_ship building|turret|object hoovercraft default
@@ -514,6 +521,15 @@
       EntranceSystem0 ->* VehicleType.GrIO
    } TransShipArmor
 
+
+   TransCorvette { 
+      MaxLoadableUnits = 1
+      MaxLoadableUnitSize = 55
+      MaxLoadableMass = 55
+      CategoriesNOT -> VehicleType.cargo_corvette.CategoriesNOT
+      EntranceSystemNum = 1
+      EntranceSystem0 ->* VehicleType.Cruiser
+   } TransCorvette
 
    TransCruiserSmall { 
       MaxLoadableUnits = 2

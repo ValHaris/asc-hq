@@ -1,0 +1,40 @@
+VehicleType { 
+   Name = Destiny
+   parent = 400 401 402 412
+   ID = 12591
+   
+   Description = DrohnenServiceZug
+   picture = put_destiny.png
+;   infoimage = mk4t_dolmen.jpg
+   wreckageobject = 14224
+;   GuideSortHelp = 550 556 0 0 4 0 0 0 0 0
+   Infotext = []
+  
+   Features = Repair_Facility
+   Armor = 400
+   Transportation ->* VehicleType.TransDroneCruiser
+   Transportation.MaxLoadableUnits = 20
+   Transportation.MaxLoadableUnitSize = 50
+   Transportation.MaxLoadableMass = 400
+
+   Tank { 
+      Energy = 0
+      Material = 40000
+      fuel = 40000
+   } Tank
+   FuelConsumption = 25
+
+   Weapons { 
+      Number = 3
+
+      Weapon0 ->* VehicleType.AmmoBomb 
+      Weapon0.Ammo = 80
+
+      Weapon1 ->* VehicleType.AmmoLM 
+      Weapon1.Ammo = 120
+
+      Weapon2 ->* VehicleType.AmmoTorp 
+      Weapon2.Ammo = 50
+
+   } Weapons
+} VehicleType

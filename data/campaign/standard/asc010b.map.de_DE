@@ -8,11 +8,11 @@ message = [[Thunderlance HQ, Rogul:#crt##crt#Groﬂartig Kommandant!#crt#Wir haben
 asc.setLocalizedEventMessage( map, 77, message )
 
 --- ===== 74  ======= 
-message = [[Thunderlance HQ, Rogul:#crt##crt#Commander, you have passed the mountains. The enemy base is near. The headquarters has sent some reinforcments to your command.#crt##crt#We hope it will help!#crt##crt#Thor Menser,#crt#Thunderlance Military Advisor#crt#]]
+message = [[Thunderlance HQ, Rogul:#crt##crt#Kommandant, nachdem Sie nun die Berge passiert haben, ist die gegnerische Basis nicht mehr weit. Das Hauptquartier entsendet Ihnen zwei Transportschiffe mit Verst‰rkungen.#crt##crt#We hope it will help!#crt##crt#Thor Menser,#crt#Thunderlance Military Advisor#crt#]]
 asc.setLocalizedEventMessage( map, 74, message )
 
 --- ===== 72  ======= 
-message = [[Wissenschaftler in der Bergstation:#crt##crt#Gut gemacht. Wir haben unser Forschungsprojekt abgeschlossen. Nehmen sie die beiden Hubschrauber Prototypen. Wir hoffen sie werden ihnen von NUtzen sein.#crt##crt#Brain Claymore#crt#Leader Scientist#crt#]]
+message = [[Wissenschaftler in der Bergstation:#crt##crt#Gut gemacht. Wir haben unser Forschungsprojekt abgeschlossen. Nehmen sie die beiden Hubschrauber Prototypen. Wir hoffen sie werden ihnen von Nutzen sein.#crt##crt#Brain Claymore#crt#Leitender Wissenschaftler#crt#]]
 asc.setLocalizedEventMessage( map, 72, message )
 
 --- ===== 19  ======= 

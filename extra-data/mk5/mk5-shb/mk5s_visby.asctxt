@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = VISBY
+   Name = Whisper
    parent = 587
    ID = 1456
    

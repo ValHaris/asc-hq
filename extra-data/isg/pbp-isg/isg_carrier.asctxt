@@ -17,11 +17,11 @@ VehicleType {
 
   JumpDrive {
       Height = medium_level_flight
-      MaxDistance = 300
+      MaxDistance = 400
       consumption {
          Energie = 0
-         Material = 1000
-         Fuel = 4000
+         Material = 2000
+         Fuel = 5000
       } consumption
       terrain_any = Spaceport 
       terrain_all = 

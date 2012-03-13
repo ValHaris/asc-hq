@@ -7,6 +7,7 @@ VehicleType {
    Description = Drache
    picture = pui_kukulcan.png
    InfoImage = pui_kukulcan.jpg
+   InfoImageSmall = pui_kukulcan_k.png
 ;   GuideSortHelp = 515 550 551 0 3 0 0 0 0 0
    Infotext = [Huemac der Oberpriester der NeoTolteken opferte täglich Menschen seinem
 Gott, dem großen und mächtigen Tlahuizcalpantecuhtli. Die Herzen der
@@ -58,7 +59,7 @@ aus der Falltür heraus. Dann flog das grünblaue Wesen fort und im Laufe des
 Tages schlüpfte in den Tiefen der Pyramide bereits das nächste
 Kukulcangelege.]
 
-   Features += no_midair_refuel moveduringreactionfire
+   Features += no_midair_refuel moveduringreactionfire matter_converter
    View = 80
    Armor = 500
    Weight = 100
@@ -67,14 +68,27 @@ Kukulcangelege.]
    
    Transportation ->* VehicleType.TransLowTrooper 
 
+   MaxResourceProduction { 
+      Energy = 0
+      Material = -500
+      fuel = 250
+   } MaxResourceProduction
+   defaultProduction {
+      energy = 0
+      material = -500
+      fuel = 250
+   } defaultProduction
+
    Tank { 
       Energy = 0
       Material = 5000
       fuel = 5000
    } Tank
-   FuelConsumption = 0
+   FuelConsumption = 10
    Movement = 0 0 0 45 180 200 200 0 
    Height = ground_level low_level_flight medium_level_flight high_level_flight
+   MovementSound = pui_kukulcan.ogg
+   HeightChangeMethod0.movecost = 25
 
    Construction { 
       ObjectGroupsRemovable = 13 21
@@ -86,13 +100,14 @@ Kukulcangelege.]
       Weapon0.type = laser shootable
       Weapon0.Name = Drachenodem
       Weapon0.Sound = burning.ogg
-      Weapon0.Punch@MaxRange = 85
-      Weapon0.Punch@MinRange = 85
+      Weapon0.targets = floating ground_level low_level_flight medium_level_flight high_level_flight
+      Weapon0.Punch@MaxRange = 90
+      Weapon0.Punch@MinRange = 90
       Weapon0.Ammo = 4
       Weapon0.ReactionFireShots = 1
       Weapon0.LaserRechargeRate = 1
-      Weapon0.LaserRechargeCost.material = 100
-      Weapon0.LaserRechargeCost.fuel = 100
+      Weapon0.LaserRechargeCost.material = 0
+      Weapon0.LaserRechargeCost.fuel = 250
 
    } Weapons
 } VehicleType
