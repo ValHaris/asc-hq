@@ -3,6 +3,24 @@ VehicleType {
    ID = 37
    parent = 357
 
+   Infotext = [The Battleship is a huge floating chunk of steel bristling with
+          weapons. It is the most powerful vessel available. Featuring
+          several long-range cannons, the Battleship it suited for off-shore
+          bombardment as well as naval support. It has no defense against
+          submarines, however, because it is too slow to accurately release
+          depth charges. Very effective when teamed up with Cruisers and
+          Destroyers.
+          #color2#
+          Pros:
+          - Very powerful
+          - Can repair itself
+          #color4#
+          Cons:
+          -
+          Slow movement
+          - Can not enter shallow
+          water]
+
    picture = MK1s_APOGEE.pcx
    InfoImage = mk1s_apogee.jpg
    InfoImageSmall = mk1s_apogee_k.png
