@@ -214,7 +214,7 @@ ASCString ServiceCommand :: getCommandString() const
 {
    ASCString c;
    for ( Values::const_iterator i = values.begin(); i != values.end(); ++i ) {
-      if ( i->second != orgValues.find(i->first)->second) {
+      if ( orgValues.find(i->first)==orgValues.end() || i->second != orgValues.find(i->first)->second) {
          ASCString s;
          s.format("serviceCommand ( map, %d, %d, %d, %d)", getContainerID(), destinationContainerID, i->first, i->second );
          
