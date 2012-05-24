@@ -34,7 +34,7 @@ Einen weiteren gravierenden Vorteil hat der Orbiter jedoch noch: Wenn ein Raumsc
       Weapon0.shotFrom = medium_level_flight high_level_flight orbit 
       Weapon0.MaxRange = 30
       Weapon0.MinRange = 10
-      Weapon0.Ammo = 20
+      Weapon0.Ammo = 40
       Weapon0.Punch@MaxRange = 75
       Weapon0.Punch@MinRange = 75
 

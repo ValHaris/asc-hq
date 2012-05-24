@@ -50,7 +50,7 @@ VehicleType {
    WaitForAttack = false
    Weapons { 
       Initiative = 0
-      Number = 4
+      Number = 5
 
       Weapon0 ->* VehicleType.SSM
       Weapon0.type = laser shootable
@@ -111,7 +111,7 @@ VehicleType {
       Weapon4.LaserRechargeRate = 2
       Weapon4.LaserRechargeCost.material = 0
       Weapon4.LaserRechargeCost.fuel = 0
-      Weapon4.MaxRange = 40
+      Weapon4.MaxRange = 50
       Weapon4.MinRange = 10
       Weapon4.Punch@MaxRange = 65
       Weapon4.Punch@MinRange = 65

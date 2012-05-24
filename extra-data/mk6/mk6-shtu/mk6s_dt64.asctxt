@@ -10,8 +10,8 @@ VehicleType {
    GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
    
    Transportation.MaxLoadableUnits = 16
-   Transportation.MaxLoadableUnitSize = 70
    Transportation.EntranceSystem1.Mode = out
+   Transportation.EntranceSystem1.UnitHeightAbs = medium_level_flight
    Transportation.EntranceSystem1.MoveCost = 20 
    Transportation.EntranceSystem1.RequireUnitFunction = paratrooper
 

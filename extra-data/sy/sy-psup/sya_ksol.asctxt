@@ -14,6 +14,7 @@ VehicleType {
    SelfRepairRate = 10
 
    Transportation { 
+      MaxLoadableUnitSize = 4500
       EntranceSystemNum = 2
       EntranceSystem0 {
         Mode = in out docking

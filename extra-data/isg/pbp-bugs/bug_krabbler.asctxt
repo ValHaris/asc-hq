@@ -64,7 +64,7 @@ VehicleType {
       Weapon2.HitAccuracy.u1 = 100
       Weapon2.HitAccuracy.u2 = 90
       Weapon2.HitAccuracy.u3 = 80
-      Weapon2.WeaponEffectiveness ->* VehicleType.SY_Trooper.WeaponEffectiveness
+      Weapon2.WeaponEffectiveness ->* VehicleType.AntiAirWeapon
 
    } Weapons
 } VehicleType

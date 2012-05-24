@@ -22,27 +22,38 @@ Als besondere Zugabe verfügt das Shell zu guter Letzt noch über ein Zusatzgerät,
    
    Transportation ->* VehicleType.TransSubmarine 
    Tank { 
-      Material = 10000
-      fuel = 20000
+      Material = 20000
+      fuel = 40000
    } Tank
-   Features += ExternalFuelTransfer ExternalMaterialTransfer ExternalAmmoTransfer automatic_resource_searching 
+   Features += ExternalFuelTransfer ExternalMaterialTransfer ExternalAmmoTransfer automatic_resource_searching mine_layer mineview
    ResourceDrillingRange = 3
 
    Weapons { 
-      Initiative = 0
-      Number = 5
+      Number = 9
       Weapon0 ->* VehicleType.ServiceGround 
 
       Weapon1 ->* VehicleType.UTorp 
-      Weapon1.Ammo = 20
+      Weapon1.Ammo = 40
 
       Weapon2 ->* VehicleType.MG_Tank 
-      Weapon2.Ammo = 50
+      Weapon2.Ammo = 100
 
-      Weapon3 ->* VehicleType.AmmoCM 
-      Weapon3.Ammo = 6
+      Weapon3 ->* VehicleType.AntiMine 
 
       Weapon4 ->* VehicleType.AmmoBomb 
       Weapon4.Ammo = 30
-   } Weapons
+
+      Weapon5 ->* VehicleType.AmmoCM 
+      Weapon5.Ammo = 6
+
+      Weapon6 ->* VehicleType.AmmoLM 
+      Weapon6.Ammo = 20
+
+      Weapon7 ->* VehicleType.AmmoSM 
+      Weapon7.Ammo = 30
+
+      Weapon8 ->* VehicleType.AmmoCannon 
+      Weapon8.Ammo = 30
+
+	  } Weapons
 } VehicleType

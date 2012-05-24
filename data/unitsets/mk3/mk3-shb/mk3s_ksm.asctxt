@@ -12,7 +12,7 @@ VehicleType {
 
    Armor -= 50
    Jamming = 39
-   Movement += 0 0 0 10 0 0 0 0 
+   Movement += 0 0 0 20 0 0 0 0 
 
    Weapons { 
       Initiative = 30

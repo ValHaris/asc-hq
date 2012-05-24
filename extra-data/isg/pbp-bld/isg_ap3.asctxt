@@ -1,0 +1,83 @@
+BuildingType { 
+   ID = 12030
+
+   Name = ISG AP 3
+   Description = Allianz POD Typ 3
+   InfoText = [ ]
+
+   ConstructionStages = 1
+   Weather = dry
+   Fields = A1
+   UseGFXpics = false
+   Pictures {
+      dry = isg_ap3.png
+   } Pictures
+   RubbleObjects = false
+   Entry = A1
+   ConstructionCost { 
+      Energy = 0
+      Material = 2000000
+      fuel = 0
+   } ConstructionCost
+
+   Features = matter_converter Vehicle_Production Ammo_Production Recycling Repair_Facility NoProductionCustomization ExternalAmmoTransfer ExternalFuelTransfer ExternalMaterialTransfer NoObjectChaining
+   ExternalLoading = ground_level floating
+   notRemovable = true
+   Armor = 2500
+   View = 100
+   Jamming = 0
+   Techlevel = 10
+   MaxResearch = 0
+
+   transportation { 
+      MaxLoadableUnits = 30
+      MaxLoadableUnitSize = 30000
+      MaxLoadableMass = 100000
+      EntranceSystemNum = 2
+      EntranceSystem0 {
+        Mode = In out docking
+        UnitHeightAbs = floating ground_level 
+        UnitHeightRel = -100
+        ContainerHeight = floating ground_level low_level_flight
+        CategoriesNOT = 
+        DockingHeightAbs = floating ground_level 
+        DockingHeightRel = -100 
+      } EntranceSystem0
+      EntranceSystem1 {
+        Mode = In out 
+        UnitHeightAbs = low_level_flight 
+        UnitHeightRel = -100
+        ContainerHeight = low_level_flight
+        CategoriesNOT = 
+        DockingHeightAbs =  
+        DockingHeightRel = -100 
+        MoveCost = 40
+	  } EntranceSystem1
+   } transportation
+
+   Height = low_level_flight 
+   TerrainAccess { 
+      terrain_any = runway spaceport 
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = 
+   } TerrainAccess
+   StorageCapacity { 
+      BImode { 
+         Energy = 900000
+         Material = 900000
+         fuel = 900000
+      } BImode
+      ASCmode { 
+         Energy = 30000
+         Material = 600000
+         fuel = 600000
+      } ASCmode
+   } StorageCapacity
+
+   MaxResourceProduction { 
+      Energy = 10000
+      Material = -1000
+      fuel = -1000
+   } MaxResourceProduction
+} BuildingType

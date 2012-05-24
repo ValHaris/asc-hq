@@ -20,6 +20,7 @@ VehicleType {
    Tank.Material = 8000
    Height = ground_level orbit
    TerrainAccess.Terrain_any = runway spaceport turret_foundation
+   TerrainAccess.Terrain_not = large_rocks bridge
    Jumpdrive ->* VehicleType.TeccnolsJump6
    Jumpdrive.MaxDistance = 80
    Jumpdrive.consumption.Material = 300

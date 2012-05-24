@@ -18,7 +18,7 @@ BuildingType {
    View = 152
    Jamming = 100
    Transportation { 
-      MaxLoadableUnits = 40
+      MaxLoadableUnits = 50
       MaxLoadableUnitSize = 40000
       MaxLoadableMass = 100000
       EntranceSystemNum = 1
@@ -40,8 +40,8 @@ BuildingType {
       terrain_not = 
       terrain_kill = 
    } TerrainAccess
-   MaxResearch = 10
-   NominalResearch = 10
+   MaxResearch = 50
+   NominalResearch = 50
    ConstructionCost { 
       Energy = 0
       Material = 100000

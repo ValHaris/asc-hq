@@ -1,0 +1,71 @@
+VehicleType { 
+   Name = ISG Sektion Schiffe
+   parent = 400 401 402
+   ID = 12018
+
+   Description = Raumschiff Sektion Schiffe
+   Picture = isg_sektion_schiffe.png
+   Infotext = []
+
+   ConstructionCost { 
+      CalculationMethod = manual
+      Energy = 50000
+      Material = 100000
+      fuel = 0
+   } ConstructionCost
+
+   Category = heavy_aircraft
+   Features = onlytransmove
+   Armor = 100
+   Weight = 3000
+   View = 10
+   Jamming = 0
+   MaxSurvivableStorm = 255
+   ResourceDrillingRange = 0
+   SelfRepairRate = 0
+   transportation { 
+      CategoriesNOT = default trooper light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle light_aircraft medium_aircraft heavy_aircraft building|turret|object helicopter
+      MaxLoadableUnits = 20
+      MaxLoadableUnitSize = 4000
+      MaxLoadableMass = 30000
+      CargoMovementDivisor = 3
+      EntranceSystemNum = 1
+      EntranceSystem0 ->* VehicleType.GrIO
+      EntranceSystem0.DisableAttack = true
+   } transportation
+
+   Height = ground_level 
+   FuelConsumption = 0
+   Tank { 
+      Energy = 0
+      Material = 50000
+      fuel = 50000
+   } Tank
+   Movement = 0 0 0 10 0 0 0 0 
+   TerrainAccess { 
+      terrain_any = 
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = 
+   } TerrainAccess
+   MovementSound = 
+
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+      ObjectsRemovable = 
+   } Construction
+
+   WaitForAttack = false
+   Weapons { 
+      Number = 7
+	  Weapon0 ->* VehicleType.AmmoMG
+	  Weapon1 ->* VehicleType.AmmoCannon
+	  Weapon2 ->* VehicleType.AmmoMine
+	  Weapon3 ->* VehicleType.AmmoSM
+	  Weapon4 ->* VehicleType.AmmoLM
+	  Weapon5 ->* VehicleType.AmmoCM
+	  Weapon6 ->* VehicleType.AmmoTorp
+   } Weapons
+} VehicleType

@@ -3,7 +3,7 @@ VehicleType {
    ID = 1270
    parent = 336
    
-   Description = Baufzg.Befestigung/Turret
+   Description = Baufzg.Befestigung/Pipeline
    picture = mk4v_regio.png
    InfoImage = mk4v_regio.jpg
    wreckageobject = 14270

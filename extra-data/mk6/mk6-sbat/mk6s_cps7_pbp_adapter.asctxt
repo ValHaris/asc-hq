@@ -1,0 +1,5 @@
+Techadapter {
+   ; CPS 7
+   Name = 15351
+   TechnologiesRequired = 15351
+} TechAdapter

@@ -25,7 +25,7 @@ VehicleType {
          Ammo = 20
          Punch@MaxRange = 100
          Punch@MinRange = 100
-         ReactionFireShots = 1
+         ReactionFireShots = 2
          HitAccuracy { 
             d6 = 
             d5 = 
@@ -44,7 +44,7 @@ VehicleType {
      	 WeaponEffectiveness {
      	    default = 0
      	    device = 0
-	    trooper = 0
+	        trooper = 0
 
             building|turret|object = 100
             hoovercraft = 100
@@ -69,10 +69,9 @@ VehicleType {
          } WeaponEffectiveness
       } Weapon0
 
-      Weapon1 ->* VehicleType.Air_MG
-      Weapon1.MaxRange = 20
-      Weapon1.Punch@MaxRange = 50
-      Weapon1.Punch@MinRange = 55
+      Weapon1 ->* VehicleType.Sniper
+      Weapon1.shotFrom = low_level_flight
+      Weapon1.HitAccuracy.d1 = 100
       
    } Weapons
 } VehicleType

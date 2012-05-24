@@ -1,0 +1,21 @@
+VehicleType { 
+   Name = ISG Sektion Fahrzeuge
+   parent = 12018
+   ID = 12020
+
+   Description = Raumschiff Sektion Fahrzeuge
+   Picture = isg_sektion_fahrzeuge.png
+   Infotext = []
+
+   transportation { 
+      CategoriesNOT = light_ship medium_ship heavy_ship building|turret|object light_aircraft medium_aircraft heavy_aircraft helicopter
+      MaxLoadableUnits = 40
+      MaxLoadableUnitSize = 1000
+      MaxLoadableMass = 10000
+      CargoMovementDivisor = 3
+      EntranceSystemNum = 1
+      EntranceSystem0 ->* VehicleType.GrIO
+      EntranceSystem0.DisableAttack = true
+   } transportation
+
+} VehicleType

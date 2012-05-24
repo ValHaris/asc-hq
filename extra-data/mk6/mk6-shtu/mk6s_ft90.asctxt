@@ -9,9 +9,6 @@ VehicleType {
    WreckageObject = 414
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
    
-   Jumpdrive ->* VehicleType.TeccnolsJump4
-   Jumpdrive.consumption.Fuel = 8000
-
    Transportation {
       EntranceSystemNum = 3
       EntranceSystem2 {
@@ -28,9 +25,10 @@ VehicleType {
 
 
    Armor -= 300
-   view = 0
+   View = 70
 
-   Movement += 0 0 0 0 60 80 0 0
+   Movement += 0 0 0 0 70 100 0 0
+   FuelConsuption = 45
    Height = floating low_level_flight medium_level_flight
    Weapons { 
       Number = 5

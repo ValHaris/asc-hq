@@ -20,10 +20,11 @@ Allerdings sollte sich der ENEG aus aktiven Kampfhandlungen heraushalten, da er 
    
    Construction { 
       Objects = 15002
+      ObjectGroupsRemovable = 10 11 13 21
    } Construction
    
    Tank.Fuel = 5000
-   Tank.Material = 700
+   Tank.Material = 5000
    
    Weapons {
       Weapon0 ->* VehicleType.type_Laser

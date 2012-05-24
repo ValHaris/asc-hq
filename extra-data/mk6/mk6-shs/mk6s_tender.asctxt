@@ -43,7 +43,7 @@ VehicleType {
    } Tank
 
    Construction { 
-      Buildings = 13 14 16-19 61 38 40 41
+      Buildings = 6 13 14 16-19 61 38 40 41
       Vehicles = 
       Objects = 996 997 998 1000 44 30 3 15003
       ObjectGroupsRemovable = 1 2 3 4 6 7 8 10 11 13 14 15

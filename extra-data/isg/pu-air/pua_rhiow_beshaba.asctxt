@@ -14,7 +14,7 @@ VehicleType {
    ID = 12534
    Parent = 515
 
-   View = 150
+   View = 130
    Description = Advanced Radar Plane
    Picture = pua_rhiow_beshaba.png
    Tank { 

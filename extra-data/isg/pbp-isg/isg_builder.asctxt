@@ -51,7 +51,7 @@ VehicleType {
       fuel = 100000
    } Tank
    FuelConsumption = 200
-   Movement = 0 40 40 40 100 70 50 40 
+   Movement = 0 44 44 44 100 70 50 40 
    TerrainAccess ->* VehicleType.hooverfull_terrain 
    TerrainAccess.terrain_any = spaceport road runway hard_sand soft_sand lowland very_shallow_water shallow_water water deep_water river
    MovementSound = ship_d_a_s.ogg

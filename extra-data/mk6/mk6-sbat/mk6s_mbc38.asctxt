@@ -15,9 +15,19 @@ VehicleType {
    Description = Kommandoschiff
    InfoText = [ Die Schlachtschiffe der BigEye Klasse dienen als zentrale Unterstützungseinheit für einen größeren Kampfverband. Es verfügt über keine Offensivwaffen, ist aber mit leistungsfähigen Abwehrsystemen bestückt. Dazu zählt neben den üblichen Raketensystemen auch ein sehr starker EMP, ein Nadellaser-Abwehrtsystem und eine leistungsfähige Torpedoabschussanlage .
 
-Den größten Platz beansprucht die gigantische Ortungsanlage, welche sogar im getauchten Zustand eine Satellitenaufklaerung ermoeglicht. Das urspruenglich grosszuegig geplante Flug-Deck mußte dadurch deutlich keliner ausfallen. Der Hangar fasst nun 4 Flugzeuge vom Delta-Typ. Der Clou der Delta Katapultanlage konnte allerdings erhalten bleiben. Zum Start muß der MCC-38 nur dicht unter die Wasseroberfläche steigen und feuert die Deltas in einer Gasblase an die Oberfläche. Zum Einfangen der Deltas muß der BigEye allerdings auftauchen.
+Den größten Platz beansprucht die gigantische Ortungsanlage, welche sogar im getauchten Zustand eine Satellitenaufklaerung ermoeglicht. Das urspruenglich grosszuegig geplante Flug-Deck mußte dadurch deutlich kleiner ausfallen. Der Hangar fasst nun 4 Flugzeuge vom Delta-Typ. Der Clou der Delta Katapultanlage konnte allerdings erhalten bleiben. Zum Start muß der MCC-38 nur dicht unter die Wasseroberfläche steigen und feuert die Deltas in einer Gasblase an die Oberfläche. Zum Einfangen der Deltas muß der BigEye allerdings auftauchen.
    ]
 
+   Transportation ->* Vehicletype.TransLightCarrier 
+   Transportation.MaxLoadableUnits = 4
+   Transportation.MaxLoadableUnitSize = 70
+   Transportation.MaxLoadableMass = 300
+   Transportation.EntranceSystem0.Mode = in
+   Transportation.EntranceSystem0.RequireUnitFunction = paratrooper
+   Transportation.EntranceSystem1.Mode = out
+   Transportation.EntranceSystem1.UnitHeightAbs = medium_level_flight
+   Transportation.EntranceSystem1.MoveCost = 20 
+   Transportation.EntranceSystem1.RequireUnitFunction = paratrooper
 
    Armor += 200
    Tank.fuel += 15000

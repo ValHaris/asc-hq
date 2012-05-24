@@ -38,7 +38,7 @@ ObjectType {
       terrain_not = Railroad Ditch bridge installation
       terrain_kill = Water Deep_water River lava
    } TerrainAccess
-   TerrainProperties_Filter = Shallow_water Lowland Swamp Forest High_mountains Road Railroad Harbour Runway Hard_sand Soft_sand Track_possible Small_rocks Mud Snow Deep_snow Mountains Very_shallow_water Large_rocks Ditch Morass Installation Frozen_water water deep_water
+   TerrainProperties_Filter = Shallow_water Lowland Swamp Forest High_mountains Road Railroad Harbour Runway Hard_sand Soft_sand Track_possible Small_rocks Mud Snow Deep_snow Mountains Very_shallow_water Large_rocks Ditch Morass Installation Frozen_water river water deep_water
    TerrainProperties_Add = Turret_foundation 
 
    dry { 

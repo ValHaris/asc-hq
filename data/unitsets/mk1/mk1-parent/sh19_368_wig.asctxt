@@ -15,7 +15,7 @@ VehicleType {
    Jamming = 19
    WaitForAttack = false
    Features = move_after_attack jam_only_own_field
-   Category = light_ship
+   Category = heavy_aircraft
    MaxSurvivableStorm = 160
    ResourceDrillingRange = 0
    SelfRepairRate = 0
@@ -28,7 +28,7 @@ VehicleType {
       fuel = 2500
    } Tank
    FuelConsumption = 25
-   Movement = 0 0 65 130 0 0 0 0 
+   Movement = 0 0 65 200 0 0 0 0 
    TerrainAccess ->* VehicleType.verysmallship_terrain 
    TerrainAccess.terrain_not = forest small_rocks large_rocks frozen_water
    MovementSound = jet_pass.ogg

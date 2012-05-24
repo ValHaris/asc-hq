@@ -33,6 +33,9 @@ ID 12024 KolonieHq-Hangar
 ID 12025 HomeBase HQ
 ID 12026 Colony Center Radar
 ID 12027 COLONY Center RZ
+ID 12028 AP1
+ID 12029 AP2
+ID 12030 AP3
 
 ***Objects***
 ID 12000 LZ Down
@@ -82,6 +85,14 @@ ID 12009 ISG SHF
 ID 12010 ISG Jammer
 ID 12011 ISG Invasor Radar
 ID 12012 Schrott
+ID 12013 Explorer
+ID 12014 Z100
+ID 12015 SV HB
+ID 12016 SV ILZ
+ID 12017 SV Kolonie
+ID 12018 Sektion Schiffe
+ID 12019 Sektion Flugzeuge
+ID 12020 Sektion Fahrzeuge
 
 Bugs
 ID 12100 Bug Krabbler
@@ -180,3 +191,6 @@ ID 12579 Bajuware   Atlantis
 ID 12580 Wult(2)    Beowult
 ID 12581 KlackKlickKlick   Xoras
 ID 12582 DrStrangelove   HAC
+
+ID 12591 Idrin      Destiny
+ID 12592 Excalibur  Prometheus
