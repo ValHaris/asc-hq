@@ -126,26 +126,29 @@ int ContainerBase :: getMaxRepair ( const ContainerBase* item, int newDamage, Re
    if ( !canRepair( item ) )
       return item->damage;
 
-   int i;
-   if ( newDamage > item->damage )
-      newDamage = item->damage;
-
-   if ( item == this )
+   if ( item == this ) {
       if ( damage - repairableDamage() > newDamage )
          newDamage = damage - repairableDamage();
+   } else if ( item->getCarrier() != this ) {
+      if ( newDamage < item->baseType->minFieldRepairDamage )
+         newDamage = item->baseType->minFieldRepairDamage;
+   }
 
+   if ( newDamage > item->damage )
+      newDamage = item->damage;
+   
    int toRepair = item->damage - newDamage;
 
    Resources maxNeeded = getRepairEfficiency() * item->baseType->productionCost;
 
    Resources needed;
-   for ( i = 0; i < resourceTypeNum; i++ )
+   for ( int i = 0; i < resourceTypeNum; i++ )
       needed.resource(i) = maxNeeded.resource(i) * (item->damage-newDamage) / 100;
 
    if ( !ignoreCost ) {
       Resources avail = getResource ( needed );
    
-      for ( i = 0; i < resourceTypeNum; i++ )
+      for ( int i = 0; i < resourceTypeNum; i++ )
          if ( needed.resource(i) ) {
             int repairable = toRepair * avail.resource(i) / needed.resource(i);
             if ( item->damage - repairable > newDamage )
@@ -153,7 +156,7 @@ int ContainerBase :: getMaxRepair ( const ContainerBase* item, int newDamage, Re
          }
    }
 
-   for ( i = 0; i < resourceTypeNum; i++ )
+   for ( int i = 0; i < resourceTypeNum; i++ )
       cost.resource(i) = maxNeeded.resource(i) * (item->damage-newDamage) / 100;
 
    return newDamage;

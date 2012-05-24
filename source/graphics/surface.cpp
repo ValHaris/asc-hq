@@ -579,7 +579,7 @@ class ColorMerger_MaskApply : public ColorMerger_AlphaHandler<pixelsize>
 
       void assign ( PixelType src, PixelType* dest )
       {
-         if ( !isOpaque(src ) )
+         if ( !this->isOpaque(src ) )
             *dest &= alphamask;
       };
 
