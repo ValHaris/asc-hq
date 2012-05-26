@@ -76,7 +76,7 @@ class UnitHooveringLogic {
 
     Vehicle ( const VehicleType* t, GameMap* actmap, int player );
 
-    static int getRepairExperienceDecrease( int oldDamage, int newDamage );
+    int getRepairExperienceDecrease( int oldDamage, int newDamage, bool offensive );
     
     int repairableDamage() const { return damage; };
 

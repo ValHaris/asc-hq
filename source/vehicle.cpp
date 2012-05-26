@@ -36,6 +36,8 @@
 #include "actions/spawnobject.h"
 #include "actions/unitfieldregistration.h"
 
+#include "attack.h"
+
 const float repairEfficiencyVehicle[resourceTypeNum*resourceTypeNum] = { 0,  0,  0,
                                                                          0,  0.5, 0,
                                                                          0.5, 0,  1 };
@@ -196,13 +198,30 @@ bool Vehicle :: canRepair( const ContainerBase* item ) const
           (item == this && typ->autorepairrate ) ;
 }
 
-    //! the percentage of experience that is removed when repairing a fully damaged unit
-    static const int repairExperienceDecrease = 20;
+//! the percentage of experience that is removed when repairing a fully damaged unit
+static const int repairExperienceDecrease = 20;
 
     
-int Vehicle::getRepairExperienceDecrease( int oldDamage, int newDamage )
+int Vehicle::getRepairExperienceDecrease( int oldDamage, int newDamage, bool offensive )
 {
-   return (oldDamage - newDamage) * repairExperienceDecrease / 100 + 1;
+   int decreasePercentage = (oldDamage - newDamage) * repairExperienceDecrease / 100;
+   
+   
+   AttackFormula af( getMap() );
+   
+   
+   int experience;
+   if ( offensive )
+      experience = experience_offensive;
+   else
+      experience = experience_defensive;
+   int oldExperience = experience;
+   
+   float origPower = af.strength_experience( experience );
+   while ( experience > 0 && af.strength_experience( experience ) >= origPower* ( 100 - decreasePercentage)/100)  
+      experience--;
+   
+   return oldExperience - experience;
 }
     
 
@@ -334,11 +353,12 @@ void Vehicle::transform ( const VehicleType* type )
 
 void Vehicle :: postRepair ( int oldDamage )
 {
-   int expDelta = getRepairExperienceDecrease( oldDamage, damage );
+   int expDelta = getRepairExperienceDecrease( oldDamage, damage, true );
    experience_offensive -= expDelta;
    if ( experience_offensive < 0 )
       experience_offensive = 0;
    
+   expDelta = getRepairExperienceDecrease( oldDamage, damage, false );
    experience_defensive -= expDelta;
    if ( experience_defensive < 0 )
       experience_defensive  = 0;

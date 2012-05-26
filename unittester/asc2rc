@@ -49,6 +49,7 @@ config {
    } UnitProduction
    replayVideo { 
       FrameRate = 15
+      ASCFrameRateLimit = 30
       Quality = 100
    } replayVideo
    VisibleMapLayer = 
@@ -70,4 +71,5 @@ config {
    AircraftCrashWarnTime = 1
    SaveEventMessagesExternal = false
    LanguageOverride = 
+   LogKillsToConsole = false
 } config
