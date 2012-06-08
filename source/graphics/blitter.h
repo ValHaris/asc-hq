@@ -30,6 +30,7 @@
 #include "../misc.h"
  #include "../palette.h"
  #include "../basegfx.h"
+#include "lighten.h"
 
 typedef SDLmm::Color Color;
 

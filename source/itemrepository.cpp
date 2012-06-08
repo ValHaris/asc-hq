@@ -88,7 +88,7 @@ void ItemRepositoryLoader<T>::readTextFiles( PropertyReadingContainer& prc, cons
    t->filename = fileName;
    t->location = location;
    t->archive = prc.getArchive();
-   add ( t );
+   this->add ( t );
 }
 
 
@@ -110,7 +110,7 @@ void ItemRepositoryLoader<T>::read( tnstream& stream )
       t->archive = stream.readString();
       dataLoaderTicker();
 
-      add ( t );
+      this->add ( t );
       // add ( T::newFromStream(stream ));
    }
 }

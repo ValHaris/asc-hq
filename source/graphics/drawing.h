@@ -31,6 +31,7 @@
 #include "../misc.h"
  #include "../palette.h"
  // #include "../basegfx.h"
+#include "lighten.h"
 
 
 
@@ -128,30 +129,6 @@ void paintFilledRectangle( Surface& surface, const SPoint& pos, int w, int h, co
 
 extern char saturationTranslationTable[256][256];
 
-
-inline SDLmm::Color lighten_Color( SDLmm::Color color, int factor16 )
-{
-   return saturationTranslationTable[color & 0xff][factor16] |
-          (saturationTranslationTable[(color >> 8) & 0xff][factor16] << 8 ) |
-          (saturationTranslationTable[(color >> 16) & 0xff][factor16] << 16 ) |
-          (color & 0xff000000);
-}
-
-inline void lighten_Color( SDLmm::Color* color, int factor16 )
-{
-   *color = lighten_Color( *color, factor16 );
-};
-
-inline SDL_Color lighten_Color( const SDL_Color& color, int factor16 )
-{
-   SDL_Color c  = color;
-   c.r =  saturationTranslationTable[color.r & 0xff][factor16];
-   c.g =  saturationTranslationTable[color.g & 0xff][factor16];
-   c.b =  saturationTranslationTable[color.b & 0xff][factor16];
-   return c;
-}
-
-
 template< int pixelsize,
 template<int> class ColorMerger >
 class PutPixel: public ColorMerger<pixelsize>
@@ -169,7 +146,7 @@ class PutPixel: public ColorMerger<pixelsize>
          PixelType* pix = (PixelType*)( surf.pixels() );
          pix += pos.y * surf.pitch()/pixelsize + pos.x;
 
-         assign ( src, pix );
+         this->assign ( src, pix );
       };
 };
 
