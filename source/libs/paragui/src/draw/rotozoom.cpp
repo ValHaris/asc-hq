@@ -60,7 +60,7 @@ static int zoomSurfaceRGBA (SDL_Surface * src, SDL_Surface * dst, bool smooth) {
 	int x, y, sx, sy, *sax, *say, *csax, *csay, csx, csy, ex, ey, t1, t2, sstep;
 	tColorRGBA *c00, *c01, *c10, *c11;
 	tColorRGBA *sp, *csp, *dp;
-	int sgap, dgap, orderRGBA;
+	int dgap;
 
 	/* Variable setup */
 	if (smooth) {
@@ -103,9 +103,7 @@ static int zoomSurfaceRGBA (SDL_Surface * src, SDL_Surface * dst, bool smooth) {
 	/* Pointer setup */
 	sp = csp = (tColorRGBA *) src->pixels;
 	dp = (tColorRGBA *) dst->pixels;
-	sgap = src->pitch - src->w * 4;
 	dgap = dst->pitch - dst->w * 4;
-	orderRGBA = (src->format->Rmask == 0x000000ff);
 
 	/* Switch between interpolating and non-interpolating code */
 	if (smooth) {
@@ -286,7 +284,7 @@ static void transformSurfaceRGBA (SDL_Surface * src, SDL_Surface * dst, int cx,
 	int x, y, t1, t2, dx, dy, xd, yd, sdx, sdy, ax, ay, ex, ey, sw, sh;
 	tColorRGBA c00, c01, c10, c11;
 	tColorRGBA *pc, *sp;
-	int gap, orderRGBA;
+	int gap;
 
 	/* Variable setup */
 	xd = ((src->w - dst->w) << 15);
@@ -297,7 +295,6 @@ static void transformSurfaceRGBA (SDL_Surface * src, SDL_Surface * dst, int cx,
 	sh = src->h - 1;
 	pc = reinterpret_cast<tColorRGBA*>(dst->pixels);
 	gap = dst->pitch - dst->w * 4;
-	orderRGBA = (src->format->Rmask == 0x000000ff);
 
 	/* Switch between interpolating and non-interpolating code */
 	if (smooth) {
@@ -442,7 +439,7 @@ static void transformSurfaceRGBA (SDL_Surface * src, SDL_Surface * dst, int cx,
 
 static void transformSurfaceY (SDL_Surface * src, SDL_Surface * dst,
                                int cx, int cy, int isin, int icos) {
-	int x, y, dx, dy, xd, yd, sdx, sdy, ax, ay, sw, sh;
+	int x, y, dx, dy, xd, yd, sdx, sdy, ax, ay;
 	tColorY *pc, *sp;
 	int gap;
 
@@ -451,8 +448,6 @@ static void transformSurfaceY (SDL_Surface * src, SDL_Surface * dst,
 	yd = ((src->h - dst->h) << 15);
 	ax = (cx << 16) - (icos * cx);
 	ay = (cy << 16) - (isin * cx);
-	sw = src->w - 1;
-	sh = src->h - 1;
 	pc = reinterpret_cast<tColorY*>(dst->pixels);
 	gap = dst->pitch - dst->w;
 	/* Clear surface to colorkey */

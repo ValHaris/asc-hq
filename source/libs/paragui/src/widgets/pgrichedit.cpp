@@ -443,7 +443,7 @@ void PG_RichEdit::AlignLine(RichLineArray::iterator actualLine, WidgetMap &widge
 Sint32 PG_RichEdit::CompleteLinePart(size_t searchFrom, Sint32 lineTop, Uint32 &lineSpace, RichLineArray::iterator actualLine, RichLinePartArray::iterator actualLinePart, bool &breakLine, Uint32 &lineAscent, bool changeAlign) {
 	breakLine = false;
 
-	Sint32 w = 0, h = 0, ls = 0, lb = 0;
+	Sint32 w = 0, ls = 0, lb = 0;
 	Sint32 lineWidth = 0;
 
 	int align = my_Align;
@@ -454,7 +454,6 @@ Sint32 PG_RichEdit::CompleteLinePart(size_t searchFrom, Sint32 lineTop, Uint32 &
 		Uint32          oldFind = searchFrom, tabSize = 0;
 
 		w = my_ParsedWords[searchFrom].my_Width + my_ParsedWords[searchFrom].my_EndSpaceWidth;
-		h = my_ParsedWords[searchFrom].my_Height;
 		lb = my_ParsedWords[searchFrom].my_BaseLine;
 		ls = my_ParsedWords[searchFrom].my_LineSkip;
 

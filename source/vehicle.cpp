@@ -1177,9 +1177,8 @@ void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits ) const
 void   Vehicle::read ( tnstream& stream )
 {
     int _id = stream.readWord ();
-    int version = 0;
     if ( _id == 0 ) {
-       version = stream.readInt();
+       stream.readInt(); // version
        _id = stream.readInt();
     }
 
@@ -1592,9 +1591,8 @@ int Vehicle::getMemoryFootprint() const
 Vehicle* Vehicle::newFromStream ( GameMap* gamemap, tnstream& stream, int forceNetworkID )
 {
    int id = stream.readWord ();
-   int version = 0;
    if ( id == 0 ) {
-      version = stream.readInt();
+      stream.readInt(); // version
       id = stream.readInt();
    }
 

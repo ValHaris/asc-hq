@@ -79,7 +79,7 @@ int triangulate_polygon(ncontours, cntr, vertices, triangles)
      int (*triangles)[3];
 {
     int i;
-  int nmonpoly, ccount, npoints, genus;
+  int nmonpoly, ccount, npoints;
   int n;
 
   memset((void *)seg, 0, sizeof(seg));
@@ -124,7 +124,6 @@ int triangulate_polygon(ncontours, cntr, vertices, triangles)
       ccount++;
     }
   
-  genus = ncontours - 1;
   n = i-1;
 
   initialise(n);

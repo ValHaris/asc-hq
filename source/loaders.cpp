@@ -706,7 +706,6 @@ void tspfldloaders::readfields ( void )
          else
             fld2->visible = 0;
 
-         bool tempobjects[16];
          int  tempobjectNum = 0;
 
          if (b3 & csm_object ) {
@@ -721,7 +720,7 @@ void tspfldloaders::readfields ( void )
             tempobjectNum = stream->readInt();
 
             for ( int i = 0; i < 16; i++ )
-               tempobjects[i] = stream->readInt();
+               stream->readInt();
          }
 
          int objectversion = 1;

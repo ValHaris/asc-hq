@@ -1119,13 +1119,11 @@ void PG_Widget::UpdateScreen() {
 bool PG_Widget::IsInFrontOf(PG_Widget* widget) {
 	PG_Widget* w1 = NULL;
 	PG_Widget* w2 = NULL;
-	PG_RectList* list = &widgetList;
 
 	// do both widgets have the same parent ?
 	if((GetParent() != NULL) && (GetParent() == widget->GetParent())) {
 		w1 = this;
 		w2 = widget;
-		list = GetParent()->GetChildList();
 	} else {
 		w1 = this->GetToplevelWidget();
 		w2 = widget->GetToplevelWidget();

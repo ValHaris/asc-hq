@@ -214,7 +214,6 @@ bool ActionContainer::isActive_req( const Command* action )
 ActionResult ActionContainer::rerun( const Context& context )
 {
    
-   Actions::iterator currentCommand = currentPos;
    Actions::iterator firstDelta = currentPos;
    Actions::iterator i = currentPos;
    while ( i != actions.begin() ) {

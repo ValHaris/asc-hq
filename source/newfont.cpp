@@ -87,7 +87,7 @@ void toldfont::read ( tnstream& stream )
       character[i].width = stream.readChar();
       character[i].size = stream.readWord();
       character[i].diskposition = stream.readInt();
-      character[i].memposition = (char*) stream.readInt();
+      character[i].memposition = NULL; stream.readInt();
       character[i].dummy = stream.readChar();
    }
    height = stream.readWord();
@@ -100,7 +100,7 @@ void toldfont::read ( tnstream& stream )
    dummy = stream.readWord();
    useems = stream.readChar();
    caps = stream.readChar();
-   palette = (dacpalette256*) stream.readInt();
+   palette = NULL; stream.readInt();
    groundline = stream.readChar();
 }
 

@@ -250,13 +250,10 @@ void SelectionHolder::pickup ( MapField* fld )
 int infomessage( char* formatstring, ... )
 {
    char stringtooutput[200];
-   char* b;
    char* c = new char[200];
    // int linenum = 0;
 
    memset (stringtooutput, 0, sizeof ( stringtooutput ));
-
-   b = stringtooutput;
 
    va_list paramlist;
    va_start ( paramlist, formatstring );

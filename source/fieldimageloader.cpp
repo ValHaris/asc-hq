@@ -121,13 +121,6 @@ vector<Surface> loadASCFieldImageArray ( const ASCString& file, int num )
 {
    vector<Surface> images;
 
-   int xsize;
-   if ( num <= 10)
-      xsize = (num+1)* 100;
-   else
-      xsize = 1100;
-
-   
    tnfilestream fs ( file, tnstream::reading );
    
    Surface s ( IMG_Load_RW ( SDL_RWFromStream( &fs ), 1));

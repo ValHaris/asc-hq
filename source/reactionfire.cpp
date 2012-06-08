@@ -209,8 +209,6 @@ int tsearchreactionfireingunits :: attack( Vehicle* attacker, Vehicle* target, c
       AttackWeap* atw = attackpossible ( attacker, target->xpos, target->ypos );
       if ( atw->count ) { // && (attacker->reactionfire.enemiesAttackable & (1 << (target->color / 8)))) {
 
-         int ad1, ad2, dd1, dd2;
-
          int strength = 0;
          int num = -1;
          for ( int j = 0; j < atw->count; j++ )
@@ -246,16 +244,10 @@ int tsearchreactionfireingunits :: attack( Vehicle* attacker, Vehicle* target, c
                   tunitattacksunit battle ( attacker, target, 0, atw->num[num], true );
                   // int nwid = target->networkid;
 
-                  ad1 = battle.av.damage;
-                  dd1 = battle.dv.damage;
-
                   if ( context.display && visibility)
                      context.display->showBattle( battle ); 
                   else
                      battle.calc();
-
-                  ad2 = battle.av.damage;
-                  dd2 = battle.dv.damage;
 
                   if ( battle.dv.damage >= 100 )
                      result = 2;

@@ -837,12 +837,14 @@ AI::UnitDistribution AI::calcUnitDistribution ()
 
 void AI::production()
 {
-   float inc;
+   /*
    int unitCount = getPlayer().vehicleList.size();
+   float inc;
    if ( unitCount ) 
       inc = float(1) / float(unitCount);
    else
       inc = 1;
+   */
 
    UnitDistribution currentUnitDistribution = calcUnitDistribution();
 

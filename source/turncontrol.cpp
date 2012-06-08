@@ -237,6 +237,7 @@ void next_turn ( GameMap* gamemap, const NextTurnStrategy& nextTurnStrategy, Map
    if  ( lastPlayer >= 0 )
       gamemap->endTurn();
    
+   /*
    int pv;
    if ( playerView == -2 ) {
       if ( gamemap->time.turn() <= 0 || gamemap->actplayer < 0 )
@@ -248,12 +249,11 @@ void next_turn ( GameMap* gamemap, const NextTurnStrategy& nextTurnStrategy, Map
             pv = gamemap->actplayer;
    } else
       pv = playerView;
+   */
 
       
    if ( findNextPlayer( gamemap ) == lastPlayer ) {
       if ( !gamemap->continueplaying ) {
-         
-         
          if ( !nextTurnStrategy.continueWhenLastPlayer() ) {
             delete gamemap;
             gamemap = NULL;

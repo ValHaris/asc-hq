@@ -130,11 +130,8 @@ inline void StretchTemplate(int x1, int x2, int y1, int y2, int yr, int yw, ST s
 template < class ST, class DT >
 inline void RectStretchTemplate(SDL_Surface* src_surface, ST src, int xs1, int ys1, int xs2, int ys2, SDL_Surface* dst_surface, DT dst, int xd1, int yd1, int xd2, int yd2, Uint32* lutVOI) {
 	int dx, dy, e, d, dx2;
-	int sx, sy;
 	dx = abs((int)(yd2 - yd1));
 	dy = abs((int)(ys2 - ys1));
-	sx = sign(yd2 - yd1);
-	sy = sign(ys2 - ys1);
 	e = (dy << 1)-dx;
 	dx2 = dx << 1;
 	dy <<= 1;
@@ -221,11 +218,8 @@ inline void StretchTemplate24to32(int x1, int x2, int y1, int y2, int yr, int yw
 
 inline void RectStretch24to32(SDL_Surface* src_surface, Uint8* src, int xs1, int ys1, int xs2, int ys2, SDL_Surface* dst_surface, Uint32* dst, int xd1, int yd1, int xd2, int yd2, Uint32* lutVOI) {
 	int dx, dy, e, d, dx2;
-	int sx, sy;
 	dx = abs((int)(yd2 - yd1));
 	dy = abs((int)(ys2 - ys1));
-	sx = sign(yd2 - yd1);
-	sy = sign(ys2 - ys1);
 	e = (dy << 1)-dx;
 	dx2 = dx << 1;
 	dy <<= 1;

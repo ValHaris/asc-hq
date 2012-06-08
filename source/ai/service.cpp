@@ -380,7 +380,6 @@ MapCoordinate3D AI :: findServiceBuilding ( const ServiceOrder& so, int* distanc
    int bestDistance = maxint;
    MapCoordinate3D bestPos;
 
-   Building* bestBuilding_p = NULL;
    int bestDistance_p = maxint;
    MapCoordinate3D bestPos_p;
 
@@ -492,7 +491,6 @@ MapCoordinate3D AI :: findServiceBuilding ( const ServiceOrder& so, int* distanc
                      int dist = int( nde->gval );
                      if ( dist < bestDistance_p ) {
                         bestDistance_p = dist;
-                        bestBuilding_p = bld;
                         bestPos_p = buildingPos;
                      }
                   }

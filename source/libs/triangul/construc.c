@@ -439,7 +439,7 @@ int segnum;
     int tfirstr, tlastr, tfirstl, tlastl;
     int i1, i2, t, tn;
     point_t tpt;
-    int tritop = 0, tribot = 0, is_swapped = 0;
+    int tribot = 0, is_swapped = 0;
     int tmptriseg;
 
     s = seg[segnum];
@@ -509,7 +509,6 @@ int segnum;
     else				/* v0 already present */
     {       /* Get the topmost intersecting trapezoid */
         tfirst = locate_endpoint(&s.v0, &s.v1, s.root0);
-        tritop = 1;
     }
 
 
