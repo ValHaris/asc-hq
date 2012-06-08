@@ -21,7 +21,7 @@ sub processFile {
 	close F;
 }
 
-my $rep1 = 's/2\.4\.\d+\.\d+/2.4.$cycle.0/;';
+my $rep1 = 's/2\.4\.\d+\.\d+/2.5.$cycle.0/;';
 
 processFile( "source/strtmesg.cpp", $rep1 );
 
