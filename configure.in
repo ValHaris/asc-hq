@@ -1,11 +1,13 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(asc,2.4.97.213)
+AC_INIT(asc,2.5.200.2)
 
 AM_CONFIG_HEADER(config.h)
 AM_INIT_AUTOMAKE
 AM_MAINTAINER_MODE
+AC_CONFIG_MACRO_DIR([m4])
 
+ACLOCAL_AMFLAGS="-I m4"
 
 if test -f $srcdir/source/strtmesg.cpp; then
    dnl extracting the version number from the source code
@@ -595,7 +597,7 @@ fi
 
 
 AC_MSG_CHECKING(distinct size_t type)
-AC_COMPILE_IFELSE( [
+AC_COMPILE_IFELSE( [AC_LANG_SOURCE( [
     #include <string>
    void foo( int i ) {};
    void foo( size_t i ) {};
@@ -606,13 +608,13 @@ AC_COMPILE_IFELSE( [
      foo(t);
      return 0;
    }  
-], size_t_type=distinct )
+])], size_t_type=distinct )
 
 if test "x$size_t_type" = x ; then
   AC_MSG_RESULT(no)
 
   AC_MSG_CHECKING(size_t conversion)
-  AC_COMPILE_IFELSE( [
+  AC_COMPILE_IFELSE([AC_LANG_SOURCE( [
     #include <string>
     void foo( int i ) {};
     void foo( unsigned int i ) {};
@@ -622,7 +624,7 @@ if test "x$size_t_type" = x ; then
        foo(t);
        return 0;
     }  
-   ], AC_MSG_RESULT("yes"),AC_MSG_ERROR("Failed to compile size_t distinction check. Please contact bugs@asc-hq.org ")  )
+   ])], AC_MSG_RESULT("yes"),AC_MSG_ERROR("Failed to compile size_t distinction check. Please contact bugs@asc-hq.org ")  )
 
 else
   CXXFLAGS="$CXXFLAGS -DSIZE_T_not_identical_to_INT"

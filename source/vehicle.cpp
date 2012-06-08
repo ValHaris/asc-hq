@@ -204,6 +204,8 @@ static const int repairExperienceDecrease = 20;
     
 int Vehicle::getRepairExperienceDecrease( int oldDamage, int newDamage, bool offensive )
 {
+   /*
+   This is an alternative Strategy that removes as much experience points as are necessary to achieve the desired decrease of attack bonus
    int decreasePercentage = (oldDamage - newDamage) * repairExperienceDecrease / 100;
    
    
@@ -222,6 +224,15 @@ int Vehicle::getRepairExperienceDecrease( int oldDamage, int newDamage, bool off
       experience--;
    
    return oldExperience - experience;
+   */
+   
+   int decreasePercentage = (oldDamage - newDamage) * repairExperienceDecrease / 100;
+   if ( offensive )
+      return min( experience_offensive * decreasePercentage/100 + 1, experience_offensive);
+   else
+      return min( experience_defensive * decreasePercentage/100 + 1, experience_defensive);
+   
+   
 }
     
 

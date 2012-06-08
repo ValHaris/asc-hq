@@ -22,7 +22,7 @@ Name:           asc
 BuildRequires:  SDL-devel SDL_image-devel SDL_mixer-devel SDL_sound-devel SDLmm-devel gcc-c++ libsigc++12-devel physfs-devel
 BuildRequires:  boost-devel freetype2-devel libexpat-devel libjpeg-devel pkg-config update-desktop-files zip lua-devel wxGTK-devel 
 Summary:        Advanced Strategic Command--Turn-Based Strategy Game
-Version:        2.4.95.212
+Version:        2.5.200.2
 Release:        1.1
 License:        GPL v2 or later
 Group:          Amusements/Games/Strategy/Turn Based
