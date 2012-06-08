@@ -35,43 +35,35 @@ void         k_loadmap(void)
       if ( !mp )
          return;
          
-      if ( mp->getgameparameter(cgp_superVisorCanSaveMap) == 0 ) {
-         delete mp;
-         throw ASCmsgException("The function to manipulate a game has not been enabled when it was started");
-      }
-      
-      bool participatingSV = false;
+      auto_ptr<GameMap> oldMap ( actmap );
+      actmap =  mp;
+
       Password pwd;
-      for ( int i = 0; i < mp->getPlayerCount(); ++i )
-         if ( mp->getPlayer(i).stat == Player::supervisor ) 
-            if ( !mp->getPlayer(i).passwordcrc.empty() ) {
-               pwd = mp->getPlayer(i).passwordcrc;
-               participatingSV = true;
+      for ( int i = 0; i < actmap->getPlayerCount(); ++i )
+         if ( actmap->getPlayer(i).stat == Player::supervisor ) 
+            if ( !actmap->getPlayer(i).passwordcrc.empty() ) {
+               pwd = actmap->getPlayer(i).passwordcrc;
                break;
             }
      
       if ( pwd.empty() ) 
-         pwd = mp->supervisorpasswordcrc;
+         pwd = actmap->supervisorpasswordcrc;
 
-      if ( pwd.empty() ) {
-         delete mp;
-         
-         if ( participatingSV ) 
-            throw ASCmsgException("You can't load this file. While a supervisor was defined in the game, he doesn't use a password");
-         else
-            throw ASCmsgException("Sorry, you can't load this file because no supervisor was defined ");
-      }
-
-      tlockdispspfld ldsf;
-      if ( !enterpassword ( pwd )) {
-         delete mp;
+      if ( !pwd.empty()  && (actmap->getgameparameter(cgp_superVisorCanSaveMap) > 0) ) {
+         tlockdispspfld ldsf;
+         if ( !enterpassword ( pwd )) {
+            delete actmap;
+            actmap = oldMap.release();
+            return;
+         }
+         ASCfilename = s1;
+      } else {
+         displaymessage("Sorry, you can't load this file because no supervisor was defined ",1);
+         delete actmap;
+         actmap = NULL;
          throw  NoMapLoaded();
       }
-      ASCfilename = s1;
-      
-      delete actmap;
-      actmap =  mp;
-      
+
       displaymap();
       mapsaved = true;
       actmap->preferredFileNames.mapname[0] = s1;
