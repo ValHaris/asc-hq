@@ -1276,26 +1276,26 @@
          } HitAccuracy
       WeaponEffectiveness {      
          trooper = 100
-         rail_vehicle = 100
-         building|turret|object = 100
-         hoovercraft = 100
-         helicopter = 100
+         rail_vehicle = 250
+         building|turret|object = 250
+         hoovercraft = 250
 
-         light_tracked_vehicle = 100
-         medium_tracked_vehicle = 100
-         heavy_tracked_vehicle = 100
+         light_tracked_vehicle = 250
+         medium_tracked_vehicle = 250
+         heavy_tracked_vehicle = 250
 
-         light_wheeled_vehicle = 100
-         medium_wheeled_vehicle = 100
-         heavy_wheeled_vehicle = 100
+         light_wheeled_vehicle = 250
+         medium_wheeled_vehicle = 250
+         heavy_wheeled_vehicle = 250
          
-         light_ship = 100
-         medium_ship  = 100
-         heavy_ship = 100
+         light_ship = 250
+         medium_ship  = 250
+         heavy_ship = 250
 
          light_aircraft = 100
          medium_aircraft  = 100
          heavy_aircraft = 100
+         helicopter = 100
       } WeaponEffectiveness
       } OAM
 

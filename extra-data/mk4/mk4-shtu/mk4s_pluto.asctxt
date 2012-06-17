@@ -62,6 +62,8 @@ Aufgrund dieser Änderungen sind die Torpedos, sowie die Luftabwehrraketen daher 
       Weapon3.MaxRange = 30
       Weapon3.Ammo = 15
       Weapon3.ReactionFireShots = 1
+      Weapon3.Punch@MaxRange = 80
+      Weapon3.Punch@MinRange = 80
 
       Weapon4 ->* VehicleType.AmmoMG
       Weapon4.Ammo = 100

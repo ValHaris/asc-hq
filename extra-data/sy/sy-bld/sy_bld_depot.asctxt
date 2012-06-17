@@ -36,8 +36,8 @@ BuildingType {
       } BImode
       ASCmode { 
          Energy = 0
-         Material = 40000
-         fuel = 40000
+         Material = 50000
+         fuel = 150000
       } ASCmode
    } StorageCapacity
 } BuildingType

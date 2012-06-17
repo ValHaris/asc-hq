@@ -1,0 +1,10 @@
+itemfilter {
+   Vehicles = 12500-12999
+   Buildings = 12500-12999
+   Objects = 12500-12999
+   Terrain = 
+   Technologies = 12500-12999
+   name = PBP personal units
+   activated = true
+} itemfilter
+   

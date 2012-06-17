@@ -1,0 +1,49 @@
+VehicleType { 
+   Name = AKI EX
+   parent = 12013 15000
+   ID = 12201
+
+   Picture = explorer_aki.png
+   Infotext = [Das Advanced Teccnol Network konnte aufgrund neuster Forschungsergebnisse einen ISG Explorer mit neuartigen Technologien aufrüsten. Die Im AKI Lander erprobte Absetztechnik konnte weiter verbessert und in die Systeme des Explorers integriert werden. Nicht fehlen durfte natürlich ein EMP der neusten Generation. Aufgrund der generell hohen Energieerzeugung der auch noch getunten ISG Triebwerke, konnten nun endlich die richtungsgesteuerten EMP-Werfer eingesetzt werden. Bisher scheiterte der Einsatz an den gewaltigen Energiemengen, welche die Abschirmfelder benötigten.]
+      
+   transportation { 
+      CargoMovementDivisor = 2
+      EntranceSystemNum = 4
+      EntranceSystem2 ->* VehicleType.GrIO
+      EntranceSystem2.ContainerHeight = low_level_flight
+	  EntranceSystem2.MoveCost = 10
+      EntranceSystem3 ->* VehicleType.GrIO
+      EntranceSystem3.UnitHeight = submerged
+      EntranceSystem3.ContainerHeight = low_level_flight
+	  EntranceSystem3.MoveCost = 10
+  } transportation
+
+   Features = self_repairing jam_only_own_field
+   Armor += 200
+   View += 60
+
+   Movement += 0 0 0 0 40 20 20 20 
+
+   Construction { 
+      Objects = 15002 15003
+   } Construction
+
+   WaitForAttack = true
+   Weapons { 
+      Number = 1
+	  Weapon0 ->* VehicleType.TeccEMPAir
+      Weapon0.Name = EMP EX spezial 
+      Weapon0.targets = submerged floating ground_level low_level_flight medium_level_flight high_level_flight
+      Weapon0.shotFrom = submerged floating ground_level low_level_flight medium_level_flight high_level_flight
+      Weapon0.LaserRechargeCost.material = 500
+      Weapon0.LaserRechargeCost.fuel = 1000
+      Weapon0.HitAccuracy.d2 = 80
+      Weapon0.HitAccuracy.0 = 100
+      Weapon0.HitAccuracy.u2 = 80
+      Weapon0.MaxRange = 40
+      Weapon0.Ammo = 6
+      Weapon0.ReactionFireShots = 2
+      Weapon0.Punch@MaxRange = 90
+      Weapon0.Punch@MinRange = 90	  
+   } Weapons
+} VehicleType

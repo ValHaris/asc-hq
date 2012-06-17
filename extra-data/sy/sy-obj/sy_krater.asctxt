@@ -1,10 +1,12 @@
 ObjectType {
    ID = 1301
    GroupID = 14
-   Weather = dry
+   
    visible_in_fogOfWar = false
    LinkableObjects = 
    Armor = 0
+   Lifetime = 1
+
    Movemalus_plus = 
    Movemalus_abs = 30
    AttackBonus_abs = -3
@@ -36,6 +38,7 @@ ObjectType {
    } TerrainAccess
    TerrainProperties_Filter = lowland hard_sand soft_sand mountains hillside high_mountains ditch installation road runway railroad
    TerrainProperties_Add = lava
+   Weather = dry
    dry { 
       UseGFXpics = false
       picture = sy_krater.pcx 1

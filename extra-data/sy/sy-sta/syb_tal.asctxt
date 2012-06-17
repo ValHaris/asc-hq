@@ -14,7 +14,7 @@ VehicleType {
    Jamming = 39
    View = 0
    Weight = 5000
-   Features = MoveDuringReactionFire jam_only_own_field self_repairing move_after_attack
+   Features = MoveDuringReactionFire jam_only_own_field self_repairing
    SelfRepairRate = 15
 
    TerrainAccess.terrain_any = hard_sand soft_sand lowland mountains high_mountains
@@ -22,7 +22,8 @@ VehicleType {
    Tank.Fuel = 10000
    Tank.Material = 5000
    Movement = 0 0 0 10 0 0 0 0 
-
+;   ObjectsLayedByMovement = 1301
+   
    JumpDrive { 
       Height = ground_level
       consumption { 
@@ -34,13 +35,14 @@ VehicleType {
       terrain_all = 
       terrain_not -> VehicleType.TerrainAccess.terrain_not
       terrain_kill = 
-      MaxDistance = 30
+      MaxDistance = 50
    } JumpDrive
 
    WaitForAttack = true
    Weapons {
       Weapon0 ->* VehicleType.type_laser
-      Weapon0.name = Dronenschacht 
+      Weapon0.name = Drohnenschacht 
+	  Weapon0.MaxRange += 10
       Weapon0.Sound = canon_s.ogg
       Weapon0.Punch@MaxRange = 110
       Weapon0.Punch@MinRange = 110
@@ -52,7 +54,7 @@ VehicleType {
       Weapon0.LaserRechargeCost.fuel = 400
 
       Weapon1 ->* VehicleType.SY_TankL
-      Weapon1.name = Dronenschacht 
+      Weapon1.name = Drohnenschacht 
       Weapon1.Sound = canon_s.ogg
       Weapon1.targets = floating ground_level low_level_flight medium_level_flight high_level_flight
       Weapon1.HitAccuracy.u1 = 100

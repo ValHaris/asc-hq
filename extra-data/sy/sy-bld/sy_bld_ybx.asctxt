@@ -3,7 +3,7 @@ BuildingType {
    ID = 1314
    parent = 498
    
-   Armor = 500
+   Armor = 1000
    View = 40
    Jamming = 21
    ConstructionStages = 1

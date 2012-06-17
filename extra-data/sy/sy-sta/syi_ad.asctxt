@@ -15,7 +15,7 @@ VehicleType {
    Armor = 850
    Weight = 5000
    Jamming = 39
-   Features = jam_only_own_field self_repairing move_after_attack
+   Features = jam_only_own_field self_repairing
    SelfRepairRate = 15
    View = 0
 
@@ -23,12 +23,13 @@ VehicleType {
    Tank.Fuel = 20000
    Tank.Material = 10000
    Movement = 0 0 0 10 0 0 0 0 
+;   ObjectsLayedByMovement = 1301
 
    WaitForAttack = true
    Weapons {
    	  Number = 1
       Weapon0 ->* VehicleType.type_laser
-      Weapon0.Name = Dronenschacht 
+      Weapon0.Name = Drohnenschacht 
       Weapon0.Sound = canon_s.ogg
       Weapon0.targets = submerged floating ground_level
       Weapon0.HitAccuracy.d1 = 60
@@ -54,6 +55,6 @@ VehicleType {
       terrain_all = 
       terrain_not -> VehicleType.TerrainAccess.terrain_not
       terrain_kill = 
-      MaxDistance = 30
+      MaxDistance = 50
    } JumpDrive
 } VehicleType

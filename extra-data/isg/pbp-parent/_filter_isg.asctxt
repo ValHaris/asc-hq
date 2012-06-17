@@ -1,10 +1,10 @@
 itemfilter {
-   Vehicles = 12000-12999
-   Buildings = 8 9 12000-12999
-   Objects = 12000-12999
+   Vehicles = 12000-12499
+   Buildings = 8 9 12000-12499
+   Objects = 12000-12499
    Terrain = 12000-12999
-   Technologies = 12000-12999
-   name = PBP ISG-PUs
+   Technologies = 12000-12499
+   name = PBP ISG
    activated = true
 } itemfilter
    

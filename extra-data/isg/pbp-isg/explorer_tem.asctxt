@@ -1,41 +1,22 @@
 VehicleType { 
-   Name = Exol
-   parent = 12013 1395
-   ID = 1351
+   Name = TEM
+   parent = 1351
+   ID = 12200
 
-   Description = Explorer Klasse
-   Picture = sya_exol.png
-   Infotext = []
+   Picture = explorer_tem.png
+   Infotext = [ Spezial Explorer der Termiden.]
       
-   transportation { 
-      MaxLoadableUnits = 25
-      MaxLoadableUnitSize = 2500
-      MaxLoadableMass = 5500
-      CargoMovementDivisor = 1.5
-      EntranceSystemNum = 3
-      EntranceSystem2 {
-        Mode = in out docking
-        UnitHeightAbs = medium_level_flight high_level_flight orbit
-        UnitHeightRel = 0
-        ContainerHeight = medium_level_flight high_level_flight orbit
-        CategoriesNOT = 
-        DockingHeightAbs = medium_level_flight high_level_flight orbit
-        DockingHeightRel = 0 
-        Movecost = 50
-        RequireUnitFunction = cruiserlanding
-      } EntranceSystem2
-   } transportation
-
-   Features = self_repairing jam_only_own_field
-   Armor += 200
+   Features = self_repairing
+   Armor += 400
    SelfRepairRate = 15
+   Jamming = 70
 
-   Movement += 0 0 0 0 20 20 20 20 
+   Movement += 0 0 0 0 40 40 40 40 
    Tank { 
-      Material = 150000
-      fuel = 300000
+      Material = 200000
+      fuel = 350000
    } Tank
-   FuelConsumption = 150
+   FuelConsumption = 100
    TerrainAccess { 
       terrain_any = Spaceport runway road lowland hard_sand soft_Sand
       terrain_all = 
