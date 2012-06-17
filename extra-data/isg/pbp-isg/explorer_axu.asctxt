@@ -1,0 +1,107 @@
+VehicleType { 
+   Name = AXU
+   parent = 12013 400
+   ID = 12202
+
+   Description = Assault eXploration Unit
+   Picture = explorer_axu.png
+   Infotext = [Basierend auf dem Entwurf des Explorers wurde von den Ingenieuren der Interstellaren Gilde ein 
+Raumschiff geschaffen, welches die bekannten Eigenschaften des Explorers so erweitert, dass dieser 
+als Basis für Operationen außerhalb der Einflusssphäre der Interstellaren Gilde dienen kann.
+Um diesen Aufgaben zu ermöglichen, wurde der Antrieb der Explorerbaureihe umfassend 
+modernisiert, modifiziert und miniaturisiert. 
+Geprägt durch die künftigen Einsatzparameter erlaubt das neue Antriebssystem sowohl einen Einsatz 
+unter der Wasseroberfläche, als auch, einen durch den Bodeneffekt begünstigten, rasanten 
+Tiefstflug. Einmal im Tiefstflug kann der vorliegende Entwurf der Assault eXploartion Unit blitzartig in 
+den Orbit aufsteigen. Die Verweildauer in höheren Luftschichten ist dabei derart kurz, dass eine 
+Zielauffassung durch herkömmliche Waffensysteme praktisch nicht erfolgen kann.
+Des weiteren ermöglichten es die verbesserten Antriebsparameter, die Anzahl der Ladebuchten um 
+ein Drittel zu erhöhen, ein Reparatur- und MDRF-Modul zu integrieren, sowie die Aussault 
+eXploartion Unit mit einem, der Selbstverteidigung dienenden, Waffensystem auszustatten. 
+Leider war es trotz modernster Abschirmmethoden nicht möglich, eine Rückwirkung des planetaren 
+Antriebssystemes auf die Bewaffnung zu verhindern, so das diese lediglich im Orbit und im 
+interstellarem Flug verwendet werden kann.
+Der vorliegende Prototyp der Assault eXploration Unit kann also wahlweise
+-  als schnelles, zum Selbstschutz bewaffnetes Transportschiff zwischen den Sternen,
+-  als Raumstation mit reiner Verteidigungsbewaffnung,
+-  als schneller Atmosphärentransporter, 
+-  also planetare Operationsbasis mit gigantischen Werkstätten
+-  oder auch als gigantisches Transport U-Boot 
+eingesetzt werden.
+Zum aktuellem Zeitpunkt findet eine umfangreiche Testreihe der Assault eXploration Unit statt. Es ist 
+daher möglich, das diese vereinzelt in der Einflusssphäre der Interstellaren Gilde gesichtet oder 
+einzelnen Völkern zu Verfügung gestellt wird.]
+      
+   transportation { 
+      MaxLoadableUnits = 40
+      EntranceSystemNum = 3
+      EntranceSystem2 ->* VehicleType.SubIO
+      EntranceSystem2.DisableAttack = true
+  } transportation
+
+   Features += MoveDuringReactionFire Repair_Facility
+
+   Movement = 0 88 0 30 140 0 0 40
+   TerrainAccess.terrain_any += shallow_water water deep_water
+
+
+   WaitForAttack = true
+   Weapons { 
+      Number = 2
+	  Weapon0 ->* VehicleType.OAM
+	  Weapon0.ReactionFireShots = 2
+	  Weapon0.Ammo = 30
+	  
+	  Weapon1 ->* VehicleType.OAM
+	  Weapon1.Type = ground_missile shootable
+	  Weapon1.targets = medium_level_flight high_level_flight
+	  Weapon1.MaxRange = 30
+	  Weapon1.ReactionFireShots = 2
+	  Weapon1.Ammo = 30
+	  
+   } Weapons
+
+   HeightChangeMethodNum = 6
+   HeightChangeMethod0 {
+      movecost = 50
+      heightdelta = 2
+      dist = 0
+      startheight = submerged
+      canattack = true
+   } HeightChangeMethod0
+   HeightChangeMethod1 {
+      movecost = 20
+      heightdelta = 1
+      dist = 0
+      startheight = ground_level
+      canattack = true
+   } HeightChangeMethod1
+   HeightChangeMethod2 {
+      movecost = 100
+      heightdelta = 3
+      dist = 0
+      startheight = low_level_flight
+      canattack = true
+   } HeightChangeMethod2
+   HeightChangeMethod3 {
+      movecost = 20
+      heightdelta = -1
+      dist = 0
+      startheight = orbit
+      canattack = true
+   } HeightChangeMethod3
+   HeightChangeMethod4 {
+      movecost = 100
+      heightdelta = -1
+      dist = 0
+      startheight = low_level_flight
+      canattack = true
+   } HeightChangeMethod4
+   HeightChangeMethod5 {
+      movecost = 25
+      heightdelta = -1
+      dist = 0
+      startheight = ground_level
+      canattack = true
+   } HeightChangeMethod5
+} VehicleType

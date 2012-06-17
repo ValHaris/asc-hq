@@ -201,8 +201,8 @@ VehicleType {
    SY_TankL_Air {
       targets = low_level_flight medium_level_flight
       MaxRange = 30
-      Punch@MaxRange = 75
-      Punch@MinRange = 80
+      Punch@MaxRange = 80
+      Punch@MinRange = 85
       HitAccuracy.0 = 0
       HitAccuracy.u1 = 100
       HitAccuracy.u2 = 95

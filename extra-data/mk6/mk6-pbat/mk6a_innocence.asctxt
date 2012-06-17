@@ -22,7 +22,7 @@ Diese ganzen Fähigkeiten haben jedoch einen Preis - und den nicht nur in den Kon
 
    Tank.Material = 2000
    Tank.Fuel = 12000
-   movement += 0 0 0 0 10 20 10 0
+   movement += 0 0 0 0 30 30 30 0
 
    Weapons { 
       Number = 5

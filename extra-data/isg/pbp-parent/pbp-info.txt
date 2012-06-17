@@ -97,6 +97,9 @@ ID 12020 Sektion Fahrzeuge
 Bugs
 ID 12100 Bug Krabbler
 
+Explorer
+ID 12200 TEM GAMER Terminden Explorer
+
 
 ***Personal Units***
 ID 12500 Komic     Avatar       Air+orbit Defence tank grafic by Gamer
@@ -194,3 +197,5 @@ ID 12582 DrStrangelove   HAC
 
 ID 12591 Idrin      Destiny
 ID 12592 Excalibur  Prometheus
+ID 12593 IceQueen   Kyterin
+ID 12594 Boras      VDT

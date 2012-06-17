@@ -12,6 +12,7 @@ BuildingType {
    RubbleObjects = false
    Entry = A1
 
+   Features += Selfdestruct_at_conquer
    Transportation { 
       MaxLoadableUnits = 10
       MaxLoadableUnitSize = 300
@@ -19,7 +20,7 @@ BuildingType {
       CategoriesNOT = default light_ship medium_ship heavy_ship rail_vehicle light_aircraft medium_aircraft heavy_aircraft helicopter rail_vehicle helicopter light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle 
       EntranceSystemNum = 2
       EntranceSystem0 {
-        Mode = out
+        Mode = in out docking
         UnitHeightAbs = ground_level
         UnitHeightRel = -100
         ContainerHeight = low_level_flight

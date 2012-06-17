@@ -3,7 +3,7 @@ VehicleType {
    parent = 401 497
    ID = 12013
 
-   Description = Special Spaceship II
+   Description = Explorer-Klasse
    Picture = isg_explorer.png
    Infotext = [Das Raumschiff ist Eigentum der Interstellaren Gilde. Offensiver Einsatz ist untersagt. Ersatz wird nur bei 
    Naturkatastrophen gestellt. Der Explorer ist eine Weiterentwicklung des Pfadfinders. Der Laderaum wurde zu Gunsten der Tankkapazität drastisch reduziert.]
@@ -49,7 +49,7 @@ VehicleType {
       terrain_any = Spaceport runway
       terrain_all = 
       terrain_not = forest small_rocks large_rocks bridge
-      terrain_kill = lava
+      terrain_kill = lava shallow_water water deep_water 
    } TerrainAccess
    MovementSound = ship_d_a_s.ogg
 

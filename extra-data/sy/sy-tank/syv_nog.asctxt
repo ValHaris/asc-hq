@@ -9,10 +9,10 @@ VehicleType {
 
 ]
    Armor = 1100
-   Weight = 65
+   Weight = 110
    View = 40
    Transportation { 
-      MaxLoadableUnits = 5
+      MaxLoadableUnits = 4
       MaxLoadableUnitSize = 10
       MaxLoadableMass = 50
       CategoriesNOT -> VehicleType.cargo_trooper_only.CategoriesNOT
@@ -22,16 +22,15 @@ VehicleType {
 
    Tank { 
       Energy = 0
-      Material = 1500
-      fuel = 2500
+      Material = 2000
+      fuel = 4000
    } Tank
    FuelConsumption = 10
    Features += moveduringreactionfire
-   Movement = 0 0 0 50 0 0 0 0 
+   Movement = 0 0 0 66 0 0 0 0 
 
    WaitForAttack = true
    Weapons { 
-      Initiative = 50
       Number = 3
       Weapon0 ->* VehicleType.SY_TankL 
       Weapon0.Ammo = 6
@@ -39,7 +38,7 @@ VehicleType {
       Weapon0.targets = floating ground_level low_level_flight
       Weapon0.Punch@MaxRange = 120
       Weapon0.Punch@MinRange = 120
-      Weapon0.Reactionfireshoots = 0
+      Weapon0.ReactionFireShots = 1
 
       Weapon1 ->* VehicleType.SY_TankL 
       Weapon1.Ammo = 6
@@ -51,5 +50,6 @@ VehicleType {
 
       Weapon2 ->* VehicleType.SY_TankL_AirH 
       Weapon2.Ammo = 6
+	  Weapon2.MaxRange = 40
    } Weapons
 } VehicleType

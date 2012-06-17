@@ -1,8 +1,8 @@
 technology {
-   Name = Container C
+   Name = Container D
    infotext = 
-   id = 1424
-   RelatedUnitID = 1424
+   id = 1426
+   RelatedUnitID = 1426
    parent = 1499
    researchpoints *= 7
    techlevel = 2

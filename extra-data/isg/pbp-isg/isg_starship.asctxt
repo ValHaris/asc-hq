@@ -3,7 +3,7 @@ VehicleType {
    parent = 401 497
    ID = 12000
 
-   Description = Spaceship
+   Description = Starship-Klasse
    Picture = isg_starship.png
    Infotext = [#crt#Raumtransporter#crt# #crt#
    Das Raumschiff ist Eigentum der Interstellaren Gilde. Es darf nur zu Transportzwecken zwischen und auf den Planeten eingesetzt werden. Offensiver Einsatz ist untersagt. Ersatz wird nur bei Naturkatastrophen gestellt.]

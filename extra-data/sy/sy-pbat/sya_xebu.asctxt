@@ -37,7 +37,7 @@ VehicleType {
 
       Weapon1 ->* VehicleType.SY_Bomber_Big 
       Weapon1.targets = submerged floating 
-      Weapon0.shotfrom = low_level_flight medium_level_flight
+      Weapon1.shotfrom = low_level_flight medium_level_flight
       Weapon1.Punch@MaxRange = 105
       Weapon1.Punch@MinRange = 115
       Weapon1.LaserRechargeCost.fuel = 230
