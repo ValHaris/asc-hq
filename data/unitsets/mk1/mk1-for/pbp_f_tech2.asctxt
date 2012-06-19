@@ -2,7 +2,7 @@
    name = "Technology Level 2"
    infotext = "level technology"
    id = 100102
-   researchpoints = 2000
+   researchpoints = 1000
    
    techlevel = 2
    
