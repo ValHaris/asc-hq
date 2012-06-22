@@ -22,7 +22,7 @@ ca. 150m lang, 120cm breit, 75cm hoch
       Material = 500
       fuel = 800
    } Tank
-   Movement = 0 0 0 60 0 0 0 0 
+   Movement = 0 0 0 77 0 0 0 0 
    SelfRepairRate = 10
    MovementSound = trampling.ogg
 

@@ -13,7 +13,7 @@ VehicleType {
    Transportation.MaxLoadableUnitSize = 900
    Transportation.MaxLoadableMass = 1800
    Transportation.CategoriesNOT = default trooper light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_tracked_vehicle medium_tracked_vehicle rail_vehicle light_aircraft medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship helicopter hoovercraft
-   Features = construct_specific_buildings construct_vehicles self_repairing ExternalMaterialTransfer ExternalFuelTransfer ExternalAmmoTansfer ExternalRepair
+   Features = construct_specific_buildings construct_vehicles self_repairing ExternalMaterialTransfer ExternalFuelTransfer ExternalAmmoTransfer ExternalRepair
    SelfRepairRate = 10
 
    Tank { 
