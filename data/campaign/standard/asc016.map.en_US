@@ -4,19 +4,19 @@ message = [[Thunderlance HQ, KATANIMO:#crt##crt#Commander,#crt#you have done a p
 asc.setLocalizedEventMessage( map, 2394, message )
 
 --- ===== 2386  ======= 
-message = [[Thunderlance HQ, 7th Fleet:#crt##crt#Sir,#crt#we have been informed, that several buildings in the combat zone have been destroyed by enemy missle launched from submarines.#crt##crt#I am glad to tell that you the 7th Fleet has been able to remove this threat. We had heavy casualties, but we have been victorious.#crt##crt#Admiral Nakos#crt#Commander, 7th Fleet #crt#]]
+message = [[Thunderlance HQ, 7th Fleet:#crt##crt#Sir,#crt#we have been informed, that several buildings in the combat zone have been destroyed by enemy missile launched from submarines.#crt##crt#I am glad to tell that you the 7th Fleet has been able to remove this threat. We had heavy casualties, but we have been victorious.#crt##crt#Admiral Nakos#crt#Commander, 7th Fleet #crt#]]
 asc.setLocalizedEventMessage( map, 2386, message )
 
 --- ===== 2385  ======= 
-message = [[+++ Air Surveillance Report +++#crt##crt#WARNING!#crt##crt#Missle launch detected.#crt#Identified in quadrant 10/69 to 17/79#crt##crt#Target building unknown!#crt#]]
+message = [[+++ Air Surveillance Report +++#crt##crt#WARNING!#crt##crt#Missile launch detected.#crt#Identified in quadrant 10/69 to 17/79#crt##crt#Target building unknown!#crt#]]
 asc.setLocalizedEventMessage( map, 2385, message )
 
 --- ===== 2382  ======= 
-message = [[+++ Air Surveillance Report+++#crt##crt#WARNING!#crt##crt#Missle launch detected!#crt#Identified target quadrant: 15/65 to 20/79#crt##crt#Target building unknown!#crt#]]
+message = [[+++ Air Surveillance Report+++#crt##crt#WARNING!#crt##crt#Missile launch detected!#crt#Identified target quadrant: 15/65 to 20/79#crt##crt#Target building unknown!#crt#]]
 asc.setLocalizedEventMessage( map, 2382, message )
 
 --- ===== 2379  ======= 
-message = [[+++ Air Surveillance Report +++#crt##crt#WARNING!#crt##crt#Missle launch detected#crt#Identified target quadrant 15/65 to 20/79#crt##crt#Target building unknown#crt#]]
+message = [[+++ Air Surveillance Report +++#crt##crt#WARNING!#crt##crt#Missile launch detected#crt#Identified target quadrant 15/65 to 20/79#crt##crt#Target building unknown#crt#]]
 asc.setLocalizedEventMessage( map, 2379, message )
 
 --- ===== 2340  ======= 
@@ -32,7 +32,7 @@ message = [[+++ Weather Forecast +++#crt##crt#The temperature raises and the fro
 asc.setLocalizedEventMessage( map, 2335, message )
 
 --- ===== 2333  ======= 
-message = [[+++ Weather Forecast +++#crt##crt#The temperature drops. #crt#Die Temparaturen fallen. Frost und Ice freeze the rivers.#crt##crt#]]
+message = [[+++ Weather Forecast +++#crt##crt#The temperature drops. Frost und Ice freeze the rivers.#crt##crt#]]
 asc.setLocalizedEventMessage( map, 2333, message )
 
 --- ===== 2330  ======= 
@@ -72,10 +72,10 @@ message = [[Your mission is a failure!#crt##crt#We have not been able to retriev
 asc.setLocalizedEventMessage( map, 1889, message )
 
 --- ===== 1845  ======= 
-message = [[Thunderlance HQ, KATANIMO:#crt##crt#Commander,#crt#after our first push, the missle submarines of the IMPERIUM have attacked first targets on the mainland. During these attacks the factory KETOS has been destroyed. Our supply lines are disturbed.#crt#The 7th fleet under command of Admiral Nakos its on its way to neutralize the enemy submarines. Until then we are almost completly cut off our supply lines. You must work with what is at your disposal. We are still able to supply you with a little amount of material via the pipeline net of KATANIMO.#crt##crt#The IMPERIUM evacuated a certain area because of the missle attack not to get caught in the crossfire of their own weapons. Conquer these buildings and produce as many units as possible using the remaining production facilities. It is not known when the first rockets will hit the area. You better hurry up!#crt##crt#Thor Menser#crt#Thunderlance Military Advisor#crt#]]
+message = [[Thunderlance HQ, KATANIMO:#crt##crt#Commander,#crt#after our first push, the missile submarines of the IMPERIUM have attacked first targets on the mainland. During these attacks the factory KETOS has been destroyed. Our supply lines are disturbed.#crt#The 7th fleet under command of Admiral Nakos its on its way to neutralize the enemy submarines. Until then we are almost completly cut off our supply lines. You must work with what is at your disposal. We are still able to supply you with a little amount of material via the pipeline net of KATANIMO.#crt##crt#The IMPERIUM evacuated a certain area because of the missile attack not to get caught in the crossfire of their own weapons. Conquer these buildings and produce as many units as possible using the remaining production facilities. It is not known when the first rockets will hit the area. You better hurry up!#crt##crt#Thor Menser#crt#Thunderlance Military Advisor#crt#]]
 asc.setLocalizedEventMessage( map, 1845, message )
 
 --- ===== 1844  ======= 
-message = [[Thunderlance HQ, KATANIMO:#crt##crt#Commander,#crt#the production facilities of KATANIMO are situated right before us. According to our informations, the IMPERIUM has established an information center right beyond this area. The informations stored there are immeasureable valuable to win this war.#crt##crt#Get these informations by conquering the IMPERIUMS information agency center#crt##crt#Lenlin Grinson#crt#Thunderlance briefeing officer#crt##crt#Mission objectives:#crt#- Conquer the IMPERIUMS information agency center#crt#]]
+message = [[Thunderlance HQ, KATANIMO:#crt##crt#Commander,#crt#the production facilities of KATANIMO are situated right before us. According to our informations, the IMPERIUM has established an information center right beyond this area. The informations stored there are immeasureable valuable to win this war.#crt##crt#Get these informations by conquering the IMPERIUMS information agency center#crt##crt#Lenlin Grinson#crt#Thunderlance Briefing officer#crt##crt#Mission objectives:#crt#- Conquer the IMPERIUMS information agency center#crt#]]
 asc.setLocalizedEventMessage( map, 1844, message )
 

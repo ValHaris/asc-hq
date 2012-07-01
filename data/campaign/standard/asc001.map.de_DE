@@ -16,7 +16,7 @@ asc.setLocalizedEventMessage( map, 20, message )
 message = [[Thunderlance HQ, Relnid:
 
 Gute Arbeit, Kommandant!
-Die Menschen in Relnid sind freuen sich über unserer Ankunft. Sie werden die Rebellion unterstützen.
+Die Menschen in Relnid freuen sich über unsere Ankunft. Sie werden die Rebellion unterstützen.
 Dies wird zukünftig eine große Hilfe sein.
 
 Lenlin Grinson,
@@ -27,8 +27,8 @@ asc.setLocalizedEventMessage( map, 10, message )
 --- ===== 3  ======= 
 message = [[Thunderlance HQ:
 
-Kommandant, die Zeit zu Handeln ist gekommen. Wir haben lange genug unter der Herschaft mit eiserner Hand durch das Imperiums gelitten. Nun müssen wir die anderen die darunter gelitten haben befreien.
-Wir müssen systematisch vorgehen und alle Städte,Forschungseinrichtungen und andere Gebäude des IMPERIUMs erobern.
+Kommandant, die Zeit zu Handeln ist gekommen. Wir haben lange genug unter der Herschaft mit eiserner Hand durch das Imperium gelitten. Nun müssen wir die anderen die darunter gelitten haben befreien.
+Wir müssen systematisch vorgehen und alle Städte, Forschungseinrichtungen und andere Gebäude des IMPERIUMs erobern.
 Wenn wir erst einmal erfolgreich waren, werden wir für immer frei sein.
 In unserer Nähe befindet sich die momentan nur schwach bewachte Stadt Relnid.
 Das ist unsere Chance zuzuschlagen.

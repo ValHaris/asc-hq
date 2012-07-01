@@ -230,7 +230,7 @@ __________________
 __________________
 09.08.2008 (GAMER)
 -Fast CM Launcher nicht mehr in Befestigung
--turret Missle launcher nur noch med Range
+-turret Missile launcher nur noch med Range
 -neue Grafik: Timber, Vertic, Bumblebee, Inca, Cone, Fix, Jellyfish, Tide, Wake, Oracle
 -Boje Techbugfix
 -Atuin +Movement,heavy_wheeled
@@ -724,7 +724,7 @@ __________
 Neu: 
 -CAD -crazy based air defence
 Änderungen:
--Bugfix: Air-Surface Missle-High, Surface-Air Missile-High, Vertic
+-Bugfix: Air-Surface Missile-High, Surface-Air Missile-High, Vertic
 -Anpassung Vesuvius an neue Gebäude
 -Dominator neuer Look
 -Predator schwerer, kann nicht mehr auf kleinem Träger landen.

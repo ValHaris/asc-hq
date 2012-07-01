@@ -8,11 +8,11 @@ message = [[Thunderlance HQ, Rogul:#crt##crt#Gut gemacht. #crt#Wir haben das Sig
 asc.setLocalizedEventMessage( map, 43, message )
 
 --- ===== 35  ======= 
-message = [[Thunderlance HQ, Rogul:#crt##crt#Kommandant, wir haben Konstruktionspläne zum Bau von Eisbrechern des Typs CONE gefunden. Die kleinen Versorgungsgebäude im Norden haben die Rohstoffe, welche wir wir zum Bau eines CONE benötigen.#crt##crt#Thor Menser,#crt#Thunderlance Military Advisor#crt#]]
+message = [[Thunderlance HQ, Rogul:#crt##crt#Kommandant, wir haben Konstruktionspläne zum Bau von Eisbrechern des Typs CONE gefunden. Die kleinen Versorgungsgebäude im Norden haben die Rohstoffe, welche wir zum Bau eines CONE benötigen.#crt##crt#Thor Menser,#crt#Thunderlance Military Advisor#crt#]]
 asc.setLocalizedEventMessage( map, 35, message )
 
 --- ===== 24  ======= 
-message = [[Thunderlance HQ, Rogul:#crt##crt#Verdammt! Die Stelle ist zugefroren. Wir werden unsere Schiffe nicht durch dieses Gebiet ohne einen Eisbrecher bekommen. Unsere Agenten haben eine Werft im Osten gefunden. In dieser Werft könnten wir nach Technologien zum Bau eines Eisbrechers suchen. #crt##crt#Thor Menser,#crt#Thunderlance Military Advisor #crt#]]
+message = [[Thunderlance HQ, Rogul:#crt##crt#Verdammt! Die Stelle ist zugefroren. Wir werden unsere Schiffe ohne einen Eisbrecher nicht durch dieses Gebiet bekommen. Unsere Agenten haben eine Werft im Osten gefunden. In dieser Werft könnten wir nach Technologien zum Bau eines Eisbrechers suchen. #crt##crt#Thor Menser,#crt#Thunderlance Military Advisor #crt#]]
 asc.setLocalizedEventMessage( map, 24, message )
 
 --- ===== 23  ======= 

@@ -12,7 +12,7 @@ message = [[Thunderlance HQ, Hyxaria:#crt##crt#Gut gemacht! Das Schleusentor ist
 asc.setLocalizedEventMessage( map, 809, message )
 
 --- ===== 806  ======= 
-message = [[Thunderlance HQ, Hyxaria:#crt##crt#Verdammt! Das IMPERIUM muss unseren Plan herausgefunden haben. Sie haben das Schleusentor am Eingang der Werft geöffnet und ein Tal geflutet. Wir müssen einen Weg finden das Schleusentor zu schließen und das Wasser abzulassen. Wir vermuten, dass die Kontrolle des Schleusentor sich im Kommando Zentrum des IMPERIUMs befinden. Beeilen sie sich!#crt##crt#Thor Menser#crt#Thunderlance Military Advisor #crt#]]
+message = [[Thunderlance HQ, Hyxaria:#crt##crt#Verdammt! Das IMPERIUM muss unseren Plan herausgefunden haben. Sie haben das Schleusentor am Eingang der Werft geöffnet und ein Tal geflutet. Wir müssen einen Weg finden das Schleusentor zu schließen und das Wasser abzulassen. Wir vermuten, dass die Kontrolle des Schleusentor sich im Kommandozentrum des IMPERIUMs befinden. Beeilen sie sich!#crt##crt#Thor Menser#crt#Thunderlance Military Advisor #crt#]]
 asc.setLocalizedEventMessage( map, 806, message )
 
 --- ===== 898  ======= 
@@ -20,10 +20,10 @@ message = [[Thunderlance HQ, Hyxaria:#crt##crt#Kommandant, wir haben die Werft l
 asc.setLocalizedEventMessage( map, 898, message )
 
 --- ===== 786  ======= 
-message = [[Thunderlance HQ, Hyxaria:#crt##crt#Kommandant! Wir haben weitere Unterlagen zu Forschungsprojekte im Labor gefunden. Ein Projekt beschäftigt sich mit Verteidigungs Türmen und ein anderes mit Mobiler Luftabwehr. Unglücklicherweise können nicht beide Projekte parallel laufen. Die Forschung eines Projektes muss vollständig abgeschlossen sein bevor das die Forschung für das nächste Projekt angegangen werden kann. Die Wahl liegt bei ihnen!#crt##crt#Vergessen sie auch nicht ein Budget für die Forschung festzulegen.#crt##crt#Tara Brae#crt#Thunderlance Science Advisor #crt#]]
+message = [[Thunderlance HQ, Hyxaria:#crt##crt#Kommandant! Wir haben weitere Unterlagen zu Forschungsprojekten im Labor gefunden. Ein Projekt beschäftigt sich mit Verteidigungstürmen und ein anderes mit mobiler Luftabwehr. Unglücklicherweise können nicht beide Projekte parallel laufen. Die Forschung eines Projektes muss vollständig abgeschlossen sein, bevor das die Forschung für das nächste Projekt angegangen werden kann. Die Wahl liegt bei ihnen!#crt##crt#Vergessen sie auch nicht ein Budget für die Forschung festzulegen.#crt##crt#Tara Brae#crt#Thunderlance Science Advisor #crt#]]
 asc.setLocalizedEventMessage( map, 786, message )
 
 --- ===== 399  ======= 
-message = [[Thunderlance HQ, Hyxaria:#crt##crt#Kommandant!#crt#Wir haben nicht viel Zeit. Der erbeutete MBV muss zur Analyse so schnell wie möglich von der Insel gebracht werden. Noch sind seine Funktionen unbekannt. Das IMPERIUM hat Dinge in die Wege geleitet um uns von unseren Missionszielen abzuhalten. Versuchen sie eine Werft im Norden ausfindig zu machen und zu erobern. Danach bringen sie den MBV zum Eingang um in per Schiff von HYXARIA zu bringen. Achten sie darauf den MBV nicht schutzlos für wer weiss was für Überraschungen mit denen das IMPERIUM noch kommen mag zurückzulassen. Die davon ausgehende Gefahr sollte nicht unterschätzt werden.#crt##crt#Viel Erfolg!#crt##crt#Lenlin Grinson#crt#Thunderlance Briefing officer#crt##crt#Missionsziele:#crt#-eskortieren sie den MBV zum Eingang der nördlichen Werft#crt#]]
+message = [[Thunderlance HQ, Hyxaria:#crt##crt#Kommandant!#crt#Wir haben nicht viel Zeit. Der erbeutete MBV muss zur Analyse so schnell wie möglich von der Insel gebracht werden. Noch sind seine Funktionen unbekannt. Das IMPERIUM hat Dinge in die Wege geleitet um uns von unseren Missionszielen abzuhalten. Versuchen sie eine Werft im Norden ausfindig zu machen und zu erobern. Danach bringen sie den MBV zum Eingang um ihn per Schiff von HYXARIA zu bringen. Achten sie darauf, den MBV nicht schutzlos für wer weiss was für Überraschungen mit denen das IMPERIUM noch kommen mag zurückzulassen. Die davon ausgehende Gefahr sollte nicht unterschätzt werden.#crt##crt#Viel Erfolg!#crt##crt#Lenlin Grinson#crt#Thunderlance Briefing officer#crt##crt#Missionsziele:#crt#-eskortieren sie den MBV zum Eingang der nördlichen Werft#crt#]]
 asc.setLocalizedEventMessage( map, 399, message )
 

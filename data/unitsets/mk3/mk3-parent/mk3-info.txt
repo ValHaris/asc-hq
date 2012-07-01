@@ -35,7 +35,7 @@ ID 532/220 ROLAND           air defence tank
 ID 533/218 GEPARD           AA-Tank
 ID 553/224 Gainful          SAM medium range
 ID 556/219 Patriot          missile air defence
-ID 567/225 Guideline        long range air missle
+ID 567/225 Guideline        long range air missile
 ID 617/223 Rapier 2         lr air defence turret
 
 --Artillery--

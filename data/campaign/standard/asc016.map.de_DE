@@ -12,11 +12,11 @@ message = [[+++ Luft Überwachungs Bericht +++#crt##crt#WARNUNG!#crt##crt#Raketen
 asc.setLocalizedEventMessage( map, 2385, message )
 
 --- ===== 2382  ======= 
-message = [[+++ Luft Überwachungs Bericht +++#crt##crt#WARNUNG!#crt##crt#Missle launch detected!#crt#Identifizierter Ziel Quadrant: 15/65 bis 20/79#crt##crt#Ziel unbekanntes Gebäude!#crt#]]
+message = [[+++ Luft Überwachungs Bericht +++#crt##crt#WARNUNG!#crt##crt#Missile launch detected!#crt#Identifizierter Ziel Quadrant: 15/65 bis 20/79#crt##crt#Ziel unbekanntes Gebäude!#crt#]]
 asc.setLocalizedEventMessage( map, 2382, message )
 
 --- ===== 2379  ======= 
-message = [[+++ Luft Überwachungs Bericht +++#crt##crt#WARNUNG!#crt##crt#Missle launch detected#crt#Identifizierter Ziel Quadrant 15/65 bis 20/79#crt##crt#Ziel unbekanntes Gebäude!#crt#]]
+message = [[+++ Luft Überwachungs Bericht +++#crt##crt#WARNUNG!#crt##crt#Missile launch detected#crt#Identifizierter Ziel Quadrant 15/65 bis 20/79#crt##crt#Ziel unbekanntes Gebäude!#crt#]]
 asc.setLocalizedEventMessage( map, 2379, message )
 
 --- ===== 2340  ======= 
@@ -32,7 +32,7 @@ message = [[+++ Wetter Prognose +++#crt##crt#Die Temperaturen steigen und der ge
 asc.setLocalizedEventMessage( map, 2335, message )
 
 --- ===== 2333  ======= 
-message = [[+++ Wetter Prognose +++#crt##crt#Die Temperaturen fallen. Frost und Eis sowie der Fluss frieren zu.#crt##crt#]]
+message = [[+++ Wetter Prognose +++#crt##crt#Die Temperaturen fallen. Es gibt Frost und Eis bildet sich auf den Flüssen.#crt##crt#]]
 asc.setLocalizedEventMessage( map, 2333, message )
 
 --- ===== 2330  ======= 
@@ -72,10 +72,10 @@ message = [[Ihre Mission war ein Fehlschlag#crt##crt#Wir waren nicht in der Lage
 asc.setLocalizedEventMessage( map, 1889, message )
 
 --- ===== 1845  ======= 
-message = [[Thunderlance HQ, KATANIMO:#crt##crt#Kommandant,#crt#nach unserem ersten Vorstoss haben Raketen-U-Boote des IMPERIUMs begonnen Ziele auf dem Festland zu beschießen. Durch diese Angriffe wurde die Fabrik KETOS zerstört. Unsere Nachschublinien wurden gestört.#crt#Die 7te Flotte unter Kommando von Admiral Nakos ist auf ihrem Weg die feindlichen U-Boote zu neutralisieren. Bis dahin sind wir nahezu vollkommen von unseren Nachschublinien abgeschnitten. Sie müssen mit dem Arbeiten was ihnen momentan zur Verfügung steht. Wir sind jedoch in der Lage sie mit etwas Material über das Pipeline Netz von KATANIMO zu versorgen.#crt##crt#Das IMPERIUM hat ein bestimmtes Gebiet,wegen des Raketenbeschusses, evakuiert um nicht ins eigene Feuer zu geraten. Erobern sie die Gebäude und bauen sie soviele Einheiten wie möglich unter Ausnutzung der verbliebenen Produktionsmöglichkeiten. Es ist nicht bekannt wann die ersten Raketen dieses Gebiet treffen werden. Sie sollten sich besser beeilen!#crt##crt#Thor Menser#crt#Thunderlance Military Advisor#crt#]]
+message = [[Thunderlance HQ, KATANIMO:#crt##crt#Kommandant,#crt#nach unserem ersten Vorstoss haben Raketen-U-Boote des IMPERIUMs begonnen, Ziele auf dem Festland zu beschießen. Durch diese Angriffe wurde die Fabrik KETOS zerstört. Unsere Nachschublinien wurden gestört.#crt#Die 7te Flotte unter Kommando von Admiral Nakos ist auf ihrem Weg die feindlichen U-Boote zu neutralisieren. Bis dahin sind wir nahezu vollkommen von unseren Nachschublinien abgeschnitten. Sie müssen mit dem Arbeiten was ihnen momentan zur Verfügung steht. Wir sind jedoch in der Lage sie mit etwas Material über das Pipeline Netz von KATANIMO zu versorgen.#crt##crt#Das IMPERIUM hat ein bestimmtes Gebiet, wegen des Raketenbeschusses, evakuiert um nicht ins eigene Feuer zu geraten. Erobern sie die Gebäude und bauen sie soviele Einheiten wie möglich unter Ausnutzung der verbliebenen Produktionsmöglichkeiten. Es ist nicht bekannt wann die ersten Raketen dieses Gebiet treffen werden. Sie sollten sich besser beeilen!#crt##crt#Thor Menser#crt#Thunderlance Military Advisor#crt#]]
 asc.setLocalizedEventMessage( map, 1845, message )
 
 --- ===== 1844  ======= 
-message = [[Thunderlance HQ, KATANIMO:#crt##crt#Kommandant,#crt#die Produktionslinien von KATANIMO befinden sich genau vor uns. Zurückgehend auf uns vorliegende Informationen betreibt das IMPERIUM ein Nachrichten Zentrum genau hinter diesem Gebiet. Die Informationen die dort gelagert werden wären von unermesslichen Wert um den Krieg zu gewinnen.#crt##crt#Besorgen sie diese Informationen indem sie die Nachrichten Zentrale des IMPERIUM erobern.#crt##crt#Lenlin Grinson#crt#Thunderlance briefeing officer#crt##crt#Mission objectives:#crt#- Erobern sie die Nachrichten Zentrale des IMPERIUMs (information agency center)#crt#]]
+message = [[Thunderlance HQ, KATANIMO:#crt##crt#Kommandant,#crt#die Produktionslinien von KATANIMO befinden sich genau vor uns. Zurückgehend auf uns vorliegende Informationen betreibt das IMPERIUM ein Nachrichten-Zentrum genau hinter diesem Gebiet. Die Informationen die dort gelagert werden, wären von unermesslichen Wert um den Krieg zu gewinnen.#crt##crt#Besorgen sie diese Informationen indem sie die Nachrichten Zentrale des IMPERIUM erobern.#crt##crt#Lenlin Grinson#crt#Thunderlance Briefing officer#crt##crt#Mission objectives:#crt#- Erobern sie die Nachrichten Zentrale des IMPERIUMs (information agency center)#crt#]]
 asc.setLocalizedEventMessage( map, 1844, message )
 

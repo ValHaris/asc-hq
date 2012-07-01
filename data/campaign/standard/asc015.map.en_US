@@ -24,7 +24,7 @@ message = [[Thunderlance HQ, Montral:#crt##crt#Sir,#crt##crt#really good! We hav
 asc.setLocalizedEventMessage( map, 1855, message )
 
 --- ===== 1943  ======= 
-message = [[Thunderlance HQ, Montral:#crt##crt#Commander,#crt#the landing forces are escorted by heavy cruisers. It is essential that you keep these at a distance by using coast guarding guns until we have set up a base at KATANIMO. In future you should avoid the coast line, because enemy battle ships and cruise missle submarines are on their way.#crt##crt#Thor Menser#crt#Thunderlance Military Advisor#crt#]]
+message = [[Thunderlance HQ, Montral:#crt##crt#Commander,#crt#the landing forces are escorted by heavy cruisers. It is essential that you keep these at a distance by using coast guarding guns until we have set up a base at KATANIMO. In future you should avoid the coast line, because enemy battle ships and cruise missile submarines are on their way.#crt##crt#Thor Menser#crt#Thunderlance Military Advisor#crt#]]
 asc.setLocalizedEventMessage( map, 1943, message )
 
 --- ===== 1846  ======= 

@@ -1195,7 +1195,7 @@
       SOMB.Punch@MaxRange = 110
       SOMB.Punch@MinRange = 110
 
-; air missle orbit
+; air missile orbit
       AMO {
          Type = air_missile shootable 
          targets = orbit 

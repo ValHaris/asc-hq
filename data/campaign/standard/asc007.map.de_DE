@@ -26,7 +26,7 @@ asc.setLocalizedEventMessage( map, 8, message )
 message = [[Thunderlance HQ, Rogul:#crt##crt#Kommandant. Ihre Zeit ist gekommen. 
 Unsere Flotte ist an der nördlichen Küste von Rogul angekommen.
 Die Eroberung des Flughafens hat oberste Priorität. Wir müssen den Flughafen im Hinterland der Insel suchen.#crt##crt#Unglücklicherweise sind unsere Hovercrafts in einem Treibminen Feld gefangen und befinden sich zusätzlich in Reichweite feindlicher Küstenbefestigungen.
-Wir hoffen sie können sie retten.#crt##crt#Lenlin Grinson,#crt#Thunderlance Briefing Officer#crt##crt#Missionsziele:#crt#- Erobern sie den feindlichen Flughafen#crt#]]
+Wir hoffen, sie können sie retten.#crt##crt#Lenlin Grinson,#crt#Thunderlance Briefing Officer#crt##crt#Missionsziele:#crt#- Erobern sie den feindlichen Flughafen#crt#]]
 asc.setLocalizedEventMessage( map, 9, message )
 
 --- ===== 11  ======= 
@@ -43,7 +43,7 @@ message = [[Thunderlance HQ, Rogul:#crt##crt#Gut gemacht, das Treibstoff Depot i
 asc.setLocalizedEventMessage( map, 13, message )
 
 --- ===== 14  ======= 
-message = [[Thunderlance HQ, Rogul:#crt##crt#Unserer Einheiten sind sicher auf Rogul gelandet.Wir haben bereits eine Fabrik eingenommen. Durch eine Befragung des Leiter der Fabrik, sind wir an Informationen über eine Minenfeld südlich der Fabrik gelangt.#crt#Es könnte sich für uns als Problem erweisen, dass wir unglücklicherweise unsere SHOCK TROOPER verloren haben, welche dieses Problem hätten lösen können. Nun müssen wir einen anderen Weg finden.#crt#Das Minenfeld ohne SHOCK TROOPER zu durchqueren ist nicht ratsam.#crt##crt#Die Hauptstromversorgung der Fabrik befindet sich im Osten. Wir haben Informationen, dass auf dem Weg dorthin ein Treibstoff und ein Material Depot liegen. Erobern sie diese Gebäude um die Produktion in der Fabrik zu beginnen. Wir benötigen dringend Verstärkungen.#crt##crt#Thor Menser,#crt#Thunderlance Military Advisor #crt#]]
+message = [[Thunderlance HQ, Rogul:#crt##crt#Unserer Einheiten sind sicher auf Rogul gelandet.Wir haben bereits eine Fabrik eingenommen. Durch eine Befragung des Fabrikleiters, sind wir an Informationen über ein Minenfeld südlich der Fabrik gelangt.#crt#Es könnte sich für uns als Problem erweisen, dass wir unglücklicherweise unsere SHOCK TROOPER verloren haben, welche dieses Problem hätten lösen können. Nun müssen wir einen anderen Weg finden.#crt#Das Minenfeld ohne SHOCK TROOPER zu durchqueren ist nicht ratsam.#crt##crt#Die Hauptstromversorgung der Fabrik befindet sich im Osten. Wir haben Informationen, dass auf dem Weg dorthin ein Treibstoff und ein Material Depot liegen. Erobern sie diese Gebäude um die Produktion in der Fabrik zu beginnen. Wir benötigen dringend Verstärkungen.#crt##crt#Thor Menser,#crt#Thunderlance Military Advisor #crt#]]
 asc.setLocalizedEventMessage( map, 14, message )
 
 --- ===== 15  ======= 
