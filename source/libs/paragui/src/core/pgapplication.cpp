@@ -688,7 +688,7 @@ PG_Theme* PG_Application::LoadTheme(const std::string& xmltheme, bool asDefault,
 #endif // __MACOS__
 
 	if(AddArchive(PARAGUI_THEMEDIR)) {
-		PG_LogDBG("'"PARAGUI_THEMEDIR "' added to searchpath");
+		PG_LogDBG("'" PARAGUI_THEMEDIR "' added to searchpath");
 	}
 
 	theme = PG_Theme::Load(xmltheme);
