@@ -31,9 +31,6 @@
 /* Define to 1 if you have the `expat' library (-lexpat). */
 #undef HAVE_LIBEXPAT
 
-/* Define to 1 if you have the `jpeg' library (-ljpeg). */
-#undef HAVE_LIBJPEG
-
 /* Define to 1 if you have the `physfs' library (-lphysfs). */
 #undef HAVE_LIBPHYSFS
 

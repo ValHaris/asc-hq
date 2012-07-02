@@ -206,11 +206,6 @@ LUA_FLAGS=$LUA_CFLAGS
 AC_SUBST(LUA_FLAGS)
 AC_SUBST(LUA_LIBS)
 
-
-AC_CHECK_LIB(jpeg, 
-             jpeg_CreateDecompress,,
-             AC_LIB_MISSING( jpeg, http://www.ijg.org/,,[ which is VERY unlikely,]))
-
 AC_CHECK_LIB(SDL_mixer, 
              Mix_PlayChannelTimed,, 
              AC_LIB_MISSING( SDL_mixer, http://www.libsdl.org/projects/SDL_mixer/ ))
