@@ -43,6 +43,7 @@ einzelnen Völkern zu Verfügung gestellt wird.]
 
    Movement = 0 88 0 30 140 0 0 40
    TerrainAccess.terrain_any += shallow_water water deep_water
+   TerrainAccess.terrain_kill = lava
 
 
    WaitForAttack = true

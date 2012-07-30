@@ -34,9 +34,9 @@ VehicleType {
    TerrainAccess.terrain_all = 
 
    Weapons { 
-      Number = 9
+      Number = 8
       Weapon0 ->* VehicleType.Air_MG
-      Weapon0.Ammo = 40
+      Weapon0.Ammo = 60
 
       Weapon1 ->* VehicleType.MineAir 
       Weapon1.Ammo = 20
@@ -44,8 +44,7 @@ VehicleType {
       Weapon2 ->* VehicleType.AmmoBomb 
       Weapon2.Ammo = 20
 
-      Weapon3 ->* VehicleType.AmmoMG 
-      Weapon3.Ammo = 20
+      Weapon3 ->* VehicleType.ServiceGround
 
       Weapon4 ->* VehicleType.AmmoTorp 
       Weapon4.Ammo = 20
@@ -59,7 +58,6 @@ VehicleType {
       Weapon7 ->* VehicleType.AmmoCM 
       Weapon7.Ammo = 4
 
-      Weapon8 ->* VehicleType.ServiceGround
    } Weapons
 
 } VehicleType

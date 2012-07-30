@@ -27,12 +27,12 @@ VehicleType {
    } Construction
 
    Weapons { 
-      Number = 9
+      Number = 8
       Weapon0 ->* VehicleType.ServiceGround 
 
       Weapon1 ->* VehicleType.Ship_MG 
       Weapon1.MaxRange = 20
-      Weapon1.Ammo = 12
+      Weapon1.Ammo = 70
       Weapon1.Punch@MinRange = 50
 
       Weapon2 ->* VehicleType.AmmoCannon 
@@ -53,7 +53,5 @@ VehicleType {
       Weapon7 ->* VehicleType.AmmoMine 
       Weapon7.Ammo = 30
 
-      Weapon8 ->* VehicleType.AmmoMG
-      Weapon8.Ammo = 50
    } Weapons
 } VehicleType

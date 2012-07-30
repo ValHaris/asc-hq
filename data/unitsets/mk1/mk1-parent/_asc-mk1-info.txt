@@ -42,8 +42,10 @@ ID 101/290  LightAssault     special combat tank light
 ID 102/294  Armadillo2       siege tank
 
 --Air Defence--
-ID  18/217  Swatter          AA-Tank              ID  61/222  SAM Turret       air defence turret   ID  64/220  Spike            air defence vehicle  ID  73/221  Spear            anti aircraft train
-ID  61      SAM Turret       SAM-Turret
+ID  18/217  Swatter          AA-Tank              
+ID  61/222  SAM Turret       air defence turret   
+ID  64/220  Spike            air defence vehicle  
+ID  73/221  Spear            anti aircraft train
 ID  74/216  CAD              air defence Mech
 ID  98/215  SAM Trooper      air defence trooper
 ID 107/118  Swatter2         Anti Aircraft Tank
@@ -91,7 +93,7 @@ ID 110/321  Heavy Gun        heavy defence Gun
 ID 122/322  Tora             lr defence gun
 
 --Orbital--
-ID  69/235  SPACELAB         support spacestation 
+ID  67/235  Terrible         support spacestation 
 ID  86/231  SHUTTLE          transport starship   
 ID  88/232  Primerose        multi attack satellite
 ID  93/238  SDB              space defence system
@@ -113,6 +115,7 @@ ID 123/327  Rasak            defence fighter
 
 --Helicopter--
 ID  55/     Tupi
+ID  23      Bumblebee                   
 
 --Ballteship--              
 ID   8/268  Hurry            torpedo wig
@@ -151,7 +154,6 @@ ID 15  Raven
 ID 21  Impact
 ID 33  Vertic
 ID 90  Terror          trooper hunter
-ID 23         Bumblebee                   
 ID 54         Inca                      
 ID 82         Sinner
 ID 78  (-)   (   ) Ralago     heavy attack helicopter

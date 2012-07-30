@@ -53,10 +53,10 @@ VehicleType {
 
    WaitForAttack = true
    Weapons { 
-      Initiative = 0
       Number = 2
-      Weapon0 ->* VehicleType.ServiceTurret 
-      Weapon0.WeaponEffectiveness.building|turret|object = 0
+      Weapon0 ->* VehicleType.ServiceTurret
+      Weapon0.shotfrom = ground_level low_level_flight
+      Weapon0.HitAccuracy.d1 = 100	  
 
       Weapon1 ->* VehicleType.SY_Fighter_small 
    } Weapons

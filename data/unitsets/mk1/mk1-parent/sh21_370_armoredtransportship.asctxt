@@ -41,12 +41,12 @@ VehicleType {
    } Construction
 
    Weapons { 
-      Initiative = 0
-      Number = 10
+      Number = 9
       Weapon0 ->* VehicleType.ServiceGround 
 
       Weapon1 ->* VehicleType.Ship_MG
       Weapon1.ReactionFireShots = 2
+      Weapon1.Ammo = 200
 
       Weapon2 ->* VehicleType.AmmoLM 
       Weapon2.Ammo = 100
@@ -57,20 +57,17 @@ VehicleType {
       Weapon4 ->* VehicleType.AmmoTorp 
       Weapon4.Ammo = 50
 
-      Weapon5 ->* VehicleType.AmmoMG 
+      Weapon5 ->* VehicleType.AmmoCannon 
       Weapon5.Ammo = 200
 
-      Weapon6 ->* VehicleType.AmmoCannon 
-      Weapon6.Ammo = 200
+      Weapon6 ->* VehicleType.AmmoBomb 
+      Weapon6.Ammo = 100
 
-      Weapon7 ->* VehicleType.AmmoBomb 
+      Weapon7 ->* VehicleType.AmmoMine 
       Weapon7.Ammo = 100
 
-      Weapon8 ->* VehicleType.AmmoMine 
-      Weapon8.Ammo = 100
-
-      Weapon9 ->* VehicleType.AmmoCM 
-      Weapon9.Ammo = 10
+      Weapon8 ->* VehicleType.AmmoCM 
+      Weapon8.Ammo = 10
    } Weapons
 
 } VehicleType

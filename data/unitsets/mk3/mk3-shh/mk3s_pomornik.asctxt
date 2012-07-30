@@ -17,16 +17,15 @@ VehicleType {
    FuelConsumption = 32
 
    Weapons { 
-      Initiative = 10
-      Number = 7
+      Number = 6
       Weapon0 ->* VehicleType.MiniGun 
-      Weapon0.Ammo = 12
+      Weapon0.Ammo = 60
       Weapon0.Punch@MaxRange = 45
       Weapon0.Punch@MinRange = 53
       
-      Weapon1 ->* VehicleType.AmmoMG
+      Weapon1 ->* VehicleType.AmmoMine
       Weapon1.Ammo = 50
-      
+     
       Weapon2 ->* VehicleType.AmmoCannon
       Weapon2.Ammo = 40
       
@@ -38,9 +37,6 @@ VehicleType {
 
       Weapon5 ->* VehicleType.AmmoBomb
       Weapon5.Ammo = 30
-      
-      Weapon6 ->* VehicleType.AmmoMine
-      Weapon6.Ammo = 50
       
    } Weapons
 } VehicleType

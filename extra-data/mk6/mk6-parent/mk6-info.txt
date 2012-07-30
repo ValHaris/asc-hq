@@ -48,7 +48,8 @@ ID 15291 Meta TAG
 ID 15241 Evi
 ID 15243 Signal
 ID 15242 Devo R
-ID 15444 Terminal1500
+ID 15305 Deltaseacher
+ID 15444 Terminal
 
 --Jamming--
 ID 15306 Shadow
@@ -88,6 +89,7 @@ ID 15104 Innocence
 ID 15271 Asus
 ID 15270 Deltafighter
 ID 15276 Deltabomber
+ID 15326 Deltahunter
 ID 15xxx Delta
 ID 15xxx Doomsday
 ID 15277 Inova
@@ -105,11 +107,13 @@ ID 15305 Deltasearcher
 --Hoovercrafts--
 
 --Battleships--
+ID 15351 CBS 7
 ID 15355 MBC 10
 ID 15356 MBC 20
 ID 15109 MBC 23
 ID 15357 MBC 30
 ID 15367 Ececutioner
+ID 15111 MCC 38 BigEye
 
 --Supportships--
 ID 15363 UTX
