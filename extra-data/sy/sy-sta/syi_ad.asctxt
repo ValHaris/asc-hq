@@ -1,7 +1,7 @@
 VehicleType { 
    Name = AD
    ID = 1350
-   parent = 304
+   parent = 304 1394
 
    Description = genmanipulierter Riesenwurm
    Picture = syi_ad.png
@@ -19,7 +19,7 @@ VehicleType {
    SelfRepairRate = 15
    View = 0
 
-   TerrainAccess.terrain_any = hard_sand soft_sand lowland mountains high_mountains
+   TerrainAccess ->* VehicleType.SY_worm 
    Tank.Fuel = 20000
    Tank.Material = 10000
    Movement = 0 0 0 10 0 0 0 0 

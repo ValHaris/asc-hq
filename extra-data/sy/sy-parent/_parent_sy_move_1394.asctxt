@@ -53,6 +53,13 @@ VehicleType {
       terrain_kill = Water Deep_water lava River 
    } SY_Ground
 
+   SY_worm { 
+      terrain_any = Road Lowland Hard_sand Soft_sand mountains high_mountains
+      terrain_all = 
+      terrain_not = swamp very_shallow_water shallow_water river water deep_water
+      terrain_kill = very_shallow_water shallow_water river water deep_water 
+   } SY_worm
+
 ; --- Transport ---
 
    TransSyDestroyer {

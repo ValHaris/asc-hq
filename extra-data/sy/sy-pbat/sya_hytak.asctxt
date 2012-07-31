@@ -5,6 +5,8 @@ VehicleType {
 
    Description = leichter Jaeger
    Picture = sya_hytak.png
+   InfoImage = sya_hytak.jpg
+   InfoImageSmall = sya_hytak_k.png
    Infotext = [Die Kleinjägerbaureihe der SY zeichnet sich durch erstaunlich Wendigkeit und Schnelligkeit aus. Das Triebwerk anderer Jägertypen ist nicht wesentlich stärker. Durch das geringe Gewicht und den geringen Luftwiderstand können die kleinen Jäger jedoch deutlich höhere geschwindigkeiten erreichen. Im Orbit wirkt sich das nicht aus. Dort ist die Geschwindigkeit der Jäger grundsätzlich gleich.
 Der Hytak ist der kleinste der Jäger und auch der schnellste. Seine primäre Aufgabe ist die Voraufklärung. Die Waffensystem sind effektiv, besitzen aber nur eine geringe Reichweite.
 Wie bei allen Jägertypen besteht die äußere Hülle aus einer organischen , selbstregenerierenden Substanz. Sie wurde aus den SY-einheimische Tierarten gezüchten und für die Industrie verwendbar gemacht. Organsiche Komponenten können nur im Mutterschiff direkt regeneriert werden. Auf anderen Trägerklassen muß die Selbstregenartion der Hülle abgewartet werden. Die Kleinjäger können neben den Trägern auch auf Zerstörern und Kreuzern stationiert werden.

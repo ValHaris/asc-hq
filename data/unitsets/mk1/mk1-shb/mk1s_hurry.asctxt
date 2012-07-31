@@ -12,7 +12,9 @@ VehicleType {
    Jamming = 39
    Weight += 300
    
-   Movement += 0 0 0 10 10 0 0 0 
+   Movement += 0 0 10 10 0 0 0 0 
+   TerrainAccess ->* VehicleType.verysmallship_terrain 
+   TerrainAccess.terrain_not = forest small_rocks large_rocks frozen_water installation
 
    Weapons { 
       Number = 2

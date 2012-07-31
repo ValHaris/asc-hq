@@ -1,7 +1,7 @@
 VehicleType { 
    Name = TAS
    ID = 1349
-   parent = 223 1395
+   parent = 223 1395 1394
 
    Description = Luftabwehrwurm
    WreckageObject = 1308
@@ -16,8 +16,7 @@ VehicleType {
    Features = MoveDuringReactionFire jam_only_own_field self_repairing
    SelfRepairRate = 15
 
-   TerrainAccess.terrain_any = hard_sand soft_sand lowland mountains high_mountains
-   TerrainAccess.terrain_kill += very_shallow_water
+   TerrainAccess ->* VehicleType.SY_worm 
    Tank.Fuel = 10000
    Tank.Material = 5000
    Movement = 0 0 0 10 0 0 0 0 

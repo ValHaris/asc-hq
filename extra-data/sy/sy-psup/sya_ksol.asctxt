@@ -9,6 +9,13 @@ VehicleType {
    InfoImage = sya_ksol.jpg
    InfoImageSmall = sya_ksol_k.png
 
+   ConstructionCost { 
+      CalculationMethod = manual
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } ConstructionCost
+
    Features = self_repairing jam_only_own_field
    Armor += 200
    Jamming = 50
