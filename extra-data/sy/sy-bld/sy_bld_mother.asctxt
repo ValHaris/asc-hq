@@ -44,8 +44,8 @@ BuildingType {
    NominalResearch = 50
    ConstructionCost { 
       Energy = 0
-      Material = 100000
-      fuel = 100000
+      Material = 0
+      fuel = 0
    } ConstructionCost
    MaxResourceProduction { 
       Energy = 10000

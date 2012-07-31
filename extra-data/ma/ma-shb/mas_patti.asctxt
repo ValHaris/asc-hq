@@ -11,13 +11,14 @@ VehicleType {
    Picture = mas_patti.pcx
 
    Transportation ->* VehicleType.TransShipSmall
-
+   Transportation.EntranceSystem0 ->* VehicleType.SubIO
+   
+   
    Armor -= 100
    View -= 10
    Movement += 77 77 0 0 0 0 0 0 
 
    Weapons { 
-      Initiative = 0
       Number = 3
       Weapon0 ->* VehicleType.UTorp 
       Weapon0.Ammo = 2

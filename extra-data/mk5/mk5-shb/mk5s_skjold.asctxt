@@ -16,14 +16,19 @@ VehicleType {
 
    TerrainAccess ->* VehicleType.verysmallship_terrain
    Weapons {
+      Number = 5
       Weapon0 ->* VehicleType.MiniGun
       Weapon0.ReactionFireShots = 1
-
+      Weapon0.Ammo = 50
+	  
       Weapon1 ->* VehicleType.SSM
       Weapon1.Ammo = 6
       Weapon1.MaxRange = 30
       Weapon1.Punch@MaxRange = 90
       Weapon1.Punch@MinRange = 90
+
+      Weapon4 ->* VehicleType.AmmoBomb 
+      Weapon4.Ammo = 10
    } Weapons
 
 } VehicleType

@@ -32,9 +32,9 @@ VehicleType {
    TerrainAccess ->* VehicleType.turret_lowland 
 
    Weapons { 
-      Initiative = 0
-      Number = 7
+      Number = 6
       Weapon0 ->* VehicleType.MiniGun
+      Weapon0.Ammo = 100
       Weapon1 ->* VehicleType.AmmoBomb
       Weapon1.Ammo = 40
       Weapon2 ->* VehicleType.AmmoAM
@@ -43,9 +43,7 @@ VehicleType {
       Weapon3.Ammo = 35
       Weapon4 ->* VehicleType.AmmoCannon
       Weapon4.Ammo = 40
-      Weapon5 ->* VehicleType.AmmoMG
-      Weapon5.Ammo = 100
-      Weapon6 ->* VehicleType.AmmoTorp
-      Weapon6.Ammo = 15
+      Weapon5 ->* VehicleType.AmmoTorp
+      Weapon5.Ammo = 15
    } Weapons
 } VehicleType

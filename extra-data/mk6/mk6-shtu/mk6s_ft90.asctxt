@@ -27,9 +27,10 @@ VehicleType {
    Armor -= 300
    View = 70
 
+   TerrainAccess.Terrain_any += spaceport
    Movement += 0 0 0 0 70 100 0 0
    FuelConsuption = 45
-   Height = floating low_level_flight medium_level_flight
+   Height = floating ground_level low_level_flight medium_level_flight
    Weapons { 
       Number = 5
       Weapon0 ->* VehicleType.Ship_Flak 
@@ -75,9 +76,23 @@ VehicleType {
    } HeightChangeMethod2
    HeightChangeMethod3 {
       movecost = 20
-      heightdelta = -2
+      heightdelta = -1
       dist = 0
       startheight = low_level_flight
       canattack = true
    } HeightChangeMethod3
+   HeightChangeMethod4 {
+      movecost = 0
+      heightdelta = -1
+      dist = 0
+      startheight = ground_level
+      canattack = true
+   } HeightChangeMethod4
+   HeightChangeMethod5 {
+      movecost = 0
+      heightdelta = 1
+      dist = 0
+      startheight = ground_level
+      canattack = true
+   } HeightChangeMethod5
 } VehicleType

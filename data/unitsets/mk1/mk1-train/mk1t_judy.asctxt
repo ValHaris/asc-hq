@@ -36,10 +36,10 @@ VehicleType {
    } Construction
 
    Weapons { 
-      Initiative = 0
-      Number = 6
+      Number = 5
 
       Weapon0 ->* VehicleType.MG_Tank
+      Weapon0.Ammo = 30
 
       Weapon1 ->* vehicleType.AmmoCannon 
       Weapon1.Ammo = 40
@@ -50,9 +50,7 @@ VehicleType {
       Weapon3 ->* VehicleType.AmmoLM 
       Weapon3.Ammo = 20
 
-      Weapon4 ->* VehicleType.AmmoMG 
-      Weapon4.Ammo = 20
+      Weapon4 ->* VehicleType.ServiceGround 
 
-      Weapon5 ->* VehicleType.ServiceGround 
-   } Weapons
+  } Weapons
 } VehicleType

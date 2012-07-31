@@ -19,20 +19,20 @@ Eine deutlich erhöhte Panzerung und der Einbau von zwei von Radarstörsenkrechtst
    Transportation.MaxLoadableMass = 30
    Transportation.EntranceSystem1.Mode = in out
 
-   Tank.fuel = 20000
-   tank.material = 10000
+   Tank.fuel = 30000
+   tank.material = 20000
    FuelConsumption = 45
 
    WaitForAttack = false
    Weapons { 
-      Number = 2
+      Number = 4
       Weapon0 { 
          Type = cannon shootable
          name = Boden Artillerie
          targets = floating ground_level low_level_flight
          shotFrom = ground_level low_level_flight medium_level_flight
          MaxRange = 40
-         Ammo = 10
+         Ammo = 20
          Punch@MaxRange = 80
          Punch@MinRange = 80
          ReactionFireShots = 2
@@ -52,7 +52,7 @@ Eine deutlich erhöhte Panzerung und der Einbau von zwei von Radarstörsenkrechtst
          Sound = aa_gun_s.ogg
          MaxRange = 40
          MinRange = 10
-         Ammo = 10
+         Ammo = 20
          Punch@MaxRange = 70
          Punch@MinRange = 70
          ReactionFireShots = 2
@@ -64,5 +64,7 @@ Eine deutlich erhöhte Panzerung und der Einbau von zwei von Radarstörsenkrechtst
          } HitAccuracy
          WeaponEffectiveness ->* VehicleType.AntiAirWeapon
       } Weapon1
+	  Weapon2 ->* VehicleType.AmmoBomb
+	  Weapon3 ->* VehicleType.AmmoTorp
    } Weapons
 } VehicleType

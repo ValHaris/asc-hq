@@ -5,9 +5,9 @@ VehicleType {
    parent = 223
 
    Description = air-defence turret
-   Infotext = []
    Picture = mk3b_rapier2.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+   Infotext = [Das Rapier2-Luftabwehrsystem ist die Weiterentwicklung der Rapier. Das System ist nicht mehr transportabel. Das Munitionsdepot wurde massiv vergrößert, die Reichweite angehoben und hat eine bessere Zielerfassung erhalten, die es erlaubt 3 Reaktionsschüsse statt 2 abzufeuern. Einmal aufgestellt hält die Rapier den Luftraum zuverlässig auf allen Höhen sauber, ist allerdings als Turm nur als stationäre Verteidigung von wichtigen strategischen Punkten gegen Luftangriffe sinnvoll. Ansonsten eignet sich die Rapier noch dazu, einen sinnvollen Ausgangpunkt für Angriffe zu stellen. Da sie nur große Raketen feuert, ist sie in den Betriebskosten sogar erstaunlich gering, wenn man das Verhältnis zur Reichweite betrachtet. Andere Einheiten in der Reichweite feuern auf diese Distanzen normalerweise Cruise Missiles.]
   
    Armor -= 100
    Jamming = 21

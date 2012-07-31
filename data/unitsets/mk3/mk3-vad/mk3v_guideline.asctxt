@@ -5,10 +5,10 @@ VehicleType {
    parent = 225
 
    Description = SAM long range
-   Infotext = [InfoImage = Wikipedia]
    Picture = mk3v_guideline.png
    InfoImage = mk3v_guideline.jpg
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+   Infotext = [Die SA-2 Guideline - auch bekannt als S-75 Dvina - ist eine weit reichende SAM für mittlere und hohe Lufträume. Sie hält den Luftraum über eine große Reichweite frei, wenn sie auch ständig aufmunitioniert wird. Zum Einsatzort wird sie in der Regel auch mit Transportern gebracht, worin sie solange recht anfällig gegen Angriffe ist. Wenn sie jedoch hinter der Front aufgestellt ist, drehen die meisten Flugzeuge ab und suchen sich andere Gebiete zum Unruhestiften, da dieses System selten alleine ist und die meisten Einheiten in der Lage sind sich gegen Bedrohungen aus dem niedrigem Luftraum zu schützen.]
 
    Armor -= 10
    Weapons { 

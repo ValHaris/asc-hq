@@ -7,6 +7,13 @@ VehicleType {
    Infotext = [Interstellares Raumschiff der SY]
    Picture = sya_ysol.png
 
+   ConstructionCost { 
+      CalculationMethod = manual
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } ConstructionCost
+
    Features = self_repairing jam_only_own_field
    Armor += 200
    SelfRepairRate = 15

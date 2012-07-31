@@ -5,10 +5,10 @@ VehicleType {
    parent = 235
    
    Description = space station
-   Infotext = []
    Picture = mk3o_spacelab.png
    infoImage = mk3o_spacelab.jpg
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+   Infotext = [Das Spacelab - die Stützpunkteinheit für Orbitalstreitkräfte. Sie hat einen Laderaum, in welchem sie die klassischen Einheiten wie A-sat oder Armstrong aufmunitionieren kann und kann mit ihren Waffen sogar getauchte Einheiten bekämpfen. Wer ihren hohen Preis verschmerzen kann, bekommt hier ein orbitales Allzweckwerkzeug, das als einzigen Nachteil sehr langsam ist. Zusätzlich erforden die Waffensysteme nach jeder Bewegung eine Neujustierung, weshalb sie nach dem Bewegen nicht mehr feuern kann. Die geringe Geschwindigkeit und der Nachteil, dass sie danach nicht mehr feuern kann, macht diese Einheit eigentlich nur zum zustätzlichem Schutz eines Areals nützlich. Da in gängigen Strategien allerdings oft eine schnelle Verlegung einer Streitmacht benötigt wird, ist diese Einheit auf dem Schlachtfeld praktisch nicht anzutreffen. Erwähnenswert sind die 600 Panzerung, welche für eine fliegende Einheit bei den Terranern einmalig sind.]
 
    Features += jam_only_own_field
    Armor -= 50

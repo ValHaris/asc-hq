@@ -55,7 +55,7 @@ ID 22202    AM-Drohne
 ID 22203    Kamikaze-AM-Drohne
 ID 22204    AO-Drohne
 ID 22205    Kamikaze-AO-Drohne
-ID 22206    AS-Drohne
+ID 22206    UAV SA
 ID 22207    Kamikaze-AS-Drohne
 ID 22208    Spionagedrohne
 ID 22209    Kamikaze-Panzer-Drohne
@@ -64,8 +64,8 @@ ID 22500    leichter AA-Senkrechtstarter
 ID 22501    mittlerer AA-S.
 ID 22502    AAO-S.
 ID 22503    schwerer AA-S.
-ID 22504    AM-S.
-ID 22505    ASA-S.
+ID 22504    SEST AM
+ID 22505    ASA-S. (SEST ASA)
 ID 22506    schwerer ASA-S.
 ID 22507    leichter AS-S.
 ID 22508    mittlerer AS-S.
@@ -172,17 +172,19 @@ ID 22702    Drohnenträger-U-Boot
 ID 22703    Senkrechtstarter-Träger-U-Boot (ursprünglich Heli-Träger)
 ID 22704    schwerer S.-Träger-U-Boot
 ID 22705    Jagd-U-Boot
-ID 22706    leichtes Kanonen-U-Boot (K1)
-ID 22707    mittleres Kanonen-U-Boot (K2)
-ID 22708    schweres Kanonen-U-Boot (K3)
+ID 22706    UK1 leichtes Kanonen-U-Boot (K1)
+ID 22707    UK2 mittleres Kanonen-U-Boot (K2)
+ID 22708    UK3 schweres Kanonen-U-Boot (K3)
 ID 22709    Pionier-U-Boot
 ID 22710    Schiffsjäger-U-Boot
-ID 22711    Spionage-U-Boot
+ID 22711    MUB-SR Spionage-U-Boot
 ID 22712    Transport-U-Boot
 ID 22713    U-Bootjäger-U-Boot
 ID 22714    Versorgungs-U-Boot
 ID 22715    Artilleriekanonen-U-Boot (K4)
 ID 22716    Patrollien-U-Boot
+ID 22717    UBV SMR
+ID 22718    UK5
 
 
 Ground (540)
