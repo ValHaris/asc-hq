@@ -44,9 +44,9 @@ Abschließend sei erwähnt, dass der Albatros - genau wie der Sperber - nicht auf 
    TerrainAccess.terrain_all = 
 
    Weapons { 
-      Initiative = 0
-      Number = 5
+      Number = 4
       Weapon0 ->* VehicleType.Air_MG
+      Weapon0.Ammo = 30
 
       Weapon1 ->* VehicleType.DCA 
       Weapon1.Ammo = 2
@@ -59,11 +59,8 @@ Abschließend sei erwähnt, dass der Albatros - genau wie der Sperber - nicht auf 
       Weapon2.Punch@MaxRange = 80
       Weapon2.Punch@MinRange = 80
 
-      Weapon3 ->* VehicleType.AmmoMG 
-      Weapon3.Ammo = 20
-
-      Weapon4 ->* VehicleType.AmmoTorp 
-      Weapon4.Ammo = 10
+      Weapon3 ->* VehicleType.AmmoTorp 
+      Weapon3.Ammo = 10
 
    } Weapons
 } VehicleType

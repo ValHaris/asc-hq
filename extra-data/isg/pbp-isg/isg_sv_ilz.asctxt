@@ -14,7 +14,7 @@ VehicleType {
       fuel = 0
    } ConstructionCost
 
-   Features = Sonar satelliteview MoveDuringReactionFire
+   Features = Sonar satelliteview MoveDuringReactionFire AutoHarvestObjects
    Armor = 100000
    View = 100
    Jamming = 130
@@ -46,6 +46,12 @@ VehicleType {
       ObjectsRemovable = 
       ObjectGroupsRemovable = 
    } Construction
+   AutoHarvestObjects { 
+      objects = 2658 992 2099
+      objectGroups = 7 8
+      Range = 16
+      MaxFieldsPerTurn = 10
+   } AutoHarvestObjects
 
    WaitForAttack = false
    Weapons { 

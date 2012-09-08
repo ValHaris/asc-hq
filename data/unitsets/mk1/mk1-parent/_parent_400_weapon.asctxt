@@ -64,22 +64,22 @@
 ;   WeaponX.WeaponEffectiveness ->* VehicleType.AntiAirWeapon
    AntiAirWeapon {      
          trooper = 100
-         rail_vehicle = 200
-         building|turret|object = 200
-         hoovercraft = 200
+         rail_vehicle = 250
+         building|turret|object = 250
+         hoovercraft = 250
          helicopter = 110
 
-         light_tracked_vehicle = 200
-         medium_tracked_vehicle = 200
-         heavy_tracked_vehicle = 200
+         light_tracked_vehicle = 250
+         medium_tracked_vehicle = 250
+         heavy_tracked_vehicle = 250
 
-         light_wheeled_vehicle = 200
-         medium_wheeled_vehicle = 200
-         heavy_wheeled_vehicle = 200
+         light_wheeled_vehicle = 250
+         medium_wheeled_vehicle = 250
+         heavy_wheeled_vehicle = 250
          
-         light_ship = 200
-         medium_ship  = 200
-         heavy_ship = 200
+         light_ship = 250
+         medium_ship  = 250
+         heavy_ship = 250
 
          light_aircraft = 100
          medium_aircraft  = 100
@@ -440,22 +440,22 @@
 
       WeaponEffectiveness {      
          trooper = 100
-         rail_vehicle = 200
-         building|turret|object = 200
-         hoovercraft = 200
+         rail_vehicle = 250
+         building|turret|object = 250
+         hoovercraft = 250
          helicopter = 100
 
-         light_tracked_vehicle = 200
-         medium_tracked_vehicle = 200
-         heavy_tracked_vehicle = 200
+         light_tracked_vehicle = 250
+         medium_tracked_vehicle = 250
+         heavy_tracked_vehicle = 250
 
-         light_wheeled_vehicle = 200
-         medium_wheeled_vehicle = 200
-         heavy_wheeled_vehicle = 200
+         light_wheeled_vehicle = 250
+         medium_wheeled_vehicle = 250
+         heavy_wheeled_vehicle = 250
          
-         light_ship = 200
-         medium_ship  = 200
-         heavy_ship = 200
+         light_ship = 250
+         medium_ship  = 250
+         heavy_ship = 250
 
          light_aircraft = 100
          medium_aircraft  = 100
@@ -620,21 +620,21 @@
             device = 100
             trooper = 100
          ; erhoehter Schaden an Einheiten die nicht fuer das Fliegen bestimmt sind
-            building|turret|object = 200
-            hoovercraft = 200
-            rail_vehicle = 200
+            building|turret|object = 250
+            hoovercraft = 250
+            rail_vehicle = 250
 
-            light_tracked_vehicle = 200
-            medium_tracked_vehicle = 200
-            heavy_tracked_vehicle = 200
+            light_tracked_vehicle = 250
+            medium_tracked_vehicle = 250
+            heavy_tracked_vehicle = 250
 
-            light_wheeled_vehicle = 200
-            medium_wheeled_vehicle = 200
-            heavy_wheeled_vehicle = 200
+            light_wheeled_vehicle = 250
+            medium_wheeled_vehicle = 250
+            heavy_wheeled_vehicle = 250
          
-            light_ship = 200
-            medium_ship  = 200
-            heavy_ship = 200
+            light_ship = 250
+            medium_ship  = 250
+            heavy_ship = 250
 
             light_aircraft = 100
             medium_aircraft  = 100
@@ -713,21 +713,21 @@
             device = 100
             trooper = 80
          ; erhoehter Schaden an Einheiten die nicht fuer das Fliegen bestimmt sind
-            building|turret|object = 200
-            hoovercraft = 200
-            rail_vehicle = 200
+            building|turret|object = 250
+            hoovercraft = 250
+            rail_vehicle = 250
 
-            light_tracked_vehicle = 200
-            medium_tracked_vehicle = 200
-            heavy_tracked_vehicle = 200
+            light_tracked_vehicle = 250
+            medium_tracked_vehicle = 250
+            heavy_tracked_vehicle = 250
 
-            light_wheeled_vehicle = 200
-            medium_wheeled_vehicle = 200
-            heavy_wheeled_vehicle = 200
+            light_wheeled_vehicle = 250
+            medium_wheeled_vehicle = 250
+            heavy_wheeled_vehicle = 250
          
-            light_ship = 200
-            medium_ship  = 200
-            heavy_ship = 200
+            light_ship = 250
+            medium_ship  = 250
+            heavy_ship = 250
 
             light_aircraft = 100
             medium_aircraft  = 100

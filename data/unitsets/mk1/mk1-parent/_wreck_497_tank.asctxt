@@ -9,7 +9,7 @@ ObjectType {
    DefenseBonus_abs = 0
    DefenseBonus_plus = 0
    Jamming_abs = -1
-   Jammming_plus = 1
+   Jammming_plus = 
    Height = 117
    ConstructionCost { 
       Energy = 0

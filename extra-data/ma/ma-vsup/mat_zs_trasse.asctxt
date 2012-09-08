@@ -11,6 +11,7 @@ VehicleType {
 
    Weight = 150
 
+   Movement = 0 0 0 110 0 0 0 0 
    Tank { 
       Energy = 0
       Material = 6600
