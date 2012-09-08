@@ -16,8 +16,8 @@ VehicleType {
 
    Tank { 
       Energy = 0
-      Material = 40000
-      fuel = 60000
+      Material = 50000
+      fuel = 70000
    } Tank
    FuelConsumption = 29
    Movement = 66 66 66 0 0 0 0 0 
@@ -33,7 +33,6 @@ VehicleType {
    } Construction
 
    Weapons { 
-      Initiative = 0
       Number = 5
       Weapon0 ->* VehicleType.UTorp 
       Weapon0.Type = torpedo ammo_transfer shootable 
@@ -45,7 +44,5 @@ VehicleType {
       Weapon3 ->* VehicleType.AmmoBomb 
       Weapon3.Ammo = 150
       Weapon4 ->* VehicleType.ServiceGround
-      Weapon4.targets = ground_level floating deep_submerged submerged 
-      Weapon4.shotFrom = floating deep_submerged submerged 
    } Weapons
 } VehicleType

@@ -15,8 +15,12 @@ BuildingType {
    rubble {
       A2 = 76
    } rubble
+
+   CategoriesProduceable = light_ship medium_ship heavy_ship default building|turret|object
+
    TerrainAccess { 
       terrain_any = Shallow_water Water Very_shallow_water river 
+      terrain_not = very_shallow_water forest large_rocks installation 
    } TerrainAccess
 
    Armor = 1000

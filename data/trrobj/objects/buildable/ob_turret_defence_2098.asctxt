@@ -21,7 +21,7 @@ ObjectType {
    DefenseBonus_abs = 3
    DefenseBonus_plus = 0
    Jamming_abs = -1
-   Jamming_plus = 5
+   Jamming_plus = 3
    ViewBonus_plus = -5
 
    ConstructionCost { 

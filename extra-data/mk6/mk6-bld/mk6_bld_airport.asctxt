@@ -6,15 +6,15 @@ BuildingType {
    Transportation { 
       EntranceSystemNum = 2
       EntranceSystem1 {
-        Mode = out
+        Mode = in out
         UnitHeightAbs = low_level_flight
         UnitHeightRel = -100
         ContainerHeight = ground_level
-        MoveCost = 30 
+        MoveCost = 20 
         CategoriesNOT = trooper light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle medium_aircraft heavy_aircraft helicopter light_ship medium_ship heavy_ship building|turret|object hoovercraft default
         DockingHeightAbs = 
         DockingHeightRel = -100 
-        RequireUnitFunction = 
+        RequireUnitFunction = paratrooper
       } EntranceSystem1
    } Transportation
 } BuildingType

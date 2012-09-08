@@ -22,13 +22,13 @@ Antrieb: unbekannt (vermutlich Antigravitation)
 Waffensystem: Hochenergielaser
 ]
 
+   Features += satelliteview moveduringreactionfire
    Armor = 950
    Weight = 3000
    View = 60
-   Jamming -= 5
+   Jamming = 30
 
    Height = medium_level_flight high_level_flight orbit 
-   WaitForAttack = false
    Transportation ->* VehicleType.TransSyCarrier 
    Tank { 
       Energy = 0
@@ -36,8 +36,9 @@ Waffensystem: Hochenergielaser
       fuel = 100000
    } Tank
    FuelConsumption = 25
-   Features += satelliteview moveduringreactionfire
    Movement = 0 0 0 0 0 110 120 110 
+
+   WaitForAttack = false
    Weapons { 
       Number = 2
       Weapon0 ->* VehicleType.SY_Fighter_Gun 

@@ -13,7 +13,7 @@ VehicleType {
    Transportation.MaxLoadableUnits = 27
    Transportation.MaxLoadableMass = 8800
 
-   Features += ExternalMaterialTransfer ExternalFuelTransfer
+   Features = Sonar ExternalFuelTransfer
    Weight = 3500
 
    Tank { 
@@ -25,10 +25,8 @@ VehicleType {
    TerrainAccess ->* VehicleType.bigship_terrain 
 
    Weapons { 
-      Initiative = 0
       Number = 5
       Weapon0 ->* VehicleType.UTorp 
-      Weapon0.Type = torpedo ammo_transfer shootable 
       Weapon0.Ammo = 80
       Weapon1 ->* vehicleType.AmmoMG 
       Weapon1.Ammo = 60
@@ -37,5 +35,7 @@ VehicleType {
       Weapon3 ->* VehicleType.AmmoBomb 
       Weapon3.Ammo = 60
       Weapon4 ->* VehicleType.ServiceGround
+      Weapon4.targets = ground_level floating deep_submerged submerged 
+      Weapon4.shotFrom = floating deep_submerged submerged 
    } Weapons
 } VehicleType

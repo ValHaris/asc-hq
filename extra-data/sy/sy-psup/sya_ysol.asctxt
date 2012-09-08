@@ -14,7 +14,7 @@ VehicleType {
       fuel = 0
    } ConstructionCost
 
-   Features = self_repairing jam_only_own_field
+   Features = self_repairing jam_only_own_field MoveDuringReactionFire
    Armor += 200
    SelfRepairRate = 15
 

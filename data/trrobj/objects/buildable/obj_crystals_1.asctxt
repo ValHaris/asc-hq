@@ -5,7 +5,7 @@ ObjectType {
          
    secondaryIDs = 
    Armor = 350
-         
+       
    groupID = 11
    TechAdapterRequired = o2105
    Weather = dry

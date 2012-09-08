@@ -6,7 +6,6 @@ VehicleType {
    Picture = explorer_tem.png
    Infotext = [ Spezial Explorer der Termiden.]
       
-   Features = self_repairing
    Armor += 400
    SelfRepairRate = 15
    Jamming = 70

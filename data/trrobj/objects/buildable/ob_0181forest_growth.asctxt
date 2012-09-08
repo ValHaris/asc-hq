@@ -34,7 +34,7 @@ ObjectType {
    DefenseBonus_abs = -1
    DefenseBonus_plus = 1
    Jamming_abs = -1
-   Jamming_plus = 5
+   Jamming_plus = 2
    TerrainAccess { 
       terrain_any = Lowland
       terrain_all = 

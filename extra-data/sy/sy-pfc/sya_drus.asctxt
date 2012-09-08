@@ -8,9 +8,11 @@ VehicleType {
    Picture = sya_drus.png
 
    Armor = 750
-   Height = low_level_flight medium_level_flight high_level_flight orbit 
+   Weight = 500
+   Jamming = 40
    Features += MoveDuringReactionFire
 
+   Height = low_level_flight medium_level_flight high_level_flight orbit 
    Tank { 
       Energy = 0
       Material = 4000
@@ -18,7 +20,6 @@ VehicleType {
    } Tank
    FuelConsumption = 25
    Movement = 0 0 0 0 100 110 110 130 
-   Weight = 500
    TerrainAccess ->* VehicleType.SY_Air
    Transportation ->* VehicleType.TransSyDestroyer 
 

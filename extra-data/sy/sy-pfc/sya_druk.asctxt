@@ -12,10 +12,11 @@ Die Waffensysteme sind sowohl im Boden als auch im Luftkampf gut einsetbar. Besi
 
    Armor = 750
    Weight = 500
-   Height = low_level_flight medium_level_flight high_level_flight orbit 
+   Jamming = 40
    Features += MoveDuringReactionFire move_after_attack
    Transportation ->* VehicleType.TransSyDestroyer 
 
+   Height = low_level_flight medium_level_flight high_level_flight orbit 
    Tank { 
       Energy = 0
       Material = 3000
@@ -26,7 +27,6 @@ Die Waffensysteme sind sowohl im Boden als auch im Luftkampf gut einsetbar. Besi
    TerrainAccess ->* VehicleType.SY_Air
 
    Weapons { 
-      Initiative = 0
       Number = 2
       Weapon0 ->* VehicleType.SY_Bomber_Big 
       Weapon0.sound = lasergun.ogg 

@@ -7,12 +7,13 @@ VehicleType {
    Infotext = [Schlachtschiff ist eine durchaus bezeichnende Beschreibung für diesen orbitalen Giganten. Die Basissektion ist nicht viel größer als die des Laak. Die umgebende Skelletstruktur aber wesentlich ausgeprägter. Im Schwarm wurden nie mehr als 2 gesichtet, meistens sogar nur einer. Mit dem Kerg zusammen stellt der das Zentrum des Schwarmes dar. In seiner Nähe sind immer einige Zerstörer und Kreuzer zu finden. Die Waffensysteme sind für den Fernkampf konstruiert und besitzen erhebliche Offensivkraft. Für den Schutz gegen Abfangjäger wurden einige Defensivsystem integriert. Auf sich allein gestellt, kann er aber den Eigenschutz nicht gewährleisten. Deshalb sollten immer Drus Einheiten in der Nähe sein. Er besitzt auch 2 Landebuchten für Jäger, die dort transportiert und versorgt werden können. Um in den Bodenkampf einzugreifen muß der Xor aus dem Orbit in die obersten Luftschichten wechseln. Dort ist er aufgrund des Luftwiderstands langsam und schwerfällig.]
    Picture = sya_xor.png
 
-   Armor = 1200
-   View = 90
    Features += MoveDuringReactionFire satelliteview move_after_attack
+   Armor = 1200
+   Weight = 3000
+   View = 80
+   Jamming = 20
 
    Height = medium_level_flight high_level_flight orbit 
-   Jamming -= 10
    WaitForAttack = false
    Tank { 
       Energy = 0
@@ -21,7 +22,6 @@ VehicleType {
    } Tank
    FuelConsumption = 35
    Movement = 0 0 0 0 0 70 70 90 
-   Weight = 3000
    Transportation ->* VehicleType.TransSyCruiser 
 
    Weapons { 
