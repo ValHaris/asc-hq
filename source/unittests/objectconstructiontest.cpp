@@ -54,13 +54,13 @@ void testObjectRemoval()
    ObjectType* wood = objectTypeRepository.getObject_byID( 181 );
    assertOrThrow( wood != NULL );
    
-   MapCoordinate pos ( 7, 10 );
+   MapCoordinate pos ( 7, 9 );
    MapField* fld = game->getField( pos );
    assertOrThrow( fld != NULL );
    
    assertOrThrow( fld->checkForObject( wood ) != NULL );
    
-   MapCoordinate unit ( 6, 11 );
+   MapCoordinate unit ( 7, 10 );
    Vehicle* v = game->getField( unit )->vehicle;
    assertOrThrow( v != NULL );
    
