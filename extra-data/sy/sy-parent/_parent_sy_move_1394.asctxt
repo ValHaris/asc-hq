@@ -64,8 +64,8 @@ VehicleType {
 
    TransSyDestroyer {
       MaxLoadableUnits = 1
-      MaxLoadableUnitSize = 0
-      MaxLoadableMass = 0
+      MaxLoadableUnitSize = 10
+      MaxLoadableMass = 10
       CategoriesNOT = trooper light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship building|turret|object hoovercraft default helicopter
       EntranceSystemNum = 0
       EntranceSystem0 {
@@ -82,9 +82,9 @@ VehicleType {
    } TransSyDestroyer
 
    TransSyCruiser {
-      MaxLoadableUnits = 2
+      MaxLoadableUnits = 1
       MaxLoadableUnitSize = 40
-      MaxLoadableMass = 80
+      MaxLoadableMass = 40
       CategoriesNOT = trooper light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship building|turret|object hoovercraft default helicopter
       CargoMovementDivisor = 1.8
       EntranceSystemNum = 1
@@ -102,9 +102,9 @@ VehicleType {
    } TransSyCruiser
 
    TransSyBattleShip {
-      MaxLoadableUnits = 3
+      MaxLoadableUnits = 2
       MaxLoadableUnitSize = 40
-      MaxLoadableMass = 120
+      MaxLoadableMass = 80
       CategoriesNOT = trooper light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle light_ship medium_ship heavy_ship building|turret|object hoovercraft default helicopter
       CargoMovementDivisor = 1.8
       EntranceSystemNum = 1

@@ -39,9 +39,9 @@ VehicleType {
    ResourceDrillingRange = 0
    SelfRepairRate = 5
    transportation { 
-      MaxLoadableUnits = 4
+      MaxLoadableUnits = 8
       MaxLoadableUnitSize = 10000
-      MaxLoadableMass = 20000
+      MaxLoadableMass = 17000
       CargoMovementDivisor = 1.4
       EntranceSystemNum = 1
       EntranceSystem0 ->* VehicleType.GrIO

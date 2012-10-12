@@ -311,11 +311,11 @@
       container_in_out {
         Mode = in out
         UnitHeightAbs = ground_level
-        UnitHeightRel = -100
+        UnitHeightRel = -1
         ContainerHeight = low_level_flight
         CategoriesNOT -> VehicleType.cargo_deftur_only.CategoriesNOT
         DockingHeightAbs = 
-        DockingHeightRel = -100
+        DockingHeightRel = 0
         MoveCost = 12
         DisableAttack = false
       } container_in_out
@@ -505,7 +505,7 @@
       CategoriesNOT = medium_ship heavy_ship 
       EntranceSystemNum = 2
       EntranceSystem0 ->* VehicleType.GrIO
-      EntranceSystem0.CategoriesNOT = light_ship
+      EntranceSystem0.CategoriesNOT = light_ship heavy_aircraft
       EntranceSystem1 ->* VehicleType.GrIO
       EntranceSystem1.CategoriesNOT -> VehicleType.cargo_lship_only.CategoriesNOT
       EntranceSystem1.DisableAttack = true

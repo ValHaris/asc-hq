@@ -27,8 +27,8 @@ VehicleType {
    Height = ground_level 
    Tank { 
       Energy = 0
-      Material = 0
-      fuel = 0
+      Material = 100000
+      fuel = 100000
    } Tank
    FuelConsumption = 0
    Movement = 0 0 0 0 0 0 0 0 
@@ -52,6 +52,12 @@ VehicleType {
       Range = 16
       MaxFieldsPerTurn = 10
    } AutoHarvestObjects
+   MaxResourceProduction { 
+      Fuel = 2000
+   } MaxResourceProduction
+   defaultProduction {
+      Fuel = 2000
+   } defaultProduction
 
    WaitForAttack = false
    Weapons { 
@@ -150,7 +156,7 @@ VehicleType {
       WeaponEffectiveness {      
          trooper = 100
          rail_vehicle = 100
-         building|turret|object = 100
+         building|turret|object = 350
          hoovercraft = 100
          helicopter = 100
 
