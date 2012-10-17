@@ -10,11 +10,11 @@ package {
    } Dependency0 
    Dependency1 { 
       package = ASCdata
-      version = 2.5.107.0 
+      version = 2.5.108.0 
    } Dependency1
    Dependency2 { 
       package = PBPdata
-      version = 107
+      version = 108
    } Dependency2
 } package
 
