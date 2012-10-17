@@ -41,7 +41,6 @@ VehicleType {
    Weapons {
       Weapon0 ->* VehicleType.type_laser
       Weapon0.name = Drohnenschacht 
-	  Weapon0.MaxRange += 10
       Weapon0.Sound = canon_s.ogg
       Weapon0.Punch@MaxRange = 110
       Weapon0.Punch@MinRange = 110

@@ -15,13 +15,42 @@ BuildingType {
    Armor = 2500
    Transportation { 
       MaxLoadableUnits = 6
-      MaxLoadableUnitSize = 20000
-      MaxLoadableMass = 40000
+      MaxLoadableUnitSize = 6900
+      MaxLoadableMass = 50000
       CategoriesNOT =  
       DisableAttack = false
    } Transportation
    Functions = Vehicle_Production Ammo_Production Repair_Facility External_Loading recycling
    CategoriesProduceable = light_ship medium_ship heavy_ship hoovercraft default heavy_aircraft
+   
+   Transportation { 
+      MaxLoadableUnits = 6
+      MaxLoadableUnitSize = 6900
+      MaxLoadableMass = 50000
+      CategoriesNOT =  
+      EntranceSystemNum = 2
+      EntranceSystem0 {
+        Mode = In out docking
+        UnitHeightAbs = ground_level
+        UnitHeightRel = -100
+        ContainerHeight = ground_level
+        CategoriesNOT = heavy_aircraft
+        DockingHeightAbs = ground_level 
+        DockingHeightRel = -100 
+        DisableAttack = false
+      } EntranceSystem0
+      EntranceSystem1 {
+        Mode = In out docking
+        UnitHeightAbs = floating
+        UnitHeightRel = -100
+        ContainerHeight = ground_level
+        CategoriesNOT = 
+        DockingHeightAbs = floating 
+        DockingHeightRel = -100 
+        DisableAttack = false
+      } EntranceSystem1
+   } Transportation
+
    TerrainAccess { 
       terrain_any = Shallow_water Water Very_shallow_water river lowland hard_sand
       terrain_all = 
