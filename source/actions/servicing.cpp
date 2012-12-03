@@ -571,7 +571,7 @@ const SingleWeapon* ServiceChecker :: getServiceWeapon()
 {
    Vehicle* srcVehicle = dynamic_cast<Vehicle*>(source);
    if ( !srcVehicle )
-      return false;
+      return NULL;
 
    const SingleWeapon* serviceWeapon = NULL;
    for (int i = 0; i < srcVehicle->typ->weapons.count ; i++)
