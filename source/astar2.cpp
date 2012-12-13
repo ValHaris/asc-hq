@@ -404,27 +404,17 @@ bool operator == ( const AStar3D::Node& a, const AStar3D::Node& b )
 
 bool AStar3D::Container::update ( const Node& node )
 {
-   iterator i = find ( node.h );
+   Node oldNode = hMap[node.h];
+   iterator i = Parent::find(oldNode);
    if ( i != Parent::end() )
       if (i->gval > node.gval || (i->gval == node.gval && i->hasAttacked && !node.hasAttacked)) {
+         hMap.erase(node.h);
          Parent::erase ( i );
          add ( node );
          return true;
       }
    return false;
 }
-
-AStar3D::Container::iterator AStar3D::Container::find ( const MapCoordinate3D& pos )
-{
-   for ( iterator i = begin(); i != end(); i++ )
-      if ( i->h == pos )
-         return i;
-   return end();
-}
-
-
-
-
 
 AStar3D :: AStar3D ( GameMap* actmap_, Vehicle* veh_, bool markTemps_, int maxDistance )
          : operationLimiter ( NULL )

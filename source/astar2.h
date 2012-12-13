@@ -164,18 +164,19 @@ class AStar3D {
     public:
 
        class Container: protected multiset<Node, less<Node> > {
+             map<MapCoordinate3D, Node> hMap;
           public:
              typedef multiset<Node, less<Node> > Parent;
 
              // Container() {};
-             void add ( const Node& node ) { insert ( node ); };
+             void add ( const Node& node ) { insert ( node ); hMap[node.h] = node; };
              bool update ( const Node& node );
-             Node getFirst() { Node n = *Parent::begin(); Parent::erase ( Parent::begin() ); return n; };
-             bool empty() { return Parent::empty(); };
+             Node getFirst() { iterator i = Parent::begin(); Parent::erase ( i ); hMap.erase(i->h); return *i; };
+             bool empty() { hMap.clear(); return Parent::empty(); };
 
 
              typedef Parent::iterator iterator;
-             iterator find( const MapCoordinate3D& pos );
+             iterator find( const MapCoordinate3D& pos ) { return Parent::find(hMap[pos]); };
 
              iterator begin() { return Parent::begin(); };
              iterator end() { return Parent::end(); };
