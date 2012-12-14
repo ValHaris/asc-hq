@@ -72,7 +72,8 @@ int windbeeline ( const MapCoordinate& start, const MapCoordinate& dest, WindMov
       dist+= minmalq;
       int direc = getdirection ( x1, y1, dest.x, dest.y );
       dist -= wm->getDist(direc);
-      getnextfield ( x1, y1, direc );
+      x1 += getnextdx ( direc, y1 );
+      y1 += getnextdy ( direc );
    }
    return dist;
 }
@@ -166,7 +167,8 @@ pair<int,int> calcMoveMalus( const MapCoordinate3D& start,
       for (int c = 0; c < sidenum; c++) {
          int x = dest.x;
          int y = dest.y;
-         getnextfield( x,  y, c );
+         x += getnextdx ( c, y );
+         y += getnextdy ( c );
          MapField* fld = vehicle->getMap()->getField ( x, y );
          if ( fld ) {
            int d = (c - direc);

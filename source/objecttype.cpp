@@ -445,7 +445,8 @@ class Smoothing {
             for ( int d = 0; d < sidenum; d++ ) {
                int x1 = x;
                int y1 = y;
-               getnextfield ( x1, y1, d );
+               x1 += getnextdx ( d, y1 );
+               y1 += getnextdy ( d );
                MapField* fld = getfield ( x1, y1 );
                if ( fld ) {
 
@@ -470,7 +471,8 @@ class Smoothing {
             for ( int d = 0; d < sidenum; d++ ) {
                int x1 = x;
                int y1 = y;
-               getnextfield ( x1, y1, d );
+               x1 += getnextdx ( d, y1 );
+               y1 += getnextdy ( d );
                MapField* fld = getfield ( x1, y1 );
                if ( fld ) {
 
@@ -786,7 +788,8 @@ void calculateforest( GameMap* actmap, ObjectType* woodObj )
                   for ( int i = 0; i < sidenum; i++) {
                      int a = x;
                      int b = y;
-                     getnextfield( a, b, i );
+                     a += getnextdx ( i, b );
+                     b += getnextdy ( i );
                      MapField* fld2 = actmap->getField(a,b);
 
                      if ( fld2 ) {

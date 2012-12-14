@@ -197,7 +197,8 @@ void AStar::findPath( HexCoord A, HexCoord B, Path& path )
 
             HexDirection d = HexDirection(directions[dci]);
             HexCoord hn = N.h;
-            getnextfield ( hn.m, hn.n, d );
+            hn.m += getnextdx ( d, hn.n );
+            hn.n += getnextdy ( d );
             // If it's off the end of the map, then don't keep scanning
             if( hn.m < 0 || hn.n < 0 || hn.m >= gamemap->xsize || hn.n >= gamemap->ysize || !fieldAccessible ( gamemap->getField ( hn.m, hn.n ), veh ))
                 continue;
@@ -265,7 +266,8 @@ void AStar::findPath( HexCoord A, HexCoord B, Path& path )
         {
             HexDirection dir = HexDirection ( gamemap->getField (h.m, h.n)->temp3 );
             tempPath.push_back( int( ReverseDirection( dir ) ) );
-            getnextfield ( h.m, h.n, dir );
+            h.m += getnextdx ( dir, h.n );
+            h.n += getnextdy ( dir );
         }
 
         // tempPath now contains the directions the unit must travel .. backwards
@@ -275,7 +277,9 @@ void AStar::findPath( HexCoord A, HexCoord B, Path& path )
         int y = A.n;
 
         for ( int i = tempPath.size()-1; i >= 0 ; i-- ) {
-           getnextfield ( x, y, tempPath[i] );
+           int direc = tempPath[i];
+           x += getnextdx ( direc, y );
+           y += getnextdy ( direc );
            path.push_back ( MapCoordinate ( x, y ));
         }
     }
@@ -817,11 +821,13 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
                              if ( fld && fld->building )
                                 access = false;
 
-                             if ( step < hcm->dist )
-                                getnextfield ( newpos.x, newpos.y, dir );
-                             else
+                             if ( step < hcm->dist ) {
+                                newpos.x += getnextdx( dir, newpos.y );
+                                newpos.y += getnextdy( dir );
+                             } else {
                                 if ( fld && (fld->building || (fld->vehicle && fld->vehicle != veh)))
                                    access = false;
+                             }
                           }
 
                           MapField* fld = actmap->getField( newpos );
@@ -869,12 +875,16 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
             prevHeight -= 10 + heightChangeDist * 1000;
 
             if ( prevHeight > -10  ) {
-               for ( int i = 0; i < heightChangeDist; i += maxmalq )
-                  getnextfield ( h.x, h.y, dir );
+               for ( int i = 0; i < heightChangeDist; i += maxmalq ) {
+                  h.x += getnextdx ( dir, h.y );
+                  h.y += getnextdy ( dir );
+               }
 
                h.setnum ( h.x, h.y, prevHeight );
-            } else
-                getnextfield ( h.x, h.y, dir );
+            } else {
+               h.x += getnextdx ( dir, h.y );
+               h.y += getnextdy ( dir );
+            }
 
             const Node* n = fieldVisited ( h );
             path.insert ( path.begin(), PathPoint(h, int(n->gval), n->enterHeight, n->hasAttacked) );

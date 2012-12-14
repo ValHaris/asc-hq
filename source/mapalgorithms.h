@@ -73,10 +73,11 @@
                    virtual ~tdrawgettempline() {};
               };
 
-//! changes x and y to the coordinates of the neighbouring field of (x/y) in the direction direc
-extern void  getnextfield(int &    x,
-                          int &    y,
-                          int direc);
+static const int dxLookup [] = { 0, 1, 1, 0, -1, -1 };
+extern inline int getnextdx( int dir, int y ){ return ((y & 1) == (dir <= 2)) * dxLookup[dir]; }
+
+static const int dyLookup [] = { -2, -1, 1, 2, 1, -1 };
+extern inline int getnextdy( int dir) { return dyLookup[dir]; }
 
 //! returns the coordinate of the field that is adjecent to the given field in the direction of direc
 extern MapCoordinate3D  getNeighbouringFieldCoordinate( const MapCoordinate3D& pos, int direc);

@@ -152,7 +152,8 @@ bool AI::ServiceOrder::execute1st ( Vehicle* supplier )
          for ( int i = 0; i < sidenum; i++ ) {
              int x = targ->xpos;
              int y = targ->ypos;
-             getnextfield ( x, y, i );
+             x += getnextdx( i, y );
+             y += getnextdy( i );
              MapField* fld = ai->getMap()->getField ( x, y );
              if ( fld && fieldAccessible ( fld, supplier, 1<<h ) == 2 && !fld->building && !fld->vehicle ) {
                 bool result = false;

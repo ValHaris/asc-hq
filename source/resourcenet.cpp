@@ -81,8 +81,10 @@ void MapNetwork :: searchfield ( int x, int y, int dir )
             for ( s = 0; s < r; s++) { 
                int nx = x;
                int ny = y;
-               getnextfield ( nx, ny, arr[s] );
-               searchfield( nx, ny, arr[s] );
+               int direc = arr[s];
+               nx += getnextdx ( direc, ny );
+               ny += getnextdy ( direc );
+               searchfield( nx, ny, direc );
                if ( searchfinished() )
                   return ;
             } 
@@ -90,7 +92,8 @@ void MapNetwork :: searchfield ( int x, int y, int dir )
          } else  
             if ( r == 1 ) {
                dir = arr[0];
-               getnextfield ( x, y, dir );
+               x += getnextdx ( dir, y );
+               y += getnextdy ( dir );
                fld = actmap->getField( x, y ); 
                if ( !fld )
                   return;
@@ -138,7 +141,8 @@ void MapNetwork :: searchbuilding ( int x, int y )
                for ( int d = 0; d < sidenum; d++ ) {
                   int xp2 = mc.x;
                   int yp2 = mc.y;
-                  getnextfield ( xp2, yp2, d );
+                  xp2 += getnextdx ( d, yp2 );
+                  yp2 += getnextdy ( d );
                   MapField* newfield = actmap->getField ( xp2, yp2 );
                   if ( newfield && newfield->building != bld  && !newfield->a.temp )
                      searchfield ( xp2, yp2, d );
@@ -261,7 +265,8 @@ int ResourceNet :: fieldavail ( int x, int y )
           for ( int i = 0; i < sidenum; i++ ) {
              int xp = x;
              int yp = y;
-             getnextfield ( xp, yp , i );
+             xp += getnextdx ( i, yp );
+             yp += getnextdy ( i );
              MapField* fld2 = actmap->getField ( xp, yp );
              if ( fld2 )
                 if ( (fld2->bdt & tb).any() ||  fld2->building )
