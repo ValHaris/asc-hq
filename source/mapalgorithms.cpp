@@ -26,7 +26,6 @@
 #include "errors.h"
 #include "gamemap.h"
 
-
 tdrawgettempline :: tdrawgettempline ( int _freefields, GameMap* _gamemap )
 {
    gamemap = _gamemap;
@@ -321,30 +320,20 @@ int          getdirection(    int      x1,
                               int      x2,
                               int      y2)
 {
-   int a;
-   int dx = (2 * x2 + (y2 & 1)) - (2 * x1 + (y1 & 1));
    int dy = y2 - y1;
-
+   int dx = x2 - x1;
    if (dx < 0)
-      if (dy < 0)
-         a = 5;
-      else
-         a = 4;
-   else
-      if (dx > 0)
-         if (dy < 0)
-            a = 1;
-         else
-            a = 2;
-      else  // dx is 0
-         if (dy < 0)
-            a = 0;
-         else
-            if ( dy > 0 )
-               a = 3;
-            else
-               a = -1;
-   return a;
+      return (dy < 0) ? 5 : 4;
+   if (dx > 0)
+      return (dy < 0) ? 1 : 2;
+   // dx == 0
+   int dOdd = (y2 & 1) - (y1 & 1);
+   if (dOdd == -1)
+      return (dy < 0) ? 5 : 4;
+   if (dOdd == 1)
+      return (dy < 0) ? 1 : 2;
+   // dOdd == 0
+   return (dy < 0) ? 0 : (dy > 0) ? 3 : -1;
 }
 
 
