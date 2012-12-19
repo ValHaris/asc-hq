@@ -408,15 +408,17 @@ bool operator == ( const AStar3D::Node& a, const AStar3D::Node& b )
 
 bool AStar3D::Container::update ( const Node& node )
 {
-   Node oldNode = hMap[node.h];
-   iterator i = Parent::find(oldNode);
-   if ( i != Parent::end() )
-      if (i->gval > node.gval || (i->gval == node.gval && i->hasAttacked && !node.hasAttacked)) {
-         hMap.erase(node.h);
-         Parent::erase ( i );
-         add ( node );
-         return true;
-      }
+   map<MapCoordinate3D, list<Node>::iterator>::iterator iMap = hMap.find(node.h);
+   if (iMap == hMap.end())
+      return false;
+   
+   iterator i = iMap->second;
+   if (i->gval > node.gval || (i->gval == node.gval && i->hasAttacked && !node.hasAttacked)) {
+      hMap.erase (iMap);
+      Parent::erase (i);
+      add (node);
+      return true;
+   }
    return false;
 }
 
