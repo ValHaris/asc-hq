@@ -61,23 +61,57 @@ bool checkUnitsForCrash( Player& player, ASCString& text )
    return endangeredUnits;
 }
 
-
-
-
 int windbeeline ( const MapCoordinate& start, const MapCoordinate& dest, WindMovement* wm ) {
-   int x1 = start.x;
-   int y1 = start.y;
    int dist = 0;
-   while ( x1 != dest.x  || y1 != dest.y ) {
-      dist+= minmalq;
-      int direc = getdirection ( x1, y1, dest.x, dest.y );
-      dist -= wm->getDist(direc);
-      x1 += getnextdx ( direc, y1 );
-      y1 += getnextdy ( direc );
+   int direcs [6] = {0};
+   int dx = dest.x - start.x;
+   int dy = dest.y - start.y;
+   int dyOdd = ((start.y & 1) - (dest.y & 1));
+
+   if (dx == 0) {
+      if (dy > 0) {
+         direcs[3] = ((dy - (dyOdd != 0)) / 2);
+         if (dyOdd == -1) {
+            direcs[2] = 1;
+         } else if (dyOdd == 1) {
+            direcs[4] = 1;
+         }
+      } if (dy < 0) {
+         direcs[0] = -((dy + (dyOdd != 0)) / 2);
+         if (dyOdd == -1) {
+            direcs[1] = 1;
+         } else if (dyOdd == 1) {
+            direcs[5] = 1;
+         }
+      } // if dy == 0 then all values stay 0
+   } else if (dx > 0) {
+      if (dy >= (dx * 2)) {
+         direcs[3] = ((dy + dyOdd) / 2) - dx;
+         direcs[2] = -dyOdd + dx * 2;
+      } else if (-dy >= (dx * 2)) {
+         direcs[0] = -((dy - dyOdd) / 2) - dx;
+         direcs[1] = -dyOdd + dx * 2;
+      } else {
+         direcs[2] = ((dy - dyOdd) / 2) + dx;
+         direcs[1] = ((-dy - dyOdd) / 2) + dx;
+      }
+   } else if (dx < 0) {
+      if (dy >= -(dx * 2)) {
+         direcs[3] = ((dy - dyOdd) / 2) + dx;
+         direcs[4] = dyOdd - dx * 2;
+      } else if (-dy >= -(dx * 2)) {
+         direcs[0] = -((dy + dyOdd) / 2) + dx;
+         direcs[5] = dyOdd - dx * 2;
+      } else {
+         direcs[4] = ((dy + dyOdd) / 2) - dx;
+         direcs[5] = ((-dy + dyOdd) / 2) - dx;
+      }
+   }
+   for (int i = 0; i < 6; i++) {
+      dist += direcs[i] * (minmalq - wm->getDist(i));
    }
    return dist;
 }
-
 
 
 pair<int,int> calcMoveMalus( const MapCoordinate3D& start,
