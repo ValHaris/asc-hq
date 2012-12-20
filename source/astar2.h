@@ -163,20 +163,19 @@ class AStar3D {
 
     public:
 
-       class Container: protected multiset<Node, less<Node> > {
+       class Container: protected deque<Node> {
              map<MapCoordinate3D, Node> hMap;
           public:
-             typedef multiset<Node, less<Node> > Parent;
+             typedef deque<Node> Parent;
 
              // Container() {};
-             void add ( const Node& node ) { insert ( node ); hMap[node.h] = node; };
+             void add ( const Node& n) { insert ( upper_bound(Parent::begin(), Parent::end(), n), n); hMap[n.h] = n; };
              bool update ( const Node& node );
-             Node getFirst() { iterator i = Parent::begin(); Parent::erase ( i ); hMap.erase(i->h); return *i; };
+             Node getFirst() { Node n = Parent::front(); Parent::pop_front(); hMap.erase(n.h); return n; };
              bool empty() { hMap.clear(); return Parent::empty(); };
 
-
              typedef Parent::iterator iterator;
-             iterator find( const MapCoordinate3D& pos ) { return Parent::find(hMap[pos]); };
+             Node* find( const MapCoordinate3D& pos ) { return &(hMap[pos]); };
 
              iterator begin() { return Parent::begin(); };
              iterator end() { return Parent::end(); };
@@ -224,7 +223,7 @@ class AStar3D {
        int getTravelTime( );
 
        //! checks weather the field fld was among the visited fields during the last search
-       const Node* fieldVisited ( const MapCoordinate3D& fld );
+       const Node* fieldVisited ( const MapCoordinate3D& fld ) { return visited.find( fld ); };
 
        int& getFieldAccess ( int x, int y );
        int& getFieldAccess ( const MapCoordinate& mc );

@@ -408,15 +408,17 @@ bool operator == ( const AStar3D::Node& a, const AStar3D::Node& b )
 
 bool AStar3D::Container::update ( const Node& node )
 {
-   Node oldNode = hMap[node.h];
-   iterator i = Parent::find(oldNode);
-   if ( i != Parent::end() )
-      if (i->gval > node.gval || (i->gval == node.gval && i->hasAttacked && !node.hasAttacked)) {
-         hMap.erase(node.h);
-         Parent::erase ( i );
-         add ( node );
-         return true;
-      }
+   map<MapCoordinate3D, Node>::iterator iMap = hMap.find(node.h);
+   if (iMap == hMap.end())
+      return false;
+   
+   Node oldNode = iMap->second;
+   if (oldNode.gval > node.gval || (oldNode.gval == node.gval && oldNode.hasAttacked && !node.hasAttacked)) {
+      hMap.erase (iMap);
+      Parent::erase (lower_bound(Parent::begin(), Parent::end(), oldNode) );
+      add (node);
+      return true;
+   }
    return false;
 }
 
@@ -928,17 +930,6 @@ void AStar3D::findAllAccessibleFields ( vector<MapCoordinate3D>* path )
    
    if ( markTemps )
       tempsMarked = actmap;
-}
-
-
-
-const AStar3D::Node* AStar3D::fieldVisited ( const MapCoordinate3D& pos )
-{
-   Container::iterator i = visited.find( pos );
-   if ( i != visited.end() )
-       return &(*i);
-
-   return NULL;
 }
 
 
