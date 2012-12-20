@@ -163,19 +163,20 @@ class AStar3D {
 
     public:
 
-       class Container: protected list<Node> {
-             map<MapCoordinate3D, list<Node>::iterator> hMap;
+       class Container: protected multiset<Node, less<Node> > {
+             map<MapCoordinate3D, Node> hMap;
           public:
-             typedef list<Node> Parent;
+             typedef multiset<Node, less<Node> > Parent;
 
              // Container() {};
-             void add ( const Node& node ) { push_back ( node ); hMap[node.h] = --(Parent::end()); };
+             void add ( const Node& node ) { insert ( node ); hMap[node.h] = node; };
              bool update ( const Node& node );
-             Node getFirst() { Node n = Parent::front() ; Parent::pop_front(); hMap.erase(n.h); return n; };
+             Node getFirst() { iterator i = Parent::begin(); Parent::erase ( i ); hMap.erase(i->h); return *i; };
              bool empty() { hMap.clear(); return Parent::empty(); };
 
+
              typedef Parent::iterator iterator;
-             iterator find( const MapCoordinate3D& pos ) { return hMap[pos]; };
+             iterator find( const MapCoordinate3D& pos ) { return Parent::find(hMap[pos]); };
 
              iterator begin() { return Parent::begin(); };
              iterator end() { return Parent::end(); };
