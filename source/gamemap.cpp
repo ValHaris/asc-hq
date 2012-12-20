@@ -1001,28 +1001,6 @@ void GameMap :: calculateAllObjects ( void )
    calculateallobjects( this );
 }
 
-MapField*  GameMap :: getField(int x, int y)
-{
-   if ((x < 0) || (y < 0) || (x >= xsize) || (y >= ysize))
-      return NULL;
-   else
-      return (   &field[y * xsize + x] );
-}
-
-const MapField*  GameMap :: getField(int x, int y) const
-{
-   if ((x < 0) || (y < 0) || (x >= xsize) || (y >= ysize))
-      return NULL;
-   else
-      return (   &field[y * xsize + x] );
-}
-
-
-MapField*  GameMap :: getField(const MapCoordinate& pos )
-{
-   return getField ( pos.x, pos.y );
-}
-
 int   GameMap :: getPlayerView() const
 {
 #ifdef karteneditor

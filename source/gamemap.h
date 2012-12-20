@@ -452,9 +452,13 @@ class GameMap {
       void setgameparameter ( GameParameter num, int value );
       void cleartemps( int b = -1, int value = 0 );
       bool isResourceGlobal ( int resource );
-      MapField* getField ( int x, int y );
-      const MapField* getField ( int x, int y ) const;
-      MapField* getField ( const MapCoordinate& pos );
+      inline MapField* getField ( int x, int y ) {
+         return ((x < 0) || (y < 0) || (x >= xsize) || (y >= ysize)) ? NULL : &field[y * xsize + x];
+      }
+      inline const MapField* getField ( int x, int y ) const {
+         return ((x < 0) || (y < 0) || (x >= xsize) || (y >= ysize)) ? NULL : &field[y * xsize + x];
+      }
+      inline MapField* getField ( const MapCoordinate& pos ) { return getField ( pos.x, pos.y ); }
       
       
       /** @name Turn Management
