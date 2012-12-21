@@ -819,7 +819,7 @@ void tspfldloaders::readfields ( void )
          spfld->field[l].typ = lfld->typ;
          spfld->field[l].fuel = lfld->material;
          spfld->field[l].visible = lfld->visible;
-         spfld->field[l].tempw = 0;
+         spfld->field[l].setTempw(0);
          spfld->field[l].connection = lfld->connection;
          for ( int i = 0; i < 8; i++ )
             spfld->field[l].view[i] = lfld->view[i];

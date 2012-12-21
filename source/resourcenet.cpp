@@ -43,7 +43,7 @@ void MapNetwork :: searchfield ( int x, int y, int dir )
 
    do { 
 
-      if ( fld->a.temp )
+      if ( fld->getaTemp() )
          return;
 
       #ifdef netdebug
@@ -56,7 +56,7 @@ void MapNetwork :: searchfield ( int x, int y, int dir )
          return;
       }
 
-      fld->a.temp = 1;
+      fld->setaTemp(1);
 
       int d = fieldavail( x, y );
       if ( d <= 0 )
@@ -108,10 +108,10 @@ void MapNetwork :: searchvehicle ( int x, int y )
    if ( pass == 2 ) {
       MapField* newfield = actmap->getField ( x, y );
       if ( newfield )
-         if ( !newfield->a.temp2 )
+         if ( !newfield->getaTemp2() )
            if ( newfield->vehicle ) {
               checkvehicle ( newfield->vehicle );
-              newfield->a.temp2 = 1;
+              newfield->setaTemp2(1);
            }
    }
 }
@@ -124,13 +124,13 @@ void MapNetwork :: searchbuilding ( int x, int y )
       return;
 
    MapField* entry = bld->getEntryField();
-   if ( entry->a.temp )
+   if ( entry->getaTemp() )
       return;
 
    if ( pass == 1 )
       checkbuilding( bld );
 
-   entry->a.temp = 1;
+   entry->setaTemp(1);
 
    if ( !searchfinished() ) 
       for( int i = 0; i < 4; i++ )
@@ -144,7 +144,7 @@ void MapNetwork :: searchbuilding ( int x, int y )
                   xp2 += getnextdx ( d, yp2 );
                   yp2 += getnextdy ( d );
                   MapField* newfield = actmap->getField ( xp2, yp2 );
-                  if ( newfield && newfield->building != bld  && !newfield->a.temp )
+                  if ( newfield && newfield->building != bld  && !newfield->getaTemp() )
                      searchfield ( xp2, yp2, d );
 
                   searchvehicle ( xp2, yp2 );
@@ -188,8 +188,8 @@ void MapNetwork :: searchAllVehiclesNextToBuildings ( int player )
             Building* bld = fld->building;
             if ( bld && bld->color == (*j)->color ) {
                MapField* fld2 = actmap->getField( (*j)->getPosition());
-               if ( !fld2->a.temp2 ) {
-                  fld2->a.temp2 = 1;
+               if ( !fld2->getaTemp2() ) {
+                  fld2->setaTemp2(1);
                   checkvehicle ( *j );
                }
             }

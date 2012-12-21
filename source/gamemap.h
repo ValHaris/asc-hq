@@ -181,6 +181,10 @@ class GameMap {
       bool dialogsHooked;
       int serverMapID;
    public:
+      char* temp;
+      char* temp2;
+      char* temp3;
+      char* temp4;
 
       void setServerMapID( int id ) { serverMapID = id; };
       int  getServerMapID() const { return serverMapID; };

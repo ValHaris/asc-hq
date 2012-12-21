@@ -640,7 +640,7 @@ MapCoordinate AI :: Sections :: getAlternativeField( const MapCoordinate& pos, m
    for ( int d = 0; d< 6; ++d ) {
       MapCoordinate m = getNeighbouringFieldCoordinate( pos, d );
       MapField* fld = ai->getMap()->getField(m );
-      if ( fld && (fld->a.temp & height) ) {
+      if ( fld && (fld->getaTemp() & height) ) {
          if ( destinationCounter->find( m ) == destinationCounter->end() )
             return m;
          else {
@@ -744,7 +744,7 @@ AI::Section* AI :: Sections :: getBest ( int pass, Vehicle* veh, MapCoordinate3D
                    for ( int yp = sec.y1; yp <= sec.y2; yp++ )
                       for ( int xp = sec.x1; xp <= sec.x2; xp++ ) {
                          MapField* fld = ai->getMap()->getField(xp, yp );
-                         if ( fld->a.temp & h ) {
+                         if ( fld->getaTemp() & h ) {
                             int mandist = abs( sec.centerx - xp ) + 2*abs ( sec.centery - yp );
                             if ( mandist < mindist ) {
                                mindist = mandist;

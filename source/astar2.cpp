@@ -146,7 +146,7 @@ void AStar::findPath( HexCoord A, HexCoord B, Path& path )
           return;
 
     for ( int y = gamemap->xsize * gamemap->ysize -1; y >= 0; y-- )
-       gamemap->field[y].temp3 = DirNone;
+       gamemap->field[y].setTemp3(DirNone);
 
     Node N;
     Container open;
@@ -218,12 +218,12 @@ void AStar::findPath( HexCoord A, HexCoord B, Path& path )
 
             N2.hval = dist( hn, B );
             // If this spot (hn) hasn't been visited, its mark is DirNone
-            if( gamemap->getField (hn.m,hn.n)->temp3 == DirNone ) {
+            if( gamemap->getField (hn.m,hn.n)->getTemp3() == DirNone ) {
 
                 // The space is not marked
 
                 if ( N.gval < MAXIMUM_PATH_LENGTH ) {
-                   gamemap->getField (hn.m,hn.n)->temp3 = ReverseDirection(d);
+                   gamemap->getField (hn.m,hn.n)->setTemp3(ReverseDirection(d));
                    open.push_back( N2 );
                    push_heap( open.begin(), open.end(), comp );
                 }
@@ -244,7 +244,7 @@ void AStar::findPath( HexCoord A, HexCoord B, Path& path )
                     Node N3 = *find1;
                     if( N3.gval > N2.gval )
                     {
-                        gamemap->getField (hn.m,hn.n)->temp3 = ReverseDirection(d);
+                        gamemap->getField (hn.m,hn.n)->setTemp3(ReverseDirection(d));
                         // Replace N3 with N2 in the open list
                         Container::iterator last = open.end() - 1;
                         *find1 = *last;
@@ -264,7 +264,7 @@ void AStar::findPath( HexCoord A, HexCoord B, Path& path )
         HexCoord h = B;
         while( !(h == A) )
         {
-            HexDirection dir = HexDirection ( gamemap->getField (h.m, h.n)->temp3 );
+            HexDirection dir = HexDirection ( gamemap->getField (h.m, h.n)->getTemp3() );
             tempPath.push_back( int( ReverseDirection( dir ) ) );
             h.m += getnextdx ( dir, h.n );
             h.n += getnextdy ( dir );
@@ -334,7 +334,7 @@ void AStar::findAllAccessibleFields ( int maxDist )
    Path dummy;
    findPath ( dummy, gamemap->xsize, gamemap->ysize );  //this field does not exist...
    for ( Container::iterator i = visited.begin(); i != visited.end(); i++ )
-      gamemap->getField ( (*i).h.m, (*i).h.n )->a.temp = 1;
+      gamemap->getField ( (*i).h.m, (*i).h.n )->setaTemp(1);
 
    tempsMarked = gamemap;
 }
@@ -921,8 +921,10 @@ void AStar3D::findAllAccessibleFields ( vector<MapCoordinate3D>* path )
    for ( Container::iterator i = visited.begin(); i != visited.end(); ++i ) {
       int& fa = getFieldAccess( i->h );
       fa |= i->h.getBitmappedHeight();
-      if ( markTemps )
-         actmap->getField ( i->h )->a.temp  |= i->h.getBitmappedHeight();
+      if ( markTemps ) {
+         char atemp = actmap->getField ( i->h )->getaTemp();
+         actmap->getField ( i->h )->setaTemp( atemp | i->h.getBitmappedHeight());
+      }
       
       if ( path )
          path->push_back( i->h );

@@ -394,11 +394,11 @@ void MovementBase::execute( const MapCoordinate& pos, ContainerBase* subject, in
         }
 
         for ( set<MapCoordinate3D>::const_iterator i = move->getReachableFields().begin(); i != move->getReachableFields().end(); ++i )
-            actmap->getField( *i)->a.temp = 1;
+            actmap->getField( *i)->setaTemp(1);
 
         // if ( !CGameOptions::Instance()->dontMarkFieldsNotAccessible_movement )
         for ( set<MapCoordinate3D>::const_iterator i = move->getReachableFieldsIndirect().begin(); i != move->getReachableFieldsIndirect().end(); ++i )
-            actmap->getField( *i)->a.temp2 = 2;
+            actmap->getField( *i)->setaTemp2(2);
         displaymap();
         NewGuiHost::pendingCommand = move;
         updateFieldInfo();
@@ -428,7 +428,7 @@ void MovementBase::execute( const MapCoordinate& pos, ContainerBase* subject, in
             move->calcPath();
             actmap->cleartemps(7);
             for ( AStar3D::Path::const_iterator i = move->getPath().begin(); i != move->getPath().end(); ++i )
-                actmap->getField( *i ) ->a.temp = 1;
+                actmap->getField( *i ) ->setaTemp(1);
             displaymap();
         }
         updateFieldInfo();
@@ -607,11 +607,11 @@ void Attack::execute(  const MapCoordinate& pos, ContainerBase* subject, int num
 
     AttackCommand::FieldList::const_iterator i;
     for ( i = attack->getAttackableUnits().begin(); i != attack->getAttackableUnits().end(); i++ )
-        actmap->getField( i->first )->a.temp = 1;
+        actmap->getField( i->first )->setaTemp(1);
     for ( i = attack->getAttackableBuildings().begin(); i != attack->getAttackableBuildings().end(); i++ )
-        actmap->getField( i->first )->a.temp = 1;
+        actmap->getField( i->first )->setaTemp(1);
     for ( i = attack->getAttackableObjects().begin(); i != attack->getAttackableObjects().end(); i++ )
-        actmap->getField( i->first )->a.temp = 1;
+        actmap->getField( i->first )->setaTemp(1);
 
     displaymap();
     attackGui.setupWeapons( attack );
@@ -772,7 +772,7 @@ void DestructBuilding::execute(  const MapCoordinate& pos, ContainerBase* subjec
             return;
         }
         for ( vector<MapCoordinate>::iterator i = fields.begin(); i != fields.end(); ++i )
-            actmap->getField(*i)->a.temp = 1;
+            actmap->getField(*i)->setaTemp(1);
 
         repaintMap();
 
@@ -964,7 +964,7 @@ public:
 
             vector<MapCoordinate> fields = jdc->getDestinations();
             for ( vector<MapCoordinate>::const_iterator i = fields.begin(); i != fields.end(); ++i )
-                actmap->getField(*i)->a.temp = 1;
+                actmap->getField(*i)->setaTemp(1);
 
             if ( fields.size() ) {
                 repaintMap();
@@ -1032,7 +1032,7 @@ public:
 
             int fieldCount = 0;
             for ( vector<Vehicle*>::iterator i = targets.begin(); i != targets.end(); ++i  ) {
-                actmap->getField ( (*i)->getPosition() )->a.temp = 1;
+                actmap->getField ( (*i)->getPosition() )->setaTemp(1);
                 fieldCount++;
             }
             if ( !fieldCount ) {
@@ -1125,7 +1125,7 @@ public:
                 if ( targetPos != srcPos ) {
                     MapField* fld = subject->getMap()->getField ( targetPos );
                     fieldCount++;
-                    fld->a.temp = 1;
+                    fld->setaTemp(1);
                 }
             }
             if ( !fieldCount ) {
@@ -1233,7 +1233,7 @@ public:
             if ( res.successful() ) {
                 vector<MapCoordinate> fields = poc->getFields();
                 for ( vector<MapCoordinate>::iterator i = fields.begin(); i != fields.end(); ++i )
-                    actmap->getField(*i)->a.temp = 1;
+                    actmap->getField(*i)->setaTemp(1);
 
                 NewGuiHost::pendingCommand = poc.get();
                 poc.release();
@@ -1629,7 +1629,7 @@ void BuildObject::execute(  const MapCoordinate& pos, ContainerBase* subject, in
         if ( res.successful() ) {
             vector<MapCoordinate> fields = poc->getFields();
             for ( vector<MapCoordinate>::iterator i = fields.begin(); i != fields.end(); ++i )
-                actmap->getField(*i)->a.temp = 1;
+                actmap->getField(*i)->setaTemp(1);
 
             NewGuiHost::pendingCommand = poc.get();
             poc.release();
@@ -1721,7 +1721,7 @@ void BuildVehicleCommand::execute(  const MapCoordinate& pos, ContainerBase* sub
 
             if ( fields.size() ) {
                 for ( vector<MapCoordinate>::const_iterator i = fields.begin(); i != fields.end(); ++i )
-                    subject->getMap()->getField( *i )->a.temp = 1;
+                    subject->getMap()->getField( *i )->setaTemp(1);
 
                 repaintMap();
 
@@ -1898,7 +1898,7 @@ void ConstructBuilding::execute(  const MapCoordinate& pos, ContainerBase* subje
             }
 
             for ( vector<MapCoordinate>::iterator i = fields.begin(); i != fields.end(); ++i )
-                actmap->getField(*i)->a.temp = 1;
+                actmap->getField(*i)->setaTemp(1);
 
             repaintMap();
 

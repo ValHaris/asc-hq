@@ -728,7 +728,7 @@ void AI ::  runReconUnits ( )
                   if ( !fld->vehicle && !fld->building ) {
                      AStar ast ( getMap(), veh );
                      ast.findAllAccessibleFields( maxUnitMovement );
-                     if ( fld->a.temp ) {
+                     if ( fld->getaTemp() ) {
                         int vdist = beeline ( veh->getPosition(), i->first )*(1+i->second/2);
                         if( vdist < mindist ) {
                            mindist = vdist;

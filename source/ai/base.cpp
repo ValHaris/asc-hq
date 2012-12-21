@@ -404,14 +404,14 @@ void AI :: showFieldInformation ( int x, int y )
 
       if ( aip.dest.x >= 0 && aip.dest.y >= 0 ) {
          getMap()->cleartemps ( 1 );
-         getMap()->getField ( aip.dest.x, aip.dest.y )->a.temp = 1;
+         getMap()->getField ( aip.dest.x, aip.dest.y )->setaTemp(1);
       }
 
 
    }
 
    for ( ReconPositions::iterator i = reconPositions.begin(); i != reconPositions.end(); i++ )
-      getMap()->getField( i->first )->a.temp2 = 1;
+      getMap()->getField( i->first )->setaTemp2(1);
 
    repaintMap();
 

@@ -338,7 +338,7 @@ class WeaponRange : public SearchFields
       int run ( const Vehicle* veh );
       void testfield ( const MapCoordinate& mc )
       {
-         gamemap->getField( mc )->tempw = 1;
+         gamemap->getField( mc )->setTempw(1);
       };
       WeaponRange ( GameMap* _gamemap ) : SearchFields ( _gamemap )
       {}
@@ -477,10 +477,10 @@ void MapRenderer::paintSingleField( const MapRenderer::FieldRenderInfo& fieldInf
       /* display marked fields */
 
       if ( layer == 18 ) {
-         if ( fld->a.temp && tempsvisible )
+         if ( fld->getaTemp() && tempsvisible )
             fieldInfo.surface.Blit( icons.markField, pos );
          else
-            if ( fld->a.temp2 && tempsvisible )
+            if ( fld->getaTemp2() && tempsvisible )
                fieldInfo.surface.Blit( icons.markFieldDark, pos );
       }
 

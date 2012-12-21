@@ -712,7 +712,7 @@ void         generatemap( TerrainType::Weather*   bt,
    for ( int l = 0; l < xsize*ysize; l++ ) {
       actmap->field[l].typ = bt;
       actmap->field[l].setparams();
-      actmap->field[l].setMap( actmap );
+      actmap->field[l].setMap( actmap, l );
    }
 
    actmap->_resourcemode = 1;
@@ -830,8 +830,8 @@ void        tloadBImap ::   ReadACTNPart(void)
                Line[X] = translationTable->terraintranslation[tr].second;
          int found = 0;
          MapField* fld = getfield ( X / 2, Y * 2 + (X & 1) );
-         fld->tempw = Line[X];
-         fld->temp3 = 0;
+         fld->setTempw(Line[X]);
+         fld->setTemp3(0);
 
 
          for ( int i = 0; i < translationTable->terrain2idTranslation.size(); i++ ) {
@@ -913,7 +913,7 @@ void        tloadBImap ::   ReadACTNPart(void)
          int newy = Y * 2 + (X & 1);
 
          if ( Line[X] != 0xffff )
-            getfield ( newx, newy )->tempw = Line[X];
+            getfield ( newx, newy )->setTempw(Line[X]);
 
 
          int xl = 0;
@@ -1012,7 +1012,7 @@ void        tloadBImap ::   ReadACTNPart(void)
 
             } else {
 
-               getfield ( newx, newy )->temp3 = 1;
+               getfield ( newx, newy )->setTemp3(1);
 
                int fnd = 0;
                for ( int k = 0; k < missnum; k++ )
@@ -1125,7 +1125,7 @@ void       tloadBImap :: ReadSHOPPart( void )
                if ( bld )
                   for ( int w = 0; w < cwettertypennum; w++ ) 
                      for ( int p = 0; p < maxbuildingpicnum; p++ ) 
-                           if ( bld->getBIPicture(bld->entry, w, p) == fld->tempw ) {
+                           if ( bld->getBIPicture(bld->entry, w, p) == fld->getTempw() ) {
                               bldlist[ bldlistnum ].bld = bld;
                               int cnt = 0;
                               int terrainmatch = 0;
@@ -1141,7 +1141,7 @@ void       tloadBImap :: ReadSHOPPart( void )
                                        else {
                                           if ( bld->terrainaccess.accessible ( fld2->bdt ) > 0 )
                                              terrainmatch++;
-                                          if ( bld->getBIPicture( BuildingType::LocalCoordinate(m,n), w, p) == fld2->tempw )
+                                          if ( bld->getBIPicture( BuildingType::LocalCoordinate(m,n), w, p) == fld2->getTempw() )
                                              objmatch++;
                                        }
                                        cnt++;
@@ -1183,7 +1183,7 @@ void       tloadBImap :: ReadSHOPPart( void )
                                      if ( bld->getPicture( BuildingType::LocalCoordinate(m , n), w, p ).valid() ) {
                                         MapCoordinate pos = bld->getFieldCoordinate ( MapCoordinate(newx, newy), BuildingType::LocalCoordinate(m, n) );
                                         MapField* fld2 = getfield ( pos.x, pos.y );
-                                        if ( fld2->tempw != bld->getBIPicture( BuildingType::LocalCoordinate(m , n), w, p ))
+                                        if ( fld2->getTempw() != bld->getBIPicture( BuildingType::LocalCoordinate(m , n), w, p ))
                                            match = 0;
                                      }
                             if ( match )
@@ -1200,7 +1200,7 @@ void       tloadBImap :: ReadSHOPPart( void )
                     for ( int m = 0; m < 4; m++ )
                        for ( int n = 0; n < 6; n++ )
                           if ( fld->building->getPicture( BuildingType::LocalCoordinate(m , n) ).valid() ) {
-                             fld->building->getField ( BuildingType::LocalCoordinate(m, n) )->temp3 = 0;
+                             fld->building->getField ( BuildingType::LocalCoordinate(m, n) )->setTemp3(0);
                           }
 
                        /*
@@ -1276,7 +1276,7 @@ void       tloadBImap :: ReadSHOPPart( void )
            } else {
                  if ( found == 254 ) {
                     char tmp[100];
-                    int obj = fld->tempw;
+                    int obj = fld->getTempw();
                     sprintf( tmp, "The building at position %d / %d using pic #%d could not be set\n", newx, newy, obj );
                     strcat ( missing, tmp );
                  } else {
@@ -1285,7 +1285,7 @@ void       tloadBImap :: ReadSHOPPart( void )
                        firstmissingbuilding = 0;
                     }
                     char tmp[100];
-                    int obj = fld->tempw;
+                    int obj = fld->getTempw();
                     sprintf( tmp, "%d / %d using pic #%d\n", newx, newy, obj );
                     strcat ( missing, tmp );
                  }
@@ -1306,8 +1306,8 @@ void       tloadBImap :: ReadSHOPPart( void )
 
    for ( int y = 0; y < actmap->ysize; y++ )
       for ( int x = 0; x < actmap->xsize; x++ ) 
-         if ( ::getfield(x,y)->temp3 ) {
-            int m = ::getfield(x,y)->tempw;
+         if ( ::getfield(x,y)->getTemp3() ) {
+            int m = ::getfield(x,y)->getTempw();
             if ( m > 0 && m != 0xffff ) {
                int fnd = 0;
                for ( int k = 0; k < missnum; k++ )
