@@ -367,18 +367,6 @@ void AI :: diplomacy ()
    }
 }
 
-
-bool AI :: isRunning ( void )
-{
-   return _isRunning;
-}
-
-
-VisibilityStates AI:: getVision ( void )
-{
-   return _vision;
-}
-
 void AI :: showFieldInformation ( int x, int y )
 {
    if ( !fieldInformation )

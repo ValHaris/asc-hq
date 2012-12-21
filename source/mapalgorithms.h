@@ -107,7 +107,7 @@ class WindMovement {
       int wm[6];
    public:
       WindMovement ( const Vehicle* vehicle );
-      int getDist ( int dir );
+      inline int getDist ( int dir ) { assert( dir >= 0 && dir <= 5 ); return wm[dir]; };
 };
 
 

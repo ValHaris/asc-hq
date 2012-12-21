@@ -966,6 +966,9 @@ void GameMap :: cleartemps( int b, int value )
 
    int lmax = xsize * ysize;
    for (int l = 0; l < lmax; ++l) {
+      #ifdef __GNUCC__
+      __builtin_prefetch (&field[l+1], 1, 0);
+      #endif
       if (b & 1)
          field[l].a.temp = value;
       if (b & 2)

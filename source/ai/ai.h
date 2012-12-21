@@ -502,14 +502,14 @@
            Player& getPlayer ( int player ) { return getMap()->player[player]; };
            Player& getPlayer ( PlayerID id ) { return getMap()->player[id.getID()]; };
            void showFieldInformation ( int x, int y );
-           bool isRunning ( void );
+           inline bool isRunning ( void ) {return _isRunning;};
 
            /**  the AI uses a different vision than human player, to counter the fact
                 that a human player can "know" a map and take a look before starting to
                 play. This function returns the minimum visibility state of a field.
                 \sa tfield::visible , VisibilityStates
            */
-           VisibilityStates getVision ( void );
+           inline VisibilityStates getVision ( void ) { return _vision; };
 
            void read ( tnstream& stream );
            void write ( tnstream& stream ) const ;

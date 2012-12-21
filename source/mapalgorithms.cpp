@@ -373,14 +373,18 @@ int beeline ( int x1, int y1, int x2, int y2 )
 }
 
 
-int square ( int i )
+inline int square ( int i )
 {
    return i*i;
 }
 
 inline float square ( float i )
 {
-   return i*i;
+   #ifdef __GNUC__
+   return __builtin_powif(i, 2);
+   #else
+   return pow(i, 2);
+   #endif
 }
 
 
@@ -426,14 +430,6 @@ WindMovement::WindMovement ( const Vehicle* vehicle )
             wm[(6-i+vehicle->getMap()->weather.windDirection)%6] = wmn[i];
       }
    }
-}
-
-
-
-int WindMovement::getDist ( int dir )
-{
-   assert( dir >= 0 && dir <= 5 );
-   return wm[dir];
 }
 
 

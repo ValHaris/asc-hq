@@ -44,6 +44,9 @@ char strstring[1000];
 
 int getFirstBit(int zahl)
 {
+   #ifdef __GNUC__ // GCC-intrinsic (TODO: Visual C++ intrinsics, can't test is right now).
+   return __builtin_ffs(zahl) - 1;
+   #else
    if (zahl != 0) {
       int log = 0;
       while ( !(zahl & 1))  {
@@ -53,6 +56,7 @@ int getFirstBit(int zahl)
       return log;
    } else
       return 0;
+   #endif
 }
 
 
