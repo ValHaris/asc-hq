@@ -19,6 +19,8 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <emmintrin.h>
+
 #include <algorithm>
 #include <ctime>
 #include <cmath>
@@ -40,7 +42,6 @@
 
 #include "packagemanager.h"
 #include "tasks/abstracttaskcontainer.h"
-
 
 RandomGenerator::RandomGenerator(int seedValue){
 
@@ -960,24 +961,20 @@ MapCoordinate GameMap::getCursor() const
 
 void GameMap :: cleartemps( int b, int value )
 {
-  if ( xsize <= 0 || ysize <= 0)
-     return;
+   if ( xsize <= 0 || ysize <= 0)
+      return;
 
-  int l = 0;
-  for ( int x = 0; x < xsize ; x++)
-     for ( int y = 0; y <  ysize ; y++) {
-
-         if (b & 1 )
-           field[l].a.temp = value;
-         if (b & 2 )
-           field[l].a.temp2 = value;
-         if (b & 4 )
-           field[l].temp3 = value;
-         if (b & 8 )
-           field[l].temp4 = value;
-
-         l++;
-     }
+   int lmax = xsize * ysize;
+   for (int l = 0; l < lmax; ++l) {
+      if (b & 1)
+         field[l].a.temp = value;
+      if (b & 2)
+         field[l].a.temp2 = value;
+      if (b & 4)
+         field[l].temp3 = value;
+      if (b & 8)
+         field[l].temp4 = value;
+   }
 }
 
 void GameMap :: allocateFields ( int x, int y, TerrainType::Weather* terrain )
