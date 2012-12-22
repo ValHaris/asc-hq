@@ -414,9 +414,9 @@ bool AStar3D::Container::update ( const Node& node )
    
    Node oldNode = iMap->second;
    if (oldNode.gval > node.gval || (oldNode.gval == node.gval && oldNode.hasAttacked && !node.hasAttacked)) {
-      hMap.erase (iMap);
+      hMap[node.h] = node;
       Parent::erase (lower_bound(Parent::begin(), Parent::end(), oldNode) );
-      add (node);
+      Parent::insert ( upper_bound(Parent::begin(), Parent::end(), node), node);
       return true;
    }
    return false;

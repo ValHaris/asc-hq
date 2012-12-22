@@ -13,7 +13,7 @@
  #include "mapalgorithms.h"
  #include "gamemap.h"
 
-
+ #include <iostream>
 
 
  enum HexDirection { DirN, DirNE, DirSE, DirS, DirSW, DirNW, DirNone };
@@ -172,7 +172,7 @@ class AStar3D {
              void add ( const Node& n) { insert ( upper_bound(Parent::begin(), Parent::end(), n), n); hMap[n.h] = n; };
              bool update ( const Node& node );
              Node getFirst() { Node n = Parent::front(); Parent::pop_front(); hMap.erase(n.h); return n; };
-             bool empty() { hMap.clear(); return Parent::empty(); };
+             bool empty() { return Parent::empty(); };
 
              typedef Parent::iterator iterator;
              Node* find( const MapCoordinate3D& pos ) { return &(hMap[pos]); };
