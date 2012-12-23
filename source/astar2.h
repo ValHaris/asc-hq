@@ -8,10 +8,8 @@
 
 
  #include <vector>
- #include <map>
  #include <tr1/unordered_map>
  #include <functional>
- #include <set>
  #include "mapalgorithms.h"
  #include "gamemap.h"
 
@@ -129,10 +127,10 @@ class AStar3D {
            MapCoordinate3D h;        // location on the map, in hex coordinates
            AStar3D::DistanceType gval;        // g in A* represents how far we've already gone
            AStar3D::DistanceType hval;        // h in A* represents an estimate of how far is left
+           int enterHeight;
            bool canStop;
            bool hasAttacked;
            bool deleted;
-           int enterHeight;
            Node(): gval(0), hval(0), canStop(false), enterHeight(-1), deleted(false) {}
            bool operator< ( const Node& b ) const;
        };
