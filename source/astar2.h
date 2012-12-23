@@ -9,11 +9,11 @@
 
  #include <vector>
  #include <map>
+ #include <tr1/unordered_map>
+ #include <functional>
  #include <set>
  #include "mapalgorithms.h"
  #include "gamemap.h"
-
- #include <iostream>
 
 
  enum HexDirection { DirN, DirNE, DirSE, DirS, DirSW, DirNW, DirNone };
@@ -131,10 +131,17 @@ class AStar3D {
            AStar3D::DistanceType hval;        // h in A* represents an estimate of how far is left
            bool canStop;
            bool hasAttacked;
+           bool deleted;
            int enterHeight;
            Node(): gval(0), hval(0), canStop(false), enterHeight(-1), deleted(false) {}
-           bool deleted;
            bool operator< ( const Node& b ) const;
+       };
+       struct hash_h {
+          size_t operator()(const MapCoordinate3D &h) const{
+             //return tr1::hash<int>()(h.x) ^ tr1::hash<int>()(h.y) ^ tr1::hash<int>()(h.getNumericalHeight() );
+             //return (h.x)<<(sizeof(size_t) / 4) &  (h.y)<<(sizeof(size_t) / 2) & h.getNumericalHeight();
+             return h.x ^ h.y ^ h.getNumericalHeight();
+          }
        };
 
     protected:
@@ -164,18 +171,23 @@ class AStar3D {
     public:
 
        class Container: protected deque<Node> {
-             map<MapCoordinate3D, Node> hMap;
+             tr1::unordered_map<MapCoordinate3D, Node*, hash_h> hMap;
+             typedef tr1::unordered_map<MapCoordinate3D, Node*, hash_h> hMapType;
+             void hMapInit ();
           public:
              typedef deque<Node> Parent;
 
              // Container() {};
-             void add ( const Node& n) { insert ( upper_bound(Parent::begin(), Parent::end(), n), n); hMap[n.h] = n; };
+             void add ( const Node& n) {
+                insert ( upper_bound(Parent::begin(), Parent::end(), n), n);
+                if (!hMap.empty()) hMap[n.h] = const_cast<Node*>(&n);
+             };
              bool update ( const Node& node );
-             Node getFirst() { Node n = Parent::front(); Parent::pop_front(); hMap.erase(n.h); return n; };
+             Node getFirst() { Node n = Parent::front(); Parent::pop_front(); if (!hMap.empty()) hMap.erase(n.h); return n; };
              bool empty() { return Parent::empty(); };
 
              typedef Parent::iterator iterator;
-             Node* find( const MapCoordinate3D& pos ) { return &(hMap[pos]); };
+             Node* find( const MapCoordinate3D& pos ) { if (hMap.empty()) hMapInit(); return hMap[pos]; };
 
              iterator begin() { return Parent::begin(); };
              iterator end() { return Parent::end(); };

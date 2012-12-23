@@ -6,7 +6,6 @@
 
 #include <stack>
 #include <vector>
-#include <functional>
 #include <algorithm>
 #include <cmath>
 
@@ -16,6 +15,7 @@
 
 #include "astar2.h"
 
+#include <iostream>
 
 // The mark array marks directions on the map.  The direction points
 // to the spot that is the previous spot along the path.  By starting
@@ -403,18 +403,24 @@ bool operator == ( const AStar3D::Node& a, const AStar3D::Node& b )
     return (a.h == b.h) && (a.gval == b.gval ) && (a.hval == b.hval );
 }
 
-
-
+void AStar3D::Container::hMapInit () {
+   hMap.rehash(Parent::size());
+   for (iterator i = Parent::begin(); i != Parent::end(); ++i) {
+      hMap[i->h] = &(*i);
+   }
+};
 
 bool AStar3D::Container::update ( const Node& node )
 {
-   map<MapCoordinate3D, Node>::iterator iMap = hMap.find(node.h);
+   if (hMap.empty())
+      hMapInit();
+   hMapType::iterator iMap = hMap.find(node.h);
    if (iMap == hMap.end())
       return false;
    
-   Node oldNode = iMap->second;
+   Node oldNode = *(iMap->second);
    if (oldNode.gval > node.gval || (oldNode.gval == node.gval && oldNode.hasAttacked && !node.hasAttacked)) {
-      hMap[node.h] = node;
+      hMap[node.h] = const_cast<Node*>(&node);
       Parent::erase (lower_bound(Parent::begin(), Parent::end(), oldNode) );
       Parent::insert ( upper_bound(Parent::begin(), Parent::end(), node), node);
       return true;
