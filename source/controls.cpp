@@ -123,6 +123,8 @@ pair<int,int> calcMoveMalus( const MapCoordinate3D& start,
 {
    int direc = getdirection ( start.x, start.y, dest.x, dest.y );
 
+   GameMap* map = vehicle->getMap(); 
+   MapField* fld = map->getField(dest.x, dest.y); 
 
    int fuelcost = 10;
    int movecost;
@@ -155,7 +157,6 @@ pair<int,int> calcMoveMalus( const MapCoordinate3D& start,
                checkWind = false;
             } else {
                // not flying
-               MapField* fld = vehicle->getMap()->getField( dest.x, dest.y );
                if ( fld->building )
                   movecost = maxmalq;
                else
@@ -167,7 +168,7 @@ pair<int,int> calcMoveMalus( const MapCoordinate3D& start,
       if ( dest.getNumericalHeight() >= 0 ) {
         // moving out of container
         int mm;
-        const ContainerBaseType::TransportationIO* unloadSystem = vehicle->getMap()->getField( start.x, start.y )->getContainer()->vehicleUnloadSystem( vehicle->typ, dest.getBitmappedHeight() );
+        const ContainerBaseType::TransportationIO* unloadSystem = map->getField( start.x, start.y )->getContainer()->vehicleUnloadSystem( vehicle->typ, dest.getBitmappedHeight() );
         if ( unloadSystem )
             mm = unloadSystem->movecost;
         else
@@ -184,7 +185,7 @@ pair<int,int> calcMoveMalus( const MapCoordinate3D& start,
                   movecost = submarineMovement;
                   checkWind = false;
                } else {
-                  movecost = vehicle->getMap()->getField( dest.x, dest.y )->getmovemalus( vehicle );
+                  movecost = fld->getmovemalus( vehicle );
                }
             }
         }
@@ -197,31 +198,23 @@ pair<int,int> calcMoveMalus( const MapCoordinate3D& start,
 
    static const  int         movemalus[6]  = { 0, 3, 5, 0, 5, 3 };
    
-   if ( checkHemming )
+   if ( checkHemming && dest.getNumericalHeight() >= 0 )
       for (int c = 0; c < sidenum; c++) {
-         int x = dest.x;
-         int y = dest.y;
-         x += getnextdx ( c, y );
-         y += getnextdy ( c );
-         MapField* fld = vehicle->getMap()->getField ( x, y );
-         if ( fld ) {
-           int d = (c - direc);
+         MapField* nextField = fld->neighboringFields[c];
+         if ( nextField && nextField->vehicle
+            && map->getPlayer(vehicle).diplomacy.isHostile( nextField->vehicle->getOwner() ) 
+            && attackpossible28(nextField->vehicle,vehicle, NULL, dest.getBitmappedHeight() )) {
+                 int d = (c - direc);
 
-           if (d >= sidenum)
-              d -= sidenum;
+                 if (d >= sidenum)
+                    d -= sidenum;
 
-           if (d < 0)
-              d += sidenum;
-
-           MapField* fld = vehicle->getMap()->getField(x,y);
-           if ( fld->vehicle && dest.getNumericalHeight() >= 0 ) {
-              if ( vehicle->getMap()->getPlayer(vehicle).diplomacy.isHostile( fld->vehicle->getOwner() ) )
-                 if ( attackpossible28(fld->vehicle,vehicle, NULL, dest.getBitmappedHeight() ))
-                    movecost += movemalus[d];
+                 if (d < 0)
+                    d += sidenum;
               
+                 movecost += movemalus[d];
            }
          }
-      }
 
     /*******************************/
     /*    Wind calculation         */
@@ -229,7 +222,7 @@ pair<int,int> calcMoveMalus( const MapCoordinate3D& start,
    if ( wm && checkWind && direc >= 0 && direc < 5 )
       if (dest.getNumericalHeight() >= 4 && dest.getNumericalHeight() <= 6 &&
           start.getNumericalHeight() >= 4 && start.getNumericalHeight() <= 6 &&
-          vehicle->getMap()->weather.windSpeed  ) {
+          map->weather.windSpeed  ) {
          movecost -=  wm->getDist( direc ) * dist;
          fuelcost -=  wm->getDist ( direc ) * dist;
 

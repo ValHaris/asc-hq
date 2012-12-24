@@ -31,18 +31,6 @@
 #include "actions/context.h"
 #include "actions/removeobject.h"
 
-MapField :: MapField ( GameMap* gamemap_, int index_ )
-{
-  init();
-  setMap( gamemap_, index_ );
-}
-
-MapField :: MapField (  )
-{
-  init();
-}
-
-
 void MapField::init ()
 {
    bdt.set ( 0 );
@@ -58,6 +46,13 @@ void MapField::init ()
    gamemap = NULL;
    viewbonus = 0;
 }
+
+void MapField::setupNeighboringFields() {
+   for (int d = 0; d < 6; ++d) {
+      neighboringFields[d] = gamemap->getField(getx() + getnextdx(d, gety()), gety() + getnextdy(d));
+   }
+}
+
 void MapField::setaTemp (char temp) {
    gamemap->temp[index] = temp;
 };
@@ -244,7 +239,7 @@ bool  MapField :: addobject( const ObjectType* obj, int dir, bool force, MapFiel
 
          sortobjects();
          if ( dir == -1 )
-            calculateobject( getx(), gety(), true, obj, gamemap );
+            calculateobject( this, true, obj, gamemap );
 
          if ( objectRemovalStrategy )
             setparams( objectRemovalStrategy );
@@ -299,7 +294,7 @@ bool MapField :: removeObject( const ObjectType* obj, bool force, ObjectRemovalS
       setparams();
    
    if ( obj )
-      calculateobject( getx(), gety(), true, obj, gamemap );
+      calculateobject( this, true, obj, gamemap );
    
    return removed;
 }

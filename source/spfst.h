@@ -64,6 +64,10 @@ extern void  calculateobject( const MapCoordinate& pos,
                              const ObjectType* obj,
                              GameMap* gamemap  );
 
+extern void  calculateobject(MapField* fld,
+                             bool mof,
+                             const ObjectType* obj,
+                             GameMap* gamemap  );
 
 
 /*! tests if the vehicle can move onto the field

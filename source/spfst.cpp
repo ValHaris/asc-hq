@@ -444,12 +444,11 @@ VisibilityStates fieldVisibility( const MapField* pe )
 
 VisibilityStates fieldVisibility( const MapField* pe, int player )
 {
-   GameMap* gamemap = pe->getMap();
-   
    if ( player < 0 )
       return visible_all;
 
    if ( pe ) {
+      GameMap* gamemap = pe->getMap();
       VisibilityStates c = VisibilityStates((pe->visible >> ( player * 2)) & 3);
       if ( c < gamemap->getInitialMapVisibility( player ) )
          c = gamemap->getInitialMapVisibility( player );
@@ -468,9 +467,17 @@ void  calculateobject( const MapCoordinate& pos,
    calculateobject( pos.x, pos.y, mof, obj, gamemap );
 }
 
-
 void         calculateobject( int       x,
                               int       y,
+                              bool      mof,
+                              const ObjectType* obj,
+                              GameMap* actmap )
+{
+   MapField* fld = actmap->getField(x,y) ;
+   calculateobject( fld, mof, obj, actmap );
+}
+
+void         calculateobject( MapField* fld,
                               bool      mof,
                               const ObjectType* obj,
                               GameMap* actmap )
@@ -483,21 +490,22 @@ void         calculateobject( int       x,
       return;
    }
 
-   MapField* fld = actmap->getField(x,y) ;
    Object* oi2 = fld-> checkForObject (  obj  );
 
    int c = 0;
    for ( int dir = 0; dir < sidenum; dir++) {
+      /*
       int a = x + getnextdx( dir, y );
       int b = y + getnextdy( dir);
       MapField* fld2 = actmap->getField(a,b);
-
+      */
+      MapField* fld2 = fld->neighboringFields[dir];
       if ( fld2 ) {
          if ( obj->netBehaviour & ObjectType::NetToSelf )
             if ( fld2->checkForObject ( obj )) {
                c |=  1 << dir ;
                if ( mof )
-                  calculateobject ( a, b, false, obj, actmap );
+                  calculateobject ( fld2, false, obj, actmap );
             }
 
 
@@ -507,7 +515,7 @@ void         calculateobject( int       x,
                if ( oi ) {
                   c |=  1 << dir ;
                   if ( mof )
-                     calculateobject ( a, b, false, oi->typ, actmap );
+                     calculateobject ( fld2, false, oi->typ, actmap );
                }
             }
          }
@@ -536,9 +544,12 @@ void         calculateobject( int       x,
       int autoborder = 0;
       int count = 0;
       for ( int dir = 0; dir < sidenum; dir++) {
+         /*
          int a = x + getnextdx( dir, y );
          int b = y + getnextdy( dir);
          MapField* fld2 = actmap->getField(a,b);
+         */
+         MapField* fld2 = fld->neighboringFields[dir];
          if ( !fld2 ) {
             // if the field opposite of the border field is connected to, make a straight line out of the map.
             if ( c & (1 << ((dir+sidenum/2) % sidenum ))) {
@@ -569,7 +580,7 @@ void         calculateallobjects( GameMap* actmap )
 
          for ( MapField::ObjectContainer::iterator i = fld->objects.begin(); i != fld->objects.end(); i++ )
              // if ( !(i->typ->netBehaviour & ObjectType::SpecialForest) )
-                calculateobject( x, y, false, i->typ, actmap );
+                calculateobject( fld, false, i->typ, actmap );
                 #if 0
              else
                 if ( find ( forestObjects.begin(), forestObjects.end(), i->typ ) == forestObjects.end())
