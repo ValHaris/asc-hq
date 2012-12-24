@@ -968,9 +968,9 @@ void GameMap :: cleartemps( int b, int value )
    if (b & 2)
       memset(temp2, value, lmax);
    if (b & 4)
-      memset(temp3, value, lmax);
+      wmemset(temp3, value, lmax);
    if (b & 8)
-      memset(temp4, value, lmax);
+      wmemset(temp4, value, lmax);
 }
 
 void GameMap :: allocateFields ( int x, int y, TerrainType::Weather* terrain )
@@ -987,8 +987,8 @@ void GameMap :: allocateFields ( int x, int y, TerrainType::Weather* terrain )
    ysize = y;
    temp = new char[x*y]();
    temp2 = new char[x*y]();
-   temp3 = new char[x*y]();
-   temp4 = new char[x*y]();
+   temp3 = new wchar_t[x*y]();
+   temp4 = new wchar_t[x*y]();
    overviewMapHolder.connect();
 }
 

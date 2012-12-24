@@ -38,7 +38,7 @@ void MapField::init ()
    vehicle = NULL;
    secondvehicle = NULL;
    building = NULL;
-   visible = 0;
+   visibility.visible = 0;
    fuel = 0;
    material = 0;
    resourceview = NULL;
@@ -75,17 +75,17 @@ Uint16 MapField::getTempw () {
    return gamemap->temp[index]<<8 | gamemap->temp2[index];
 };
 
-void MapField::setTemp3 (char temp3) {
+void MapField::setTemp3 (Uint16 temp3) {
    gamemap->temp3[index] = temp3;
 };
-char MapField::getTemp3 () {
+Uint16 MapField::getTemp3 () {
    return gamemap->temp3[index];
 };
 
-void MapField::setTemp4 (char temp4) {
+void MapField::setTemp4 (Uint16 temp4) {
    gamemap->temp4[index] = temp4;
 };
-char MapField::getTemp4 () {
+Uint16 MapField::getTemp4 () {
    return gamemap->temp4[index];
 };
 
@@ -164,7 +164,7 @@ void MapField::operator= ( const MapField& f )
    typ = f.typ;
    fuel = f.fuel;
    material = f.material;
-   visible = f.visible;
+   visibility.visible = f.visibility.visible;
    vehicle = f.vehicle;
    building = f.building;
    if ( f.resourceview ) {
@@ -400,7 +400,7 @@ void MapField :: setWeather ( int weather )
               }
      }
 }
-
+/*
 void MapField::setVisibility ( VisibilityStates valtoset, int actplayer ) 
 {
       int newval = (valtoset ^ 3) << ( 2 * actplayer );
@@ -409,9 +409,10 @@ void MapField::setVisibility ( VisibilityStates valtoset, int actplayer )
       visible |= oneval;
       visible ^= newval;
 };
-
+*/
 void MapField::resetView( GameMap* gamemap, int playersToReset )
 {
+   //TODO: don't use the bitmasks for that
    int mask = 0;
    for ( int i = 0; i < gamemap->getPlayerCount(); ++i )
       if ( !(playersToReset & (1 << i)))
@@ -421,7 +422,9 @@ void MapField::resetView( GameMap* gamemap, int playersToReset )
    for ( int y = 0; y < gamemap->ysize; ++y )
       for ( int x = 0; x < gamemap->xsize; ++x ) {
          MapField& fld = gamemap->field[l++];
-         fld.visible &= mask;
+         //fld.visible &= mask;
+         Uint16 oldmask = fld.getVisibilityBitfield();
+         fld.setVisibilityBitfield(mask & oldmask);
       }
         
 }

@@ -61,9 +61,6 @@ class  MapField {
     void setMineralMaterial( int material );
     void setMineralFuel( int fuel );
    
-    //! can this field be seen be the player. Variable is bitmapped; two bits for each player. These two bits can have the states defined in ::VisibilityStates
-    Uint16       visible;
-
     //! units standing on this object will get a bonus to their view
     int          viewbonus;
 
@@ -80,11 +77,11 @@ class  MapField {
     void setTempw (Uint16 tempw);
     Uint16 getTempw ();
 
-    void setTemp3 (char temp3);
-    char getTemp3 ();
+    void setTemp3 (Uint16 temp3);
+    Uint16 getTemp3 ();
 
-    void setTemp4 (char temp4);
-    char getTemp4 ();
+    void setTemp4 (Uint16 temp4);
+    Uint16 getTemp4 ();
     
     //@}
 
@@ -233,10 +230,21 @@ class  MapField {
       \param valtoset the value that is going to be written into the visibility variable
       \param actplayer the player for which the view is changed
    */
-   void setVisibility ( VisibilityStates valtoset, int actplayer );
+    //! can this field be seen be the player. Variable is bitmapped; two bits for each player. These two bits can have the states defined in ::VisibilityStates
+    union {
+       char perPlayer[8];
+       Uint64 visible;
+    } visibility;
+    
 
-   VisibilityStates getVisibility( int actplayer ) {
-       return VisibilityStates((visible >> (2*actplayer)) & 3);
+   void setVisibility ( VisibilityStates valtoset, int actplayer ) { visibility.perPlayer[actplayer] = valtoset; };
+   VisibilityStates getVisibility( int actplayer ) { return VisibilityStates(visibility.perPlayer[actplayer]); };
+   const VisibilityStates getVisibility( int actplayer ) const { return VisibilityStates(visibility.perPlayer[actplayer]); };
+   Uint16 getVisibilityBitfield() {
+      Uint16 b; for (int i = 0; i < 8; ++i) b |= (visibility.perPlayer[i] << (2*i) & 3); return b;
+   };
+   void setVisibilityBitfield (Uint16 b) {
+      for (int i = 0; i < 8; ++i) visibility.perPlayer[i] = (b >> (2*i) & 3);
    };
 
    static void resetView( GameMap* gamemap, int playersToReset );

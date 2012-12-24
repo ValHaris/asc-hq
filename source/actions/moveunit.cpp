@@ -397,14 +397,14 @@ ActionResult MoveUnit::runAction( const Context& context )
 
             } else {
                (new UnitFieldRegistration( vehicle, *pos, UnitFieldRegistration::RegisterOnField ))->execute( context );
-               int orgVisibility = fld->visible;
+               Uint64 orgVisibility = fld->visibility.visible;
                for ( int i = 0; i < getMap()->getPlayerCount(); ++i )
                   evaluatevisibilityfield ( getMap(), fld, i, -1, getMap()->getgameparameter ( cgp_initialMapVisibility ) );
                
-               if ( fld->visible != orgVisibility ) {
+               if ( fld->visibility.visible != orgVisibility ) {
                   ChangeView::ViewState viewState;
-                  viewState[MapCoordinate(pos->x,pos->y)] = fld->visible;
-                  fld->visible = orgVisibility;
+                  viewState[MapCoordinate(pos->x,pos->y)] = fld->visibility.visible;
+                  fld->visibility.visible = orgVisibility;
                   (new ChangeView(getMap(),viewState))->execute(context);
                }
             }

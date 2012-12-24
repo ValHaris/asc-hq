@@ -409,7 +409,8 @@ bool fieldvisiblenow( const MapField* pe, Vehicle* veh, int player )
       return false;
   
    if ( pe ) {
-      int c = (pe->visible >> ( player * 2)) & 3;
+      //int c = (pe->visible >> ( player * 2)) & 3;
+      VisibilityStates c = pe->getVisibility(player);
 
       if ( c < gamemap->getInitialMapVisibility( player ) )
          c = gamemap->getInitialMapVisibility( player );
@@ -449,7 +450,8 @@ VisibilityStates fieldVisibility( const MapField* pe, int player )
 
    if ( pe ) {
       GameMap* gamemap = pe->getMap();
-      VisibilityStates c = VisibilityStates((pe->visible >> ( player * 2)) & 3);
+      //VisibilityStates c = VisibilityStates((pe->visible >> ( player * 2)) & 3);
+      VisibilityStates c = pe->getVisibility(player);
       if ( c < gamemap->getInitialMapVisibility( player ) )
          c = gamemap->getInitialMapVisibility( player );
 
