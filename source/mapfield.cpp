@@ -479,14 +479,12 @@ void MapField :: removemine( int num )
 
 int MapField :: getx( void )
 {
-   int n = this - gamemap->field;
-   return n % gamemap->xsize;
+   return index % gamemap->xsize;
 }
 
 int MapField :: gety( void )
 {
-   int n = this - gamemap->field;
-   return n / gamemap->xsize;
+   return index / gamemap->xsize;
 }
 
 

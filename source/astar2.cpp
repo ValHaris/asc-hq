@@ -471,8 +471,8 @@ AStar3D :: AStar3D ( GameMap* actmap_, Vehicle* veh_, bool markTemps_, int maxDi
    for ( int i = 0; i < cnt; i++ ) {
       posDirs[i] = DirNone;
       posHHops[i] = -20;
-      fieldAccess[i] = 0;
    }
+   memset(fieldAccess, 0, sizeof(fieldAccess));
 
    if ( (veh->typ->height & ( chtieffliegend | chfliegend | chhochfliegend )) && actmap->weather.windSpeed ) {
       wind = new WindMovement ( veh );
