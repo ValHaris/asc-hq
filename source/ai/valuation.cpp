@@ -763,7 +763,7 @@ AI::Section* AI :: Sections :: getBest ( int pass, Vehicle* veh, MapCoordinate3D
                                }
                             }
 
-                            ai->_vision = visible_all;
+                            ai->setVision(visible_all);
 
                             ac++;
 
@@ -776,7 +776,7 @@ AI::Section* AI :: Sections :: getBest ( int pass, Vehicle* veh, MapCoordinate3D
                                attack.searchTargets();
                                targets += attack.getAttackableUnits().size();
                             }
-                            ai->_vision = visible_ago;
+                            ai->setVision(visible_ago);
                          } else
                             nac++;
                       }

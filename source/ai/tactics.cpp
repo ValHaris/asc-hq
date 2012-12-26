@@ -271,8 +271,8 @@ AI::AiResult AI::executeMoveAttack ( Vehicle* veh, TargetVector& tv )
    MoveVariant* mv = *max_element( tv.begin(), tv.end(), moveVariantComp );
 
    if ( mv->movePos != veh->getPosition3D() ) {
-      VisibilityStates org_vision =  _vision ;
-      _vision = visible_now;
+      VisibilityStates org_vision =  getVision() ;
+      setVision(visible_now);
       
       auto_ptr<MoveUnitCommand> muc ( new MoveUnitCommand( veh ));
       muc->setFlags ( MoveUnitCommand::NoInterrupt );
@@ -285,7 +285,7 @@ AI::AiResult AI::executeMoveAttack ( Vehicle* veh, TargetVector& tv )
       }
 
       result.unitsMoved ++;
-      _vision = org_vision;
+      setVision(org_vision);
    }
 
    // the unit may have been shot down due to reactionfire during movement
@@ -683,8 +683,8 @@ AI::AiResult AI::tactics( void )
                            Since all units now only attack the neighbouring fields, which is generally
                            visible, the AI does not cheat here.
                         */
-                        VisibilityStates org_vision =  _vision ;
-                        _vision = visible_all;
+                        VisibilityStates org_vision = getVision();
+                        setVision(visible_all);
    
                         AiResult res = executeMoveAttack ( veh, tv );
                         i = tactVehicles.erase ( i );
@@ -699,7 +699,7 @@ AI::AiResult AI::tactics( void )
                         
                         directAttackNum++;
    
-                        _vision = org_vision;
+                        setVision(org_vision);
    
                      } else {
                         targets[mv->enemy->networkid].push_back( *mv );
@@ -745,8 +745,8 @@ AI::AiResult AI::tactics( void )
             Since all units now only attack the neighbouring fields, which is generally
             visible, the AI does not cheat here.
          */
-         VisibilityStates org_vision =  _vision ;
-         _vision = visible_all;
+         VisibilityStates org_vision =  getVision();
+         setVision(visible_all);
 
          /* we don't need to discard all the calculations made above after a single attack.
             Only the attacks that are near enough to be affected by the last movement and attack
@@ -779,13 +779,13 @@ AI::AiResult AI::tactics( void )
                   for ( int i = 0; i < sidenum; i++ )
                      if ( finalPositions[i] ) {
                         int nwid = finalPositions[i]->networkid;
-                        _vision = org_vision;
+                        setVision(org_vision);
                         MapCoordinate affected =  MapCoordinate(finalPositions[i]->xpos, finalPositions[i]->ypos);
                         MapCoordinate3D dst = getNeighbouringFieldCoordinate( MapCoordinate3D( enemy->xpos, enemy->ypos, finalPositions[i]->height ), i);
                         dst.setnum ( dst.x, dst.y, -2 );
                         
                         moveUnit ( finalPositions[i], dst );
-                        _vision = visible_all;
+                        setVision(visible_all);
 
                         affectedFields.push_back ( affected );
                         // the unit may have been shot down due to reaction fire
@@ -884,7 +884,7 @@ AI::AiResult AI::tactics( void )
 
          } while ( currentTarget != targets.end() );
 
-         _vision = org_vision;
+         setVision(org_vision);
 
       } else {
          // no attacks are possible

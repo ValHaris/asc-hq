@@ -186,6 +186,9 @@ class GameMap {
       wchar_t* temp3;
       wchar_t* temp4;
 
+      bool playerAiRunning[9];
+      VisibilityStates playerAiVision[9];
+
       void setServerMapID( int id ) { serverMapID = id; };
       int  getServerMapID() const { return serverMapID; };
 

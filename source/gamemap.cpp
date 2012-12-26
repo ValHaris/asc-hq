@@ -1919,11 +1919,10 @@ VisibilityStates GameMap::getInitialMapVisibility( int player )
    VisibilityStates c = VisibilityStates( getgameparameter ( cgp_initialMapVisibility ));
 
    if ( this->player[player].ai ) {
-      if ( this->player[player].ai->isRunning() ) {
-         if ( c < this->player[player].ai->getVision() )
-            c = this->player[player].ai->getVision();
+      if ( this->playerAiRunning[player] ) {
+         if ( c < this->playerAiVision[player] )
+            c = this->playerAiVision[player];
       } else
-         // this is a hack to make the replays of the AI work
          if ( c < visible_ago )
             c = visible_ago;
    }

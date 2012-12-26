@@ -45,8 +45,8 @@
            bool benchMark;
            bool strictChecks;
 
-           bool _isRunning;
-           VisibilityStates _vision;
+           //bool _isRunning;
+           //VisibilityStates _vision;
            int unitCounter;
            int player;
 
@@ -494,6 +494,7 @@
 
            //! returns the map this AI runson
            GameMap* getMap ( void ) { return activemap; };
+           const GameMap* getMap ( void ) const { return activemap; };
 
            //! returns the number of the player which is controlled by this ai
            int getPlayerNum ( void ) { return player; };
@@ -502,14 +503,19 @@
            Player& getPlayer ( int player ) { return getMap()->player[player]; };
            Player& getPlayer ( PlayerID id ) { return getMap()->player[id.getID()]; };
            void showFieldInformation ( int x, int y );
-           inline bool isRunning ( void ) {return _isRunning;};
+           //inline bool isRunning ( void ) {return _isRunning;};
+           inline bool isRunning ( void ) {return getMap()->playerAiRunning[player];};
+           inline const bool isRunning ( void ) const {return getMap()->playerAiRunning[player];};
+           inline void isRunning ( bool b ) { getMap()->playerAiRunning[player] = b;};
 
            /**  the AI uses a different vision than human player, to counter the fact
                 that a human player can "know" a map and take a look before starting to
                 play. This function returns the minimum visibility state of a field.
                 \sa tfield::visible , VisibilityStates
            */
-           inline VisibilityStates getVision ( void ) { return _vision; };
+           inline VisibilityStates getVision ( void ) { return getMap()->playerAiVision[player]; };
+           inline const VisibilityStates getVision ( void ) const { return getMap()->playerAiVision[player]; };
+           inline void setVision ( VisibilityStates v ) { getMap()->playerAiVision[player] = v; };
 
            void read ( tnstream& stream );
            void write ( tnstream& stream ) const ;
