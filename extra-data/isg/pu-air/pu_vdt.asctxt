@@ -1,0 +1,70 @@
+VehicleType { 
+   Name = VDT
+   parent = 22511
+   ID = 12594
+
+   Description = Drohnenträger
+   Infotext = [Da die bereits vorhandenen DA Einheiten als reine Offensiv-Varianten konzipiert waren und so eine Versorgung von bereits ausgesetzten Drohnen sich als äußerst kompliziert erwies rief der Rat der Lords unter der Führung von Lord boraas Ende des Zyklus 104 dazu auf eine neue Variante des VDA zu entwickeln. Die neue Einheit sollte nicht nur der Aussetzung von Drohnen sondern auch zu ihrer Wartung dienen.
+Um der gestiegenen Anforderung an die Triebwerke entgegen treten zu können, wurden die im VDA verbauten Turbinen durch Thunderbolt VSZ Turbinen der neusten Generation ausgetauscht. Auch wurde die Anordnung der Triebwerke komplett in die Flügel verlagert und ein zusätzliches sechtes Triebwerk integriert.
+Der so gewonnene Platz im Rumpf des VDA's konnte zur Unterbringung von Wartungs- und Betankungs- und Munitionierungseinrichtungen verwendet werden. Außerdem wurde der Hangar erweitert und zusätzlich mit einem Auffangseil zum Einfangen von Drohnen im Flug ausgerüstet.
+Um trotz der Vergrößerung der Rumpfpartie einen Waffeneinsatz wie gewohnt zu gewährleisten, musste zusätzlich zur Kanone an der Unterseite der VDA's eine weitere an der Oberseite installiert werden. Diese kann feindliche Flugzeuge auf normalem Höhenlevel und hoch fliegende Einheiten im 360° Radius auf 4 Felder Entfernung bekämpfen. Durch die so mögliche Konzentration der Waffe an der Unterseite auf Ziele an der Wasseroberfläche, auf dem Boden und auf niedrig fliegend Flugzeuge konnte die Reichweite ebenfalls auf 4 Felder erweitert werden.
+Eine deutlich erhöhte Panzerung und der Einbau von zwei von Radarstörsenkrechtstartern übernommenen Störgeneratoren bieten dem Vertikal Drohnenträger (VDT) einen sicheren Schutz vor feindlichen Angriffen.]
+   Picture = pu_vdt.png
+
+   Armor += 150
+   Features = MoveDuringReactionFire Repair_Facility
+   Jamming = 40
+
+   Transportation.MaxLoadableUnits = 6
+   Transportation.MaxLoadableMass = 30
+   Transportation.EntranceSystem1.Mode = in out
+
+   Tank.fuel = 30000
+   tank.material = 20000
+   FuelConsumption = 45
+
+   WaitForAttack = false
+   Weapons { 
+      Number = 4
+      Weapon0 { 
+         Type = cannon shootable
+         name = Boden Artillerie
+         targets = floating ground_level low_level_flight
+         shotFrom = ground_level low_level_flight medium_level_flight
+         MaxRange = 40
+         Ammo = 20
+         Punch@MaxRange = 80
+         Punch@MinRange = 80
+         ReactionFireShots = 2
+         HitAccuracy { 
+            d2 = 80
+            d1 = 90
+            0 = 100
+            u1 = 80
+         } HitAccuracy
+         WeaponEffectiveness ->* VehicleType.Artillery.WeaponEffectiveness
+      } Weapon0
+      Weapon1 { 
+         Type = cannon shootable
+		 name = Flak
+         targets = medium_level_flight high_level_flight
+         shotFrom = ground_level low_level_flight medium_level_flight
+         Sound = aa_gun_s.ogg
+         MaxRange = 40
+         MinRange = 10
+         Ammo = 20
+         Punch@MaxRange = 70
+         Punch@MinRange = 70
+         ReactionFireShots = 2
+         HitAccuracy { 
+            d1 = 80
+            0 = 100
+            u1 = 90
+            u2 = 80
+         } HitAccuracy
+         WeaponEffectiveness ->* VehicleType.AntiAirWeapon
+      } Weapon1
+	  Weapon2 ->* VehicleType.AmmoBomb
+	  Weapon3 ->* VehicleType.AmmoTorp
+   } Weapons
+} VehicleType

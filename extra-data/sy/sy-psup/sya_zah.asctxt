@@ -24,7 +24,7 @@ VehicleType {
 
    Construction { 
       Buildings = 1301-1303 1311 1313-1318 1325 1324 1325 1335
-      Vehicles = 1347-1350
+      Vehicles = 
       Objects = 3 30 996 1309 2153
       ObjectsRemovable = 988 1300 1305 1306
       ObjectGroupsRemovable = 
@@ -56,10 +56,11 @@ VehicleType {
    Weapons { 
       Initiative = 0
       Number = 2
-      Weapon0 ->* VehicleType.ServiceTurret 
+      Weapon0 ->* VehicleType.ServiceGround 
       Weapon0.targets = floating ground_level orbit
       Weapon0.shotFrom = floating ground_level orbit
       Weapon0.WeaponEffectiveness.trooper = 100
+      Weapon0.WeaponEffectiveness.light_aircraft = 0
       Weapon1 ->* VehicleType.SY_Fighter_small 
    } Weapons
 } VehicleType

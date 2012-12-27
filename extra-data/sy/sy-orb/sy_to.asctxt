@@ -18,14 +18,9 @@ VehicleType {
       Weapon0.Punch@MinRange += 9
       Weapon0.LaserRechargeCost.fuel -> VehicleType.Weapons.Weapon0.Punch@MinRange
 
-      Weapon1 ->* VehicleType.SY_OrbAL 
+      Weapon1 ->* VehicleType.SY_OrbGL 
       Weapon1.Punch@MaxRange += 5
       Weapon1.Punch@MinRange += 9
-      Weapon1.HitAccuracy.d4 = 100
-      Weapon1.HitAccuracy.d3 = 90
-      Weapon1.HitAccuracy.d2 = 80
-      Weapon1.HitAccuracy.d1 = 70
-      Weapon1.HitAccuracy.0 = 60
       Weapon1.LaserRechargeCost.fuel -> VehicleType.Weapons.Weapon1.Punch@MinRange
 
    } Weapons

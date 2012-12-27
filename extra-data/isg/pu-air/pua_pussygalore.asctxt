@@ -1,0 +1,24 @@
+VehicleType { 
+   Name = Pussy Galore
+   parent = 273
+   ID = 12590
+
+   Description = Jamming Unit
+   Infotext = [Pussy Galore ist die Anführerin von Pussy Galores Flying Circus, einer Gruppe professioneller weiblicher Piloten, die im Auftrag solventer Diktatoren potenziell-verfängliche Operationen ausführt. Zu dem Leistungsprofil ihrer Fliegerstaffel zählen insbesondere Schnelligkeit, eine schwache Radarsignatur, und eine diskrete Einsatzführung zum Schutz der Identität des Kunden.]
+   Picture = pua_pussygalore.png
+   InfoImage = 
+
+   Armor -= 40
+   View = 50
+   Jamming = 60
+   Weight += 20
+   Features = move_after_attack no_reactionfire
+
+   Movement += 0 0 0 0 0 -20 -20 0  
+   Tank.Fuel += 5000
+   
+   Weapons { 
+   Number = 1
+   Weapon0 ->* VehicleType.AirH_MG
+   } Weapons
+} VehicleType

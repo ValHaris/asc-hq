@@ -1,7 +1,7 @@
 VehicleType { 
    Name = sonar boje
    abstract = true
-   parent = 400 401 402 423
+   parent = 400 401 402 423 493
    ID = 249
    Description = sonar boje
    Infotext = []
@@ -11,9 +11,9 @@ VehicleType {
    View = 65
    Features = sonar paratrooper jam_only_own_field
 
-   Height = floating 
+   Height = submerged floating 
    TerrainAccess ->* VehicleType.verysmallship_terrain
-   Movement = 0 0 19 0 0 0 0 0
+   Movement = 0 19 19 0 0 0 0 0
 
    Weapons { 
       Initiative = 0

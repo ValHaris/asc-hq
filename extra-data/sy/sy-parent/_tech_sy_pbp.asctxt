@@ -16,7 +16,7 @@
    TechnologiesRequired = -1 
    ; this technology depends on the technologies with ID 122 and 123   
    
-   BlockingOtherTechnologies = 100204 100207 100211 100212 100301 100304 100310 100311 100315
+   BlockingOtherTechnologies = 100204 100207 100211 100212 100301 100304 100310 100311 100314 100315
    ; if technology 127 has been researched, this technology will not be researchable any more
 
    RequireAllListedTechnologies = true

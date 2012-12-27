@@ -573,8 +573,6 @@ void tunitattacksbuilding :: setup ( Vehicle* attackingunit, int x, int y, int w
 
 void tunitattacksbuilding :: setresult( const Context& context )
 {
-   MapCoordinate target = _attackedbuilding->getPosition();
-   
    GameAction* b = new ConsumeAmmo( _attackingunit, _attackingunit->typ->weapons.weapon[av.weapnum].getScalarWeaponType(), av.weapnum, _attackingunit->ammo[ av.weapnum ] - av.weapcount );
    b->execute ( context );
    

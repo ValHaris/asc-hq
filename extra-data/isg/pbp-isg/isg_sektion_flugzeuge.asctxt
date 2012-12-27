@@ -1,0 +1,55 @@
+VehicleType { 
+   Name = ISG Sektion Flugzeuge
+   parent = 12018
+   ID = 12019
+
+   Description = Raumschiff Sektion Flugzeuge
+   Picture = isg_sektion_flugzeuge.png
+   Infotext = []
+
+   transportation { 
+      CategoriesNOT = default trooper light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle light_ship medium_ship heavy_ship building|turret|object hoovercraft
+      MaxLoadableUnits = 30
+      MaxLoadableUnitSize = 1000
+      MaxLoadableMass = 10000
+      CargoMovementDivisor = 3
+      EntranceSystemNum = 1
+      EntranceSystem0 ->* VehicleType.GrIO
+      EntranceSystem0.DisableAttack = true
+   } transportation
+
+   Height = ground_level 
+   FuelConsumption = 0
+   Tank { 
+      Energy = 0
+      Material = 50000
+      fuel = 50000
+   } Tank
+   Movement = 0 0 0 10 0 0 0 0 
+   TerrainAccess { 
+      terrain_any = runway
+      terrain_all = runway turret_foundation
+      terrain_not = 
+      terrain_kill = 
+   } TerrainAccess
+   MovementSound = 
+
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+      ObjectsRemovable = 
+   } Construction
+
+   WaitForAttack = false
+   Weapons { 
+      Number = 7
+	  Weapon0 ->* VehicleType.AmmoMG
+	  Weapon1 ->* VehicleType.AmmoCannon
+	  Weapon2 ->* VehicleType.AmmoMine
+	  Weapon3 ->* VehicleType.AmmoSM
+	  Weapon4 ->* VehicleType.AmmoLM
+	  Weapon5 ->* VehicleType.AmmoCM
+	  Weapon6 ->* VehicleType.AmmoTorp
+   } Weapons
+} VehicleType

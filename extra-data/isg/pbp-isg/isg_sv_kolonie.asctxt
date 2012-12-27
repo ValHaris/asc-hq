@@ -1,0 +1,28 @@
+VehicleType { 
+   Name = ISG SV Kolonie
+   parent = 12016
+   ID = 12017
+
+   Description = Kolonie Bewacher
+   Infotext = [Waechter des Kolonieplatzes]
+   Picture = isg_sv_kolonie.png
+
+   Jamming = 200
+   TerrainAccess { 
+      terrain_any = runway hard_sand lowland soft_sand spaceport turret_foundation
+   } TerrainAccess
+
+
+   Weapons { 
+
+      Weapon0 { 
+         MaxRange = 150
+         MinRange = 10
+      } Weapon0
+
+      Weapon1 { 
+         MaxRange = 200
+         MinRange = 10
+      } Weapon1
+   } Weapons
+} VehicleType

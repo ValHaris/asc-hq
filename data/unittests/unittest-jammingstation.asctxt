@@ -1,0 +1,101 @@
+BuildingType { 
+   Transportation { 
+      EntranceSystemNum = 1
+      EntranceSystem0 { 
+         Mode = In Out Docking 
+         UnitHeightAbs = floating ground_level 
+         UnitHeightRel = -100
+         ContainerHeight = floating ground_level 
+         CategoriesNOT = 
+         DockingHeightAbs = floating ground_level 
+         DockingHeightRel = -100
+         RequiresUnitFeature = 
+         DisableAttack = false
+         MoveCost = -1
+      } EntranceSystem0
+      MaxLoadableUnits = 2
+      MaxLoadableUnitSize = 15
+      MaxLoadableMass = 15
+      CategoriesNOT = default medium_tracked_vehicle heavy_tracked_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle rail_vehicle medium_aircraft medium_ship building|turret|object light_aircraft heavy_aircraft light_ship heavy_ship helicopter hoovercraft 
+   } Transportation
+   Name = Unittest Jamming Station
+   Description = 
+   Infotext = Radarstoehranlage
+   ID = 1000000026
+   SecondaryIDs = 
+   View = 50
+   Jamming = 61
+   InfoImage = 
+   InfoImageSmall = 
+   MaxResourceProduction { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } MaxResourceProduction
+   ResourceExtractionEfficiency { 
+      Material = 1024
+      Fuel = 1024
+   } ResourceExtractionEfficiency
+   StorageCapacity { 
+      BImode { 
+         Energy = 1000000
+         Material = 1000000
+         fuel = 1000000
+      } BImode
+      ASCmode { 
+         Energy = 0
+         Material = 300
+         fuel = 300
+      } ASCmode
+   } StorageCapacity
+   MaxResearch = 0
+   NominalResearch = 0
+   MaxResearchpointsDefault = 0
+   DefaultProduction { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } DefaultProduction
+   CategoriesProduceable = default light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle trooper rail_vehicle medium_aircraft medium_ship building|turret|object light_aircraft heavy_aircraft light_ship heavy_ship helicopter hoovercraft 
+   AutoHarvestObjects { 
+      objects = 
+      objectGroups = 
+      Range = 0
+      MaxFieldsPerTurn = 2147483647
+   } AutoHarvestObjects
+   Construction { 
+      VehiclesInternally = 
+      ProductionEfficiency = 1.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 1.000000 
+   } Construction
+   ConstructionStages = 1
+   Weather = dry few_snow much_snow snow_and_ice 
+   Fields = A1 
+   UseGFXpics = false
+   Pictures { 
+      dry = unittest-jammingstation.png
+      few_snow = unittest-jammingstation.png
+      much_snow = unittest-jammingstation.png
+      snow_and_ice = unittest-jammingstation.png
+   } Pictures
+   RubbleObjects = false
+   Entry = A1
+   Armor = 800
+   Features = 
+   Techlevel = 0
+   TerrainAccess { 
+      terrain_any = Lowland Hard_sand Soft_sand 
+      terrain_all = 
+      terrain_not = Forest Railroad Large_rocks Installation 
+      terrain_kill = Water Deep_water Lava River 
+   } TerrainAccess
+   ConstructionCost { 
+      Energy = 0
+      Material = 13000
+      fuel = 16000
+   } ConstructionCost
+   Height = ground_level 
+   ExternalLoading = 
+   NotRemovable = false
+   TechAdapterRequired = b26 
+   RequireAllListedTechAdapter = true
+} BuildingType

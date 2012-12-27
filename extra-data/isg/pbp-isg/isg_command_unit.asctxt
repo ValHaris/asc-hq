@@ -4,7 +4,7 @@ VehicleType {
    ID = 12006
 
    Description = Command Unit
-   Infotext = [Waechter der Landezone]
+   Infotext = [Waechter der Invasionslandezone]
    Picture = isg_command_unit.png
 
    ConstructionCost { 
@@ -15,9 +15,9 @@ VehicleType {
    } ConstructionCost
 
    Features = Sonar satelliteview MoveDuringReactionFire
-   Armor = 5000
+   Armor = 3500
    View = 150
-   Jamming = 100
+   Jamming = 105
    Category = building|turret|object
    MaxSurvivableStorm = 255
    ResourceDrillingRange = 0
@@ -50,7 +50,7 @@ VehicleType {
    WaitForAttack = false
    Weapons { 
       Initiative = 0
-      Number = 4
+      Number = 5
 
       Weapon0 ->* VehicleType.SSM
       Weapon0.type = laser shootable
@@ -111,7 +111,7 @@ VehicleType {
       Weapon4.LaserRechargeRate = 2
       Weapon4.LaserRechargeCost.material = 0
       Weapon4.LaserRechargeCost.fuel = 0
-      Weapon4.MaxRange = 40
+      Weapon4.MaxRange = 50
       Weapon4.MinRange = 10
       Weapon4.Punch@MaxRange = 65
       Weapon4.Punch@MinRange = 65

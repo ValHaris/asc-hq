@@ -164,7 +164,7 @@ ActionResult DestructContainer::runAction( const Context& context )
       if ( veh && veh->isViewing() ) {
          veh->removeview();
          hadViewOnMap = true;
-      } else if ( bld ) {
+      } else if ( bld && bld->isViewing() ) {
          bld->removeview();
          hadViewOnMap = true;
       } 
@@ -188,7 +188,7 @@ ActionResult DestructContainer::undoAction( const Context& context )
    if ( building ) {
       Building* bld = Building::newFromStream( getMap(), memstream );
       bld->chainbuildingtofield( bld->getEntry() );
-      if ( bld->getOwner() < bld->getMap()->getPlayerCount() )
+      if ( bld->getOwner() < bld->getMap()->getPlayerCount() && hadViewOnMap )
          bld->addview();
    } else {
       Vehicle* veh = Vehicle::newFromStream( getMap(), memstream );

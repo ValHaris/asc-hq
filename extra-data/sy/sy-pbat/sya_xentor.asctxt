@@ -3,27 +3,34 @@ VehicleType {
    parent = 1393 1394 1395 1398
    ID = 1302
 
-   Description = medium fighter
+   Description = schwerer Jaeger
    Picture = sya_xentor.png
-   Infotext = [Dieser mittlere Jägertyp gehört zu den am meisten anzutreffenden SY-Jägern. Neben einer hervorragenden Geschwindigkeit verfügt er über eine ansprechende Panzerung und starke Waffensysteme. Seine Waffen können auch Bodenziele angreifen, alledings nur aus geringer Entfernung und mit geringer Effizienz. Die schnörkellose Hülle ermöglicht einen hohen Stealthfaktor. Trotz dieser Eigenschaften sollte er nicht eigenständig in durch Luftverteidigung geschützten Bereichen operieren.
+   Infotext = [Dieser Jägertyp gehört zu den am meisten anzutreffenden SY-Jägern und wird als schweres Fluggeraet klassifiziert. Neben einer hervorragenden Geschwindigkeit verfügt er über eine ansprechende Panzerung und starke Waffensysteme. Seine Waffen können auch Bodenziele angreifen, alledings nur aus geringer Entfernung und mit geringer Effizienz. Die schnörkellose Hülle ermöglicht einen hohen Stealthfaktor. Trotz dieser Eigenschaften sollte er nicht eigenständig in durch Luftverteidigung geschützten Bereichen operieren.
 Die Jäger der SY besitzen eine organische Hüllenpanzerung, welche herkömmliche Strahlung von Aufklärungssonden absorbiert. Selbst normales Licht wird unterschiedliche reflektiert. Dadurch entstehen seltsame Kaleidoskopeffekte, welche die Waffensysteme auf optischer Basis ebenfalls verwirren.
 ]
 
-   Armor = 410
-   Category = medium_aircraft
-   FuelConsumption = 12
-   Movement = 0 0 0 40 180 190 190 30 
-   Weight = 80
+   Armor = 400
+   Weight = 100
+   Movement = 0 0 0 40 180 190 190 0 
+   FuelConsumption += 4
 
    Weapons { 
       Number = 2
+      
       Weapon0 ->* VehicleType.SY_Fighter_Big 
       Weapon0.Punch@MaxRange = 72
       Weapon0.Punch@MinRange = 76
-      Weapon0.LaserRechargeCost.fuel -> VehicleType.Weapons.Weapon0.Punch@MinRange
-      Weapon1 ->* VehicleType.SY_Fighter_small 
-      Weapon1.Punch@MaxRange = 63
-      Weapon1.Punch@MinRange = 63
-      Weapon1.LaserRechargeCost.fuel -> VehicleType.Weapons.Weapon0.Punch@MinRange
+      Weapon0.LaserRechargeCost.fuel = 150
+      Weapon0.LaserRechargeCost.material = 80
+      
+      Weapon1 ->* VehicleType.SY_Fighter_Big 
+      Weapon1.targets = orbit
+      Weapon1.shotFrom = high_level_flight
+      Weapon1.HitAccuracy.u1 = 100
+      Weapon1.Punch@MaxRange = 70
+      Weapon1.Punch@MinRange = 80
+      Weapon1.LaserRechargeCost.fuel = 160
+      Weapon1.LaserRechargeCost.material = 80
+
    } Weapons
 } VehicleType

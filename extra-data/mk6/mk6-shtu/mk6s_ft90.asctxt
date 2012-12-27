@@ -5,13 +5,10 @@ VehicleType {
 
    Description = aircraft carrier
 ;   Infotext = []
-   picture = mk6s_ft90.pcx
+   picture = mk6s_ft90.png
    WreckageObject = 414
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
    
-   Jumpdrive ->* VehicleType.TeccnolsJump4
-   Jumpdrive.consumption.Fuel = 8000
-
    Transportation {
       EntranceSystemNum = 3
       EntranceSystem2 {
@@ -28,10 +25,12 @@ VehicleType {
 
 
    Armor -= 300
-   view = 0
+   View = 70
 
-   Movement += 0 0 0 0 60 80 0 0
-   Height = floating low_level_flight medium_level_flight
+   TerrainAccess.Terrain_any += spaceport
+   Movement += 0 0 0 0 70 100 0 0
+   FuelConsuption = 45
+   Height = floating ground_level low_level_flight medium_level_flight
    Weapons { 
       Number = 5
       Weapon0 ->* VehicleType.Ship_Flak 
@@ -77,9 +76,23 @@ VehicleType {
    } HeightChangeMethod2
    HeightChangeMethod3 {
       movecost = 20
-      heightdelta = -2
+      heightdelta = -1
       dist = 0
       startheight = low_level_flight
       canattack = true
    } HeightChangeMethod3
+   HeightChangeMethod4 {
+      movecost = 0
+      heightdelta = -1
+      dist = 0
+      startheight = ground_level
+      canattack = true
+   } HeightChangeMethod4
+   HeightChangeMethod5 {
+      movecost = 0
+      heightdelta = 1
+      dist = 0
+      startheight = ground_level
+      canattack = true
+   } HeightChangeMethod5
 } VehicleType

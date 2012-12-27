@@ -22,10 +22,9 @@ VehicleType {
    FuelConsumption = 11
 
    Weapons { 
-      Initiative = 0
-      Number = 6
+      Number = 5
       Weapon0 ->* VehicleType.MG_Tank 
-      Weapon0.Ammo = 16
+      Weapon0.Ammo = 100
       Weapon0.Punch@MaxRange = 44
       Weapon0.Punch@MinRange = 44
       Weapon0.HitAccuracy.u1 = 100
@@ -37,7 +36,5 @@ VehicleType {
       Weapon3.Ammo = 30
       Weapon4 ->* VehicleType.AmmoCannon
       Weapon4.Ammo = 40
-      Weapon5 ->* VehicleType.AmmoMG
-      Weapon5.Ammo = 100
    } Weapons
 } VehicleType

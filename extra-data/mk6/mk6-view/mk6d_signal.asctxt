@@ -13,7 +13,7 @@ VehicleType {
       Objects = 15002
    } Construction
    
-   Tank.Fuel = 4000
-   Tank.Material = 200
+   Tank.Fuel = 4500
+   Tank.Material = 900
 
 } VehicleType

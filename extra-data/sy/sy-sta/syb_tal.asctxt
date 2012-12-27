@@ -1,44 +1,76 @@
 VehicleType { 
    Name = TAL
    ID = 1348
-   parent = 322
+   parent = 322 1395 1394
 
-   Description = lr surface defence system
+   Description = Bodenabwehrwurm
    Infotext = []
    picture = syb_tal.png
    WreckageObject = 1308
 ;   InfoImage = mk3b_ss74.jpg
 ;   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
-	 Armor = 750
-   Jamming = 39
-   Features += jam_only_own_field self_repairing
-   SelfRepairRate = 15
-   Category = Trooper
 
-   TerrainAccess.terrain_any = hard_sand soft_sand lowland mountains high_mountains
-   TerrainAccess.terrain_kill += very_shallow_water
+   Armor = 750
+   Jamming = 39
+   View = 0
+   Weight = 5000
+   Features = MoveDuringReactionFire jam_only_own_field self_repairing
+   SelfRepairRate = 15
+
+   TerrainAccess ->* VehicleType.SY_worm 
    Tank.Fuel = 10000
    Tank.Material = 5000
+   Movement = 0 0 0 10 0 0 0 0 
+;   ObjectsLayedByMovement = 1301
+   
+   JumpDrive { 
+      Height = ground_level
+      consumption { 
+         Energy = 0
+         Material = 300
+         fuel = 300
+      } consumption
+      terrain_any -> VehicleType.TerrainAccess.terrain_any 
+      terrain_all = 
+      terrain_not -> VehicleType.TerrainAccess.terrain_not
+      terrain_kill = 
+      MaxDistance = 50
+   } JumpDrive
 
+   WaitForAttack = true
    Weapons {
       Weapon0 ->* VehicleType.type_laser
-      Weapon0.name = Dronenschacht 
+      Weapon0.name = Drohnenschacht 
+	  Weapon0.MaxRange += 10
+      Weapon0.Sound = canon_s.ogg
       Weapon0.Punch@MaxRange = 110
       Weapon0.Punch@MinRange = 110
       Weapon0.LaserRechargeRate = 1
-      Weapon0.Ammo = 6
+	  Weapon0.ReactionFireShots = 2
+      Weapon0.Ammo = 4
       Weapon0.LaserRechargeCost.energy = 0
-      Weapon0.LaserRechargeCost.material = 100
-      Weapon0.LaserRechargeCost.fuel = 200
+      Weapon0.LaserRechargeCost.material = 200
+      Weapon0.LaserRechargeCost.fuel = 400
 
-      Weapon1 ->* VehicleType.type_laser 
-      Weapon1.name = Defensivlaser 
-      Weapon1.Punch@MaxRange = 60
-      Weapon1.Punch@MinRange = 60
-      Weapon1.LaserRechargeRate = 2
+      Weapon1 ->* VehicleType.SY_TankL
+      Weapon1.name = Drohnenschacht 
+      Weapon1.Sound = canon_s.ogg
+      Weapon1.targets = floating ground_level low_level_flight medium_level_flight high_level_flight
+      Weapon1.HitAccuracy.u1 = 100
+      Weapon1.HitAccuracy.u2 = 95
+      Weapon1.HitAccuracy.u3 = 90
+	  Weapon1.MaxRange = 40
+      Weapon1.Punch@MaxRange = 110
+      Weapon1.Punch@MinRange = 110
+	  Weapon1.ReactionFireShots = 2
+      Weapon1.LaserRechargeRate = 1
       Weapon1.Ammo = 4
       Weapon1.LaserRechargeCost.energy = 0
-      Weapon1.LaserRechargeCost.material = 10
-      Weapon1.LaserRechargeCost.fuel = 20
+      Weapon1.LaserRechargeCost.material = 100
+      Weapon1.LaserRechargeCost.fuel = 200
+      Weapon1.WeaponEffectiveness.helicopter = 70
+      Weapon1.WeaponEffectiveness.light_aircraft = 70
+      Weapon1.WeaponEffectiveness.medium_aircraft  = 70
+      Weapon1.WeaponEffectiveness.heavy_aircraft = 70
    } Weapons
 } VehicleType

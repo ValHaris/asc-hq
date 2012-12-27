@@ -4,13 +4,16 @@ VehicleType {
    parent = 419
 
    Description = Bauschiff
-   Infotext = [ Der Taros ist die schwimmende Variante des Gigant-Baufahrzeugs. Auf Basis des Rex wurden Installationsanlagen integriert, die in kuerzester Zeit Straßen- und Eisenbahnbruecken sowie stationaere verteidigungsanlagen herstellen koennen.] 
+   Infotext = [ Der Taros ist die schwimmende Variante des Gigant-Baufahrzeugs. Auf Basis des Rex wurden Installationsanlagen integriert, die in kuerzester Zeit Straßen- und Eisenbahnbruecken sowie stationaere Verteidigungsanlagen herstellen koennen.] 
    picture = mk4s_taros.png
    wreckageobject = 14269
    GuideSortHelp = 554 558 0 0 4 0 0 0 0 0
    
    Transportation ->* VehicleType.TransTurretBig2
-   Features = construct_specific_buildings construct_vehicles self_repairing ExternalMaterialTransfer ExternalFuelTransfer ExternalRepair
+   Transportation.MaxLoadableUnitSize = 900
+   Transportation.MaxLoadableMass = 1800
+   Transportation.CategoriesNOT = default trooper light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_tracked_vehicle medium_tracked_vehicle rail_vehicle light_aircraft medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship helicopter hoovercraft
+   Features = construct_specific_buildings construct_vehicles self_repairing ExternalMaterialTransfer ExternalFuelTransfer ExternalAmmoTransfer ExternalRepair
    SelfRepairRate = 10
 
    Tank { 
@@ -20,10 +23,10 @@ VehicleType {
    
    Construction { 
       Buildings = 13 14 50
-      Vehicles = 1221 1222 1219 1278
+      Vehicles = 1221 1222 1219 1278 14004
       Objects = 1000 2 30 44 999 997 996 995
-      ObjectsRemovable = 
-      ObjectGroupsRemovable = 2 4 6 7 9 12 14 15
+      ObjectsRemovable = 996
+      ObjectGroupsRemovable =  1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 21
    } Construction
    Weapons { 
       Number = 4
@@ -31,9 +34,8 @@ VehicleType {
       Weapon1 ->* VehicleType.Ship_MG 
       Weapon2 ->* VehicleType.AmmoCannon 
       Weapon2.Ammo = 70
-
       Weapon3 ->* VehicleType.AmmoLM 
       Weapon3.Ammo = 70
-
+	  
    } Weapons
 } VehicleType

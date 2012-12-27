@@ -166,12 +166,14 @@ MapCoordinate3D AI::RefuelConstraint::getNearestRefuellingPosition ( bool buildi
 {
    findPath();
 
+   /*
    int fuel = veh->getResource(maxint, 2, true);
    int x1,y1,x2,y2;
    x1 = max(veh->xpos - fuel / veh->typ->fuelConsumption, 0 );
    y1 = max(veh->ypos - fuel / veh->typ->fuelConsumption, 0 );
    x2 = min(veh->xpos + fuel / veh->typ->fuelConsumption, ai.getMap()->xsize );
    y2 = min(veh->ypos + fuel / veh->typ->fuelConsumption, ai.getMap()->ysize );
+   */
 
    for ( AStar3D::Container::iterator i = ast->visited.begin(); i != ast->visited.end(); i++ ) {
       int dist = int(i->gval );
@@ -835,12 +837,14 @@ AI::UnitDistribution AI::calcUnitDistribution ()
 
 void AI::production()
 {
-   float inc;
+   /*
    int unitCount = getPlayer().vehicleList.size();
+   float inc;
    if ( unitCount ) 
       inc = float(1) / float(unitCount);
    else
       inc = 1;
+   */
 
    UnitDistribution currentUnitDistribution = calcUnitDistribution();
 

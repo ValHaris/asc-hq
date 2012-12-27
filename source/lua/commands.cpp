@@ -348,12 +348,16 @@ ActionResult serviceCommand( GameMap* actmap, int providingContainerID, int rece
       if ( (*i)->getID() == type )
          (*i)->setAmount( rec, amount );
    
-   ac->saveTransfers();
-   ActionResult res = ac->execute( createContext( actmap ) );
-   if ( res.successful() ) 
-      ac.release();
-
-   return res;
+   if ( transfers.size() > 0 ) {
+      ac->saveTransfers();
+      ActionResult res = ac->execute( createContext( actmap ) );
+      if ( res.successful() ) 
+         ac.release();
+   
+      return res;
+   } else {
+      return ActionResult(23301);  
+   }
 }
 
 ActionResult repairUnit( GameMap* actmap, int repairerID, int damagedUnitID )

@@ -1,0 +1,53 @@
+VehicleType { 
+   Name = TEM
+   parent = 1351
+   ID = 12200
+
+   Picture = explorer_tem.png
+   Infotext = [ Spezial Explorer der Termiden.]
+      
+   Features = self_repairing
+   Armor += 400
+   SelfRepairRate = 15
+   Jamming = 70
+
+   Movement += 0 0 0 0 40 40 40 40 
+   Tank { 
+      Material = 200000
+      fuel = 350000
+   } Tank
+   FuelConsumption = 100
+   TerrainAccess { 
+      terrain_any = Spaceport runway road lowland hard_sand soft_Sand
+      terrain_all = 
+      terrain_not = forest large_rocks bridge installation hillside
+      terrain_kill = lava
+   } TerrainAccess
+   MovementSound = ship_d_a_s.ogg
+
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+      ObjectsRemovable = 
+   } Construction
+
+   WaitForAttack = false
+   Weapons { 
+      Number = 2
+	  Weapon0 ->* VehicleType.SY_Fighter_AD
+	  Weapon0.MaxRange = 40
+	  Weapon0.shotFrom = ground_level low_level_flight medium_level_flight high_level_flight orbit 
+      Weapon0.Punch@MaxRange = 80
+      Weapon0.Punch@MinRange = 85
+	  Weapon1 ->* VehicleType.SY_bomber_big
+	  Weapon1.MaxRange = 40
+	  Weaoon1.shotFrom = ground_level low_level_flight medium_level_flight
+	  Weapon1.HitAccuracy.d3 = 0
+	  Weapon1.HitAccuracy.0 = 100
+	  Weapon1.ReactionFireShots = 2
+      Weapon1.Punch@MaxRange = 110
+      Weapon1.Punch@MinRange = 130
+
+  } Weapons
+} VehicleType

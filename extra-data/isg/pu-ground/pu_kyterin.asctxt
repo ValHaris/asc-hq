@@ -1,0 +1,30 @@
+VehicleType { 
+   Name = Kyterin
+   ID = 12593
+   parent = 1440
+
+   Description = Jagd-Buggy
+   Picture = pu_kyterin.png
+   InfoImage = mk5v_fav4x4t7.jpg
+   WreckageObject = 1404
+   Infotext = [Spezial Luft-Jagd-Kampf-Buggy]
+   
+   Armor += 50
+   Weight += 5
+   View = 50
+   Movement -= 0 0 0 1 0 0 0 0 
+
+   Weapons {
+      Number = 3 
+      Weapon0 ->* vehicleType.MG30low 
+      Weapon0.ReactionFireShots = 1
+      Weapon1 ->* VehicleType.SAMH
+      Weapon1.MinRange = 50
+      Weapon1.Ammo = 2
+      Weapon1.ReactionFireShots = 0
+      Weapon2 ->* VehicleType.SAMH
+      Weapon2.MaxRange = 30
+      Weapon2.Ammo = 2
+      Weapon2.ReactionFireShots = 1
+   } Weapons
+} VehicleType

@@ -4,7 +4,7 @@ message = [[Thunderlance HQ, Hyxaria:#crt##crt#Gut gemacht!#crt#Nun hoffen wir e
 asc.setLocalizedEventMessage( map, 266, message )
 
 --- ===== 264  ======= 
-message = [[Kommandant, sie haben ihre Missionsziele nicht erfüllt!#crt##crt#Das IMPERIUM hat nun eine Waffe die viel zu mächtig ist, als das man dagegen Widerstand leisten könnte.Wir werden den Krieg verlieren. #crt##crt#Es ist vorbei!#crt##crt#Letzte Nachricht von#crt#Lenlin Grinson,#crt#Thunderlance Briefing Officer#crt#]]
+message = [[Kommandant, sie haben ihre Missionsziele nicht erfüllt!#crt##crt#Das IMPERIUM hat nun eine Waffe die viel zu mächtig ist, als dass man dagegen Widerstand leisten könnte.Wir werden den Krieg verlieren. #crt##crt#Es ist vorbei!#crt##crt#Letzte Nachricht von#crt#Lenlin Grinson,#crt#Thunderlance Briefing Officer#crt#]]
 asc.setLocalizedEventMessage( map, 264, message )
 
 --- ===== 260  ======= 
@@ -13,7 +13,7 @@ In der Höhle und am Eingang des Labors befinden sich viele feindliche Minen. Ret
 asc.setLocalizedEventMessage( map, 260, message )
 
 --- ===== 259  ======= 
-message = [[Thunderlance HQ, Hyxaria:#crt##crt#Kommandant, unser Spezial Kommando ist nun am Höhlen Eingang gelandet. Die Hubschrauber sind wegen Treibstoffmangels nicht in der Lage wieder zu starten. Die Radio Station wurde von einem feindlichen Agenten zerstört, welcher die Hauptstromversorgung der Anlage sabotierte.#crt##crt#Am Ende des Höhlensystems liegt ein Forschungslabor. Wir rechnen damit, dass die Geheimen Waffensysteme, nach denen wir suchen, dort entwickelt werden.#crt##crt#Lenlin Grinson#crt#Thunderlance Briefing Officer#crt##crt#Missionsziele:#crt#- Erobern sie das gegnerische Forschungslabor#crt#]]
+message = [[Thunderlance HQ, Hyxaria:#crt##crt#Kommandant, unser Spezial Kommando ist nun am Höhlen Eingang gelandet. Die Hubschrauber sind wegen Treibstoffmangels nicht in der Lage wieder zu starten. Die Radio Station wurde von einem feindlichen Agenten zerstört, welcher die Hauptstromversorgung der Anlage sabotierte.#crt##crt#Am Ende des Höhlensystems liegt ein Forschungslabor. Wir rechnen damit, dass die geheimen Waffensysteme, nach denen wir suchen, dort entwickelt werden.#crt##crt#Lenlin Grinson#crt#Thunderlance Briefing Officer#crt##crt#Missionsziele:#crt#- Erobern sie das gegnerische Forschungslabor#crt#]]
 asc.setLocalizedEventMessage( map, 259, message )
 
 --- ===== 397  ======= 

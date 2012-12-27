@@ -54,8 +54,6 @@ vector<const VehicleType*> BuildProductionLineCommand :: productionLinesBuyable(
    if ( !avail( container ))
       return list;
    
-   Resources r = container->getResource( Resources(maxint, maxint, maxint), 1 );
-   
    for ( int i = 0; i < vehicleTypeRepository.getNum(); ++i ) {
       VehicleType* veh = getMap()->getvehicletype_bypos ( i );
       if ( veh ) {

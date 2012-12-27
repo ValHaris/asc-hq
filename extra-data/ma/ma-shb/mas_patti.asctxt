@@ -3,7 +3,7 @@ VehicleType {
    parent = 22996 351
    ID = 22716
 
-   Description = Patrollien-U-Boot
+   Description = Patroullien-U-Boot
    Infotext = [Das Patty ist das kleinste Mitglied der malanischen U-Boot Flotte. Es wurde vor allem konzipiert, um in seichten Gewässern operieren zu können. Zu diesem Zweck verfügt es über eine leichte Bewaffnung, bestehend aus einer Maschinenkanone größerer Reichweite, und einer speziellen Unterwasserkanone für Angriffe aus kürzerer Distanz. Die Maschinenkanone gibt dem Patty rudimentäre Flugabwehrmöglichkeiten an der Wasseroberfläche. Ein Torpedorohr mit allerdings nur 2 Torpedos Munition ermöglicht die Bekämpfung feindlicher Schiffe und U-Boote. Trotzdem ist die Bewaffnung für ernsthafte Kämpfe unzureichend. Auch die recht schwache Panzerung ist für schwere Gefechte nicht ausgelegt.
    Der Hauptzweck ist die Sicherung von flachen Küsten und die Anlandung von Truppen. Zu diesem Zweck besitzt das Patty einen Laderaum, welcher groß genug ist, einige Infanterieeinheiten zu transportieren und abzusetzen. Die eingebaute Schleuse ermöglicht dabei auch das Aussetzen von Tauchern unter Wasser. Auf diese Art und Weise ist auch die Unterstützung eigener U-Boote möglich.
    Für das unbemerkte Besetzen abgelegener Siedlungen und Gebäude in Küstennähe ist das Patty die erste Wahl. Es kann die eigene Infanterie schnell an Land bringen und gleichzeitig Feuerschutz geben.
@@ -11,13 +11,14 @@ VehicleType {
    Picture = mas_patti.pcx
 
    Transportation ->* VehicleType.TransShipSmall
-
+   Transportation.EntranceSystem0 ->* VehicleType.SubIO
+   
+   
    Armor -= 100
    View -= 10
    Movement += 77 77 0 0 0 0 0 0 
 
    Weapons { 
-      Initiative = 0
       Number = 3
       Weapon0 ->* VehicleType.UTorp 
       Weapon0.Ammo = 2

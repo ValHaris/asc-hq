@@ -7,7 +7,7 @@ ObjectType {
 
    Name = Defensive Turret Foundation
    Armor = 750
-   Height = 118
+   Height = 114
 
    visible_in_fogOfWar = false
    LinkableObjects = 
@@ -48,7 +48,7 @@ ObjectType {
                                forest installation
                                track_possible harbour
                                small_rocks large_rocks hillside mountains High_mountains
-                               road railroad runway ditch]
+                               road railroad runway ditch river]
    TerrainProperties_Add = turret_foundation 
    dry { 
       UseGFXpics = false

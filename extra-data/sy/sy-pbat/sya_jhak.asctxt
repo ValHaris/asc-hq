@@ -3,24 +3,32 @@ VehicleType {
    parent = 1393 1395 1398
    ID = 1301
 
-   Description = heavy fighter
+   Description = ueberschwerer Jaeger
    Picture = sya_jhak.png
-   Infotext = [Schwerer Jaeger#crt#Seine Schwerfaelligkeit wird durch eine
+   Infotext = [ Der Jhak ist ein ueberschwerer Jaeger. Seine Schwerfaelligkeit wird durch eine
               sehr starke Partikelkanone mehr als ausgeglichen.]
 
-   Armor = 500
-   Category = medium_aircraft
-   Movement = 0 0 0 40 160 180 180 40 
-   Weight = 105
+   Armor = 450
+   Weight = 120
+   Movement = 0 0 0 40 150 160 160 00 
+   FuelConsumption += 6
 
    Weapons { 
       Number = 2
-      Weapon0 ->* VehicleType.SY_Fighter_Big 
+      
+      Weapon0 ->* VehicleType.SY_Fighter_Big
       Weapon0.Punch@MaxRange = 78
       Weapon0.Punch@MinRange = 82
-      Weapon0.LaserRechargeCost.fuel -> VehicleType.Weapons.Weapon0.Punch@MinRange
-      Weapon1 ->* VehicleType.SY_fighter_Small 
-      Weapon1.Punch@MaxRange = 65
-      Weapon1.Punch@MinRange = 65
+      Weapon0.LaserRechargeCost.fuel = 160
+      Weapon0.LaserRechargeCost.material = 80
+      
+      Weapon1 ->* VehicleType.SY_fighter_Big
+      Weapon1.Ammo = 1
+      Weapon1.MaxRange = 30
+      Weapon1.MinRange = 20
+      Weapon1.Punch@MaxRange = 75
+      Weapon1.Punch@MinRange = 84
+      Weapon1.LaserRechargeCost.fuel = 600
+      Weapon1.LaserRechargeCost.material = 600
    } Weapons
 } VehicleType

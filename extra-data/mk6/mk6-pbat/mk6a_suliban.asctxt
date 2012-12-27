@@ -14,7 +14,7 @@ VehicleType {
 
    Tank.Material = 2000
    Tank.Fuel = 12000
-   movement += 0 0 0 0 20 40 20 0
+   movement += 0 0 0 0 50 50 50 0
 
    Weapons { 
       Number = 4

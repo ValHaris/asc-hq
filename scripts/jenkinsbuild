@@ -1,6 +1,11 @@
+#!/bin/sh
+set -e
+
+
 export CXXFLAGS=-Wall
 export CFLAGS=-Wall
 export CXX="ccache g++"
 export CC="ccache gcc"
 ./configure --enable-extradata --with-win32-build-path=/home/martin/asc/pbp/asc/asc2 --with-win32-DLL-path=/home/martin/asc/pbp/asc/dlls -q
-make
+echo "This is a test error message" 1>&2
+make -s

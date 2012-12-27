@@ -10,17 +10,17 @@ Obwohl alle SY durch ihre organische Hüllenpanzerung eine erhebliche Tarnkapazit
    Picture = sya_trox.pcx
 
    Armor = 220
+   Weight = 39
    Category = light_aircraft
    Jamming = 34
 
    Height = low_level_flight medium_level_flight high_level_flight orbit
-   WaitForAttack = false
    FuelConsumption = 30
    Features = self_repairing cruiserlanding
    Movement = 0 0 0 0 120 120 120 30 
-   Weight = 6
    TerrainAccess ->* VehicleType.SY_Air
 
+   WaitForAttack = false
    Weapons { 
       Initiative = 0
       Number = 0

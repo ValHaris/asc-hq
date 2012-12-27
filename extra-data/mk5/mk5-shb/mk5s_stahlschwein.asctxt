@@ -11,7 +11,7 @@ VehicleType {
    Armor += 700
    Transportation ->* VehicleType.noTrans 
    Tank.Material = 0
-   Features += move_after_attack icebreaker
+   Features += move_after_attack icebreaker sonar
    TerrainAccess ->* VehicleType.icebreaker_terrain
 
    WaitForAttack = true

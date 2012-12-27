@@ -129,7 +129,7 @@ void         tcomputeview::testfield( const MapCoordinate& mc )
           efield->view[player].satellite < 0 ||
           efield->view[player].jamming   < 0 ||
           efield->view[player].mine      < 0 )
-        displaymessage ( "Warning: inconsistency in view calculation !!\n Please report this bug !", 1 );
+        errorMessage( "Warning: inconsistency in view calculation !!\n Please report this bug !" );
    #endif
 }
 
@@ -222,14 +222,17 @@ void         tcomputebuildingview::init( const Building*    bld,  int _mode )
 
 
 
-void         clearvisibility( GameMap* gamemap, int  reset )
+void         clearvisibility( GameMap* gamemap )
 {
    if (!gamemap || (gamemap->xsize <= 0) || (gamemap->ysize <= 0))
      return;
 
-   for ( int p = 0; p < gamemap->getPlayerCount() ; p++ )
+   for ( int p = 0; p < gamemap->getPlayerCount() ; p++ ) {
       for ( Player::VehicleList::iterator i = gamemap->player[p].vehicleList.begin(); i != gamemap->player[p].vehicleList.end(); i++ )
          (*i)->resetview();
+      for ( Player::BuildingList::iterator b = gamemap->player[p].buildingList.begin(); b != gamemap->player[p].buildingList.end(); b++ )
+         (*b)->resetview();
+   }
 
    int l = 0;
    for ( int x = 0; x < gamemap->xsize ; x++)
@@ -449,7 +452,7 @@ int computeview( GameMap* gamemap, int player_fieldcount_mask, bool disableShare
    if ( !gamemap || (gamemap->xsize == 0) || (gamemap->ysize == 0))
       return 0;
 
-   clearvisibility( gamemap, 1 );
+   clearvisibility( gamemap );
 
    for ( int a = 0; a < gamemap->getPlayerCount(); a++)
       if (gamemap->player[a].exist() ) {
@@ -532,7 +535,7 @@ void RecalculateAreaView::removeFieldView( const MapCoordinate& pos )
    if ( !fld )
       return;
    
-   if ( fld->getContainer() && fld->getContainer()->getOwner() < fld->getContainer()->getMap()->getPlayerCount() ) {
+   if ( (fld->vehicle || fld->getBuildingEntrance()) && fld->getContainer()->getOwner() < fld->getContainer()->getMap()->getPlayerCount() ) {
       if ( context ) 
          (new ViewRegistration( fld->getContainer(), ViewRegistration::RemoveView ))->execute(*context);
       else 
@@ -547,7 +550,7 @@ void RecalculateAreaView::addFieldView( const MapCoordinate& pos )
       return;
    
    
-   if ( fld->getContainer() && fld->getContainer()->getOwner() < fld->getContainer()->getMap()->getPlayerCount() ) { //excluding neutral buildings here
+   if ( (fld->vehicle || fld->getBuildingEntrance()) && fld->getContainer()->getOwner() < fld->getContainer()->getMap()->getPlayerCount() ) { //excluding neutral buildings here
       if ( context ) 
          (new ViewRegistration( fld->getContainer(), ViewRegistration::AddView ))->execute(*context);
       else

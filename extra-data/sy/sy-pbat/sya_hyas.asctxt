@@ -5,20 +5,18 @@ VehicleType {
 
    Description = Markierer
    Picture = sya_hyas.png
-   Infotext = [Die athmosphaerentauglichen Triebwerke ermoeglichen extreme
-              Beschleunigungswerte, sind aber nur bedingt in der Lage den Hytak
-              ausserhalb der Lufthuelle zu bewegen.]
+   Infotext = [Der Hyas ist ein Fernaufklaerer und gehört zur Klasse der mittleren SY-Fluggeraete. Zugunsten seiner Tanks wurde die Armierung verringert. Er kann eine Sprungmarkierung setzten, die kann der YSol anpeilen und dann dorthinspringen.]
 
    Armor = 300
-   Movement = 0 0 0 40 190 190 190 20 
+   Movement = 0 0 0 40 190 190 190 0 
    MaxSurvivableStorm = 180
-   Weight = 45
+   Weight = 80
    Jamming += 10
    Features += satelliteview
 
    Tank { 
       Material = 7000
-      fuel += 3000
+      fuel += 10000
    } Tank
 
    Construction {
@@ -32,6 +30,7 @@ VehicleType {
       Weapon0 ->* VehicleType.SY_Fighter_Small 
       Weapon0.Punch@MaxRange = 55
       Weapon0.Punch@MinRange = 55
-      Weapon0.LaserRechargeCost.fuel -> VehicleType.Weapons.Weapon0.Punch@MinRange
+      Weapon0.LaserRechargeCost.fuel = 110
+      Weapon0.LaserRechargeCost.material = 55
    } Weapons
 } VehicleType

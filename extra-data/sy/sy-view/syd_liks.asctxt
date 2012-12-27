@@ -4,11 +4,12 @@ VehicleType {
    ID = 1347
    WreckageObject = 1307
 
-   Description = senor
+   Description = Senorkriechpflanze
    Picture = syd_liks.png
 ;   GuideSortHelp += 0 0 0 0 2 0 0 0 0 0
    InfoText = []
 
+   Features = jam_only_own_field
    Category = trooper
    Jamming = 39
    Movement += 0 0 0 2 0 0 0 0

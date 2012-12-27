@@ -46,6 +46,9 @@ const float repairEfficiencyBuilding[resourceTypeNum*resourceTypeNum] = { 1./3.,
 Building :: Building ( GameMap* actmap, const MapCoordinate& _entryPosition, const BuildingType* type, int player, bool setupImages, bool chainToField )
            : ContainerBase ( type, actmap, player ), typ ( type ), repairEfficiency ( repairEfficiencyBuilding )
 {
+   
+   viewOnMap = false;
+         
    int i;
    for ( i = 0; i < 8; i++ )
       aiparam[i] = NULL;
@@ -131,7 +134,8 @@ void Building :: convert ( int player, bool recursive )
          }
 
    #endif
-   if ( color < 8*8 )
+   bool hadViewOnMap = viewOnMap;
+   if ( color < 8*8  && hadViewOnMap)
       removeview();
 
    Player::BuildingList::iterator i = find ( gamemap->player[oldcol].buildingList.begin(), gamemap->player[oldcol].buildingList.end(), this );
@@ -142,7 +146,7 @@ void Building :: convert ( int player, bool recursive )
 
    color = player * 8;
 
-   if ( player < 8 )
+   if ( hadViewOnMap && player < 8 )
       addview();
 
    if ( recursive )
@@ -348,17 +352,33 @@ int  Building :: unchainbuildingfromfield ( void )
 
 void Building :: addview ( void )
 {
+   if ( viewOnMap )
+      fatalError ("void Building :: addview - the building is already viewing the map");
+
+   viewOnMap = true;
+   
    tcomputebuildingview bes ( gamemap );
    bes.init( this, +1 );
    bes.startsearch();
 }
 
+void Building :: resetview()
+{
+   viewOnMap = false;  
+}
+
+
 void Building :: removeview ( void )
 {
    if ( color != 64 ) {
+      if ( !viewOnMap )
+         fatalError ("void Building :: removeview - the building is not viewing the map");
+      
       tcomputebuildingview bes ( gamemap );
       bes.init( this, -1 );
       bes.startsearch();
+      
+      viewOnMap = false;
    }
 }
 

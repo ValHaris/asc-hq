@@ -1,19 +1,39 @@
 VehicleType { 
    Name = YSOL
-   parent = 400 401 402 1399 12003
+   parent = 400 401 402 1399 12003 1395
    ID = 1340
 
-   Description = fast spaceship
+   Description = Pathfinder-Klasse
    Infotext = [Interstellares Raumschiff der SY]
    Picture = sya_ysol.png
 
-   Height = ground_level low_level_flight medium_level_flight high_level_flight orbit 
-   Jamming = 20
-   WaitForAttack = false
+   ConstructionCost { 
+      CalculationMethod = manual
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } ConstructionCost
 
-   SelfRepairRate = 10
+   Features = self_repairing jam_only_own_field
+   Armor += 200
+   SelfRepairRate = 15
 
-  JumpDrive {
+   Height = low_level_flight medium_level_flight high_level_flight orbit 
+   TerrainAccess { 
+      terrain_any =
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = lava shallow_water water deep_water 
+   } TerrainAccess
+   Movement += 0 0 0 0 20 20 20 20 
+   FuelConsumption = 150
+   Tank { 
+      Material += 20000
+      fuel += 50000
+   } Tank
+
+   
+   JumpDrive {
       Height = orbit
       terrain_any = road runway Spaceport lowland hard_sand soft_sand hillside ditch mountains high_mountains very_shallow_water shallow_water water deep_water river lava installation turret_foundation
       terrain_all = beacon
@@ -22,6 +42,7 @@ VehicleType {
    } JumpDrive
 
    Transportation { 
+      MaxLoadableUnitSize = 4500
       EntranceSystemNum = 2
       EntranceSystem0 {
         Mode = in out docking
@@ -37,11 +58,23 @@ VehicleType {
       EntranceSystem1.DisableAttack = true
    } Transportation
 
-   TerrainAccess { 
-      terrain_any = spaceport
-      terrain_all = 
-      terrain_not = 
-      terrain_kill = 
-   } TerrainAccess
+   WaitForAttack = false
+   Weapons { 
+      Number = 2
+	  Weapon0 ->* VehicleType.SY_Fighter_AD
+	  Weapon0.MaxRange = 40
+	  Weaoon0.shotFrom = low_level_flight medium_level_flight high_level_flight orbit 
+      Weapon0.Punch@MaxRange = 80
+      Weapon0.Punch@MinRange = 85
+	  Weapon1 ->* VehicleType.SY_bomber_big
+	  Weapon1.MaxRange = 40
+	  Weaoon1.shotFrom = low_level_flight medium_level_flight
+	  Weapon1.HitAccuracy.d3 = 0
+	  Weapon1.HitAccuracy.0 = 100
+	  Weapon1.ReactionFireShots = 2
+      Weapon1.Punch@MaxRange = 110
+      Weapon1.Punch@MinRange = 130
+
+  } Weapons
 
 } VehicleType

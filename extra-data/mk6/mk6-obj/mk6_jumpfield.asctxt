@@ -16,9 +16,9 @@ ObjectType {
    Armor = 200
    ConstructionCost { 
       Energy = 0
-      Material = 100
-      fuel = 2000
-      Movement = 17
+      Material = 300
+      fuel = 1500
+      Movement = 11
    } ConstructionCost
    RemovalCost { 
       Energy = 0

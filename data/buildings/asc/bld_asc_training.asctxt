@@ -19,7 +19,7 @@ BuildingType {
       MaxLoadableMass = 1000
       CategoriesNOT = default building|turret|object rail_vehicle light_aircraft medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship helicopter
    } Transportation
-   Functions = Training_Facility ResourceSink Ammo_Production 
+   Features = Training_Facility ResourceSink Ammo_Production 
    ConstructionCost { 
       Energy = 0
       Material = 4000

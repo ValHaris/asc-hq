@@ -3,30 +3,36 @@ VehicleType {
    parent = 1393 1395 1398
    ID = 1342
 
-   Description = stealth fighter
+   Description = Tarnkappenjaeger
    Picture = sya_mes.png
    InfoImage = sya_mes.jpg
    InfoImageSmall = sya_mes_k.png
-   Infotext = [InfoImage = BananaJoe]
-
-   
+   Infotext = [ Der MES wird klassifiziert als mittlerer Tarnkappen-Fluggeraet. Die Aussenhaut wird durch eine besondere aber anfaellige biologische Substanz umhuellt.
+   		InfoImage = BananaJoe]
 
    Armor = 300
+   Weight = 80
    MaxSurvivableStorm = 180
-   Weight = 40
    Jamming += 30
 
-   Height = low_level_flight medium_level_flight high_level_flight
-   Movement = 0 0 0 0 200 200 200 0 
-   Tank.fuel += 4000
+   Movement = 0 0 0 40 200 200 200 0 
+   FuelConsumption += 2
 
    Weapons { 
-      Number = 1
+      Number = 2
+      
       Weapon0 ->* VehicleType.SY_Fighter_Big 
       Weapon0.shotFrom = medium_level_flight high_level_flight
-      Weapon0.targets = low_level_flight medium_level_flight high_level_flight orbit
       Weapon0.Punch@MaxRange = 70
       Weapon0.Punch@MinRange = 75
-      Weapon0.LaserRechargeCost.fuel -> VehicleType.Weapons.Weapon0.Punch@MinRange
+      Weapon0.LaserRechargeCost.fuel = 140
+      Weapon0.LaserRechargeCost.material = 70
+
+      Weapon1 ->* VehicleType.SY_Fighter_Small 
+      Weapon1.targets = low_level_flight medium_level_flight high_level_flight orbit
+      Weapon1.Punch@MaxRange = 80
+      Weapon1.Punch@MinRange = 80
+      Weapon1.LaserRechargeCost.fuel = 160
+      Weapon1.LaserRechargeCost.material = 80
    } Weapons
 } VehicleType

@@ -3,26 +3,40 @@ VehicleType {
    parent = 1395 1393 1398
    ID = 1324
 
-   Description = medium bomber
-   Infotext = [ Mittlerer Bomber auf Basis des Xentor mit ansprechender Panzerung und Bewaffnung.]
+   Description = schwerer Bomber
+   Infotext = [ schwerer Bomber auf Basis des Xentor mit ansprechender Panzerung und Bewaffnung.]
    Picture = sya_xenos.png
 
    Armor = 400
    View = 40
-   Category = medium_aircraft
-   Movement = 0 0 0 30 180 190 190 20 
-   Weight = 80
+   Movement = 0 0 0 40 180 190 190 0 
+   Weight = 100
 
-   Weapons { 
-      Initiative = 0
-      Number = 2
-      Weapon0 ->* VehicleType.SY_Bomber_Big 
+   Weapons {
+      Number = 3
+      Weapon0 ->* VehicleType.SY_Bomber_Big
+      Weapon0.shotFrom = low_level_flight medium_level_flight 
       Weapon0.Punch@MaxRange = 110
       Weapon0.Punch@MinRange = 130
+      Weapon0.LaserRechargeCost.fuel = 260
+      Weapon0.LaserRechargeCost.material = 130
 
-      Weapon1 ->* VehicleType.SY_fighter_Small 
-      Weapon1.Punch@MaxRange = 55
-      Weapon1.Punch@MinRange = 55
+      Weapon1 ->* VehicleType.SY_Bomber_Big
+      Weapon1.shotFrom = medium_level_flight high_level_flight
+      Weapon1.HitAccuracy.d3 = 95
+      Weapon1.HitAccuracy.d2 = 100
+      Weapon1.HitAccuracy.d1 = 0
+      Weapon1.MaxRange = 10
+      Weapon1.Punch@MaxRange = 100
+      Weapon1.Punch@MinRange = 100
+      Weapon1.LaserRechargeCost.fuel = 400
+      Weapon1.LaserRechargeCost.material = 200
+
+      Weapon2 ->* VehicleType.SY_fighter_def 
+      Weapon2.Punch@MaxRange = 55
+      Weapon2.Punch@MinRange = 55
+      Weapon2.LaserRechargeCost.fuel = 110
+      Weapon2.LaserRechargeCost.material = 55
    } Weapons
 
 } VehicleType

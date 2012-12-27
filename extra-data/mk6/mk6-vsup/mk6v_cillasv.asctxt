@@ -20,7 +20,7 @@ VehicleType {
    TerrainAccess ->* VehicleType.offroad 
 
    Construction {
-      Buildings = 4 6 30 39 15008
+      Buildings = 2 4 6 30 32 39 15008
       Vehicles = 15222 15243 
 ;							   LaZa JuTur
       Objects = 1 3 10 30 45 181 2153 1000 998 997 2098 44 2658 15003

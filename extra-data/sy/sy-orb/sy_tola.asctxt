@@ -10,52 +10,54 @@ VehicleType {
    Armor = 400
    View = 50
    Weight = 150
+   
+   Tank.Material = 3700
+   Tank.Fuel = 6000
 
    WaitForAttack = true
    Weapons { 
       Number = 3
-      Weapon0 ->* VehicleType.SY_OrbAL
-      Weapon0.sound = lasergun.ogg 
-      Weapon0.Punch@MaxRange += 5
-      Weapon0.Punch@MinRange += 9
-      Weapon0.HitAccuracy.d4 = 100
-      Weapon0.HitAccuracy.d3 = 80
-      Weapon0.HitAccuracy.d2 = 70
-      Weapon0.HitAccuracy.d1 = 60
-      Weapon0.HitAccuracy.0 = 60
-      Weapon0.ReactionFireShots = 0
-      Weapon0.LaserRechargeCost.fuel -> VehicleType.Weapons.Weapon0.Punch@MinRange
+      Weapon0 ->* VehicleType.SY_OrbGL
+      Weapon0.sound = lasergun.ogg
+	  Weapon0.MaxRange = 70
+	  Weapon0.MinRange = 30
+      Weapon0.Punch@MaxRange += 35
+      Weapon0.Punch@MinRange += 25
+	  Weapon0.Ammo = 4
+      Weapon0.ReactionFireShots = 1
+      Weapon0.LaserRechargeCost.Material = 750
+      Weapon0.LaserRechargeCost.Fuel = 750
 
-      Weapon1 ->* VehicleType.SY_OrbAL 
+      Weapon1 ->* VehicleType.SY_OrbGL 
       Weapon1.sound = lasergun.ogg
       Weapon1.MaxRange = 50
       Weapon1.MinRange = 20
-      Weapon1.Punch@MaxRange += 5
-      Weapon1.Punch@MinRange += 9
-      Weapon1.HitAccuracy.d4 = 100
-      Weapon1.HitAccuracy.d3 = 80
-      Weapon1.HitAccuracy.d2 = 70
-      Weapon1.HitAccuracy.d1 = 60
-      Weapon1.HitAccuracy.0 = 60
+      Weapon1.Punch@MaxRange += 35
+      Weapon1.Punch@MinRange += 25
+	  Weapon1.Ammo = 4
+      Weapon1.ReactionFireShots = 1
       Weapon1.LaserRechargeCost.fuel -> VehicleType.Weapons.Weapon1.Punch@MinRange
+      Weapon1.LaserRechargeCost.Material = 350
+      Weapon1.LaserRechargeCost.Fuel = 350
 
       Weapon2 ->* VehicleType.SY_Fighter_Gun 
       Weapon2.sound = lasergun.ogg
-      Weapon2.targets = submerged floating ground_level low_level_flight medium_level_flight
+      Weapon2.targets = submerged floating ground_level low_level_flight medium_level_flight high_level_flight orbit
       Weapon2.shotFrom = orbit 
       Weapon2.MaxRange = 30
       Weapon2.MinRange = 10
-      Weapon2.Ammo = 2
+	  Weapon2.Ammo = 4
+      Weapon2.ReactionFireShots = 1
       Weapon2.Punch@MaxRange = 120
       Weapon2.Punch@MinRange = 130
       Weapon2.HitAccuracy.d5 = 80
       Weapon2.HitAccuracy.d4 = 100
       Weapon2.HitAccuracy.d3 = 65
-      Weapon2.HitAccuracy.d2 = 60
-      Weapon2.HitAccuracy.d1 = 0
-      Weapon2.HitAccuracy.0 = 0
-      Weapon2.LaserRechargeCost.Material = 130
-      Weapon2.LaserRechargeCost.Fuel = 130
+      Weapon2.HitAccuracy.d2 = 65
+      Weapon2.HitAccuracy.d1 = 65
+      Weapon2.HitAccuracy.0 = 65
+      Weapon2.LaserRechargeCost.Material = 150
+      Weapon2.LaserRechargeCost.Fuel = 150
 
    } Weapons
 } VehicleType

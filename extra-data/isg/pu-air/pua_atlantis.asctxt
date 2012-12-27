@@ -15,33 +15,33 @@ VehicleType {
 	SelfRepairRate	= 10
    
 	Height = ground_level low_level_flight medium_level_flight high_level_flight
-	Movement = 0 0 0 65 40 50 60 0 
+	Movement = 0 0 0 40 40 40 40 0 
 	FuelConsumption	= 50
 	Tank { 
-		Material	= 40000
-		fuel		= 60000
+	   Material	= 40000
+	   fuel		= 60000
 	} Tank	
 
 	Jumpdrive {
-		Height = medium_level_flight
-		MaxDistance = 250
-		consumption {
-			Energie = 0
-			Material = 3000
-			Fuel = 5000
-		} consumption
-		terrain_any = deep_water water river shallow_water very_shallow_water Road Runway Hard_sand Lowland Soft_sand Hillside Mountains High_mountains Ditch Turret_foundation Installation small_rocks Large_rocks Railroad Frozen_water Forest
-		terrain_all = 
-		terrain_not = 
-		terrain_kill = 
-	} Jumpdrive
+	   Height = medium_level_flight
+	   MaxDistance = 200
+	   consumption {
+	      Energie = 0
+	      Material = 5000
+	      Fuel = 10000
+	   } consumption
+	   terrain_any = deep_water water river shallow_water very_shallow_water Road Runway Hard_sand Lowland Soft_sand Hillside Mountains High_mountains Ditch Turret_foundation Installation small_rocks Large_rocks Railroad Frozen_water Forest
+	   terrain_all = 
+	   terrain_not = 
+	   terrain_kill = 
+ 	} Jumpdrive
 	
 	Transportation {
-		MaxLoadableUnits 		= 2
-		MaxLoadableMass 		= 400
-		MaxLoadableUnitSize 		= 290	
+	   MaxLoadableUnits 		= 6
+	   MaxLoadableMass 		= 370
+	   MaxLoadableUnitSize 		= 120	
 	
-		CategoriesNOT = heavy_wheeled_vehicle heavy_tracked_vehicle light_ship medium_ship heavy_ship rail_vehicle hoovercraft
+		CategoriesNOT = heavy_wheeled_vehicle heavy_tracked_vehicle heavy_aircraft light_ship medium_ship heavy_ship rail_vehicle hoovercraft
 
 		EntranceSystemNum 		= 3
 		EntranceSystem0	->* VehicleType.GrIO

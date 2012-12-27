@@ -30,6 +30,7 @@
 #include "../misc.h"
  #include "../palette.h"
  #include "../basegfx.h"
+#include "lighten.h"
 
 typedef SDLmm::Color Color;
 
@@ -749,7 +750,7 @@ class ColorMerger_AlphaOverwrite : public ColorMerger_AlphaHandler<pixelsize>
 
       void assign ( PixelType src, PixelType* dest )
       {
-         if ( isOpaque(src ) ) {
+         if ( this->isOpaque(src ) ) {
             *dest = src;
          }
       };
@@ -769,7 +770,7 @@ class ColorMerger_AlphaMerge : public ColorMerger_AlphaHandler<pixelsize>
 
       void assign ( PixelType src, PixelType* dest )
       {
-         if ( isOpaque(src ) ) {
+         if ( this->isOpaque(src ) ) {
             *dest = src;
          }
       };
@@ -846,7 +847,7 @@ class ColorMerger_AlphaShadow<1> : public ColorMerger_AlphaHandler<1>
       void assign ( PixelType src, PixelType* dest )
       {
          // STATIC_CHECK ( pixelsize == 1, wrong_pixel_size );
-         if ( isOpaque(src ) ) {
+         if ( this->isOpaque(src ) ) {
             *dest = table[*dest];
          }
       };
@@ -873,7 +874,7 @@ class ColorMerger_AlphaShadow<4> : public ColorMerger_AlphaHandler<4>
 
       void assign ( PixelType src, PixelType* dest )
       {
-         if ( isOpaque(src ) ) {
+         if ( this->isOpaque(src ) ) {
             *dest = ((*dest >> 1) & 0x7f7f7f7f) | (*dest & 0xff000000 );
          }
       };
@@ -901,7 +902,7 @@ class ColorMerger_AlphaMixer<1> : public ColorMerger_AlphaHandler<1>
    protected:
       void assign ( PixelType src, PixelType* dest )
       {
-         if ( isOpaque(src ) )
+         if ( this->isOpaque(src ) )
             *dest = colormixbufchar[*dest + src*256 ];
       };
    public:
@@ -918,7 +919,7 @@ class ColorMerger_AlphaMixer<4> : public ColorMerger_AlphaHandler<4>
       void assign ( PixelType src, PixelType* dest )
       {
          // STATIC_CHECK ( pixelsize == 1, wrong_pixel_size );
-         if ( isOpaque(src ) ) {
+         if ( this->isOpaque(src ) ) {
             *dest = ((*dest >> 1) & 0x7f7f7f7f) + ((src >> 1) & 0x7f7f7f7f);
          }
       };
@@ -975,7 +976,7 @@ class ColorMerger_Alpha_XLAT_TableShifter<1> : public ColorMerger_AlphaHandler<1
       void assign ( PixelType src, PixelType* dest )
       {
          // STATIC_CHECK ( pixelsize == 1, wrong_pixel_size );
-         if ( isOpaque(src ) ) {
+         if ( this->isOpaque(src ) ) {
             *dest = table[ *dest + src*256 ];
          }
       };

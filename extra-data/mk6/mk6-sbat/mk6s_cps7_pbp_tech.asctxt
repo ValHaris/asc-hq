@@ -1,0 +1,10 @@
+technology {
+   Name = CPS 7
+   infotext = 
+   id = 15351
+   RelatedUnitID = 15351
+   parent = 15000
+   researchpoints *= 5
+   techlevel = 1
+   TechnologiesRequired = 15000,100004,100101,100211 
+} Technology

@@ -9,14 +9,6 @@ VehicleType {
 
    Armor = 600
    
-  JumpDrive {
-      terrain_any = Spaceport runway
-      terrain_all = beacon
-      terrain_not = forest small_rocks large_rocks bridge
-      terrain_kill = 
-   } JumpDrive
-
-
    Height = ground_level orbit 
    Features = self_repairing no_midair_refuel
    Movement = 0 0 0 60 0 0 0 60 

@@ -342,7 +342,7 @@
             MapCoordinate getDestination ( Vehicle* veh );
             AiResult moveToSavePlace ( Vehicle* veh, int preferredHeight = -1 );
             int  getBestHeight (  Vehicle* veh );
-            float getAttackValue ( const tfight& battle, const Vehicle* attackingUnit, const Vehicle* attackedUnit, float factor = 1 );
+            float getAttackValue ( const tfight& battle, Vehicle* attackingUnit, Vehicle* attackedUnit, float factor = 1 );
 
             /** chenges a vehicles height
                 \returns 1 = height change successful ;
@@ -356,6 +356,8 @@
             void  calculateThreat ( Vehicle* eht );
             void  calculateThreat ( Building* bld );
             void  calculateThreat ( Building* bld, int player );
+            int getValue( Vehicle* v );
+            
 
             static AiParameter::JobList chooseJob ( const VehicleType* typ );
             friend class CalculateThreat_Vehicle;

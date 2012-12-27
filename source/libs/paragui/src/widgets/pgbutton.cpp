@@ -605,13 +605,14 @@ void PG_Button::eventBlit(SDL_Surface* srf, const PG_Rect& src, const PG_Rect& d
 		DrawText(tx, ty, my_text);
 	}
 
-	bool i0, i1;
+//        bool i0;
+        bool i1;
 
 	if(!_mid->togglemode) {
-		i0 = (_mid->state == PRESSED) ? true : false;
+//		i0 = (_mid->state == PRESSED) ? true : false;
 		i1 = (_mid->state == PRESSED) ? false : true;
 	} else {
-		i0 = (_mid->isPressed) ? true : false;
+//		i0 = (_mid->isPressed) ? true : false;
 		i1 = (_mid->isPressed) ? false : true;
 	}
 

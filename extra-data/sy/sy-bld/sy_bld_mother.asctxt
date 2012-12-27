@@ -1,5 +1,5 @@
 BuildingType {
-   Name = KXOL
+   Name = XSOL
 
    InfoImage = sya_ksol.jpg
    InfoimageSmall = sya_ksol_k.png
@@ -15,11 +15,11 @@ BuildingType {
    Entry = A3
    ID = 1300
    Armor = 5000
-   View = 152
-   Jamming = 100
+   View = 200
+   Jamming = 200
    Transportation { 
-      MaxLoadableUnits = 40
-      MaxLoadableUnitSize = 40000
+      MaxLoadableUnits = 50
+      MaxLoadableUnitSize = 4500
       MaxLoadableMass = 100000
       EntranceSystemNum = 1
       EntranceSystem0 {
@@ -40,12 +40,12 @@ BuildingType {
       terrain_not = 
       terrain_kill = 
    } TerrainAccess
-   MaxResearch = 10
-   NominalResearch = 10
+   MaxResearch = 50
+   NominalResearch = 50
    ConstructionCost { 
       Energy = 0
-      Material = 100000
-      fuel = 100000
+      Material = 0
+      fuel = 0
    } ConstructionCost
    MaxResourceProduction { 
       Energy = 10000
@@ -64,9 +64,9 @@ BuildingType {
          fuel = 100000
       } BImode
       ASCmode { 
-         Energy = 20000
+         Energy = 30000
          Material = 100000
-         fuel = 100000
+         fuel = 250000
       } ASCmode
    } StorageCapacity
    Height = orbit 

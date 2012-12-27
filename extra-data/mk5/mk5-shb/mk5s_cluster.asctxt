@@ -10,7 +10,7 @@ VehicleType {
    GuideSortHelp += 0 0 0 0 5 0 0 0 0 0
 
    Height = floating ground_level low_level_flight medium_level_flight
-   Movement += 0 0 0 10 70 60 0 0
+   Movement += 0 0 0 15 70 60 0 0
 
    Weapons { 
       Number = 3

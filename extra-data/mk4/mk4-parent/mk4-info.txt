@@ -8,10 +8,10 @@ Spezifikationen: GAMER
 ID  1205/201 Demon          light attack trooper
 ID  1215/202 Troll          anti tank trooper
 ID  1236/207 Paratdemon     Fallschirmspringer
-ID  1237/206 Diver          tauchroboter
 
 -Mechwarrior
 ID  1213/209 Golem          medium battle robot /Prätorianer
+ID  1237/206 GT Dive        tauchroboter
 ID 14000/208 GT_Speeder     light battle robot /Prätorianer
 ID 14008/211 GT Defender    defence battle robot /Prätorianer
 ID 14009/210 Ultimate       heavy battle robot /Prätorianer
@@ -109,10 +109,14 @@ ID  1243/278 Stormbringer   heavy bomber
 ID  1246/271 Genom          light fighter
 ID  1247/326 Sperber        sea plane
 ID  1248/325 Spectrum       tankflugzeug
+ID  1255     Albatros
 ID  1279/270 Copra          Medium Fighter
 ID  1286/277 Condor         Medium Bomber
 ID 14013/280 Usurius        stealth bomber
 ID 14026/327 DTERANO        defence fighter /Prätorianer
+
+--Drohnen--
+ID 14006     Thunder SX
 
 --Helicopter--
 ID 14033/409 Genni          Generator
@@ -164,13 +168,11 @@ ID  1245 Dragon       Kampfhubschrauber
 ID  1250 PTerrano
 ID  1251 Crux         Transportflugzeug
 ID  1252 Guppy
-ID  1255 Albatros
 ID  1271 Exterminator
 ID  1282 Firebird     Kampfhubschrauber
 ID  1287 Pirate       Jet Helicopter
 ID  1296 Thunder GX
 ID 14001 Thunder OX
-ID 14006 Thunder SX
 ID 14022 CRUX DX
 ID 14033 Genni
 ID 14034 Thunder Spy

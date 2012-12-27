@@ -1,6 +1,6 @@
 map = asc.getLoadingMap() 
  --- ===== 170  ======= 
-message = [[Thunderlance HQ, Rogul:#crt##crt#Kommandant, wir haben ein Hovercraft erbeutet. Dieses Fahrzeug ist beschädigt und ohne Treibstoff. Dieses Hovercraft wurde dazu genutzt Arbeiter zu eine kleine Insel im Westen zu bringen. Vielleicht finden wir Werkzeuge um die Brücke zu reparieren auf dieser Insel.#crt##crt#Thor Menser,#crt#Thunderlance Military Advisor #crt#]]
+message = [[Thunderlance HQ, Rogul:#crt##crt#Kommandant, wir haben ein Hovercraft erbeutet. Dieses Fahrzeug ist beschädigt und ohne Treibstoff. Dieses Hovercraft wurde dazu genutzt, Arbeiter zu einer kleinen Insel im Westen zu bringen. Vielleicht finden wir Werkzeuge um die Brücke zu reparieren auf dieser Insel.#crt##crt#Thor Menser,#crt#Thunderlance Military Advisor #crt#]]
 asc.setLocalizedEventMessage( map, 170, message )
 
 --- ===== 88  ======= 
@@ -8,15 +8,15 @@ message = [[Thunderlance HQ, Rogul:#crt##crt#Kommandant,die Brücke wurde durch e
 asc.setLocalizedEventMessage( map, 88, message )
 
 --- ===== 271  ======= 
-message = [[Thunderlance HQ, Rogul:#crt##crt#Gute Arbeit!#crt#Unsere Wissenschaftler im Labor Zug haben die Spezial Fabrik erreicht und suchen nun nach wichtigen Informationen.#crt##crt#Lenlin Grinson,#crt#Thunderlance Briefing Officer#crt#]]
+message = [[Thunderlance HQ, Rogul:#crt##crt#Gute Arbeit!#crt#Unsere Wissenschaftler im Laborzug haben die Spezialfabrik erreicht und suchen nun nach wichtigen Informationen.#crt##crt#Lenlin Grinson,#crt#Thunderlance Briefing Officer#crt#]]
 asc.setLocalizedEventMessage( map, 271, message )
 
 --- ===== 90  ======= 
-message = [[Thunderlance HQ, Rogul:#crt##crt#Kommandant, das Fahrzeug vom Typ ANT ist fähig Straßen,Schienen und Brücken zu bauen. Das versetzt uns in die Lage die Brücke wieder aufzubauen.#crt##crt#Thor Menser,#crt#Thunderlance Military Advisor #crt##crt#]]
+message = [[Thunderlance HQ, Rogul:#crt##crt#Kommandant, das Fahrzeug vom Typ ANT ist fähig Straßen, Schienen und Brücken zu bauen. Das versetzt uns in die Lage die Brücke wieder aufzubauen.#crt##crt#Thor Menser,#crt#Thunderlance Military Advisor #crt##crt#]]
 asc.setLocalizedEventMessage( map, 90, message )
 
 --- ===== 89  ======= 
-message = [[Thunderlance HQ, Rogul:#crt##crt#Kommandant, diese Fahrzeuge vom Typ ANT können Straßen,Schienen und Brücken bauen. Sie könnten ziemlich nützlich sein.#crt##crt#Thor Menser,#crt#Thunderlance Military Advisor#crt##crt##crt#]]
+message = [[Thunderlance HQ, Rogul:#crt##crt#Kommandant, diese Fahrzeuge vom Typ ANT können Straßen, Schienen und Brücken bauen. Sie könnten ziemlich nützlich sein.#crt##crt#Thor Menser,#crt#Thunderlance Military Advisor#crt##crt##crt#]]
 asc.setLocalizedEventMessage( map, 89, message )
 
 --- ===== 87  ======= 
@@ -29,12 +29,12 @@ Mit diesen Gebäuden hätten wir eine vollständige Basis um unsere Aufgabe fortzus
 asc.setLocalizedEventMessage( map, 18, message )
 
 --- ===== 169  ======= 
-message = [[Thunderlance HQ, Rogul:#crt##crt#Das IMPERIUM hat von unseren Plänen erfahren und hat versucht die Zug Fabrik zu sabotieren. Glücklicherweise ist es uns gelungen das Schlimmste zu verhindern. Nur kleinere Schäden sind die Folge aber die Fabrik ist nicht länger an Pipelines und Schienen angeschlossen. Wir müssen eine andere Fabrik finden um weitere Verstärkungen zu produzieren.#crt#Seien sie vorsichtig! Rogul ist durch den Fluß Golug in zwei Teile geteilt.
+message = [[Thunderlance HQ, Rogul:#crt##crt#Das IMPERIUM hat von unseren Plänen erfahren und hat versucht die Zugfabrik zu sabotieren. Glücklicherweise ist es uns gelungen das Schlimmste zu verhindern. Nur kleinere Schäden sind die Folge, aber die Fabrik ist nicht länger an Pipelines und Schienen angeschlossen. Wir müssen eine andere Fabrik finden um weitere Verstärkungen zu produzieren.#crt#Seien sie vorsichtig! Rogul ist durch den Fluß Golug in zwei Teile geteilt.
 Diese zwei Teile sind über eine große und baufällige Brücke miteinander verbunden. Der Wasserstand des Golug ist während dieser Jahreszeit sehr hoch. Beeilen sie sich bevor die Wassermassen die Brücke zerstören könnten. Viel Erfolg!#crt##crt#Thor Menser,#crt#Thunderlance Military Advisor#crt##crt#]]
 asc.setLocalizedEventMessage( map, 169, message )
 
 --- ===== 19  ======= 
-message = [[Thunderlance HQ, Rogul:#crt##crt#Kommandant, wir haben einige Dokumente über ein geheimes Forschungsprogramm des IMPERIUMs gefunden. Es scheint so, dass unsere Feinde neue Waffensystem in einer Spezial Fabrik entwickelt haben. Diese Waffenfabrik befindet sich im Nord Osten von Rogul.#crt#Unsere Wissenschaftler haben einen Transportzug vom Typ FLUX zu einem mobilen Labor umgebaut. Eskortieren sie diesen Zug sicher zu dieser gegnerischen Fabrik um Informationen über Prototypen neuer Waffensystem zu erlangen.#crt##crt#Lenlin Grinson,#crt#Thunderlance Briefing Officer#crt##crt#Missionsziele:#crt#- Eskortieren sie den Zug zur Fabrik im Nord Osten#crt#- verlieren sie den Transportzug nicht #crt#]]
+message = [[Thunderlance HQ, Rogul:#crt##crt#Kommandant, wir haben einige Dokumente über ein geheimes Forschungsprogramm des IMPERIUMs gefunden. Es scheint so, dass unsere Feinde neue Waffensystem in einer Spezialfabrik entwickelt haben. Diese Waffenfabrik befindet sich im Nordosten von Rogul.#crt#Unsere Wissenschaftler haben einen Transportzug vom Typ FLUX zu einem mobilen Labor umgebaut. Eskortieren sie diesen Zug sicher zu dieser gegnerischen Fabrik um Informationen über Prototypen neuer Waffensysteme zu erlangen.#crt##crt#Lenlin Grinson,#crt#Thunderlance Briefing Officer#crt##crt#Missionsziele:#crt#- Eskortieren sie den Zug zur Fabrik im Nordosten#crt#- verlieren sie den Transportzug nicht #crt#]]
 asc.setLocalizedEventMessage( map, 19, message )
 
 --- ===== 272  ======= 

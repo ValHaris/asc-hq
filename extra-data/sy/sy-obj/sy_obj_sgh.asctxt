@@ -13,7 +13,7 @@ ObjectType {
 
    Weather = dry
    ;                def lTr mTr hvT lWh mWh hWh tro rlv mAC mSh BTO lAC hAC lSh hSh Hli hov
-   Movemalus_plus = 10  5   8   5   10  15  20  5   30  30  14  14  30  30  30  30  30  30
+   Movemalus_plus = 10  4   4   4   10  10  10  3   30  30  14  14  30  30  30  30  30  30
    Movemalus_abs = -1 
    AttackBonus_abs = -1
    AttackBonus_plus = 0
@@ -42,7 +42,7 @@ ObjectType {
       terrain_kill = swamp very_shallow_water shallow_water water deep_water river lava
    } TerrainAccess
    TerrainProperties_Filter =  
-   TerrainProperties_Add = small_rocks 
+   TerrainProperties_Add =  
    dry { 
       UseGFXpics = false
       picture = SY_OBJ_SGH.pcx 1

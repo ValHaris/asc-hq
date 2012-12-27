@@ -4,15 +4,15 @@ message = [[Ihre Mission war ein Fehlschlag, Kommandant!#crt##crt#Ohne die Husch
 asc.setLocalizedEventMessage( map, 78, message )
 
 --- ===== 77  ======= 
-message = [[Thunderlance HQ, Rogul:#crt##crt#Großartig Kommandant!#crt#Wir haben das Haupt Kontroll Zentrum eingenommen. Die Transporthubschrauber gehören uns. Das Spezial Kommando ist zur Insel im Norden aufgebrochen. Wir werden sie benachrichtigen sobald sie dort sicher angekommen sind.#crt##crt#Lenlin Grinson,#crt#Thunderlance Briefing Officer#crt#]]
+message = [[Thunderlance HQ, Rogul:#crt##crt#Großartig Kommandant!#crt#Wir haben das Hauptkontrollzentrum eingenommen. Die Transporthubschrauber gehören uns. Das Spezial Kommando ist zur Insel im Norden aufgebrochen. Wir werden sie benachrichtigen sobald sie dort sicher angekommen sind.#crt##crt#Lenlin Grinson,#crt#Thunderlance Briefing Officer#crt#]]
 asc.setLocalizedEventMessage( map, 77, message )
 
 --- ===== 74  ======= 
-message = [[Thunderlance HQ, Rogul:#crt##crt#Commander, you have passed the mountains. The enemy base is near. The headquarters has sent some reinforcments to your command.#crt##crt#We hope it will help!#crt##crt#Thor Menser,#crt#Thunderlance Military Advisor#crt#]]
+message = [[Thunderlance HQ, Rogul:#crt##crt#Kommandant, nachdem Sie nun die Berge passiert haben, ist die gegnerische Basis nicht mehr weit. Das Hauptquartier entsendet Ihnen zwei Transportschiffe mit Verstärkungen.#crt##crt#Wir hoffen, dass sie helfen werden!#crt##crt#Thor Menser,#crt#Thunderlance Military Advisor#crt#]]
 asc.setLocalizedEventMessage( map, 74, message )
 
 --- ===== 72  ======= 
-message = [[Wissenschaftler in der Bergstation:#crt##crt#Gut gemacht. Wir haben unser Forschungsprojekt abgeschlossen. Nehmen sie die beiden Hubschrauber Prototypen. Wir hoffen sie werden ihnen von NUtzen sein.#crt##crt#Brain Claymore#crt#Leader Scientist#crt#]]
+message = [[Wissenschaftler in der Bergstation:#crt##crt#Gut gemacht. Wir haben unser Forschungsprojekt abgeschlossen. Nehmen sie die beiden Hubschrauber Prototypen. Wir hoffen sie werden ihnen von Nutzen sein.#crt##crt#Brain Claymore#crt#Leitender Wissenschaftler#crt#]]
 asc.setLocalizedEventMessage( map, 72, message )
 
 --- ===== 19  ======= 
@@ -20,10 +20,10 @@ message = [[Wissenschaftler in der Bergstation:#crt##crt#Unsere Chance das Forsc
 asc.setLocalizedEventMessage( map, 19, message )
 
 --- ===== 11  ======= 
-message = [[Wissenschaftler in der Bergstation:#crt##crt#Hallo, wir haben von ihnen gehört und hoffen sie können uns helfen. Das Imperium hat den Weg zu unserem Forschungs Labor blockiert. #crt##crt#Unser Forschungsprojekt ist bald abgeschlossen aber wir benötigen mehr Material. Übernehmen sie das Kommando von einigen Hubschraubern im Osten!#crt#CKönnen sie uns helfen unseren Material Transport sicher durch die Berge zu bringen? Wir werden sie dafür belohnen.#crt##crt#Brain Claymore#crt#Leitender Wissenschaftler#crt##crt#Zusätzliche freiwillige Missionsziele:#crt#- Eskortieren sie beide Material Transporter zum Forschungslabor im Norden#crt#- Verlieren sie keinen von beiden#crt#]]
+message = [[Wissenschaftler in der Bergstation:#crt##crt#Hallo, wir haben von ihnen gehört und hoffen sie können uns helfen. Das Imperium hat den Weg zu unserem Forschungslabor blockiert. #crt##crt#Unser Forschungsprojekt ist bald abgeschlossen aber wir benötigen mehr Material. Übernehmen sie das Kommando von einigen Hubschraubern im Osten!#crt#Können sie uns helfen unseren Materialtransport sicher durch die Berge zu bringen? Wir werden sie dafür belohnen.#crt##crt#Brain Claymore#crt#Leitender Wissenschaftler#crt##crt#Zusätzliche freiwillige Missionsziele:#crt#- Eskortieren sie beide Material Transporter zum Forschungslabor im Norden#crt#- Verlieren sie keinen von beiden#crt#]]
 asc.setLocalizedEventMessage( map, 11, message )
 
 --- ===== 2  ======= 
-message = [[Thunderlance HQ, Rogul:#crt##crt#Gut, Kommandant. Sie haben sich der Eroberungs-Mission angeschlossen. Zwischenzeitlich ist unsere Flotte zu einer kleineren Insel im Norden unterwegs. Sie haben die Aufgabe alle Luftabwehrstellungen zu zerstören, damit ein Spezial Kommando auf der Insel landen kann. #crt##crt#Wir müssen einige Transporthubschrauber erobern, damit wir diese Spezial Kommando zu der Insel bringen können. Das Imperium hat eine streng bewachte Basis weit von hier im Osten. In dieser Basis sollen einige Transporthubschrauber stehen. Sie müssen die Hauptgebäude erobern um die Kontrolle über die Hubschrauber zu erlangen.#crt##crt#Wir müssen durch die Jehios Highlands um die Basis zu erreichen. Obwohl wir nicht viele Truppen haben müssen sie diese wichtige Aufgabe erledigen. Wir arbeiten an einer Möglichkeit um ihnen später Nachschub zukommen zu lassen.#crt##crt#Tun sie ihr Bestes, Kommandant!#crt##crt#Lenlin Grinson,#crt#Thunderlance Briefing Officer#crt##crt#Missionsziele:#crt#- Erobern sie die Hauptgebäude der imperialen Basis um die Transporthubschrauber zu erobern#crt#]]
+message = [[Thunderlance HQ, Rogul:#crt##crt#Gut, Kommandant. Sie haben sich der Eroberungs-Mission angeschlossen. Zwischenzeitlich ist unsere Flotte zu einer kleineren Insel im Norden unterwegs. Sie haben die Aufgabe alle Luftabwehrstellungen zu zerstören, damit ein Spezial Kommando auf der Insel landen kann. #crt##crt#Wir müssen einige Transporthubschrauber erobern, damit wir dieses Spezial Kommando zu der Insel bringen können. Das Imperium hat eine streng bewachte Basis weit von hier im Osten. In dieser Basis sollen einige Transporthubschrauber stehen. Sie müssen die Hauptgebäude erobern um die Kontrolle über die Hubschrauber zu erlangen.#crt##crt#Wir müssen durch die Jehios Highlands um die Basis zu erreichen. Obwohl wir nicht viele Truppen haben, müssen sie diese wichtige Aufgabe erledigen. Wir arbeiten an einer Möglichkeit um ihnen später Nachschub zukommen zu lassen.#crt##crt#Tun sie ihr Bestes, Kommandant!#crt##crt#Lenlin Grinson,#crt#Thunderlance Briefing Officer#crt##crt#Missionsziele:#crt#- Erobern sie die Hauptgebäude der imperialen Basis um die Transporthubschrauber zu erobern#crt#]]
 asc.setLocalizedEventMessage( map, 2, message )
 

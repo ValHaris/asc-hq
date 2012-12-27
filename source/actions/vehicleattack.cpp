@@ -114,7 +114,7 @@ ActionResult VehicleAttackAction::runAction( const Context& context )
    */
 
    
-   bool somethingDestroyed = battle->dv.damage >= 100 || battle->av.damage >= 100;
+   bool somethingDestroyed = (battle->dv.damage >= 100 || battle->av.damage >= 100);
    
    RecalculateAreaView rav ( getMap(), target, maxViewRange / maxmalq + 1, &context );
    if ( somethingDestroyed )

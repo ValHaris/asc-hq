@@ -13,12 +13,13 @@ VehicleType {
    Features += satelliteview
 
    Weapons { 
-      Initiative = -100
-      Number = 9
+      Number = 7
       Weapon0 ->* VehicleType.Ship_MG
+      Weapon0.Ammo = 200
       Weapon1 ->* VehicleType.Ship_Flak
-      Weapon2 ->* VehicleType.AmmoCannon 
-      Weapon2.Ammo = 100
+      Weapon1.Ammo = 100
+      Weapon2 ->* VehicleType.AmmoMine 
+      Weapon2.Ammo = 60
       Weapon3 ->* VehicleType.AmmoTorp 
       Weapon3.Ammo = 20
       Weapon4 ->* VehicleType.AmmoBomb
@@ -27,9 +28,5 @@ VehicleType {
       Weapon5.Ammo = 60
       Weapon6 ->* VehicleType.AmmoSM 
       Weapon6.Ammo = 60
-      Weapon7 ->* VehicleType.AmmoMine 
-      Weapon7.Ammo = 60
-      Weapon8 ->* VehicleType.AmmoMG 
-      Weapon8.Ammo = 200
    } Weapons
 } VehicleType

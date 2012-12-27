@@ -11,7 +11,7 @@ ObjectType {
    TerrainAccess.terrain_any = Lowland Hard_sand Soft_sand Very_shallow_water shallow_water water
    TerrainAccess.terrain_not =  
    TerrainAccess.terrain_kill =  
-;   TerrainProperties_Filter = Road Hard_sand Soft_sand Lowland Ditch Hillside Mountains High_mountains Installation Small_rocks Large_rocks Forest Swamp morass mud Very_shallow_water Shallow_water river water deep_water Snow Deep_snow Frozen_water lava 
+   TerrainProperties_Filter = Road Hard_sand Soft_sand Lowland Ditch Hillside Mountains High_mountains Installation Small_rocks Large_rocks Forest Swamp morass mud Very_shallow_water Shallow_water river water deep_water Snow Deep_snow Frozen_water lava 
    TerrainProperties_Add = runway railroad lava_barrier pipeline turret_foundation
    Jamming_abs = 0
    canExistBeneathBuildings = true

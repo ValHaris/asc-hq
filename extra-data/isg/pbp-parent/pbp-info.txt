@@ -33,6 +33,9 @@ ID 12024 KolonieHq-Hangar
 ID 12025 HomeBase HQ
 ID 12026 Colony Center Radar
 ID 12027 COLONY Center RZ
+ID 12028 AP1
+ID 12029 AP2
+ID 12030 AP3
 
 ***Objects***
 ID 12000 LZ Down
@@ -82,101 +85,126 @@ ID 12009 ISG SHF
 ID 12010 ISG Jammer
 ID 12011 ISG Invasor Radar
 ID 12012 Schrott
+ID 12013 Explorer
+ID 12014 Z100
+ID 12015 SV HB
+ID 12016 SV ILZ
+ID 12017 SV Kolonie
+ID 12018 Sektion Schiffe
+ID 12019 Sektion Flugzeuge
+ID 12020 Sektion Fahrzeuge
 
 Bugs
 ID 12100 Bug Krabbler
 
+Explorer
+ID 12200 TEM GAMER Terminden Explorer
+ID 12201 AKI Adamski
+ID 12202 AXU Hanni
+
 
 ***Personal Units***
-ID 12500 Komic     Avatar       Air+orbit Defence tank grafic by Gamer
-ID 12501 Rausi     Orxis        Mix:Axis&Orion         grafik by Rausi
-off12502 (Sir Hacke Enduro       Kampfmotorrad          grafic by Gamer)
-ID 12503 Tigerking Dora         Schienengesch�tz       grafic by Gamer
-ID 12504 Cushman   HI-OB        Schienengesch�tz       grafics by Hastrubal/Gamer/BananaJoe
-ID 12505 SmokinMan
-ID 12506 Greg      MORMONE      heavy attack tank      grafic by Gamer
-ID 12507 Hanni     ConzeptX
-* OBJ ID 12401
-* OBJ ID 12402
-* OBJ ID 12403
-* OBJ ID 12404
-* OBJ ID 12405
-* OBJ ID 12406
-ID 12508           Aquila       Drohnentr�gerraumschiff
-off  12509 Tengri    Lethos       Raketenpanzer          grafic by Gamer
-ID 12510 Komic2    MOA          CM Heli                grafic by Komic
-off  12511 GenSek        
-ID 12512 Caturix   Balors SChwert     	Defence spacecraft
-ID 12513 Tengri2   Lemur        (Sinner)              grafic by Gamer
-ID 12514 Slacks    Morl-Booster                        grafic by Slacks
-ID 12515 Slacks    Morl-Glider                         grafic by Slacks
-ID 12516 Rennreh   Rehstar                             grafic by rennreh
-ID 12517 WULT
-off  12518 Xypha2    catalysm
-off  12519 Jogi      Jogi
-ID 12520 Micky     Adler11                             grafic by Gamer
-ID 12521 Keyfinder FASM         Angriffs-U-Boot
-off  12522 Xyphag.   Zyklop       support
-off  12523 Grom
-ID 12524 Greg2     Rambo
-ID 12525 Greg3     
-ID 12526 Ares
-ID 12527 Sirhacke  Sirtaki 	Support		(ehemals Zapp)
-ID 12528 Prophet
-ID 12529 MoS      Pussycat
-off12530 Grom2     Grimm
-ID 12531 Shadow     Shadow
-ID 12532 Gambit	    Gambit
-off12533 Bundy      Pak-Fa
-ID 12534 Gambit     Beshaba
-off12535 Lucius     Neptun
-ID 12536 Kral       Kormoran
-ID 12537 Excalibur  Clustius
-ID 12538 Redhorse   Artemis
-ID 12539 Google    miniDrus (by minimus)
-ID 12540 Adamski    Lander
-ID 12541 Shadow2    Gravos
-ID 12542 hanni2     PTR Observer
-off 12543 Exar
-ID 12544 SmokinMan2 Whitenoise
-* OBJ ID 12544 Statik
-ID 12545 Prophet
-* OBJ ID 12545 
-* OBJ ID 12546
-off 12546 Satanplayer Devil
-off 12547 --         Satan47
-ID 12548 Raiden     Atomrakete
-ID 12549 Toby B1
-ID 12550 Bear       thanatos
-ID 12551 Snake      Thunderstorm
-ID 12552 Scara      Scar
-ID 12553 BananJoe   Omega
-off 12554 Chewie     DoomsdayXXL
-ID 12555 NoBear     Exodus
-ID 12556 vanBuckel  Speed
-ID 12557 BananJoe2 Azrael
-ID 12558 BloodyMary Damokles
-ID 12559 Redhorse2  Cleaner
-ID 12560 GAMER      SYG
-ID 12561 Itaker     Scapegoat
-ID 12562 CH187      AO187
-ID 12563 Lord       Venenum Volaticum
-ID 12564 Tigerking2 Tigerqueen
-ID 12565 Localhorst KMAX
-ID 12566 Omega      Okeanos
-ID 12567 Taxi
-ID 12568 Shadow(3)  Wellos
-off12569 Gambit(2)  DIVORCED
-ID 12570 Cataldo    Serpente
-ID 12571 Setupman   Onion-X
-ID 12572 Banana(3)  Baal
-ID 12573 Sarpeda    Scal
-ID 12574 Davion     DC
-ID 12575 Wult(MA)   Kukulcan
-ID 12576 Bahunabega DragonFly
-ID 12577 Unknown    Hermelin
-ID 12578 SDLG	    Seine Eminenz
-ID 12579 Bajuware   Atlantis
-ID 12580 Wult(2)    Beowult
-ID 12581 KlackKlickKlick   Xoras
-ID 12582 DrStrangelove   HAC
+ 12500 Komic            Avatar         Air+orbit Defence tank     grafic by Gamer
+ 12501 -Zuteilung-      Orxis          Mix:Axis&Orion             grafik by Rausi
+ 12502 Rio              Hornisse       Kampfmotorrad              grafic by ?
+ 12503 Daxxter          Dora           Schienengeschütz           grafic by Gamer
+ 12504 Boraas           HI-OB          Schienengeschütz           grafics by Hastrubal/Gamer/BananaJoe
+ 12505 SmokinMan        Smoker         Flugzeugträger-Hoovercraft grafics by GAMER/SmokinMan
+ 12506 Greg             MORMONE        heavy attack tank          grafic by Gamer
+ 12507 Hanni            ConzeptX       Multibaueinheit            
+ * OBJ ID 12401
+ * OBJ ID 12402
+ * OBJ ID 12403
+ * OBJ ID 12404
+ * OBJ ID 12405
+ * OBJ ID 12406
+ 12508 amigannom        Aquila         Drohnenträgerraumschiff
+ 12509 -Zuteilung       Lethos         Raketenpanzer              grafic by Gamer
+ 12510 Komic            MOA            CM Heli                    grafic by Komic
+ 12511 amigannom        Kommissar      Flugzeugräger-UBoot        grafic by GAMER 
+ 12512 Caturix          Balors SChwert Defence spacecraft
+ 12513 TheScarabeus     ScarFly        (Sinner)                   grafic by Gamer
+ 12514 Slacks           Morl-Booster                              grafic by Slacks
+ 12515 Slacks           Morl-Glider                               grafic by Slacks
+ 12516 Rennreh          Rehstar                                   grafic by rennreh
+ 12517 WULT             Atlatl         Abfangjäger
+ 12518 -Zuteilung-      catalysm       Citadelle                  grafic by Xyphagorosh
+ 12519 -Zuteilung-      Jogi           Baufahrzeug
+ 12520 Haris            Adler11        Raum-Transporter           grafic by Gamer
+ 12521 Collective_Minds FASM           Angriffs-U-Boot            grafic by GAMER
+ 12522 -Zuteilung-      Zyklop         support
+ 12523 -Zuteilung-      Gram           Luftlandeeinheit
+ 12524 Greg    	        Rambo          Radarstörhubschrauber      grafic by GAMER
+ 12525 Greg             Phantom        Schlachtschiff             grafic by GAMER
+ 12526 Ares             Ares           Raumtransporter            grafic by GAMER
+ 12527 Sirhacke         Sirtaki        Support		(ehemals Zapp)
+ 12528 Prophet          Prophet        ServiceHoovercraft
+ 12529 frei             Pussycat       Störflugzeug
+ 12530 -Zuteilung-      Grimm          Transporter                grafic by Grom
+ 12531 Shadow           Shadow         Luftabwehrturm             grafik by GAMER/BananaJoe
+ 12532 frei	        Gambit         Munitionstransportflieger  grafix by GAMER
+ 12533 frei             Pak-Fa         DefensivJäger
+ 12534 frei             Beshaba        Radarflugzeug              grafik by Rhiow
+ 12535 MagisterSpinks   Neptun         Verteidigungsuboot
+ 12536 frei             Kormoran       Radarstörer
+ 12537 Excalibur        Clustius       Minenwerferflugzeug
+ 12538 Redhorse         Artemis        Verteidigungsschiff
+ 12539 G00gle           miniDrus       Verteidigunsflugzeug       (by minimus)
+ 12540 Adamski          Lander         Transporflieger            grafik by GAMER, BananaJoe
+ 12541 Shadow2          Gravos         Turrettransportflieger
+ 12542 -Zuteilung       Petronas       Fliegender Träger
+ 12543 Adamski          Phenm AKI      Flugkreuzer
+ 12544 SmokinMan        Whitenoise     Bauflugzeug
+ * OBJ ID 12544 Statik
+ 12545 Prophet          Buran          Eiswellezünder
+ * OBJ ID 12545 
+ * OBJ ID 12546
+ 12546 frei             Devil          (Überarbeitung)
+ 12547 --Quest--        Satan47        Reparaturflieger
+ 12548 Raiden           Atomrakete
+ 12549 Toby             B1             Bomber
+ 12550 Bear             Thanatos       Verteidiger
+ 12551 Snake            Thunderstorm   Angriffsdrohne
+ 12552 Scara            Scar           Luftabwehrzug
+ 12553 BananJoe         Omega          Luftabwehrfahrzeug
+ 12554 -Zuteilung-      DoomsdayXXL    Raumjäger
+ 12555 NoBear           Exodus         Schienengeschütz
+ 12556 vanBuckel        Speed          Kampfbuggy
+ 12557 Elsbeth_Mussadin Azrael         Luftabwehr
+ 12558 BloodyMary       Damokles       Luftangriff
+ 12559 Redhorse         Cleaner        Minenräumhubschrauber
+ 12560 GAMER            SYG            Soldat
+ 12561 Itaker           Scapegoat      RF Fänger
+ 12562 CH187            AO187          Luftabwehr
+ 12563 Lord          Venenum Volaticum Flugzeugträger
+ 12564 --Quest--        Tigerqueen     Satankopie
+ 12565 frei             KMAX           Kampfhubschrauber
+ 12566 Omega            Okeanos        Kreuzer
+ 12567 frei             Taxi           Transporthoovercraft
+ 12568 Shadow           Wellos         Seeabwehr
+ 12569 Wessix           DIVORCED       Luftabwehr
+ 12570 Sieglinde        Serpente       Verteidigungsschiff
+ 12571 Setupman         Onion-X        Verteidiger
+ 12572 Grothesk         Baal           Kampfbuggy
+ 12573 frei             Scal           Minenräumer
+ 12574 Peerteer         FC             Baueinheit
+ 12575 Wult(MA)         Kukulcan       Drache                      grafik by GAMER
+ 12576 Bahunabega       DragonFly      Kampfhubschrauber
+ 12577 Unknown          Hermelin       Baufahrzeug
+ 12578 motsch	        Luzifer        Dämon
+ 12579 umpani           Atlantis       ZeppelinTräger              grafik by GAMER
+ 12580 Wult             Beowult        Transportkapsel
+ 12581 KlackKlickKlick  Xoras          Schlachtkreuzer
+ 12582 DrStrangelove    HAL            Transporter
+ 12583 Devil            Hulk           HulkID
+ 12584 Nummer5		No5            Bauschweber
+ 12585 cushman          Stormraven     Transportkreuzer
+ 12586 cushman		Blood of Vengeance (Umbau zum Explorer)
+ 12587 cushman          Drop Pod (Blood of Vengeance)
+ 12588 frei             Nemesis        Ghost
+ 12589 AlanTuring	F.P.1          Inselträger
+ 12590 Todwart		Pussy Galore   Abfangjäger
+ 12591 Idrin            Destiny        Luftabwehr
+ 12592 Excalibur        Prometheus     Zeppelinträger
+ 12593 IceQueen         Kyterin        Luftangriffbuggy
+ 12594 Boras            VDT            Drohnenträger

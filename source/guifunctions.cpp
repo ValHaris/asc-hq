@@ -369,6 +369,11 @@ bool Movement::available( const MapCoordinate& pos, ContainerBase* subject, int 
 void MovementBase::execute( const MapCoordinate& pos, ContainerBase* subject, int num )
 {
     if ( !commandPending() ) {
+        // This situation should have already been covered by MovementBase::available(), but there were crash reports with vehicle being NULL
+        if ( !actmap->getField(pos)->vehicle )
+           return;
+
+       
         MoveUnitCommand* move = new MoveUnitCommand( actmap->getField(pos)->vehicle );
 
         move->setVerticalDirection( getVerticalDirection() );

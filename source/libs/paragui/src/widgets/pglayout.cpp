@@ -1179,7 +1179,6 @@ static void XMLProcInstr(void *userData, const XML_Char *target, const XML_Char 
 
 bool PG_Layout::Load(PG_Widget* parent, const std::string& filename, void (* WorkCallback)(int now, int max), void *UserSpace) {
 	ParseUserData_t	XMLParser;
-	bool status = true;
 	int bytes_pos = 0;
 
 	XMLParser.Parser = XML_ParserCreate(NULL);
@@ -1208,7 +1207,6 @@ bool PG_Layout::Load(PG_Widget* parent, const std::string& filename, void (* Wor
 
 		if ((buff = XML_GetBuffer(XMLParser.Parser, XML_BUFF_SIZE)) == NULL) {
 			PG_LogWRN("Can`t get parse buffer");
-			status = false;
 			break;
 		}
 
@@ -1221,12 +1219,10 @@ bool PG_Layout::Load(PG_Widget* parent, const std::string& filename, void (* Wor
 
 		if (XML_ParseBuffer(XMLParser.Parser, bytes_read, bytes_read == 0) == 0) {
 			PG_LogWRN("%s on the line %d pos %d",XML_ErrorString(XML_GetErrorCode(XMLParser.Parser)),XML_GetCurrentLineNumber(XMLParser.Parser), XML_GetCurrentColumnNumber(XMLParser.Parser));
-			status = false;
 			break;
 		}
 
 		if (bytes_read == 0) {
-			status = true;
 			break;
 		}
 	}

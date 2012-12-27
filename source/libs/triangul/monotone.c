@@ -287,7 +287,6 @@ int dir;
     int  mnew; /* howsplit, */
     int v0, v1; /* , v0next, v1next; */
     int retval;
-    int do_switch = FALSE;
 
     if ((trnum <= 0) || visited[trnum])
         return 0;
@@ -312,7 +311,6 @@ int dir;
             v1 = t->lseg;
             if (from == t->d1)
             {
-                do_switch = TRUE;
                 mnew = make_new_monotone_poly(mcur, v1, v0);
                 traverse_polygon(mcur, t->d1, trnum, TR_FROM_UP);
                 traverse_polygon(mnew, t->d0, trnum, TR_FROM_UP);
@@ -342,7 +340,6 @@ int dir;
             v1 = tr[t->u0].rseg;
             if (from == t->u1)
             {
-                do_switch = TRUE;
                 mnew = make_new_monotone_poly(mcur, v1, v0);
                 traverse_polygon(mcur, t->u1, trnum, TR_FROM_DN);
                 traverse_polygon(mnew, t->u0, trnum, TR_FROM_DN);
@@ -374,7 +371,6 @@ int dir;
             if (((dir == TR_FROM_DN) && (t->d1 == from)) ||
                     ((dir == TR_FROM_UP) && (t->u1 == from)))
             {
-                do_switch = TRUE;
                 mnew = make_new_monotone_poly(mcur, v1, v0);
                 traverse_polygon(mcur, t->u1, trnum, TR_FROM_DN);
                 traverse_polygon(mcur, t->d1, trnum, TR_FROM_UP);
@@ -400,7 +396,6 @@ int dir;
                 retval = SP_2UP_LEFT;
                 if ((dir == TR_FROM_UP) && (t->u0 == from))
                 {
-                    do_switch = TRUE;
                     mnew = make_new_monotone_poly(mcur, v1, v0);
                     traverse_polygon(mcur, t->u0, trnum, TR_FROM_DN);
                     traverse_polygon(mnew, t->d0, trnum, TR_FROM_UP);
@@ -423,7 +418,6 @@ int dir;
                 retval = SP_2UP_RIGHT;
                 if ((dir == TR_FROM_UP) && (t->u1 == from))
                 {
-                    do_switch = TRUE;
                     mnew = make_new_monotone_poly(mcur, v1, v0);
                     traverse_polygon(mcur, t->u1, trnum, TR_FROM_DN);
                     traverse_polygon(mnew, t->d1, trnum, TR_FROM_UP);
@@ -452,7 +446,6 @@ int dir;
                 retval = SP_2DN_LEFT;
                 if (!((dir == TR_FROM_DN) && (t->d0 == from)))
                 {
-                    do_switch = TRUE;
                     mnew = make_new_monotone_poly(mcur, v1, v0);
                     traverse_polygon(mcur, t->u1, trnum, TR_FROM_DN);
                     traverse_polygon(mcur, t->d1, trnum, TR_FROM_UP);
@@ -476,7 +469,6 @@ int dir;
                 retval = SP_2DN_RIGHT;
                 if ((dir == TR_FROM_DN) && (t->d1 == from))
                 {
-                    do_switch = TRUE;
                     mnew = make_new_monotone_poly(mcur, v1, v0);
                     traverse_polygon(mcur, t->d1, trnum, TR_FROM_UP);
                     traverse_polygon(mnew, t->u1, trnum, TR_FROM_DN);
@@ -503,7 +495,6 @@ int dir;
                 retval = SP_SIMPLE_LRDN;
                 if (dir == TR_FROM_UP)
                 {
-                    do_switch = TRUE;
                     mnew = make_new_monotone_poly(mcur, v1, v0);
                     traverse_polygon(mcur, t->u0, trnum, TR_FROM_DN);
                     traverse_polygon(mcur, t->u1, trnum, TR_FROM_DN);
@@ -528,7 +519,6 @@ int dir;
                 retval = SP_SIMPLE_LRUP;
                 if (dir == TR_FROM_UP)
                 {
-                    do_switch = TRUE;
                     mnew = make_new_monotone_poly(mcur, v1, v0);
                     traverse_polygon(mcur, t->u0, trnum, TR_FROM_DN);
                     traverse_polygon(mcur, t->u1, trnum, TR_FROM_DN);

@@ -2829,8 +2829,6 @@ void tviewtext::evalcommand ( const char** s)
    char s4[100];
    int k, i = 0,
           j = 0;
-   int tvt_oldx;
-
 
    memset( s4, 0, sizeof( s4 ));
    if (strnicmp(s3, "#COLOR", 6) == 0) {
@@ -2885,7 +2883,6 @@ void tviewtext::evalcommand ( const char** s)
    } 
 
    if (strnicmp(s3, "#TAB", 4) == 0) {
-      tvt_oldx = tvt_xp;
       i+=4;
       while (s3[i] != '#') {
          s4[j] = s3[i];
@@ -2905,7 +2902,6 @@ void tviewtext::evalcommand ( const char** s)
 
    } 
    if (strnicmp(s3, "#POS", 4) == 0) {
-      tvt_oldx = tvt_xp;
       i+=4;
       while (s3[i] != '#') {
          s4[j] = s3[i];
@@ -2920,7 +2916,6 @@ void tviewtext::evalcommand ( const char** s)
    } 
 
    if (strnicmp(s3, "#EEINZUG", 8) == 0) {
-      tvt_oldx = tvt_xp;
       i+=8;
       while (s3[i] != '#') {
          s4[j] = s3[i];
@@ -2932,7 +2927,6 @@ void tviewtext::evalcommand ( const char** s)
       eeinzug = atoi ( s4 );
    } 
    if (strnicmp(s3, "#AEINZUG", 8) == 0) {
-      tvt_oldx = tvt_xp;
       i+=8;
       while (s3[i] != '#') {
          s4[j] = s3[i];

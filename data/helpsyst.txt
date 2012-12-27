@@ -209,36 +209,13 @@ Then enter or select a filename to which the game will be saved. If a % is used 
 #color004##fontsize=18#
 ADVANCED STRATEGIC COMMAND
 #color000##fontsize=14#
-(C) 1994 - 2008 by Martin Bickel, Steffen Frï¿½hlich and Daniel Korbely
+(C) 1994 - 2012 by Martin Bickel, Steffen Fr”hlich and many, many contributors.
 
-Contributions:
-
-Christian Mayer (graphics)
-Frank Fiedler (graphics)
-Michael Kievernagel (music)
-Torsten Maekler (objects, terrain)
-Kevin Hirschmann (code, unit and building guide)
-Jeffrey M. Wacheski (sound)
-Tom Wilson, Simon Britnell (linux porting)
-
-
-Many thanks to:
-
-Marius Rickenbacher for debugging
-Alexander Schï¿½fer for helping with the very first versions of ASC
-Amit Patel for his pathfinding algorithm implementation
-Jï¿½rg Richter for giving us sources of his excellent BI2/3 map editor and enabling us to make the "Battle-Isle"-Version of ASC.
-Michael Moerz, Nicolas Raffenaud, Frank Landgraf, Bernhard Oemer and Shamada Diundra for contributing code and general help.
-Karel Voracek for the experience symbols.
 
 Advanced Strategic Command and its utility programs use code of The Independent JPEG Group .
 The data compression uses bzlib by Julian R Seward.
-The windows installer for this product was created using Installer VISE from MindVision Software.
-Some tutorial levels are based on Battle Isle maps by Steffen Frï¿½hlich and Thomas Blaser.
 
 
-
-If I forgot anybody, please drop an email.
 ##0041
 #font02#Resources#font01#
 

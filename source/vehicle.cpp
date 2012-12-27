@@ -819,9 +819,11 @@ bool  Vehicle :: vehicleconstructable ( const VehicleType* tnk, int x, int y )
       if ( !(tnk->height & height))
          hgt = 1 << getFirstBit(tnk->height);
       if ( terrainaccessible2( gamemap->getField(x,y), tnk->terrainaccess, hgt ) > 0 )
-         if ( getResource( getExternalVehicleConstructionCost( tnk ), true ) == getExternalVehicleConstructionCost( tnk ) )
-            if ( beeline (x, y, xpos, ypos) <= maxmalq )
+         if ( getResource( getExternalVehicleConstructionCost( tnk ), true ) == getExternalVehicleConstructionCost( tnk ) ) {
+            int dist = beeline (x, y, xpos, ypos);
+            if ( dist <= maxmalq * typ->unitConstructionMaxDistance && dist >= maxmalq * typ->unitConstructionMinDistance )
                return 1;
+         }
 
    }
    return 0;
@@ -1227,9 +1229,8 @@ void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits ) const
 void   Vehicle::read ( tnstream& stream )
 {
     int _id = stream.readWord ();
-    int version = 0;
     if ( _id == 0 ) {
-       version = stream.readInt();
+       stream.readInt(); // version
        _id = stream.readInt();
     }
 
@@ -1646,9 +1647,8 @@ int Vehicle::getMemoryFootprint() const
 Vehicle* Vehicle::newFromStream ( GameMap* gamemap, tnstream& stream, int forceNetworkID )
 {
    int id = stream.readWord ();
-   int version = 0;
    if ( id == 0 ) {
-      version = stream.readInt();
+      stream.readInt(); // version
       id = stream.readInt();
    }
 

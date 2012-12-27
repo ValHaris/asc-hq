@@ -23,9 +23,6 @@ my @files = ("asc2.exe" );
 push( @files,  "mapeditor2.exe") if ( $mapedit );
 my @debugfiles = ("asc.pdb", "mapeditor.pdb");
 
-my $ftpclient = "C:/Programme/NcFTP/ncftpput.exe";
-
-
 print $version . "\n";
 
 open (P, "passwd.txt") || die "could not open password file";
@@ -57,6 +54,7 @@ mkdir $archivedir if ( ! -e $archivedir ) ;
 system("cp " . join (" ", @files, @debugfiles) . " $archivedir");
 die "error copying file" if $?;
 
+system("net use z:") unless -e "z:";
 
 sub randomString {
    my $s = "";
@@ -76,7 +74,7 @@ sub randomString {
 }
 
 
-system("$ftpclient -u ftp60885 -p $password -v www.asc-hq.de /www.asc-hq.de $zipname");
+system("cmd /c copy $zipname z:");
 die "error uploading file" if $?;
 
 if ( $cvsUpload ) {
@@ -88,7 +86,7 @@ if ( $pbpEditor ) {
     my $pbpzip = "pbpeditor-$id.zip";
     unlink($pbpzip) if -e $pbpzip;
     system("zip $pbpzip pbpeditor2.exe");
-    system("$ftpclient -u ftp60885 -p $password -v www.asc-hq.de /www.asc-hq.de $pbpzip");
+    system("cmd /c copy $zipname z:");
     die "error uploading file $pbpzip " if $?;
  
 }

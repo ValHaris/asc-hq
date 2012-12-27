@@ -21,11 +21,12 @@ VehicleType {
       Material = 400
       fuel = 1000
    } Tank
-   Movement += 0 0 0 2 0 0 0 0 
+   Movement += 0 0 0 4 0 0 0 0 
    SelfRepairRate = 10
    Weapons { 
       Number = 1
-      Weapon0 ->* VehicleType.SY_Trooper 
+      Weapon0 ->* VehicleType.SY_Trooper
+      Weapon0.name = Stabwaffe	  
       Weapon0.MinRange = 10
       Weapon0.Punch@MinRange += 2
       Weapon0.WeaponEffectiveness.trooper = 100

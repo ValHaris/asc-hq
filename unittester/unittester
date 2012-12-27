@@ -7,5 +7,9 @@ mkdir unittest-data
 cd unittest-data
 ln -s ../../data/main.ascdat .
 ln -s ../../data/dialog/asc2_dlg.zip .
+if [ -e ../../extra-data/pbp.ascdat ] ; then
+   echo "Testing PBP data as well"
+   ln -s ../../extra-data/pbp.ascdat .
+fi
 cd ..
 ../source/unix/asc/unittester -c asc2rc

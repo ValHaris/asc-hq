@@ -945,9 +945,20 @@ void AI :: tactics_findBestAttackOrder ( Vehicle** units, int* attackOrder, Vehi
 
 }
 
-float AI :: getAttackValue ( const tfight& battle, const Vehicle* attackingUnit, const Vehicle* attackedUnit, float factor )
+
+int AI :: getValue( Vehicle* v ) 
 {
-   float result = (battle.dv.damage - attackedUnit->damage) * attackedUnit->aiparam[getPlayerNum()]->getValue() * factor - 1/config.aggressiveness * (battle.av.damage - attackingUnit->damage) * attackedUnit->aiparam[getPlayerNum()]->getValue() ;
+   if ( v->aiparam[getPlayerNum()] == NULL ) {
+      calculateThreat(v);  
+   }
+   return v->aiparam[getPlayerNum()]->getValue();
+}
+
+float AI :: getAttackValue ( const tfight& battle, Vehicle* attackingUnit, Vehicle* attackedUnit, float factor )
+{
+   calculateThreat( attackedUnit );
+   float result =                     (battle.dv.damage - attackedUnit->damage) * getValue(attackedUnit) * factor 
+          - 1/config.aggressiveness * (battle.av.damage - attackingUnit->damage) * getValue(attackingUnit) ;
    if ( battle.dv.damage >= 100 )
       result += attackedUnit->aiparam[getPlayerNum()]->getValue() * attack_unitdestroyed_bonus;
    return result;

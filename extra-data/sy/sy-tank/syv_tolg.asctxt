@@ -4,6 +4,9 @@ VehicleType {
    parent = 1394 1395 1392 1399
 
    Description = Panzer
+   Picture = syv_tolg.png
+   InfoImage = syv_tolg.jpg
+   InfoImageSmall = syv_tolg_k.png
    Infotext = [Obwohl sich die SY überwiegend in der Luft bewegen, mußten Fahrzeuge entwickelt und gebaut werden, die sich am Boden fortbewegen. Typisch für die SY wurde ein kompaktesModel für den Bodennahkampf geschaffen. Der Tolg-Schwebepanzer besitzt eine starke Panzerung, einen Plasmawerfer für den Nahkampf und 2 Kleinlaser.
 Der Schwebeantrieb ist so dimensioniert, das er kurzfristig in die Luft aufsteigen kann, um kleinere Hindernisse zu überwinden. Ein Abfeuern der Waffen, ist im Flugmodus allerdings nicht möglich. Die dabei entstehenden Kräfte würden den Tolg abstürzen lassen.
 
@@ -17,8 +20,6 @@ Waffensystem: Plasmawerfer Typ N
 Haupteinsatzgebiet: Boden-Nahkampf
 
 InfoImage = Steffen Fröhlich]
-   Picture = syv_tolg.png
-   InfoImage = syv_tolg.jpg
 
    Features += no_midair_refuel 
    Armor = 850

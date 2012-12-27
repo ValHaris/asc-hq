@@ -7,7 +7,7 @@ VehicleType {
    Picture = syv_morr.png
    Infotext = [Der Morr ist die landgestützte Kommandozentrale der Sy.]
 
-   Features += moveduringreactionfire
+   Features += moveduringreactionfire Repair_Facility 
    Armor = 1600
    Weight = 1000
    View = 85
@@ -25,10 +25,10 @@ VehicleType {
 
    Tank { 
       Energy = 0
-      Material = 30000
-      fuel = 60000
+      Material = 100000
+      fuel = 150000
    } Tank
-   FuelConsumption = 18
+   FuelConsumption = 30
    Movement = 0 0 0 50 0 0 0 0  
 
    WaitForAttack = false

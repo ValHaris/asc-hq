@@ -1,0 +1,3 @@
+scripts/rebuild -q
+make -j 8 -s
+make -s check

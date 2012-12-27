@@ -10,7 +10,7 @@ VehicleType {
 
    Category = heavy_aircraft
    Armor = 200000
-   View = 300
+   View = 0
    Jamming = 100
    Features = ExternalFuelTransfer ExternalMaterialTransfer self_repairing immune_to_mines construct_vehicles ExternalRepair MoveDuringReactionFire Move_after_attack
    MaxSurvivableStorm = 255
@@ -78,27 +78,27 @@ VehicleType {
             u6 = 100
          } HitAccuracy
       WeaponEffectiveness {      
-         trooper = 100
-         rail_vehicle = 100
-         building|turret|object = 100
-         hoovercraft = 100
-         helicopter = 100
+         trooper = 500
+         rail_vehicle = 500
+         building|turret|object = 500
+         hoovercraft = 500
+         helicopter = 500
 
-         light_tracked_vehicle = 100
-         medium_tracked_vehicle = 100
-         heavy_tracked_vehicle = 100
+         light_tracked_vehicle = 500
+         medium_tracked_vehicle = 500
+         heavy_tracked_vehicle = 500
 
-         light_wheeled_vehicle = 100
-         medium_wheeled_vehicle = 100
-         heavy_wheeled_vehicle = 100
+         light_wheeled_vehicle = 500
+         medium_wheeled_vehicle = 500
+         heavy_wheeled_vehicle = 500
          
-         light_ship = 100
-         medium_ship  = 100
-         heavy_ship = 100
+         light_ship = 500
+         medium_ship  = 500
+         heavy_ship = 500
 
-         light_aircraft = 100
-         medium_aircraft  = 100
-         heavy_aircraft = 100
+         light_aircraft = 500
+         medium_aircraft  = 500
+         heavy_aircraft = 500
       } WeaponEffectiveness
       } Weapon0
       Weapon1 { 

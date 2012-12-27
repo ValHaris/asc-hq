@@ -3,11 +3,11 @@ VehicleType {
    parent = 401 497
    ID = 12003
 
-   Description = Special Spaceship
+   Description = Pathfinder-Klasse
    Picture = isg_pathfinder.png
    Infotext = [#crt#Raumtransporter#crt# #crt#
    Das Raumschiff ist Eigentum der Interstellaren Gilde. Offensiver Einsatz ist untersagt. Ersatz wird nur bei 
-   Naturkatastrophen gestellt. Der Pathfinder besitz einen verbesserten Antrieb, der die Raumflugzeit um die Hälfte verkürzt.]
+   Naturkatastrophen gestellt. Der Pathfinder besitzt einen verbesserten Antrieb, der die Raumflugzeit um die Hälfte verkürzt.]
 
    ConstructionCost { 
       CalculationMethod = manual

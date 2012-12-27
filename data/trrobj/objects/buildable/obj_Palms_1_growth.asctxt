@@ -24,8 +24,8 @@ ObjectType {
    RemovalCost { 
       Energy = 0
       Material = -150
-      fuel = 20
-      Movement = 15
+      fuel = -75
+      Movement = 20
    } RemovalCost
 
    TerrainAccess { 

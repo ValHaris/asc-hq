@@ -17,7 +17,7 @@ VehicleType {
    Movement = 0 0 0 1 0 0 0 0
 
    Weapons {
-      Weapon0.MaxRange = 190
+      Weapon0.MaxRange = 180
       Weapon1 ->* VehicleType.NLS
    } Weapons
 } VehicleType

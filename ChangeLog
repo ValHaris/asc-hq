@@ -1,3 +1,33 @@
+ASC 2.5.0.0
+
+  Major Features:
+    - Added function for long distance movement (longer than 1 turn)
+    - savegames have preview image
+
+  Minor Features:
+    - add: infos about the health and the fuel can be shown at the top of the unit
+    - Map transformations can now transform Techadapters
+    - unit info shows 3D image of unit
+    - more LUA commands
+    - Automatic Ammo Production is now on by default for new ASC installations
+    - better detection of screen resolution, 100% zoom now default
+
+  Bugfixes:
+    - fixed view calcuation problems
+    - fixed compilation problems with gcc 4.7
+    - Fixed crash on windows when trying to perform invalid resource/ammo transfers through Lua
+    - Fixed damage increase through repair
+    - Fixed AI crash
+    - Fixed positioning of map info window
+    - Fixed writing empty service commands
+    - Fixed crash when jumping into RF
+    - Fixed undo errors when destroying objects
+    - and many more...
+
+
+The old Changelogs were automatically created from CVS history:
+
+
 2009-12-20 17:34  mbickel
 
 	* configure, configure.in, data/ascdatacoreversion.asctxt,
@@ -447,7 +477,7 @@
 2009-11-07 12:45  gamer
 
 	* source/vehicletype.cpp: Kosten Radar wieder reduziert
-	  Kostenerhöhung für Jumpdrive immobiler Einheiten leichte
+	  Kostenerhï¿½hung fï¿½r Jumpdrive immobiler Einheiten leichte
 	  Modifizierung movementkosten low/med Air
 
 2009-11-06 17:17  mbickel
@@ -741,12 +771,12 @@
 
 	  Terrain: -Blue, vsw object Ice Fix -ID 2004 Terrainbit Ice fix
 
-	  Gebäude -Spaceport Nord, Spielerfarben gefixt -Spaceport Süd,
+	  Gebï¿½ude -Spaceport Nord, Spielerfarben gefixt -Spaceport Sï¿½d,
 	  Eingang korrigiert, Spielerfarben gefixt
 
 	  Basisdefinitionen -SAM Tank nicht mehr light tank default sondern
 	  medium tank default -mobile jammer , Fuelverbrauch drasitisch
-	  erhöht -Höhenstufenwechsel von und in den Orbit erschwert
+	  erhï¿½ht -Hï¿½henstufenwechsel von und in den Orbit erschwert
 
 2009-09-07 07:11  gamer
 
@@ -1093,7 +1123,7 @@
 	* data/campaign/standard/: asc013.map.en_US, asc012.map.de_DE,
 	  asc013.map.de_DE, asc014.map.de_DE, asc014.map.en_US,
 	  asc015.map.de_DE, asc016.map.de_DE, asc017.map.de_DE:
-	  Übersetzungen
+	  ï¿½bersetzungen
 
 2009-08-04 21:25  grom
 
@@ -1115,7 +1145,7 @@
 	  standard/asc006.map.de_DE, standard/asc007.map.de_DE,
 	  standard/asc008.map.de_DE, standard/asc009.map.de_DE,
 	  standard/asc010a.map.de_DE, standard/asc010b.map.de_DE,
-	  standard/asc011.map.de_DE: Übersetzungen usw.
+	  standard/asc011.map.de_DE: ï¿½bersetzungen usw.
 
 2009-08-02 15:07  grom
 
@@ -1328,7 +1358,7 @@
 	  unitsets/mk1/mk1-view/mk1b_brs.asctxt,
 	  unitsets/mk1/mk1-view/mk1b_brs.jpg,
 	  unitsets/mk1/mk1-view/mk1b_brs_k.png,
-	  unitsets/mk3/mk3-parent/mk3-history.txt: Update für Zyklus 75 PBP
+	  unitsets/mk3/mk3-parent/mk3-history.txt: Update fï¿½r Zyklus 75 PBP
 
 2009-07-24 20:44  mbickel
 
@@ -1772,7 +1802,7 @@
 2009-06-10 16:19  grom
 
 	* data/campaign/standard/asc009.map: Rechtschreibfehler behoben und
-	  Event zum überschreiben des Akku hinzugefügt.
+	  Event zum ï¿½berschreiben des Akku hinzugefï¿½gt.
 
 2009-06-09 22:47  mbickel
 
@@ -5978,7 +6008,7 @@
 	  kam009.map, kam010.map, kam011.map, kam012.map, kam013.map,
 	  kam014.map, kam015.map, kam016.map, kam017.map, kam018.map,
 	  kam019.map, kam020.map, kam021.map, kam022.map, kam023.map,
-	  kam024.map, kam025.map: Überarbeitung Kamor Kampagne
+	  kam024.map, kam025.map: ï¿½berarbeitung Kamor Kampagne
 
 2008-06-15 20:58  mbickel
 
@@ -6239,7 +6269,7 @@
 
 2008-05-19 07:46  grom
 
-	* data/campaign/standard/asc017.map: Vorläufige Endmap der Kampgane
+	* data/campaign/standard/asc017.map: Vorlï¿½ufige Endmap der Kampgane
 	  - Ersteller Kamor
 
 2008-05-12 12:41  grom
@@ -7211,13 +7241,13 @@
 
 	* data/campaign/standard/: asc001.map, asc002.map, asc003.map,
 	  asc004.map, asc005.map, asc006.map: Stratege hat jetzt Teil 1 bis
-	  6 der Kampagne gecheckt und einige Kleinigkeiten geändert:
+	  6 der Kampagne gecheckt und einige Kleinigkeiten geï¿½ndert:
 
 	  - kleinere Englisch-Fehler in den Meldungen - Herumfahrende Comas
 	  mit aktiviertem RF habe ich enttankt, damit sie vor Ort bleiben -
-	  Tankfüllungen von Fahrzeugen habe ich maximiert, aber nur bei
+	  Tankfï¿½llungen von Fahrzeugen habe ich maximiert, aber nur bei
 	  Wiesel, Termite und Nova - in den Karten 4 bis 6 habe ich das
-	  Akku entfernt und dafür ein weiteres Windkraftwerk eingebaut; die
+	  Akku entfernt und dafï¿½r ein weiteres Windkraftwerk eingebaut; die
 	  Stromerzeugungsmenge hab ich reduziert, so dass das Gesamt-Niveau
 	  der E-Erzeugung ca. konstant blieb - bei einigen Computer-Turrets
 	  habe ich RF eingeschaltet; hatte bisher gefehlt
@@ -7234,8 +7264,8 @@
 
 2008-02-07 10:51  gamer
 
-	* data/campaign/kamor/_filter_kamor.asctxt: Filter für kamor
-	  Campagne eingefügt
+	* data/campaign/kamor/_filter_kamor.asctxt: Filter fï¿½r kamor
+	  Campagne eingefï¿½gt
 
 2008-02-07 00:03  gamer
 
@@ -7884,7 +7914,7 @@
 	  terrain/trr_rock_flat_29.asctxt, terrain/trr_rock_flat_3.asctxt,
 	  terrain/trr_rock_flat_30.asctxt, terrain/trr_rock_flat_31.asctxt,
 	  terrain/trr_rock_flat_4.asctxt, terrain/trr_rock_flat_5.asctxt,
-	  terrain/trr_sand_1.asctxt: few Snow Grafiken überarbeitet
+	  terrain/trr_sand_1.asctxt: few Snow Grafiken ï¿½berarbeitet
 
 2007-12-16 18:57  mbickel
 
@@ -8580,7 +8610,7 @@
 2007-11-10 15:34  xyph
 
 	* data/trrobj/objects/buildable/ob_0996strong_pipeline.asctxt:
-	  GroupID von 15 in 9 geändert
+	  GroupID von 15 in 9 geï¿½ndert
 
 2007-11-09 18:04  ares
 
@@ -9016,11 +9046,11 @@
 	  terrain/trr_grassland_16_hr.png, terrain/trr_grassland_16_lr.png,
 	  terrain/trr_grassland_17.png, terrain/trr_grassland_17_fs.png,
 	  terrain/trr_grassland_17_hr.png, terrain/trr_grassland_17_lr.png:
-	   Railroads Movemalus für Turrets entfernt
+	   Railroads Movemalus fï¿½r Turrets entfernt
 	   Kristalle an Wald angeglichen
 	   Pilze eingebaut
-	   Terraingrafiken verschönert
-	   Editorpalette überarbeitet
+	   Terraingrafiken verschï¿½nert
+	   Editorpalette ï¿½berarbeitet
 
 2007-10-01 12:53  mbickel
 
@@ -9242,7 +9272,7 @@
 2007-08-24 19:57  grom
 
 	* data/unitsets/mk3/mk3-train/mk3t_icce.asctxt: Service Weapon
-	  eingefügt
+	  eingefï¿½gt
 
 2007-08-24 19:45  grom
 
@@ -9251,13 +9281,13 @@
 2007-08-24 19:42  grom
 
 	* data/tech_asc012_tg2.asctxt: Fehler im Text und nicht
-	  existierendes Parent auf 101106 geändert
+	  existierendes Parent auf 101106 geï¿½ndert
 
 2007-08-24 19:19  grom
 
 	* data/unitsets/mk1/mk1-parent/sh18_367_speedship.asctxt: Floating
-	  und Groundlevel als Höhen Möglichkeit - Fix des Parents für zB.
-	  Möwe 2
+	  und Groundlevel als Hï¿½hen Mï¿½glichkeit - Fix des Parents fï¿½r zB.
+	  Mï¿½we 2
 
 2007-08-20 21:43  mbickel
 
@@ -10027,7 +10057,7 @@
 	  objects/landscape/obj_rocks_large_3_ms.png,
 	  objects/landscape/obj_rocks_small_1_ms.png,
 	  objects/landscape/obj_rocks_small_2_ms.png,
-	  objects/landscape/obj_rocks_small_3_ms.png: Wetter hinzugefügt
+	  objects/landscape/obj_rocks_small_3_ms.png: Wetter hinzugefï¿½gt
 
 2007-05-14 22:07  mbickel
 
@@ -10352,8 +10382,8 @@
 	  trr_water_4_deep.asctxt, trr_water_4_deep.png,
 	  trr_water_4_deep_ice.png, trr_water_4_deep_ms.png,
 	  trr_water_5_ocean.asctxt, trr_water_5_ocean.png,
-	  trr_water_5_ocean_ice.png: Überarbeitung von Terrain und
-	  Wetterdefinitionen. Hinzufügen von Grafiken und Grafikoperation
+	  trr_water_5_ocean_ice.png: ï¿½berarbeitung von Terrain und
+	  Wetterdefinitionen. Hinzufï¿½gen von Grafiken und Grafikoperation
 	  Snow.
 
 2007-04-27 09:16  grom
@@ -10802,9 +10832,9 @@
 	  obj_rocks_small_3.asctxt, obj_ruin_1.asctxt, obj_ruin_2.asctxt,
 	  obj_ruin_3.asctxt, obj_ruin_4.asctxt, obj_swamp_1.asctxt,
 	  obj_swamp_2.asctxt, obj_swamp_3.asctxt, obj_swamp_4.asctxt,
-	  obj_swamp_5.asctxt, obj_swamp_6.asctxt: Überarbeitung bezüglich
-	  Wetter und Aufräumen der Verweisungen sowie Schneebilder
-	  hinzugefügt
+	  obj_swamp_5.asctxt, obj_swamp_6.asctxt: ï¿½berarbeitung bezï¿½glich
+	  Wetter und Aufrï¿½umen der Verweisungen sowie Schneebilder
+	  hinzugefï¿½gt
 
 2007-04-27 08:42  grom
 
@@ -18177,7 +18207,7 @@
 	  bld_asc_radar.asctxt, bld_asc_radar.pcx, bld_asc_smvehicle.pcx,
 	  bld_asc_solar.pcx, bld_asc_town.asctxt, bld_asc_town.pcx,
 	  bld_asc_training.pcx, bld_asc_windpower_dry.pcx,
-	  bld_asc_windpower_fs.pcx, buildings.version: Gebäude
+	  bld_asc_windpower_fs.pcx, buildings.version: Gebï¿½ude
 	  aktualisierung
 
 2006-08-04 18:15  gamer
@@ -21905,14 +21935,14 @@
 	  asc005.map, asc006.map, asc007.map, asc008.map, asc009.map,
 	  asc010a.map, asc010b.map, asc011.map:  Updated campaign maps:
 	     ASC004: Taktischer Hinweis (Minen), + 1 Ceti
-	     ASC005: Gegner-Abwehr  etwas verstärkt
+	     ASC005: Gegner-Abwehr  etwas verstï¿½rkt
 	     ASC008: +1 Mine, +1 Bohrturm
-	     ASC009: Training auf 5 begrenzt, Trooper können nicht gebaut
-	  werden, Ressourcen im Boden verringert, Gegner etwas verstärkt
+	     ASC009: Training auf 5 begrenzt, Trooper kï¿½nnen nicht gebaut
+	  werden, Ressourcen im Boden verringert, Gegner etwas verstï¿½rkt
 	     ASC010a: +2 WindPP, damit Cone gebaut werden kann (interims!
-	  die 2 PP verschwinden wieder sobald das Akku-Gebäude fertig ist),
+	  die 2 PP verschwinden wieder sobald das Akku-Gebï¿½ude fertig ist),
 	  +2MonsterWIg
-	     ASC010b: Gegner mit MG-Nest-Abwehr verstärkt
+	     ASC010b: Gegner mit MG-Nest-Abwehr verstï¿½rkt
 	   Added campaign map11
 
 2004-03-27 22:48  mbickel
@@ -24573,7 +24603,7 @@
 2001-09-30 11:46  mbickel
 
 	* data/moredata/mk1.con:  New version of unitset by Steffen
-	  Fröhlich
+	  Frï¿½hlich
 
 2001-09-29 22:44  mbickel
 

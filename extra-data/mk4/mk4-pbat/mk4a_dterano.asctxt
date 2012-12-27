@@ -32,6 +32,7 @@ Aufgrund der Tatsachen, dass die Dterrano sich vom Gesamtgewicht her nicht von i
 
    Weapons { 
       Number = 3 
+	  Weapon1.MaxRange = 20
       Weapon2 ->* VehicleType.Air_MG 
    } Weapons
 } VehicleType

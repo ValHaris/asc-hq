@@ -14,7 +14,7 @@ VehicleType {
       fuel =
       Material =
    } ConstructionCost
-   Height = ground_level low_level_flight medium_level_flight high_level_flight orbit 
+   Height = low_level_flight medium_level_flight high_level_flight 
    Jamming = 65
    WaitForAttack = false
    Tank { 
@@ -24,13 +24,13 @@ VehicleType {
    } Tank
    FuelConsumption = 18
    Features = self_repairing jam_only_own_field move_after_attack cruiserlanding no_reactionfire
-   Movement = 0 0 0 80 140 160 160 40 
+   Movement = 0 0 0 0 140 160 160 0 
    movementsound = sy_ground_s.ogg
-   Category = light_aircraft
+   Category = medium_aircraft
    MaxSurvivableStorm = 255
    ResourceDrillingRange = 0
    SelfRepairRate = 15
-   Weight = 45
+   Weight = 50
    TerrainAccess ->* VehicleType.SY_fighter_ground
    Construction { 
       Buildings = 

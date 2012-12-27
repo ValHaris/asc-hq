@@ -1,26 +1,28 @@
 VehicleType { 
    Name = KSOL
-   parent = 400 401 402 1399 12000
+   parent = 400 401 402 1399 12000 1395
    ID = 1327
 
-   Description = SpaceShip
+   Description = StarShip-Klasse
    Infotext = [Interstellares Raumschiff der SY]
    Picture = sya_ksol.png
    InfoImage = sya_ksol.jpg
    InfoImageSmall = sya_ksol_k.png
 
-   Features += jam_only_own_field
-   Jamming = 20
-   SelfRepairRate = 10
+   ConstructionCost { 
+      CalculationMethod = manual
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } ConstructionCost
 
-  JumpDrive {
-      terrain_any = road runway Spaceport lowland hard_sand soft_sand hillside ditch mountains high_mountains very_shallow_water shallow_water water deep_water river lava installation turret_foundation
-      terrain_all = beacon
-      terrain_not = 
-      terrain_kill = 
-   } JumpDrive
+   Features = self_repairing jam_only_own_field
+   Armor += 200
+   Jamming = 50
+   SelfRepairRate = 15
 
    Transportation { 
+      MaxLoadableUnitSize = 4500
       EntranceSystemNum = 2
       EntranceSystem0 {
         Mode = in out docking
@@ -36,14 +38,25 @@ VehicleType {
       EntranceSystem1.DisableAttack = true
    } Transportation
 
-   Height = ground_level low_level_flight medium_level_flight high_level_flight orbit 
-
+   Height = low_level_flight medium_level_flight high_level_flight orbit 
+   Movement += 0 0 0 0 20 20 20 20 
+   Tank { 
+      Material += 20000
+      fuel += 50000
+   } Tank
    TerrainAccess { 
-      terrain_any = Spaceport 
+      terrain_any =  
       terrain_all = 
       terrain_not = 
       terrain_kill = 
    } TerrainAccess
+   JumpDrive {
+      Height = orbit
+      terrain_any = road runway Spaceport lowland hard_sand soft_sand hillside ditch mountains high_mountains very_shallow_water shallow_water water deep_water river lava installation turret_foundation
+      terrain_all = beacon
+      terrain_not = 
+      terrain_kill = 
+   } JumpDrive
 
    Construction { 
       Buildings = 
@@ -54,7 +67,20 @@ VehicleType {
 
    WaitForAttack = false
    Weapons { 
-      Initiative = 0
-      Number = 0
-   } Weapons
+      Number = 2
+	  Weapon0 ->* VehicleType.SY_Fighter_AD
+	  Weapon0.MaxRange = 40
+	  Weaoon0.shotFrom = low_level_flight medium_level_flight high_level_flight orbit 
+      Weapon0.Punch@MaxRange = 80
+      Weapon0.Punch@MinRange = 85
+	  Weapon1 ->* VehicleType.SY_bomber_big
+	  Weapon1.MaxRange = 40
+	  Weaoon1.shotFrom = low_level_flight medium_level_flight
+	  Weapon1.HitAccuracy.d3 = 0
+	  Weapon1.HitAccuracy.0 = 100
+	  Weapon1.ReactionFireShots = 2
+      Weapon1.Punch@MaxRange = 110
+      Weapon1.Punch@MinRange = 130
+
+  } Weapons
 } VehicleType

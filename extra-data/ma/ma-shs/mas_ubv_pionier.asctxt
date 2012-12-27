@@ -16,7 +16,7 @@ VehicleType {
 
    Armor -= 100
    Weight = 2000
-   Features += construct_vehicles construct_specific_buildings mine_layer mineview automatic_resource_searching icebreaker
+   Features += construct_vehicles construct_specific_buildings mine_layer mineview automatic_resource_searching icebreaker ExternalMaterialTransfer ExternalFuelTransfer ExternalAmmoTransfer
    ResourceDrillingRange = 5
 
     Tank { 
@@ -26,11 +26,13 @@ VehicleType {
    } Tank
    FuelConsumption = 30
    Movement = 66 66 66 0 0 0 0 0 
+   TerrainAccess ->* VehicleType.icebreaker_terrain
+
    Construction { 
       Buildings = 22930 22903 22929
       Vehicles = 22611 22612 22613 22616
       Objects = 3 30 44 995 996 997 998 999 1000
-      ObjectsRemovable = 
+      ObjectsRemovable = 30
       ObjectGroupsRemovable = 1 2 3 4 5 6 7 8 10 11 12 13 14 15
    } Construction
 
@@ -38,9 +40,8 @@ VehicleType {
       Initiative = 0
       Number = 3
       Weapon0 ->* VehicleType.UTorp 
-      Weapon0.Type = torpedo ammo_transfer shootable 
       Weapon0.Ammo = 20
-      Weapon1 ->* VehicleType.ServiceGround
+      Weapon1 ->* VehicleType.ServiceTurret
       Weapon1.targets = ground_level floating deep_submerged submerged 
       Weapon1.shotFrom = floating deep_submerged submerged 
       Weapon2 ->* VehicleType.AntiMine 

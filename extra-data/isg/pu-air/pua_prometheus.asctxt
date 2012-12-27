@@ -1,0 +1,92 @@
+VehicleType { 
+	Name			= Prometheus
+	ID			    = 12592
+	parent			= 497 325 401
+
+	Description 	= Service Luftschiff
+	Picture			= pua_prometheus.png
+	InfoImage		= pua_prometheus.jpg
+	InfoImageSmall	= pua_prometheus_k.png
+	Infotext		= [Das Spezial-Frachtluftschiff der Cali mit dem Projektnamen „Atlantis“ ist eine gigantische Werkstatt in der Luft. 
+Es handelt sich um ein halbstarres Kielluftschiff mit einem Teilskelett. Das Teilskelett ist die Skelettstruktur im inneren der Hülle. Der Kiel ist aus kohlenstofffaserverstärktem Kunststoff hergestellt und von der Bugspitze bis zum Heck ist zentral eine von beiden Seiten durchgehende Werkstatt und jeweils Steuerbord bzw. Barkbord, sind zusätzlich Lager, Antrieb usw. ungebracht. 
+Angetrieben wird dieser von vierundzwanzig Hochleistungs-Wellenturbinen, von denen ein Drittel nur zum Steuern verwendet wird.
+Auch bei diesem Flugobjekt erklärt sich der Auftrieb durch ein physikalisches Gesetz, nämlich dass kalte Luft schwerer ist als warme Luft. Das Fluggerät fliegt später also, weil kalte Luft nach unten absinkt, während die zugeführte Warmluft für den Auftrieb sorgt.
+Technische Daten
+Abmessungen: 65 m Durchmesser, 260 m Länge, 82 m Gesamthöhe 
+Hüllenvolumen: 550.000 Kubikmeter, als Traggas wird Helium benutzt. 
+Leergewicht: 2.000 
+Ladevolumen: 500
+Reichweite: bis zu 10.000 km 
+Höchstgeschwindigkeit: 70
+max. Flughöhe mittlere Höhenstufe ]
+
+	View			= 100
+	Jamming			= 0
+	Weight			= 2000
+	Armor			= 600
+	Features		= ExternalFuelTransfer MoveDuringReactionFire self_repairing Repair_Facility
+	SelfRepairRate	= 10
+   
+	Height = ground_level low_level_flight medium_level_flight
+	Movement = 0 0 0 40 70 70 0 0 
+	FuelConsumption	= 20
+	Tank { 
+	   Material	= 40000
+	   fuel		= 100000
+	} Tank	
+
+	Transportation {
+	   MaxLoadableUnits 		= 2
+	   MaxLoadableMass 		    = 370
+	   MaxLoadableUnitSize 		= 150	
+	
+		CategoriesNOT = medium_wheeled_vehicle heavy_wheeled_vehicle medium_tracked_vehicle heavy_tracked_vehicle heavy_aircraft light_ship medium_ship heavy_ship rail_vehicle hoovercraft building|turret|object
+
+		EntranceSystemNum 		= 2
+		EntranceSystem0	->* VehicleType.GrIO
+
+		Entrancesystem1 ->* VehicleType.carrier
+		Entrancesystem1.UnitHeightRel	= 0
+		Entrancesystem1.UnitHeightAbs	= medium_level_flight 
+		Entrancesystem1.ContainerHeight	= medium_level_flight 
+
+		
+		
+	} Transportation	
+
+	Weapons { 
+		Number = 7
+		
+		Weapon0 ->* VehicleType.AAMH
+		Weapon0.Ammo = 60
+		Weapon0.MaxRange = 30
+		Weapon0.shotFrom = ground_level low_level_flight medium_level_flight 
+		Weapon0.ReactionFireShots = 3
+		Weapon0.Punch@MaxRange = 85
+		Weapon0.Punch@MinRange = 85
+        Weapon0.WeaponEffectiveness.trooper = 0		
+		
+		Weapon1	->* VehicleType.Sniper
+ 		Weapon1.type = machinegun shootable
+        Weapon1.shotFrom = low_level_flight medium_level_flight
+        Weapon1.HitAccuracy.d2 = 90
+        Weapon1.HitAccuracy.d1 = 100
+		Weapon1.Ammo = 100
+        Weapon1.ReactionFireShots = 2		
+
+		Weapon2	->* VehicleType.AmmoBomb
+		Weapon2.Ammo					= 80	
+		Weapon3	->* VehicleType.AmmoTorp
+		Weapon3.Ammo					= 30
+		Weapon4	->* VehicleType.AmmoSM
+		Weapon4.Ammo					= 50
+		Weapon5 ->* VehicleType.AmmoMine
+		Weapon5.Ammo					= 50
+
+		Weapon6 ->* VehicleType.ServiceGround
+		Weapon6.shotFrom = ground_level medium_level_flight 
+		Weapon6.targets = ground_level medium_level_flight 
+        
+		
+   } Weapons
+} VehicleType

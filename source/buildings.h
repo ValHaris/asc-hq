@@ -42,6 +42,8 @@ class  Building : public ContainerBase {
 
     friend class tprocessminingfields;
     
+    bool viewOnMap;
+    
    public:
     const BuildingType* typ;
     
@@ -113,10 +115,18 @@ class  Building : public ContainerBase {
     
     //! Adds the view and jamming of the building to the player's global radar field
     void addview();
+    
+    /** resets the internal view state, so that addview() can be executed again */
+    void resetview();
 
     //! Removes the view and jamming of the building from the player's global radar field
     void removeview();
 
+    /** returns true if the buildings' view is currently added to the maps global visibility.
+    \sa viewcalculation.cpp */
+    bool isViewing ( ) const { return viewOnMap; };
+    
+    
     //! returns the armor of the building. \see BuildingType::_armor
     int  getArmor() const;
 

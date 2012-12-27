@@ -11,39 +11,40 @@ VehicleType {
    picture = mk4s_koloss.png
    wreckageobject = 14027
 
-   Armor += 200
-   View = 80
+   Armor += 500
+   View = 90
    Features += self_repairing moveduringreactionfire move_after_attack
    Category = heavy_ship
-   SelfRepairRate = 5
+   SelfRepairRate = 10
    Weight += 500
 
    Tank { 
       Energy = 0
-      Material = 9000
+      Material = 10000
       fuel = 20000
    } Tank
-   FuelConsumption = 50
+   FuelConsumption = 40
    TerrainAccess ->* VehicleType.very_bigship_terrain 
    Movement = 55 55 52 0 0 0 0 0 
 
    waitforattack = true
    Weapons { 
-      Initiative = 0
-      Number = 4
+      Number = 3
       Weapon0 ->* VehicleType.UTorp 
       Weapon0.MaxRange = 30
-      Weapon0.Punch@MaxRange = 110
+      Weapon0.Punch@MaxRange = 120
       Weapon0.Punch@MinRange = 120
       Weapon0.Ammo = 8
       Weapon0.ReactionFireShots = 1
 
-      Weapon1 ->* VehicleType.SAM 
+      Weapon1 ->* VehicleType.SAMH 
       Weapon1.shotFrom = submerged floating 
-      Weapon1.MaxRange = 20
+      Weapon1.MaxRange = 30
       Weapon1.Ammo = 6
       Weapon1.ReactionfireShots = 1
-
+      Weapon1.Punch@MaxRange = 80
+      Weapon1.Punch@MinRange = 80
+ 
       Weapon2 ->* VehicleType.UTorp
       Weapon2.targets = deep_submerged submerged 
       Weapon2.Punch@MaxRange = 105

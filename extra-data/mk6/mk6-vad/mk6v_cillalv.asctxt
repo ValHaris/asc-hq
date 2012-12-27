@@ -7,7 +7,7 @@ VehicleType {
    GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
    Infotext = []
    
-   Armor -= 50
+   Armor += 50
    Tank.Material = 1000
 
    Weapons { 

@@ -67,6 +67,8 @@ Units
 1348 Tal
 1349 Tas
 1350 AD
+1351 Exol
+1352 Neks   Käfigfahrzeug
 
 Objekte
 

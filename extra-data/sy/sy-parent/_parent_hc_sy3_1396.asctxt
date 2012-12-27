@@ -49,13 +49,13 @@ VehicleType {
       movecost = 25
       heightdelta = -1
       dist = 2
-      startheight = medium_level_flight high_level_flight orbit
+      startheight = medium_level_flight high_level_flight
       canattack = true
    } HeightChangeMethod6
    HeightChangeMethod7 {
-      movecost = 25
+      movecost = 35
       heightdelta = -1
-      dist = 1
+      dist = 2
       startheight = orbit
       canattack = true
    } HeightChangeMethod7

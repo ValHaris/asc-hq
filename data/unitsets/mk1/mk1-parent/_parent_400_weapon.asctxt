@@ -440,22 +440,22 @@
 
       WeaponEffectiveness {      
          trooper = 100
-         rail_vehicle = 100
-         building|turret|object = 100
-         hoovercraft = 100
+         rail_vehicle = 200
+         building|turret|object = 200
+         hoovercraft = 200
          helicopter = 100
 
-         light_tracked_vehicle = 100
-         medium_tracked_vehicle = 100
-         heavy_tracked_vehicle = 100
+         light_tracked_vehicle = 200
+         medium_tracked_vehicle = 200
+         heavy_tracked_vehicle = 200
 
-         light_wheeled_vehicle = 100
-         medium_wheeled_vehicle = 100
-         heavy_wheeled_vehicle = 100
+         light_wheeled_vehicle = 200
+         medium_wheeled_vehicle = 200
+         heavy_wheeled_vehicle = 200
          
-         light_ship = 100
-         medium_ship  = 100
-         heavy_ship = 100
+         light_ship = 200
+         medium_ship  = 200
+         heavy_ship = 200
 
          light_aircraft = 100
          medium_aircraft  = 100
@@ -488,6 +488,20 @@
    Ship_Gun.MaxRange = 20
 
    Ship_Flak ->* Vehicletype.Flak
+   
+   Ship_Flak.WeaponEffectiveness.rail_vehicle = 100
+   Ship_Flak.WeaponEffectiveness.building|turret|object = 100
+   Ship_Flak.WeaponEffectiveness.hoovercraft = 100
+   Ship_Flak.WeaponEffectiveness.light_tracked_vehicle = 100
+   Ship_Flak.WeaponEffectiveness.medium_tracked_vehicle = 100
+   Ship_Flak.WeaponEffectiveness.heavy_tracked_vehicle = 100
+   Ship_Flak.WeaponEffectiveness.light_wheeled_vehicle = 100
+   Ship_Flak.WeaponEffectiveness.medium_wheeled_vehicle = 100
+   Ship_Flak.WeaponEffectiveness.heavy_wheeled_vehicle = 100
+   Ship_Flak.WeaponEffectiveness.light_ship = 100
+   Ship_Flak.WeaponEffectiveness.medium_ship  = 100
+   Ship_Flak.WeaponEffectiveness.heavy_ship = 100
+
    Ship_Flak.MaxRange = 30
   
 
@@ -592,9 +606,9 @@
             d4 = 
             d3 = 
             d2 = 
-            d1 = 98
+            d1 = 100
             0 = 100
-            u1 = 98
+            u1 = 100
             u2 = 
             u3 = 
             u4 = 
@@ -1181,7 +1195,7 @@
       SOMB.Punch@MaxRange = 110
       SOMB.Punch@MinRange = 110
 
-; air missle orbit
+; air missile orbit
       AMO {
          Type = air_missile shootable 
          targets = orbit 
@@ -1262,26 +1276,26 @@
          } HitAccuracy
       WeaponEffectiveness {      
          trooper = 100
-         rail_vehicle = 100
-         building|turret|object = 100
-         hoovercraft = 100
-         helicopter = 100
+         rail_vehicle = 250
+         building|turret|object = 250
+         hoovercraft = 250
 
-         light_tracked_vehicle = 100
-         medium_tracked_vehicle = 100
-         heavy_tracked_vehicle = 100
+         light_tracked_vehicle = 250
+         medium_tracked_vehicle = 250
+         heavy_tracked_vehicle = 250
 
-         light_wheeled_vehicle = 100
-         medium_wheeled_vehicle = 100
-         heavy_wheeled_vehicle = 100
+         light_wheeled_vehicle = 250
+         medium_wheeled_vehicle = 250
+         heavy_wheeled_vehicle = 250
          
-         light_ship = 100
-         medium_ship  = 100
-         heavy_ship = 100
+         light_ship = 250
+         medium_ship  = 250
+         heavy_ship = 250
 
          light_aircraft = 100
          medium_aircraft  = 100
          heavy_aircraft = 100
+         helicopter = 100
       } WeaponEffectiveness
       } OAM
 

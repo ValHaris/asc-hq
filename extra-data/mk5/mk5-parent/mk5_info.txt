@@ -110,9 +110,9 @@ ID 16005 Revelation
 
 **Schiffe**
 ID 1455 Sealboat
-ID 1456 Visby
+ID 1456 Whisper
 ID 1457 Skjold X
-ID 1458 Fortress
+ID 1458 Fortra
 ID 1485 Flyer
 ID 1487 Accelerator
 ID 1488 Cluster

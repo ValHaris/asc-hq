@@ -9,7 +9,7 @@ VehicleType {
    
    View += 20
    
-   Armor -= 200
+   Armor += 300
    Features += ManualSelfDestruct
    
    Tank.Fuel = 9000

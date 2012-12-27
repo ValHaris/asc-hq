@@ -23,8 +23,8 @@ VehicleType {
    Construction { 
       Buildings = 
       Vehicles = 1347
-;                                                          Laserzaun
-      Objects = 3 30 181 996 1305 1306 1307 1308 1309 2153 2658
+;                                                     Laserzaun
+      Objects = 3 30 181 996 1305 1306 1308 1309 2153 2658
       ObjectsRemovable = 988 1305 2658
       ObjectGroupsRemovable = 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 21
    } Construction
@@ -53,10 +53,10 @@ VehicleType {
 
    WaitForAttack = true
    Weapons { 
-      Initiative = 0
       Number = 2
-      Weapon0 ->* VehicleType.ServiceTurret 
-      Weapon0.WeaponEffectiveness.building|turret|object = 0
+      Weapon0 ->* VehicleType.ServiceTurret
+      Weapon0.shotfrom = ground_level low_level_flight
+      Weapon0.HitAccuracy.d1 = 100	  
 
       Weapon1 ->* VehicleType.SY_Fighter_small 
    } Weapons

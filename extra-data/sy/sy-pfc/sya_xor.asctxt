@@ -7,7 +7,7 @@ VehicleType {
    Infotext = [Schlachtschiff ist eine durchaus bezeichnende Beschreibung für diesen orbitalen Giganten. Die Basissektion ist nicht viel größer als die des Laak. Die umgebende Skelletstruktur aber wesentlich ausgeprägter. Im Schwarm wurden nie mehr als 2 gesichtet, meistens sogar nur einer. Mit dem Kerg zusammen stellt der das Zentrum des Schwarmes dar. In seiner Nähe sind immer einige Zerstörer und Kreuzer zu finden. Die Waffensysteme sind für den Fernkampf konstruiert und besitzen erhebliche Offensivkraft. Für den Schutz gegen Abfangjäger wurden einige Defensivsystem integriert. Auf sich allein gestellt, kann er aber den Eigenschutz nicht gewährleisten. Deshalb sollten immer Drus Einheiten in der Nähe sein. Er besitzt auch 2 Landebuchten für Jäger, die dort transportiert und versorgt werden können. Um in den Bodenkampf einzugreifen muß der Xor aus dem Orbit in die obersten Luftschichten wechseln. Dort ist er aufgrund des Luftwiderstands langsam und schwerfällig.]
    Picture = sya_xor.png
 
-   Armor = 1400
+   Armor = 1200
    View = 90
    Features += MoveDuringReactionFire satelliteview move_after_attack
 
@@ -20,7 +20,7 @@ VehicleType {
       fuel = 12000
    } Tank
    FuelConsumption = 35
-   Movement = 0 0 0 0 0 70 80 80 
+   Movement = 0 0 0 0 0 70 70 90 
    Weight = 3000
    Transportation ->* VehicleType.TransSyCruiser 
 
@@ -31,26 +31,29 @@ VehicleType {
       Weapon0.MinRange = 20
       Weapon0.Punch@MaxRange = 80
       Weapon0.Punch@MinRange = 100
-      Weapon0.LaserRechargeCost.fuel = 100
+      Weapon0.LaserRechargeCost.fuel = 400
+      Weapon0.LaserRechargeCost.material = 300
       Weapon0.Reactionfireshots = 0
       Weapon0.HitAccuracy.d1 = 0
-			Weapon0.HitAccuracy.d2 = 100
-			Weapon0.HitAccuracy.d3 = 85
+      Weapon0.HitAccuracy.d2 = 100
+      Weapon0.HitAccuracy.d3 = 85
 
       Weapon1 ->* VehicleType.SY_Bomber_Big 
       Weapon1.MaxRange = 40
       Weapon1.Punch@MaxRange = 110
       Weapon1.Punch@MinRange = 130
-      Weapon1.LaserRechargeCost.fuel = 130
+      Weapon1.LaserRechargeCost.fuel = 300
+      Weapon1.LaserRechargeCost.material = 200
       Weapon1.HitAccuracy.d1 = 0
-			Weapon1.HitAccuracy.d2 = 100
-			Weapon1.HitAccuracy.d3 = 85
+      Weapon1.HitAccuracy.d2 = 100
+      Weapon1.HitAccuracy.d3 = 85
 
       Weapon2 ->* VehicleType.SY_Fighter_AD 
       Weapon2.MaxRange = 30
       Weapon2.Punch@MaxRange = 75
       Weapon2.Punch@MinRange = 80
-      Weapon2.LaserRechargeCost.fuel = 80
+      Weapon2.LaserRechargeCost.fuel = 160
+      Weapon2.LaserRechargeCost.material = 80
 
    } Weapons
 } VehicleType

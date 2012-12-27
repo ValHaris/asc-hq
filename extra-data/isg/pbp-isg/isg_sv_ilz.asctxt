@@ -1,0 +1,169 @@
+VehicleType { 
+   Name = ISG SV ILZ
+   parent = 400
+   ID = 12016
+
+   Description = ILZ Bewacher
+   Infotext = [Waechter der Invasionslandezone]
+   Picture = isg_sv_ilz.png
+
+   ConstructionCost { 
+      CalculationMethod = manual
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } ConstructionCost
+
+   Features = Sonar satelliteview MoveDuringReactionFire
+   Armor = 100000
+   View = 100
+   Jamming = 130
+   Category = building|turret|object
+   MaxSurvivableStorm = 255
+   ResourceDrillingRange = 0
+   SelfRepairRate = 0
+   Weight = 20000
+
+   Height = ground_level 
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } Tank
+   FuelConsumption = 0
+   Movement = 0 0 0 0 0 0 0 0 
+   TerrainAccess { 
+      terrain_any = runway hard_sand lowland soft_sand
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = lava
+   } TerrainAccess
+
+   Construction { 
+      Buildings = 
+      Vehicles =  
+      Objects = 
+      ObjectsRemovable = 
+      ObjectGroupsRemovable = 
+   } Construction
+
+   WaitForAttack = false
+   Weapons { 
+      Initiative = 0
+      Number = 2
+
+      Weapon0 { 
+         Name = Multi Target Laser
+         Type = laser shootable 
+         targets = deep_submerged submerged floating ground_level low_level_flight medium_level_flight high_level_flight orbit 
+         shotFrom = deep_submerged submerged floating ground_level low_level_flight medium_level_flight high_level_flight orbit 
+         MaxRange = 100
+         MinRange = 10
+         Ammo = 100
+	     ReactionFireShots = 100
+	     LaserRechargeRate = 10
+         LaserRechargeCost {
+            energy = 0
+            material = 0
+            fuel = 0
+         } LaserRechargeCost
+         Punch@MaxRange = 1000
+         Punch@MinRange = 1000
+         HitAccuracy { 
+            d6 = 100
+            d5 = 100
+            d4 = 100
+            d3 = 100
+            d2 = 100
+            d1 = 100
+            0 = 100
+            u1 = 100
+            u2 = 100
+            u3 = 100
+            u4 = 100
+            u5 = 100
+            u6 = 100
+         } HitAccuracy
+      WeaponEffectiveness {      
+         trooper = 500
+         rail_vehicle = 500
+         building|turret|object = 500
+         hoovercraft = 500
+         helicopter = 500
+
+         light_tracked_vehicle = 500
+         medium_tracked_vehicle = 500
+         heavy_tracked_vehicle = 500
+
+         light_wheeled_vehicle = 500
+         medium_wheeled_vehicle = 500
+         heavy_wheeled_vehicle = 500
+         
+         light_ship = 500
+         medium_ship  = 500
+         heavy_ship = 500
+
+         light_aircraft = 500
+         medium_aircraft  = 500
+         heavy_aircraft = 500
+      } WeaponEffectiveness
+      } Weapon0
+
+      Weapon1 { 
+         Name = Multi Target Laser
+         Type = laser shootable 
+         targets = deep_submerged submerged floating ground_level low_level_flight medium_level_flight high_level_flight orbit 
+         shotFrom = deep_submerged submerged floating ground_level low_level_flight medium_level_flight high_level_flight orbit 
+         MaxRange = 150
+         MinRange = 10
+         Ammo = 100
+	     ReactionFireShots = 0
+	     LaserRechargeRate = 10
+         LaserRechargeCost {
+            energy = 0
+            material = 0
+            fuel = 0
+         } LaserRechargeCost
+         Punch@MaxRange = 120
+         Punch@MinRange = 120
+         HitAccuracy { 
+            d6 = 100
+            d5 = 100
+            d4 = 100
+            d3 = 100
+            d2 = 100
+            d1 = 100
+            0 = 100
+            u1 = 100
+            u2 = 100
+            u3 = 100
+            u4 = 100
+            u5 = 100
+            u6 = 100
+         } HitAccuracy
+      WeaponEffectiveness {      
+         trooper = 100
+         rail_vehicle = 100
+         building|turret|object = 100
+         hoovercraft = 100
+         helicopter = 100
+
+         light_tracked_vehicle = 100
+         medium_tracked_vehicle = 100
+         heavy_tracked_vehicle = 100
+
+         light_wheeled_vehicle = 100
+         medium_wheeled_vehicle = 100
+         heavy_wheeled_vehicle = 100
+         
+         light_ship = 100
+         medium_ship  = 100
+         heavy_ship = 100
+
+         light_aircraft = 100
+         medium_aircraft  = 100
+         heavy_aircraft = 100
+      } WeaponEffectiveness
+      } Weapon1
+   } Weapons
+} VehicleType

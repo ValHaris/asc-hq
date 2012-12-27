@@ -24,8 +24,8 @@ BuildingType {
    MaxResearch = 0
    ConstructionCost { 
       Energy = 0
-      Material = 20000
-      fuel = 20000
+      Material = 0
+      fuel = 0
    } ConstructionCost
    MaxResourceProduction { 
       Energy = -15000

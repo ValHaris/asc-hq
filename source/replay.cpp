@@ -980,11 +980,9 @@ void trunreplay :: execnextreplaymove ( void )
                         int y2 = stream->readInt();
                         int nwid = stream->readInt();
                         int height = stream->readInt();
-                        int noInterrupt;
+                        
                         if ( nextaction == rpl_move3 || nextaction == rpl_move4 || nextaction == rpl_move5 )
-                           noInterrupt = stream->readInt();
-                        else
-                           noInterrupt = -1;
+                           stream->readInt(); // noInterrupt
 
                         int destDamage;
                         if ( nextaction == rpl_move5 )
@@ -1157,10 +1155,9 @@ void trunreplay :: execnextreplaymove ( void )
                         int nwid = stream->readInt();
                         stream->readInt(); // oldheight
                         int newheight = stream->readInt();
-                        int noInterrupt = -1;
 
                         if ( nextaction == rpl_changeheight2 )
-                           noInterrupt = stream->readInt();
+                           stream->readInt(); // noInterrupt 
 
 
                         readnextaction();
@@ -1303,12 +1300,11 @@ void trunreplay :: execnextreplaymove ( void )
                            int y = stream->readInt();
                            int id = stream->readInt();
                            int col = stream->readInt();
-                           int nwid = -1;
                            int constx = -1;
                            int consty = -1;
                            int height = -1;
                            if ( nextaction == rpl_buildtnk2 )
-                              nwid = stream->readInt();
+                              stream->readInt(); // networkid
 
                            if ( nextaction == rpl_buildtnk3 || nextaction == rpl_buildtnk4 ) {
                               constx = stream->readInt();
