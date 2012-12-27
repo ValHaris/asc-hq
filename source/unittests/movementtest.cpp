@@ -256,6 +256,25 @@ void testMapResizeWithMovement()
   
 }
 
+void testPathFinding()
+{
+   auto_ptr<GameMap> game ( startMap("unittest-pathfinding.map"));
+   Vehicle* buggy = game->getField(12,19)->vehicle;
+   assertOrThrow( buggy );
+
+   auto_ptr<MoveUnitCommand> muc ( new MoveUnitCommand( buggy ));
+   muc->searchFields();
+   assertOrThrow(  muc->getReachableFields().size() == 149 );
+
+   for ( set<MapCoordinate3D>::iterator i = muc->getReachableFields().begin(); i != muc->getReachableFields().end(); ++i ) {
+	   muc->setDestination( *i );
+	   muc->calcPath();
+	   assertOrThrow( !muc->getPath().empty() );
+   }
+
+
+}
+
 
 
 void testMovement() 
@@ -268,4 +287,5 @@ void testMovement()
    testMovementTracks();
    testHeightChangeAI();
    testHeightChangeGUI();
+   testPathFinding();
 }

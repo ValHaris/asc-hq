@@ -24,13 +24,7 @@ ResourcePlacement::ResourcePlacement(GameMap& m,double fr, double mr, unsigned s
       map(m), fuelRoughness(fr), materialRoughness(fr), maxFuelOffset(maxFOffset), maxMaterialOffset(maxMOffset), 
       additionalResourceFreeFieldsPercentageFuel(addFreeFieldsPercFuel), additionalResourceFreeFieldsPercentageMaterial(addFreeFieldsPercMaterial), stepCount(0)
 {
-  double depth = 0.0;
   srand(static_cast<unsigned>(time(0)));
-  if(map.xsize > map.ysize) {
-    depth = map.ysize;
-  } else {
-    depth = map.xsize ;
-  }
   if(fuelRoughness > 4.0)
     fuelRoughness = 4.0;
   else if(fuelRoughness < 0.1)

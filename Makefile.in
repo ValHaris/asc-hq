@@ -861,6 +861,9 @@ unitguide:
 SWIG: 
 	cd source/lua && make SWIG	
 
+thoroughcheck:
+	cd unittester && ./unittester --valgrind
+
 hgtag:
 	hg tag ASC`scripts/getversion source/strtmesg.cpp | sed s/\\\\./-/g`
 

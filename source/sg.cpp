@@ -455,10 +455,10 @@ MapTypeLoaded loadStartupMap ( const char *gameToLoad=NULL )
             fatalError ( "Don't know how to handle the file %s ", gameToLoad );
 
       }
-      catch ( InvalidID err ) {
+      catch ( const InvalidID & err ) {
          displaymessage( err.getMessage(), 2 );
       } /* endcatch */
-      catch ( tinvalidversion err ) {
+      catch ( const tinvalidversion & err ) {
          if ( err.expected < err.found )
             displaymessage( "File/module %s has invalid version.\nExpected version %d\nFound version %d\nPlease install the latest version from www.asc-hq.org", 2, err.getFileName().c_str(), err.expected, err.found );
          else
@@ -1215,8 +1215,8 @@ void executeUserAction ( tuseractions action )
          GotoPosition gp( actmap );
          gp.Show();
          gp.RunModal();
-          break;
-      };
+      	 };
+      	 break;
       case ua_showTechAdapter: {
                ViewFormattedText vft("TechAdapter", actmap->getCurrentPlayer().research.listTriggeredTechAdapter(), PG_Rect( -1,-1,300,500));
                vft.Show();
@@ -1274,7 +1274,8 @@ void executeUserAction ( tuseractions action )
       case ua_createUnitCostList: createUnitCostList();
          break;
          
-      default:;
+      default:
+    	 break;
       };
 }
 
@@ -1386,23 +1387,23 @@ int gamethread ( void* data )
       
       mtl = loadStartupMap( gtp->filename.c_str() );
    }
-   catch ( ParsingError err ) {
+   catch ( const ParsingError & err ) {
       errorMessage ( "Error parsing text file " + err.getMessage() );
       return -1;
    }
-   catch ( tfileerror err ) {
+   catch ( const tfileerror & err ) {
       errorMessage ( "Error loading file " + err.getFileName() );
       return -1;
    }
-   catch ( ASCmsgException msg ) {
+   catch ( const ASCmsgException & msg ) {
       errorMessage ( msg.getMessage() );
       return -1;
    }
-   catch ( ASCexception ) {
+   catch ( const ASCexception & ) {
       errorMessage ( "loading of game failed" );
       return -1;
    }
-   catch ( ThreadExitException ) {
+   catch ( const ThreadExitException & ) {
       displayLogMessage(0, "caught thread exiting exception, shutting down");
       return -1;
    }
@@ -1479,15 +1480,15 @@ int gamethread ( void* data )
             displayLogMessage ( 7, "mainloop exited\n");
          }
       } /* endtry */
-      catch ( NoMapLoaded ) { 
+      catch ( const NoMapLoaded & ) {
          delete actmap;
          actmap = NULL;
       } /* endcatch */
-      catch ( ShutDownMap ) { 
+      catch ( const ShutDownMap & ) {
          delete actmap;
          actmap = NULL;
       }
-      catch ( LoadNextMap lnm ) {
+      catch ( const LoadNextMap & lnm ) {
          if ( actmap->campaign.avail ) {
             delete actmap;
             actmap = NULL;
@@ -1649,7 +1650,7 @@ int main(int argc, char *argv[] )
    Cmdline* cl = NULL;
    try {
       cl = new Cmdline ( argc, argv );
-   } catch ( string s ) {
+   } catch ( const string & s ) {
       cerr << s;
       exit(1);
    }
@@ -1679,7 +1680,7 @@ int main(int argc, char *argv[] )
    try {
       initFileIO( cl->c() );  // passing the filename from the command line options
       checkDataVersion();
-   } catch ( tfileerror err ) {
+   } catch ( const tfileerror & err ) {
       displaymessage ( "unable to access file %s \n", 2, err.getFileName().c_str() );
    }
    catch ( ... ) {
@@ -1753,7 +1754,7 @@ int main(int argc, char *argv[] )
       // this starts the gamethread procedure, whichs will run the entire game
       returncode = initializeEventHandling ( gamethread, &gtp );
    }
-   catch ( bad_alloc ) {
+   catch ( const bad_alloc & ) {
       fatalError ("Out of memory");
    }
 

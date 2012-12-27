@@ -1442,10 +1442,10 @@ void  savemap( const ASCString& name, GameMap* gamemap )
 
    } /* endtry */
 
-   catch ( tfileerror err ) {
+   catch ( const tfileerror& err ) {
       displaymessage( "file error writing map to filename %s ", 1, err.getFileName().c_str() );
    } /* endcatch */
-   catch ( ASCexception ) {
+   catch ( const ASCexception& ) {
       displaymessage( "error writing map ", 1 );
    } /* endcatch */
 
@@ -1456,10 +1456,10 @@ void  savegame( const ASCString& name, GameMap* gamemap)
    try {
       tsavegameloaders gl;
       gl.savegame ( gamemap, name);
-   } catch ( tfileerror err) {
+   } catch ( const tfileerror& err) {
       displaymessage( "error writing map to filename %s ", 1, err.getFileName().c_str() );
    } /* endcatch */
-   catch ( ASCexception ) {
+   catch ( const ASCexception& ) {
       displaymessage( "error writing map ", 1 );
    } /* endcatch */
 }
@@ -1485,7 +1485,7 @@ void  savereplay( GameMap* gamemap, int num )
       sgl.savegame ( &memstream, gamemap, false );
 
       memstream.writeInt ( actreplayversion );
-   } catch ( ASCexception ) {
+   } catch ( const ASCexception & ) {
       displaymessage( "error saving replay information", 1 );
    } /* endcatch */
 }
@@ -1511,19 +1511,19 @@ GameMap*  loadreplay( MemoryStreamStorage* streambuf )
          throw tinvalidversion ( name, actreplayversion, version );
       }
 
-   } catch ( InvalidID err ) {
+   } catch ( const InvalidID & err ) {
       displaymessage( err.getMessage().c_str(), 1 );
       replaymap = NULL;
    } /* endcatch */
-   catch ( tinvalidversion err ) {
+   catch ( const tinvalidversion & err ) {
       displaymessage( err.getMessage().c_str(), 1 );
       replaymap = NULL;
    } /* endcatch */
-   catch ( tfileerror err) {
+   catch ( const tfileerror & err) {
       displaymessage( "error reading map filename %s ", 1, err.getFileName().c_str() );
       replaymap = NULL;
    } /* endcatch */
-   catch ( ASCexception ) {
+   catch ( const ASCexception & ) {
       displaymessage( "error loading replay", 1 );
       replaymap = NULL;
    } /* endcatch */
@@ -1539,26 +1539,26 @@ GameMap* mapLoadingExceptionChecker( const ASCString& filename, MapLoadingFuncti
    GameMap* m = NULL;
    try {
       m = loader( filename );
-   } catch ( InvalidID err ) {
+   } catch ( const InvalidID & err ) {
       displaymessage( err.getMessage().c_str(), 1 );
       return NULL;
    } /* endcatch */
-   catch ( tinvalidversion err ) {
+   catch ( const tinvalidversion & err ) {
       displaymessage( err.getMessage().c_str(), 1 );
       return NULL;
    } /* endcatch */
-   catch ( StreamCompressionError err ) {
+   catch ( const StreamCompressionError & err ) {
       displaymessage( "The file %s is corrupted.\nPlease obtain a new copy of that file", 1, filename.c_str() );
       return NULL;
-   } catch ( tfileerror err) {
+   } catch ( const tfileerror & err) {
       displaymessage( "error reading map filename %s ", 1, err.getFileName().c_str() );
       return NULL;
    } /* endcatch */
-   catch ( ASCmsgException msg ) {
+   catch ( const ASCmsgException & msg ) {
       displaymessage( "error loading file\n" + msg.getMessage() , 1 );
       return NULL;
    } /* endcatch */
-   catch ( ASCexception ) {
+   catch ( const ASCexception & ) {
       displaymessage( "error loading file", 1 );
       return NULL;
    } /* endcatch */
@@ -1634,7 +1634,7 @@ bool validateemlfile ( const ASCString& filename )
 
    } /* endtry */
 
-   catch ( ASCexception ) {
+   catch ( const ASCexception & ) {
       return false;
    } /* endcatch */
 
@@ -1667,7 +1667,7 @@ bool validatesavfile ( const ASCString& filename )
 
    } /* endtry */
 
-   catch ( ASCexception ) {
+   catch ( const ASCexception & ) {
       return false;
    } /* endcatch */
 

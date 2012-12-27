@@ -617,7 +617,6 @@ bool Maped_MainScreenWidget::clickOnMap( const MapCoordinate& field, const SPoin
 
       for ( deallocating_vector<ContextAction*>::iterator i = contextActions.begin(); i != contextActions.end(); ++i )
          if ( (*i)->available( field )) {
-            MapCoordinate mc = field;
             contextMenu->addMenuItem( (*i)->getText( field ), (*i)->getActionID() );
          }
 
