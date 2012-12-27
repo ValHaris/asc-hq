@@ -12,7 +12,7 @@ if [ -e ../../extra-data/pbp.ascdat ] ; then
    ln -s ../../extra-data/pbp.ascdat .
 fi
 cd ..
-if [ $1 = "--valgrind" ] 
+if [ "$1" = "--valgrind" ] 
 then
    prefix="valgrind --tool=memcheck --num-callers=30 --leak-resolution=med --freelist-vol=100000000 --error-limit=no"
 else
