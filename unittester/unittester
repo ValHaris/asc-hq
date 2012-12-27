@@ -1,6 +1,7 @@
 #!/bin/sh
 
 set -e
+set -x
 
 rm -rf unittest-data
 mkdir unittest-data
@@ -12,4 +13,10 @@ if [ -e ../../extra-data/pbp.ascdat ] ; then
    ln -s ../../extra-data/pbp.ascdat .
 fi
 cd ..
-../source/unix/asc/unittester -c asc2rc
+if [ $1 = "--valgrind" ] 
+then
+   prefix="valgrind --tool=memcheck --num-callers=30 --leak-resolution=med --freelist-vol=100000000 --error-limit=no"
+else
+   prefix="" 
+fi
+$prefix ../source/unix/asc/unittester -c asc2rc
