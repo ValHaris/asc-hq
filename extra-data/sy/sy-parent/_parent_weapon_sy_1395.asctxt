@@ -116,11 +116,11 @@ VehicleType {
    } SY_Animal
 
       SY_Animal2Effectiveness {      
-         trooper = 100
+         trooper = 80
          rail_vehicle = 100
-         building|turret|object = 150
+         building|turret|object = 120
          hoovercraft = 100
-         helicopter = 150
+         helicopter = 120
 
          light_tracked_vehicle = 80
          medium_tracked_vehicle = 100
@@ -134,9 +134,9 @@ VehicleType {
          medium_ship  = 100
          heavy_ship = 120
 
-         light_aircraft = 150
-         medium_aircraft  = 150
-         heavy_aircraft = 150
+         light_aircraft = 120
+         medium_aircraft  = 120
+         heavy_aircraft = 120
       } Sy_Animal2Effectiveness
 
    ; MORR , ZEO , AX , TOLG , NOG , IOX , XYX

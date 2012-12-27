@@ -197,6 +197,14 @@ ASCString ASCString::toString(int i )
    return s;
 }
 
+ASCString ASCString::toString( unsigned int i )
+{
+   ASCString s;
+   s.format("%u",i);
+   return s;
+}
+
+
 #ifdef SIZE_T_not_identical_to_INT
 ASCString ASCString::toString( size_t i )
 {

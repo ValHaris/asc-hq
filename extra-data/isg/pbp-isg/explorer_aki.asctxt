@@ -18,7 +18,7 @@ VehicleType {
 	  EntranceSystem3.MoveCost = 10
   } transportation
 
-   Features = self_repairing jam_only_own_field
+   Features = self_repairing jam_only_own_field MoveDuringReactionFire
    Armor += 200
    View += 60
 

@@ -136,8 +136,11 @@ ActionResult MoveUnit::runAction( const Context& context )
    if ( oldfield->vehicle == vehicle) 
       (new UnitFieldRegistration( vehicle, vehicle->getPosition(), UnitFieldRegistration::RemoveView ))->execute( context );
 
-   
-   (new UnitFieldRegistration( vehicle, vehicle->getPosition(), UnitFieldRegistration::UnregisterOnField ))->execute( context );
+   {
+	   ActionResult res = (new UnitFieldRegistration( vehicle, vehicle->getPosition(), UnitFieldRegistration::UnregisterOnField ))->execute( context );
+	   if ( !res.successful())
+		   return res;
+   }
    
    int soundHeight = -1;
    if ( pos->getRealHeight() >= 0 )

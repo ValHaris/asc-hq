@@ -208,7 +208,9 @@ int main(int argc, char *argv[] )
    PG_FileArchive archive( argv[0] );
 
    try {
-      runTester();
+      int result = runTester();
+      if ( result != 0 )
+         return result;
    }
    catch ( bad_alloc ) {
       fatalError ("Out of memory");

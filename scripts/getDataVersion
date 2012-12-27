@@ -1,0 +1,11 @@
+#!/usr/bin/perl -w
+use strict;
+
+open (F, $ARGV[0] );
+while ( <F> ) {
+  if ( /Version\s*=\s*(\d+)\.(\d+).(\d+).(\d+)\s*$/i )  {
+    print $3 . "\n";
+    exit(0);
+  }
+}
+close (F);

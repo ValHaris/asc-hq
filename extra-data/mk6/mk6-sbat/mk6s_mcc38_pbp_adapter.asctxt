@@ -1,5 +1,5 @@
 Techadapter {
    ; MCC 38
-   Name = 15110
+   Name = 15111
    TechnologiesRequired = 15111
 } TechAdapter

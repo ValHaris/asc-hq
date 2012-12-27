@@ -1640,7 +1640,7 @@ int  GameMap::resize( int top, int bottom, int left, int right )  // positive: l
   if ( -(left + right) > xsize )
      return 2;
 
-  if ( bottom & 1 || top & 1 )
+  if ( (bottom & 1) || (top & 1) )
      return 3;
 
 

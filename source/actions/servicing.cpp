@@ -160,9 +160,9 @@ bool ResourceWatch::getResources( Resources res )
    {
       assert( unit == source.getContainer() || unit == dest.getContainer() );
       if ( unit == dest.getContainer() )
-         return sigDestAmount( ASCString::toString( getAmount( unit )));
+         sigDestAmount( ASCString::toString( getAmount( unit )));
       else
-         return sigSourceAmount( ASCString::toString( getAmount( unit )));
+         sigSourceAmount( ASCString::toString( getAmount( unit )));
    }
 
 
@@ -571,7 +571,7 @@ const SingleWeapon* ServiceChecker :: getServiceWeapon()
 {
    Vehicle* srcVehicle = dynamic_cast<Vehicle*>(source);
    if ( !srcVehicle )
-      return false;
+      return NULL;
 
    const SingleWeapon* serviceWeapon = NULL;
    for (int i = 0; i < srcVehicle->typ->weapons.count ; i++)

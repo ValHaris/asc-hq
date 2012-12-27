@@ -1,18 +1,28 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?fileVersion 5.0.0?>
-
-<cproject storage_type_id="org.eclipse.cdt.core.XmlProjectDescriptionStorage2">
-<storageModule moduleId="org.eclipse.cdt.core.settings">
-<cconfiguration id="cdt.managedbuild.toolchain.gnu.base.1932971597">
-<storageModule externalCElementFile="cdt.managedbuild.toolchain.gnu.base.1932971597_org.eclipse.cdt.core.settings" id="cdt.managedbuild.toolchain.gnu.base.1932971597" name="Default"/>
-<storageModule externalCElementFile="cdt.managedbuild.toolchain.gnu.base.1932971597_scannerConfiguration"/>
-<storageModule externalCElementFile="cdt.managedbuild.toolchain.gnu.base.1932971597_cdtBuildSystem" version="4.0.0"/>
-<storageModule externalCElementFile="cdt.managedbuild.toolchain.gnu.base.1932971597_org.eclipse.cdt.core.externalSettings"/>
-<storageModule externalCElementFile="cdt.managedbuild.toolchain.gnu.base.1932971597_org.eclipse.cdt.core.language.mapping"/>
-<storageModule externalCElementFile="cdt.managedbuild.toolchain.gnu.base.1932971597_org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
-</cconfiguration>
-</storageModule>
-<storageModule moduleId="cdtBuildSystem" version="4.0.0">
-<project id="ASC.null.1346276178" name="ASC"/>
-</storageModule>
+<?fileVersion 5.0.0?><cproject storage_type_id="org.eclipse.cdt.core.XmlProjectDescriptionStorage2">
+	<storageModule moduleId="org.eclipse.cdt.core.settings">
+		<cconfiguration id="cdt.managedbuild.toolchain.gnu.base.783224884">
+			<storageModule externalCElementFile="cdt.managedbuild.toolchain.gnu.base.783224884_org.eclipse.cdt.core.settings" id="cdt.managedbuild.toolchain.gnu.base.783224884" name="Default"/>
+			<storageModule externalCElementFile="cdt.managedbuild.toolchain.gnu.base.783224884_cdtBuildSystem" version="4.0.0"/>
+			<storageModule externalCElementFile="cdt.managedbuild.toolchain.gnu.base.783224884_org.eclipse.cdt.core.externalSettings"/>
+		</cconfiguration>
+	</storageModule>
+	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+		<project id="ASC.null.1213469115" name="ASC"/>
+	</storageModule>
+	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
+	<storageModule moduleId="refreshScope" versionNumber="2">
+		<configuration configurationName="Default">
+			<resource resourceType="PROJECT" workspacePath="/ASC"/>
+		</configuration>
+	</storageModule>
+	<storageModule moduleId="scannerConfiguration">
+		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		<scannerConfigBuildInfo instanceId="cdt.managedbuild.toolchain.gnu.base.783224884;cdt.managedbuild.toolchain.gnu.base.783224884.1368999874;cdt.managedbuild.tool.gnu.cpp.compiler.base.932907417;cdt.managedbuild.tool.gnu.cpp.compiler.input.146749119">
+			<autodiscovery enabled="false" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.make.core.GCCStandardMakePerFileProfile"/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="cdt.managedbuild.toolchain.gnu.base.783224884;cdt.managedbuild.toolchain.gnu.base.783224884.1368999874;cdt.managedbuild.tool.gnu.c.compiler.base.315894280;cdt.managedbuild.tool.gnu.c.compiler.input.1036956936">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		</scannerConfigBuildInfo>
+	</storageModule>
 </cproject>

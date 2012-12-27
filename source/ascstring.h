@@ -67,6 +67,7 @@ public:
 
     //! converts the parameter to a String
     static ASCString toString( int i );
+    static ASCString toString( unsigned int i );
     
    #ifdef SIZE_T_not_identical_to_INT
     static ASCString toString( size_t i );

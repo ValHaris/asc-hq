@@ -4,7 +4,7 @@ VehicleType {
    ID = 22709
 
    Description = build submarine
-   Infotext = [Die Baueinheit auf See baut Bohrinseln oder die stationaeren Marineeinheiten, auch für den Transport dieser Einheiten ist das Pionier-U-Boot zustaendig.]
+   Infotext = [Die Baueinheit auf See baut Bohrinseln oder Sonarbojen zur Seeüberwachung. Es hat zwei Ladebuchten für die teilstationären Spezialseeturrets der Malaner.]
    Picture = mas_ubv_pionier.png
    WreckageObject = 436
 
@@ -16,13 +16,13 @@ VehicleType {
 
    Armor -= 100
    Weight = 2000
-   Features += construct_vehicles construct_specific_buildings mine_layer mineview automatic_resource_searching icebreaker ExternalMaterialTransfer ExternalFuelTransfer ExternalAmmoTransfer
+   Features += construct_vehicles Repair_Facility construct_specific_buildings mine_layer mineview automatic_resource_searching icebreaker ExternalMaterialTransfer ExternalFuelTransfer ExternalAmmoTransfer
    ResourceDrillingRange = 5
 
     Tank { 
       Energy = 0
-      Material = 30000
-      fuel = 50000
+      Material = 20000
+      fuel = 20000
    } Tank
    FuelConsumption = 30
    Movement = 66 66 66 0 0 0 0 0 
@@ -30,14 +30,13 @@ VehicleType {
 
    Construction { 
       Buildings = 22930 22903 22929
-      Vehicles = 22611 22612 22613 22616
+      Vehicles = 22616
       Objects = 3 30 44 995 996 997 998 999 1000
       ObjectsRemovable = 30
       ObjectGroupsRemovable = 1 2 3 4 5 6 7 8 10 11 12 13 14 15
    } Construction
 
    Weapons { 
-      Initiative = 0
       Number = 3
       Weapon0 ->* VehicleType.UTorp 
       Weapon0.Ammo = 20

@@ -25,6 +25,8 @@
 #include "../spfst-legacy.h"
 #include "../i18n.h"
 
+#include "../iconrepository.h"
+
 void showSearchPath()
 {
 
@@ -54,6 +56,28 @@ void showSearchPath()
    vft.RunModal();
 }
 
+ASCString showSurfaceInfo( Surface& surface ) {
+   ASCString s;
+   
+   s += "BitsPerPixel: " + ASCString::toString(  surface.getBaseSurface()->format->BitsPerPixel ) + "\n";
+   s += "BytesPerPixel: " + ASCString::toString(  surface.getBaseSurface()->format->BytesPerPixel ) + "\n";
+   s += "Rloss: " + ASCString::toString(  surface.getBaseSurface()->format->Rloss ) + "\n";
+   s += "Gloss: " + ASCString::toString(  surface.getBaseSurface()->format->Gloss ) + "\n";
+   s += "Bloss: " + ASCString::toString(  surface.getBaseSurface()->format->Bloss ) + "\n";
+   s += "Aloss: " + ASCString::toString(  surface.getBaseSurface()->format->Aloss ) + "\n";
+   s += "Rshift: " + ASCString::toString(  surface.getBaseSurface()->format->Rshift ) + "\n";
+   s += "Gshift: " + ASCString::toString(  surface.getBaseSurface()->format->Gshift ) + "\n";
+   s += "Bshift: " + ASCString::toString(  surface.getBaseSurface()->format->Bshift ) + "\n";
+   s += "Ashift: " + ASCString::toString(  surface.getBaseSurface()->format->Ashift ) + "\n";
+   s += "Rmask: " + ASCString::toString(  surface.getBaseSurface()->format->Rmask ) + "\n";
+   s += "Gmask: " + ASCString::toString(  surface.getBaseSurface()->format->Gmask ) + "\n";
+   s += "Bmask: " + ASCString::toString(  surface.getBaseSurface()->format->Bmask ) + "\n";
+   s += "Amask: " + ASCString::toString(  surface.getBaseSurface()->format->Amask ) + "\n";
+   s += "colorkey: " + ASCString::toString( surface.getBaseSurface()->format->colorkey ) + "\n";
+   s += "Alpha: " + ASCString::toString( surface.getBaseSurface()->format->alpha ) + "\n";
+   
+   return s;
+}
 
 void showSDLInfo()
 {
@@ -124,6 +148,12 @@ void showSDLInfo()
    s += "\n\nLanguage: ";
    Locale locale;
    s += locale.getLang();
+   
+   s += "\n\nInformation for gamebackground.png:\n";
+   s += showSurfaceInfo( IconRepository::getIcon("gamebackground.png"));
+   
+   s += "\n\nInformation for curshex.png: \n";
+   s += showSurfaceInfo( IconRepository::getIcon("curshex.png"));
    
    ViewFormattedText vft( "SDL Settings", s, PG_Rect(-1,-1,450,550));
    vft.Show();

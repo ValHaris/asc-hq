@@ -11,8 +11,9 @@ Ein Laak kann nicht einfach abgeschossen werden, er muß praktisch zerstört werde
 
    Features += MoveDuringReactionFire move_after_attack satelliteview
    Armor = 900
+   Weight = 1000
    View = 60
-   Jamming -= 5
+   Jamming = 30
 
    Tank { 
       Energy = 0
@@ -22,7 +23,6 @@ Ein Laak kann nicht einfach abgeschossen werden, er muß praktisch zerstört werde
    Height = medium_level_flight high_level_flight orbit 
    FuelConsumption = 30
    Movement = 0 0 0 0 0 90 90 120 
-   Weight = 1000
    Transportation ->* VehicleType.TransSyCruiser 
 
    WaitForAttack = false

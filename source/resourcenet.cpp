@@ -776,7 +776,7 @@ bool compareMapResources( GameMap* currentMap, GameMap* replaymap, int player, A
 
          for ( Player::VehicleList::iterator i = more->player[player].vehicleList.begin(); i != more->player[player].vehicleList.end(); ++i )
             if ( !less->getUnit( (*i)->networkid )) {
-               s.format( "Type: %s at %d/%d\n", (*i)->getName().c_str(), (*i)->getPosition().x, (*i)->getPosition().y );
+               s.format( "\nType: %s at %d/%d, nwid: %d", (*i)->getName().c_str(), (*i)->getPosition().x, (*i)->getPosition().y, (*i)->networkid );
                *log += s;
             }
       }

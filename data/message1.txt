@@ -292,6 +292,8 @@ Failed to set transferable amount
 Destination not available
 22003
 Unit already there
+22004
+Unit cannot move
 22100
 Unit for destruction not available
 22101

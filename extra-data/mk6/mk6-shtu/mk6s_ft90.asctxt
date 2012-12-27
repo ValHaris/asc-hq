@@ -52,7 +52,7 @@ VehicleType {
 
    } Weapons
 
-   HeightChangeMethodNum = 4
+   HeightChangeMethodNum = 6
    HeightChangeMethod0 {
       movecost = 25
       heightdelta = 2
