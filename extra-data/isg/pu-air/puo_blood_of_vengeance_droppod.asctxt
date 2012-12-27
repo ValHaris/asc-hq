@@ -14,7 +14,7 @@ VehicleType {
    Weight = 151
    MaxSurvivableStorm = 150
    Category = medium_aircraft 
-   Movement = 0 0 0 0 0 0 0 10 
+   Movement = 0 0 0 0 19 19 19 19 
    Height = ground_level low_level_flight medium_level_flight high_level_flight orbit
    
    FuelConsumption = 1
@@ -37,7 +37,7 @@ VehicleType {
       canattack = true
    } HeightChangeMethod0
    HeightChangeMethod1 {
-      movecost = 0
+      movecost = 4
       heightdelta = -1
       dist = 1
       startheight = medium_level_flight high_level_flight

@@ -20,7 +20,7 @@ entspricht.
 InfoImage = http://navy-matters.beedall.com/]
 
    Armor -= 200
-   Features += no_reactionfire   
+   Features = sonar no_reactionfire   
 
    Movement -= 11 11 10 0 0 0 0 0 
 

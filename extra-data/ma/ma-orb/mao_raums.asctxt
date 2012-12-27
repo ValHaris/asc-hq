@@ -38,4 +38,17 @@ VehicleType {
       startheight = orbit
       canattack = true
    } HeightChangeMethod1
+      
+   transportation { 
+      MaxLoadableUnits = 40
+      MaxLoadableUnitSize = 10000
+      MaxLoadableMass = 22000
+      CargoMovementDivisor = 1.5
+      EntranceSystemNum = 2
+      EntranceSystem0 ->* VehicleType.GrIO
+      EntranceSystem0.DisableAttack = true
+      EntranceSystem1 ->* VehicleType.OrbIO
+      EntranceSystem1.DisableAttack = true
+   } transportation
+   
 } VehicleType

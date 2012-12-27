@@ -522,7 +522,7 @@ void RecalculateAreaView::removeView()
 void RecalculateAreaView::addView()
 {
    circularFieldIterator( gamemap, position, 0, range, FieldIterationFunctor( this, &RecalculateAreaView::addFieldView ));
-   evaluateviewcalculation( gamemap, position, range, 0, false, context );
+   evaluateviewcalculation( gamemap, position, range*maxmalq, 0, false, context );
    active = false;
 }
 

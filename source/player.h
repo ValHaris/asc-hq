@@ -103,7 +103,8 @@ class Player : public SigC::Object {
       void userInteractionBegins( Player& p );
       void turnEnds( Player& p );
       
-      
+      int serverPlayerID;
+
    public:
       Player();
 
@@ -155,9 +156,7 @@ class Player : public SigC::Object {
 
       //! returns the name of the player 
       ASCString getName( ) const;
-      
       void setName( const ASCString& name ) { this->name = name; };
-      void setName( const char* name ) { setName( ASCString(name)); };
 
       //! the Password required for playing this player
       Password passwordcrc;
@@ -224,11 +223,13 @@ class Player : public SigC::Object {
 
       bool operator==( const Player& otherPlayer) const;
       
+      void setPlayerID( int id ) { serverPlayerID = id; };
+      int getPlayerID() const { return serverPlayerID; };
+      
    private:   
       ASCString       name;
       DI_Color        color;
       void sendQueuedMessages();
-                 
 };
 
 

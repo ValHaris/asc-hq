@@ -1,5 +1,5 @@
 ObjectType {
-   name = ISG Neutral Solo Zone
+   name = Ausweichlandezone
    ID = 12005
    Weather = dry
    visible_in_fogOfWar = true
@@ -40,7 +40,7 @@ ObjectType {
    TerrainProperties_Add = spaceport pipeline
    dry { 
       UseGFXpics = false
-      picture = isg_alz.pcx 1
+      picture = isg_alz.png 1
       ImageReference =  -1
       FlipPictures   =  0
    } dry

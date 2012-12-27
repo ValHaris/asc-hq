@@ -12,7 +12,7 @@ VehicleType {
    Features += MoveDuringReactionFire satelliteview move_after_attack
 
    Height = medium_level_flight high_level_flight orbit 
-   Jamming = 50
+   Jamming -= 10
    WaitForAttack = false
    Tank { 
       Energy = 0

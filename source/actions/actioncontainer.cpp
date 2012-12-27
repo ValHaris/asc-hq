@@ -270,8 +270,11 @@ void ActionContainer::getCommands( AbstractCommandWriter& writer)
 {
    for ( Actions::iterator i = actions.begin(); i != actions.end(); ++i ) {
       if ( isActive_map( *i )) {
-         writer.printComment( (*i)->getDescription() );
-         writer.printCommand( (*i)->getCommandString() );
+         ASCString command = (*i)->getCommandString();
+         if ( !command.empty()) {
+            writer.printComment( (*i)->getDescription() );
+            writer.printCommand( command );
+         }
       }
    }
 }

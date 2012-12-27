@@ -298,7 +298,7 @@ void CGameOptions::setDefaults ( void )
    replayspeed=0;
    debugReplay = 0;
 
-   autoproduceammunition = false;
+   autoproduceammunition = true;
 /*
    bi3.dir.setName( NULL );
    bi3.interpolate.terrain=0;

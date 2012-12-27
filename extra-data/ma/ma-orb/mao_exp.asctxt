@@ -1,0 +1,22 @@
+VehicleType { 
+   Name = MALAN EXPLORER
+   parent = 12013
+   ID = 22103
+
+   Description = Special Spaceship
+   Picture = mao_exp.png
+   Infotext = [Der Malanischer Explorer ist eine Weiterentwicklung des Raumsprinters. Der Laderaum wurde zu Gunsten der Tankkapazität drastisch reduziert.]
+      
+   transportation { 
+      MaxLoadableUnits = 33
+      MaxLoadableUnitSize = 3000
+      MaxLoadableMass = 5000
+      CargoMovementDivisor = 1.5
+      EntranceSystemNum = 2
+      EntranceSystem0 ->* VehicleType.GrIO
+      EntranceSystem0.DisableAttack = true
+      EntranceSystem1 ->* VehicleType.OrbIO
+      EntranceSystem1.DisableAttack = true
+   } transportation
+
+} VehicleType

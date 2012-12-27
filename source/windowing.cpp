@@ -993,7 +993,7 @@ PG_Rect LayoutablePanel::PositionCalculator( const PG_Rect& rect, const ASCStrin
          r.x = PG_Application::GetScreenWidth() - r.w;
          
       if ( r.y + r.h >  PG_Application::GetScreenHeight() )
-         r.y = PG_Application::GetScreenHeight() - r.y;
+         r.y = PG_Application::GetScreenHeight() - r.h;
       
       return r;
    } else

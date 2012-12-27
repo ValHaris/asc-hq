@@ -182,8 +182,12 @@ class PackageData;
 class GameMap {
       void operator= ( const GameMap& map );
       bool dialogsHooked;
+      int serverMapID;
    public:
-      
+
+      void setServerMapID( int id ) { serverMapID = id; };
+      int  getServerMapID() const { return serverMapID; };
+
       static const int maxTotalPlayers = 8;
       
       //! the size of the map
@@ -201,6 +205,9 @@ class GameMap {
       //! the title of the map
       ASCString    maptitle;
 
+      void setTitle( const ASCString& title ) { maptitle = title; };
+      ASCString  getTitle() const { return maptitle; };
+      
 
       struct Campaign {
           //! is this a campaign map?

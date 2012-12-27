@@ -22,8 +22,8 @@ VehicleType {
       Weapon0.sound = lasercannon.ogg
       Weapon0.Punch@MaxRange += 10
       Weapon0.Punch@MinRange += 20
-      Weapon0.Ammo = 6
-      Weapon0.LaserRechargeRate = 1
+      Weapon0.Ammo = 4
+      Weapon0.LaserRechargeRate = 2
       Weapon0.LaserRechargeCost.material = 200
       Weapon0.LaserRechargeCost.fuel = 400
    } Weapons

@@ -625,7 +625,7 @@ void ASC_MainScreenWidget::spawnPanel ( Panels panel )
    if ( panel == MapControl ) {
       if ( !mapInfoPanel || !CGameOptions::Instance()->cacheASCGUI ) {
          delete mapInfoPanel;
-         mapInfoPanel = new MapInfoPanel( this, PG_Rect(Width()-170, 0, 170, 160), mapDisplay );
+         mapInfoPanel = new MapInfoPanel( this, PG_Rect(Width()-170, 0, 170, 135), mapDisplay );
       }
       mapInfoPanel->Show();
    }
