@@ -101,7 +101,8 @@ void PG_MultiLineEdit::DrawText(const PG_Rect& dst) {
 			SetFontColor(inv_color);
 			PG_FontEngine::GetTextSize(middlepart, GetFont(), &w);
 			if(_y < my_height) {
-				SDL_Rect rect = {x + x1, y + _y, w, (_y + GetFontHeight() > my_height) ? my_height - _y : GetFontHeight()};
+				Uint16 h = (_y + GetFontHeight() > my_height) ? my_height - _y : GetFontHeight();
+				SDL_Rect rect = {Sint16(x + x1), Sint16(y + _y), Uint16(w), h };
 				SDL_FillRect(screen, &rect, highlightColor);
 			}
 			PG_Widget::DrawText(x1, _y, middlepart);

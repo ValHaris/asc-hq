@@ -52,7 +52,7 @@ ActionResult GameAction::execute( const Context& context )
       if ( context.actionContainer && result.successful() && !context.parentAction && command)
          context.actionContainer->add( command );
       return result;
-   } catch ( ActionResult res ) {
+   } catch ( const ActionResult& res ) {
       return res;
    }
 }

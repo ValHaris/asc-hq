@@ -160,9 +160,9 @@ bool ResourceWatch::getResources( Resources res )
    {
       assert( unit == source.getContainer() || unit == dest.getContainer() );
       if ( unit == dest.getContainer() )
-         return sigDestAmount( ASCString::toString( getAmount( unit )));
+         sigDestAmount( ASCString::toString( getAmount( unit )));
       else
-         return sigSourceAmount( ASCString::toString( getAmount( unit )));
+         sigSourceAmount( ASCString::toString( getAmount( unit )));
    }
 
 

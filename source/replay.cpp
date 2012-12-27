@@ -607,7 +607,7 @@ void runSpecificReplay( int player, int viewingplayer, bool performEndTurnOperat
          } while ( t ); /* enddo */
        }
 
-       catch ( ActionResult res ) {
+       catch ( const ActionResult& res ) {
           // displayActionError( res );
           delete actmap;
           actmap = NULL;
@@ -2096,7 +2096,7 @@ void trunreplay :: execnextreplaymove ( void )
                ActionResult res = a->redo( createReplayContext() );
                if ( !res.successful() )
                   error("action " + a->getDescription() + " failed\n" + getmessage(res.getCode()));
-               } catch ( ActionResult res ) {
+               } catch ( const ActionResult & res ) {
                   error("action " + a->getDescription() + " failed\n" + getmessage(res.getCode()));
                   throw res;
                }
