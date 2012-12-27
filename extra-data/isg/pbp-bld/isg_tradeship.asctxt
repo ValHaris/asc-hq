@@ -16,8 +16,8 @@ BuildingType {
    Entry = A1
    ConstructionCost { 
       Energy = 0
-      Material = 60000
-      fuel = 60000
+      Material = 0
+      fuel = 0
    } ConstructionCost
 
    Features = matter_converter Vehicle_Production Ammo_Production Recycling Repair_Facility NoProductionCustomization ExternalAmmoTransfer ExternalFuelTransfer ExternalMaterialTransfer NoObjectChaining
@@ -30,9 +30,9 @@ BuildingType {
    MaxResearch = 0
 
    transportation { 
-      MaxLoadableUnits = 60
+      MaxLoadableUnits = 70
       MaxLoadableUnitSize = 30000
-      MaxLoadableMass = 60000
+      MaxLoadableMass = 80000
       EntranceSystemNum = 1
       EntranceSystem0 {
         Mode = In out docking

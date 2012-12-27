@@ -237,7 +237,7 @@ bool  MapField :: addobject( const ObjectType* obj, int dir, bool force, MapFiel
 }
 
 
-bool MapField :: removeObject( const ObjectType* obj, bool force)
+bool MapField :: removeObject( const ObjectType* obj, bool force, ObjectRemovalStrategy* objectRemovalStrategy )
 {
    if ( !force && building )
       return false;
@@ -265,7 +265,11 @@ bool MapField :: removeObject( const ObjectType* obj, bool force)
          } else
             o++;
 
-   setparams();
+   if ( objectRemovalStrategy )
+      setparams( objectRemovalStrategy );
+   else
+      setparams();
+   
    if ( obj )
       calculateobject( getx(), gety(), true, obj, gamemap );
    

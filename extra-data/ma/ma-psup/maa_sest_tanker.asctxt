@@ -4,7 +4,12 @@ VehicleType {
    ID = 22517
 
    Description = TankSenkrechtstarter
-   Infotext = []
+   Infotext = [Obwohl die malanischen Senkrechtstarter durch Ihre Konstruktion die Möglichkeit haben, jederzeit auf ebenem Gelände zu landen, hat es sich doch erforderlich gemacht, einen Tanker für die Luftflotte zu entwickeln. 
+   Zu schnell bleiben die bodengebundenen Servicezüge hinter angreifenden Staffeln zurück, welche dann plötzlich ohne Treibstoff notlanden müssen. Der SEST TANKER dient an dieser Stelle als Ersatz und kann größere Mengen Treibstoff recht schnell transportieren. 
+   Das Übernehmen von Treibstoff ist im Tiefflug jedoch zu riskant, weshalb beide Maschinen zum Auftanken eine mittlere Höhe ansteuern müssen. Alternativ ist auch ein Betanken am Boden möglich, um leergeflogene SEST wieder flottzumachen.
+   
+   
+Als reine Serviceeinheit ist der SEST TANKER unbewaffnet und nur mäßig gepanzert. Er ist deshalb besonders zu schützen!]
    Picture = maa_sest_tanker.pcx
 
    Features += externalFuelTransfer

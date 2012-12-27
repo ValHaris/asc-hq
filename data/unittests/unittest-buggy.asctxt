@@ -1,0 +1,269 @@
+VehicleType { 
+   Transportation { 
+      EntranceSystemNum = 0
+      MaxLoadableUnits = 0
+      MaxLoadableUnitSize = 2147483647
+      MaxLoadableMass = 2147483647
+      CategoriesNOT = 
+   } Transportation
+   Name = Unittest SuperBuggy
+   Description = Spähfahrzeug
+   Infotext = [Raketenwerfer sind aus der modernen Bodenkriegsf�hrung inzwischen
+              nicht mehr wegzudenken. Im Allgemeinen sind sie recht schnell
+              und k�nnen ihre Ziele aus sicherer Distanz heraus angreifen.
+              Meist handelt es sich bei ihnen um gut gepanzerte Fahrzeuge,
+              Selbstfahrlafetten oder aber wenig mobile Gesch�tzeinheiten,
+              die wiederum zur Fortbewegung auf entsprechende Transporteinheiten
+              angewiesen sind. Der Buggy bildet hierbei eine gro�e Ausnahme,
+              denn er verbindet sowohl Nach-, als auch Vorteile aller dieser
+              drei zuvor genannten Variationen - und dies in besonderer Art
+              und Weise. Er ist klein, leicht und schwach gepanzert - daf�r
+              aber auch sehr schnell und trotz allem recht schlagkr�ftig!
+              
+              Selbst innerhalb des cromonischen Milit�rs ist der Buggy eine
+              Art Unikum. Vom Prinzip her eine Mischung aus Ranger und Sting,
+              ist er ein auf Quad-Bauweise basierendes und extrem leichtes
+              Fahrzeug, dass �ber enorme Feuerkraft verf�gt. Er besitzt einen
+              leichten Unterbau und einen trotz allem recht starken Motor.
+              In Verbindung mit seinen vier �berdimensionalen Ballonreifen,
+              deren gro�en Federweg, der extremen Bodenfreiheit, sowie dem
+              geringen Gesamtgewicht, weist er eine (f�r Radfahrzeuge) recht
+              ordentliche Gel�ndeg�ngigkeit und vor allem auch eine enorme
+              H�chstgeschwindigkeit auf. Au�erdem kann er von den meisten
+              cromonischen Transportern auf- und mitgenommen werden.
+               Im Feld
+              selbst agiert er zumeist selbstst�ndig, oder als wertvolle Unterst�tzungseinheit.
+              Entweder f�hrt er eigenst�ndige Angriffe gegen kleinere, schlecht
+              bewachte Au�enposten, oder er greift den schwereren Einheiten
+              in gr��eren Schlachten hilfreich unter die Arme. Letzteres vor
+              allem dann, wenn es darum geht, angeschlagenen Feindeinheiten
+              den Rest zu geben, ohne anschlie�end den gro�en Br�dern unn�tig
+              im Weg zu stehen.
+               Bewaffnet ist der Buggy zum einen mit dem
+              gleichen MG, welches bereits im Ranger Verwendung fand. Dieses
+              eignet sich vorrangig zur Abwehr angreifender Infanterieeinheiten
+              und f�r �berraschende �berf�lle auf unbewaffnete Versorgungseinheiten.
+              Selbige vermag er mittels seiner ausgesprochen guten Sensoren
+              auch eigenst�ndig aufzusp�ren, ohne dabei auf die Hilfe anderer
+              Aufkl�rungseinheiten angewiesen zu sein.
+               Seine Hauptbewaffnung
+              besteht indes aus einem leichten Raketenwerfer. Dieser vermag
+              Boden-Boden-Raketen �ber eine gr��ere Distanz hinweg abzufeuern,
+              sodass sich der Buggy nicht erst auf verlustreiche Nahk�mpfe
+              mit schwereren Einheiten einlassen muss. Von der Wirkung her
+              sind diese Raketen etwas schw�cher als die des Sting - bedenkt
+              man jedoch die geringeren Anschaffungskosten des Buggys, so
+              gleicht sich dieser Nachteil ganz schnell wieder aus. Sein einziges
+              wirkliches Manko ist die Tatsache, dass das Geh�use des Raketenwerfers
+              lediglich drei Raketen zu fassen vermag. Dadurch ist dieses
+              Fahrzeug faktisch st�ndig auf die unmittelbare N�he eines Munitionstransporters
+              angewiesen. Da er jedoch aus der Bewegung heraus feuern und
+              sich anschlie�end auch schnell wieder zur�ckziehen kann, d�rfte
+              dies bei einer gut durchdachten milit�rischen F�hrung kein allzu
+              gro�es Problem darstellen.
+               Als schnelle Kampfeinheit ist der
+              Buggy heutzutage aus dem cromonischen Milit�r nicht mehr wegzudenken.
+              Wenn man es versteht, mit dem geringen Munitionsvorrat, sowie
+              der nur aus recht d�nnem Alu-Blech bestehenden Panzerung umzugehen
+              und man den Buggy dann auch nur dementsprechend einsetzt, wird
+              man mit ihm sehr viel Freude haben und dem Gegner die ein oder
+              andere, b�se �berraschung bereiten k�nnen.]
+   ID = 1000001203
+   SecondaryIDs = 
+   View = 51
+   Jamming = 12
+   InfoImage = 
+   InfoImageSmall = 
+   MaxResourceProduction { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } MaxResourceProduction
+   ResourceExtractionEfficiency { 
+      Material = 1024
+      Fuel = 1024
+   } ResourceExtractionEfficiency
+   StorageCapacity { 
+      BImode { 
+         Energy = 0
+         Material = 0
+         fuel = 1000
+      } BImode
+      ASCmode { 
+         Energy = 0
+         Material = 0
+         fuel = 1000
+      } ASCmode
+   } StorageCapacity
+   MaxResearch = 0
+   NominalResearch = 0
+   MaxResearchpointsDefault = 0
+   DefaultProduction { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } DefaultProduction
+   CategoriesProduceable = default light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle trooper rail_vehicle medium_aircraft medium_ship building|turret|object light_aircraft heavy_aircraft light_ship heavy_ship helicopter hoovercraft 
+   AutoHarvestObjects { 
+      objects = 
+      objectGroups = 
+      Range = 0
+      MaxFieldsPerTurn = 2147483647
+   } AutoHarvestObjects
+   Construction { 
+      VehiclesInternally = 
+      ProductionEfficiency = 1.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 1.000000 
+   } Construction
+   Armor = 250
+   Picture = unittest_buggy.png
+   Height = ground_level 
+   WaitForAttack = false
+   FuelConsumption = 12
+   Features = move_after_attack jam_only_own_field 
+   Movement = 0 0 0 120 0 0 0 0 
+   Category = light_wheeled_vehicle
+   MaxSurvivableStorm = 255
+   ResourceDrillingRange = 0
+   SelfRepairRate = 0
+   WreckageObject = 1203 
+   Transportation { 
+      CargoMovementDivisor = 2.000000
+   } Transportation
+   Weight = 20
+   TerrainAccess { 
+      terrain_any = Lowland Road Runway Hard_sand Soft_sand Frozen_water 
+      terrain_all = 
+      terrain_not = Swamp Forest Deep_snow Large_rocks Hillside Morass 
+      terrain_kill = Shallow_water Water Deep_water Lava River 
+   } TerrainAccess
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+      ObjectsRemovable = 
+      ObjectGroupsBuildable = 
+      ObjectGroupsRemovable = 
+      UnitConstructionMoveCostPercentage = 50
+      UnitConstructionMinDistance = 1
+      UnitConstructionMaxDistance = 1
+   } Construction
+   Weapons { 
+      Number = 2
+      Weapon0 { 
+         Type = machinegun shootable 
+         targets = floating ground_level low_level_flight 
+         shotFrom = floating ground_level 
+         MaxRange = 10
+         MinRange = 10
+         Ammo = 10
+         Punch@MaxRange = 35
+         Punch@MinRange = 35
+         Sound = 
+         LaserRechargeRate = 0
+         laserRechargeCost { 
+            Energy = 0
+            Material = 0
+            fuel = 0
+         } laserRechargeCost
+         ReactionFireShots = 1
+         HitAccuracy { 
+            d6 = 0
+            d5 = 0
+            d4 = 0
+            d3 = 0
+            d2 = 0
+            d1 = 0
+            0 = 100
+            u1 = 80
+            u2 = 0
+            u3 = 0
+            u4 = 0
+            u5 = 0
+            u6 = 0
+         } HitAccuracy
+         WeaponEffectiveness { 
+            light_tracked_vehicle = 80
+            medium_tracked_vehicle = 65
+            heavy_tracked_vehicle = 50
+            medium_wheeled_vehicle = 90
+            heavy_wheeled_vehicle = 80
+            trooper = 130
+            rail_vehicle = 60
+            medium_aircraft = 90
+            medium_ship = 60
+            building|turret|object = 50
+            heavy_aircraft = 80
+            light_ship = 80
+            heavy_ship = 50
+            helicopter = 90
+            hoovercraft = 90
+         } WeaponEffectiveness
+         name = 
+      } Weapon0
+      Weapon1 { 
+         Type = ground_missile shootable 
+         targets = floating ground_level 
+         shotFrom = submerged floating ground_level 
+         MaxRange = 20
+         MinRange = 10
+         Ammo = 3
+         Punch@MaxRange = 170
+         Punch@MinRange = 170
+         Sound = groundmissile_s.ogg
+         LaserRechargeRate = 0
+         laserRechargeCost { 
+            Energy = 0
+            Material = 0
+            fuel = 0
+         } laserRechargeCost
+         ReactionFireShots = 1
+         HitAccuracy { 
+            d6 = 0
+            d5 = 0
+            d4 = 0
+            d3 = 0
+            d2 = 0
+            d1 = 0
+            0 = 100
+            u1 = 95
+            u2 = 0
+            u3 = 0
+            u4 = 0
+            u5 = 0
+            u6 = 0
+         } HitAccuracy
+         WeaponEffectiveness { 
+            trooper = 0
+         } WeaponEffectiveness
+         name = 
+      } Weapon1
+   } Weapons
+   AIJobOverride = undefined
+   MovementSound = 
+   KillSound = 
+   HeightChangeMethodNum = 0
+   TechAdapterRequired = 
+   RequireAllListedTechAdapter = true
+   ConstructionCost { 
+      Energy = 5645
+      Material = 4834
+      fuel = 0
+      CalculationMethod = manual
+      Calculator = standard
+   } ConstructionCost
+   guideSortHelp = 504 332 0 0 4 0 0 0 0 0 
+   JumpDrive { 
+      Height = 
+      consumption { 
+         Energy = 0
+         Material = 0
+         fuel = 0
+      } consumption
+      terrain_any = Shallow_water Lowland Swamp Forest High_mountains Road Railroad Harbour Runway Pipeline Buried_pipeline Water Deep_water Hard_sand Soft_sand Track_possible Small_rocks Mud Snow Deep_snow Mountains Very_shallow_water Large_rocks Lava Ditch Hillside Turret_foundation Morass Installation Pack_ice River Frozen_water bridge lava_barrier spaceport beacon fire 
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = 
+      MaxDistance = 2147483647
+   } JumpDrive
+   ObjectsLayedByMovement = 
+} VehicleType

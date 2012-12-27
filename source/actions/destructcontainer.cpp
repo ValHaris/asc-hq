@@ -28,7 +28,7 @@
 #include "../viewcalculation.h"
      
 DestructContainer::DestructContainer( ContainerBase* container, bool suppressWreckage )
-   : ContainerAction( container ), fieldRegistration( NONE ), unitBuffer(NULL), hostingCarrier(0), cargoSlot(-1)
+   : ContainerAction( container ), fieldRegistration( NONE ), unitBuffer(NULL), hostingCarrier(0), cargoSlot(-1), hadViewOnMap(true)
 {
    building = container->isBuilding();
    this->suppressWreckage = suppressWreckage;
@@ -41,13 +41,13 @@ ASCString DestructContainer::getDescription() const
 }
       
 
-static const int destructContainerStreamVersion = 4;
+static const int destructContainerStreamVersion = 5;
       
 void DestructContainer::readData ( tnstream& stream ) 
 {
    int version = stream.readInt();
    if ( version < 1 || version > destructContainerStreamVersion )
-      throw tinvalidversion ( "DestructUnit", 1, version );
+      throw tinvalidversion ( "DestructUnit", destructContainerStreamVersion, version );
    
    ContainerAction::readData( stream );
    building = stream.readInt();
@@ -70,6 +70,11 @@ void DestructContainer::readData ( tnstream& stream )
       suppressWreckage = stream.readInt();
    else
       suppressWreckage = false;
+   
+   if ( version >= 5 )
+      hadViewOnMap = stream.readInt();
+   else
+      hadViewOnMap = true;
 };
       
       
@@ -89,6 +94,7 @@ void DestructContainer::writeData ( tnstream& stream ) const
    stream.writeInt( hostingCarrier );
    stream.writeInt( cargoSlot );
    stream.writeInt( suppressWreckage );
+   stream.writeInt( hadViewOnMap );
 };
 
 
@@ -153,8 +159,16 @@ ActionResult DestructContainer::runAction( const Context& context )
             }
    }
    
-   if( fieldRegistration != CARRIER )
-      container->removeview();
+   hadViewOnMap = false;
+   if( fieldRegistration != CARRIER ) {
+      if ( veh && veh->isViewing() ) {
+         veh->removeview();
+         hadViewOnMap = true;
+      } else if ( bld ) {
+         bld->removeview();
+         hadViewOnMap = true;
+      } 
+   }
    
    MapCoordinate pos = container->getPosition();
    int viewrange = container->baseType->view;
@@ -192,7 +206,7 @@ ActionResult DestructContainer::undoAction( const Context& context )
          getMap()->getField( veh->getPosition() )->vehicle = veh;
       */
         
-      if ( fieldRegistration != CARRIER )
+      if ( fieldRegistration != CARRIER && hadViewOnMap )
          veh->addview();
    }
    

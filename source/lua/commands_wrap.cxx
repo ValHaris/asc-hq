@@ -5931,6 +5931,44 @@ fail:
 }
 
 
+static int _wrap_renameContainer(lua_State* L) {
+  int SWIG_arg = 0;
+  GameMap *arg1 = (GameMap *) 0 ;
+  int arg2 ;
+  std::string *arg3 = 0 ;
+  std::string *arg4 = 0 ;
+  std::string temp3 ;
+  std::string temp4 ;
+  SwigValueWrapper< ActionResult > result;
+  
+  SWIG_check_num_args("renameContainer",4,4)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("renameContainer",1,"GameMap *");
+  if(!lua_isnumber(L,2)) SWIG_fail_arg("renameContainer",2,"int");
+  if(!lua_isstring(L,3)) SWIG_fail_arg("renameContainer",3,"std::string const &");
+  if(!lua_isstring(L,4)) SWIG_fail_arg("renameContainer",4,"std::string const &");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_GameMap,0))){
+    SWIG_fail_ptr("renameContainer",1,SWIGTYPE_p_GameMap);
+  }
+  
+  arg2 = (int)lua_tonumber(L, 2);
+  temp3.assign(lua_tostring(L,3),lua_strlen(L,3)); arg3=&temp3;
+  temp4.assign(lua_tostring(L,4),lua_strlen(L,4)); arg4=&temp4;
+  result = renameContainer(arg1,arg2,(std::string const &)*arg3,(std::string const &)*arg4);
+  {
+    ActionResult * resultptr = new ActionResult((const ActionResult &) result);
+    SWIG_NewPointerObj(L,(void *) resultptr,SWIGTYPE_p_ActionResult,1); SWIG_arg++;
+  }
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_endTurn(lua_State* L) {
   int SWIG_arg = 0;
   
@@ -6064,6 +6102,7 @@ static const struct luaL_reg swig_commands[] = {
     { "setDiplomacy", _wrap_setDiplomacy},
     { "cancelResearch", _wrap_cancelResearch},
     { "setResearchGoal", _wrap_setResearchGoal},
+    { "renameContainer", _wrap_renameContainer},
     { "endTurn", _wrap_endTurn},
     { "endTurn_headLess", _wrap_endTurn_headLess},
     { "getSelectedUnit", _wrap_getSelectedUnit},

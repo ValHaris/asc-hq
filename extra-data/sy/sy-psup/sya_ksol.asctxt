@@ -9,14 +9,8 @@ VehicleType {
    InfoImage = sya_ksol.jpg
    InfoImageSmall = sya_ksol_k.png
 
-   Features = jam_only_own_field self_repairing
-   Armor = 600
-   Weight = 100000
-   View = 0
+   Features += jam_only_own_field
    Jamming = 20
-   Category = heavy_aircraft
-   MaxSurvivableStorm = 255
-   ResourceDrillingRange = 0
    SelfRepairRate = 10
 
   JumpDrive {
@@ -43,13 +37,6 @@ VehicleType {
    } Transportation
 
    Height = ground_level low_level_flight medium_level_flight high_level_flight orbit 
-   Tank { 
-      Energy = 0
-      Material = 100000
-      fuel = 100000
-   } Tank
-   FuelConsumption = 200
-   Movement = 0 0 0 30 80 90 100 150 
 
    TerrainAccess { 
       terrain_any = Spaceport 
