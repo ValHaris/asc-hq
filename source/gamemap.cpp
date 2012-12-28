@@ -968,9 +968,11 @@ void GameMap :: cleartemps( int b, int value )
    if (b & 2)
       memset(temp2, value, lmax);
    if (b & 4)
-      wmemset(temp3, value, lmax);
+      for (int l = 0; l < lmax; ++l)
+         temp3[l] = value;
    if (b & 8)
-      wmemset(temp4, value, lmax);
+      for (int l = 0; l < lmax; ++l)
+         temp4[l] = value;
 }
 
 void GameMap :: allocateFields ( int x, int y, TerrainType::Weather* terrain )
@@ -987,8 +989,8 @@ void GameMap :: allocateFields ( int x, int y, TerrainType::Weather* terrain )
    ysize = y;
    temp = new char[x*y]();
    temp2 = new char[x*y]();
-   temp3 = new wchar_t[x*y]();
-   temp4 = new wchar_t[x*y]();
+   temp3 = new int[x*y]();
+   temp4 = new int[x*y]();
    overviewMapHolder.connect();
 }
 
@@ -1711,6 +1713,14 @@ int  GameMap::resize( int top, int bottom, int left, int right )  // positive: l
   xsize = newx;
   ysize = newy;
 
+  delete[] temp;
+  delete[] temp2;
+  delete[] temp3;
+  delete[] temp4;
+  temp = new char[newx*newy]();
+  temp2 = new char[newx*newy]();
+  temp3 = new int[newx*newy]();
+  temp4 = new int[newx*newy]();
 
   for (int s = 0; s < 9; s++)
      for ( Player::BuildingList::iterator i = player[s].buildingList.begin(); i != player[s].buildingList.end(); i++ ) {

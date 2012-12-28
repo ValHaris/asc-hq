@@ -114,15 +114,13 @@ extern const int currentServiceOrderVersion;
        virtual int getMoveCost ( int x1, int y1, int x2, int y2, const Vehicle* vehicle )
        {
           int cost = AStar::getMoveCost ( x1, y1, x2, y2, vehicle );
-          //int visibility = ai->getMap()->getField ( x2, y2 )->visible;
-          MapField* fld = ai->getMap()->getField(x2, y2);
+          int visibility = ai->getMap()->getField ( x2, y2 )->visible;
           int visnum = 0;
           int enemynum = 0;
           for ( int i = 0; i< 8; i++ )
              if ( ai->getMap()->player[i].diplomacy.isHostile( ai->getPlayerNum() ) ) {
                 enemynum++;
-                //int v = (visibility >> ( 2*i)) & 3;
-                VisibilityStates v = fld->getVisibility(8);
+                int v = (visibility >> ( 2*i)) & 3;
                 if ( v >= visible_now )
                    visnum++;
              }
@@ -143,15 +141,13 @@ extern const int currentServiceOrderVersion;
        virtual DistanceType getMoveCost ( const MapCoordinate3D& start, const MapCoordinate3D& dest, const Vehicle* vehicle, bool& canStop, bool& hasAttacked )
        {
           DistanceType cost = AStar3D::getMoveCost ( start, dest, vehicle, canStop, hasAttacked );
-          //int visibility = ai->getMap()->getField ( dest )->visible;
-          MapField* fld = ai->getMap()->getField(dest);
+          int visibility = ai->getMap()->getField ( dest )->visible;
           int visnum = 0;
           int enemynum = 0;
           for ( int i = 0; i< 8; i++ )
              if ( ai->getMap()->player[i].diplomacy.isHostile( ai->getPlayerNum() ) ) {
                 enemynum++;
-                //int v = (visibility >> ( 2*i)) & 3;
-                VisibilityStates v = fld->getVisibility(8);
+                int v = (visibility >> ( 2*i)) & 3;
                 if ( v >= visible_now )
                    visnum++;
              }

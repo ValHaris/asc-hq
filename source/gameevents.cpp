@@ -262,8 +262,7 @@ EventTrigger::State BuildingSeen::getState( int player )
          if ( bld->typ->fieldExists ( BuildingType::LocalCoordinate(x, y) ) ) {
             MapField* fld = bld->getField ( BuildingType::LocalCoordinate( x, y) );
             if ( fld ) {
-               //int vis = (fld-> visible >> (player*2) ) & 3;
-               VisibilityStates vis = fld->getVisibility(player);
+               int vis = (fld-> visible >> (player*2) ) & 3;
                if ( bld->typ->height >= chschwimmend && bld->typ->height <= chhochfliegend ) {
                   if ( vis >= visible_now )
                      cnt++;

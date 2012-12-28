@@ -183,8 +183,8 @@ class GameMap {
    public:
       char* temp;
       char* temp2;
-      wchar_t* temp3;
-      wchar_t* temp4;
+      int* temp3;
+      int* temp4;
 
       bool playerAiRunning[9];
       VisibilityStates playerAiVision[9];

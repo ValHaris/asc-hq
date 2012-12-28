@@ -87,8 +87,8 @@ ActionResult ChangeView::runAction( const Context& context )
 {
    for ( ViewState::iterator i = newState.begin(); i != newState.end(); ++i  ) {
       MapField* fld = getMap()->getField( i->first );
-      oldState[i->first] = fld->visibility.visible;
-      fld->visibility.visible = newState[i->first];
+      oldState[i->first] = fld->visible;
+      fld->visible = newState[i->first];
    }
    return ActionResult(0);
 }
@@ -98,12 +98,12 @@ ActionResult ChangeView::undoAction( const Context& context )
 {
    for ( ViewState::iterator i = newState.begin(); i != newState.end(); ++i  ) {
       MapField* fld = getMap()->getField( i->first );
-      if ( fld->visibility.visible != newState[i->first] ) {
+      if ( fld->visible != newState[i->first] ) {
          ASCString msg;
-         msg.format( "; expected: %x ; found %x" , newState[i->first], fld->visibility.visible );
+         msg.format( "; expected: %x ; found %x" , newState[i->first], fld->visible );
          throw ActionResult(21207, "Position is " + i->first.toString(true) + msg );
       }
-      fld->visibility.visible = oldState[i->first];
+      fld->visible = oldState[i->first];
    }
    return ActionResult(0);
 }

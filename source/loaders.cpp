@@ -500,7 +500,7 @@ void   tspfldloaders::writefields ( void )
 
       if (fld->typ != fld->typ->terraintype->weather[0])
          b3 |= csm_weather;
-      if (fld->visibility.visible)
+      if (fld->visible)
          b3 |= csm_visible;
       if ( !fld->objects.empty() || !fld->mines.empty() )
          b4 |= csm_newobject;
@@ -560,7 +560,7 @@ void   tspfldloaders::writefields ( void )
          stream->writeChar ( fld->fuel );
 
       if (b3 & csm_visible )
-         stream->writeWord ( fld->getVisibilityBitfield() );
+         stream->writeWord ( fld->visible );
 
       if ( b4 & csm_newobject ) {
          stream->writeInt ( objectstreamversion );
@@ -702,9 +702,9 @@ void tspfldloaders::readfields ( void )
             fld2->fuel = 0;
 
          if (b3 & csm_visible)
-            fld2->setVisibilityBitfield(stream->readWord());
+            fld2->visible = stream->readWord();
          else
-            fld2->visibility.visible = 0;
+            fld2->visible = 0;
 
          int  tempobjectNum = 0;
 
@@ -818,7 +818,7 @@ void tspfldloaders::readfields ( void )
       } else {
          spfld->field[l].typ = lfld->typ;
          spfld->field[l].fuel = lfld->material;
-         spfld->field[l].visibility.visible = lfld->visibility.visible;
+         spfld->field[l].visible = lfld->visible;
          spfld->field[l].setTempw(0);
          spfld->field[l].connection = lfld->connection;
          for ( int i = 0; i < 8; i++ )

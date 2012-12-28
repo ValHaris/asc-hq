@@ -263,8 +263,7 @@ VisibilityStates calcvisibilityfield ( GameMap* gamemap, MapField* fld, int play
    
    VisibilityStates view = visible_not;
    
-   //if ( ((fld->visible >> (player * 2)) & 3) >= visible_ago || initial == 1)
-   if ( fld->getVisibility(player) >= visible_ago || initial == 1)
+   if ( ((fld->visible >> (player * 2)) & 3) >= visible_ago || initial == 1)
       view = visible_ago;
 
    if ( add == -1 ) 
@@ -311,13 +310,12 @@ int  evaluatevisibilityfield ( GameMap* gamemap, MapField* fld, int player, int 
    if ( player < 0 )
       return 0;
 
-   VisibilityStates originalVisibility;
+   int originalVisibility;
    if ( initial == 2 ) {
       fld->setVisibility(visible_all, player);
       return 0;
    } else {
-      //originalVisibility = (fld->visible >> (player * 2)) & 3;
-      originalVisibility = fld->getVisibility(player);
+      originalVisibility = (fld->visible >> (player * 2)) & 3;
       if ( originalVisibility >= visible_ago || initial == 1)
          fld->setVisibility(visible_ago, player);
    }
@@ -349,7 +347,7 @@ int  evaluateviewcalculation ( GameMap* gamemap, int player_fieldcount_mask, boo
                
                if ( firstLoop )
                   // first player in loop, so we save the current state as the 'original' state
-                  fld->setTemp3(fld->getVisibilityBitfield());
+                  fld->setTemp3(fld->visible);
                
                if ( player_fieldcount_mask & (1 << player ))
                   fieldsChanged += evaluatevisibilityfield ( gamemap, fld, player, add, initial );
@@ -365,11 +363,11 @@ int  evaluateviewcalculation ( GameMap* gamemap, int player_fieldcount_mask, boo
       for ( int y = 0; y < gamemap->ysize; ++y )
          for ( int x = 0; x < gamemap->xsize; ++x ) {
             MapField* fld = gamemap->getField(x,y);
-            if ( fld->getVisibilityBitfield() != fld->getTemp3() ) {
+            if ( fld->visible != fld->getTemp3() ) {
                // we are running under action control, the change shall be done by the action and not here,
                // so we are undoing our change for the moment
-               viewState[MapCoordinate(x,y)] = fld->visibility.visible;
-               fld->setVisibilityBitfield(fld->getTemp3());
+               viewState[MapCoordinate(x,y)] = fld->visible;
+               fld->visible = fld->getTemp3();
             }
          }
       
@@ -422,7 +420,7 @@ int  evaluateviewcalculation ( GameMap* gamemap, const MapCoordinate& pos, int d
    for ( int yy = y1; yy <= y2; yy++ )
       for ( int xx = x1; xx <= x2; xx++ ) {
          MapField* fld = gamemap->getField ( xx, yy );
-         Uint64 oldview = fld->visibility.visible;
+         int oldview = fld->visible;
          for ( int player = 0; player < gamemap->getPlayerCount(); player++ )
             if ( gamemap->player[player].exist() ) {
                int result = evaluatevisibilityfield ( gamemap, fld, player, add[player], initial );
@@ -431,11 +429,11 @@ int  evaluateviewcalculation ( GameMap* gamemap, const MapCoordinate& pos, int d
                   
             }
             
-         if ( (fld->visibility.visible != oldview) && viewState ) {
+         if ( (fld->visible != oldview) && viewState ) {
             // we are running under action control, the change shall be done by the action and not here,
             // so we are undoing our change for the moment
-            (*viewState)[MapCoordinate(xx,yy)] = fld->visibility.visible;
-            fld->visibility.visible = oldview;
+            (*viewState)[MapCoordinate(xx,yy)] = fld->visible;
+            fld->visible = oldview;
          }
       }
       

@@ -169,8 +169,8 @@ class AStar3D {
     public:
 
        class Container: protected deque<Node> {
-             tr1::unordered_map<MapCoordinate3D, Node*, hash_h> hMap;
-             typedef tr1::unordered_map<MapCoordinate3D, Node*, hash_h> hMapType;
+             tr1::unordered_map<MapCoordinate3D, Node, hash_h> hMap;
+             typedef tr1::unordered_map<MapCoordinate3D, Node, hash_h> hMapType;
              void hMapInit ();
           public:
              typedef deque<Node> Parent;
@@ -178,14 +178,14 @@ class AStar3D {
              // Container() {};
              void add ( const Node& n) {
                 insert ( upper_bound(Parent::begin(), Parent::end(), n), n);
-                if (!hMap.empty()) hMap[n.h] = const_cast<Node*>(&n);
+                if (!hMap.empty()) hMap[n.h] = n;
              };
              bool update ( const Node& node );
              Node getFirst() { Node n = Parent::front(); Parent::pop_front(); if (!hMap.empty()) hMap.erase(n.h); return n; };
              bool empty() { return Parent::empty(); };
 
              typedef Parent::iterator iterator;
-             Node* find( const MapCoordinate3D& pos ) { if (hMap.empty()) hMapInit(); return hMap[pos]; };
+             Node* find( const MapCoordinate3D& pos ) { if (hMap.empty()) hMapInit(); return &hMap[pos]; };
 
              iterator begin() { return Parent::begin(); };
              iterator end() { return Parent::end(); };

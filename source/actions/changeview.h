@@ -29,7 +29,7 @@
 
 class ChangeView : public GameAction {
    public:
-      typedef map<MapCoordinate,Uint64> ViewState;
+      typedef map<MapCoordinate,int> ViewState;
       ChangeView( GameMap* gamemap, const ViewState& state );
       
       

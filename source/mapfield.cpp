@@ -38,7 +38,7 @@ void MapField::init ()
    vehicle = NULL;
    secondvehicle = NULL;
    building = NULL;
-   visibility.visible = 0;
+   visible = 0;
    fuel = 0;
    material = 0;
    resourceview = NULL;
@@ -49,7 +49,12 @@ void MapField::init ()
 
 void MapField::setupNeighboringFields() {
    for (int d = 0; d < 6; ++d) {
-      neighboringFields[d] = gamemap->getField(getx() + getnextdx(d, gety()), gety() + getnextdy(d));
+      int x = getx() + getnextdx(d, gety());
+      int y = gety() + getnextdy(d);
+      if (x < 0 || y < 0 || x >= gamemap->xsize || y >= gamemap->ysize)
+         neighboringFields[d] = NULL;
+      else
+         neighboringFields[d] = gamemap->getField(x, y);
    }
 }
 
@@ -75,17 +80,17 @@ Uint16 MapField::getTempw () {
    return gamemap->temp[index]<<8 | gamemap->temp2[index];
 };
 
-void MapField::setTemp3 (Uint16 temp3) {
+void MapField::setTemp3 (int temp3) {
    gamemap->temp3[index] = temp3;
 };
-Uint16 MapField::getTemp3 () {
+int MapField::getTemp3 () {
    return gamemap->temp3[index];
 };
 
-void MapField::setTemp4 (Uint16 temp4) {
+void MapField::setTemp4 (int temp4) {
    gamemap->temp4[index] = temp4;
 };
-Uint16 MapField::getTemp4 () {
+int MapField::getTemp4 () {
    return gamemap->temp4[index];
 };
 
@@ -164,7 +169,7 @@ void MapField::operator= ( const MapField& f )
    typ = f.typ;
    fuel = f.fuel;
    material = f.material;
-   visibility.visible = f.visibility.visible;
+   visible = f.visible;
    vehicle = f.vehicle;
    building = f.building;
    if ( f.resourceview ) {
@@ -400,7 +405,7 @@ void MapField :: setWeather ( int weather )
               }
      }
 }
-/*
+
 void MapField::setVisibility ( VisibilityStates valtoset, int actplayer ) 
 {
       int newval = (valtoset ^ 3) << ( 2 * actplayer );
@@ -409,10 +414,9 @@ void MapField::setVisibility ( VisibilityStates valtoset, int actplayer )
       visible |= oneval;
       visible ^= newval;
 };
-*/
+
 void MapField::resetView( GameMap* gamemap, int playersToReset )
 {
-   //TODO: don't use the bitmasks for that
    int mask = 0;
    for ( int i = 0; i < gamemap->getPlayerCount(); ++i )
       if ( !(playersToReset & (1 << i)))
@@ -422,9 +426,7 @@ void MapField::resetView( GameMap* gamemap, int playersToReset )
    for ( int y = 0; y < gamemap->ysize; ++y )
       for ( int x = 0; x < gamemap->xsize; ++x ) {
          MapField& fld = gamemap->field[l++];
-         //fld.visible &= mask;
-         Uint16 oldmask = fld.getVisibilityBitfield();
-         fld.setVisibilityBitfield(mask & oldmask);
+         fld.visible &= mask;
       }
         
 }
