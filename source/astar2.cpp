@@ -406,7 +406,7 @@ bool operator == ( const AStar3D::Node& a, const AStar3D::Node& b )
 void AStar3D::Container::hMapInit () {
    hMap.rehash(Parent::size());
    for (iterator i = Parent::begin(); i != Parent::end(); ++i) {
-      hMap[i->h] = (*i);
+      hMap[i->h] = i;
    }
 };
 
@@ -418,12 +418,11 @@ bool AStar3D::Container::update ( const Node& node )
    if (iMap == hMap.end())
       return false;
    
-   Node oldNode = iMap->second;
-   if (oldNode.gval > node.gval || (oldNode.gval == node.gval && oldNode.hasAttacked && !node.hasAttacked)) {
-      //hMap[node.h] = const_cast<Node*>(&node);
-      Parent::erase (lower_bound(Parent::begin(), Parent::end(), oldNode) );
-      iterator i = Parent::insert ( upper_bound(Parent::begin(), Parent::end(), node), node);
-      hMap[node.h] = node;
+   iterator i  = iMap->second;
+   if (i->gval > node.gval || (i->gval == node.gval && i->hasAttacked && !node.hasAttacked)) {
+      Parent::erase(i);
+      iterator i = Parent::insert ( node );
+      hMap[node.h] = i;
       return true;
    }
    return false;

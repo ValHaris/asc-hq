@@ -136,7 +136,7 @@ class AStar3D {
        };
        struct hash_h {
           size_t operator()(const MapCoordinate3D &h) const{
-             return static_cast<size_t>(h.x) ^ (static_cast<size_t>(h.y) << 16) ^ (static_cast<size_t>(h.getNumericalHeight()) << 32);
+             return static_cast<size_t>(h.x) ^ (static_cast<size_t>(h.y) << 16) ^ (static_cast<size_t>(h.getNumericalHeight())  << 32);
           }
        };
 
@@ -166,24 +166,29 @@ class AStar3D {
 
     public:
 
-       class Container: protected deque<Node> {
-             tr1::unordered_map<MapCoordinate3D, Node, hash_h> hMap;
-             typedef tr1::unordered_map<MapCoordinate3D, Node, hash_h> hMapType;
+       class Container: protected multiset<Node, less<Node> > {
+             tr1::unordered_map<MapCoordinate3D, iterator, hash_h> hMap;
+             typedef tr1::unordered_map<MapCoordinate3D, iterator, hash_h> hMapType;
              void hMapInit ();
           public:
-             typedef deque<Node> Parent;
+             typedef multiset<Node, less<Node> > Parent;
 
              // Container() {};
              void add ( const Node& n) {
-                insert ( upper_bound(Parent::begin(), Parent::end(), n), n);
-                if (!hMap.empty()) hMap[n.h] = n;
+                iterator i = insert ( n);
+                if (!hMap.empty()) hMap[n.h] = i;
              };
              bool update ( const Node& node );
-             Node getFirst() { Node n = Parent::front(); Parent::pop_front(); if (!hMap.empty()) hMap.erase(n.h); return n; };
+             Node getFirst() { iterator b = Parent::begin(); Parent::erase(b); if (!hMap.empty()) hMap.erase(b->h); return *b; };
              bool empty() { return Parent::empty(); };
 
              typedef Parent::iterator iterator;
-             Node* find( const MapCoordinate3D& pos ) { if (hMap.empty()) hMapInit(); return &hMap[pos]; };
+             const Node* find( const MapCoordinate3D& pos ) {
+                if (hMap.empty()) hMapInit();
+                hMapType::iterator i = hMap.find(pos); 
+                if (i == hMap.end()) return NULL;
+                else return &(*(i->second));
+             };
 
              iterator begin() { return Parent::begin(); };
              iterator end() { return Parent::end(); };
