@@ -136,9 +136,7 @@ class AStar3D {
        };
        struct hash_h {
           size_t operator()(const MapCoordinate3D &h) const{
-             //return tr1::hash<int>()(h.x) ^ tr1::hash<int>()(h.y) ^ tr1::hash<int>()(h.getNumericalHeight() );
-             //return (h.x)<<(sizeof(size_t) / 4) &  (h.y)<<(sizeof(size_t) / 2) & h.getNumericalHeight();
-             return h.x ^ h.y ^ h.getNumericalHeight();
+             return static_cast<size_t>(h.x) ^ (static_cast<size_t>(h.y) << 16) ^ (static_cast<size_t>(h.getNumericalHeight()) << 32);
           }
        };
 

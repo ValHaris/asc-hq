@@ -27,16 +27,14 @@ class  MapField {
     GameMap* gamemap;
     void init();
     int index;
-    void setupNeighboringFields();
   protected:
     MapField (  ) { init(); };
     friend class GameMap;
   public:
-    MapField* neighboringFields[6];
     MapField ( GameMap* gamemap_, int index_ ) { init(); setMap(gamemap_, index_); };
     void operator= ( const MapField& f );
 
-    void setMap ( GameMap* gamemap_, int index_ ) { gamemap = gamemap_; index = index_; setupNeighboringFields();};
+    void setMap ( GameMap* gamemap_, int index_ ) { gamemap = gamemap_; index = index_; };
     GameMap* getMap() const { return gamemap; };
 
     //! the terraintype of the field

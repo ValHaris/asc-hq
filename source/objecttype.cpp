@@ -442,9 +442,12 @@ class Smoothing {
          int  GetNeighbourMask( int x, int y, int* Arr, ObjectType* o )
          {
             int res = 0;
-            MapField* currentFld = actmap->getField(x, y);
             for ( int d = 0; d < sidenum; d++ ) {
-               MapField* fld = currentFld->neighboringFields[d];
+               int x1 = x;
+               int y1 = y;
+               x1 += getnextdx ( d, y1 );
+               y1 += getnextdy ( d );
+               MapField* fld = getfield ( x1, y1 );
                if ( fld ) {
 
                   Object* obj = fld->checkForObject ( o );
@@ -465,9 +468,12 @@ class Smoothing {
          int  GetNeighbourMask( int x, int y, int* Arr )
          {
             int res = 0;
-            MapField* currentFld = actmap->getField(x, y);
             for ( int d = 0; d < sidenum; d++ ) {
-               MapField* fld = currentFld->neighboringFields[d];
+               int x1 = x;
+               int y1 = y;
+               x1 += getnextdx ( d, y1 );
+               y1 += getnextdy ( d );
+               MapField* fld = getfield ( x1, y1 );
                if ( fld ) {
 
                   if ( IsInSetOfWord ( fld->typ->bi_pict, Arr ))
@@ -780,7 +786,12 @@ void calculateforest( GameMap* actmap, ObjectType* woodObj )
                if ( o->typ == woodObj ) {
                   int c = 0;
                   for ( int i = 0; i < sidenum; i++) {
-                     MapField* fld2 = fld->neighboringFields[i];
+                     int a = x;
+                     int b = y;
+                     a += getnextdx ( i, b );
+                     b += getnextdy ( i );
+                     MapField* fld2 = actmap->getField(a,b);
+
                      if ( fld2 ) {
                         Object* oi = fld2->checkForObject ( o->typ );
                         if ( oi )

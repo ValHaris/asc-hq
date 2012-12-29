@@ -34,15 +34,15 @@ class MapNetwork {
 
                 MapCoordinate startposition;
 
-                virtual int fieldavail ( MapField* fld ) = 0;
+                virtual int fieldavail ( int x, int y ) = 0;
                 virtual int searchfinished ( void ) = 0;
                 virtual void checkvehicle ( Vehicle* v ) = 0;
                 virtual void checkbuilding ( Building* b ) = 0;
                 virtual int globalsearch ( void ) = 0;
 
-                virtual void searchbuilding ( MapField* fld );
-                virtual void searchvehicle  ( MapField* fld );
-                virtual void searchfield ( MapField* fld, int dir );
+                virtual void searchbuilding ( int x, int y );
+                virtual void searchvehicle  ( int x, int y );
+                virtual void searchfield ( int x, int y, int dir );
                 void searchAllVehiclesNextToBuildings ( int player );
              public:
                 enum Scope { singleField, net, wholeMap, globalPool };
@@ -58,7 +58,7 @@ class ResourceNet : public MapNetwork {
                   int resourcetype;
                   int scope;
 
-                  virtual int fieldavail ( MapField* fld );
+                  virtual int fieldavail ( int x, int y );
                   virtual int globalsearch ( void ) { return scope; };
              };
 

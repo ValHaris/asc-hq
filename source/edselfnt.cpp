@@ -262,11 +262,11 @@ int TerrainItem::place( const MapCoordinate& mc ) const
    fld->setWeather( selection.getWeather() );
    fld->setparams();
    for ( int d = 0; d < 6; ++d ) {
-      //MapCoordinate pos = getNeighbouringFieldCoordinate( mc, d );
-      MapField* fld = fld->neighboringFields[d];
+      MapCoordinate pos = getNeighbouringFieldCoordinate( mc, d );
+      MapField* fld = actmap->getField( pos );
       if ( fld ) 
          for ( MapField::ObjectContainer::iterator i = fld->objects.begin(); i != fld->objects.end(); ++i )
-            calculateobject( fld, false, i->typ, actmap );
+            calculateobject( pos, false, i->typ, actmap );
    }
    return 0;
 }

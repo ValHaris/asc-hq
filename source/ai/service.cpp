@@ -144,19 +144,22 @@ int AI::ServiceOrder::possible ( Vehicle* supplier )
 bool AI::ServiceOrder::execute1st ( Vehicle* supplier )
 {
    Vehicle* targ = getTargetUnit();
-   MapField* targetField = ai->getMap()->getField(targ->xpos, targ->ypos);
    MapCoordinate3D meet;
 
    vector<MapCoordinate3D> dest;
    for ( int h = 0; h < 8; h++ ) {
       if ( supplier->typ->height & ( 1<<h)) {
          for ( int i = 0; i < sidenum; i++ ) {
-             MapField* fld = targetField->neighboringFields[i];
+             int x = targ->xpos;
+             int y = targ->ypos;
+             x += getnextdx( i, y );
+             y += getnextdy( i );
+             MapField* fld = ai->getMap()->getField ( x, y );
              if ( fld && fieldAccessible ( fld, supplier, 1<<h ) == 2 && !fld->building && !fld->vehicle ) {
                 bool result = false;
                 TemporaryContainerStorage tus ( supplier );
-                supplier->xpos = fld->getx();
-                supplier->ypos = fld->gety();
+                supplier->xpos = x;
+                supplier->ypos = y;
                 supplier->height = 1 << h;
 
                 
@@ -169,7 +172,7 @@ bool AI::ServiceOrder::execute1st ( Vehicle* supplier )
                 tus.restore();
 
                 if ( result )
-                   dest.push_back ( MapCoordinate3D(fld->getx(), fld->gety(), 1<<h ));
+                   dest.push_back ( MapCoordinate3D(x, y, 1<<h ));
              }
          }
       }

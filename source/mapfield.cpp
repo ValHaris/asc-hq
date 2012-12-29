@@ -46,18 +46,6 @@ void MapField::init ()
    gamemap = NULL;
    viewbonus = 0;
 }
-
-void MapField::setupNeighboringFields() {
-   for (int d = 0; d < 6; ++d) {
-      int x = getx() + getnextdx(d, gety());
-      int y = gety() + getnextdy(d);
-      if (x < 0 || y < 0 || x >= gamemap->xsize || y >= gamemap->ysize)
-         neighboringFields[d] = NULL;
-      else
-         neighboringFields[d] = gamemap->getField(x, y);
-   }
-}
-
 void MapField::setaTemp (char temp) {
    gamemap->temp[index] = temp;
 };
@@ -244,7 +232,7 @@ bool  MapField :: addobject( const ObjectType* obj, int dir, bool force, MapFiel
 
          sortobjects();
          if ( dir == -1 )
-            calculateobject( this, true, obj, gamemap );
+            calculateobject( getx(), gety(), true, obj, gamemap );
 
          if ( objectRemovalStrategy )
             setparams( objectRemovalStrategy );
@@ -299,7 +287,7 @@ bool MapField :: removeObject( const ObjectType* obj, bool force, ObjectRemovalS
       setparams();
    
    if ( obj )
-      calculateobject( this, true, obj, gamemap );
+      calculateobject( getx(), gety(), true, obj, gamemap );
    
    return removed;
 }
@@ -481,12 +469,14 @@ void MapField :: removemine( int num )
 
 int MapField :: getx( void )
 {
-   return index % gamemap->xsize;
+   int n = this - gamemap->field;
+   return n % gamemap->xsize;
 }
 
 int MapField :: gety( void )
 {
-   return index / gamemap->xsize;
+   int n = this - gamemap->field;
+   return n / gamemap->xsize;
 }
 
 
@@ -555,15 +545,22 @@ int MapField :: getjamming ( void )
 int MapField :: getmovemalus ( const Vehicle* veh )
 {
    int mnum = mines.size();
-   int movemalus = __movemalus[veh->typ->movemalustyp];
    if ( mnum ) {
+      int movemalus = __movemalus.at(veh->typ->movemalustyp);
       int col = mineowner();
       if ( veh->color == col*8 )
          movemalus += movemalus * mine_movemalus_increase * mnum / 100;
+
+      if ( movemalus < minmalq )
+         fatalError ( "invalid movemalus for terraintype ID %d used on field %d / %d" , typ->terraintype->id, getx(), gety() );
+
+      return movemalus;
+   } else {
+      int mm = __movemalus.at(veh->typ->movemalustyp);
+      if ( mm < minmalq )
+         fatalError ( "invalid movemalus for terraintype ID %d used on field %d / %d" , typ->terraintype->id, getx(), gety() );
+      return mm;
    }
-   if ( movemalus < minmalq )
-      fatalError ( "invalid movemalus for terraintype ID %d used on field %d / %d" , typ->terraintype->id, getx(), gety() );
-   return movemalus;
 }
 
 int MapField :: getmovemalus ( int type )

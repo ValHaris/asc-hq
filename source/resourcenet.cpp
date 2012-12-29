@@ -31,10 +31,11 @@
 
 SigC::Signal0<void> tributeTransferred;
 
-void MapNetwork :: searchfield ( MapField* fld, int dir )
+void MapNetwork :: searchfield ( int x, int y, int dir )
 {
-   int s;
+  int s;
 
+   MapField* fld = actmap->getField ( x, y );
    if ( !fld )
       return;
 
@@ -51,17 +52,17 @@ void MapNetwork :: searchfield ( MapField* fld, int dir )
       #endif
 
       if ( fld->building ) { 
-         searchbuilding ( fld );
+         searchbuilding ( x, y );
          return;
       }
 
       fld->setaTemp(1);
 
-      int d = fieldavail( fld );
+      int d = fieldavail( x, y );
       if ( d <= 0 )
          return;
 
-      searchvehicle ( fld );
+      searchvehicle ( x, y );
 
       int olddir = dir + sidenum/2; 
       while (olddir >= sidenum ) 
@@ -78,9 +79,12 @@ void MapNetwork :: searchfield ( MapField* fld, int dir )
 
          if (r > 1) {      // Kreuzungsstelle 
             for ( s = 0; s < r; s++) { 
+               int nx = x;
+               int ny = y;
                int direc = arr[s];
-               MapField* newfld = fld->neighboringFields[s];
-               searchfield( newfld, direc );
+               nx += getnextdx ( direc, ny );
+               ny += getnextdy ( direc );
+               searchfield( nx, ny, direc );
                if ( searchfinished() )
                   return ;
             } 
@@ -88,7 +92,9 @@ void MapNetwork :: searchfield ( MapField* fld, int dir )
          } else  
             if ( r == 1 ) {
                dir = arr[0];
-               fld = fld->neighboringFields[dir];
+               x += getnextdx ( dir, y );
+               y += getnextdy ( dir );
+               fld = actmap->getField( x, y ); 
                if ( !fld )
                   return;
             } else
@@ -97,26 +103,23 @@ void MapNetwork :: searchfield ( MapField* fld, int dir )
 
 }
 
-void MapNetwork :: searchvehicle ( MapField* fld )
+void MapNetwork :: searchvehicle ( int x, int y )
 {
-   if (!fld)
-      return;
    if ( pass == 2 ) {
-      if ( !fld->getaTemp2() )
-        if ( fld->vehicle ) {
-           checkvehicle ( fld->vehicle );
-           fld->setaTemp2(1);
-        }
+      MapField* newfield = actmap->getField ( x, y );
+      if ( newfield )
+         if ( !newfield->getaTemp2() )
+           if ( newfield->vehicle ) {
+              checkvehicle ( newfield->vehicle );
+              newfield->setaTemp2(1);
+           }
    }
 }
 
 
-void MapNetwork :: searchbuilding ( MapField* fld )
+void MapNetwork :: searchbuilding ( int x, int y )
 {
-   if (!fld)
-      return;
-
-   Building* bld = fld->building;
+   Building* bld = actmap->getField( x, y )->building;
    if ( !bld )
       return;
 
@@ -136,12 +139,15 @@ void MapNetwork :: searchbuilding ( MapField* fld )
             MapField* fld2 = actmap->getField ( mc );
             if ( fld2 && fld2->building == bld )
                for ( int d = 0; d < sidenum; d++ ) {
-                  MapField* newfield = fld2->neighboringFields[d];
+                  int xp2 = mc.x;
+                  int yp2 = mc.y;
+                  xp2 += getnextdx ( d, yp2 );
+                  yp2 += getnextdy ( d );
+                  MapField* newfield = actmap->getField ( xp2, yp2 );
                   if ( newfield && newfield->building != bld  && !newfield->getaTemp() )
-                     searchfield ( newfield, d );
+                     searchfield ( xp2, yp2, d );
 
-                  if ( newfield )
-                     searchvehicle ( newfield );
+                  searchvehicle ( xp2, yp2 );
 
                } /* endfor */
          }
@@ -175,14 +181,15 @@ void MapNetwork :: searchAllVehiclesNextToBuildings ( int player )
 {
    pass++;
    for ( Player::VehicleList::iterator j = actmap->player[player].vehicleList.begin(); j != actmap->player[player].vehicleList.end(); j++ ) {
-      MapField* fld = actmap->getField((*j)->getPosition());
+      MapCoordinate3D mc = (*j)->getPosition();
       for ( int s = 0; s < sidenum; s++ ) {
-         MapField* newfld = fld->neighboringFields[s];
-         if ( newfld ) {
-            Building* bld = newfld->building;
+         MapField* fld = actmap->getField ( getNeighbouringFieldCoordinate ( mc, s ));
+         if ( fld ) {
+            Building* bld = fld->building;
             if ( bld && bld->color == (*j)->color ) {
-               if ( !fld->getaTemp2() ) {
-                  fld->setaTemp2(1);
+               MapField* fld2 = actmap->getField( (*j)->getPosition());
+               if ( !fld2->getaTemp2() ) {
+                  fld2->setaTemp2(1);
                   checkvehicle ( *j );
                }
             }
@@ -193,7 +200,6 @@ void MapNetwork :: searchAllVehiclesNextToBuildings ( int player )
 
 void MapNetwork :: start ( int x, int y )
 {
-   MapField* fld = actmap->getField(x, y);
    if ( globalsearch() == 2 ) {
       for ( int i = 0; i < 8; i++ )
          if ( actmap->player[i].exist() ) {
@@ -210,29 +216,38 @@ void MapNetwork :: start ( int x, int y )
    } else 
       if ( globalsearch() == 1 ) {
          actmap->cleartemps(7);
-         searchfield ( fld, -1 );
+         startposition.x = x;
+         startposition.y = y;
+         searchfield ( x, y, -1 );
          actmap->cleartemps(7);
          if ( !searchfinished() ) {
             pass++;
-            searchfield ( fld, -1 );
+            startposition.x = x;
+            startposition.y = y;
+            searchfield ( x, y, -1 );
             actmap->cleartemps(7);
          }
       } else  
          if ( globalsearch() == 0 ) {
-            if ( fld->building ) {
-               if ( pass == 1 )
-                  checkbuilding( fld->building );
-            } else
-               if ( fld->vehicle )
-                   if ( pass == 2 )
-                      checkvehicle ( fld->vehicle );
+            MapField* fld = actmap->getField ( x, y );
+            if ( fld ) {
+               if ( fld->building ) {
+                  if ( pass == 1 )
+                     checkbuilding( fld->building );
+               } else
+                  if ( fld->vehicle )
+
+                     if ( pass == 2 )
+                        checkvehicle ( fld->vehicle );
+            }
          }
 }
 
 
 
-int ResourceNet :: fieldavail ( MapField* fld )
+int ResourceNet :: fieldavail ( int x, int y )
 {
+    MapField* fld = actmap->getField ( x, y );
 /*    Object* o = fld->checkforobject ( pipelineobject ) ; 
     if ( o )
        return o->dir;
@@ -248,7 +263,11 @@ int ResourceNet :: fieldavail ( MapField* fld )
        if ( (fld->bdt & tb).any() ) {
           int d = 0;
           for ( int i = 0; i < sidenum; i++ ) {
-             MapField* fld2 = fld->neighboringFields[i];
+             int xp = x;
+             int yp = y;
+             xp += getnextdx ( i, yp );
+             yp += getnextdy ( i );
+             MapField* fld2 = actmap->getField ( xp, yp );
              if ( fld2 )
                 if ( (fld2->bdt & tb).any() ||  fld2->building )
                    d |= ( 1 << i );
