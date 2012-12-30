@@ -234,6 +234,10 @@ GameMap :: GameMap ( void )
    xsize = 0;
    ysize = 0;
    field = NULL;
+   temp = NULL;
+   temp2 = NULL;
+   temp3 = NULL;
+   temp4 = NULL;
 
    actplayer = -1;
    time.abstime = 0;
@@ -1525,10 +1529,22 @@ GameMap :: ~GameMap ()
    delete tasks;
    tasks = NULL;
    
-   delete[] temp;
-   delete[] temp2;
-   delete[] temp3;
-   delete[] temp4;
+   if (temp) {
+      delete[] temp;
+      temp = NULL;
+   }
+   if (temp2) {
+      delete[] temp2;
+      temp2 = NULL;
+   }
+   if (temp3) {
+      delete[] temp3;
+      temp3 = NULL;
+   }
+   if (temp4) {
+      delete[] temp4;
+      temp4 = NULL;
+   }
 }
 
 /*
