@@ -6,7 +6,6 @@
 #ifndef astar2H
  #define astar2H
 
-
  #include <vector>
  #include <tr1/unordered_map>
  #include <functional>
@@ -95,8 +94,9 @@ extern void findPath( GameMap* actmap, AStar::Path& path, Vehicle* veh, int x, i
 //! A 3D path finding algorithm, based on the 2D algorithm by Amit J. Patel
 class AStar3D {
     public:
-       typedef float DistanceType;
-       static const DistanceType longestPath;
+       typedef int DistanceType;
+       static const DistanceType longestPath = 1e9;
+       //static const __m128i longestPathVector = _mm_set_epi32(1e9, 1e9, 1e9, 1e9);
        class OperationLimiter {
            public:
               virtual bool allowHeightChange() = 0;
@@ -169,22 +169,20 @@ class AStar3D {
        class Container: protected multiset<Node, less<Node> > {
              tr1::unordered_map<MapCoordinate3D, iterator, hash_h> hMap;
              typedef tr1::unordered_map<MapCoordinate3D, iterator, hash_h> hMapType;
-             void hMapInit ();
           public:
              typedef multiset<Node, less<Node> > Parent;
 
              // Container() {};
              void add ( const Node& n) {
                 iterator i = insert ( n);
-                if (!hMap.empty()) hMap[n.h] = i;
+                hMap[n.h] = i;
              };
              bool update ( const Node& node );
-             Node getFirst() { iterator b = Parent::begin(); Parent::erase(b); if (!hMap.empty()) hMap.erase(b->h); return *b; };
+             Node getFirst() { Node n = *(Parent::begin()); Parent::erase(Parent::begin()); hMap.erase(n.h); return n; };
              bool empty() { return Parent::empty(); };
 
              typedef Parent::iterator iterator;
              const Node* find( const MapCoordinate3D& pos ) {
-                if (hMap.empty()) hMapInit();
                 hMapType::iterator i = hMap.find(pos); 
                 if (i == hMap.end()) return NULL;
                 else return &(*(i->second));

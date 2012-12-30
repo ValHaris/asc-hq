@@ -3,7 +3,6 @@
 */
 
 
-
 #include <stack>
 #include <vector>
 #include <algorithm>
@@ -375,7 +374,6 @@ bool AStar3D::Node::operator< ( const AStar3D::Node& b ) const
        return gval < b.gval;
     else
        return (gval+hval) < (b.gval+b.hval);
-
 }
 /*
 bool operator< ( const AStar3D::Node& a, const AStar3D::Node& b )
@@ -402,18 +400,8 @@ bool operator == ( const AStar3D::Node& a, const AStar3D::Node& b )
     // Two nodes are equal if their components are equal
     return (a.h == b.h) && (a.gval == b.gval ) && (a.hval == b.hval );
 }
-
-void AStar3D::Container::hMapInit () {
-   hMap.rehash(Parent::size());
-   for (iterator i = Parent::begin(); i != Parent::end(); ++i) {
-      hMap[i->h] = i;
-   }
-};
-
 bool AStar3D::Container::update ( const Node& node )
 {
-   if (hMap.empty())
-      hMapInit();
    hMapType::iterator iMap = hMap.find(node.h);
    if (iMap == hMap.end())
       return false;
@@ -421,8 +409,8 @@ bool AStar3D::Container::update ( const Node& node )
    iterator i  = iMap->second;
    if (i->gval > node.gval || (i->gval == node.gval && i->hasAttacked && !node.hasAttacked)) {
       Parent::erase(i);
-      iterator i = Parent::insert ( node );
-      hMap[node.h] = i;
+      iterator newi = Parent::insert ( node );
+      hMap[node.h] = newi;
       return true;
    }
    return false;
@@ -471,8 +459,8 @@ AStar3D :: AStar3D ( GameMap* actmap_, Vehicle* veh_, bool markTemps_, int maxDi
    for ( int i = 0; i < cnt; i++ ) {
       posDirs[i] = DirNone;
       posHHops[i] = -20;
+      fieldAccess[i] = 0;
    }
-   memset(fieldAccess, 0, sizeof(fieldAccess));
 
    if ( (veh->typ->height & ( chtieffliegend | chfliegend | chhochfliegend )) && actmap->weather.windSpeed ) {
       wind = new WindMovement ( veh );
@@ -616,7 +604,7 @@ const int* getDirectionOrder ( int x, int y, int x2, int y2 )
     return (const int*)(&directions[b][a]);
 }
 
-const AStar3D::DistanceType AStar3D::longestPath = 1e9;
+//const AStar3D::DistanceType AStar3D::longestPath = 1e9;
 
 void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>& B, Path& path )
 {
