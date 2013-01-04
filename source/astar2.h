@@ -12,14 +12,6 @@
  #include "mapalgorithms.h"
  #include "gamemap.h"
 
- #if defined(_MSC_VER)
- #define ALIGNED __declspec(align(16))
- #else
- #if defined(__GNUC__)
- #define ALIGNED __attribute__((aligned(16)))
- #endif
- #endif
-
  enum HexDirection { DirN, DirNE, DirSE, DirS, DirSW, DirNW, DirNone };
 
 
@@ -136,12 +128,15 @@ class AStar3D {
            AStar3D::DistanceType hval;        // h in A* represents an estimate of how far is left
            int enterHeight;
            HexDirection dir;
+           int HHop;
            bool canStop;
            bool hasAttacked;
            bool deleted;
            Node(DistanceType _gval=0, DistanceType _hval=0, int _enterHeight=-1,
-                bool _canStop=false, bool _deleted=false, bool _hasAttacked=false, HexDirection _dir=DirNone) :
-              gval(_gval), hval(_hval), canStop(_canStop), enterHeight(_enterHeight), deleted(_deleted), hasAttacked(_hasAttacked), dir(_dir) {}
+                bool _canStop=false, bool _deleted=false, bool _hasAttacked=false,
+                HexDirection _dir=DirNone, int _HHop=0) :
+              gval(_gval), hval(_hval), canStop(_canStop), enterHeight(_enterHeight),
+              deleted(_deleted), hasAttacked(_hasAttacked), dir(_dir), HHop(_HHop) {}
            bool operator< ( const Node& b ) const;
        };
        struct hash_h {
@@ -164,12 +159,7 @@ class AStar3D {
 
        virtual DistanceType getMoveCost ( const MapCoordinate3D& start, const MapCoordinate3D& dest, const Vehicle* vehicle, bool& canStop, bool& hasAttacked );
 
-       //HexDirection* posDirs ALIGNED;
-       int*          posHHops ALIGNED;
-       int*          fieldAccess ALIGNED;
-
-       //HexDirection& getPosDir ( const MapCoordinate3D& pos ) { return posDirs [(pos.y * actmap->xsize + pos.x) * 9 + 1+pos.getNumericalHeight()]; };
-       int& getPosHHop ( const MapCoordinate3D& pos )         { return posHHops[(pos.y * actmap->xsize + pos.x) * 9 + 1+pos.getNumericalHeight()]; };
+       int* fieldAccess;
 
        DistanceType dist( const MapCoordinate3D& a, const MapCoordinate3D& b );
        DistanceType dist( const MapCoordinate3D& a, const vector<MapCoordinate3D>& b );
@@ -187,7 +177,6 @@ class AStar3D {
                 iterator i = insert ( n);
                 hMap[n.h] = i;
              };
-             //bool update ( const Node& node );
              Node getFirst() { Node n = *(Parent::begin()); Parent::erase(Parent::begin()); hMap.erase(n.h); return n; };
              bool empty() { return Parent::empty(); };
 
@@ -221,7 +210,7 @@ class AStar3D {
        
        bool get_first( Container& v, Node& n );
 
-       void nodeVisited ( const Node& n, Container& open, int prevHeight = -10, int heightChangeDist = 0 );
+       void nodeVisited ( const Node& n, Container& open );
 
 
     public:

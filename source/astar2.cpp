@@ -2,10 +2,6 @@
     \brief Pathfinding routines using the A* algorithm.
 */
 
-#if __x86_64__ ||  _WIN64
-#include <emmintrin.h>
-#endif
-
 #include <stack>
 #include <vector>
 #include <algorithm>
@@ -401,23 +397,7 @@ bool operator == ( const AStar3D::Node& a, const AStar3D::Node& b )
     // Two nodes are equal if their components are equal
     return (a.h == b.h) && (a.gval == b.gval ) && (a.hval == b.hval );
 }
-/*
-bool AStar3D::Container::update ( const Node& node )
-{
-   hMapType::iterator iMap = hMap.find(node.h);
-   if (iMap == hMap.end())
-      return false;
-   
-   iterator i  = iMap->second;
-   if (i->gval > node.gval || (i->gval == node.gval && i->hasAttacked && !node.hasAttacked)) {
-      Parent::erase(i);
-      iterator newi = Parent::insert ( node );
-      hMap[node.h] = newi;
-      return true;
-   }
-   return false;
-}
-*/
+
 AStar3D :: AStar3D ( GameMap* actmap_, Vehicle* veh_, bool markTemps_, int maxDistance )
          : operationLimiter ( NULL )
 {
@@ -454,19 +434,7 @@ AStar3D :: AStar3D ( GameMap* actmap_, Vehicle* veh_, bool markTemps_, int maxDi
       maxVehicleSpeedFactor = max( maxVehicleSpeedFactor, vehicleSpeedFactor[i] );
    
    int cnt = actmap->xsize*actmap->ysize*9;
-   //posDirs = new HexDirection[cnt];
-   posHHops = new int[cnt];
    fieldAccess = new int[cnt](); // initializes with 0
-
-   for ( int i = 0; i < cnt; ++i ) {
-   #if __x86_64__ ||  _WIN64
-      //_mm_stream_si32((int*)&posDirs[i], DirNone);
-      _mm_stream_si32(&posHHops[i], -20);
-   #else
-      //posDirs[i] = DirNone;
-      posHHops[i] = -20;
-   #endif
-   }
 
    if ( (veh->typ->height & ( chtieffliegend | chfliegend | chhochfliegend )) && actmap->weather.windSpeed ) {
       wind = new WindMovement ( veh );
@@ -486,8 +454,6 @@ AStar3D :: ~AStar3D ( )
       wind = NULL;
    }
 
-   //delete[] posDirs;
-   delete[] posHHops;
    delete[] fieldAccess;
 }
 
@@ -563,20 +529,16 @@ AStar3D::DistanceType AStar3D::getMoveCost ( const MapCoordinate3D& start, const
 // abstraction layer on priority_queue wouldn't let me do that.
 
 
-void AStar3D :: nodeVisited ( const Node& N2, Container& open, int prevHeight, int heightChangeDist )
+void AStar3D :: nodeVisited ( const Node& N2, Container& open )
 {
    if ( N2.gval <= MAXIMUM_PATH_LENGTH && N2.gval < longestPath ) {
       Container::iterator i = open.findIterator(N2.h);
       if ( i == open.end()) {
-         if ( !visited.find(N2.h)) {
+         if ( !visited.find(N2.h))
             open.add ( N2 );
-            getPosHHop(N2.h) = 10 + prevHeight + 1000 * heightChangeDist;
-         }
       } else {
-         if (i->gval > N2.gval || (i->gval == N2.gval && i->hasAttacked && !N2.hasAttacked)) {
+         if (i->gval > N2.gval || (i->gval == N2.gval && i->hasAttacked && !N2.hasAttacked))
             open.replace(i, N2);
-            getPosHHop(N2.h) = 10 + prevHeight + 1000 * heightChangeDist;
-         }
       }
    }
 }
@@ -691,16 +653,19 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
                             if ( N2.canStop && actmap->getField(N2.h)->getContainer() && actmap->getField(N2.h)->vehicle != veh) {
                                  // there's an container on the field that can be entered. This means, the unit can't stop 'over' the container...
                                  N2.canStop = false;
-                                 nodeVisited ( N2, open, N.h.getNumericalHeight(), maxmalq );
+                                 N2.HHop = 10 + N.h.getNumericalHeight() + 1000 * maxmalq;
+                                 nodeVisited ( N2, open );
 
                                  // ... only inside it
                                  N2.canStop = true;
                                  N2.enterHeight = N2.h.getNumericalHeight() ;
                                  N2.h.setNumericalHeight(-1);
                                  // N2.hasAttacked = true;
-                                 nodeVisited ( N2, open, N.h.getNumericalHeight(), maxmalq );
+                                 N2.HHop = 10 + N.h.getNumericalHeight() + 1000 * maxmalq;
+                                 nodeVisited ( N2, open );
                             } else
-                                 nodeVisited ( N2, open, N.h.getNumericalHeight(), maxmalq );
+                                 N2.HHop = 10 + N.h.getNumericalHeight() + 1000 * maxmalq;
+                                 nodeVisited ( N2, open );
                          }
 
                       }
@@ -774,7 +739,8 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
                      N2.enterHeight = N2.h.getNumericalHeight() ;
                      N2.h.setNumericalHeight (-1);
                      // N2.hasAttacked = true;
-                     nodeVisited ( N2, open, N.h.getNumericalHeight(), maxmalq );
+                     N2.HHop = 10 + N.h.getNumericalHeight() + 1000 * maxmalq;
+                     nodeVisited ( N2, open );
                   } else
                      if ( !veh->typ->hasFunction( ContainerBaseType::OnlyMoveToAndFromTransports  ) )
                         nodeVisited ( N2, open );
@@ -832,7 +798,8 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
                                    N2.h.setNumericalHeight (-1);
                                 }
 
-                                nodeVisited ( N2, open, N.h.getNumericalHeight() , hcm->dist * maxmalq );
+                                N2.HHop = 10 + N.h.getNumericalHeight() + 1000 * hcm->dist * maxmalq;
+                                nodeVisited ( N2, open );
                              }
                           }
                        }
@@ -854,9 +821,7 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
         {
             HexDirection dir = n->dir;
 
-            int prevHeight = getPosHHop(h);
-            if ( prevHeight == -20 )
-               fatalError ( "AStar3D : Unknown Position ");
+            int prevHeight = n->HHop;
             int heightChangeDist = prevHeight / 1000;
             prevHeight -= 10 + heightChangeDist * 1000;
 
