@@ -587,7 +587,7 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
        return;
     */
 
-    Node N = Node(0, dist(A, B), -1, false, false, veh->attacked);
+    Node N = Node(0, dist(A, B), -1, false, veh->attacked);
     // insert the original node
     N.h = A;
     if ( !(actmap->getField(A)->unitHere(veh)) ) {
@@ -647,7 +647,7 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
 
                             int gval = (k >= longestPath || N.gval >= longestPath) ? longestPath : N.gval + k;
 
-                            Node N2 = Node(gval, dist(pos, B), -1, canStop, false, hasAttacked, ReverseDirection(HexDirection(dir)));
+                            Node N2 = Node(gval, dist(pos, B), -1, canStop, hasAttacked, ReverseDirection(HexDirection(dir)));
                             N2.h = pos;
 
                             if ( N2.canStop && actmap->getField(N2.h)->getContainer() && actmap->getField(N2.h)->vehicle != veh) {
@@ -686,7 +686,7 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
                                  && veh->getMap()->getPlayer(veh).diplomacy.isAllied( fld->getContainer() ))
                                if ( !fld->building || (fld->bdt & getTerrainBitType(cbbuildingentry) ).any()) {
                                   pos.setNumericalHeight(-1);
-                                  Node N2 = Node(N.gval + 10, dist(pos, B), N.enterHeight, true, N.deleted, N.hasAttacked, ReverseDirection(HexDirection(dir)));
+                                  Node N2 = Node(N.gval + 10, dist(pos, B), N.enterHeight, N.canStop, N.hasAttacked, ReverseDirection(HexDirection(dir)));
                                   N2.h = pos;
                                   nodeVisited ( N2, open );
                                }
@@ -724,7 +724,7 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
                   DistanceType k = max(getMoveCost( N.h, hn, veh, canStop, hasAttacked ), 1);
 
                   int gval = (k >= longestPath || N.gval >= longestPath) ? longestPath : N.gval + k;
-                  Node N2 = Node(gval, dist(hn, B), -1, canStop, false, hasAttacked, ReverseDirection(HexDirection(dir)));
+                  Node N2 = Node(gval, dist(hn, B), -1, canStop, hasAttacked, ReverseDirection(HexDirection(dir)));
                   N2.h = hn;
 
                   if ( N2.canStop && actmap->getField(hn)->getContainer() && actmap->getField(hn)->vehicle != veh) {
@@ -790,7 +790,7 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
                                 bool canStop = true;
                                 bool hasAttacked = N.hasAttacked;
                                 int gval = N.gval + getMoveCost( N.h, newpos, veh, canStop, hasAttacked );
-                                Node N2 = Node(gval, dist(newpos, B), -1, canStop, false, hasAttacked, ReverseDirection(HexDirection(dir)));
+                                Node N2 = Node(gval, dist(newpos, B), -1, canStop, hasAttacked, ReverseDirection(HexDirection(dir)));
                                 N2.h = newpos;
 
                                 if ( actmap->getField(newpos)->getContainer() && actmap->getField(newpos)->vehicle != veh ) {

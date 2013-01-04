@@ -131,12 +131,11 @@ class AStar3D {
            int HHop;
            bool canStop;
            bool hasAttacked;
-           bool deleted;
            Node(DistanceType _gval=0, DistanceType _hval=0, int _enterHeight=-1,
-                bool _canStop=false, bool _deleted=false, bool _hasAttacked=false,
+                bool _canStop=false, bool _hasAttacked=false,
                 HexDirection _dir=DirNone, int _HHop=0) :
               gval(_gval), hval(_hval), canStop(_canStop), enterHeight(_enterHeight),
-              deleted(_deleted), hasAttacked(_hasAttacked), dir(_dir), HHop(_HHop) {}
+              hasAttacked(_hasAttacked), dir(_dir), HHop(_HHop) {}
            bool operator< ( const Node& b ) const;
        };
        struct hash_h {
