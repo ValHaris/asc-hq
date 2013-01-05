@@ -191,11 +191,12 @@ void AI::getAttacks ( AStar3D& vm, Vehicle* veh, TargetVector& tv, int hemmingBo
    int x2 = veh->xpos;
    int y2 = veh->ypos;
 
-   for ( AStar3D::Container::iterator ff = vm.visited.begin(); ff != vm.visited.end(); ++ff ) {
-      x1 = min ( x1, ff->h.x );
-      y1 = min ( y1, ff->h.y );
-      x2 = max ( x2, ff->h.x );
-      y2 = max ( y2, ff->h.y );
+   for ( AStar3D::visitedType::iterator ff = vm.visited.begin(); ff != vm.visited.end(); ++ff ) {
+      AStar3D::Node n = ff->second;
+      x1 = min ( x1, n.h.x );
+      y1 = min ( y1, n.h.y );
+      x2 = max ( x2, n.h.x );
+      y2 = max ( y2, n.h.y );
    }
 
    int maxrange = 0;
@@ -240,18 +241,20 @@ void AI::getAttacks ( AStar3D& vm, Vehicle* veh, TargetVector& tv, int hemmingBo
         apl = new RefuelConstraint( *this, veh );
 
       int fuelLacking = 0;
-      for ( AStar3D::Container::iterator ff = vm.visited.begin(); ff != vm.visited.end(); ++ff )
-         if ( !ff->hasAttacked ) {
-            MapField* fld = getMap()->getField (ff->h);
+      for ( AStar3D::visitedType::iterator ff = vm.visited.begin(); ff != vm.visited.end(); ++ff ) {
+         AStar3D::Node node = ff->second;
+         if ( !node.hasAttacked ) {
+            MapField* fld = getMap()->getField (node.h);
             if ( !fld->vehicle && !fld->building ) {
-                if ( !apl || apl->returnFromPositionPossible ( ff->h )) {
-                   searchTargets ( veh, ff->h, tv, beeline ( ff->h.x, ff->h.y, orgxpos, orgypos ), vm, hemmingBonus );
+                if ( !apl || apl->returnFromPositionPossible ( node.h )) {
+                   searchTargets ( veh, node.h, tv, beeline ( node.h.x, node.h.y, orgxpos, orgypos ), vm, hemmingBonus );
                    if ( tv.size() && justOne )
                       return;
                 } else
                    fuelLacking++;
              }
          }
+      }
 
       if ( apl ) {
          delete apl;

@@ -202,7 +202,8 @@ class AStar3D {
        };
 
        //! the reachable fields
-       Container visited;
+       typedef tr1::unordered_map<MapCoordinate3D, Node, hash_h> visitedType;
+       visitedType visited;
        // vector<Node> visited;
     protected:
 
@@ -242,7 +243,11 @@ class AStar3D {
        int getTravelTime( );
 
        //! checks weather the field fld was among the visited fields during the last search
-       const Node* fieldVisited ( const MapCoordinate3D& fld ) { return visited.find( fld ); };
+       const Node* fieldVisited ( const MapCoordinate3D& fld ) {
+          //return visited.find( fld );
+          visitedType::iterator i = visited.find(fld);
+          return (i == visited.end()) ? NULL : &(i->second);
+       };
 
        int& getFieldAccess ( int x, int y );
        int& getFieldAccess ( const MapCoordinate& mc );

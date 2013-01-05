@@ -534,7 +534,7 @@ void AStar3D :: nodeVisited ( const Node& N2, Container& open )
    if ( N2.gval <= MAXIMUM_PATH_LENGTH && N2.gval < longestPath ) {
       Container::iterator i = open.findIterator(N2.h);
       if ( i == open.end()) {
-         if ( !visited.find(N2.h))
+         if ( visited.find(N2.h) == visited.end())
             open.add ( N2 );
       } else {
          if (i->gval > N2.gval || (i->gval == N2.gval && i->hasAttacked && !N2.hasAttacked))
@@ -605,7 +605,7 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
     while( !open.empty() ) {
         N = open.getFirst();
        
-        visited.add( N );
+        visited[N.h] = N;
         // If we're at the goal, then exit
         for ( vector<MapCoordinate3D>::const_iterator i = B.begin(); i != B.end(); i++ )
            if( N.h == *i ) {
@@ -873,16 +873,17 @@ void AStar3D::findAllAccessibleFields ( vector<MapCoordinate3D>* path )
 
    Path dummy;
    findPath ( dummy, MapCoordinate3D(actmap->xsize, actmap->ysize, veh->height) );  //this field does not exist...
-   for ( Container::iterator i = visited.begin(); i != visited.end(); ++i ) {
-      int& fa = getFieldAccess( i->h );
-      fa |= i->h.getBitmappedHeight();
+   for ( visitedType::iterator i = visited.begin(); i != visited.end(); ++i ) {
+      AStar3D::Node node = i->second;
+      int& fa = getFieldAccess( node.h );
+      fa |= node.h.getBitmappedHeight();
       if ( markTemps ) {
-         char atemp = actmap->getField ( i->h )->getaTemp();
-         actmap->getField ( i->h )->setaTemp( atemp | i->h.getBitmappedHeight());
+         char atemp = actmap->getField ( node.h )->getaTemp();
+         actmap->getField ( node.h )->setaTemp( atemp | node.h.getBitmappedHeight());
       }
       
       if ( path )
-         path->push_back( i->h );
+         path->push_back( node.h );
    }
    
    if ( markTemps )

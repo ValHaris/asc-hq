@@ -149,26 +149,27 @@ void PathFinder :: getMovementFields ( set<MapCoordinate3D>& reachableFields, se
 
    // there are different entries for the same x/y coordinate but different height.
    // Since the UI is only in xy, we need to find the height which is the easiest to reach
-   typedef multimap<MapCoordinate,Container::iterator > Fields;
+   typedef multimap<MapCoordinate, Node* > Fields;
    Fields fields;
    int orgHeight=-1;
    int minMovement = maxint;
-   for ( Container::iterator i = visited.begin(); i != visited.end(); ++i ) {
-      if ( i->h.x != veh->getPosition().x || i->h.y != veh->getPosition().y || i->h.getNumericalHeight() != unitHeight ) {
-         int h = i->h.getNumericalHeight();
+   for ( AStar3D::visitedType::iterator i = visited.begin(); i != visited.end(); ++i ) {
+      AStar3D::Node node = i->second;
+      if ( node.h.x != veh->getPosition().x || node.h.y != veh->getPosition().y || node.h.getNumericalHeight() != unitHeight ) {
+         int h = node.h.getNumericalHeight();
          // if ( h == -1 )
-         //   h = i->enterHeight;
+         //   h = node.enterHeight;
          if ( h == -1 || height == -1 || h == height ) {
-            if ( i->canStop )
-               fields.insert(make_pair(MapCoordinate(i->h),  i));
+            if ( node.canStop )
+               fields.insert(make_pair(MapCoordinate(node.h),  &(i->second)));
             else
-               reachableFieldsIndirect.insert( i->h );
+               reachableFieldsIndirect.insert( node.h );
          }
       }
-      if ( i->h.getNumericalHeight() >= 0 )
-         if ( i->gval < minMovement ) {
-            orgHeight = i->h.getNumericalHeight();
-            minMovement = int (i->gval);
+      if ( node.h.getNumericalHeight() >= 0 )
+         if ( node.gval < minMovement ) {
+            orgHeight = node.h.getNumericalHeight();
+            minMovement = int (node.gval);
          }
    }
    for ( Fields::iterator i = fields.begin(); i != fields.end();  ) {

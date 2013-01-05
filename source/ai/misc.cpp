@@ -175,10 +175,11 @@ MapCoordinate3D AI::RefuelConstraint::getNearestRefuellingPosition ( bool buildi
    y2 = min(veh->ypos + fuel / veh->typ->fuelConsumption, ai.getMap()->ysize );
    */
 
-   for ( AStar3D::Container::iterator i = ast->visited.begin(); i != ast->visited.end(); i++ ) {
-      int dist = int(i->gval );
-      if ( i->h.getNumericalHeight() == -1 ) {
-          MapField* fld = ai.getMap()->getField( i->h.x, i->h.y );
+   for ( AStar3D::visitedType::iterator i = ast->visited.begin(); i != ast->visited.end(); i++ ) {
+      AStar3D::Node n = i->second;
+      int dist = int(n.gval );
+      if ( n.h.getNumericalHeight() == -1 ) {
+          MapField* fld = ai.getMap()->getField( n.h.x, n.h.y );
           if ( fld->building && fld->building->color == veh->color )
              reachableBuildings[ dist ] = fld->building;
       }
@@ -188,11 +189,11 @@ MapCoordinate3D AI::RefuelConstraint::getNearestRefuellingPosition ( bool buildi
 
 
        // let's check for landing
-       if ((veh->height > chfahrend) && (i->h.getNumericalHeight() == chfahrend) ) {
+       if ((veh->height > chfahrend) && (n.h.getNumericalHeight() == chfahrend) ) {
           // we don't want to land in hostile territory
-          FieldInformation& fi = ai.getFieldInformation ( i->h.x, i->h.y );
+          FieldInformation& fi = ai.getFieldInformation ( n.h.x, n.h.y );
           if ( fi.control == -1 || !ai.getMap()->player[fi.control].diplomacy.isHostile( ai.getPlayerNum() ) )
-              landingPositions[dist] = i->h;
+              landingPositions[dist] = n.h;
        }
    }
 
