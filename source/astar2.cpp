@@ -626,6 +626,8 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
 
           if ( !operationLimiter || operationLimiter->allowLeavingContainer() ) {
              for ( int dir = 0; dir < 6; dir++ ) {
+                if (dir == N.dir) // don't need to check the last visited Node
+                   continue;
                 MapCoordinate3D pos = getNeighbouringFieldCoordinate ( N.h, dir );
                 if ( actmap->getField(pos)) {
                    int h = actmap->getField(N.h)->getContainer()->vehicleUnloadable(veh->typ);
@@ -676,6 +678,8 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
           if ( !operationLimiter || operationLimiter->allowDocking() ) {
              int dock = actmap->getField(N.h)->getContainer()->vehicleDocking(veh, true );
              for ( int dir = 0; dir < 6; dir++ ) {
+                if (dir == N.dir) // don't need to check the last visited Node
+                   continue;
                 if ( dock ) {
                    for ( int dir = 0; dir < 6; dir++ ) {
                       MapCoordinate3D pos = getNeighbouringFieldCoordinate ( N.h, dir );
@@ -711,6 +715,8 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
               for( int dci = 0; dci < 6; dci++ ) {
 
                   HexDirection dir = HexDirection(directions[dci]);
+                  if (dir == N.dir) // don't need to check the last visited Node
+                     continue;
                   MapCoordinate3D hn = getNeighbouringFieldCoordinate ( N.h, dir );
 
                   // If it's off the end of the map, then don't keep scanning
