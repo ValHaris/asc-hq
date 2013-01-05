@@ -13,10 +13,62 @@
 
 #include "astar2.h"
 
+int windbeeline ( const MapCoordinate& start, const MapCoordinate& dest, WindMovement* wm ) {
+   int dist = 0;
+   int direcs [6] = {0};
+   int dx = dest.x - start.x;
+   int dy = dest.y - start.y;
+   int dyOdd = ((start.y & 1) - (dest.y & 1));
+
+   if (dx == 0) {
+      if (dy > 0) {
+         direcs[3] = ((dy - (dyOdd != 0)) / 2);
+         if (dyOdd == -1) {
+            direcs[2] = 1;
+         } else if (dyOdd == 1) {
+            direcs[4] = 1;
+         }
+      } if (dy < 0) {
+         direcs[0] = -((dy + (dyOdd != 0)) / 2);
+         if (dyOdd == -1) {
+            direcs[1] = 1;
+         } else if (dyOdd == 1) {
+            direcs[5] = 1;
+         }
+      } // if dy == 0 then all values stay 0
+   } else if (dx > 0) {
+      if (dy >= (dx * 2)) {
+         direcs[3] = ((dy + dyOdd) / 2) - dx;
+         direcs[2] = -dyOdd + dx * 2;
+      } else if (-dy >= (dx * 2)) {
+         direcs[0] = -((dy - dyOdd) / 2) - dx;
+         direcs[1] = -dyOdd + dx * 2;
+      } else {
+         direcs[2] = ((dy - dyOdd) / 2) + dx;
+         direcs[1] = ((-dy - dyOdd) / 2) + dx;
+      }
+   } else if (dx < 0) {
+      if (dy >= -(dx * 2)) {
+         direcs[3] = ((dy - dyOdd) / 2) + dx;
+         direcs[4] = dyOdd - dx * 2;
+      } else if (-dy >= -(dx * 2)) {
+         direcs[0] = -((dy + dyOdd) / 2) + dx;
+         direcs[5] = dyOdd - dx * 2;
+      } else {
+         direcs[4] = ((dy + dyOdd) / 2) - dx;
+         direcs[5] = ((-dy + dyOdd) / 2) - dx;
+      }
+   }
+   for (int i = 0; i < 6; i++) {
+      dist += direcs[i] * (minmalq - wm->getDist(i));
+   }
+   return dist;
+}
+
+
 // The mark array marks directions on the map.  The direction points
 // to the spot that is the previous spot along the path.  By starting
 // at the end, we can trace our way back to the start, and have a path.
-
 
 // mark -> temp3
 
