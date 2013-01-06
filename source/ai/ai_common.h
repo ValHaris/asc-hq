@@ -79,9 +79,9 @@ extern const int currentServiceOrderVersion;
   class StratAStar3D : public AStar3D {
        AI* ai;
     protected:
-       virtual DistanceType getMoveCost ( const MapCoordinate3D& start, const MapCoordinate3D& dest, const Vehicle* vehicle, bool& canStop, bool& hasAttacked )
+       virtual DistanceType getMoveCost ( const MapCoordinate3D& start, const MapCoordinate3D& dest, const Vehicle* vehicle, bool& hasAttacked )
        {
-          DistanceType cost = AStar3D::getMoveCost ( start, dest, vehicle, canStop, hasAttacked );
+          DistanceType cost = AStar3D::getMoveCost ( start, dest, vehicle, hasAttacked );
           if ( ai->getMap()->getField ( dest )->vehicle && beeline ( vehicle->xpos, vehicle->ypos, dest.x, dest.y) < vehicle->getMovement())
              cost += 2;
           return cost;
@@ -94,9 +94,9 @@ extern const int currentServiceOrderVersion;
  class AntiMineAStar3D : public AStar3D {
     AI* ai;
     protected:
-       virtual DistanceType getMoveCost ( const MapCoordinate3D& start, const MapCoordinate3D& dest, const Vehicle* vehicle, bool& canStop, bool& hasAttacked )
+       virtual DistanceType getMoveCost ( const MapCoordinate3D& start, const MapCoordinate3D& dest, const Vehicle* vehicle, bool& hasAttacked )
        {
-          DistanceType cost = AStar3D::getMoveCost ( start, dest, vehicle, canStop, hasAttacked );
+          DistanceType cost = AStar3D::getMoveCost ( start, dest, vehicle, hasAttacked );
           MapField* f = ai->getMap()->getField ( dest );
           if ( f->mineattacks(vehicle) )
              cost += 1;
@@ -138,9 +138,9 @@ extern const int currentServiceOrderVersion;
  class HiddenAStar3D : public AStar3D {
        AI* ai;
     protected:
-       virtual DistanceType getMoveCost ( const MapCoordinate3D& start, const MapCoordinate3D& dest, const Vehicle* vehicle, bool& canStop, bool& hasAttacked )
+       virtual DistanceType getMoveCost ( const MapCoordinate3D& start, const MapCoordinate3D& dest, const Vehicle* vehicle, bool& hasAttacked )
        {
-          DistanceType cost = AStar3D::getMoveCost ( start, dest, vehicle, canStop, hasAttacked );
+          DistanceType cost = AStar3D::getMoveCost ( start, dest, vehicle, hasAttacked );
           int visibility = ai->getMap()->getField ( dest )->visible;
           int visnum = 0;
           int enemynum = 0;

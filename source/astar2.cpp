@@ -540,19 +540,11 @@ AStar3D::DistanceType AStar3D::dist ( const MapCoordinate3D& a, const vector<Map
 }
 
 
-AStar3D::DistanceType AStar3D::getMoveCost ( const MapCoordinate3D& start, const MapCoordinate3D& dest, const Vehicle* vehicle, bool& canStop, bool& hasAttacked )
+AStar3D::DistanceType AStar3D::getMoveCost ( const MapCoordinate3D& start, const MapCoordinate3D& dest, const Vehicle* vehicle, bool& hasAttacked )
 {
     // since we are operating at different levels of height and the unit has different
     // speeds at different levels of height, we must not optimize for distance, but for
     // travel time.
-
-    int fa = fieldAccessible ( actmap->getField ( dest ), vehicle, dest.getBitmappedHeight(), &hasAttacked );
-
-    canStop = fa >= 2;
-
-    if ( !fa )
-       return longestPath;
-
     int movecost = calcMoveMalus ( start, dest, vehicle, wind, &hasAttacked ).first;
 
     if ( start.getNumericalHeight() >= 0 )
@@ -689,19 +681,16 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
                          if ( tio ) {
                             pos.setNumericalHeight(i);
                             bool hasAttacked = N.hasAttacked || tio->disableAttack;
-                            bool canStop = false;
+                            int fa = fieldAccessible ( actmap->getField ( pos ), veh, pos.getBitmappedHeight(), &hasAttacked );
+                            if ( !fa )
+                               continue;
+                            bool canStop = fa >= 2;
 
-                            DistanceType k = getMoveCost( N.h, pos, veh, canStop, hasAttacked );
-                            if ( (k > veh->typ->movement[i]) && (k < longestPath) )
-                               k = longestPath;
-                                  /*
-                               if ( k < MAXIMUM_PATH_LENGTH )
-                                  k = MAXIMUM_PATH_LENGTH;
-                                  */
+                            DistanceType k = getMoveCost( N.h, pos, veh, hasAttacked );
+                            if (k >= longestPath)
+                               continue;
 
-                            int gval = (k >= longestPath || N.gval >= longestPath) ? longestPath : N.gval + k;
-
-                            Node N2 = Node(gval, dist(pos, B), -1, canStop, hasAttacked, ReverseDirection(HexDirection(dir)));
+                            Node N2 = Node(N.gval + k, dist(pos, B), -1, canStop, hasAttacked, ReverseDirection(HexDirection(dir)));
                             N2.h = pos;
 
                             if ( N2.canStop && actmap->getField(N2.h)->getContainer() && actmap->getField(N2.h)->vehicle != veh) {
@@ -771,17 +760,24 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
                      continue;
                   MapCoordinate3D hn = getNeighbouringFieldCoordinate ( N.h, dir );
 
+                  if (visited.find(hn) != visited.end())
+                     continue;
                   // If it's off the end of the map, then don't keep scanning
-                  if( hn.x < 0 || hn.y < 0 || hn.x >= actmap->xsize || hn.y >= actmap->ysize || !fieldAccessible ( actmap->getField ( hn ), veh, hn.getBitmappedHeight() ))
+                  if( hn.x < 0 || hn.y < 0 || hn.x >= actmap->xsize || hn.y >= actmap->ysize )
                       continue;
 
                   // cursor.gotoxy ( hn.m, hn.n );
 
                   bool hasAttacked = N.hasAttacked;
-                  bool canStop;
-                  DistanceType k = max(getMoveCost( N.h, hn, veh, canStop, hasAttacked ), 1);
+                  int fa = fieldAccessible ( actmap->getField ( hn ), veh, hn.getBitmappedHeight(), &hasAttacked );
+                  if ( !fa )
+                     continue;
+                  bool canStop = fa >= 2;
+                  DistanceType k = max(getMoveCost( N.h, hn, veh, hasAttacked ), 1);
+                  if (k >= longestPath)
+                     continue;
 
-                  int gval = (k >= longestPath || N.gval >= longestPath) ? longestPath : N.gval + k;
+                  int gval = N.gval + k;
                   Node N2 = Node(gval, dist(hn, B), -1, canStop, hasAttacked, ReverseDirection(HexDirection(dir)));
                   N2.h = hn;
 
@@ -843,11 +839,13 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
                           MapField* fld = actmap->getField( newpos );
                           if ( fld && access ) {
                              newpos.setNumericalHeight(newpos.getNumericalHeight() + hcm->heightDelta);
-                             if ( fieldAccessible( fld, veh, newpos.getBitmappedHeight() ) == 2 ) {
-
+                             bool hasAttacked = N.hasAttacked;
+                             int fa = fieldAccessible ( fld, veh, newpos.getBitmappedHeight(), &hasAttacked );
+                             if ( fa == 2 ) {
+                                if (visited.find(newpos) != visited.end())
+                                   continue;
                                 bool canStop = true;
-                                bool hasAttacked = N.hasAttacked;
-                                int gval = N.gval + getMoveCost( N.h, newpos, veh, canStop, hasAttacked );
+                                int gval = N.gval + getMoveCost( N.h, newpos, veh, hasAttacked );
                                 Node N2 = Node(gval, dist(newpos, B), -1, canStop, hasAttacked, ReverseDirection(HexDirection(dir)));
                                 N2.h = newpos;
 
@@ -868,12 +866,12 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
         }
     }
 
-    if( found && N.gval <= MAXIMUM_PATH_LENGTH && N.gval <= longestPath ) {
+    if( found ) {
         // We have found a path, so let's copy it into `path'
 
         MapCoordinate3D h = endpos;
 
-        path.insert ( path.begin(), PathPoint ( h, int(ceil(N.gval)), N.enterHeight, N.hasAttacked ) );
+        path.insert ( path.begin(), PathPoint ( h, N.gval, N.enterHeight, N.hasAttacked ) );
         const Node* n = fieldVisited ( h );
         while( !(h == A) )
         {
@@ -896,7 +894,7 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
             }
 
             n = fieldVisited ( h );
-            path.insert ( path.begin(), PathPoint(h, int(n->gval), n->enterHeight, n->hasAttacked) );
+            path.insert ( path.begin(), PathPoint(h, n->gval, n->enterHeight, n->hasAttacked) );
         }
     }
     else

@@ -144,12 +144,10 @@ pair<int,int> calcMoveMalus( const MapCoordinate3D& start,
 
    static const  int         movemalus[6]  = { 0, 3, 5, 0, 5, 3 };
    
-   if ( checkHemming )
+   if ( checkHemming && dest.getNumericalHeight() >= 0 )
       for (int c = 0; c < sidenum; c++) {
-         int x = dest.x;
-         int y = dest.y;
-         x += getnextdx ( c, y );
-         y += getnextdy ( c );
+         int x = dest.x + getnextdx ( c, dest.y );
+         int y = dest.y + getnextdy ( c );
          MapField* fld = vehicle->getMap()->getField ( x, y );
          if ( fld ) {
            int d = (c - direc);
@@ -160,8 +158,7 @@ pair<int,int> calcMoveMalus( const MapCoordinate3D& start,
            if (d < 0)
               d += sidenum;
 
-           MapField* fld = vehicle->getMap()->getField(x,y);
-           if ( fld->vehicle && dest.getNumericalHeight() >= 0 ) {
+           if ( fld->vehicle ) {
               if ( vehicle->getMap()->getPlayer(vehicle).diplomacy.isHostile( fld->vehicle->getOwner() ) )
                  if ( attackpossible28(fld->vehicle,vehicle, NULL, dest.getBitmappedHeight() ))
                     movecost += movemalus[d];
