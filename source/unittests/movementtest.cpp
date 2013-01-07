@@ -262,16 +262,118 @@ void testPathFinding()
    Vehicle* buggy = game->getField(12,19)->vehicle;
    assertOrThrow( buggy );
 
-   auto_ptr<MoveUnitCommand> muc ( new MoveUnitCommand( buggy ));
-   muc->searchFields();
-   assertOrThrow(  muc->getReachableFields().size() == 149 );
+   {
+	   auto_ptr<MoveUnitCommand> muc ( new MoveUnitCommand( buggy ));
+	   muc->searchFields();
+	   //cout <<  muc->getReachableFields().size() << "\n";
+	   assertOrThrow(  muc->getReachableFields().size() == 157 );
 
-   for ( set<MapCoordinate3D>::iterator i = muc->getReachableFields().begin(); i != muc->getReachableFields().end(); ++i ) {
-	   muc->setDestination( *i );
-	   muc->calcPath();
-	   assertOrThrow( !muc->getPath().empty() );
+	   for ( set<MapCoordinate3D>::iterator i = muc->getReachableFields().begin(); i != muc->getReachableFields().end(); ++i ) {
+		   muc->setDestination( *i );
+		   muc->calcPath();
+		   assertOrThrow( !muc->getPath().empty() );
+	   }
    }
 
+
+
+   {
+	   Vehicle* sub = game->getField(0,15)->vehicle;
+	   assertOrThrow( sub );
+
+	   AStar3D ast( game.get(), sub, false, sub->getMovement());
+	   vector<MapCoordinate3D> fields;
+	   ast.findAllAccessibleFields( &fields );
+
+	   // make entries unique - there shouldn't be any duplicates, but at the time of writing this test
+	   // findAllAccessibleFields does return some duplicates
+	   set<MapCoordinate3D> s( fields.begin(), fields.end() );
+
+	   /*
+	   cout << "s.size: " << s.size() << "\n";
+	   for ( vector<MapCoordinate3D>::iterator i = fields.begin(); i!= fields.end(); ++i ) {
+		   cout << "assertOrThrow ( s.find( MapCoordinate3D(" << i->x << "," << i->y << "," << i->getBitmappedHeight() << ")) != s.end() );\n";
+	   }
+	   */
+
+
+	   assertOrThrow( s.size() == 16 );
+	   // activate this test once the duplicate-bug is fixed
+	   // assertOrThrow( s.size() == fields.size() );
+
+	   assertOrThrow ( s.find( MapCoordinate3D(0,15,4)) != s.end() );
+	   assertOrThrow ( s.find( MapCoordinate3D(1,16,4)) != s.end() );
+	   assertOrThrow ( s.find( MapCoordinate3D(0,14,4)) != s.end() );
+	   assertOrThrow ( s.find( MapCoordinate3D(1,16,2)) != s.end() );
+	   assertOrThrow ( s.find( MapCoordinate3D(1,17,2)) != s.end() );
+	   assertOrThrow ( s.find( MapCoordinate3D(2,18,2)) != s.end() );
+	   assertOrThrow ( s.find( MapCoordinate3D(2,18,4)) != s.end() );
+	   assertOrThrow ( s.find( MapCoordinate3D(2,19,4)) != s.end() );
+	   assertOrThrow ( s.find( MapCoordinate3D(2,19,2)) != s.end() );
+	   assertOrThrow ( s.find( MapCoordinate3D(3,20,2)) != s.end() );
+	   assertOrThrow ( s.find( MapCoordinate3D(3,18,2)) != s.end() );
+	   assertOrThrow ( s.find( MapCoordinate3D(2,21,2)) != s.end() );
+	   assertOrThrow ( s.find( MapCoordinate3D(1,16,1)) != s.end() );
+	   assertOrThrow ( s.find( MapCoordinate3D(2,18,1)) != s.end() );
+	   assertOrThrow ( s.find( MapCoordinate3D(1,17,1)) != s.end() );
+	   assertOrThrow ( s.find( MapCoordinate3D(2,19,1)) != s.end() );
+
+	   // test the test :-)
+	   assertOrThrow ( s.find( MapCoordinate3D(99,16,1)) == s.end() );
+
+	   AStar3D::Path path;
+	   AStar3D ast2( game.get(), sub, false, sub->getMovement());
+	   ast2.findPath(path, MapCoordinate3D(2,19,4));
+
+	   /*
+	   cout << path.size() << "\n";
+	   int cnt = 0;
+	   for ( AStar3D::Path::iterator i = path.begin(); i != path.end(); ++i) {
+		   cout << "assertOrThrow( path["<< cnt++ <<"] == MapCoordinate3D(" << i->x << "," << i->y << "," << i->getBitmappedHeight() << "));\n";
+	   }
+	   */
+
+
+	   assertOrThrow( path.size() == 7 );
+	   assertOrThrow( path[0] == MapCoordinate3D(0,15,4));
+	   assertOrThrow( path[1] == MapCoordinate3D(1,16,4));
+	   assertOrThrow( path[2] == MapCoordinate3D(1,16,2));
+	   assertOrThrow( path[3] == MapCoordinate3D(1,17,2));
+	   assertOrThrow( path[4] == MapCoordinate3D(2,18,2));
+	   assertOrThrow( path[5] == MapCoordinate3D(2,19,2));
+	   assertOrThrow( path[6] == MapCoordinate3D(2,19,4));
+
+
+	   move( sub, MapCoordinate3D(2,19,4));
+
+	   assertOrThrow( sub->getMovement() == 18 );
+
+   }
+
+   {
+
+	   Vehicle* air = game->getField(19,2)->vehicle ;
+	   assertOrThrow( air );
+
+	   AStar3D ast( game.get(), air, false, air->getMovement()*2);
+	   AStar3D::Path path;
+	   ast.findPath(path, MapCoordinate3D(19,12,8));
+
+	   assertOrThrow( path.size() == 6 );
+
+	   assertOrThrow( path[0] == MapCoordinate3D( 19, 2,    8) );
+	   assertOrThrow( path[1] == MapCoordinate3D( 18, 4, 0x10) );
+	   assertOrThrow( path[2] == MapCoordinate3D( 18, 5, 0x10) );
+	   assertOrThrow( path[3] == MapCoordinate3D( 19, 6, 0x10) );
+	   assertOrThrow( path[4] == MapCoordinate3D( 19, 8, 0x10) );
+	   assertOrThrow( path[5] == MapCoordinate3D( 19,12,    8) );
+
+
+	   vector<MapCoordinate3D> fields;
+	   ast.findAllAccessibleFields(&fields);
+
+	   assertOrThrow( fields.size() == 31 );
+   }
 
 }
 
