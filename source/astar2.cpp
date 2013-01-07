@@ -13,56 +13,65 @@
 
 #include "astar2.h"
 
-int windbeeline ( const MapCoordinate& start, const MapCoordinate& dest, WindMovement* wm ) {
-   int dist = 0;
-   int direcs [6] = {0};
+#include <iostream>
+
+union Dirs {
+   Uint64 all;
+   Uint8 dir[8];
+};
+
+inline int windbeeline ( const MapCoordinate& start, const MapCoordinate& dest, WindMovement* wm ) {
+   int distance = 0;
    int dx = dest.x - start.x;
    int dy = dest.y - start.y;
    int dyOdd = ((start.y & 1) - (dest.y & 1));
 
+   Dirs d;
+
    if (dx == 0) {
       if (dy > 0) {
-         direcs[3] = ((dy - (dyOdd != 0)) / 2);
+         d.dir[3] = ((dy - (dyOdd != 0)) / 2);
          if (dyOdd == -1) {
-            direcs[2] = 1;
+            d.dir[2] = 1;
          } else if (dyOdd == 1) {
-            direcs[4] = 1;
+            d.dir[4] = 1;
          }
       } if (dy < 0) {
-         direcs[0] = -((dy + (dyOdd != 0)) / 2);
+         d.dir[0] = -((dy + (dyOdd != 0)) / 2);
          if (dyOdd == -1) {
-            direcs[1] = 1;
+            d.dir[1] = 1;
          } else if (dyOdd == 1) {
-            direcs[5] = 1;
+            d.dir[5] = 1;
          }
       } // if dy == 0 then all values stay 0
    } else if (dx > 0) {
       if (dy >= (dx * 2)) {
-         direcs[3] = ((dy + dyOdd) / 2) - dx;
-         direcs[2] = -dyOdd + dx * 2;
+         d.dir[3] = ((dy + dyOdd) / 2) - dx;
+         d.dir[2] = -dyOdd + dx * 2;
       } else if (-dy >= (dx * 2)) {
-         direcs[0] = -((dy - dyOdd) / 2) - dx;
-         direcs[1] = -dyOdd + dx * 2;
+         d.dir[0] = -((dy - dyOdd) / 2) - dx;
+         d.dir[1] = -dyOdd + dx * 2;
       } else {
-         direcs[2] = ((dy - dyOdd) / 2) + dx;
-         direcs[1] = ((-dy - dyOdd) / 2) + dx;
+         d.dir[2] = ((dy - dyOdd) / 2) + dx;
+         d.dir[1] = ((-dy - dyOdd) / 2) + dx;
       }
    } else if (dx < 0) {
       if (dy >= -(dx * 2)) {
-         direcs[3] = ((dy - dyOdd) / 2) + dx;
-         direcs[4] = dyOdd - dx * 2;
+         d.dir[3] = ((dy - dyOdd) / 2) + dx;
+         d.dir[4] = dyOdd - dx * 2;
       } else if (-dy >= -(dx * 2)) {
-         direcs[0] = -((dy + dyOdd) / 2) + dx;
-         direcs[5] = dyOdd - dx * 2;
+         d.dir[0] = -((dy + dyOdd) / 2) + dx;
+         d.dir[5] = dyOdd - dx * 2;
       } else {
-         direcs[4] = ((dy + dyOdd) / 2) - dx;
-         direcs[5] = ((-dy + dyOdd) / 2) - dx;
+         d.dir[4] = ((dy + dyOdd) / 2) - dx;
+         d.dir[5] = ((-dy + dyOdd) / 2) - dx;
       }
    }
+
    for (int i = 0; i < 6; i++) {
-      dist += direcs[i] * (minmalq - wm->getDist(i));
+      distance += d.dir[i] * (minmalq - wm->getDist(i));
    }
-   return dist;
+   return distance;
 }
 
 
@@ -528,15 +537,13 @@ AStar3D::DistanceType AStar3D::dist( const MapCoordinate3D& a, const MapCoordina
 
 AStar3D::DistanceType AStar3D::dist ( const MapCoordinate3D& a, const vector<MapCoordinate3D>& b )
 {
-   DistanceType d = longestPath;
+   DistanceType e;
    for ( vector<MapCoordinate3D>::const_iterator i = b.begin(); i != b.end(); i++ ) {
-      DistanceType e = dist(a,*i);
+      e = dist(a,*i);
       if ( maxVehicleSpeedFactor )
          e /= maxVehicleSpeedFactor;
-      if ( d > e )
-         d = e;
    }
-   return d;
+   return min(e, longestPath);
 }
 
 
@@ -618,7 +625,32 @@ const int* getDirectionOrder ( int x, int y, int x2, int y2 )
     return (const int*)(&directions[b][a]);
 }
 
-//const AStar3D::DistanceType AStar3D::longestPath = 1e9;
+bool AStar3D::naivePathFinder(const MapCoordinate3D& a, const MapCoordinate3D& b) {
+   MapCoordinate3D current = a;
+   MapCoordinate3D next;
+   int dir;
+   while (current != b) {
+      dir = getdirection(current, b);
+      next = getNeighbouringFieldCoordinate (current, dir);
+      if (fieldAccessible(actmap->getField(next), veh)) {
+         current = next;
+      } else {
+         if (b.y > (current.y + 1))
+            dir = 3;
+         else if ( b.y < (current.y - 1))
+            dir = 0;
+         else
+            return false;
+         next = getNeighbouringFieldCoordinate (current, dir);
+         if (fieldAccessible(actmap->getField(next), veh)) {
+            current = next;
+         } else {
+            return false;
+         }
+      }
+   }
+   return true;
+}
 
 void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>& B, Path& path )
 {
@@ -637,6 +669,10 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
     if ( !(actmap->getField(A)->unitHere(veh)) ) {
        N.h.setNumericalHeight(-1);
     }
+    bool optimistic;
+    if ((B.size() == 1) && B[0].valid() && (A.getNumericalHeight() == B[0].getNumericalHeight())) {
+      optimistic = naivePathFinder(A, B[0]);
+    }
     open.add(N);
 
     // Remember which nodes we visited, so that we can clear the mark array
@@ -648,7 +684,7 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
     // While there are still nodes to visit, visit them!
     while( !open.empty() ) {
         N = open.getFirst();
-       
+      
         visited[N.h] = N;
         // If we're at the goal, then exit
         for ( vector<MapCoordinate3D>::const_iterator i = B.begin(); i != B.end(); i++ )
@@ -664,14 +700,11 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
         if ( found )
            break;
 
-
         if ( N.h.getNumericalHeight() == -1 ) {
            // the unit is inside a container
 
           if ( !operationLimiter || operationLimiter->allowLeavingContainer() ) {
              for ( int dir = 0; dir < 6; dir++ ) {
-                if (dir == N.dir) // don't need to check the last visited Node
-                   continue;
                 MapCoordinate3D pos = getNeighbouringFieldCoordinate ( N.h, dir );
                 if ( actmap->getField(pos)) {
                    int h = actmap->getField(N.h)->getContainer()->vehicleUnloadable(veh->typ);
@@ -719,10 +752,7 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
           if ( !operationLimiter || operationLimiter->allowDocking() ) {
              int dock = actmap->getField(N.h)->getContainer()->vehicleDocking(veh, true );
              for ( int dir = 0; dir < 6; dir++ ) {
-                if (dir == N.dir) // don't need to check the last visited Node
-                   continue;
                 if ( dock ) {
-                   for ( int dir = 0; dir < 6; dir++ ) {
                       MapCoordinate3D pos = getNeighbouringFieldCoordinate ( N.h, dir );
                       MapField* fld = actmap->getField( pos );
                       if ( fld && fld->getContainer() && ( fld->getContainer() != actmap->getField(N.h)->getContainer() ))
@@ -736,7 +766,6 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
                                   nodeVisited ( N2, open );
                                }
                    }
-                }
             }
           }
 
@@ -758,13 +787,18 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
                   HexDirection dir = HexDirection(directions[dci]);
                   if (dir == N.dir) // don't need to check the last visited Node
                      continue;
+
+                  if (optimistic && (N.dir != DirNone) && ((dir == (N.dir + 1) % 6) || (dir == (N.dir - 1) % 6)))
+                     continue;
+
                   MapCoordinate3D hn = getNeighbouringFieldCoordinate ( N.h, dir );
 
-                  if (visited.find(hn) != visited.end())
-                     continue;
                   // If it's off the end of the map, then don't keep scanning
                   if( hn.x < 0 || hn.y < 0 || hn.x >= actmap->xsize || hn.y >= actmap->ysize )
                       continue;
+
+                  if (visited.find(hn) != visited.end())
+                     continue;
 
                   // cursor.gotoxy ( hn.m, hn.n );
 

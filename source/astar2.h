@@ -89,9 +89,9 @@
 extern void findPath( GameMap* actmap, AStar::Path& path, Vehicle* veh, int x, int y );
 
 
-
 //! A 3D path finding algorithm, based on the 2D algorithm by Amit J. Patel
 class AStar3D {
+       bool naivePathFinder(const MapCoordinate3D& a, const MapCoordinate3D& b);
     public:
        typedef int DistanceType;
        static const DistanceType longestPath = 1e9;
