@@ -45,7 +45,8 @@ char strstring[1000];
 int getFirstBit(int zahl)
 {
    #ifdef __GNUC__ // GCC-intrinsic (TODO: Visual C++ intrinsics, can't test is right now).
-   return __builtin_ffs(zahl) - 1;
+   //return __builtin_ffs(zahl) - 1;
+   return (zahl != 0 ) ? __builtin_ctz(zahl) : 0;
    #else
    if (zahl != 0) {
       int log = 0;

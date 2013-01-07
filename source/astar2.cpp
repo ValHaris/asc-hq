@@ -753,18 +753,18 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
              int dock = actmap->getField(N.h)->getContainer()->vehicleDocking(veh, true );
              for ( int dir = 0; dir < 6; dir++ ) {
                 if ( dock ) {
-                      MapCoordinate3D pos = getNeighbouringFieldCoordinate ( N.h, dir );
-                      MapField* fld = actmap->getField( pos );
-                      if ( fld && fld->getContainer() && ( fld->getContainer() != actmap->getField(N.h)->getContainer() ))
-                         if ( fld->getContainer()->vehicleDocking(veh, false ) & dock )
-                            if ( fld->getContainer()->getOwner() == actmap->getField(N.h)->getContainer()->getOwner() 
-                                 && veh->getMap()->getPlayer(veh).diplomacy.isAllied( fld->getContainer() ))
-                               if ( !fld->building || (fld->bdt & getTerrainBitType(cbbuildingentry) ).any()) {
-                                  pos.setNumericalHeight(-1);
-                                  Node N2 = Node(N.gval + 10, dist(pos, B), N.enterHeight, N.canStop, N.hasAttacked, ReverseDirection(HexDirection(dir)));
-                                  N2.h = pos;
-                                  nodeVisited ( N2, open );
-                               }
+                   MapCoordinate3D pos = getNeighbouringFieldCoordinate ( N.h, dir );
+                   MapField* fld = actmap->getField( pos );
+                   if ( fld && fld->getContainer() && ( fld->getContainer() != actmap->getField(N.h)->getContainer() ))
+                      if ( fld->getContainer()->vehicleDocking(veh, false ) & dock )
+                         if ( fld->getContainer()->getOwner() == actmap->getField(N.h)->getContainer()->getOwner() 
+                              && veh->getMap()->getPlayer(veh).diplomacy.isAllied( fld->getContainer() ))
+                            if ( !fld->building || (fld->bdt & getTerrainBitType(cbbuildingentry) ).any()) {
+                               pos.setNumericalHeight(-1);
+                               Node N2 = Node(N.gval + 10, dist(pos, B), N.enterHeight, N.canStop, N.hasAttacked, ReverseDirection(HexDirection(dir)));
+                               N2.h = pos;
+                               nodeVisited ( N2, open );
+                            }
                    }
             }
           }
