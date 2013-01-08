@@ -1,6 +1,6 @@
 scripts/rebuild -q
 make -j 8 -s
-if [ $1 = "--valgrind" ] ; then
+if [ "$1" = "--valgrind" ] ; then
    make -s thoroughcheck
 else
    make -s check
