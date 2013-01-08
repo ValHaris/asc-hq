@@ -796,7 +796,7 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
                   if ( !fa )
                      continue;
                   bool canStop = fa >= 2;
-                  DistanceType k = max(getMoveCost( N.h, hn, veh, hasAttacked ), 1);
+                  DistanceType k = max(getMoveCost( N.h, hn, veh, hasAttacked ), (float)1);
                   if (k >= longestPath)
                      continue;
 

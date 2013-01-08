@@ -297,9 +297,9 @@ void testPathFinding()
 	   */
 
 
-	   assertOrThrow( s.size() == 16 );
+	   //assertOrThrow( s.size() == 16 );
 	   // activate this test once the duplicate-bug is fixed
-	   // assertOrThrow( s.size() == fields.size() );
+	   assertOrThrow( s.size() == fields.size() );
 
 	   assertOrThrow ( s.find( MapCoordinate3D(0,15,4)) != s.end() );
 	   assertOrThrow ( s.find( MapCoordinate3D(1,16,4)) != s.end() );
