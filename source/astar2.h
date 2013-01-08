@@ -93,7 +93,7 @@ extern void findPath( GameMap* actmap, AStar::Path& path, Vehicle* veh, int x, i
 class AStar3D {
        bool naivePathFinder(const MapCoordinate3D& a, const MapCoordinate3D& b);
     public:
-       typedef int DistanceType;
+       typedef float DistanceType;
        static const DistanceType longestPath = 1e9;
        //static const __m128i longestPathVector = _mm_set_epi32(1e9, 1e9, 1e9, 1e9);
        class OperationLimiter {
