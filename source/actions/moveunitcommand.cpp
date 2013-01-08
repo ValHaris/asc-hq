@@ -153,15 +153,15 @@ void PathFinder :: getMovementFields ( set<MapCoordinate3D>& reachableFields, se
    Fields fields;
    int orgHeight=-1;
    int minMovement = maxint;
-   for ( AStar3D::visitedType::iterator i = visited.begin(); i != visited.end(); ++i ) {
-      AStar3D::Node node = i->second;
+   for ( AStar3D::VisitedContainer::iterator i = visited.begin(); i != visited.end(); ++i ) {
+      AStar3D::Node node = *i;
       if ( node.h.x != veh->getPosition().x || node.h.y != veh->getPosition().y || node.h.getNumericalHeight() != unitHeight ) {
          int h = node.h.getNumericalHeight();
          // if ( h == -1 )
          //   h = node.enterHeight;
          if ( h == -1 || height == -1 || h == height ) {
             if ( node.canStop )
-               fields.insert(make_pair(MapCoordinate(node.h),  &(i->second)));
+               fields.insert(make_pair(MapCoordinate(node.h),  &(*i)));
             else
                reachableFieldsIndirect.insert( node.h );
          }

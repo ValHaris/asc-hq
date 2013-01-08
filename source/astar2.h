@@ -121,27 +121,27 @@ class AStar3D {
              static PathPoint newFromStream( tnstream& stream );
        };
 
-       typedef vector<PathPoint> Path;
-       struct Node {
-           MapCoordinate3D h;        // location on the map, in hex coordinates
-           AStar3D::DistanceType gval;        // g in A* represents how far we've already gone
-           AStar3D::DistanceType hval;        // h in A* represents an estimate of how far is left
-           int enterHeight;
-           HexDirection dir;
-           int HHop;
-           bool canStop;
-           bool hasAttacked;
-           Node(DistanceType _gval=0, DistanceType _hval=0, int _enterHeight=-1,
-                bool _canStop=false, bool _hasAttacked=false,
-                HexDirection _dir=DirNone, int _HHop=0) :
-              gval(_gval), hval(_hval), canStop(_canStop), enterHeight(_enterHeight),
-              hasAttacked(_hasAttacked), dir(_dir), HHop(_HHop) {}
-           bool operator< ( const Node& b ) const;
-       };
+       typedef deque<PathPoint> Path;
+
        struct hash_h {
           size_t operator()(const MapCoordinate3D &h) const{
              return static_cast<size_t>(h.x) ^ (static_cast<size_t>(h.y) << 16) ^ (static_cast<size_t>(h.getNumericalHeight())  << 32);
           }
+       };
+
+       struct Node {
+           Node* previous;
+           MapCoordinate3D h;        // location on the map, in hex coordinates
+           AStar3D::DistanceType gval;        // g in A* represents how far we've already gone
+           AStar3D::DistanceType hval;        // h in A* represents an estimate of how far is left
+           int enterHeight;
+           bool canStop;
+           bool hasAttacked;
+           Node(DistanceType _gval=0, DistanceType _hval=0, int _enterHeight=-1,
+                bool _canStop=false, bool _hasAttacked=false) :
+              gval(_gval), hval(_hval), canStop(_canStop), enterHeight(_enterHeight),
+              hasAttacked(_hasAttacked) {}
+           bool operator< ( const Node& b ) const;
        };
 
     protected:
@@ -202,9 +202,30 @@ class AStar3D {
        };
 
        //! the reachable fields
-       typedef tr1::unordered_map<MapCoordinate3D, Node, hash_h> visitedType;
-       visitedType visited;
-       // vector<Node> visited;
+       //typedef tr1::unordered_map<MapCoordinate3D, Node, hash_h> visitedType;
+       class VisitedContainer: protected deque<Node> {
+             typedef tr1::unordered_map<MapCoordinate3D, Node*, hash_h> hMapType;
+             hMapType hMap;
+          public:
+             typedef deque<Node> Parent;
+             typedef Parent::iterator iterator;
+             inline Node* add ( const Node& n) {
+                push_back(n);
+                Node* n_ptr = &back();
+                hMap[n.h] = n_ptr;
+                return n_ptr;
+             };
+             const Node* find( const MapCoordinate3D& pos ) {
+                hMapType::iterator i = hMap.find(pos); 
+                if (i == hMap.end()) return NULL;
+                else return i->second;
+             };
+
+             iterator begin() { return Parent::begin(); };
+             iterator end() { return Parent::end(); };
+      };
+       //typedef deque<Node> visitedType;
+       VisitedContainer visited;
     protected:
 
        
@@ -244,9 +265,16 @@ class AStar3D {
 
        //! checks weather the field fld was among the visited fields during the last search
        const Node* fieldVisited ( const MapCoordinate3D& fld ) {
+          return visited.find(fld);
           //return visited.find( fld );
-          visitedType::iterator i = visited.find(fld);
-          return (i == visited.end()) ? NULL : &(i->second);
+          //visitedType::iterator i = find(visited.begin(), visited.end(), fld);
+
+          /*
+          for (visitedType::iterator i = visited.begin(); i != visited.end(); ++i)
+             if (i->h == fld)
+                return &(*i);
+          return NULL;
+          */
        };
 
        int& getFieldAccess ( int x, int y );

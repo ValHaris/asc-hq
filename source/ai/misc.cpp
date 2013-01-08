@@ -175,8 +175,8 @@ MapCoordinate3D AI::RefuelConstraint::getNearestRefuellingPosition ( bool buildi
    y2 = min(veh->ypos + fuel / veh->typ->fuelConsumption, ai.getMap()->ysize );
    */
 
-   for ( AStar3D::visitedType::iterator i = ast->visited.begin(); i != ast->visited.end(); i++ ) {
-      AStar3D::Node n = i->second;
+   for ( AStar3D::VisitedContainer::iterator i = ast->visited.begin(); i != ast->visited.end(); i++ ) {
+      AStar3D::Node n = *i;
       int dist = int(n.gval );
       if ( n.h.getNumericalHeight() == -1 ) {
           MapField* fld = ai.getMap()->getField( n.h.x, n.h.y );
