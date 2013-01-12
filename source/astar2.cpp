@@ -504,6 +504,8 @@ AStar3D :: AStar3D ( GameMap* actmap_, Vehicle* veh_, bool markTemps_, int maxDi
 
 }
 
+const AStar3D::DistanceType AStar3D::longestPath = 1e9;
+
 
 AStar3D :: ~AStar3D ( )
 {

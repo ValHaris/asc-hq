@@ -7,7 +7,7 @@
  #define astar2H
 
  #include <vector>
- #include <tr1/unordered_map>
+ #include <boost/unordered_map.hpp>
  #include <functional>
  #include "mapalgorithms.h"
  #include "gamemap.h"
@@ -94,7 +94,7 @@ class AStar3D {
        bool naivePathFinder(const MapCoordinate3D& a, const MapCoordinate3D& b);
     public:
        typedef float DistanceType;
-       static const DistanceType longestPath = 1e9;
+       static const DistanceType longestPath;
        //static const __m128i longestPathVector = _mm_set_epi32(1e9, 1e9, 1e9, 1e9);
        class OperationLimiter {
            public:
@@ -166,7 +166,7 @@ class AStar3D {
     public:
 
        class Container: protected multiset<Node, less<Node> > {
-             typedef tr1::unordered_map<MapCoordinate3D, iterator, hash_h> hMapType;
+             typedef boost::unordered_map<MapCoordinate3D, iterator, hash_h> hMapType;
              hMapType hMap;
           public:
              typedef multiset<Node, less<Node> > Parent;
@@ -202,9 +202,9 @@ class AStar3D {
        };
 
        //! the reachable fields
-       //typedef tr1::unordered_map<MapCoordinate3D, Node, hash_h> visitedType;
+       //typedef boost::unordered_map<MapCoordinate3D, Node, hash_h> visitedType;
        class VisitedContainer: protected deque<Node> {
-             typedef tr1::unordered_map<MapCoordinate3D, Node*, hash_h> hMapType;
+             typedef boost::unordered_map<MapCoordinate3D, Node*, hash_h> hMapType;
              hMapType hMap;
           public:
              typedef deque<Node> Parent;
