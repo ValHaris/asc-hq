@@ -256,6 +256,7 @@ class MapCoordinate3D : public MapCoordinate {
                z = stream.readInt ( );
                MapCoordinate::read ( stream );
             };
+            ASCString toString(bool coordinates = false) const;
       };
 
 
