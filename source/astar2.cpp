@@ -869,7 +869,7 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
                              int fa = fieldAccessible ( fld, veh, newpos.getBitmappedHeight(), &hasAttacked );
                              if ( fa == 2 ) {
                                 bool canStop = true;
-                                int gval = N.gval + getMoveCost( N.h, newpos, veh, hasAttacked );
+                                DistanceType gval = N.gval + getMoveCost( N.h, newpos, veh, hasAttacked );
                                 Node N2 = Node(gval, dist(newpos, B), -1, canStop, hasAttacked);
                                 N2.previous = N_ptr;
                                 N2.h = newpos;
