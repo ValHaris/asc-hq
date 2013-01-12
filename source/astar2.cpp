@@ -6,6 +6,7 @@
 #include <vector>
 #include <algorithm>
 #include <cmath>
+#include <iostream>
 
 #include "vehicletype.h"
 #include "spfst.h"
@@ -974,4 +975,13 @@ AStar3D::PathPoint AStar3D::PathPoint::newFromStream( tnstream& stream )
    pp.read(stream);
    return pp;  
 }
+
+void AStar3D::dumpVisited()
+{
+	for ( VisitedContainer::iterator i = visited.begin(); i != visited.end(); ++i ) {
+		cout << "(" << i->h.x << "," << i->h.y << "," << i->h.getNumericalHeight() << ")@" << i->gval << "\n";
+	}
+}
+
+
 
