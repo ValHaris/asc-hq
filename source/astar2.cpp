@@ -803,7 +803,7 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
                   if (k >= longestPath)
                      continue;
 
-                  int gval = N.gval + k;
+                  DistanceType gval = N.gval + k;
                   Node N2 = Node(gval, dist(hn, B), -1, canStop, hasAttacked);
                   N2.previous = N_ptr;
                   N2.h = hn;
