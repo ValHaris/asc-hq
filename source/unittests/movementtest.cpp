@@ -297,7 +297,8 @@ void testPathFinding()
 	   */
 
 
-	   //assertOrThrow( s.size() == 16 );
+	   assertOrThrow( s.size() == 16 );
+	   
 	   // activate this test once the duplicate-bug is fixed
 	   assertOrThrow( s.size() == fields.size() );
 
