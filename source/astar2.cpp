@@ -867,7 +867,7 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
 
         MapCoordinate3D h = endpos;
 
-        path.insert ( path.begin(), PathPoint ( h, int(ceil(N.gval)), N.enterHeight, N.hasAttacked ) );
+        path.insert ( path.begin(), PathPoint ( h, int(N.gval), N.enterHeight, N.hasAttacked ) );
         while( !(h == A) )
         {
             // tfield* fld = actmap->getField ( h );

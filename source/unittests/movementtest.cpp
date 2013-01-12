@@ -346,7 +346,7 @@ void testPathFinding()
 
 	   move( sub, MapCoordinate3D(2,19,4));
 
-	   assertOrThrow( sub->getMovement() == 18 );
+	   assertOrThrow( sub->getMovement() == 19 );
 
    }
 
