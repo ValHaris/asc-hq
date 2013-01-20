@@ -344,7 +344,7 @@ void testPathFinding()
 	   assertOrThrow( path[6] == MapCoordinate3D(2,19,4));
 
 
-	   move( sub, MapCoordinate3D(2,19,4));
+	   move( sub, MapCoordinate(2,19));
 
 	   assertOrThrow( sub->getMovement() == 19 );
 
@@ -375,6 +375,45 @@ void testPathFinding()
 	   assertOrThrow( fields.size() == 31 );
    }
 
+   /* now testing the docking. After the shuttle has reached orbit, the trooper will move from shuttle
+    * through the space station to the other shuttle, although troopers as such cannot move in orbit
+   */
+   {
+
+	   Vehicle* trooper = game->getField(11,2)->vehicle ;
+	   assertOrThrow( trooper );
+
+	   move(trooper, MapCoordinate(12,4));
+
+	   Vehicle* shuttle = game->getField(12,4)->vehicle ;
+	   assertOrThrow( shuttle );
+
+	   move( shuttle, MapCoordinate3D ( 13,7, chtieffliegend ));
+	   assertOrThrow( shuttle->getMovement(false,false) == 31 );
+
+	   next_turn( game.get(), NextTurnStrategy_Abort(), NULL, -1 );
+	   move( shuttle, MapCoordinate3D ( 13,3, chfliegend ));
+	   move( shuttle, MapCoordinate3D ( 12,5, chhochfliegend ));
+	   assertOrThrow( shuttle->getMovement(false,false) == 22 );
+
+	   next_turn( game.get(), NextTurnStrategy_Abort(), NULL, -1 );
+	   move( shuttle, MapCoordinate3D ( 13,3, chsatellit ));
+	   assertOrThrow( shuttle->getMovement(false,false) == 65 );
+	   assertOrThrow( trooper->getMovement(false,false) == 32 );
+
+	   auto_ptr<MoveUnitCommand> muc ( new MoveUnitCommand( trooper ));
+	   muc->searchFields();
+	   const set<MapCoordinate3D>& fields = muc->getReachableFields();
+	   std::cout << "Fields size " << fields.size() << "\n";
+	   // making sure the trooper cannot enter the shuttles that are not in orbit
+	   assertOrThrow( fields.size() == 2  );
+	   assertOrThrow( game->getField(13,1)->vehicle );
+
+
+
+	   move( trooper, MapCoordinate ( 12,3 ));
+	   assertOrThrow( trooper->getMovement(false,false) == 0 );
+   }
 }
 
 
