@@ -782,8 +782,8 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
                   HexDirection dir = HexDirection(directions[dci]);
                   MapCoordinate3D hn = getNeighbouringFieldCoordinate ( N.h, dir );
 
-                  if ((N.previous) && (hn == N.previous->h))
-                     continue;
+                  //if ((N.previous) && (hn == N.previous->h))
+                  //   continue;
 
                   // If it's off the end of the map, then don't keep scanning
                   if( hn.x < 0 || hn.y < 0 || hn.x >= actmap->xsize || hn.y >= actmap->ysize )

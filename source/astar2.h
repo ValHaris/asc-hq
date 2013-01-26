@@ -12,6 +12,8 @@
  #include "mapalgorithms.h"
  #include "gamemap.h"
 
+ #include <iostream>
+
  enum HexDirection { DirN, DirNE, DirSE, DirS, DirSW, DirNW, DirNone };
 
 
@@ -165,16 +167,17 @@ class AStar3D {
 
     public:
 
-       class Container: protected multiset<Node, less<Node> > {
+       class Container: protected set<Node, less<Node> > {
              typedef tr1::unordered_map<MapCoordinate3D, iterator, hash_h> hMapType;
              hMapType hMap;
           public:
-             typedef multiset<Node, less<Node> > Parent;
+             typedef set<Node, less<Node> > Parent;
 
              // Container() {};
              void add ( const Node& n) {
-                iterator i = insert ( n);
-                hMap[n.h] = i;
+                pair<iterator, bool> res = insert(n);
+                if (res.second)
+                   hMap[n.h] = res.first;
              };
              Node getFirst() { Node n = *(Parent::begin()); Parent::erase(Parent::begin()); hMap.erase(n.h); return n; };
              bool empty() { return Parent::empty(); };
@@ -189,12 +192,26 @@ class AStar3D {
              iterator findIterator( const MapCoordinate3D& pos ) {
                 hMapType::iterator i = hMap.find(pos); 
                 if (i == hMap.end()) return Parent::end();
-                else return i->second;
+                else {
+                   cout << "in findIterator: ";
+                   cout << "i->h: (" << i->second->h.x << ", " << i->second->h.y << ", " << i->second->h.getNumericalHeight() << "), ";
+                   cout << "pos: (" << pos.x << ", " << pos.y << ", " << pos.getNumericalHeight() << ")\n ";
+                   assert(i->second->h == pos);
+                   return i->second;
+                }
              };
              void replace(iterator i, const Node& node) {
+                //if (i->h != node.h) {
+                   cout << "in replace: ";
+                   cout << "i->h: (" << i->h.x << ", " << i->h.y << ", " << i->h.getNumericalHeight() << "), ";
+                   cout << "node.h: (" << node.h.x << ", " << node.h.y << ", " << node.h.getNumericalHeight() << "), ";
+                //}
+                assert(i->h == node.h);
                 Parent::erase(i);
-                iterator newi = Container::Parent::insert ( node );
-                hMap[node.h] = newi;
+                pair<iterator, bool> res = insert (node);
+                //iterator newi = Container::Parent::insert ( node ).first;
+                if (res.second)
+                   hMap[node.h] = res.first;
              };
              iterator begin() { return Parent::begin(); };
              iterator end() { return Parent::end(); };

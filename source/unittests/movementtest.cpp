@@ -296,8 +296,8 @@ void testPathFinding()
 	   }
 	   */
 
-
-	   //assertOrThrow( s.size() == 16 );
+           cout << s.size();
+	   assertOrThrow( s.size() == 16 );
 	   // activate this test once the duplicate-bug is fixed
 	   assertOrThrow( s.size() == fields.size() );
 
