@@ -296,7 +296,6 @@ void testPathFinding()
 	   }
 	   */
 
-           cout << s.size();
 	   assertOrThrow( s.size() == 16 );
 	   // activate this test once the duplicate-bug is fixed
 	   assertOrThrow( s.size() == fields.size() );
@@ -372,7 +371,9 @@ void testPathFinding()
 	   vector<MapCoordinate3D> fields;
 	   ast.findAllAccessibleFields(&fields);
 
-	   assertOrThrow( fields.size() == 31 );
+	   set<MapCoordinate3D> s( fields.begin(), fields.end() );
+           // assertOrThrow ( s.size() == fields.size() );
+	   assertOrThrow( s.size() == 29 );
    }
 
 }

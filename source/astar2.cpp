@@ -895,7 +895,7 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
     if ( found ) {
         Node* n = &N;
         while ( n ) {
-           path.push_front ( PathPoint(n->h, n->gval, n->enterHeight, n->hasAttacked) );
+           path.push_front ( PathPoint(n->h, ceil(n->gval), n->enterHeight, n->hasAttacked) );
            n = n->previous; 
         }
     } else {
