@@ -580,7 +580,7 @@ AStar3D::DistanceType AStar3D::getMoveCost ( const MapCoordinate3D& start, const
 // abstraction layer on priority_queue wouldn't let me do that.
 
 
-void AStar3D :: nodeVisited ( const Node& N2, OpenContainer& open )
+void AStar3D :: addToOpen ( const Node& N2, OpenContainer& open )
 {
    if ( N2.gval <= MAXIMUM_PATH_LENGTH && N2.gval < longestPath ) {
       //Container::iterator i = open.findIterator(N2.h);
@@ -731,16 +731,16 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
                             if ( N2.canStop && actmap->getField(N2.h)->getContainer() && actmap->getField(N2.h)->vehicle != veh) {
                                  // there's an container on the field that can be entered. This means, the unit can't stop 'over' the container...
                                  N2.canStop = false;
-                                 nodeVisited ( N2, open );
+                                 addToOpen ( N2, open );
 
                                  // ... only inside it
                                  N2.canStop = true;
                                  N2.enterHeight = N2.h.getNumericalHeight() ;
                                  N2.h.setNumericalHeight(-1);
                                  // N2.hasAttacked = true;
-                                 nodeVisited ( N2, open );
+                                 addToOpen ( N2, open );
                             } else
-                                 nodeVisited ( N2, open );
+                                 addToOpen ( N2, open );
                          }
 
                       }
@@ -763,7 +763,7 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
                                Node N2 = Node(N.gval + 10, dist(pos, B), N.enterHeight, N.canStop, N.hasAttacked);
                                N2.previous = N_ptr;
                                N2.h = pos;
-                               nodeVisited ( N2, open );
+                               addToOpen ( N2, open );
                             }
                 }
              }
@@ -814,7 +814,7 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
                      // there's an container on the field that can be entered. This means, the unit can't stop 'over' the container...
                      if ( !veh->typ->hasFunction( ContainerBaseType::OnlyMoveToAndFromTransports  ) ) {
                         N2.canStop = false;
-                        nodeVisited ( N2, open );
+                        addToOpen ( N2, open );
                      }
 
                      // ... only inside it
@@ -822,10 +822,10 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
                      N2.enterHeight = N2.h.getNumericalHeight() ;
                      N2.h.setNumericalHeight (-1);
                      // N2.hasAttacked = true;
-                     nodeVisited ( N2, open );
+                     addToOpen ( N2, open );
                   } else
                      if ( !veh->typ->hasFunction( ContainerBaseType::OnlyMoveToAndFromTransports  ) )
-                        nodeVisited ( N2, open );
+                        addToOpen ( N2, open );
               }
 
            // and now change the units' height. That's only possible on fields where the unit can stop it's movement
@@ -881,7 +881,7 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
                                    N2.h.setNumericalHeight (-1);
                                 }
 
-                                nodeVisited ( N2, open );
+                                addToOpen ( N2, open );
                              }
                           }
                        }

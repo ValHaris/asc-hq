@@ -171,59 +171,7 @@ class AStar3D {
 
     public:
 
-       /*
-       class Container: protected set<Node, less<Node> > {
-             typedef tr1::unordered_map<MapCoordinate3D, iterator, hash_h> hMapType;
-             hMapType hMap;
-          public:
-             typedef set<Node, less<Node> > Parent;
-
-             // Container() {};
-             void add ( const Node& n) {
-                pair<iterator, bool> res = insert(n);
-                if (res.second)
-                   hMap[n.h] = res.first;
-             };
-             Node getFirst() { Node n = *(Parent::begin()); Parent::erase(Parent::begin()); hMap.erase(n.h); return n; };
-             bool empty() { return Parent::empty(); };
-
-             typedef Parent::iterator iterator;
-             const Node* find( const MapCoordinate3D& pos ) {
-                hMapType::iterator i = hMap.find(pos); 
-                if (i == hMap.end()) return NULL;
-                else return &(*(i->second));
-             };
-
-             iterator findIterator( const MapCoordinate3D& pos ) {
-                hMapType::iterator i = hMap.find(pos); 
-                if (i == hMap.end()) return Parent::end();
-                else {
-                   cout << "in findIterator: ";
-                   cout << "i->h: (" << i->second->h.x << ", " << i->second->h.y << ", " << i->second->h.getNumericalHeight() << "), ";
-                   cout << "pos: (" << pos.x << ", " << pos.y << ", " << pos.getNumericalHeight() << ")\n ";
-                   assert(i->second->h == pos);
-                   return i->second;
-                }
-             };
-             void replace(iterator i, const Node& node) {
-                //if (i->h != node.h) {
-                   cout << "in replace: ";
-                   cout << "i->h: (" << i->h.x << ", " << i->h.y << ", " << i->h.getNumericalHeight() << "), ";
-                   cout << "node.h: (" << node.h.x << ", " << node.h.y << ", " << node.h.getNumericalHeight() << "), ";
-                //}
-                assert(i->h == node.h);
-                Parent::erase(i);
-                pair<iterator, bool> res = insert (node);
-                //iterator newi = Container::Parent::insert ( node ).first;
-                if (res.second)
-                   hMap[node.h] = res.first;
-             };
-             iterator begin() { return Parent::begin(); };
-             iterator end() { return Parent::end(); };
-
-       };
-       */
-       typedef boost::multi_index_container <
+      typedef boost::multi_index_container <
           Node,
           boost::multi_index::indexed_by <
              boost::multi_index::ordered_non_unique<boost::multi_index::identity<Node> >,
@@ -260,8 +208,7 @@ class AStar3D {
        VisitedContainer visited;
     protected:
 
-       void nodeVisited ( const Node& n, OpenContainer& open );
-
+       void addToOpen ( const Node& n, OpenContainer& open );
 
     public:
        AStar3D ( GameMap* actmap, Vehicle* veh, bool markTemps_ = true, int maxDistance = maxint );
