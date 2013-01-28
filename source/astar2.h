@@ -12,7 +12,11 @@
  #include "mapalgorithms.h"
  #include "gamemap.h"
 
- #include <iostream>
+ #include <boost/multi_index_container.hpp>
+ #include <boost/multi_index/ordered_index.hpp>
+ #include <boost/multi_index/hashed_index.hpp>
+ #include <boost/multi_index/identity.hpp>
+ #include <boost/multi_index/member.hpp>
 
  enum HexDirection { DirN, DirNE, DirSE, DirS, DirSW, DirNW, DirNone };
 
@@ -167,6 +171,7 @@ class AStar3D {
 
     public:
 
+       /*
        class Container: protected set<Node, less<Node> > {
              typedef tr1::unordered_map<MapCoordinate3D, iterator, hash_h> hMapType;
              hMapType hMap;
@@ -217,6 +222,16 @@ class AStar3D {
              iterator end() { return Parent::end(); };
 
        };
+       */
+       typedef boost::multi_index_container <
+          Node,
+          boost::multi_index::indexed_by <
+             boost::multi_index::ordered_non_unique<boost::multi_index::identity<Node> >,
+             boost::multi_index::hashed_unique<boost::multi_index::member<Node, MapCoordinate3D, &Node::h>, hash_h>
+          >
+       > OpenContainer;
+
+       typedef OpenContainer::nth_index<1>::type OpenContainerIndex;
 
        //! the reachable fields
        //typedef tr1::unordered_map<MapCoordinate3D, Node, hash_h> visitedType;
@@ -245,10 +260,7 @@ class AStar3D {
        VisitedContainer visited;
     protected:
 
-       
-       bool get_first( Container& v, Node& n );
-
-       void nodeVisited ( const Node& n, Container& open );
+       void nodeVisited ( const Node& n, OpenContainer& open );
 
 
     public:

@@ -580,17 +580,18 @@ AStar3D::DistanceType AStar3D::getMoveCost ( const MapCoordinate3D& start, const
 // abstraction layer on priority_queue wouldn't let me do that.
 
 
-void AStar3D :: nodeVisited ( const Node& N2, Container& open )
+void AStar3D :: nodeVisited ( const Node& N2, OpenContainer& open )
 {
    if ( N2.gval <= MAXIMUM_PATH_LENGTH && N2.gval < longestPath ) {
-      Container::iterator i = open.findIterator(N2.h);
-      if ( i == open.end()) {
+      //Container::iterator i = open.findIterator(N2.h);
+      OpenContainerIndex::iterator i = open.get<1>().find(N2.h);
+      if ( i == open.get<1>().end()) {
          //if ( visited.find(N2.h) == visited.end())
          if ( !fieldVisited(N2.h))
-            open.add ( N2 );
+            open.insert ( N2 );
       } else {
          if (i->gval > N2.gval || (i->gval == N2.gval && i->hasAttacked && !N2.hasAttacked))
-            open.replace(i, N2);
+            open.get<1>().replace(i, N2);
       }
    }
 }
@@ -657,7 +658,8 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
 {
     _path = &path;
 
-    Container open;
+    //Container open;
+    OpenContainer open;
 
     /* this should be checked outside by giving the pathfinder the right movement
     if ( !veh->canMove() )
@@ -671,7 +673,8 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
     if ( !(actmap->getField(A)->unitHere(veh)) ) {
        N.h.setNumericalHeight(-1);
     }
-    open.add(N);
+    //open.add(N);
+    open.insert(N);
 
     // Remember which nodes we visited, so that we can clear the mark array
     // at the end.
@@ -680,7 +683,9 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
 
     // While there are still nodes to visit, visit them!
     while( !open.empty() ) {
-        N = open.getFirst();
+        //N = open.getFirst();
+        N = *open.begin();
+        open.erase(open.begin());
       
         Node* N_ptr = visited.add(N);
         // If we're at the goal, then exit
@@ -800,7 +805,7 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
                   if (k >= longestPath)
                      continue;
 
-                  int gval = N.gval + k;
+                  DistanceType gval = N.gval + k;
                   Node N2 = Node(gval, dist(hn, B), -1, canStop, hasAttacked);
                   N2.previous = N_ptr;
                   N2.h = hn;
@@ -866,7 +871,7 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
                              int fa = fieldAccessible ( fld, veh, newpos.getBitmappedHeight(), &hasAttacked );
                              if ( fa == 2 ) {
                                 bool canStop = true;
-                                int gval = N.gval + getMoveCost( N.h, newpos, veh, hasAttacked );
+                                DistanceType gval = N.gval + getMoveCost( N.h, newpos, veh, hasAttacked );
                                 Node N2 = Node(gval, dist(newpos, B), -1, canStop, hasAttacked);
                                 N2.previous = N_ptr;
                                 N2.h = newpos;
