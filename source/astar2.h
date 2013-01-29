@@ -145,7 +145,7 @@ class AStar3D {
            bool hasAttacked;
            Node(DistanceType _gval=0, DistanceType _hval=0, int _enterHeight=-1,
                 bool _canStop=false, bool _hasAttacked=false) :
-              gval(_gval), hval(_hval), canStop(_canStop), enterHeight(_enterHeight),
+              gval(_gval), hval(_hval), enterHeight(_enterHeight), canStop(_canStop),
               hasAttacked(_hasAttacked) {}
            bool operator< ( const Node& b ) const;
        };
@@ -182,32 +182,33 @@ class AStar3D {
        typedef OpenContainer::nth_index<1>::type OpenContainerIndex;
 
        //! the reachable fields
-       //typedef tr1::unordered_map<MapCoordinate3D, Node, hash_h> visitedType;
        class VisitedContainer: protected deque<Node> {
-             typedef tr1::unordered_map<MapCoordinate3D, Node*, hash_h> hMapType;
+             typedef tr1::unordered_map<MapCoordinate3D, DistanceType, hash_h> hMapType;
              hMapType hMap;
           public:
              typedef deque<Node> Parent;
              typedef Parent::iterator iterator;
-             inline Node* add ( const Node& n) {
+             Node* add ( const Node& n) {
                 push_back(n);
-                Node* n_ptr = &back();
-                hMap[n.h] = n_ptr;
-                return n_ptr;
+                hMap[n.h] = n.gval;
+                return &back();
              };
-             const Node* find( const MapCoordinate3D& pos ) {
+             bool contains ( const MapCoordinate3D& pos ) {
+                return hMap.find(pos) != hMap.end();
+             }
+             DistanceType gval( const MapCoordinate3D& pos ) {
                 hMapType::iterator i = hMap.find(pos); 
-                if (i == hMap.end()) return NULL;
+                if (i == hMap.end()) return -1;
                 else return i->second;
              };
 
              iterator begin() { return Parent::begin(); };
              iterator end() { return Parent::end(); };
       };
-       //typedef deque<Node> visitedType;
        VisitedContainer visited;
     protected:
 
+       //! adds a node to the OpenContainer, or replaces one
        void addToOpen ( const Node& n, OpenContainer& open );
 
     public:
@@ -238,20 +239,6 @@ class AStar3D {
 
        //! returns the number of turns that the unit will need to travel along the last found path
        int getTravelTime( );
-
-       //! checks weather the field fld was among the visited fields during the last search
-       const Node* fieldVisited ( const MapCoordinate3D& fld ) {
-          return visited.find(fld);
-          //return visited.find( fld );
-          //visitedType::iterator i = find(visited.begin(), visited.end(), fld);
-
-          /*
-          for (visitedType::iterator i = visited.begin(); i != visited.end(); ++i)
-             if (i->h == fld)
-                return &(*i);
-          return NULL;
-          */
-       };
 
        int& getFieldAccess ( int x, int y );
        int& getFieldAccess ( const MapCoordinate& mc );

@@ -476,26 +476,21 @@ MapCoordinate3D AI :: findServiceBuilding ( const ServiceOrder& so, int* distanc
             };
 
             if ( fullfillableServices ) {
-               const AStar3D::Node* nde = astar.fieldVisited(buildingPos);
-               if ( nde ) {
-                  int dist = int( nde->gval );
-                  if ( dist < bestDistance ) {
-                     bestDistance = dist;
-                     bestBuilding = bld;
-                     bestPos = buildingPos;
-                  }
+               int dist = (int)astar.visited.gval(buildingPos);
+               if ( ( dist != -1 ) && ( dist < bestDistance ) ) {
+                  bestDistance = dist;
+                  bestBuilding = bld;
+                  bestPos = buildingPos;
                }
-            } else
+            } else {
                if ( partlyFullfillabelServices ) {
-                  const AStar3D::Node* nde = astar.fieldVisited(buildingPos);
-                  if ( nde ) {
-                     int dist = int( nde->gval );
-                     if ( dist < bestDistance_p ) {
-                        bestDistance_p = dist;
-                        bestPos_p = buildingPos;
-                     }
+                  int dist = (int)astar.visited.gval(buildingPos);
+                  if ( (dist != -1) && ( dist < bestDistance_p ) ) {
+                     bestDistance_p = dist;
+                     bestPos_p = buildingPos;
                   }
                }
+            }
          }
       }
    }

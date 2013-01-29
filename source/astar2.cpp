@@ -537,6 +537,8 @@ AStar3D::DistanceType AStar3D::dist( const MapCoordinate3D& a, const MapCoordina
 
 AStar3D::DistanceType AStar3D::dist ( const MapCoordinate3D& a, const vector<MapCoordinate3D>& b )
 {
+   if (b.empty())
+      return longestPath;
    DistanceType e;
    for ( vector<MapCoordinate3D>::const_iterator i = b.begin(); i != b.end(); i++ ) {
       e = dist(a,*i);
@@ -583,11 +585,9 @@ AStar3D::DistanceType AStar3D::getMoveCost ( const MapCoordinate3D& start, const
 void AStar3D :: addToOpen ( const Node& N2, OpenContainer& open )
 {
    if ( N2.gval <= MAXIMUM_PATH_LENGTH && N2.gval < longestPath ) {
-      //Container::iterator i = open.findIterator(N2.h);
       OpenContainerIndex::iterator i = open.get<1>().find(N2.h);
       if ( i == open.get<1>().end()) {
-         //if ( visited.find(N2.h) == visited.end())
-         if ( !fieldVisited(N2.h))
+         if ( !visited.contains(N2.h))
             open.insert ( N2 );
       } else {
          if (i->gval > N2.gval || (i->gval == N2.gval && i->hasAttacked && !N2.hasAttacked))

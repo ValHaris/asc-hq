@@ -260,10 +260,9 @@ bool AI::RefuelConstraint::returnFromPositionPossible ( const MapCoordinate3D& p
       positionsCalculated = true;
    }
 
-   if ( !ast->fieldVisited(pos) )
+   int dist  = int( ast->visited.gval(pos));
+   if (dist == -1)
       return false;
-
-   int dist  = int( ast->fieldVisited(pos)->gval );
    int dist2;
    if ( !reachableBuildings.empty() ) {
       ReachableBuildings::iterator rb = reachableBuildings.begin();
