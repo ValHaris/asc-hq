@@ -108,6 +108,7 @@ class WindMovement {
    public:
       WindMovement ( const Vehicle* vehicle );
       inline int getDist ( int dir ) { assert( dir >= 0 && dir <= 5 ); return wm[dir]; };
+      const inline int getDist ( int dir ) const { assert( dir >= 0 && dir <= 5 ); return wm[dir]; };
 };
 
 
