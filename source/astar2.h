@@ -131,9 +131,15 @@ class AStar3D {
 
        typedef deque<PathPoint> Path;
 
-       struct hash_h {
+       struct hash_MapCoordinate3D {
           size_t operator()(const MapCoordinate3D &h) const{
              return static_cast<size_t>(h.x) ^ (static_cast<size_t>(h.y) << 8) ^ (static_cast<size_t>(h.getNumericalHeight())  << 16);
+          }
+       };
+
+       struct hash_MapCoordinate {
+          size_t operator()(const MapCoordinate &h) const{
+             return static_cast<size_t>(h.x) ^ (static_cast<size_t>(h.y) << 16);
           }
        };
 
@@ -162,7 +168,8 @@ class AStar3D {
 
        virtual DistanceType getMoveCost ( const MapCoordinate3D& start, const MapCoordinate3D& dest, const Vehicle* vehicle, bool& hasAttacked );
 
-       int* fieldAccess;
+       typedef boost::unordered_map<MapCoordinate, int, hash_MapCoordinate> fieldAccessType;
+       fieldAccessType fieldAccess;
 
        DistanceType dist( const MapCoordinate3D& a, const MapCoordinate3D& b );
        DistanceType dist( const MapCoordinate3D& a, const vector<MapCoordinate3D>& b );
@@ -173,15 +180,17 @@ class AStar3D {
           Node,
           boost::multi_index::indexed_by <
              boost::multi_index::ordered_non_unique<boost::multi_index::identity<Node> >,
-             boost::multi_index::hashed_unique<boost::multi_index::member<Node, MapCoordinate3D, &Node::h>, hash_h>
+             boost::multi_index::hashed_unique<boost::multi_index::member<Node, MapCoordinate3D, &Node::h>, hash_MapCoordinate3D>
           >
        > OpenContainer;
 
        typedef OpenContainer::nth_index<1>::type OpenContainerIndex;
 
        //! the reachable fields
+       // pointers to nodes in this container need to stay valid when the
+       // container grows, so we can't use a vector for this.
        class VisitedContainer: protected deque<Node> {
-             typedef boost::unordered_map<MapCoordinate3D, DistanceType, hash_h> hMapType;
+             typedef boost::unordered_map<MapCoordinate3D, DistanceType, hash_MapCoordinate3D> hMapType;
              hMapType hMap;
           public:
              typedef deque<Node> Parent;
@@ -245,8 +254,8 @@ class AStar3D {
        //! returns the number of turns that the unit will need to travel along the last found path
        int getTravelTime( );
 
-       int& getFieldAccess ( int x, int y );
-       int& getFieldAccess ( const MapCoordinate& mc );
+       int getFieldAccess ( int x, int y );
+       int getFieldAccess ( const MapCoordinate& mc );
 
        virtual ~AStar3D ( );
  };

@@ -484,12 +484,9 @@ AStar3D :: AStar3D ( GameMap* actmap_, Vehicle* veh_, bool markTemps_, int maxDi
    for ( int i = 0; i < 8; ++i )
       maxVehicleSpeedFactor = max( maxVehicleSpeedFactor, vehicleSpeedFactor[i] );
    
-   int cnt = actmap->xsize*actmap->ysize*9;
-   fieldAccess = new int[cnt](); // initializes with 0
-
-   if ( (veh->typ->height & ( chtieffliegend | chfliegend | chhochfliegend )) && actmap->weather.windSpeed ) {
+   if ( (veh->typ->height & ( chtieffliegend | chfliegend | chhochfliegend )) && actmap->weather.windSpeed )
       wind = new WindMovement ( veh );
-   } else
+   else
       wind = NULL;
 
 }
@@ -505,7 +502,7 @@ AStar3D :: ~AStar3D ( )
       wind = NULL;
    }
 
-   delete[] fieldAccess;
+   //delete[] fieldAccess;
 }
 
 AStar3D::DistanceType AStar3D::dist( const MapCoordinate3D& a, const MapCoordinate3D& b )
@@ -816,7 +813,7 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
 
 
               if ( (!operationLimiter || operationLimiter->allowHeightChange()) && !(veh->typ->hasFunction( ContainerBaseType::OnlyMoveToAndFromTransports  )) )
-              if ( (fieldAccessible ( actmap->getField(N_ptr->h), veh, N_ptr->h.getBitmappedHeight() ) == 2 ) || actmap->getgameparameter( cgp_movefrominvalidfields) )
+              if ( (fieldAccessible ( oldFld, veh, N_ptr->h.getBitmappedHeight() ) == 2 ) || actmap->getgameparameter( cgp_movefrominvalidfields) )
                  for ( int heightDelta = -1; heightDelta <= 1; heightDelta += 2 ) {
                     const VehicleType::HeightChangeMethod* hcm = veh->getHeightChange( heightDelta, N_ptr->h.getBitmappedHeight());
                     if ( hcm ) {
@@ -897,8 +894,8 @@ void AStar3D::findAllAccessibleFields ( vector<MapCoordinate3D>* path )
    findPath ( dummy, MapCoordinate3D(actmap->xsize, actmap->ysize, veh->height) );  //this field does not exist...
    for ( VisitedContainer::iterator i = visited.begin(); i != visited.end(); ++i ) {
       AStar3D::Node node = *i;
-      int& fa = getFieldAccess( node.h );
-      fa |= node.h.getBitmappedHeight();
+      fieldAccess[node.h] |= node.h.getBitmappedHeight();
+
       if ( markTemps ) {
          char atemp = actmap->getField ( node.h )->getaTemp();
          actmap->getField ( node.h )->setaTemp( atemp | node.h.getBitmappedHeight());
@@ -912,17 +909,16 @@ void AStar3D::findAllAccessibleFields ( vector<MapCoordinate3D>* path )
       tempsMarked = actmap;
 }
 
-
-int& AStar3D::getFieldAccess ( int x, int y )
+int AStar3D::getFieldAccess ( int x, int y )
 {
-   return fieldAccess[x + y * actmap->xsize];
+   return getFieldAccess( MapCoordinate(x, y) );
 }
 
-int& AStar3D::getFieldAccess ( const MapCoordinate& mc )
+int AStar3D::getFieldAccess ( const MapCoordinate& mc )
 {
-   return fieldAccess[mc.x + mc.y * actmap->xsize];
+   fieldAccessType::iterator i = fieldAccess.find(mc);
+   return (i == fieldAccess.end()) ? 0 : i->second;
 }
-
              
 void AStar3D::PathPoint::write( tnstream& stream ) const
 {
