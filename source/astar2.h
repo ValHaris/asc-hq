@@ -211,13 +211,12 @@ class AStar3D {
        //! adds a node to the OpenContainer, or replaces one
        void addToOpen ( const Node& n, OpenContainer& open );
 
-       bool initNode ( Node& newN,
+       int initNode ( Node& newN,
                        Node* oldN_ptr,
-                       int dir,
+                       const MapCoordinate3D& newpos,
                        const vector<MapCoordinate3D>& B,
-                       int newNumericalHeight=-2,
                        bool disableAttack=false,
-                       bool keepEnterHeight=false);
+                       bool enter=false);
 
     public:
        AStar3D ( GameMap* actmap, Vehicle* veh, bool markTemps_ = true, int maxDistance = maxint );

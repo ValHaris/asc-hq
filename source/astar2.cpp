@@ -567,60 +567,58 @@ AStar3D::DistanceType AStar3D::getMoveCost ( const MapCoordinate3D& start, const
 
 void AStar3D :: addToOpen ( const Node& N2, OpenContainer& open )
 {
-   if ( N2.gval <= MAXIMUM_PATH_LENGTH && N2.gval < longestPath ) {
+   //if ( N2.gval <= MAXIMUM_PATH_LENGTH && N2.gval < longestPath ) {
       OpenContainerIndex::iterator i = open.get<1>().find(N2.h);
       if ( i == open.get<1>().end()) {
-         if ( !visited.contains(N2.h))
-            open.insert ( N2 );
+         //if ( !visited.contains(N2.h))
+         open.insert ( N2 );
       } else {
          if (i->gval > N2.gval || (i->gval == N2.gval && i->hasAttacked && !N2.hasAttacked))
             open.get<1>().replace(i, N2);
       }
-   }
+   //}
 }
 
-bool AStar3D::initNode ( Node& newN,
+int AStar3D::initNode ( Node& newN,
                 Node* oldN_ptr,
-                int dir,
+                const MapCoordinate3D& newpos,
                 const vector<MapCoordinate3D>& B,
-                int newNumericalHeight,
                 bool disableAttack,
-                bool keepEnterHeight) {
+                bool enter) {
 
-   if (dir != -1)
-      newN.h = getNeighbouringFieldCoordinate (oldN_ptr->h, dir);
-   else
-      newN.h = oldN_ptr->h;
-
-   if (newNumericalHeight != -2)
-      newN.h.setNumericalHeight(newNumericalHeight);
+   newN.h = newpos;
 
    // No need to reassess already visited Node
    if ( (oldN_ptr->previous) && (newN.h == oldN_ptr->previous->h) )
-      return false;
+      return 0;
 
    if ( visited.contains(newN.h) )
-      return false;
+      return 0;
 
    // If it's off the end of the map, then don't keep scanning
    if( newN.h.x < 0 || newN.h.y < 0 || newN.h.x >= actmap->xsize || newN.h.y >= actmap->ysize )
-      return false;
+      return 0;
 
    newN.hasAttacked = oldN_ptr->hasAttacked || disableAttack;
 
    int fa = fieldAccessible ( actmap->getField ( newN.h ), veh, newN.h.getBitmappedHeight(), &newN.hasAttacked );
    if ( !fa )
-      return false;
+      return 0;
    newN.canStop = fa >= 2;
 
    newN.gval = oldN_ptr->gval + getMoveCost ( oldN_ptr->h, newN.h, veh, newN.hasAttacked );
    if ( (newN.gval >= longestPath) || ( newN.gval > MAXIMUM_PATH_LENGTH ) )
-      return false;
+      return 0;
 
-   newN.enterHeight = keepEnterHeight ? oldN_ptr->enterHeight : -1;
+   if (enter) {
+      newN.enterHeight = newN.h.getNumericalHeight();
+      newN.h.setNumericalHeight(-1);
+   } else {
+      newN.enterHeight = -1;
+   }
    newN.previous = oldN_ptr;
    newN.hval = dist(newN.h, B);
-   return true;
+   return fa;
 }
 
 const int* getDirectionOrder ( int x, int y, int x2, int y2 )
@@ -735,8 +733,9 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
                       if ( h & (1<<i)) {
                          const ContainerBaseType::TransportationIO* tio = oldFld->getContainer()->vehicleUnloadSystem( veh->typ, 1<<i);
                          if ( tio ) {
+                            pos.setNumericalHeight(i);
                             Node N2;
-                            if (!initNode(N2, N_ptr, dir, B, i, tio->disableAttack))
+                            if (!initNode(N2, N_ptr, pos, B, tio->disableAttack))
                                continue;
 
                             if ( N2.canStop && actmap->getField(N2.h)->getContainer() && actmap->getField(N2.h)->vehicle != veh) {
@@ -760,7 +759,7 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
           }
 
           if ( !operationLimiter || operationLimiter->allowDocking() ) {
-             int dock = actmap->getField(N.h)->getContainer()->vehicleDocking(veh, true );
+             int dock = oldFld->getContainer()->vehicleDocking(veh, true );
              for ( int dir = 0; dir < 6; dir++ ) {
                 if ( dock ) {
                    MapCoordinate3D pos = getNeighbouringFieldCoordinate ( N.h, dir );
@@ -771,9 +770,9 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
                               && veh->getMap()->getPlayer(veh).diplomacy.isAllied( fld->getContainer() ))
                             if ( !fld->building || (fld->bdt & getTerrainBitType(cbbuildingentry) ).any()) {
                                pos.setNumericalHeight(-1);
-                               Node N2 = Node(N.gval + 10, dist(pos, B), N.enterHeight, N.canStop, N.hasAttacked);
-                               N2.previous = N_ptr;
-                               N2.h = pos;
+                               Node N2;
+                               if ( !initNode(N2, N_ptr, pos, B) )
+                                  continue;
                                addToOpen ( N2, open );
                             }
                 }
@@ -797,7 +796,7 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
 
                  HexDirection dir = HexDirection(directions[dci]);
                  Node N2;
-                 if ( !initNode(N2, N_ptr, dir, B) )
+                 if ( !initNode(N2, N_ptr, getNeighbouringFieldCoordinate(N.h, dir), B) )
                     continue;
                  if ( N2.canStop && actmap->getField(N2.h)->getContainer() && actmap->getField(N2.h)->vehicle != veh) {
                      // there's an container on the field that can be entered. This means, the unit can't stop 'over' the container...
@@ -856,22 +855,11 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
                           MapField* fld = actmap->getField( newpos );
                           if ( fld && access ) {
                              newpos.setNumericalHeight(newpos.getNumericalHeight() + hcm->heightDelta);
-                             bool hasAttacked = N.hasAttacked;
-                             int fa = fieldAccessible ( fld, veh, newpos.getBitmappedHeight(), &hasAttacked );
-                             if ( fa == 2 ) {
-                                bool canStop = true;
-                                DistanceType gval = N.gval + getMoveCost( N.h, newpos, veh, hasAttacked );
-                                Node N2 = Node(gval, dist(newpos, B), -1, canStop, hasAttacked);
-                                N2.previous = N_ptr;
-                                N2.h = newpos;
-
-                                if ( actmap->getField(newpos)->getContainer() && actmap->getField(newpos)->vehicle != veh ) {
-                                   N2.enterHeight = N2.h.getNumericalHeight() ;
-                                   N2.h.setNumericalHeight (-1);
-                                }
-
-                                addToOpen ( N2, open );
-                             }
+                             bool enter = actmap->getField(newpos)->getContainer() && actmap->getField(newpos)->vehicle != veh;
+                             Node N2;
+                             if ( initNode(N2, N_ptr, newpos, B, false, enter ) != 2)
+                                continue;
+                            addToOpen ( N2, open );
                           }
                        }
                     }
