@@ -190,24 +190,21 @@ class AStar3D {
        // pointers to nodes in this container need to stay valid when the
        // container grows, so we can't use a vector for this.
        class VisitedContainer: protected deque<Node> {
-             typedef boost::unordered_map<MapCoordinate3D, DistanceType, hash_MapCoordinate3D> hMapType;
+             typedef boost::unordered_map<MapCoordinate3D, Node*, hash_MapCoordinate3D> hMapType;
              hMapType hMap;
           public:
              typedef deque<Node> Parent;
              typedef Parent::iterator iterator;
              Node* add ( const Node& n) {
                 push_back(n);
-                hMap[n.h] = n.gval;
+                hMap[n.h] = &back();
                 return &back();
              };
-             bool contains ( const MapCoordinate3D& pos ) {
-                return hMap.find(pos) != hMap.end();
-             }
-             DistanceType gval( const MapCoordinate3D& pos ) {
+             Node* find ( const MapCoordinate3D& pos ) {
                 hMapType::iterator i = hMap.find(pos); 
-                if (i == hMap.end()) return -1;
+                if (i == hMap.end()) return NULL;
                 else return i->second;
-             };
+             }
 
              iterator begin() { return Parent::begin(); };
              iterator end() { return Parent::end(); };

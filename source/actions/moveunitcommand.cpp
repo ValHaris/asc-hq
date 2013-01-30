@@ -306,10 +306,9 @@ void MoveUnitCommand::calcPath()
       ast.findPath ( path, destination );
    }
    
-   
    if ( path.empty() && multiTurnMovement ) {
       
-      bool enterContainer = true;
+      const bool enterContainer = true;
       
       AStar3D::Path totalPath;
       AStar3D astar ( getMap(), getUnit(), false );

@@ -586,7 +586,7 @@ int AStar3D::initNode ( Node& newN,
    if ( (oldN_ptr->previous) && (newN.h == oldN_ptr->previous->h) )
       return 0;
 
-   if ( visited.contains(newN.h) )
+   if ( visited.find(newN.h) )
       return 0;
 
    // If it's off the end of the map, then don't keep scanning

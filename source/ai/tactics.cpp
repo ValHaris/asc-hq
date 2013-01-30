@@ -96,7 +96,7 @@ void AI :: searchTargets ( Vehicle* veh, const MapCoordinate3D& pos, TargetVecto
             MapCoordinate mc = getNeighbouringFieldCoordinate ( MapCoordinate ( mv->attackx, mv->attacky), nf );
             MapField* fld = getMap()->getField(mc);
             if ( fld && !veh->typ->wait)
-               mv->neighbouringFieldsReachable[nf] = (vm.visited.contains( MapCoordinate3D(mc.x, mc.y, pos.getBitmappedHeight()) ) || ( veh->xpos == mc.x && veh->ypos == mc.y )) && !fld->building && (!fld->vehicle || fld->unitHere(veh));
+               mv->neighbouringFieldsReachable[nf] = (vm.visited.find( MapCoordinate3D(mc.x, mc.y, pos.getBitmappedHeight()) ) || ( veh->xpos == mc.x && veh->ypos == mc.y )) && !fld->building && (!fld->vehicle || fld->unitHere(veh));
             else
                mv->neighbouringFieldsReachable[nf] = false;
 
