@@ -143,10 +143,6 @@ class AStar3D {
            int enterHeight;
            bool canStop;
            bool hasAttacked;
-           Node(DistanceType _gval=0, DistanceType _hval=0, int _enterHeight=-1,
-                bool _canStop=false, bool _hasAttacked=false) :
-              gval(_gval), hval(_hval), enterHeight(_enterHeight), canStop(_canStop),
-              hasAttacked(_hasAttacked) {}
            bool operator< ( const Node& b ) const;
        };
 

@@ -689,31 +689,30 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
        return;
     */
 
-    Node N = Node(0, dist(A, B), -1, false, veh->attacked);
-    N.previous = NULL;
-    // insert the original node
-    N.h = A;
-    if ( !(actmap->getField(A)->unitHere(veh)) ) {
-       N.h.setNumericalHeight(-1);
-    }
-    open.insert(N);
+    Node firstNode;
+    firstNode.previous = NULL;
+    firstNode.gval = 0;
+    firstNode.hval = dist(A, B);
 
-    // Remember which nodes we visited, so that we can clear the mark array
-    // at the end.
+    firstNode.h = A;
+    if ( !(actmap->getField(A)->unitHere(veh)) ) {
+       firstNode.h.setNumericalHeight(-1);
+    }
+    // insert the original node
+    open.insert(firstNode);
 
     bool found = false;
+    Node* N_ptr;
 
     // While there are still nodes to visit, visit them!
     while( !open.empty() ) {
-        N = *open.begin();
-        Node* N_ptr = visited.add(N);
+        N_ptr = visited.add(*open.begin());
         open.erase(open.begin());
         // If we're at the goal, then exit
-        MapField* oldFld = actmap->getField(N.h);
+        MapField* oldFld = actmap->getField(N_ptr->h);
         for ( vector<MapCoordinate3D>::const_iterator i = B.begin(); i != B.end(); i++ )
-           if( N.h == *i ) {
-              //MapField* fld = actmap->getField(N.h);
-              if ( N.h.getNumericalHeight() == -1 || !(oldFld->building || (oldFld->vehicle && oldFld->vehicle != veh ))) {
+           if( N_ptr->h == *i ) {
+              if ( N_ptr->h.getNumericalHeight() == -1 || !(oldFld->building || (oldFld->vehicle && oldFld->vehicle != veh ))) {
                  found = true;
                  break;
               }
@@ -721,12 +720,12 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
         if ( found )
            break;
 
-        if ( N.h.getNumericalHeight() == -1 ) {
+        if ( N_ptr->h.getNumericalHeight() == -1 ) {
            // the unit is inside a container
 
           if ( !operationLimiter || operationLimiter->allowLeavingContainer() ) {
              for ( int dir = 0; dir < 6; dir++ ) {
-                MapCoordinate3D pos = getNeighbouringFieldCoordinate ( N.h, dir );
+                MapCoordinate3D pos = getNeighbouringFieldCoordinate ( N_ptr->h, dir );
                 if ( actmap->getField(pos)) {
                    int h = oldFld->getContainer()->vehicleUnloadable(veh->typ);
                    for ( int i = 0; i < 8; i++ )
@@ -762,7 +761,7 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
              int dock = oldFld->getContainer()->vehicleDocking(veh, true );
              for ( int dir = 0; dir < 6; dir++ ) {
                 if ( dock ) {
-                   MapCoordinate3D pos = getNeighbouringFieldCoordinate ( N.h, dir );
+                   MapCoordinate3D pos = getNeighbouringFieldCoordinate ( N_ptr->h, dir );
                    MapField* fld = actmap->getField( pos );
                    if ( fld && fld->getContainer() && ( fld->getContainer() != oldFld->getContainer() ))
                       if ( fld->getContainer()->vehicleDocking(veh, false ) & dock )
@@ -785,7 +784,7 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
 
            const int* directions;
            if ( B.begin()->valid() ) {
-              directions = getDirectionOrder ( N.h.x, N.h.y, B.begin()->x, B.begin()->y );
+              directions = getDirectionOrder ( N_ptr->h.x, N_ptr->h.y, B.begin()->x, B.begin()->y );
            } else {
               static const int d[6] = {0,1,2,3,4,5};
               directions = d;
@@ -796,7 +795,7 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
 
                  HexDirection dir = HexDirection(directions[dci]);
                  Node N2;
-                 if ( !initNode(N2, N_ptr, getNeighbouringFieldCoordinate(N.h, dir), B) )
+                 if ( !initNode(N2, N_ptr, getNeighbouringFieldCoordinate(N_ptr->h, dir), B) )
                     continue;
                  if ( N2.canStop && actmap->getField(N2.h)->getContainer() && actmap->getField(N2.h)->vehicle != veh) {
                      // there's an container on the field that can be entered. This means, the unit can't stop 'over' the container...
@@ -820,12 +819,12 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
 
 
               if ( (!operationLimiter || operationLimiter->allowHeightChange()) && !(veh->typ->hasFunction( ContainerBaseType::OnlyMoveToAndFromTransports  )) )
-              if ( (fieldAccessible ( actmap->getField(N.h), veh, N.h.getBitmappedHeight() ) == 2 ) || actmap->getgameparameter( cgp_movefrominvalidfields) )
+              if ( (fieldAccessible ( actmap->getField(N_ptr->h), veh, N_ptr->h.getBitmappedHeight() ) == 2 ) || actmap->getgameparameter( cgp_movefrominvalidfields) )
                  for ( int heightDelta = -1; heightDelta <= 1; heightDelta += 2 ) {
-                    const VehicleType::HeightChangeMethod* hcm = veh->getHeightChange( heightDelta, N.h.getBitmappedHeight());
+                    const VehicleType::HeightChangeMethod* hcm = veh->getHeightChange( heightDelta, N_ptr->h.getBitmappedHeight());
                     if ( hcm ) {
                        for ( int dir = 0; (dir < 6 && hcm->dist) || (dir < 1 && !hcm->dist); dir++ ) {
-                          MapCoordinate3D newpos = N.h;
+                          MapCoordinate3D newpos = N_ptr->h;
                           bool access = true;
                           for ( int step = 0; step <= hcm->dist; step++ ) {
                              MapField* fld = actmap->getField(newpos);
@@ -834,10 +833,10 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
                                 break;
                              }
 
-                             if (  !fieldAccessible ( fld, veh, N.h.getBitmappedHeight()) && (actmap->getgameparameter( cgp_movefrominvalidfields)==0 || step>0))
+                             if (  !fieldAccessible ( fld, veh, N_ptr->h.getBitmappedHeight()) && (actmap->getgameparameter( cgp_movefrominvalidfields)==0 || step>0))
                                 access = false;
 
-                             if ( !fieldAccessible( fld, veh, 1 << (N.h.getNumericalHeight() + hcm->heightDelta)) )
+                             if ( !fieldAccessible( fld, veh, 1 << (N_ptr->h.getNumericalHeight() + hcm->heightDelta)) )
                                 access = false;
 
                              if ( fld && fld->building )
@@ -870,10 +869,9 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
     }
 
     if ( found ) {
-        Node* n = &N;
-        while ( n ) {
-           path.push_front ( PathPoint(n->h, ceil(n->gval), n->enterHeight, n->hasAttacked) );
-           n = n->previous; 
+        while ( N_ptr ) {
+           path.push_front ( PathPoint(N_ptr->h, ceil(N_ptr->gval), N_ptr->enterHeight, N_ptr->hasAttacked) );
+           N_ptr = N_ptr->previous; 
         }
     } else {
         // No path
