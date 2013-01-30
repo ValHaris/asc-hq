@@ -567,16 +567,13 @@ AStar3D::DistanceType AStar3D::getMoveCost ( const MapCoordinate3D& start, const
 
 void AStar3D :: addToOpen ( const Node& N2, OpenContainer& open )
 {
-   //if ( N2.gval <= MAXIMUM_PATH_LENGTH && N2.gval < longestPath ) {
-      OpenContainerIndex::iterator i = open.get<1>().find(N2.h);
-      if ( i == open.get<1>().end()) {
-         //if ( !visited.contains(N2.h))
-         open.insert ( N2 );
-      } else {
-         if (i->gval > N2.gval || (i->gval == N2.gval && i->hasAttacked && !N2.hasAttacked))
-            open.get<1>().replace(i, N2);
-      }
-   //}
+   OpenContainerIndex::iterator i = open.get<1>().find(N2.h);
+   if ( i == open.get<1>().end()) {
+      open.insert ( N2 );
+   } else {
+      if (i->gval > N2.gval || (i->gval == N2.gval && i->hasAttacked && !N2.hasAttacked))
+         open.get<1>().replace(i, N2);
+   }
 }
 
 int AStar3D::initNode ( Node& newN,

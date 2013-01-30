@@ -7,7 +7,7 @@
  #define astar2H
 
  #include <vector>
- #include <tr1/unordered_map>
+ //#include <tr1/unordered_map>
  #include <functional>
  #include "mapalgorithms.h"
  #include "gamemap.h"
@@ -17,6 +17,8 @@
  #include <boost/multi_index/hashed_index.hpp>
  #include <boost/multi_index/identity.hpp>
  #include <boost/multi_index/member.hpp>
+
+ #include <boost/unordered_map.hpp>
 
  enum HexDirection { DirN, DirNE, DirSE, DirS, DirSW, DirNW, DirNone };
 
@@ -136,14 +138,14 @@ class AStar3D {
        };
 
        struct Node {
-           Node* previous;
-           MapCoordinate3D h;        // location on the map, in hex coordinates
-           AStar3D::DistanceType gval;        // g in A* represents how far we've already gone
-           AStar3D::DistanceType hval;        // h in A* represents an estimate of how far is left
-           int enterHeight;
-           bool canStop;
-           bool hasAttacked;
-           bool operator< ( const Node& b ) const;
+          Node* previous;
+          MapCoordinate3D h;        // location on the map, in hex coordinates
+          AStar3D::DistanceType gval;        // g in A* represents how far we've already gone
+          AStar3D::DistanceType hval;        // h in A* represents an estimate of how far is left
+          int16_t enterHeight;
+          bool canStop;
+          bool hasAttacked;
+          bool operator< ( const Node& b ) const;
        };
 
     protected:
@@ -179,7 +181,7 @@ class AStar3D {
 
        //! the reachable fields
        class VisitedContainer: protected deque<Node> {
-             typedef tr1::unordered_map<MapCoordinate3D, DistanceType, hash_h> hMapType;
+             typedef boost::unordered_map<MapCoordinate3D, DistanceType, hash_h> hMapType;
              hMapType hMap;
           public:
              typedef deque<Node> Parent;
@@ -208,11 +210,11 @@ class AStar3D {
        void addToOpen ( const Node& n, OpenContainer& open );
 
        int initNode ( Node& newN,
-                       Node* oldN_ptr,
-                       const MapCoordinate3D& newpos,
-                       const vector<MapCoordinate3D>& B,
-                       bool disableAttack=false,
-                       bool enter=false);
+                      Node* oldN_ptr,
+                      const MapCoordinate3D& newpos,
+                      const vector<MapCoordinate3D>& B,
+                      bool disableAttack=false,
+                      bool enter=false);
 
     public:
        AStar3D ( GameMap* actmap, Vehicle* veh, bool markTemps_ = true, int maxDistance = maxint );
