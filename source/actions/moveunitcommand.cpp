@@ -300,11 +300,10 @@ bool MoveUnitCommand::isFieldReachable3D( const MapCoordinate3D& pos, bool direc
 
 void MoveUnitCommand::calcPath()
 {
+
    path.clear();
-   {
-      AStar3D ast ( getMap(), getUnit(), false, getUnit()->getMovement() );
-      ast.findPath ( path, destination );
-   }
+   AStar3D ast ( getMap(), getUnit(), false, getUnit()->getMovement() );
+   ast.findPath ( path, destination );
    
    if ( path.empty() && multiTurnMovement ) {
       

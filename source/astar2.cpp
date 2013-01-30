@@ -574,7 +574,7 @@ void AStar3D :: addToOpen ( const Node& N2, OpenContainer& open )
 }
 
 int AStar3D::initNode ( Node& newN,
-                Node* oldN_ptr,
+                const Node* oldN_ptr,
                 const MapCoordinate3D& newpos,
                 const vector<MapCoordinate3D>& B,
                 bool disableAttack,
@@ -696,7 +696,7 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
     open.insert(firstNode);
 
     bool found = false;
-    Node* N_ptr;
+    const Node* N_ptr;
 
     // While there are still nodes to visit, visit them!
     while( !open.empty() ) {
@@ -863,13 +863,31 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
     }
 
     if ( found ) {
+       constructPath ( path, N_ptr );
+       /*
         while ( N_ptr ) {
            path.push_front ( PathPoint(N_ptr->h, ceil(N_ptr->gval), N_ptr->enterHeight, N_ptr->hasAttacked) );
            N_ptr = N_ptr->previous; 
         }
+      */
     } else {
         // No path
     }
+}
+
+bool AStar3D::constructPath( Path& path, const Node* n_ptr) {
+   if ( n_ptr == NULL )
+      return false;
+   const Node* n = n_ptr;
+   while ( n ) {
+      path.push_front ( PathPoint(n->h, ceil(n->gval), n->enterHeight, n->hasAttacked) );
+      n = n->previous; 
+   }
+   return true;
+}
+
+bool AStar3D::constructPath( Path& path, const MapCoordinate3D& pos) {
+   return constructPath ( path, visited.find (pos) );
 }
 
 void AStar3D::findPath( Path& path, const MapCoordinate3D& dest )

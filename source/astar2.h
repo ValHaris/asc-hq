@@ -144,11 +144,11 @@ class AStar3D {
        };
 
        struct Node {
-          Node* previous;
+          const Node* previous;
           MapCoordinate3D h;        // location on the map, in hex coordinates
           AStar3D::DistanceType gval;        // g in A* represents how far we've already gone
           AStar3D::DistanceType hval;        // h in A* represents an estimate of how far is left
-          int16_t enterHeight;
+          int enterHeight;
           bool canStop;
           bool hasAttacked;
           bool operator< ( const Node& b ) const;
@@ -195,12 +195,12 @@ class AStar3D {
           public:
              typedef deque<Node> Parent;
              typedef Parent::iterator iterator;
-             Node* add ( const Node& n) {
+             const Node* add ( const Node& n) {
                 push_back(n);
                 hMap[n.h] = &back();
                 return &back();
              };
-             Node* find ( const MapCoordinate3D& pos ) {
+             const Node* find ( const MapCoordinate3D& pos ) {
                 hMapType::iterator i = hMap.find(pos); 
                 if (i == hMap.end()) return NULL;
                 else return i->second;
@@ -216,7 +216,7 @@ class AStar3D {
        void addToOpen ( const Node& n, OpenContainer& open );
 
        int initNode ( Node& newN,
-                      Node* oldN_ptr,
+                      const Node* oldN_ptr,
                       const MapCoordinate3D& newpos,
                       const vector<MapCoordinate3D>& B,
                       bool disableAttack=false,
@@ -244,6 +244,12 @@ class AStar3D {
            \param path if non-null, all fields will be stored there
        */
        void findAllAccessibleFields ( vector<MapCoordinate3D>* path = NULL );
+
+       //! construct a path from a pointer to a visited node, return false if pointer is NULL, else true
+       bool constructPath( Path& path, const Node* n);
+
+       //! construct a path from a pointer to a visited node; return false if position doesn't exist, else true
+       bool constructPath( Path& path, const MapCoordinate3D& pos);
 
        //! returns the distance of the last found path, or -1 on any error
        int getDistance( );
