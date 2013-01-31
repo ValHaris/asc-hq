@@ -99,7 +99,14 @@ void testHeightChangeAI()
    // this is the AI way of doing things, selecting a 3D coordinate as destination
    
    MapCoordinate3D dest( 6,10,1<<5 );
-   assertOrThrow( muc->isFieldReachable3D( dest, true ));
+
+   // the 'isFieldReachable3D' method was removed since it was not used anymore
+   //assertOrThrow( muc->isFieldReachable3D( dest, true ));
+   // This is the equivalent:
+   AStar3D ast = AStar3D ( game.get(), veh, false, veh->getMovement() );
+   AStar3D::Path path;
+   ast.findPath ( path, dest );
+   assert ( !path.empty() );
    
    muc->setDestination( dest );
    ActionResult res = muc->execute( createTestingContext( veh->getMap() ));

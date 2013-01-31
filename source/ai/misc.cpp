@@ -575,81 +575,63 @@ bool AI :: moveUnit ( Vehicle* veh, const MapCoordinate3D& destination, bool int
       AStar3D::Path path;
       ast->findPath ( path, destination );
 
-      return moveUnit ( veh, path, intoBuildings, intoTransports ) == 1 ;
-//   }
-}
-
-int AI::moveUnit ( Vehicle* veh, const AStar3D::Path& path, bool intoBuildings, bool intoTransports )
-{
-   auto_ptr<MoveUnitCommand> mum ( new MoveUnitCommand( veh ));
-   mum->searchFields();
-   
-   
-   int oldHeight = veh->getPosition3D().getNumericalHeight();
-   AStar3D::Path::const_iterator pi = path.begin();
-   if ( pi == path.end() )
-      return 0;
-
-   int nwid = veh->networkid;
-
-   AStar3D::Path::const_iterator lastmatch = pi;
-   while ( pi != path.end() ) {
-      MapField* fld = getMap()->getField ( pi->x, pi->y );
-      bool ok = true;
-      if ( fld->getContainer() ) {
-         if ( pi+1 !=path.end() )
-             ok = false;
-         else {
-            if ( fld->building && !intoBuildings )
-               ok = false;
-            if ( fld->vehicle && !intoTransports )
-               ok = false;
-         }
-      }
-
-      if ( ok )
-         if ( mum->isFieldReachable3D(*pi, true) )
-            lastmatch = pi;
-
-      ++pi;
-   }
-
-   if ( getMap()->getField ( lastmatch->x, lastmatch->y )->building )
-      if ( checkReConquer ( getMap()->getField ( lastmatch->x, lastmatch->y )->building, veh ))
+      if ( path.empty() )
          return false;
 
-   if ( lastmatch == path.begin() )
-      return 0;
-  
-   mum->setDestination( *lastmatch );
-   mum->setFlags( MoveUnitCommand::NoInterrupt );
-   
-   
-   ActionResult res = mum->execute( getContext() );
-   if ( res.successful() ) {
-      mum.release();
-      if ( getMap()->getUnit ( nwid ) && (oldHeight != veh->getPosition3D().getNumericalHeight()) )
-         veh->aiparam[ getPlayerNum()]->setNewHeight();
-   } else {
-      displaymessage ( "AI :: moveUnit (path) \n error in movement step 3 with unit %d", 1, veh->networkid );
-      return -1;
-   }
+      auto_ptr<MoveUnitCommand> mum ( new MoveUnitCommand( veh ));
+      mum->searchFields();
+      // CODE DUPLICATION: MoveUnitCommand::findPath()
+      const AStar3D::Node* n;
+      for (n = ast->visited.find(path.back()); n != NULL; n = n->previous) {
+         if ( (n->gval <= veh->getMovement() ) && n->canStop ) {
+            MapField* fld = getMap()->getField ( n->h );
+            if ( fld->getContainer() ) {
+               if ( n->h != path.back() ) {
+                  continue;
+               }
+            } else {
+               if ( ( fld->building && !intoBuildings ) || ( fld->vehicle && !intoTransports ) ) {
+                  continue;
+               }
+            }
+            mum->setDestination( n->h );
+            break;
+         }
+      }
+      if ( n == NULL )
+         return false;
 
-   //! the unit may have been shot down
-   if ( ! getMap()->getUnit ( nwid ))
-      return 1;
+      mum->setFlags( MoveUnitCommand::NoInterrupt );
 
-   if ( pi == path.end() ) 
+      int nwid = veh->networkid;
+      int oldHeight = veh->getPosition3D().getNumericalHeight();
+
+      if ( getMap()->getField ( n->h )->building )
+         if ( checkReConquer ( getMap()->getField ( n->h )->building, veh ) )
+            return false;
+
+      ActionResult res = mum->execute( getContext() );
+      if ( res.successful() ) {
+         mum.release();
+         if ( getMap()->getUnit ( nwid ) && (oldHeight != veh->getPosition3D().getNumericalHeight()) )
+            veh->aiparam[ getPlayerNum()]->setNewHeight();
+      } else {
+         displaymessage ( "AI :: moveUnit (path) \n error in movement step 3 with unit %d", 1, veh->networkid );
+         return false;
+      }
+
+      //! the unit may have been shot down
+      if ( ! getMap()->getUnit ( nwid ))
+         return true;
+
       if ( veh->aiparam[getPlayerNum()]->getJob() == AiParameter::job_conquer )
          if ( getMap()->getField ( veh->getPosition() )->building )
             veh->aiparam[getPlayerNum()]->clearJobs();
 
-   return 1;
+      return true;
+
+//   }
 }
-
-
-
-
 
 AI:: CheckFieldRecon :: CheckFieldRecon ( AI* _ai ) : SearchFields ( _ai->getMap() ), player(_ai->getPlayerNum()), ai ( _ai )
 {

@@ -327,12 +327,6 @@
 
             bool moveUnit ( Vehicle* veh, const MapCoordinate3D& destination, bool intoBuildings = true, bool intoTransports = true );
 
-            /** \returns 1 = destination reached;
-                         0 = everything ok, but not enough movement to reach destination;
-                         -1 = error
-             */
-            int moveUnit ( Vehicle* veh, const AStar3D::Path& path, bool intoBuildings = true, bool intoTransports = true );
-
             void getAttacks ( AStar3D& vm, Vehicle* veh, TargetVector& tv, int hemmingBonus, bool justOne = false, bool executeService = true );
             void searchTargets ( Vehicle* veh, const MapCoordinate3D& pos, TargetVector& tl, int moveDist, AStar3D& vm, int hemmingBonus );
             bool targetsNear( Vehicle* veh );

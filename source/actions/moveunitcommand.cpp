@@ -289,15 +289,6 @@ bool MoveUnitCommand::isFieldReachable( const MapCoordinate& pos, bool direct )
    return false;  
 }
 
-bool MoveUnitCommand::isFieldReachable3D( const MapCoordinate3D& pos, bool direct )
-{
-   AStar3D ast ( getMap(), getUnit(), false, getUnit()->getMovement() );
-   AStar3D::Path localPath;
-   ast.findPath ( localPath, pos );
-   return !localPath.empty();
-}
-
-
 void MoveUnitCommand::calcPath( AStar3D* const astar)
 {
 
