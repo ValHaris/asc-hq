@@ -60,21 +60,6 @@
 
 extern const int currentServiceOrderVersion;
 
-  //! A path finding algorithm which avoids units to jam; used by the AI's strategy module.
-  class StratAStar : public AStar {
-       AI* ai;
-    protected:
-       virtual int getMoveCost ( int x1, int y1, int x2, int y2, const Vehicle* vehicle )
-       {
-          int cost = AStar::getMoveCost ( x1, y1, x2, y2, vehicle );
-          if ( ai->getMap()->getField ( x2, y2 )->vehicle && beeline ( vehicle->xpos, vehicle->ypos, x2, y2) < vehicle->getMovement())
-             cost += 2;
-          return cost;
-       };
-    public:
-       StratAStar ( AI* _ai, Vehicle* veh ) : AStar ( _ai->getMap(), veh ), ai ( _ai ) {};
- };
-
   //! A 3D path finding algorithm which avoids units to jam; used by the AI's strategy module.
   class StratAStar3D : public AStar3D {
        AI* ai;
@@ -106,33 +91,6 @@ extern const int currentServiceOrderVersion;
        AntiMineAStar3D ( AI* _ai, Vehicle* veh, bool markTemps_ = true ) : AStar3D ( _ai->getMap(), veh, markTemps_ ), ai ( _ai ) {};
  };
  
-
-  //! A path finding algorithm which tries to keep the units hidden from view.
- class HiddenAStar : public AStar {
-       AI* ai;
-    protected:
-       virtual int getMoveCost ( int x1, int y1, int x2, int y2, const Vehicle* vehicle )
-       {
-          int cost = AStar::getMoveCost ( x1, y1, x2, y2, vehicle );
-          int visibility = ai->getMap()->getField ( x2, y2 )->visible;
-          int visnum = 0;
-          int enemynum = 0;
-          for ( int i = 0; i< 8; i++ )
-             if ( ai->getMap()->player[i].diplomacy.isHostile( ai->getPlayerNum() ) ) {
-                enemynum++;
-                int v = (visibility >> ( 2*i)) & 3;
-                if ( v >= visible_now )
-                   visnum++;
-             }
-          if ( enemynum )
-             cost += 12 * visnum / enemynum;
-
-          return cost;
-       };
-    public:
-       HiddenAStar ( AI* _ai, Vehicle* veh ) : AStar ( _ai->getMap(), veh ), ai ( _ai ) {};
- };
-
 
   //! A 3D path finding algorithm which tries to keep the units hidden from view.
  class HiddenAStar3D : public AStar3D {
