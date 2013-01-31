@@ -301,50 +301,24 @@ bool MoveUnitCommand::isFieldReachable3D( const MapCoordinate3D& pos, bool direc
 void MoveUnitCommand::calcPath()
 {
 
+   const int maxMovement = getUnit()->getMovement();
    path.clear();
-   AStar3D ast ( getMap(), getUnit(), false, getUnit()->getMovement() );
-   ast.findPath ( path, destination );
-   
-   if ( path.empty() && multiTurnMovement ) {
-      
-      const bool enterContainer = true;
-      
-      AStar3D::Path totalPath;
-      AStar3D astar ( getMap(), getUnit(), false );
-   
-      astar.findPath ( totalPath, destination );
-      if ( totalPath.empty() )
-         return;
-   
-      AStar3D::Path::const_iterator pi = totalPath.begin();
-      AStar3D::Path::const_iterator lastmatch = totalPath.begin();
-      
-      while ( pi != totalPath.end() ) {
-         MapField* fld = getMap()->getField ( pi->x, pi->y );
-         bool ok = true;
-         if ( fld->getContainer() ) {
-            if ( pi+1 !=totalPath.end() )
-               ok = false;
-            else {
-               if ( fld->building && !enterContainer )
-                  ok = false;
-               if ( fld->vehicle && !enterContainer )
-                  ok = false;
-            }
-         }
+   const bool enterContainer = true;
 
-         if ( ok )
-            if ( isFieldReachable3D(*pi, true) )
-               lastmatch = pi;
+   AStar3D::Path totalPath;
+   AStar3D astar ( getMap(), getUnit(), false );
 
-         ++pi;
+   astar.findPath ( totalPath, destination );
+   if ( totalPath.empty() ) // found no path at all
+      return;
+   
+   // trace the found path back to the furthest point we can reach this round
+   for ( const AStar3D::Node* n = astar.visited.find(destination); n != NULL; n = n->previous ) {
+      if ( ( n->gval <= maxMovement ) && n->canStop) {
+         // found!
+         astar.constructPath ( path, n );
+         break;
       }
-
-      if ( lastmatch == totalPath.begin() )
-         return;
-  
-      AStar3D ast ( getMap(), getUnit(), false, getUnit()->getMovement() );
-      ast.findPath ( path, *lastmatch );
    }
 }
 

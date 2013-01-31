@@ -249,7 +249,7 @@ class AStar3D {
        bool constructPath( Path& path, const Node* n);
 
        //! construct a path from a pointer to a visited node; return false if position doesn't exist, else true
-       bool constructPath( Path& path, const MapCoordinate3D& pos);
+       inline bool constructPath( Path& path, const MapCoordinate3D& pos) { return constructPath ( path, visited.find (pos) ); }
 
        //! returns the distance of the last found path, or -1 on any error
        int getDistance( );

@@ -886,10 +886,6 @@ bool AStar3D::constructPath( Path& path, const Node* n_ptr) {
    return true;
 }
 
-bool AStar3D::constructPath( Path& path, const MapCoordinate3D& pos) {
-   return constructPath ( path, visited.find (pos) );
-}
-
 void AStar3D::findPath( Path& path, const MapCoordinate3D& dest )
 {
   vector<MapCoordinate3D> d;
