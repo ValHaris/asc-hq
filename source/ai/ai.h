@@ -367,11 +367,6 @@
             void tactics_findBestAttackOrder ( Vehicle** units, int* attackOrder, Vehicle* enemy, int depth, int damage, int& finalDamage, int* finalOrder, int& finalAttackNum );
             void tactics_findBestAttackUnits ( const MoveVariantContainer& mvc, MoveVariantContainer::iterator& m, Vehicle** positions, float value, Vehicle** finalposition, float& finalvalue, int unitsPositioned, int recursionDepth, int startTime );
 
-            /** a special path finding where fields occupied by units get an addidional movemalus.
-                This helps finding a path that is not thick with units and prevents units to queue all one after another
-            */
-            void findStratPath ( vector<MapCoordinate>& path, Vehicle* veh, int x2, int y2 );
-
             class  UnitDistribution {
                public:
                   static const int groupCount = 6;
