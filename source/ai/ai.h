@@ -160,8 +160,9 @@
                    MapCoordinate3D getNearestRefuellingPosition ( bool buildingRequired, bool refuel, bool repair );
                    bool returnFromPositionPossible ( const MapCoordinate3D& pos, int theoreticalFuel = -1 );
                    //! checks whether the unit can crash do to lack of fuel; this is usually true for airplanes. A unit that does not crash does not need to care about landing positions.
-                   void findPath();
+                   void findPath( bool markTemps=true);
                    static bool necessary (const Vehicle* veh, AI& ai );
+                   AStar3D* getAst() { return ast; };
                    ~RefuelConstraint() { if (ast) delete ast; };
            };
            friend class RefuelConstraint;
@@ -454,7 +455,7 @@
             class Sections {
                   AI* ai;
                   Section* section;
-                  MapCoordinate getAlternativeField( const MapCoordinate& pos, map<MapCoordinate,int>* destinationCounter, int height );
+                  MapCoordinate getAlternativeField( const MapCoordinate& pos, map<MapCoordinate,int>* destinationCounter, int height, AStar3D* ast );
                public:
                   int sizeX ;
                   int sizeY ;

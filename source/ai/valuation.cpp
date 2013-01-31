@@ -633,14 +633,13 @@ AI::Section& AI :: Sections :: getForPos ( int xn, int yn )
 /*
   This is like some ball rolling down from some high potential spike
 */
-MapCoordinate AI :: Sections :: getAlternativeField( const MapCoordinate& pos, map<MapCoordinate,int>* destinationCounter, int height )
+MapCoordinate AI :: Sections :: getAlternativeField( const MapCoordinate& pos, map<MapCoordinate,int>* destinationCounter, int height, AStar3D* ast )
 {
    MapCoordinate result  = pos;
    int potential = destinationCounter->operator[](pos);
    for ( int d = 0; d< 6; ++d ) {
       MapCoordinate m = getNeighbouringFieldCoordinate( pos, d );
-      MapField* fld = ai->getMap()->getField(m );
-      if ( fld && (fld->getaTemp() & height) ) {
+      if ( ast->getFieldAccess(m) & height) {
          if ( destinationCounter->find( m ) == destinationCounter->end() )
             return m;
          else {
@@ -654,7 +653,7 @@ MapCoordinate AI :: Sections :: getAlternativeField( const MapCoordinate& pos, m
    if ( result == pos )
       return result;
    else
-      return getAlternativeField( result , destinationCounter, height );
+      return getAlternativeField( result , destinationCounter, height, ast );
 }
 
 
@@ -668,6 +667,7 @@ AI::Section* AI :: Sections :: getBest ( int pass, Vehicle* veh, MapCoordinate3D
    */
 
    AStar3D* ast = 0;
+   bool deleteAst = false;
    RefuelConstraint* rfc = NULL;
    if ( RefuelConstraint::necessary ( veh, *ai )) {
       if ( secondRun )
@@ -675,12 +675,13 @@ AI::Section* AI :: Sections :: getBest ( int pass, Vehicle* veh, MapCoordinate3D
       else
          rfc = new RefuelConstraint ( *ai, veh );
 
-      rfc->findPath();
+      rfc->findPath( false );
+      ast = rfc->getAst();
    } else {
-      ast = new AStar3D ( ai->getMap(), veh );
+      ast = new AStar3D ( ai->getMap(), veh, false );
       ast->findAllAccessibleFields (  );
+      deleteAst = true;
    }
-
 
    AiParameter& aip = *veh->aiparam[ ai->getPlayerNum() ];
 
@@ -743,8 +744,7 @@ AI::Section* AI :: Sections :: getBest ( int pass, Vehicle* veh, MapCoordinate3D
 
                    for ( int yp = sec.y1; yp <= sec.y2; yp++ )
                       for ( int xp = sec.x1; xp <= sec.x2; xp++ ) {
-                         MapField* fld = ai->getMap()->getField(xp, yp );
-                         if ( fld->getaTemp() & h ) {
+                         if ( ast->getFieldAccess(xp, yp) & h ) {
                             int mandist = abs( sec.centerx - xp ) + 2*abs ( sec.centery - yp );
                             if ( mandist < mindist ) {
                                mindist = mandist;
@@ -754,7 +754,7 @@ AI::Section* AI :: Sections :: getBest ( int pass, Vehicle* veh, MapCoordinate3D
                                      check how many are for neighbouringfields */
                                   
                                   
-                                  MapCoordinate alt = getAlternativeField( MapCoordinate(xp,yp), destinationCounter, h );
+                                  MapCoordinate alt = getAlternativeField( MapCoordinate(xp,yp), destinationCounter, h, ast );
                                   xtogoSec = alt.x;
                                   ytogoSec = alt.y;
                                } else {
@@ -804,8 +804,12 @@ AI::Section* AI :: Sections :: getBest ( int pass, Vehicle* veh, MapCoordinate3D
             }
 
    tus.restore();
-   delete ast;
-   delete rfc;
+   if ( deleteAst ) {
+      delete ast;
+   } else {
+      ast = NULL;
+      delete rfc;
+   }
 
    if ( !frst ) {
       if ( sectionsPossibleWithMaxFuell && allowRefuellOrder )

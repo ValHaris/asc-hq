@@ -141,7 +141,7 @@ class SaveUnitMovement {
 
 
 
-void AI::RefuelConstraint::findPath()
+void AI::RefuelConstraint::findPath( bool markTemps )
 {
    if ( !ast ) {
 
@@ -156,7 +156,7 @@ void AI::RefuelConstraint::findPath()
       } else
          dist = maxMove;
 
-      ast = new AStar3D ( ai.getMap(), veh, true, dist );
+      ast = new AStar3D ( ai.getMap(), veh, markTemps, dist );
       ast->findAllAccessibleFields ( );
       // tanker planes may have a very large range; that's why we top the distance at 100 fields
    }
@@ -706,16 +706,18 @@ void AI ::  runReconUnits ( )
                // the unit is not standing on a reconposition
                int mindist = maxint;
                MapCoordinate mc;
-               for ( ReconPositions::iterator i = reconPositions.begin(); i != reconPositions.end(); i++ ) {
-                  MapField* fld = getMap()->getField( i->first );
-                  if ( !fld->vehicle && !fld->building ) {
-                     AStar ast ( getMap(), veh );
-                     ast.findAllAccessibleFields( maxUnitMovement );
-                     if ( fld->getaTemp() ) {
-                        int vdist = beeline ( veh->getPosition(), i->first )*(1+i->second/2);
-                        if( vdist < mindist ) {
-                           mindist = vdist;
-                           mc = i->first;
+               if ( !reconPositions.empty() ) {
+                  AStar3D ast ( getMap(), veh, false, maxUnitMovement );
+                  ast.findAllAccessibleFields( );
+                  for ( ReconPositions::iterator i = reconPositions.begin(); i != reconPositions.end(); i++ ) {
+                     MapField* fld = getMap()->getField( i->first );
+                     if ( !fld->vehicle && !fld->building ) {
+                        if ( ast.getFieldAccess( i->first ) ) {
+                           int vdist = beeline ( veh->getPosition(), i->first )*(1+i->second/2);
+                           if( vdist < mindist ) {
+                              mindist = vdist;
+                              mc = i->first;
+                           }
                         }
                      }
                   }
