@@ -29,6 +29,17 @@ void move( Vehicle* veh, const MapCoordinate& dest )
       throw ActionResult(res);
 }
 
+void move( Vehicle* veh, const MapCoordinate3D& dest )
+{
+   auto_ptr<MoveUnitCommand> muc ( new MoveUnitCommand( veh ));
+   muc->setDestination( dest );
+   ActionResult res = muc->execute( createTestingContext( veh->getMap() ));
+   if ( res.successful() )
+      muc.release();
+   else
+      throw ActionResult(res);
+}
+
 void attack( Vehicle* veh, const MapCoordinate& target )
 {
    auto_ptr<AttackCommand> muc ( new AttackCommand( veh ));

@@ -7,7 +7,6 @@
  #define astar2H
 
  #include <vector>
- //#include <tr1/unordered_map>
  #include <functional>
  #include "mapalgorithms.h"
  #include "gamemap.h"

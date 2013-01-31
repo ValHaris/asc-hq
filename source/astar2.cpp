@@ -2,9 +2,9 @@
     \brief Pathfinding routines using the A* algorithm.
 */
 
-#include <stack>
+
+
 #include <vector>
-#include <algorithm>
 #include <cmath>
 
 #include "vehicletype.h"
@@ -64,14 +64,6 @@ inline int windbeeline ( const MapCoordinate& start, const MapCoordinate& dest, 
    return distance;
 }
 
-
-HexDirection ReverseDirection( HexDirection d )
-{
-    // With hexagons, I'm numbering the directions 0 = N, 1 = NE,
-    // and so on (clockwise).  To flip the direction, I can just
-    // add 3, mod 6.
-    return HexDirection( ( 3+int(d) ) % 6 );
-}
 
 ///////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////
@@ -310,33 +302,6 @@ const int* getDirectionOrder ( int x, int y, int x2, int y2 )
     return (const int*)(&directions[b][a]);
 }
 
-bool AStar3D::naivePathFinder(const MapCoordinate3D& a, const MapCoordinate3D& b) {
-   MapCoordinate3D current = a;
-   MapCoordinate3D next;
-   int dir;
-   while (current != b) {
-      dir = getdirection(current, b);
-      next = getNeighbouringFieldCoordinate (current, dir);
-      if (fieldAccessible(actmap->getField(next), veh)) {
-         current = next;
-      } else {
-         if (b.y > (current.y + 1))
-            dir = 3;
-         else if ( b.y < (current.y - 1))
-            dir = 0;
-         else
-            return false;
-         next = getNeighbouringFieldCoordinate (current, dir);
-         if (fieldAccessible(actmap->getField(next), veh)) {
-            current = next;
-         } else {
-            return false;
-         }
-      }
-   }
-   return true;
-}
-
 void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>& B, Path& path )
 {
     _path = &path;
@@ -529,12 +494,6 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
 
     if ( found ) {
        constructPath ( path, N_ptr );
-       /*
-        while ( N_ptr ) {
-           path.push_front ( PathPoint(N_ptr->h, ceil(N_ptr->gval), N_ptr->enterHeight, N_ptr->hasAttacked) );
-           N_ptr = N_ptr->previous; 
-        }
-      */
     } else {
         // No path
     }
@@ -543,11 +502,8 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
 bool AStar3D::constructPath( Path& path, const Node* n_ptr) {
    if ( n_ptr == NULL )
       return false;
-   const Node* n = n_ptr;
-   while ( n ) {
-      path.push_front ( PathPoint(n->h, ceil(n->gval), n->enterHeight, n->hasAttacked) );
-      n = n->previous; 
-   }
+   for ( const Node* n = n_ptr; n != NULL; n = n->previous )
+      path.push_front ( PathPoint(n->h, int(n->gval), n->enterHeight, n->hasAttacked) );
    return true;
 }
 
