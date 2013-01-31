@@ -298,7 +298,7 @@ bool MoveUnitCommand::isFieldReachable3D( const MapCoordinate3D& pos, bool direc
 }
 
 
-void MoveUnitCommand::calcPath()
+void MoveUnitCommand::calcPath( AStar3D* const astar)
 {
 
    const int maxMovement = getUnit()->getMovement();
@@ -306,17 +306,16 @@ void MoveUnitCommand::calcPath()
    const bool enterContainer = true;
 
    AStar3D::Path totalPath;
-   AStar3D astar ( getMap(), getUnit(), false );
 
-   astar.findPath ( totalPath, destination );
+   astar->findPath ( totalPath, destination );
    if ( totalPath.empty() ) // found no path at all
       return;
    
    // trace the found path back to the furthest point we can reach this round
-   for ( const AStar3D::Node* n = astar.visited.find(destination); n != NULL; n = n->previous ) {
+   for ( const AStar3D::Node* n = astar->visited.find(destination); n != NULL; n = n->previous ) {
       if ( ( n->gval <= maxMovement ) && n->canStop) {
          // found!
-         astar.constructPath ( path, n );
+         astar->constructPath ( path, n );
          break;
       }
    }

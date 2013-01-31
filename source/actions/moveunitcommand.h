@@ -87,7 +87,8 @@ class MoveUnitCommand : public UnitCommand, public TaskInterface, public SigC::O
       
       int getVerticalDirection() const { return verticalDirection; };
       
-      void calcPath();
+      void calcPath() { AStar3D* const a = new AStar3D( getMap(), getUnit(), false); calcPath( a ); delete a; }
+      void calcPath( AStar3D* const astar );
       const AStar3D::Path& getPath();
       
       void setDestination( const MapCoordinate& destination );
