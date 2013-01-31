@@ -197,8 +197,8 @@ class AStar3D {
              typedef Parent::iterator iterator;
              const Node* add ( const Node& n) {
                 push_back(n);
-                hMap[n.h] = &back();
-                return &back();
+                hMap[n.h] = &Parent::back();
+                return &Parent::back();
              };
              const Node* find ( const MapCoordinate3D& pos ) {
                 hMapType::iterator i = hMap.find(pos); 
@@ -208,6 +208,7 @@ class AStar3D {
 
              iterator begin() { return Parent::begin(); };
              iterator end() { return Parent::end(); };
+             const Node& back() { return Parent::back(); };
       };
        VisitedContainer visited;
     protected:
