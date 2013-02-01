@@ -187,6 +187,9 @@ class AStar3D {
        int getFieldAccess ( int x, int y );
        int getFieldAccess ( const MapCoordinate& mc );
 
+       //! for debugging: dumps the contents of the visited node to stdout
+       void dumpVisited();
+
        virtual ~AStar3D ( );
  };
 
