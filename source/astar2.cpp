@@ -235,7 +235,9 @@ int AStar3D::initNode ( Node& newN,
                 const MapCoordinate3D& newpos,
                 const vector<MapCoordinate3D>& B,
                 bool disableAttack,
-                bool enter) {
+                bool enter,
+                bool dock) {
+   int fa;
 
    newN.h = newpos;
 
@@ -252,12 +254,18 @@ int AStar3D::initNode ( Node& newN,
 
    newN.hasAttacked = oldN_ptr->hasAttacked || disableAttack;
 
-   int fa = fieldAccessible ( actmap->getField ( newN.h ), veh, newN.h.getBitmappedHeight(), &newN.hasAttacked );
-   if ( !fa )
-      return 0;
-   newN.canStop = fa >= 2;
+   if ( !dock ) {
+      fa = fieldAccessible ( actmap->getField ( newN.h ), veh, newN.h.getBitmappedHeight(), &newN.hasAttacked );
+      if ( !fa )
+         return 0;
+      newN.canStop = fa >= 2;
 
-   newN.gval = oldN_ptr->gval + getMoveCost ( oldN_ptr->h, newN.h, veh, newN.hasAttacked );
+      newN.gval = oldN_ptr->gval + getMoveCost ( oldN_ptr->h, newN.h, veh, newN.hasAttacked );
+   } else {
+      newN.gval = oldN_ptr->gval + 10;
+      newN.canStop = true;
+      fa = 1;
+   }
    if ( (newN.gval >= longestPath) || ( newN.gval > MAXIMUM_PATH_LENGTH ) )
       return 0;
 
@@ -394,7 +402,7 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
                             if ( !fld->building || (fld->bdt & getTerrainBitType(cbbuildingentry) ).any()) {
                                pos.setNumericalHeight(-1);
                                Node N2;
-                               if ( !initNode(N2, N_ptr, pos, B) )
+                               if ( !initNode(N2, N_ptr, pos, B, false, false, true) )
                                   continue;
                                addToOpen ( N2, open );
                             }

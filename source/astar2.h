@@ -146,7 +146,8 @@ class AStar3D {
                       const MapCoordinate3D& newpos,
                       const vector<MapCoordinate3D>& B,
                       bool disableAttack=false,
-                      bool enter=false);
+                      bool enter=false,
+                      bool dock=false);
 
     public:
        AStar3D ( GameMap* actmap, Vehicle* veh, bool markTemps_ = true, int maxDistance = maxint );
