@@ -24,11 +24,9 @@
 
 //! A 3D path finding algorithm, based on the 2D algorithm by Amit J. Patel
 class AStar3D {
-       bool naivePathFinder(const MapCoordinate3D& a, const MapCoordinate3D& b);
     public:
        typedef float DistanceType;
        static const DistanceType longestPath = 1e9;
-       //static const __m128i longestPathVector = _mm_set_epi32(1e9, 1e9, 1e9, 1e9);
        class OperationLimiter {
            public:
               virtual bool allowHeightChange() = 0;
