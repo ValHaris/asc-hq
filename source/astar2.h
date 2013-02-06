@@ -7,15 +7,8 @@
  #define astar2H
 
  #include <vector>
- #include <functional>
  #include "mapalgorithms.h"
  #include "gamemap.h"
-
- #include <boost/multi_index_container.hpp>
- #include <boost/multi_index/ordered_index.hpp>
- #include <boost/multi_index/hashed_index.hpp>
- #include <boost/multi_index/identity.hpp>
- #include <boost/multi_index/member.hpp>
 
  #include <boost/unordered_map.hpp>
 
@@ -75,6 +68,7 @@ class AStar3D {
           bool canStop;
           bool hasAttacked;
           bool operator< ( const Node& b ) const;
+          bool operator> ( const Node& b ) const;
        };
 
     protected:
@@ -98,17 +92,6 @@ class AStar3D {
        DistanceType dist( const MapCoordinate3D& a, const vector<MapCoordinate3D>& b );
 
     public:
-
-      typedef boost::multi_index_container <
-          Node,
-          boost::multi_index::indexed_by <
-             boost::multi_index::ordered_non_unique<boost::multi_index::identity<Node> >,
-             boost::multi_index::hashed_unique<boost::multi_index::member<Node, MapCoordinate3D, &Node::h>, hash_MapCoordinate3D>
-          >
-       > OpenContainer;
-
-       typedef OpenContainer::nth_index<1>::type OpenContainerIndex;
-
        //! the reachable fields
        // pointers to nodes in this container need to stay valid when the
        // container grows, so we can't use a vector for this.
@@ -135,9 +118,6 @@ class AStar3D {
       };
        VisitedContainer visited;
     protected:
-
-       //! adds a node to the OpenContainer, or replaces one
-       void addToOpen ( const Node& n, OpenContainer& open );
 
        int initNode ( Node& newN,
                       const Node* oldN_ptr,

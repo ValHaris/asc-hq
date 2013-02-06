@@ -7,6 +7,12 @@
 #include <vector>
 #include <cmath>
 
+#include <boost/multi_index_container.hpp>
+#include <boost/multi_index/ordered_index.hpp>
+#include <boost/multi_index/hashed_index.hpp>
+#include <boost/multi_index/identity.hpp>
+#include <boost/multi_index/member.hpp>
+
 #include "vehicletype.h"
 #include "spfst.h"
 #include "controls.h"
@@ -14,8 +20,17 @@
 #include "astar2.h"
 
 #include <iostream>
+typedef boost::multi_index_container <
+   AStar3D::Node,
+   boost::multi_index::indexed_by <
+      boost::multi_index::ordered_non_unique<boost::multi_index::identity<AStar3D::Node> >,
+      boost::multi_index::hashed_unique<boost::multi_index::member<AStar3D::Node, MapCoordinate3D, &AStar3D::Node::h>, AStar3D::hash_MapCoordinate3D>
+   >
+> OpenContainer;
 
-inline int windbeeline ( const MapCoordinate& start, const MapCoordinate& dest, const WindMovement* wm ) {
+typedef OpenContainer::nth_index<1>::type OpenContainerIndex;
+
+static inline int windbeeline ( const MapCoordinate& start, const MapCoordinate& dest, const WindMovement* wm ) {
    int distance = 0;
    int dx = dest.x - start.x;
    int dy = dest.y - start.y;
@@ -80,6 +95,15 @@ bool AStar3D::Node::operator< ( const AStar3D::Node& b ) const
     else
        return (gval+hval) < (b.gval+b.hval);
 }
+bool AStar3D::Node::operator> ( const AStar3D::Node& b ) const
+{
+    // To compare two nodes, we compare the `f' value, which is the
+    // sum of the g and h values.
+    if ( hval >= AStar3D::longestPath || b.hval >= AStar3D::longestPath )
+       return gval > b.gval;
+    else
+       return (gval+hval) > (b.gval+b.hval);
+}
 /*
 bool operator< ( const AStar3D::Node& a, const AStar3D::Node& b )
 {
@@ -90,7 +114,6 @@ bool operator< ( const AStar3D::Node& a, const AStar3D::Node& b )
     else
        return (a.gval+a.hval) < (b.gval+b.hval);
 }
-*/
 bool operator> ( const AStar3D::Node& a, const AStar3D::Node& b )
 {
     if ( a.hval >= AStar3D::longestPath || b.hval >= AStar3D::longestPath )
@@ -99,6 +122,7 @@ bool operator> ( const AStar3D::Node& a, const AStar3D::Node& b )
        return (a.gval+a.hval) > (b.gval+b.hval);
 }
 
+*/
 
 bool operator == ( const AStar3D::Node& a, const AStar3D::Node& b )
 {
@@ -219,14 +243,15 @@ AStar3D::DistanceType AStar3D::getMoveCost ( const MapCoordinate3D& start, const
 }
 
 
-void AStar3D :: addToOpen ( const Node& N2, OpenContainer& open )
+static void addToOpen ( const AStar3D::Node& N2, OpenContainer& open )
 {
-   OpenContainerIndex::iterator i = open.get<1>().find(N2.h);
+   const OpenContainerIndex::iterator& i = open.get<1>().find(N2.h);
    if ( i == open.get<1>().end()) {
       open.insert ( N2 );
    } else {
-      if (i->gval > N2.gval || (i->gval == N2.gval && i->hasAttacked && !N2.hasAttacked))
+      if ((i->gval > N2.gval) || (i->gval == N2.gval && i->hasAttacked && !N2.hasAttacked)) {
          open.get<1>().replace(i, N2);
+      }
    }
 }
 
@@ -245,11 +270,18 @@ int AStar3D::initNode ( Node& newN,
    if ( (oldN_ptr->previous) && (newN.h == oldN_ptr->previous->h) )
       return 0;
 
-   if ( visited.find(newN.h) )
-      return 0;
-
    // If it's off the end of the map, then don't keep scanning
    if( newN.h.x < 0 || newN.h.y < 0 || newN.h.x >= actmap->xsize || newN.h.y >= actmap->ysize )
+      return 0;
+
+   if (enter) {
+      newN.enterHeight = newN.h.getNumericalHeight();
+      newN.h.setNumericalHeight(-1);
+   } else {
+      newN.enterHeight = -1;
+   }
+
+   if ( visited.find(newN.h) )
       return 0;
 
    newN.hasAttacked = oldN_ptr->hasAttacked || disableAttack;
@@ -262,19 +294,13 @@ int AStar3D::initNode ( Node& newN,
 
       newN.gval = oldN_ptr->gval + getMoveCost ( oldN_ptr->h, newN.h, veh, newN.hasAttacked );
    } else {
-      newN.gval = oldN_ptr->gval + 10;
-      newN.canStop = true;
       fa = 1;
+      newN.canStop = true;
+      newN.gval = oldN_ptr->gval + 10;
    }
    if ( (newN.gval >= longestPath) || ( newN.gval > MAXIMUM_PATH_LENGTH ) )
       return 0;
 
-   if (enter) {
-      newN.enterHeight = newN.h.getNumericalHeight();
-      newN.h.setNumericalHeight(-1);
-   } else {
-      newN.enterHeight = -1;
-   }
    newN.previous = oldN_ptr;
    newN.hval = dist(newN.h, B);
    return fa;
@@ -340,6 +366,7 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
     while( !open.empty() ) {
         N_ptr = visited.add(*open.begin());
         open.erase(open.begin());
+        //cout << "(" << N_ptr->h.x << "," << N_ptr->h.y << "," << N_ptr->h.getNumericalHeight() << ")@" << N_ptr->gval << "\n";
         // If we're at the goal, then exit
         MapField* oldFld = actmap->getField(N_ptr->h);
         for ( vector<MapCoordinate3D>::const_iterator i = B.begin(); i != B.end(); i++ )
