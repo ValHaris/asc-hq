@@ -22,8 +22,16 @@ void dumpNode(const AStar3D::Node& n) {
 }
 
 class OpenContainer {
-      typedef boost::heap::fibonacci_heap<AStar3D::Node, boost::heap::compare<greater<AStar3D::Node> > > storage_t;
-      typedef boost::unordered_map<MapCoordinate3D, storage_t::handle_type, AStar3D::hash_MapCoordinate3D> index_t;
+      typedef boost::heap::fibonacci_heap<
+         AStar3D::Node,
+         boost::heap::compare<greater<AStar3D::Node> >,
+         boost::heap::constant_time_size<false>
+      > storage_t;
+      typedef boost::unordered_map<
+         MapCoordinate3D,
+         storage_t::handle_type,
+         AStar3D::hash_MapCoordinate3D
+      > index_t;
       typedef storage_t::handle_type handle_type;
       storage_t storage;
       index_t index;

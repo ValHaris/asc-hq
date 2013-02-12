@@ -49,13 +49,13 @@ class AStar3D {
 
        struct hash_MapCoordinate3D {
           size_t operator()(const MapCoordinate3D &h) const{
-             return static_cast<size_t>(h.x) ^ (static_cast<size_t>(h.y) << 12) ^ (static_cast<size_t>(h.getNumericalHeight())  << 24);
+             return h.x ^ (h.y << 12) ^ (h.getNumericalHeight() << 24);
           }
        };
 
        struct hash_MapCoordinate {
           size_t operator()(const MapCoordinate &h) const{
-             return static_cast<size_t>(h.x) ^ (static_cast<size_t>(h.y) << 16);
+             return h.x ^ (h.y << 16);
           }
        };
 
