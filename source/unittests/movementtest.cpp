@@ -375,12 +375,13 @@ void testPathFinding()
 	   assertOrThrow( path[5] == MapCoordinate3D( 19,12,    8) );
 
 
+	   ast = AStar3D ( game.get(), air, false, air->getMovement()*2);
 	   vector<MapCoordinate3D> fields;
 	   ast.findAllAccessibleFields(&fields);
 
 	   set<MapCoordinate3D> s( fields.begin(), fields.end() );
-           // assertOrThrow ( s.size() == fields.size() );
-	   assertOrThrow( s.size() == 29 );
+           assertOrThrow ( s.size() == fields.size() );
+	   assertOrThrow( s.size() == 1147 );
    }
 
    /* now testing the docking. After the shuttle has reached orbit, the trooper will move from shuttle
