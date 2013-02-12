@@ -406,7 +406,8 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
                                  N2.enterHeight = N2.h.getNumericalHeight() ;
                                  N2.h.setNumericalHeight(-1);
                                  // N2.hasAttacked = true;
-                                 addToOpen ( N2, open );
+                                 if (!visited.find(N2.h))
+                                    addToOpen ( N2, open );
                             } else
                                  addToOpen ( N2, open );
                          }
@@ -468,7 +469,8 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
                      N2.enterHeight = N2.h.getNumericalHeight() ;
                      N2.h.setNumericalHeight (-1);
                      // N2.hasAttacked = true;
-                     addToOpen ( N2, open );
+                     if (!visited.find(N2.h))
+                        addToOpen ( N2, open );
                   } else
                      if ( !veh->typ->hasFunction( ContainerBaseType::OnlyMoveToAndFromTransports  ) )
                         addToOpen ( N2, open );

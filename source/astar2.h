@@ -103,7 +103,8 @@ class AStar3D {
              typedef Parent::iterator iterator;
              const Node* add ( const Node& n) {
                 push_back(n);
-                hMap[n.h] = &Parent::back();
+                pair<hMapType::iterator, bool> res = hMap.insert(make_pair(n.h, &Parent::back()));
+                assert(res.second == true);
                 return &Parent::back();
              };
              const Node* find ( const MapCoordinate3D& pos ) {
