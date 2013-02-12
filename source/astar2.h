@@ -95,27 +95,28 @@ class AStar3D {
        //! the reachable fields
        // pointers to nodes in this container need to stay valid when the
        // container grows, so we can't use a vector for this.
-       class VisitedContainer: protected deque<Node> {
-             typedef boost::unordered_map<MapCoordinate3D, Node*, hash_MapCoordinate3D> hMapType;
-             hMapType hMap;
+       class VisitedContainer {
+             typedef boost::unordered_map<MapCoordinate3D, Node*, hash_MapCoordinate3D> index_t;
+             typedef deque<Node> storage_t;
+             index_t index;
+             storage_t storage;
           public:
-             typedef deque<Node> Parent;
-             typedef Parent::iterator iterator;
+             typedef storage_t::iterator iterator;
              const Node* add ( const Node& n) {
-                push_back(n);
-                pair<hMapType::iterator, bool> res = hMap.insert(make_pair(n.h, &Parent::back()));
+                storage.push_back(n);
+                pair<index_t::iterator, bool> res = index.insert(make_pair(n.h, &storage.back()));
                 assert(res.second == true);
-                return &Parent::back();
+                return &storage.back();
              };
              const Node* find ( const MapCoordinate3D& pos ) {
-                hMapType::iterator i = hMap.find(pos); 
-                if (i == hMap.end()) return NULL;
+                index_t::iterator i = index.find(pos); 
+                if (i == index.end()) return NULL;
                 else return i->second;
              }
 
-             iterator begin() { return Parent::begin(); };
-             iterator end() { return Parent::end(); };
-             const Node& back() { return Parent::back(); };
+             iterator begin() { return storage.begin(); };
+             iterator end() { return storage.end(); };
+             const Node& back() { return storage.back(); };
       };
        VisitedContainer visited;
     protected:

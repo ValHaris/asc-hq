@@ -13,6 +13,8 @@
 #include <boost/multi_index/identity.hpp>
 #include <boost/multi_index/member.hpp>
 
+#include <boost/heap/fibonacci_heap.hpp>
+
 #include "vehicletype.h"
 #include "spfst.h"
 #include "controls.h"
@@ -20,6 +22,7 @@
 #include "astar2.h"
 
 #include <iostream>
+
 typedef boost::multi_index_container <
    AStar3D::Node,
    boost::multi_index::indexed_by <
