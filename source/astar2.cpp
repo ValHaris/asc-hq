@@ -7,12 +7,6 @@
 #include <vector>
 #include <cmath>
 
-#include <boost/multi_index_container.hpp>
-#include <boost/multi_index/ordered_index.hpp>
-#include <boost/multi_index/hashed_index.hpp>
-#include <boost/multi_index/identity.hpp>
-#include <boost/multi_index/member.hpp>
-
 #include <boost/heap/fibonacci_heap.hpp>
 
 #include "vehicletype.h"
@@ -23,15 +17,29 @@
 
 #include <iostream>
 
-typedef boost::multi_index_container <
-   AStar3D::Node,
-   boost::multi_index::indexed_by <
-      boost::multi_index::ordered_non_unique<boost::multi_index::identity<AStar3D::Node> >,
-      boost::multi_index::hashed_unique<boost::multi_index::member<AStar3D::Node, MapCoordinate3D, &AStar3D::Node::h>, AStar3D::hash_MapCoordinate3D>
-   >
-> OpenContainer;
+void dumpNode(const AStar3D::Node& n) {
+   cout << "(" << n.h.x << "," << n.h.y << "," << n.h.getNumericalHeight() << ")@" << n.gval << "\n";
+}
 
-typedef OpenContainer::nth_index<1>::type OpenContainerIndex;
+class OpenContainer {
+      typedef boost::heap::fibonacci_heap<AStar3D::Node, boost::heap::compare<greater<AStar3D::Node> > > storage_t;
+      typedef boost::unordered_map<MapCoordinate3D, storage_t::handle_type, AStar3D::hash_MapCoordinate3D> index_t;
+      typedef storage_t::handle_type handle_type;
+      storage_t storage;
+      index_t index;
+   public:
+      const AStar3D::Node& top() const { return storage.top(); }
+      void pop() { index.erase(storage.top().h); storage.pop(); }
+      int empty() const { return storage.empty(); }
+      void pushOrUpdate ( const AStar3D::Node& n ) {
+         const index_t::iterator i = index.find(n.h);
+         if (i == index.end()) {
+            index[n.h] = storage.push(n);
+         } else if (((*i->second).gval > n.gval) || ((*i->second).gval == n.gval && (*i->second).hasAttacked && !n.hasAttacked)) {
+            storage.increase(i->second, n);
+         }
+      }
+};
 
 static inline int windbeeline ( const MapCoordinate& start, const MapCoordinate& dest, const WindMovement* wm ) {
    int distance = 0;
@@ -107,25 +115,6 @@ bool AStar3D::Node::operator> ( const AStar3D::Node& b ) const
     else
        return (gval+hval) > (b.gval+b.hval);
 }
-/*
-bool operator< ( const AStar3D::Node& a, const AStar3D::Node& b )
-{
-    // To compare two nodes, we compare the `f' value, which is the
-    // sum of the g and h values.
-    if ( a.hval >= AStar3D::longestPath || b.hval >= AStar3D::longestPath )
-       return a.gval < b.gval;
-    else
-       return (a.gval+a.hval) < (b.gval+b.hval);
-}
-bool operator> ( const AStar3D::Node& a, const AStar3D::Node& b )
-{
-    if ( a.hval >= AStar3D::longestPath || b.hval >= AStar3D::longestPath )
-       return a.gval > b.gval;
-    else
-       return (a.gval+a.hval) > (b.gval+b.hval);
-}
-
-*/
 
 bool operator == ( const AStar3D::Node& a, const AStar3D::Node& b )
 {
@@ -185,8 +174,6 @@ AStar3D :: ~AStar3D ( )
       delete wind;
       wind = NULL;
    }
-
-   //delete[] fieldAccess;
 }
 
 AStar3D::DistanceType AStar3D::dist( const MapCoordinate3D& a, const MapCoordinate3D& b )
@@ -243,19 +230,6 @@ AStar3D::DistanceType AStar3D::getMoveCost ( const MapCoordinate3D& start, const
           return longestPath;
        else
           return movecost / vehicleSpeedFactor[start.getNumericalHeight()];
-}
-
-
-static void addToOpen ( const AStar3D::Node& N2, OpenContainer& open )
-{
-   const OpenContainerIndex::iterator& i = open.get<1>().find(N2.h);
-   if ( i == open.get<1>().end()) {
-      open.insert ( N2 );
-   } else {
-      if ((i->gval > N2.gval) || (i->gval == N2.gval && i->hasAttacked && !N2.hasAttacked)) {
-         open.get<1>().replace(i, N2);
-      }
-   }
 }
 
 int AStar3D::initNode ( Node& newN,
@@ -350,7 +324,7 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
        return;
     */
 
-    Node firstNode;
+    Node firstNode = Node();
     firstNode.previous = NULL;
     firstNode.gval = 0;
     firstNode.hval = dist(A, B);
@@ -360,16 +334,16 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
        firstNode.h.setNumericalHeight(-1);
     }
     // insert the original node
-    open.insert(firstNode);
+    open.pushOrUpdate(firstNode);
 
     bool found = false;
     const Node* N_ptr;
 
     // While there are still nodes to visit, visit them!
     while( !open.empty() ) {
-        N_ptr = visited.add(*open.begin());
-        open.erase(open.begin());
-        //cout << "(" << N_ptr->h.x << "," << N_ptr->h.y << "," << N_ptr->h.getNumericalHeight() << ")@" << N_ptr->gval << "\n";
+        //N_ptr = visited.add(*open.begin());
+        N_ptr = visited.add(open.top());
+        open.pop();
         // If we're at the goal, then exit
         MapField* oldFld = actmap->getField(N_ptr->h);
         for ( vector<MapCoordinate3D>::const_iterator i = B.begin(); i != B.end(); i++ )
@@ -395,14 +369,14 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
                          const ContainerBaseType::TransportationIO* tio = oldFld->getContainer()->vehicleUnloadSystem( veh->typ, 1<<i);
                          if ( tio ) {
                             pos.setNumericalHeight(i);
-                            Node N2;
+                            Node N2 = Node();
                             if (!initNode(N2, N_ptr, pos, B, tio->disableAttack))
                                continue;
 
                             if ( N2.canStop && actmap->getField(N2.h)->getContainer() && actmap->getField(N2.h)->vehicle != veh) {
                                  // there's an container on the field that can be entered. This means, the unit can't stop 'over' the container...
                                  N2.canStop = false;
-                                 addToOpen ( N2, open );
+                                 open.pushOrUpdate ( N2 );
 
                                  // ... only inside it
                                  N2.canStop = true;
@@ -410,9 +384,9 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
                                  N2.h.setNumericalHeight(-1);
                                  // N2.hasAttacked = true;
                                  if (!visited.find(N2.h))
-                                    addToOpen ( N2, open );
+                                    open.pushOrUpdate ( N2 );
                             } else
-                                 addToOpen ( N2, open );
+                                 open.pushOrUpdate ( N2 );
                          }
 
                       }
@@ -432,10 +406,10 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
                               && veh->getMap()->getPlayer(veh).diplomacy.isAllied( fld->getContainer() ))
                             if ( !fld->building || (fld->bdt & getTerrainBitType(cbbuildingentry) ).any()) {
                                pos.setNumericalHeight(-1);
-                               Node N2;
+                               Node N2 = Node();
                                if ( !initNode(N2, N_ptr, pos, B, false, false, true) )
                                   continue;
-                               addToOpen ( N2, open );
+                               open.pushOrUpdate ( N2 );
                             }
                 }
              }
@@ -457,14 +431,14 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
               for( int dci = 0; dci < 6; dci++ ) {
 
                  HexDirection dir = HexDirection(directions[dci]);
-                 Node N2;
+                 Node N2 = Node();
                  if ( !initNode(N2, N_ptr, getNeighbouringFieldCoordinate(N_ptr->h, dir), B) )
                     continue;
                  if ( N2.canStop && actmap->getField(N2.h)->getContainer() && actmap->getField(N2.h)->vehicle != veh) {
                      // there's an container on the field that can be entered. This means, the unit can't stop 'over' the container...
                      if ( !veh->typ->hasFunction( ContainerBaseType::OnlyMoveToAndFromTransports  ) ) {
                         N2.canStop = false;
-                        addToOpen ( N2, open );
+                        open.pushOrUpdate ( N2 );
                      }
 
                      // ... only inside it
@@ -473,10 +447,10 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
                      N2.h.setNumericalHeight (-1);
                      // N2.hasAttacked = true;
                      if (!visited.find(N2.h))
-                        addToOpen ( N2, open );
+                        open.pushOrUpdate ( N2 );
                   } else
                      if ( !veh->typ->hasFunction( ContainerBaseType::OnlyMoveToAndFromTransports  ) )
-                        addToOpen ( N2, open );
+                        open.pushOrUpdate ( N2 );
               }
 
            // and now change the units' height. That's only possible on fields where the unit can stop it's movement
@@ -519,10 +493,10 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
                           if ( fld && access ) {
                              newpos.setNumericalHeight(newpos.getNumericalHeight() + hcm->heightDelta);
                              bool enter = actmap->getField(newpos)->getContainer() && actmap->getField(newpos)->vehicle != veh;
-                             Node N2;
+                             Node N2 = Node();
                              if ( initNode(N2, N_ptr, newpos, B, false, enter ) != 2)
                                 continue;
-                            addToOpen ( N2, open );
+                            open.pushOrUpdate ( N2 );
                           }
                        }
                     }
@@ -624,7 +598,7 @@ AStar3D::PathPoint AStar3D::PathPoint::newFromStream( tnstream& stream )
 void AStar3D::dumpVisited()
 {
    for ( VisitedContainer::iterator i = visited.begin(); i != visited.end(); ++i ) {
-      cout << "(" << i->h.x << "," << i->h.y << "," << i->h.getNumericalHeight() << ")@" << i->gval << "\n";
+      dumpNode(*i);
    }
 }
 

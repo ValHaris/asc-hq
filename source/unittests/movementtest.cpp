@@ -370,7 +370,7 @@ void testPathFinding()
 	   assertOrThrow( path[0] == MapCoordinate3D( 19, 2,    8) );
 	   assertOrThrow( path[1] == MapCoordinate3D( 18, 4, 0x10) );
 	   assertOrThrow( path[2] == MapCoordinate3D( 18, 5, 0x10) );
-	   assertOrThrow( path[3] == MapCoordinate3D( 19, 6, 0x10) );
+	   assertOrThrow( path[3] == MapCoordinate3D( 18, 7, 0x10) );
 	   assertOrThrow( path[4] == MapCoordinate3D( 19, 8, 0x10) );
 	   assertOrThrow( path[5] == MapCoordinate3D( 19,12,    8) );
 

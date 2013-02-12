@@ -104,8 +104,7 @@ class AStar3D {
              typedef storage_t::iterator iterator;
              const Node* add ( const Node& n) {
                 storage.push_back(n);
-                pair<index_t::iterator, bool> res = index.insert(make_pair(n.h, &storage.back()));
-                assert(res.second == true);
+                index.insert(make_pair(n.h, &storage.back()));
                 return &storage.back();
              };
              const Node* find ( const MapCoordinate3D& pos ) {
