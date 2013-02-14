@@ -185,8 +185,6 @@ AStar3D :: ~AStar3D ( )
       delete wind;
       wind = NULL;
    }
-
-   //delete[] fieldAccess;
 }
 
 AStar3D::DistanceType AStar3D::dist( const MapCoordinate3D& a, const MapCoordinate3D& b )
