@@ -337,8 +337,11 @@ const int* getDirectionOrder ( int x, int y, int x2, int y2 )
     return (const int*)(&directions[b][a]);
 }
 
-void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>& B, Path& path )
+void AStar3D::findPath( Path& path, const vector<MapCoordinate3D>& B )
 {
+
+   MapCoordinate3D A = veh->getPosition3D();
+
     _path = &path;
 
     OpenContainer open;
@@ -549,12 +552,7 @@ void AStar3D::findPath( Path& path, const MapCoordinate3D& dest )
 {
   vector<MapCoordinate3D> d;
   d.push_back ( dest );
-  findPath ( veh->getPosition3D() , d, path );
-}
-
-void AStar3D::findPath( Path& path, const vector<MapCoordinate3D>& dest )
-{
-  findPath ( veh->getPosition3D(), dest, path );
+  findPath ( path, d );
 }
 
 

@@ -49,13 +49,13 @@ class AStar3D {
 
        struct hash_MapCoordinate3D {
           size_t operator()(const MapCoordinate3D &h) const{
-             return h.x ^ (h.y << 12) ^ (h.getNumericalHeight())  << 24);
+             return h.x ^ (h.y << 12) ^ (h.getNumericalHeight()  << 24);
           }
        };
 
        struct hash_MapCoordinate {
           size_t operator()(const MapCoordinate &h) const{
-             return h.x ^ (h.y << 16)
+             return h.x ^ (h.y << 16);
           }
        };
 
@@ -135,9 +135,6 @@ class AStar3D {
 
        //! the search can be restricted to certain operations
        void registerOperationLimiter( OperationLimiter* ol ) { operationLimiter = ol; };
-
-       //! searches for a path from A to B and stores it in path
-       void findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>& B, Path& path );
 
        //! searches for a path from the unit's current position to dest and stores it in path
        void findPath( Path& path, const MapCoordinate3D& dest );
