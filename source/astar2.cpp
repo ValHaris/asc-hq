@@ -345,18 +345,21 @@ bool AStar3D::findPath( const vector<MapCoordinate3D>& B ) {
        return;
     */
 
-    Node firstNode = Node();
-    firstNode.previous = NULL;
-    firstNode.gval = 0;
-    firstNode.hval = dist(A, B);
+    if ( !visited.find(A) ) {
+       Node firstNode = Node();
+       firstNode.previous = NULL;
+       firstNode.gval = 0;
+       firstNode.hval = dist(A, B);
+       firstNode.enterHeight = -1;
+       firstNode.canStop = true;
 
-    firstNode.h = A;
-    if ( !(actmap->getField(A)->unitHere(veh)) ) {
-       firstNode.h.setNumericalHeight(-1);
+       firstNode.h = A;
+       if ( !(actmap->getField(A)->unitHere(veh)) ) {
+          firstNode.h.setNumericalHeight(-1);
+       }
+       // insert the original node
+       open.pushOrUpdate(firstNode);
     }
-    // insert the original node
-    open.pushOrUpdate(firstNode);
-
     bool found = false;
     const Node* N_ptr;
 
@@ -546,13 +549,13 @@ bool AStar3D::findPath( Path& path, const MapCoordinate3D& dest )
 }
 
 
-void AStar3D::findAllAccessibleFields ( vector<MapCoordinate3D>* path )
+void AStar3D::findAllAccessibleFields ()
 {
    if ( markTemps )
       actmap->cleartemps ( 3 );
 
    vector<MapCoordinate3D> v;
-   findPath ( v );  //this field does not exist...
+   findPath ( v );
    for ( VisitedContainer::iterator i = visited.begin(); i != visited.end(); ++i ) {
       fieldAccess[i->h] |= i->h.getBitmappedHeight();
 
@@ -560,9 +563,6 @@ void AStar3D::findAllAccessibleFields ( vector<MapCoordinate3D>* path )
          char atemp = actmap->getField ( i->h )->getaTemp();
          actmap->getField ( i->h )->setaTemp( atemp | i->h.getBitmappedHeight());
       }
-      
-      if ( path )
-         path->push_back( i->h );
    }
    
    if ( markTemps )

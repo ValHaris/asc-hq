@@ -289,12 +289,14 @@ void testPathFinding()
 	   assertOrThrow( sub );
 
 	   AStar3D ast( game.get(), sub, false, sub->getMovement());
-	   vector<MapCoordinate3D> fields;
-	   ast.findAllAccessibleFields( &fields );
+	   ast.findAllAccessibleFields( );
 
 	   // make entries unique - there shouldn't be any duplicates, but at the time of writing this test
 	   // findAllAccessibleFields does return some duplicates
-	   set<MapCoordinate3D> s( fields.begin(), fields.end() );
+           set<MapCoordinate3D> s;
+           for (AStar3D::VisitedContainer::iterator i = ast.visited.begin(); i != ast.visited.end(); ++i) {
+              s.insert(i->h);
+           }
 
 	   /*
 	   cout << "s.size: " << s.size() << "\n";
@@ -304,43 +306,33 @@ void testPathFinding()
 	   */
 
 	   assertOrThrow( s.size() == 16 );
-	   // activate this test once the duplicate-bug is fixed
-	   assertOrThrow( s.size() == fields.size() );
+	   assertOrThrow( s.size() == ast.visited.size() );
 
-	   assertOrThrow ( s.find( MapCoordinate3D(0,15,4)) != s.end() );
-	   assertOrThrow ( s.find( MapCoordinate3D(1,16,4)) != s.end() );
-	   assertOrThrow ( s.find( MapCoordinate3D(0,14,4)) != s.end() );
-	   assertOrThrow ( s.find( MapCoordinate3D(1,16,2)) != s.end() );
-	   assertOrThrow ( s.find( MapCoordinate3D(1,17,2)) != s.end() );
-	   assertOrThrow ( s.find( MapCoordinate3D(2,18,2)) != s.end() );
-	   assertOrThrow ( s.find( MapCoordinate3D(2,18,4)) != s.end() );
-	   assertOrThrow ( s.find( MapCoordinate3D(2,19,4)) != s.end() );
-	   assertOrThrow ( s.find( MapCoordinate3D(2,19,2)) != s.end() );
-	   assertOrThrow ( s.find( MapCoordinate3D(3,20,2)) != s.end() );
-	   assertOrThrow ( s.find( MapCoordinate3D(3,18,2)) != s.end() );
-	   assertOrThrow ( s.find( MapCoordinate3D(2,21,2)) != s.end() );
-	   assertOrThrow ( s.find( MapCoordinate3D(1,16,1)) != s.end() );
-	   assertOrThrow ( s.find( MapCoordinate3D(2,18,1)) != s.end() );
-	   assertOrThrow ( s.find( MapCoordinate3D(1,17,1)) != s.end() );
-	   assertOrThrow ( s.find( MapCoordinate3D(2,19,1)) != s.end() );
+	   assertOrThrow ( ast.visited.find( MapCoordinate3D(0,15,4)) != NULL );
+	   assertOrThrow ( ast.visited.find( MapCoordinate3D(1,16,4)) != NULL );
+	   assertOrThrow ( ast.visited.find( MapCoordinate3D(0,14,4)) != NULL );
+	   assertOrThrow ( ast.visited.find( MapCoordinate3D(1,16,2)) != NULL );
+	   assertOrThrow ( ast.visited.find( MapCoordinate3D(1,17,2)) != NULL );
+	   assertOrThrow ( ast.visited.find( MapCoordinate3D(2,18,2)) != NULL );
+	   assertOrThrow ( ast.visited.find( MapCoordinate3D(2,18,4)) != NULL );
+	   assertOrThrow ( ast.visited.find( MapCoordinate3D(2,19,4)) != NULL );
+	   assertOrThrow ( ast.visited.find( MapCoordinate3D(2,19,2)) != NULL );
+	   assertOrThrow ( ast.visited.find( MapCoordinate3D(3,20,2)) != NULL );
+	   assertOrThrow ( ast.visited.find( MapCoordinate3D(3,18,2)) != NULL );
+	   assertOrThrow ( ast.visited.find( MapCoordinate3D(2,21,2)) != NULL );
+	   assertOrThrow ( ast.visited.find( MapCoordinate3D(1,16,1)) != NULL );
+	   assertOrThrow ( ast.visited.find( MapCoordinate3D(2,18,1)) != NULL );
+	   assertOrThrow ( ast.visited.find( MapCoordinate3D(1,17,1)) != NULL );
+	   assertOrThrow ( ast.visited.find( MapCoordinate3D(2,19,1)) != NULL );
 
 	   // test the test :-)
-	   assertOrThrow ( s.find( MapCoordinate3D(99,16,1)) == s.end() );
+	   assertOrThrow ( ast.visited.find( MapCoordinate3D(99,16,1)) == NULL );
 
 	   AStar3D::Path path;
 	   AStar3D ast2( game.get(), sub, false, sub->getMovement());
 	   ast2.findPath(path, MapCoordinate3D(2,19,4));
 
-	   /*
-	   cout << path.size() << "\n";
-	   int cnt = 0;
-	   for ( AStar3D::Path::iterator i = path.begin(); i != path.end(); ++i) {
-		   cout << "assertOrThrow( path["<< cnt++ <<"] == MapCoordinate3D(" << i->x << "," << i->y << "," << i->getBitmappedHeight() << "));\n";
-	   }
-	   */
-
-
-	   assertOrThrow( path.size() == 7 );
+           assertOrThrow( path.size() == 7 );
 	   assertOrThrow( path[0] == MapCoordinate3D(0,15,4));
 	   assertOrThrow( path[1] == MapCoordinate3D(1,16,4));
 	   assertOrThrow( path[2] == MapCoordinate3D(1,16,2));
@@ -376,11 +368,14 @@ void testPathFinding()
 
 
 	   ast = AStar3D ( game.get(), air, false, air->getMovement()*2);
-	   vector<MapCoordinate3D> fields;
-	   ast.findAllAccessibleFields(&fields);
+	   ast.findAllAccessibleFields();
 
-	   set<MapCoordinate3D> s( fields.begin(), fields.end() );
-           assertOrThrow ( s.size() == fields.size() );
+           set<MapCoordinate3D> s;
+           for (AStar3D::VisitedContainer::iterator i = ast.visited.begin(); i != ast.visited.end(); ++i) {
+              s.insert(i->h);
+           }
+
+           assertOrThrow ( s.size() == ast.visited.size() );
 	   assertOrThrow( s.size() == 1147 );
    }
 

@@ -154,7 +154,7 @@ class AStar3D {
            The Destructor removes all marks.
            \param path if non-null, all fields will be stored there
        */
-       void findAllAccessibleFields ( vector<MapCoordinate3D>* path = NULL );
+       void findAllAccessibleFields ( );
 
        //! construct a path from a pointer to a visited node, return false if pointer is NULL, else true
        bool constructPath( Path& path, const Node* n);
