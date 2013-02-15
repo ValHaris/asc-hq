@@ -49,7 +49,7 @@ class AStar3D {
 
        struct hash_MapCoordinate3D {
           size_t operator()(const MapCoordinate3D &h) const{
-             return h.x ^ (h.y << 12) ^ (h.getNumericalHeight()  << 24);
+             return h.x ^ (h.y << 12) ^ (h.getNumericalHeight() << 24);
           }
        };
 
@@ -104,8 +104,7 @@ class AStar3D {
              typedef storage_t::iterator iterator;
              const Node* add ( const Node& n) {
                 storage.push_back(n);
-                pair<index_t::iterator, bool> res = index.insert(make_pair(n.h, &storage.back()));
-                assert(res.second == true);
+                index.insert(make_pair(n.h, &storage.back()));
                 return &storage.back();
              };
              const Node* find ( const MapCoordinate3D& pos ) {
