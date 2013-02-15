@@ -116,6 +116,8 @@ class AStar3D {
              iterator begin() { return storage.begin(); };
              iterator end() { return storage.end(); };
              const Node& back() { return storage.back(); };
+             int size() const { return storage.size(); };
+             int empty() const { return storage.empty(); };
       };
        VisitedContainer visited;
     protected:
