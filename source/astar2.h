@@ -135,11 +135,17 @@ class AStar3D {
        //! the search can be restricted to certain operations
        void registerOperationLimiter( OperationLimiter* ol ) { operationLimiter = ol; };
 
+       //! searches for a path from the unit's current position to dest
+       bool findPath( const MapCoordinate3D& dest );
+
+       //! searches for a path from the units current position to one of the dest fields
+       bool findPath( const vector<MapCoordinate3D>& dest );
+
        //! searches for a path from the unit's current position to dest and stores it in path
-       void findPath( Path& path, const MapCoordinate3D& dest );
+       bool findPath( Path& path, const MapCoordinate3D& dest );
 
        //! searches for a path from the units current position to one of the dest fields and stores it in path
-       void findPath( Path& path, const vector<MapCoordinate3D>& dest );
+       bool findPath( Path& path, const vector<MapCoordinate3D>& dest );
 
        /** searches for all fields that are within the range of maxDist and marks them.
            On each field one bit for each level of height will be set.

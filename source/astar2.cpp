@@ -110,19 +110,13 @@ bool AStar3D::Node::operator< ( const AStar3D::Node& b ) const
 {
     // To compare two nodes, we compare the `f' value, which is the
     // sum of the g and h values.
-    if ( hval >= AStar3D::longestPath || b.hval >= AStar3D::longestPath )
-       return gval < b.gval;
-    else
-       return (gval+hval) < (b.gval+b.hval);
+   return (gval+hval) < (b.gval+b.hval);
 }
 bool AStar3D::Node::operator> ( const AStar3D::Node& b ) const
 {
     // To compare two nodes, we compare the `f' value, which is the
     // sum of the g and h values.
-    if ( hval >= AStar3D::longestPath || b.hval >= AStar3D::longestPath )
-       return gval > b.gval;
-    else
-       return (gval+hval) > (b.gval+b.hval);
+   return (gval+hval) > (b.gval+b.hval);
 }
 
 bool operator == ( const AStar3D::Node& a, const AStar3D::Node& b )
@@ -201,7 +195,7 @@ AStar3D::DistanceType AStar3D::dist( const MapCoordinate3D& a, const MapCoordina
          dist = beeline ( a, b ) + heightDiff;
       }
    } else {
-      dist = longestPath;
+      dist = 0;
    }
    return dist;
 }
@@ -209,7 +203,7 @@ AStar3D::DistanceType AStar3D::dist( const MapCoordinate3D& a, const MapCoordina
 AStar3D::DistanceType AStar3D::dist ( const MapCoordinate3D& a, const vector<MapCoordinate3D>& b )
 {
    if (b.empty())
-      return longestPath;
+      return 0;
    DistanceType e;
    for ( vector<MapCoordinate3D>::const_iterator i = b.begin(); i != b.end(); ++i ) {
       e = dist(a,*i);
@@ -322,12 +316,27 @@ const int* getDirectionOrder ( int x, int y, int x2, int y2 )
     return (const int*)(&directions[b][a]);
 }
 
-void AStar3D::findPath( Path& path, const vector<MapCoordinate3D>& B )
-{
+bool AStar3D::findPath( Path& path, const vector<MapCoordinate3D>& B ) {
+   _path = &path;
+
+   if (findPath (B)) {
+      constructPath ( path, &visited.back() );
+      return true;
+   } else {
+      return false;
+   }
+         
+}
+
+bool AStar3D::findPath( const MapCoordinate3D& B ) {
+   vector<MapCoordinate3D> vB;
+   vB.push_back(B);
+   return findPath(vB);
+}
+
+bool AStar3D::findPath( const vector<MapCoordinate3D>& B ) {
 
    MapCoordinate3D A = veh->getPosition3D();
-
-    _path = &path;
 
     OpenContainer open;
 
@@ -432,7 +441,7 @@ void AStar3D::findPath( Path& path, const vector<MapCoordinate3D>& B )
            // the unit is not inside a container
 
            const int* directions;
-           if ( B.begin()->valid() ) {
+           if ( !B.empty() && B.begin()->valid() ) {
               directions = getDirectionOrder ( N_ptr->h.x, N_ptr->h.y, B.begin()->x, B.begin()->y );
            } else {
               static const int d[6] = {0,1,2,3,4,5};
@@ -518,11 +527,7 @@ void AStar3D::findPath( Path& path, const vector<MapCoordinate3D>& B )
         }
     }
 
-    if ( found ) {
-       constructPath ( path, N_ptr );
-    } else {
-        // No path
-    }
+    return found;
 }
 
 bool AStar3D::constructPath( Path& path, const Node* n_ptr) {
@@ -533,7 +538,7 @@ bool AStar3D::constructPath( Path& path, const Node* n_ptr) {
    return true;
 }
 
-void AStar3D::findPath( Path& path, const MapCoordinate3D& dest )
+bool AStar3D::findPath( Path& path, const MapCoordinate3D& dest )
 {
   vector<MapCoordinate3D> d;
   d.push_back ( dest );
@@ -546,19 +551,18 @@ void AStar3D::findAllAccessibleFields ( vector<MapCoordinate3D>* path )
    if ( markTemps )
       actmap->cleartemps ( 3 );
 
-   Path dummy;
-   findPath ( dummy, MapCoordinate3D(actmap->xsize, actmap->ysize, veh->height) );  //this field does not exist...
+   vector<MapCoordinate3D> v;
+   findPath ( v );  //this field does not exist...
    for ( VisitedContainer::iterator i = visited.begin(); i != visited.end(); ++i ) {
-      AStar3D::Node node = *i;
-      fieldAccess[node.h] |= node.h.getBitmappedHeight();
+      fieldAccess[i->h] |= i->h.getBitmappedHeight();
 
       if ( markTemps ) {
-         char atemp = actmap->getField ( node.h )->getaTemp();
-         actmap->getField ( node.h )->setaTemp( atemp | node.h.getBitmappedHeight());
+         char atemp = actmap->getField ( i->h )->getaTemp();
+         actmap->getField ( i->h )->setaTemp( atemp | i->h.getBitmappedHeight());
       }
       
       if ( path )
-         path->push_back( node.h );
+         path->push_back( i->h );
    }
    
    if ( markTemps )
