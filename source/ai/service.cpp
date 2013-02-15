@@ -374,8 +374,6 @@ MapCoordinate3D AI :: findServiceBuilding ( const ServiceOrder& so, int* distanc
    for ( int i = 0; i < 8; i++ )
       maxMovement = max ( maxMovement, veh->typ->movement[i] );
 
-   AStar3D astar ( getMap(), veh, true, maxMovement*10 );
-   astar.findAllAccessibleFields ( );
 
    Building* bestBuilding = NULL;
    int bestDistance = maxint;
@@ -384,66 +382,69 @@ MapCoordinate3D AI :: findServiceBuilding ( const ServiceOrder& so, int* distanc
    int bestDistance_p = maxint;
    MapCoordinate3D bestPos_p;
 
-   for ( Player::BuildingList::iterator bi = getPlayer().buildingList.begin(); bi != getPlayer().buildingList.end(); bi++ ) {
-      Building* bld = *bi;
-      if ( astar.getFieldAccess( bld->getEntry())  ) { // ####TRANS
-         MapCoordinate3D buildingPos = bld->getEntry();
-         buildingPos.setnum ( buildingPos.x, buildingPos.y, -1 );
-         /*
-         if ( !(bld->typ->loadcapability & buildingPos.z))
-            buildingPos.z = 1 << getFirstBit ( astar.getFieldAccess(bld->getEntry()) & bld->typ->loadcapability );
-         */
+   for (int factor = 1; factor <= 3; ++factor) {
+      AStar3D astar ( getMap(), veh, true, maxMovement*factor*factor );
+      astar.findAllAccessibleFields ( );
+      for ( Player::BuildingList::iterator bi = getPlayer().buildingList.begin(); bi != getPlayer().buildingList.end(); bi++ ) {
+         Building* bld = *bi;
+         if ( astar.getFieldAccess( bld->getEntry())  ) { // ####TRANS
+            MapCoordinate3D buildingPos = bld->getEntry();
+            buildingPos.setnum ( buildingPos.x, buildingPos.y, -1 );
+            /*
+               if ( !(bld->typ->loadcapability & buildingPos.z))
+               buildingPos.z = 1 << getFirstBit ( astar.getFieldAccess(bld->getEntry()) & bld->typ->loadcapability );
+               */
 
-         bool loadable = true;
-         if ( loadable ) {
-            int fullfillableServices = 0;
-            int partlyFullfillabelServices = 0;
-            switch ( so.requiredService ) {
-               case ServiceOrder::srv_repair : if ( bld->canRepair( veh ) ) {
-                                                    int mr =  bld->getMaxRepair( veh );
-                                                    if ( mr == 0 )
-                                                       fullfillableServices++;
-
-                                                    if ( mr < veh->damage )
-                                                       partlyFullfillabelServices++;
-
-                                                 }
-                                                 break;
-                  case ServiceOrder::srv_resource:  {
-                                                     Resources needed =  veh->getStorageCapacity() - veh->getResource(Resources(maxint,maxint,maxint), true);
-                                                     Resources avail = bld->getResource ( needed, 1 );
-                                                     if ( avail < needed )
-                                                        avail += bld->netResourcePlus( ) * config.waitForResourcePlus;
-
-                                                     int missing = 0;
-                                                     int pmissing = 0;
-                                                     for ( int r = 0; r < resourceTypeNum; r++ ) {
-                                                        if( needed.resource(r) * 75 / 100 > avail.resource(r) )
-                                                           missing ++;
-
-                                                        if( needed.resource(r) * 10 / 100 > avail.resource(r) )
-                                                           pmissing ++;
-                                                     }
-                                                     if ( missing == 0 )
+            bool loadable = true;
+            if ( loadable ) {
+               int fullfillableServices = 0;
+               int partlyFullfillabelServices = 0;
+               switch ( so.requiredService ) {
+                  case ServiceOrder::srv_repair : if ( bld->canRepair( veh ) ) {
+                                                     int mr =  bld->getMaxRepair( veh );
+                                                     if ( mr == 0 )
                                                         fullfillableServices++;
 
-                                                     if ( pmissing == 0)
-                                                       partlyFullfillabelServices++;
-                                                 }
-                                                 break;
+                                                     if ( mr < veh->damage )
+                                                        partlyFullfillabelServices++;
+
+                                                  }
+                                                  break;
+                  case ServiceOrder::srv_resource:  {
+                                                       Resources needed =  veh->getStorageCapacity() - veh->getResource(Resources(maxint,maxint,maxint), true);
+                                                       Resources avail = bld->getResource ( needed, 1 );
+                                                       if ( avail < needed )
+                                                          avail += bld->netResourcePlus( ) * config.waitForResourcePlus;
+
+                                                       int missing = 0;
+                                                       int pmissing = 0;
+                                                       for ( int r = 0; r < resourceTypeNum; r++ ) {
+                                                          if( needed.resource(r) * 75 / 100 > avail.resource(r) )
+                                                             missing ++;
+
+                                                          if( needed.resource(r) * 10 / 100 > avail.resource(r) )
+                                                             pmissing ++;
+                                                       }
+                                                       if ( missing == 0 )
+                                                          fullfillableServices++;
+
+                                                       if ( pmissing == 0)
+                                                          partlyFullfillabelServices++;
+                                                    }
+                                                    break;
                   case ServiceOrder::srv_ammo :  {
-                                                   int missing = 0;
-                                                   int pmissing = 0;
-                                                   int ammoNeeded[waffenanzahl];
-                                                   for ( int t = 0; t < waffenanzahl; t++ )
-                                                      ammoNeeded[t] = 0;
+                                                    int missing = 0;
+                                                    int pmissing = 0;
+                                                    int ammoNeeded[waffenanzahl];
+                                                    for ( int t = 0; t < waffenanzahl; t++ )
+                                                       ammoNeeded[t] = 0;
 
-                                                   for ( int i = 0; i < veh->typ->weapons.count; i++ )
-                                                      if ( veh->typ->weapons.weapon[i].requiresAmmo() )
-                                                         ammoNeeded[ veh->typ->weapons.weapon[i].getScalarWeaponType() ] += veh->typ->weapons.weapon[i].count - veh->ammo[i];
+                                                    for ( int i = 0; i < veh->typ->weapons.count; i++ )
+                                                       if ( veh->typ->weapons.weapon[i].requiresAmmo() )
+                                                          ammoNeeded[ veh->typ->weapons.weapon[i].getScalarWeaponType() ] += veh->typ->weapons.weapon[i].count - veh->ammo[i];
 
-                                                   Resources needed;
-                                                   for ( int  j = 0; j < waffenanzahl; j++ ) {
+                                                    Resources needed;
+                                                    for ( int  j = 0; j < waffenanzahl; j++ ) {
                                                        int n = ammoNeeded[j] - bld->ammo[j];
                                                        if ( n > 0 ) {
                                                           if ( bld->typ->hasFunction( ContainerBaseType::AmmoProduction  )) {
@@ -452,49 +453,51 @@ MapCoordinate3D AI :: findServiceBuilding ( const ServiceOrder& so, int* distanc
                                                           } else
                                                              missing++;
                                                        }
-                                                   }
-                                                   Resources avail = bld->getResource ( needed, 1 );
-                                                   if ( avail < needed )
-                                                      avail += bld->netResourcePlus( ) * config.waitForResourcePlus;
+                                                    }
+                                                    Resources avail = bld->getResource ( needed, 1 );
+                                                    if ( avail < needed )
+                                                       avail += bld->netResourcePlus( ) * config.waitForResourcePlus;
 
-                                                   for ( int r = 0; r < resourceTypeNum; r++ ) {
-                                                      if ( avail.resource(r) < needed.resource (r) )
-                                                         missing++;
-                                                      if ( avail.resource(r) <= needed.resource (r)/3 )
-                                                         pmissing++;
-                                                   }
+                                                    for ( int r = 0; r < resourceTypeNum; r++ ) {
+                                                       if ( avail.resource(r) < needed.resource (r) )
+                                                          missing++;
+                                                       if ( avail.resource(r) <= needed.resource (r)/3 )
+                                                          pmissing++;
+                                                    }
 
-                                                   if ( missing == 0 )
+                                                    if ( missing == 0 )
                                                        fullfillableServices++;
 
-                                                   if ( pmissing == 0)
-                                                     partlyFullfillabelServices++;
+                                                    if ( pmissing == 0)
+                                                       partlyFullfillabelServices++;
 
                                                  }
                                                  break;
 
-            };
+               };
 
-            if ( fullfillableServices ) {
-               const AStar3D::Node* n = astar.visited.find(buildingPos);
-               if ( n && ( n->gval < bestDistance ) ) {
-                  bestDistance = (int)n->gval;
-                  bestBuilding = bld;
-                  bestPos = buildingPos;
-               }
-            } else {
-               if ( partlyFullfillabelServices ) {
+               if ( fullfillableServices ) {
                   const AStar3D::Node* n = astar.visited.find(buildingPos);
-                  if ( n && ( n->gval < bestDistance_p ) ) {
-                     bestDistance_p = (int)n->gval;
-                     bestPos_p = buildingPos;
+                  if ( n && ( n->gval < bestDistance ) ) {
+                     bestDistance = (int)n->gval;
+                     bestBuilding = bld;
+                     bestPos = buildingPos;
+                  }
+               } else {
+                  if ( partlyFullfillabelServices ) {
+                     const AStar3D::Node* n = astar.visited.find(buildingPos);
+                     if ( n && ( n->gval < bestDistance_p ) ) {
+                        bestDistance_p = (int)n->gval;
+                        bestPos_p = buildingPos;
+                     }
                   }
                }
             }
          }
       }
+      if (bestBuilding)
+         break;
    }
-
    if ( bestBuilding && (bestDistance < bestDistance_p*3)) {
       if ( distance )
          *distance = bestDistance;
