@@ -74,7 +74,7 @@ VehicleType {
    } Transportation
    Weight = 2000
    TerrainAccess { 
-      terrain_any = Water Deep_water 
+      terrain_any = Water Deep_water Shallow_water
       terrain_all = 
       terrain_not = Forest Small_rocks Large_rocks Frozen_water 
       terrain_kill = Lava 

@@ -1,0 +1,322 @@
+VehicleType { 
+   Transportation { 
+      EntranceSystemNum = 1
+      EntranceSystem0 { 
+         Mode = In Out Docking 
+         UnitHeightAbs = orbit 
+         UnitHeightRel = -100
+         ContainerHeight = orbit 
+         CategoriesNOT = 
+         DockingHeightAbs = orbit 
+         DockingHeightRel = -100
+         RequiresUnitFeature = 
+         DisableAttack = false
+         MoveCost = 20
+      } EntranceSystem0
+      MaxLoadableUnits = 3
+      MaxLoadableUnitSize = 500
+      MaxLoadableMass = 500
+      CategoriesNOT = rail_vehicle medium_ship building|turret|object light_ship heavy_ship 
+   } Transportation
+   Name = Unittest Spacestation
+   Description = space station
+   Infotext = [Die Raumstation Klasse "TERRIBLE" wurde von rehanischen Wissenschaftlern
+              und Ingenieuren ursprünglich unter dem Namen "Regus Maximus"
+              entwickelt, um zivilen Anforderungen zu entsprechen. Bei der
+              Entwicklung nahm jedoch auch das Militär teil, das von vornherein
+              eine militärische Verwendung ins Auge gefasst hatte. In Planung
+              und Entwicklung konnte sich das Militär jedoch erst durchsetzen,
+              als es im Verlauf der Bauarbeiten im All zu einer Reihe von
+              schweren Unfällen kam. Diese Unfälle kosteten insgesamt 97 Rehaner
+              das Leben, und mit jedem zusätzlichen Unfall zogen sich mehr
+              und mehr der zivilen Teilhaber aus dem Projekt zurück. Schließlich
+              kam es zu einem Streik der Arbeiter, die nicht mehr an der "Terrible",
+              oder der "Schrecklichen", wie sie die halbfertige Station nannten,
+              arbeiten wollten, solange keine umfassenden Sicherheitsmaßnahmen
+              ergriffen würden. Kaum hatte dieser Streik begonnen, übernahm
+              das rehanische Militär den Bau und stellte die Station in kurzer
+              Zeit in Dienst. Sie und alle Nachfolgenden dieses Types wurden
+              vom Militär fortan als "TERRIBLE"-Raumstationen geführt.
+               Nunmehr
+              dienen "TERRIBLE"-Raumstationen zur Kontrolle des Luftraumes,
+              sowie der Landfläche unter ihrem geostationären Orbit. Lediglich
+              niedrigfliegende Luftfahrzeuge und abgetauchte UBoote sowie
+              Infanterie können von Waffensystemen der Raumstation nicht erfasst
+              und bekämpft werden. Zusätzlich dient sie als Heimatbasis der
+              gesamten orbitalen Streitmacht der Rehaner, von Wartungsanlagen
+              und einem Krankenhaus bis zur hydroponischen Farm, man findet
+              alles auf dem Multitalent im All.
+              ]
+   ID = 1000000067
+   SecondaryIDs = 
+   View = 100
+   Jamming = 0
+   InfoImage = 
+   InfoImageSmall = 
+   MaxResourceProduction { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } MaxResourceProduction
+   ResourceExtractionEfficiency { 
+      Material = 1024
+      Fuel = 1024
+   } ResourceExtractionEfficiency
+   StorageCapacity { 
+      BImode { 
+         Energy = 0
+         Material = 16000
+         fuel = 16000
+      } BImode
+      ASCmode { 
+         Energy = 0
+         Material = 16000
+         fuel = 16000
+      } ASCmode
+   } StorageCapacity
+   MaxResearch = 0
+   NominalResearch = 0
+   MaxResearchpointsDefault = 0
+   DefaultProduction { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } DefaultProduction
+   CategoriesProduceable = default light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle trooper rail_vehicle medium_aircraft medium_ship building|turret|object light_aircraft heavy_aircraft light_ship heavy_ship helicopter hoovercraft 
+   AutoHarvestObjects { 
+      objects = 
+      objectGroups = 
+      Range = 0
+      MaxFieldsPerTurn = 2147483647
+   } AutoHarvestObjects
+   Construction { 
+      VehiclesInternally = 
+      ProductionEfficiency = 1.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 1.000000 
+   } Construction
+   minFieldRepairDamage = 0
+   Armor = 670
+   Picture = unittest-spacestation.png
+   Height = orbit 
+   WaitForAttack = true
+   FuelConsumption = 100
+   Features = Repair_Facility ExternalAmmoTransfer automatic_resource_searching self_repairing MoveDuringReactionFire 
+   Movement = 0 0 0 0 0 0 0 20 
+   Category = heavy_aircraft
+   MaxSurvivableStorm = 0
+   ResourceDrillingRange = 6
+   SelfRepairRate = 10
+   WreckageObject = 
+   Transportation { 
+      CargoMovementDivisor = 3.000000
+   } Transportation
+   Weight = 505
+   TerrainAccess { 
+      terrain_any = 
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = Shallow_water Swamp Water Deep_water Very_shallow_water Lava River 
+   } TerrainAccess
+   Construction { 
+      Buildings = 
+      Vehicles = 
+      Objects = 
+      ObjectsRemovable = 
+      ObjectGroupsBuildable = 
+      ObjectGroupsRemovable = 
+      UnitConstructionMoveCostPercentage = 50
+      UnitConstructionMinDistance = 1
+      UnitConstructionMaxDistance = 1
+   } Construction
+   Weapons { 
+      Number = 4
+      Weapon0 { 
+         Type = air_missile shootable 
+         targets = medium_level_flight high_level_flight orbit 
+         shotFrom = orbit 
+         MaxRange = 40
+         MinRange = 10
+         Ammo = 30
+         Punch@MaxRange = 78
+         Punch@MinRange = 78
+         Sound = 
+         LaserRechargeRate = 0
+         laserRechargeCost { 
+            Energy = 0
+            Material = 0
+            fuel = 0
+         } laserRechargeCost
+         ReactionFireShots = 2
+         HitAccuracy { 
+            d6 = 0
+            d5 = 0
+            d4 = 0
+            d3 = 0
+            d2 = 94
+            d1 = 98
+            0 = 100
+            u1 = 0
+            u2 = 0
+            u3 = 0
+            u4 = 0
+            u5 = 0
+            u6 = 0
+         } HitAccuracy
+         WeaponEffectiveness { 
+            light_tracked_vehicle = 250
+            medium_tracked_vehicle = 250
+            heavy_tracked_vehicle = 250
+            light_wheeled_vehicle = 250
+            medium_wheeled_vehicle = 250
+            heavy_wheeled_vehicle = 250
+            rail_vehicle = 250
+            medium_ship = 250
+            building|turret|object = 250
+            light_ship = 250
+            heavy_ship = 250
+            hoovercraft = 250
+         } WeaponEffectiveness
+         name = 
+      } Weapon0
+      Weapon1 { 
+         Type = air_missile shootable 
+         targets = floating ground_level 
+         shotFrom = orbit 
+         MaxRange = 40
+         MinRange = 10
+         Ammo = 30
+         Punch@MaxRange = 98
+         Punch@MinRange = 98
+         Sound = 
+         LaserRechargeRate = 0
+         laserRechargeCost { 
+            Energy = 0
+            Material = 0
+            fuel = 0
+         } laserRechargeCost
+         ReactionFireShots = 1
+         HitAccuracy { 
+            d6 = 0
+            d5 = 0
+            d4 = 100
+            d3 = 0
+            d2 = 0
+            d1 = 0
+            0 = 0
+            u1 = 0
+            u2 = 0
+            u3 = 0
+            u4 = 0
+            u5 = 0
+            u6 = 0
+         } HitAccuracy
+         WeaponEffectiveness { 
+            light_tracked_vehicle = 95
+            light_wheeled_vehicle = 90
+            medium_wheeled_vehicle = 95
+            trooper = 0
+         } WeaponEffectiveness
+         name = 
+      } Weapon1
+      Weapon2 { 
+         Type = cruise_missile shootable 
+         targets = submerged floating ground_level 
+         shotFrom = orbit 
+         MaxRange = 70
+         MinRange = 10
+         Ammo = 3
+         Punch@MaxRange = 110
+         Punch@MinRange = 120
+         Sound = 
+         LaserRechargeRate = 0
+         laserRechargeCost { 
+            Energy = 0
+            Material = 0
+            fuel = 0
+         } laserRechargeCost
+         ReactionFireShots = 0
+         HitAccuracy { 
+            d6 = 0
+            d5 = 60
+            d4 = 100
+            d3 = 0
+            d2 = 0
+            d1 = 0
+            0 = 0
+            u1 = 0
+            u2 = 0
+            u3 = 0
+            u4 = 0
+            u5 = 0
+            u6 = 0
+         } HitAccuracy
+         WeaponEffectiveness { 
+            trooper = 0
+         } WeaponEffectiveness
+         name = 
+      } Weapon2
+      Weapon3 { 
+         Type = cannon ammo_transfer shootable 
+         targets = medium_level_flight high_level_flight orbit 
+         shotFrom = medium_level_flight high_level_flight orbit 
+         MaxRange = 20
+         MinRange = 10
+         Ammo = 30
+         Punch@MaxRange = 55
+         Punch@MinRange = 65
+         Sound = 
+         LaserRechargeRate = 0
+         laserRechargeCost { 
+            Energy = 0
+            Material = 0
+            fuel = 0
+         } laserRechargeCost
+         ReactionFireShots = 1
+         HitAccuracy { 
+            d6 = 0
+            d5 = 0
+            d4 = 0
+            d3 = 0
+            d2 = 0
+            d1 = 95
+            0 = 100
+            u1 = 0
+            u2 = 0
+            u3 = 0
+            u4 = 0
+            u5 = 0
+            u6 = 0
+         } HitAccuracy
+         WeaponEffectiveness { 
+         } WeaponEffectiveness
+         name = 
+      } Weapon3
+   } Weapons
+   AIJobOverride = undefined
+   MovementSound = move_air_jet_s.ogg
+   KillSound = 
+   HeightChangeMethodNum = 0
+   TechAdapterRequired = 67 
+   RequireAllListedTechAdapter = true
+   ConstructionCost { 
+      Energy = 35533
+      Material = 32853
+      fuel = 0
+      CalculationMethod = manual
+      Calculator = standard
+   } ConstructionCost
+   guideSortHelp = 516 235 507 508 1 509 550 553 0 0 
+   JumpDrive { 
+      Height = 
+      consumption { 
+         Energy = 0
+         Material = 0
+         fuel = 0
+      } consumption
+      terrain_any = Shallow_water Lowland Swamp Forest High_mountains Road Railroad Harbour Runway Pipeline Buried_pipeline Water Deep_water Hard_sand Soft_sand Track_possible Small_rocks Mud Snow Deep_snow Mountains Very_shallow_water Large_rocks Lava Ditch Hillside Turret_foundation Morass Installation Pack_ice River Frozen_water bridge lava_barrier spaceport beacon fire 
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = 
+      MaxDistance = 2147483647
+   } JumpDrive
+   ObjectsLayedByMovement = 
+} VehicleType

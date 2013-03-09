@@ -126,9 +126,9 @@ class AStar3D {
 
        typedef vector<PathPoint> Path;
        struct Node {
-           MapCoordinate3D h;        // location on the map, in hex coordinates
-           AStar3D::DistanceType gval;        // g in A* represents how far we've already gone
-           AStar3D::DistanceType hval;        // h in A* represents an estimate of how far is left
+           MapCoordinate3D h;        //! location on the map, in hex coordinates
+           AStar3D::DistanceType gval;        //! g in A* represents how far we've already gone
+           AStar3D::DistanceType hval;        //! h in A* represents an estimate of how far is left
            bool canStop;
            bool hasAttacked;
            int enterHeight;
@@ -227,6 +227,9 @@ class AStar3D {
 
        int& getFieldAccess ( int x, int y );
        int& getFieldAccess ( const MapCoordinate& mc );
+
+       //! for debugging: dumps the contents of the visited node to stdout
+       void dumpVisited();
 
        virtual ~AStar3D ( );
  };

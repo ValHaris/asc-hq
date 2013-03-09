@@ -425,7 +425,7 @@ void Vehicle :: endOwnTurn()
    
    if ( typ->autorepairrate > 0 )
       if ( damage )
-         repairItem ( this, max ( damage - typ->autorepairrate, 0 ) );
+         repairItem ( this, max ( damage - typ->autorepairrate, typ->minFieldRepairDamage ) );
 
    reactionfire.endOwnTurn();
 

@@ -173,7 +173,7 @@ int         fieldAccessible( const MapField*        field,
               if (vehicleplattfahrbar(vehicle,field))
                  return 2;
                else {
-                  if ( getheightdelta(getFirstBit(field->vehicle->height), getFirstBit(vehicle->height)) || (attackpossible28(field->vehicle,vehicle) == false) || ( vehicle->getMap()->getPlayer(vehicle).diplomacy.getState( field->vehicle->getOwner()) >= PEACE ))
+                  if ( getheightdelta(getFirstBit(field->vehicle->height), getFirstBit(uheight)) || (attackpossible28(field->vehicle,vehicle) == false) || ( vehicle->getMap()->getPlayer(vehicle).diplomacy.getState( field->vehicle->getOwner()) >= PEACE ))
                     return 1;
                }
            }

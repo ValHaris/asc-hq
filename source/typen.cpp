@@ -311,6 +311,17 @@ ASCString MapCoordinate::toString(bool coordinates) const
    return s;
 }
 
+ASCString MapCoordinate3D::toString(bool coordinates) const
+{
+   ASCString s;
+   if ( coordinates )
+      s.format( "%d/%d/%d", x, y, getNumericalHeight());
+   else
+      s.format( "#coord(%d/%d)#", x, y);
+   return s;
+}
+
+
 
 vector<IntRange> String2IntRangeVector( const ASCString& t )
 {

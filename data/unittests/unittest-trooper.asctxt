@@ -97,6 +97,7 @@ VehicleType {
    MaxSurvivableStorm = 100
    ResourceDrillingRange = 0
    SelfRepairRate = 5
+   minFieldRepairDamage = 10
    WreckageObject = 417 
    Transportation { 
       CargoMovementDivisor = 2.000000

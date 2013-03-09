@@ -9,6 +9,7 @@
 #include <functional>
 #include <algorithm>
 #include <cmath>
+#include <iostream>
 
 #include "vehicletype.h"
 #include "spfst.h"
@@ -866,7 +867,7 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
 
         MapCoordinate3D h = endpos;
 
-        path.insert ( path.begin(), PathPoint ( h, int(ceil(N.gval)), N.enterHeight, N.hasAttacked ) );
+        path.insert ( path.begin(), PathPoint ( h, int(N.gval), N.enterHeight, N.hasAttacked ) );
         while( !(h == A) )
         {
             // tfield* fld = actmap->getField ( h );
@@ -978,4 +979,13 @@ AStar3D::PathPoint AStar3D::PathPoint::newFromStream( tnstream& stream )
    pp.read(stream);
    return pp;  
 }
+
+void AStar3D::dumpVisited()
+{
+	for ( Container::iterator i = visited.begin(); i != visited.end(); ++i ) {
+		cout << "(" << i->h.x << "," << i->h.y << "," << i->h.getNumericalHeight() << ")@" << i->gval << "\n";
+	}
+}
+
+
 

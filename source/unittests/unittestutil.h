@@ -29,6 +29,7 @@ extern void testCargoMovement( Vehicle* veh, int movement );
 extern void testCargoMovementMax( Vehicle* veh, int movement );
 extern Vehicle* getFirstCargo( ContainerBase* carrier );
 extern void move( Vehicle* veh, const MapCoordinate& dest );
+extern void move( Vehicle* veh, const MapCoordinate3D& dest );
 extern void attack( Vehicle* veh, const MapCoordinate& target );
 
 
