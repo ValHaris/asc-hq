@@ -42,6 +42,7 @@
 #include "streamencoding.h"
 #include "tasks/taskcontainer.h"
 #include "maptest.h"
+#include "repairtest.h"
 
 
 void viewcomp( Player& player )
@@ -91,6 +92,7 @@ void runUnitTests()
    testTransferControl();
    testAiService();
    testAiMovement();
+   testUnitRepair();
 }     
       
 
@@ -110,19 +112,19 @@ int runTester ( )
    try {
       loaddata();
    }
-   catch ( ParsingError err ) {
+   catch ( ParsingError& err ) {
       errorMessage ( "Error parsing text file " + err.getMessage() );
       return -1;
    }
-   catch ( tfileerror err ) {
+   catch ( tfileerror& err ) {
       errorMessage ( "Error loading file " + err.getFileName() );
       return -1;
    }
-   catch ( ASCexception ) {
+   catch ( ASCexception& ) {
       errorMessage ( "loading of game failed" );
       return -1;
    }
-   catch ( ThreadExitException ) {
+   catch ( ThreadExitException& ) {
       displayLogMessage(0, "caught thread exiting exception, shutting down");
       return -1;
    }
@@ -177,7 +179,7 @@ int main(int argc, char *argv[] )
    Cmdline* cl = NULL;
    try {
       cl = new Cmdline ( argc, argv );
-   } catch ( string s ) {
+   } catch ( const string& s ) {
       cerr << s;
       exit(1);
    }
@@ -212,15 +214,15 @@ int main(int argc, char *argv[] )
       if ( result != 0 )
          return result;
    }
-   catch ( bad_alloc ) {
+   catch ( bad_alloc& ) {
       fatalError ("Out of memory");
       return 1;
    }
-   catch ( ASCmsgException e ) {
+   catch ( ASCmsgException& e ) {
       cerr << e.getMessage() << "\n";
       return 2;
    }
-   catch ( ActionResult ar ) {
+   catch ( ActionResult& ar ) {
       cerr << "ActionResult failed:" << ar.getCode() << " : " << ar.getMessage() << "\n";
       return 2;
    }
