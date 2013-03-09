@@ -19,7 +19,7 @@
 class AStar3D {
     public:
        typedef float DistanceType;
-       static const DistanceType longestPath = 1e9;
+       static const DistanceType longestPath;
        class OperationLimiter {
            public:
               virtual bool allowHeightChange() = 0;
