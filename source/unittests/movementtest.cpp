@@ -404,7 +404,7 @@ void testPathFinding()
 	   auto_ptr<MoveUnitCommand> muc ( new MoveUnitCommand( trooper ));
 	   muc->searchFields();
 	   const set<MapCoordinate3D>& fields = muc->getReachableFields();
-	   std::cout << "Fields size " << fields.size() << "\n";
+	   // std::cout << "Fields size " << fields.size() << "\n";
 	   // making sure the trooper cannot enter the shuttles that are not in orbit
 	   assertOrThrow( fields.size() == 2  );
 	   assertOrThrow( game->getField(13,1)->vehicle );
