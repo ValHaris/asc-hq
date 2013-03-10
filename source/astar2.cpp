@@ -543,7 +543,7 @@ bool AStar3D::constructPath( Path& path, const Node* n_ptr) {
    return true;
 }
 
-bool AStar3D::findPath( Path& path, const MapCoordinate3D& dest )
+void AStar3D::findPath( Path& path, const MapCoordinate3D& dest )
 {
   vector<MapCoordinate3D> d;
   d.push_back ( dest );

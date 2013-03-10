@@ -144,7 +144,7 @@ class AStar3D {
        bool findPath( const vector<MapCoordinate3D>& dest );
 
        //! searches for a path from the unit's current position to dest and stores it in path
-       bool findPath( Path& path, const MapCoordinate3D& dest );
+       void findPath( Path& path, const MapCoordinate3D& dest );
 
        //! searches for a path from the units current position to one of the dest fields and stores it in path
        bool findPath( Path& path, const vector<MapCoordinate3D>& dest );
