@@ -354,6 +354,7 @@ bool AStar3D::findPath( const vector<MapCoordinate3D>& B ) {
        firstNode.hval = dist(A, B);
        firstNode.enterHeight = -1;
        firstNode.canStop = true;
+       firstNode.hasAttacked = veh->attacked;
 
        firstNode.h = A;
        if ( !(actmap->getField(A)->unitHere(veh)) ) {
