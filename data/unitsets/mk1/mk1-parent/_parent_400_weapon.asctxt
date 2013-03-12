@@ -85,6 +85,33 @@
          medium_aircraft  = 100
          heavy_aircraft = 100
    } AntiAirWeapon
+
+;   WeaponX.WeaponEffectiveness ->* VehicleType.Anti100
+   Anti100 {      
+         default = 100
+		 trooper = 100
+         rail_vehicle = 100
+         building|turret|object = 100
+         hoovercraft = 100
+         helicopter = 100
+
+         light_tracked_vehicle = 100
+         medium_tracked_vehicle = 100
+         heavy_tracked_vehicle = 100
+
+         light_wheeled_vehicle = 100
+         medium_wheeled_vehicle = 100
+         heavy_wheeled_vehicle = 100
+         
+         light_ship = 100
+         medium_ship  = 100
+         heavy_ship = 100
+
+         light_aircraft = 100
+         medium_aircraft  = 100
+         heavy_aircraft = 100
+   } Anti100
+
 ;      WeaponX.ReactionFireShots = 2
 
 

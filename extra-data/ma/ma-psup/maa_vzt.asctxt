@@ -31,37 +31,16 @@ VehicleType {
 
    WaitForAttack = true
    Weapons { 
-      Initiative = 0
       Number = 1
-      Weapon0 { 
-         Type = cannon shootable
-         targets = floating ground_level low_level_flight medium_level_flight high_level_flight
-         Sound = aa_gun_s.ogg
-         shotFrom = ground_level low_level_flight medium_level_flight high_level_flight
-         MaxRange = 30
-         MinRange = 10
-         Ammo = 10
-         ReactionFireShots = 2
-         Punch@MaxRange = 70
-         Punch@MinRange = 70
-         HitAccuracy { 
-            d6 = 0
-            d5 = 0
-            d4 = 0
-            d3 = 0
-            d2 = 0
-            d1 = 80
-            0 = 100
-            u1 = 80
-            u2 = 0
-            u3 = 0
-            u4 = 0
-            u5 = 0
-            u6 = 0
-         } HitAccuracy
-         WeaponEffectiveness {
-	    trooper = 50
-	 } WeaponEffectiveness
-      } Weapon0
+      Weapon0 ->* VehicleType.AU_Gun 
+      Weapon0.MaxRange = 30
+      Weapon0.MinRange = 10
+      Weapon0.Ammo = 10
+      Weapon0.ReactionFireShots = 2
+      Weapon0.Punch@MaxRange = 70
+      Weapon0.Punch@MinRange = 70
+      Weapon0.HitAccuracy.d1 = 80
+      Weapon0.HitAccuracy.0 = 100
+      Weapon0.HitAccuracy.u1 = 80
    } Weapons
 } VehicleType

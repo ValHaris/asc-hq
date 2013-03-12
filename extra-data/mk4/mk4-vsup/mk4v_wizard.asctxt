@@ -10,7 +10,7 @@ VehicleType {
    picture = mk4v_wizard.png
    WreckageObject = 14268
 
-   Features += construct_specific_buildings  
+   Features += construct_specific_buildings ExternalFuelTransfer ExternalMaterialTransfer
    Weight = 65
 
    Tank { 
@@ -26,6 +26,7 @@ VehicleType {
    } Construction
 
    Weapons { 
-      Number = 0
+      Number = 1
+      Weapon0 ->* VehicleType.ServiceTurret
    } Weapons
 } VehicleType
