@@ -10,14 +10,14 @@ VehicleType {
    View -= 10
    Features = sonar ManualSelfDestruct onlyTransMove
 
-   Height = deep_submerged submerged 
+   Height = floating deep_submerged submerged 
    Tank { 
       Energy = 0
       Material = 0
       fuel = 220
    } Tank
    FuelConsumption = 100
-   Movement = 12 12 0 0 0 0 0 0 
+   Movement = 12 12 12 0 0 0 0 0 
 
    TerrainAccess { 
       terrain_any = Shallow_water Water Deep_water river

@@ -49,12 +49,13 @@ VehicleType {
 
    WaitForAttack = false
    Weapons { 
-      Initiative = 0
       Number = 5
 
       Weapon0 ->* VehicleType.SSM
       Weapon0.type = laser shootable
       Weapon0.targets = submerged floating ground_level 
+      Weapon0.WeaponEffectiveness.default = 0
+      Weapon0.WeaponEffectiveness.trooper = 0
       Weapon0.HitAccuracy.d1 = 100
       Weapon0.LaserRechargeRate = 1
       Weapon0.LaserRechargeCost.material = 0
@@ -89,6 +90,7 @@ VehicleType {
       Weapon2.Ammo = 5
 
       Weapon3 ->* VehicleType.Laser_gun
+      Weapon3.WeaponEffectiveness ->* VehicleType.AntiAirWeapon
       Weapon3.targets = low_level_flight medium_level_flight high_level_flight 
       Weapon3.HitAccuracy.u1 = 100
       Weapon3.HitAccuracy.u2 = 100
@@ -104,6 +106,7 @@ VehicleType {
       Weapon3.ReactionFireShots = 4
 
       Weapon4 ->* VehicleType.Laser_gun
+      Weapon4.WeaponEffectiveness ->* VehicleType.Anti100
       Weapon4.targets = submerged floating ground_level 
       Weapon4.HitAccuracy.u1 = 100
       Weapon4.HitAccuracy.u2 = 100

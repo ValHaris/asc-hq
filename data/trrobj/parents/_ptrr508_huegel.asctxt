@@ -9,7 +9,7 @@ TerrainType {
       BasicJamming = 1
    ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
       Movemalus = 20  20  20  20  20  24  24  20  15  24  24  16  24  24  24  24  24  24 
-      TerrainProperties = hillside track_possible
+      TerrainProperties = hillside hard_sand track_possible
    } dry
 
    light_rain { 
@@ -18,7 +18,7 @@ TerrainType {
       BasicJamming = 2
    ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
       Movemalus = 22  22  22  22  24  26  26  22  15  26  26  16  26  26  26  26  26  24 
-      TerrainProperties = hillside mud track_possible
+      TerrainProperties = hillside hard_sand mud track_possible
    } light_rain
 
    heavy_rain { 
@@ -27,11 +27,11 @@ TerrainType {
       BasicJamming = 3
    ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
       Movemalus = 24  24  24  24  26  28  28  24  15  28  28  16  28  28  28  28  28  24
-      TerrainProperties = hillside track_possible
+      TerrainProperties = hillside hard_sand mud  track_possible
    } heavy_rain
 
    few_snow ->* TerrainType.dry 
-   few_snow.TerrainProperties = hillside snow track_possible
+   few_snow.TerrainProperties = hillside hard_sand snow track_possible
    few_snow.BasicJamming = 2
 
    much_snow { 
@@ -40,7 +40,7 @@ TerrainType {
       BasicJamming = 3
    ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
       Movemalus = 30  30  30  30  30  30  30  20  17  30  30  16  30  30  30  30  30  30 
-      TerrainProperties = hillside deep_snow track_possible
+      TerrainProperties = hillside hard_sand deep_snow track_possible
    } much_snow
    snow_and_ice ->* TerrainType.much_snow
 } TerrainType
