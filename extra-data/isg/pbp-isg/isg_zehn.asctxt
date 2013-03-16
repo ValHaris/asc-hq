@@ -39,7 +39,7 @@ VehicleType {
    FuelConsumption = 10
    Movement = 0 0 0 45 180 200 200 0 
    Height = ground_level low_level_flight medium_level_flight high_level_flight
-   MovementSound = pui_kukulcan.ogg
+   MovementSound = isg_zehn.ogg
    HeightChangeMethod0.movecost = 25
 
    Construction { 

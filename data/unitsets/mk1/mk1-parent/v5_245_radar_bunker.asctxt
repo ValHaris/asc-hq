@@ -15,6 +15,7 @@ VehicleType {
    TerrainAccess ->* VehicleType.turret_lowland 
 
    Weapons {
+     Number = 1
      Weapon0 ->* VehicleType.MiniGun
    } Weapons
 } VehicleType

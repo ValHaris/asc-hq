@@ -10,6 +10,7 @@ VehicleType {
 ]
 
    Features = jam_only_own_field self_repairing sonar no_midair_refuel cruiserlanding
+   Category = light_aircraft
    Armor = 300
    View = 60
    Jamming = 39
@@ -26,7 +27,6 @@ VehicleType {
    Movement = 0 0 0 0 140 140 140 0 
 
    Weapons { 
-      Initiative = 0
       Number = 0
    } Weapons
 } VehicleType

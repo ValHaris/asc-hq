@@ -30,9 +30,9 @@ VehicleType {
    } Transportation
 
    Height = submerged floating ground_level low_level_flight
-   Movement = 0 22 60 33 33 0 0 0 
+   Movement = 0 22 60 39 39 0 0 0 
    TerrainAccess {
-      terrain_any = Spaceport shallow_water water deep_water river
+      terrain_any = Spaceport runway shallow_water water deep_water river
       terrain_all =
       terrain_not = very_shallow_water small_rocks large_rocks forest
       terrain_kill = lava
@@ -65,7 +65,7 @@ VehicleType {
       movecost = 10
       heightdelta = 1
       dist = 0
-      startheight = submerged
+      startheight = submerged ground_level
       canattack = true
    } HeightChangeMethod0
    HeightChangeMethod1 {
@@ -79,14 +79,14 @@ VehicleType {
       movecost = 5
       heightdelta = -1
       dist = 0
-      startheight = floating
+      startheight = floating ground_level
       canattack = true
    } HeightChangeMethod2
    HeightChangeMethod3 {
       movecost = 5
       heightdelta = -1
       dist = 0
-      startheight = low_level_flight ground_level
+      startheight = low_level_flight 
       canattack = true
    } HeightChangeMethod3
 } VehicleType

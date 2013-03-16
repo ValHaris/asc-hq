@@ -76,7 +76,7 @@ VehicleType {
         CategoriesNOT = 
         DockingHeightAbs = medium_level_flight high_level_flight orbit
         DockingHeightRel = 0 
-        Movecost = 20
+        Movecost = 30
         RequireUnitFunction = cruiserlanding
       } EntranceSystem0
    } TransSyDestroyer
@@ -96,7 +96,7 @@ VehicleType {
         CategoriesNOT = 
         DockingHeightAbs = medium_level_flight high_level_flight orbit
         DockingHeightRel = 0 
-        Movecost = 30
+        Movecost = 40
         RequireUnitFunction = cruiserlanding
       } EntranceSystem0
    } TransSyCruiser
@@ -116,7 +116,7 @@ VehicleType {
         CategoriesNOT = 
         DockingHeightAbs = medium_level_flight high_level_flight orbit
         DockingHeightRel = 0 
-        Movecost = 30
+        Movecost = 50
         RequireUnitFunction = cruiserlanding
       } EntranceSystem0
    } TransSyBattleShip
@@ -136,7 +136,7 @@ VehicleType {
         CategoriesNOT = 
         DockingHeightAbs = medium_level_flight high_level_flight orbit
         DockingHeightRel = 0 
-        Movecost = 20
+        Movecost = 60
         RequireUnitFunction = cruiserlanding
       } EntranceSystem0
    } TransSyCarrier

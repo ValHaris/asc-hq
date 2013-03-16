@@ -34,5 +34,4 @@ BuildingType {
          fuel = 0
       } ASCmode
    } StorageCapacity
-   Height = floating 
 } BuildingType
