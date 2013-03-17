@@ -58,6 +58,7 @@ void testView1()
    
    attack( game->getField(1,6)->vehicle, MapCoordinate( 3,5 ) );
    
+   assertOrThrow( game->getField(3,5)->vehicle == NULL );
    assertOrThrow( fieldvisiblenow(game->getField(4,3)) == true );
    
    ActionResult res = game->actions.undo( createTestingContext( game.get() ) );  
