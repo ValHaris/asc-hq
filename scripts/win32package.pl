@@ -25,12 +25,6 @@ my @debugfiles = ("asc.pdb", "mapeditor.pdb");
 
 print $version . "\n";
 
-open (P, "passwd.txt") || die "could not open password file";
-my $password = <P>;
-chomp $password;
-close P;
-
-
 chdir($exepath) || die "could not change directory to $exepath";
 
 my @zipfiles;
@@ -47,11 +41,17 @@ if ( $testVersion ) {
 system("zip -X -D $zipname " . join (" ", @zipfiles) );
 die "error zipping file" if $?;
 
-my $archivedir = "archive/" . $version;
+my $archiveroot = "archive";
+mkdir $archiveroot if ( ! -e $archiveroot ) ;
+
+
+my $archivedir = $archiveroot . "/" . $version;
 
 mkdir $archivedir if ( ! -e $archivedir ) ;
 
-system("cp " . join (" ", @files, @debugfiles) . " $archivedir");
+my $cmd = "cp " . join (" ", @files, @debugfiles) . " $archivedir";
+print $cmd;
+system($cmd);
 die "error copying file" if $?;
 
 system("net use z:") unless -e "z:";
