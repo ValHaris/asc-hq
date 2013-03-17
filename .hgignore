@@ -34,3 +34,11 @@ glob:*.pdb
 glob:*.exe
 glob:*.idb
 glob:.*.swp
+glob:source/win32/**/*.suo
+glob:source/win32/**/*.ncb
+glob:source/win32/**/*.exp
+glob:*BuildLog.htm
+glob:*.intermediate.manifest
+glob:*.user
+glob:source/win32/msvc/**/*.dep
+glob:*.exe.embed.manifest
