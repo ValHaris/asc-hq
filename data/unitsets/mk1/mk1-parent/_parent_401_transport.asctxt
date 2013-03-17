@@ -128,7 +128,7 @@
         UnitHeightAbs = medium_level_flight high_level_flight
         UnitHeightRel = 0
         ContainerHeight = medium_level_flight high_level_flight
-        MoveCost = 40 
+        MoveCost = 60 
         CategoriesNOT = 
         DockingHeightAbs = 
         DockingHeightRel = -100 

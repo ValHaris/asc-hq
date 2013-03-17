@@ -6,25 +6,26 @@ VehicleType {
    Description = 
    Infotext = []
    Picture = mk5d_forest.png
-;   WreckageObject = 1414
+   WreckageObject = 1303
+   ; kleiner Krater
 
    Armor = 250
    Weight = 1
-   View = 20
+   View = 30
    Jamming = 11
    Features = Kamikaze_only moveduringreactionfire
 
+   Movement = 0 0 0 12 0 0 0 0 
    TerrainAccess ->* VehicleType.device_terrain 
 
    Weapons { 
-      Initiative = 0
       Number = 1
       Weapon0 { 
          Type = laser shootable 
          targets = ground_level floating 
          shotFrom = ground_level
-         Punch@MaxRange = 150
-         Punch@MinRange = 150
+         Punch@MaxRange = 170
+         Punch@MinRange = 170
          LaserRechargeRate = 1
          LaserRechargeCost {
             energy = 0

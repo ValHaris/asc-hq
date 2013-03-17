@@ -39,6 +39,7 @@ einzelnen Völkern zu Verfügung gestellt wird.]
       EntranceSystem2.DisableAttack = true
   } transportation
 
+   Height += submerged 
    Features += MoveDuringReactionFire Repair_Facility
 
    Movement = 0 88 0 30 140 0 0 40
@@ -85,8 +86,8 @@ einzelnen Völkern zu Verfügung gestellt wird.]
       canattack = true
    } HeightChangeMethod2
    HeightChangeMethod3 {
-      movecost = 20
-      heightdelta = -1
+      movecost = 10
+      heightdelta = -3
       dist = 0
       startheight = orbit
       canattack = true
@@ -100,7 +101,7 @@ einzelnen Völkern zu Verfügung gestellt wird.]
    } HeightChangeMethod4
    HeightChangeMethod5 {
       movecost = 25
-      heightdelta = -1
+      heightdelta = -2
       dist = 0
       startheight = ground_level
       canattack = true
