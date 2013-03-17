@@ -202,7 +202,7 @@ bool Vehicle :: canRepair( const ContainerBase* item ) const
 static const int repairExperienceDecrease = 20;
 
     
-int Vehicle::getRepairExperienceDecrease( int oldDamage, int newDamage, bool offensive )
+int Vehicle::getRepairExperienceValue( int oldDamage, int newDamage, bool offensive, int roundToResolution )
 {
    /*
    This is an alternative Strategy that removes as much experience points as are necessary to achieve the desired decrease of attack bonus
@@ -226,15 +226,69 @@ int Vehicle::getRepairExperienceDecrease( int oldDamage, int newDamage, bool off
    return oldExperience - experience;
    */
    
+	int exp;
+	if ( offensive )
+		exp = experience_offensive;
+	else
+		exp = experience_defensive;
+
    int decreasePercentage = (oldDamage - newDamage) * repairExperienceDecrease / 100;
-   if ( offensive )
-      return min( experience_offensive * decreasePercentage/100 + 1, experience_offensive);
-   else
-      return min( experience_defensive * decreasePercentage/100 + 1, experience_defensive);
-   
-   
+
+   int newexp = exp - (exp * decreasePercentage/100);
+   newexp = (newexp / roundToResolution) * roundToResolution;
+
+   if ( newexp < 0 )
+	   newexp = 0;
+   if ( newexp > exp )
+	   newexp = exp;
+
+   return newexp;
 }
-    
+
+
+int Vehicle :: getExperience_offensive() const
+{
+	return experience_offensive / experienceResolution;
+}
+
+int Vehicle :: getExperience_defensive() const
+{
+	return experience_defensive / experienceResolution;
+}
+
+int Vehicle :: getExperience_offensive_raw() const
+{
+	return experience_offensive;
+}
+
+int Vehicle :: getExperience_defensive_raw() const
+{
+	return experience_defensive;
+}
+
+
+void Vehicle :: setExperience_offensive( int experience )
+{
+	experience_offensive = experience * experienceResolution;
+}
+
+void Vehicle :: setExperience_defensive( int experience )
+{
+	experience_defensive = experience * experienceResolution;
+
+}
+
+void Vehicle :: setExperience_offensive_raw( int experience )
+{
+	experience_offensive = experience;
+}
+
+void Vehicle :: setExperience_defensive_raw( int experience )
+{
+	experience_defensive = experience;
+
+}
+
 
 int Vehicle :: putResource ( int amount, int resourcetype, bool queryonly, int scope, int player )
 {
@@ -362,15 +416,13 @@ void Vehicle::transform ( const VehicleType* type )
    }
 }
 
-void Vehicle :: postRepair ( int oldDamage )
+void Vehicle :: postRepair ( int oldDamage, bool autoRepair )
 {
-   int expDelta = getRepairExperienceDecrease( oldDamage, damage, true );
-   experience_offensive -= expDelta;
+   experience_offensive = getRepairExperienceValue( oldDamage, damage, true, autoRepair ? 1 : experienceResolution );
    if ( experience_offensive < 0 )
       experience_offensive = 0;
    
-   expDelta = getRepairExperienceDecrease( oldDamage, damage, false );
-   experience_defensive -= expDelta;
+   experience_defensive = getRepairExperienceValue( oldDamage, damage, false, autoRepair ? 1 : experienceResolution );;
    if ( experience_defensive < 0 )
       experience_defensive  = 0;
 }
@@ -425,7 +477,7 @@ void Vehicle :: endOwnTurn()
    
    if ( typ->autorepairrate > 0 )
       if ( damage )
-         repairItem ( this, max ( damage - typ->autorepairrate, typ->minFieldRepairDamage ) );
+         repairItem ( this, max ( damage - typ->autorepairrate, typ->minFieldRepairDamage ), true );
 
    reactionfire.endOwnTurn();
 
@@ -1049,7 +1101,7 @@ void Vehicle :: fillMagically( bool ammunition, bool resources )
 
 
 
-const int vehicleVersion = 9;
+const int vehicleVersion = 10;
 
 void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits ) const
 {
@@ -1250,9 +1302,13 @@ void   Vehicle::readData ( tnstream& stream )
     if ( bm & cem_version )
        version = stream.readInt();
 
-    if ( bm & cem_experience )
+    if ( bm & cem_experience ) {
        experience_offensive = stream.readChar();
-    else
+
+       if ( version < 10 )
+       	experience_offensive *= experienceResolution;
+
+    } else
        experience_offensive = 0;
     
     if ( bm & cem_damage )
@@ -1471,6 +1527,7 @@ void   Vehicle::readData ( tnstream& stream )
     else
        privateName = "";
     
+
     if ( version >= 9 )
        experience_defensive = stream.readInt();
     else

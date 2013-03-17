@@ -139,6 +139,9 @@ void viewterraininfo ( GameMap* gamemap, const MapCoordinate& pos, bool fullVisi
       if ( !typ->filename.empty() )
          text += "File Name: " + typ->location + "\n";
 
+      text += "Offensive experience (raw value): " + ASCString::toString( fld->vehicle->getExperience_offensive_raw()) + "\n";
+      text += "Defensive experience (raw value): " + ASCString::toString( fld->vehicle->getExperience_defensive_raw()) + "\n";
+
       
       text += "Terrain access:\n" + typ->terrainaccess.toString() + "\n";
    }

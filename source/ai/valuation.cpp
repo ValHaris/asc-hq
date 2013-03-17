@@ -142,7 +142,7 @@ int          CalculateThreat_Vehicle :: getdamage(void)
 
 int          CalculateThreat_Vehicle :: getexpirience(void)
 {
-   return (eht->experience_offensive + eht->experience_defensive) / 2;
+   return (eht->getExperience_offensive() + eht->getExperience_defensive()) / 2;
 }
 
 
@@ -321,7 +321,7 @@ void AI :: WeaponThreatRange :: testfield ( const MapCoordinate& mc )
          AttackFormula af ( ai->getMap() );
          int strength = int ( WeapDist::getWeaponStrength( &veh->typ->weapons.weapon[weap], ai->getMap()->getField(mc)->getWeather(), dist*maxmalq, veh->height, 1 << height )
                               * veh->typ->weapons.weapon[weap].maxstrength
-                              * (1 + af.strength_experience ( veh->experience_offensive ) + af.strength_attackbonus ( gamemap->getField(startPos)->getattackbonus() ))
+                              * (1 + af.strength_experience ( veh->getExperience_offensive() ) + af.strength_attackbonus ( gamemap->getField(startPos)->getattackbonus() ))
                               * af.strength_damage ( veh->damage )
                              );
 

@@ -165,11 +165,11 @@ ActionResult RepairUnitCommand::go ( const Context& context )
    else
       return res;
    
-   int experience_o = max( 0, target->experience_offensive - target->getRepairExperienceDecrease( oldDamage, newDamage, true ));
-   int experience_d = max( 0, target->experience_defensive - target->getRepairExperienceDecrease( oldDamage, newDamage, false ));
+   int experience_o = target->getRepairExperienceValue( oldDamage, newDamage, true, Vehicle::experienceResolution  );
+   int experience_d = target->getRepairExperienceValue( oldDamage, newDamage, false, Vehicle::experienceResolution );
    
-   if ( experience_o != target->experience_offensive ) {
-      auto_ptr<ChangeUnitProperty> expChange ( new ChangeUnitProperty( target, ChangeUnitProperty::ExperienceOffensive, experience_o ));
+   if ( experience_o != target->getExperience_offensive_raw() ) {
+      auto_ptr<ChangeUnitProperty> expChange ( new ChangeUnitProperty( target, ChangeUnitProperty::ExperienceOffensive_Raw, experience_o ));
       ActionResult res = expChange->execute( context );
       if ( res.successful() )
          expChange.release();
@@ -177,8 +177,8 @@ ActionResult RepairUnitCommand::go ( const Context& context )
          return res;
    }
    
-   if ( experience_d != target->experience_defensive ) {
-      auto_ptr<ChangeUnitProperty> expChange ( new ChangeUnitProperty( target, ChangeUnitProperty::ExperienceDefensive, experience_d ));
+   if ( experience_d != target->getExperience_defensive_raw() ) {
+      auto_ptr<ChangeUnitProperty> expChange ( new ChangeUnitProperty( target, ChangeUnitProperty::ExperienceDefensive_Raw, experience_d ));
       ActionResult res = expChange->execute( context );
       if ( res.successful() )
          expChange.release();

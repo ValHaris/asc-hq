@@ -94,7 +94,7 @@ Resources ContainerBase :: getResource ( const Resources& res ) const
 }
 
 
-int ContainerBase :: repairItem   ( ContainerBase* item, int newDamage  )
+int ContainerBase :: repairItem   ( ContainerBase* item, int newDamage, bool autoRepair  )
 {
    if ( !canRepair( item ) )
       return item->damage;
@@ -110,7 +110,7 @@ int ContainerBase :: repairItem   ( ContainerBase* item, int newDamage  )
    item->damage = newDamage;
    getResource ( cost, 0 );
 
-   item->postRepair( orgdam );
+   item->postRepair( orgdam, autoRepair );
 
    return newDamage;
 }

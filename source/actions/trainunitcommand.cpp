@@ -48,8 +48,8 @@ bool TrainUnitCommand :: avail ( const ContainerBase* carrier, const Vehicle* un
       return false;
    
    int maxExp = min( unit->getMap()->getgameparameter( cgp_maxtrainingexperience ), maxunitexperience);
-   if(    unit->experience_offensive >= maxExp
-       && unit->experience_defensive >= maxExp )
+   if(    unit->getExperience_offensive() >= maxExp
+       && unit->getExperience_defensive() >= maxExp )
       return false;
    
    if ( unit->attacked )
@@ -99,8 +99,8 @@ ActionResult TrainUnitCommand::go ( const Context& context )
    if ( !avail( getContainer(), unit ))
       return ActionResult( 22101 );
    
-   int newexp_o = unit->experience_offensive + getMap()->getgameparameter( cgp_trainingIncrement );
-   int newexp_d = unit->experience_defensive + getMap()->getgameparameter( cgp_trainingIncrement );
+   int newexp_o = unit->getExperience_offensive() + getMap()->getgameparameter( cgp_trainingIncrement );
+   int newexp_d = unit->getExperience_defensive() + getMap()->getgameparameter( cgp_trainingIncrement );
    
    int maxexp = min( unit->getMap()->getgameparameter( cgp_maxtrainingexperience ), maxunitexperience);
    if ( newexp_o > maxexp )
@@ -109,14 +109,14 @@ ActionResult TrainUnitCommand::go ( const Context& context )
    if ( newexp_d > maxexp )
       newexp_d = maxexp;
    
-   if ( newexp_o != unit->experience_offensive ) {
+   if ( newexp_o != unit->getExperience_offensive() ) {
       auto_ptr<ChangeUnitProperty> train ( new ChangeUnitProperty( unit, ChangeUnitProperty::ExperienceOffensive, newexp_o ));
       ActionResult res = train->execute( context );
       if ( res.successful() )
          train.release();
    }
          
-   if ( newexp_d != unit->experience_defensive ) {
+   if ( newexp_d != unit->getExperience_defensive() ) {
       auto_ptr<ChangeUnitProperty> train ( new ChangeUnitProperty( unit, ChangeUnitProperty::ExperienceDefensive, newexp_d ));
       ActionResult res = train->execute( context );
       if ( res.successful() )

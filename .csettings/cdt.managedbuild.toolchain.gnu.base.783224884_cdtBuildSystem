@@ -12,6 +12,8 @@
 							<listOptionValue builtIn="false" value="/usr/include/c++/4.7/"/>
 							<listOptionValue builtIn="false" value="/usr/include/SDL"/>
 							<listOptionValue builtIn="false" value="/usr/include/sigc++-1.2/"/>
+							<listOptionValue builtIn="false" value="/usr/include"/>
+							<listOptionValue builtIn="false" value="/usr/include/c++/4.7/x86_64-linux-gnu"/>
 						</option>
 						<option id="gnu.cpp.compiler.option.preprocessor.def.1316201208" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
 							<listOptionValue builtIn="false" value="_UNIX_"/>
@@ -25,6 +27,7 @@
 							<listOptionValue builtIn="false" value="/usr/include/c++/4.7/"/>
 							<listOptionValue builtIn="false" value="/usr/include/SDL"/>
 							<listOptionValue builtIn="false" value="/usr/include/sigc++-1.2/"/>
+							<listOptionValue builtIn="false" value="/usr/include"/>
 						</option>
 						<option id="gnu.c.compiler.option.preprocessor.def.symbols.1517196610" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" valueType="definedSymbols">
 							<listOptionValue builtIn="false" value="_UNIX_"/>
@@ -45,11 +48,15 @@
 							<listOptionValue builtIn="false" value="/usr/include/c++/4.7/iostream"/>
 							<listOptionValue builtIn="false" value="/usr/include/SDL"/>
 							<listOptionValue builtIn="false" value="/usr/include/sigc++-1.2/"/>
+							<listOptionValue builtIn="false" value="/usr/include"/>
 						</option>
 						<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1861756393" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 					</tool>
 				</toolChain>
 			</folderInfo>
+			<sourceEntries>
+				<entry excluding="source/tools/makefont.cpp" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+			</sourceEntries>
 		</configuration>
 	</storageModule>
 </cproject>

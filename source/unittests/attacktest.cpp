@@ -23,14 +23,14 @@ void testAttack1()
    assertOrThrow( veh != NULL );
    assertOrThrow( veh->getMovement() == 100 );
    
-   assertOrThrow( veh->experience_offensive == 0 );
-   assertOrThrow( veh->experience_defensive == 0 );
+   assertOrThrow( veh->getExperience_offensive() == 0 );
+   assertOrThrow( veh->getExperience_defensive() == 0 );
    
    attack( veh, MapCoordinate( 3,5) );
    
    assertOrThrow( veh->getMovement() == 0 );
-   assertOrThrow( veh->experience_offensive == 2 );
-   assertOrThrow( veh->experience_defensive == 1 );
+   assertOrThrow( veh->getExperience_offensive() == 2 );
+   assertOrThrow( veh->getExperience_defensive() == 1 );
    
    testCargoMovement( veh, 50 );
    
@@ -44,12 +44,12 @@ void testAttack1()
    Vehicle* mam = game->getField(4,4)->vehicle;
    assertOrThrow( mam != NULL );
    assertOrThrow( mam->getMovement() == 100 );
-   assertOrThrow( mam->experience_offensive == 0 );
-   assertOrThrow( mam->experience_defensive == 0 );
+   assertOrThrow( mam->getExperience_offensive() == 0 );
+   assertOrThrow( mam->getExperience_defensive() == 0 );
    
    attack( mam, MapCoordinate( 3,5) );
-   assertOrThrow( mam->experience_offensive == 1 );
-   assertOrThrow( mam->experience_defensive == 0 );
+   assertOrThrow( mam->getExperience_offensive() == 1 );
+   assertOrThrow( mam->getExperience_defensive() == 0 );
    
    assertOrThrow( mam->getMovement() == 100 );
    testCargoMovement( mam, 100 );

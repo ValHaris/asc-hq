@@ -22,6 +22,7 @@
 #ifndef fieldmarkerH
 #define fieldmarkerH
 
+#include <vector>
 #include "../paradialog.h"
 
 class MapDisplayPG;

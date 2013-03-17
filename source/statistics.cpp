@@ -36,7 +36,7 @@ double StatisticsCalculator::strength( const ContainerBase* c, bool recurse )
    if ( veh ) {
       s = veh->typ->productionCost.energy + veh->typ->productionCost.material;
       AttackFormula af( c->getMap() );
-      s *= (af.strength_experience( veh->experience_offensive) + af.defense_experience( veh->experience_defensive)) + 1.0 ;
+      s *= (af.strength_experience( veh->getExperience_offensive() ) + af.defense_experience( veh->getExperience_defensive())) + 1.0 ;
       s *= af.strength_damage( veh->damage );
       s/=10000;
    }

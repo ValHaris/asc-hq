@@ -76,7 +76,7 @@ class UnitHooveringLogic {
 
     Vehicle ( const VehicleType* t, GameMap* actmap, int player );
 
-    int getRepairExperienceDecrease( int oldDamage, int newDamage, bool offensive );
+    int getRepairExperienceValue( int oldDamage, int newDamage, bool offensive, int rountToResolution );
     
     int repairableDamage() const { return damage; };
 
@@ -89,9 +89,21 @@ class UnitHooveringLogic {
     int          ammo[16];
     int          weapstrength[16];
     
-    
+   private:
     int          experience_offensive;
     int          experience_defensive;
+   public:
+    static const int experienceResolution = 10;
+    int getExperience_offensive() const ;
+    int getExperience_defensive() const;
+    void setExperience_offensive( int experience );
+    void setExperience_defensive( int experience );
+
+    int getExperience_offensive_raw() const ;
+    int getExperience_defensive_raw() const;
+    void setExperience_offensive_raw( int experience );
+    void setExperience_defensive_raw( int experience );
+
 
     //! did the unit already attack this turn
     bool         attacked;
@@ -248,7 +260,7 @@ class UnitHooveringLogic {
   protected:
     const ResourceMatrix& getRepairEfficiency() const { return repairEfficiency; };
 
-    virtual void postRepair ( int oldDamage );
+    virtual void postRepair ( int oldDamage, bool autoRepair );
 
   private:
     /** if a unit (searchedInnerVehicle) is inside a transport, its payload depends also on the transport.

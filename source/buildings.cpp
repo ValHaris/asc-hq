@@ -85,7 +85,7 @@ int Building::repairableDamage() const
    return d;
 }
 
-void Building::postRepair ( int oldDamage )
+void Building::postRepair ( int oldDamage, bool autoRepair )
 {
    repairedThisTurn += oldDamage - damage;
 }

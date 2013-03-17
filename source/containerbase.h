@@ -280,7 +280,7 @@ class ContainerBase {
       virtual const ResourceMatrix& getRepairEfficiency() const = 0;
 
       //! is called after a repair is performed. Vehicles use this to reduce their experience.
-      virtual void postRepair ( int oldDamage ) = 0;
+      virtual void postRepair ( int oldDamage, bool autoRepair ) = 0;
       
       //! checks whether the item can be repaired provided that it is in range
       virtual bool canRepair( const ContainerBase* item ) const = 0;
@@ -289,7 +289,7 @@ class ContainerBase {
 	      \return a value in the range 0 .. item->damage */
       int getMaxRepair ( const ContainerBase* item ) const;
       int getMaxRepair ( const ContainerBase* item, int newDamage, Resources& cost, bool ignoreCost = false  ) const;
-      int repairItem   ( ContainerBase* item, int newDamage = 0 );
+      int repairItem   ( ContainerBase* item, int newDamage = 0, bool autoRepair = false );
       
       //! returns the amount of damage that can still be repaired this turn
       virtual int repairableDamage() const = 0;

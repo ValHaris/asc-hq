@@ -37,7 +37,9 @@ ASCString ChangeUnitProperty::getPropertyName( Property property )
 {
    switch ( property ) {
       case ExperienceOffensive: return "Offensive Experience";
+      case ExperienceOffensive_Raw: return "Offensive Experience (RAW)";
       case ExperienceDefensive: return "Defensive Experience";
+      case ExperienceDefensive_Raw: return "Defensive Experience (RAW)";
       case Movement: return "Movement";
       case AttackedFlag: return "AttackedFlag";
       case Height: return "Height";
@@ -100,8 +102,10 @@ GameActionID ChangeUnitProperty::getID() const
 int ChangeUnitProperty::getUnitProperty()
 {
    switch ( property ) {
-      case ExperienceOffensive: return getUnit()->experience_offensive;
-      case ExperienceDefensive: return getUnit()->experience_defensive;
+      case ExperienceOffensive: return getUnit()->getExperience_offensive();
+      case ExperienceDefensive: return getUnit()->getExperience_defensive();
+      case ExperienceOffensive_Raw: return getUnit()->getExperience_offensive_raw();
+      case ExperienceDefensive_Raw: return getUnit()->getExperience_defensive_raw();
       case Movement:   return getUnit()->getMovement( false, false );
       case AttackedFlag: return getUnit()->attacked;
       case Height: return getUnit()->height;
@@ -116,10 +120,16 @@ void ChangeUnitProperty::setUnitProperty( Property property, int value, const Co
 {
    switch ( property ) {
       case ExperienceOffensive: 
-         getUnit()->experience_offensive = value;
+         getUnit()->setExperience_offensive ( value );
          break;
       case ExperienceDefensive: 
-         getUnit()->experience_defensive = value;
+         getUnit()->setExperience_defensive ( value );
+         break;
+      case ExperienceOffensive_Raw:
+         getUnit()->setExperience_offensive_raw( value );
+         break;
+      case ExperienceDefensive_Raw:
+         getUnit()->setExperience_defensive_raw ( value );
          break;
       case Movement:
          getUnit()->setMovement( value, 0 );

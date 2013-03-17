@@ -56,7 +56,7 @@ void testAutoRepair()
    assertOrThrow ( veh->damage == 35 );
 
    for ( int i = 0; i < 10; ++i) {
-	   // std::cout << "experience in turn " << i << " is " << veh->experience_offensive << "\n";
+	   // std::cout << "experience in turn " << i << " is " << veh->getExperience_offensive_raw() << "\n";
 	   next_turn( game.get(), NextTurnStrategy_Abort(), NULL, -1 );
    }
 
@@ -74,8 +74,8 @@ void testManualRepair()
 
    Vehicle* aircraft = carrier->getCargo(0);
    assertOrThrow( aircraft != NULL );
-   assertOrThrow ( aircraft->experience_offensive == 10 );
-   assertOrThrow ( aircraft->experience_offensive == 10 );
+   assertOrThrow ( aircraft->getExperience_offensive() == 10 );
+   assertOrThrow ( aircraft->getExperience_defensive() == 10 );
    assertOrThrow ( aircraft->damage == 50 );
 
    assertOrThrow( RepairUnitCommand::avail(carrier) );
@@ -93,13 +93,13 @@ void testManualRepair()
       throw ActionResult(res);
 
    assertOrThrow ( aircraft->damage == 0 );
-   assertOrThrow ( aircraft->experience_offensive == 8 );
-   assertOrThrow ( aircraft->experience_offensive == 8 );
+   assertOrThrow ( aircraft->getExperience_offensive() == 9 );
+   assertOrThrow ( aircraft->getExperience_defensive() == 9 );
 
 }
 
 
 void testUnitRepair() {
-	testManualRepair();
 	testAutoRepair();
+	testManualRepair();
 }

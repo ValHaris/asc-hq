@@ -30,7 +30,7 @@
 */
 class ChangeUnitProperty : public UnitAction {
    public:
-      enum Property { ExperienceOffensive, Movement, AttackedFlag, Height, Direction, ReactionFire, PowerGeneration, ExperienceDefensive };
+      enum Property { ExperienceOffensive, Movement, AttackedFlag, Height, Direction, ReactionFire, PowerGeneration, ExperienceDefensive, ExperienceOffensive_Raw, ExperienceDefensive_Raw };
    private:
      
       static ASCString getPropertyName( Property property );

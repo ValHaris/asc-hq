@@ -194,7 +194,7 @@ class  Building : public ContainerBase {
   protected:
      ResourceMatrix repairEfficiency;
      const ResourceMatrix& getRepairEfficiency() const { return repairEfficiency; };
-     virtual void postRepair ( int oldDamage );
+     virtual void postRepair ( int oldDamage, bool autoRepair );
      vector<MapCoordinate> getCoveredFields();
 };
 

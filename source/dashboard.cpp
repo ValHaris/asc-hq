@@ -248,7 +248,7 @@ void DashboardPanel::painter ( const PG_Rect &src, const ASCString& name, const 
       int idx = 0;
       if ( veh ) {
          AttackFormula af ( veh->getMap() );
-         idx = af.getIconIndex( veh->experience_offensive, true );
+         idx = af.getIconIndex( veh->getExperience_offensive(), true );
       }
 
       screen.Blit( IconRepository::getIcon("experience" + ASCString::toString(idx) + ".png"), SPoint(dst.x, dst.y) );
@@ -258,7 +258,7 @@ void DashboardPanel::painter ( const PG_Rect &src, const ASCString& name, const 
       int idx = 0;
       if ( veh ) {
          AttackFormula af ( veh->getMap() );
-         idx = af.getIconIndex( veh->experience_defensive, false );
+         idx = af.getIconIndex( veh->getExperience_defensive(), false );
       }
       screen.Blit( IconRepository::getIcon("experience" + ASCString::toString(idx) + ".png"), SPoint(dst.x, dst.y) );
    }  
@@ -397,14 +397,14 @@ void DashboardPanel::showUnitData( Vehicle* veh, Building* bld, MapField* fld,  
          setLabelText( "unitname", veh->typ->description );
 
       // shows the number of experience points
-      setLabelText( "unitoffensiveexperience", veh->experience_offensive );
-      setLabelText( "unitdefensiveexperience", veh->experience_defensive );
+      setLabelText( "unitoffensiveexperience", veh->getExperience_offensive() );
+      setLabelText( "unitdefensiveexperience", veh->getExperience_defensive() );
 
 
       // shows the bonus that the units gets because of its experience (in percent)
       AttackFormula af( veh->getMap() );
-      setLabelText( "unitattackincrease", int( af.strength_experience( veh->experience_offensive ) * 100));
-      setLabelText( "unitdefenseincrease", int( af.defense_experience( veh->experience_defensive ) * 100));
+      setLabelText( "unitattackincrease", int( af.strength_experience( veh->getExperience_offensive() ) * 100));
+      setLabelText( "unitdefenseincrease", int( af.defense_experience( veh->getExperience_defensive() ) * 100));
 
       // the health of the unit
       setBargraphValue( "unitdamage", float(100-veh->damage) / 100  );

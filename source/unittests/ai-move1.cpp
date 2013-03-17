@@ -165,7 +165,7 @@ void testAiHeliMovement1()
    next_turn( game.get(), NextTurnStrategy_Abort(), NULL, -1 );
    
    // at least one attack
-   assertOrThrow( heli->experience_offensive >= 1  );
+   assertOrThrow( heli->getExperience_offensive() >= 1  );
    
    // attacked from flying level
    assertOrThrow( heli->damage == 0  );

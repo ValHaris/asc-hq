@@ -270,13 +270,15 @@ ActionResult ConstructUnitCommand::go ( const Context& context )
                cnt++;
 
          Vehicle* vehicle = spawnUnit->getUnit();
-         vehicle->experience_offensive += cnt * getMap()->getgameparameter(cgp_bi3_training);
-         if ( vehicle->experience_offensive > maxunitexperience )
-            vehicle->experience_offensive = maxunitexperience;
+         int expOff = vehicle->getExperience_offensive() + cnt * getMap()->getgameparameter(cgp_bi3_training);
+         if ( expOff > maxunitexperience )
+            expOff = maxunitexperience;
+         vehicle->setExperience_offensive( expOff );
 
-         vehicle->experience_defensive += cnt * getMap()->getgameparameter(cgp_bi3_training);
-         if ( vehicle->experience_defensive > maxunitexperience )
-            vehicle->experience_defensive = maxunitexperience;
+         int expDef = vehicle->getExperience_defensive() + cnt * getMap()->getgameparameter(cgp_bi3_training);
+         if ( expDef > maxunitexperience )
+            expDef = maxunitexperience;
+         vehicle->setExperience_offensive( expDef );
                   
       }
    }

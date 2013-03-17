@@ -1577,9 +1577,10 @@ void         UnitPropertyEditor::init(  )
     addbutton("~N~ame",50,80,250,100,1,1,29,true);
     addeingabe(29, namebuffer, 0, 100);
 
+    /*
     addbutton("E~x~p of Unit",50,120,250,140,2,1,1,true);
     addeingabe(1, &unit->experience_offensive, 0, maxunitexperience);
-
+*/
     addbutton("~D~amage of Unit",50,160,250,180,2,1,2,true);
     addeingabe(2, &unit->damage, 0, 100 );
 
@@ -3811,8 +3812,8 @@ void copyVehicleData( Vehicle* source, Vehicle* target, GameMap* targetMap, int*
     target->height = source->height;
     target->tank = source->getTank();
     target->name = source->name;
-    target->experience_offensive = source->experience_offensive;
-    target->experience_defensive = source->experience_defensive;
+    target->setExperience_offensive( source->getExperience_offensive() );
+    target->setExperience_defensive ( source->getExperience_defensive() );
     target->damage = source->damage;
 
 
