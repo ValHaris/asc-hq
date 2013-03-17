@@ -10,6 +10,7 @@
 #include <iostream>
 
 #include "../actions/moveunitcommand.h"
+#include "../actions/repairunitcommand.h"
 #include "../loaders.h"
 #include "../itemrepository.h"
 #include "unittestutil.h"
@@ -54,13 +55,51 @@ void testAutoRepair()
    
    assertOrThrow ( veh->damage == 35 );
 
-   for ( int i = 0; i < 10; ++i)
+   for ( int i = 0; i < 10; ++i) {
+	   // std::cout << "experience in turn " << i << " is " << veh->experience_offensive << "\n";
 	   next_turn( game.get(), NextTurnStrategy_Abort(), NULL, -1 );
+   }
 
    assertOrThrow ( veh->damage == 10 );
    
 }
 
+
+void testManualRepair()
+{
+   MapHolder game ( startMap("unittest-repair.map"));
+
+   Vehicle* carrier = game->getField(1,9)->vehicle;
+   assertOrThrow( carrier != NULL );
+
+   Vehicle* aircraft = carrier->getCargo(0);
+   assertOrThrow( aircraft != NULL );
+   assertOrThrow ( aircraft->experience_offensive == 10 );
+   assertOrThrow ( aircraft->experience_offensive == 10 );
+   assertOrThrow ( aircraft->damage == 50 );
+
+   assertOrThrow( RepairUnitCommand::avail(carrier) );
+   auto_ptr<RepairUnitCommand> ruc ( new RepairUnitCommand( carrier ));
+
+   assertOrThrow( ruc->getInternalTargets().size() == 1 );
+   assertOrThrow( ruc->getInternalTargets()[0] == aircraft );
+
+   ruc->setTarget(aircraft);
+
+   ActionResult res = ruc->execute( createTestingContext( game.get() ));
+   if ( res.successful() )
+      ruc.release();
+   else
+      throw ActionResult(res);
+
+   assertOrThrow ( aircraft->damage == 0 );
+   assertOrThrow ( aircraft->experience_offensive == 8 );
+   assertOrThrow ( aircraft->experience_offensive == 8 );
+
+}
+
+
 void testUnitRepair() {
+	testManualRepair();
 	testAutoRepair();
 }
