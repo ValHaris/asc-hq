@@ -41,11 +41,11 @@ tgraphmodeparameters *hgmp = (tgraphmodeparameters *) & hardwaregraphmodeparamet
 
 int xlatbuffersize = 66000;
 
-void generategrayxlattable( ppixelxlattable tab, char offset, char size, dacpalette256* pal )
+void generategrayxlattable( ppixelxlattable tab, Uint8 offset, Uint8 size, dacpalette256* pal )
 {
 	for ( int b = 0; b <= 255; b++) {
-//		(*tab)[b] = (char) (offset + size - 1 - ((*activepalette256)[b][0] + (*activepalette256)[b][1] + (*activepalette256)[b][2]) * size / 192);
-		(*tab)[b] = (char) (offset + size - 1 - ( 0.299 * (*pal)[b][0] + 0.587 * (*pal)[b][1] + 0.114 * (*pal)[b][2]) * size / 64 );
+//		(*tab)[b] = (Uint8) (offset + size - 1 - ((*activepalette256)[b][0] + (*activepalette256)[b][1] + (*activepalette256)[b][2]) * size / 192);
+		(*tab)[b] = (Uint8) (offset + size - 1 - ( 0.299 * (*pal)[b][0] + 0.587 * (*pal)[b][1] + 0.114 * (*pal)[b][2]) * size / 64 );
 	}
 }
 
@@ -182,7 +182,7 @@ line(int  x1,
      int  y1,
      int  x2,
      int  y2,
-     char actcol)
+     Uint8 actcol)
 {
    collategraphicoperations cgs ( x1, y1, x2, y2 );
 	float           m, b;
@@ -242,7 +242,7 @@ xorline(int  x1,
      int  y1,
      int  x2,
      int  y2,
-     char actcol)
+     Uint8 actcol)
 {
    collategraphicoperations cgs ( x1, y1, x2, y2 );
 
@@ -298,7 +298,7 @@ rectangle(int x1,
 	  int y1,
 	  int x2,
 	  int y2,
-	  char color)
+	  Uint8 color)
 {
    collategraphicoperations cgs ( x1, y1, x2, y2 );
 
@@ -314,7 +314,7 @@ void xorrectangle(int x1,
 	     int y1,
 	     int x2,
 	     int y2,
-	     char color)
+	     Uint8 color)
 {
    collategraphicoperations cgs ( x1, y1, x2, y2 );
 
@@ -525,7 +525,7 @@ void rotatepict90 ( void* s, void* d )
          dc[ y * dl + x] = sc[ ( sh - x - 1 ) * sl + y];
 }
   union tpix {
-  struct { char r,g,b,a; } s;
+  struct { Uint8 r,g,b,a; } s;
   int all;
 };
 
@@ -550,19 +550,19 @@ int getimagepixel ( void* image, int x, int y )
 
 const float pi = 3.14159265;
 
-char* rotatepict ( void* image, int organgle )
+Uint8* rotatepict ( void* image, int organgle )
 {
    int fieldxsize, fieldysize;
    getpicsize(image, fieldxsize, fieldysize );
 
    float angle = ((float)organgle) / 360 * 2 * pi + pi;
 
-   char* dst = new char[ imagesize ( 0, 0, fieldxsize, fieldysize ) ];
+   Uint8* dst = new Uint8[ imagesize ( 0, 0, fieldxsize, fieldysize ) ];
    Uint16* wp = (Uint16*) dst;
    wp[0] = fieldxsize-1;
    wp[1] = fieldysize-1;
 
-   char* pnt  = dst + 4;
+   Uint8* pnt  = dst + 4;
 
    for ( int y = 0; y < fieldysize; y++ ) {
       for ( int x = 0; x < fieldxsize; x++ ) {
@@ -610,7 +610,7 @@ char* rotatepict ( void* image, int organgle )
 }
 
 
-char* rotatepict_grw ( void* image, int organgle )
+Uint8* rotatepict_grw ( void* image, int organgle )
 {
    int fieldxsize, fieldysize;
    getpicsize(image, fieldxsize, fieldysize );
@@ -619,12 +619,12 @@ char* rotatepict_grw ( void* image, int organgle )
 
    int d = int(sqrt(double(fieldxsize*fieldxsize + fieldysize*fieldysize )));
 
-   char* dst = new char[ imagesize ( 0, 0, d,d ) ];
+   Uint8* dst = new Uint8[ imagesize ( 0, 0, d,d ) ];
    Uint16* wp = (Uint16*) dst;
    wp[0] = d-1;
    wp[1] = d-1;
 
-   char* pnt  = dst + 4;
+   Uint8* pnt  = dst + 4;
 
    for ( int y = 0; y < d; y++ ) {
       for ( int x = 0; x < d; x++ ) {
@@ -934,7 +934,7 @@ char* convertimage ( TrueColorImage* img, dacpalette256 pal )
    }
   #endif
    int size = imagesize ( 1, 1, img->getxsize(), img->getysize() );
-   char* newimg = new char[ size ] ;
+   char* newimg = new Uint8[ size ] ;
    char* start = newimg;
    Uint16* wp = (Uint16*) newimg;
    wp[0] = img->getxsize()-1;
@@ -1068,7 +1068,7 @@ void ellipse ( int x1, int y1, int x2, int y2, int color, float tolerance )
 
 
 
-// char truecolor2pal_table[262144];
+// Uint8 truecolor2pal_table[262144];
 
 
 dacpalette256* activepalette256;
@@ -1236,7 +1236,7 @@ void*     xlatbuffer;
 
 
 
-void bar(int x1, int y1, int x2, int y2, char color)
+void bar(int x1, int y1, int x2, int y2, Uint8 color)
 {
    collategraphicoperations cgo ( x1, y1, x2, y2 );
    if ( agmp->windowstatus == 100 ) {
@@ -1480,7 +1480,7 @@ void putspriteimage ( int x1, int y1, void* pic )
          src += 4;
          for ( int y = w[1] + 1; y > 0; y-- ) {
             for ( int x = w[0]+1; x > 0; x-- ) {
-               char d = *(src++);
+            	Uint8 d = *(src++);
                if ( d != 255 )
                   *buf = d;
                buf++;
@@ -1511,7 +1511,7 @@ void putrotspriteimage(int x1, int y1, void *pic, int rotationvalue)
          for ( int c = 0; c < hd->size; c++ ) {
             if ( *src == hd->rle ) {
                x += src[1];
-               char d = src[2];
+               Uint8 d = src[2];
                if ( d != 255 ) {
                   if ( d >= 16 && d < 24 )
                      d += rotationvalue;
@@ -1524,7 +1524,7 @@ void putrotspriteimage(int x1, int y1, void *pic, int rotationvalue)
                c+=2;
    
             } else {
-               char d = *(src++);
+            	Uint8 d = *(src++);
                if ( d != 255 ) {
                   if ( d >= 16 && d < 24 )
                      d += rotationvalue;
@@ -1547,7 +1547,7 @@ void putrotspriteimage(int x1, int y1, void *pic, int rotationvalue)
          src += 4;
          for ( int y = w[1] + 1; y > 0; y-- ) {
             for ( int x = w[0]+1; x > 0; x-- ) {
-               char d = *(src++);
+            	Uint8 d = *(src++);
                if ( d != 255 ) {
                   if ( d >= 16 && d < 24 )
                      d += rotationvalue;
@@ -1678,7 +1678,7 @@ void putspritetexture ( int x1, int y1, int x2, int y2, void *texture )
       char* buf = (char*) agmp->linearaddress;
       for ( int y = y1 ; y <= y2; y++ ) {
          for ( int x = x1; x <= x2 ; x++ ) {
-            char d = c[offset];
+        	 Uint8 d = c[offset];
             if ( d != 255 )
                buf[offset] = d;
             offset++;
@@ -1965,7 +1965,7 @@ void* convertSurface ( SDLmm::Surface& s, bool paletteTranslation )
 {
   s.Lock();
 
-  char* buf = new char[ imagesize ( 1, 1, s.w(), s.h())];
+  Uint8* buf = new Uint8[ imagesize ( 1, 1, s.w(), s.h())];
   Uint16* wp = (Uint16*) buf;
   wp[0] = s.w()-1;
   wp[1] = s.h()-1;

@@ -81,27 +81,27 @@ void toldfont::read ( tnstream& stream )
 {
    stream.readdata ( &id, sizeof ( id ));
    stream.readdata ( &name, sizeof ( name ));
-   number = stream.readChar();
-   color = stream.readChar();
+   number = stream.readUint8();
+   color = stream.readUint8();
    for ( int i = 0; i < 256; ++i ) {
-      character[i].width = stream.readChar();
+      character[i].width = stream.readUint8();
       character[i].size = stream.readWord();
       character[i].diskposition = stream.readInt();
       character[i].memposition = NULL; stream.readInt();
-      character[i].dummy = stream.readChar();
+      character[i].dummy = stream.readUint8();
    }
    height = stream.readWord();
    for ( int i = 0; i < 256; ++i )
-      kernchartable[i] = stream.readChar();
+      kernchartable[i] = stream.readUint8();
    for ( int i = 0; i < 101; ++i )
       for ( int j = 0; j < 101; ++j )
-         kerning[i][j] = stream.readChar();
+         kerning[i][j] = stream.readUint8();
 
    dummy = stream.readWord();
-   useems = stream.readChar();
-   caps = stream.readChar();
+   useems = stream.readUint8();
+   caps = stream.readUint8();
    palette = NULL; stream.readInt();
-   groundline = stream.readChar();
+   groundline = stream.readUint8();
 }
 
 pfont        loadfont( tnstream* stream )

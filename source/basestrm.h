@@ -279,9 +279,9 @@ class tlzwstreamcompression {
               int readcnt;
 
        // ******* rle uncompression
-              char rlestartbyte;
-              char rlenum;
-              char rledata;
+              Uint8 rlestartbyte;
+              Uint8 rlenum;
+              Uint8 rledata;
 
        // ******* general
               IndexType freecode;
@@ -557,7 +557,7 @@ class tfindfile {
 class ASCIIEncodingStream : public tnstream {
    private:
       int shift;
-      unsigned char buf;
+      int buf;
 
       ASCString result;
    public:
@@ -566,7 +566,7 @@ class ASCIIEncodingStream : public tnstream {
       virtual void writedata ( const void* buf, int size );
       virtual int  readdata  ( void* buf, int size, bool excpt = true );
 
-       void put( char c );
+       void put( Uint8 c );
        void flush();
        ASCString getResult();
 };
@@ -577,7 +577,7 @@ class ASCIIEncodingStream : public tnstream {
 class ASCIIDecodingStream : public tnstream {
    private:
       int shift;
-      unsigned char buf;
+      int buf;
 
       int length;
       ASCString data;

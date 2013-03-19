@@ -441,7 +441,7 @@ void checkFileLoadability ( const ASCString& filename )
 {
    try {
       tnfilestream strm ( filename, tnstream::reading );
-      strm.readChar();
+      strm.readUint8();
    }
    catch ( ASCexception ) {
       ASCString msg = "Unable to access " + filename + "\n";

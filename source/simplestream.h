@@ -27,7 +27,6 @@
 #include "basestreaminterface.h"
 
 class tnbufstream  : public tnstream {
-           char  minbuf;
            int datalen;
 
        protected:

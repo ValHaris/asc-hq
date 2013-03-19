@@ -531,7 +531,7 @@ class ColorTransform_None
 template<int pixelSize>
 class ColorTransform_XLAT
 {
-      const char* table;
+      const Uint8* table;
 
    protected:
       ColorTransform_XLAT() : table(NULL)
@@ -551,7 +551,7 @@ class ColorTransform_XLAT
       };
 
    public:
-      void setTranslationTable( const char* translationTable )
+      void setTranslationTable( const Uint8* translationTable )
       {
          table = translationTable;
       };
@@ -560,7 +560,7 @@ class ColorTransform_XLAT
       {}
       ;
 
-      ColorTransform_XLAT ( const char* t ) : table ( t )
+      ColorTransform_XLAT ( const Uint8* t ) : table ( t )
       {}
       ;
 };
@@ -841,7 +841,7 @@ template<>
 class ColorMerger_AlphaShadow<1> : public ColorMerger_AlphaHandler<1>
 {
       typedef PixelSize2Type<1>::PixelType PixelType;
-      const char* table;
+      const Uint8* table;
    protected:
 
       void assign ( PixelType src, PixelType* dest )
@@ -855,7 +855,7 @@ class ColorMerger_AlphaShadow<1> : public ColorMerger_AlphaHandler<1>
       ColorMerger_AlphaShadow ( NullParamType npt = nullParam) : table ( xlattables.a.dark1 )
       {}
       ;
-      ColorMerger_AlphaShadow ( const char* translationTable ) : table ( translationTable )
+      ColorMerger_AlphaShadow ( const Uint8* translationTable ) : table ( translationTable )
       {}
       ;
 };
@@ -882,7 +882,7 @@ class ColorMerger_AlphaShadow<4> : public ColorMerger_AlphaHandler<4>
       ColorMerger_AlphaShadow ( NullParamType npt = nullParam)
       {}
       ;
-      ColorMerger_AlphaShadow ( const char* translationTable )
+      ColorMerger_AlphaShadow ( const Uint8* translationTable )
       {}
       ;
 };
@@ -937,7 +937,7 @@ template<int pixelsize>
 class ColorMerger_Alpha_XLAT_TableShifter : public ColorMerger_AlphaHandler<pixelsize>
 {
       typedef typename PixelSize2Type<pixelsize>::PixelType PixelType;
-      const char* table;
+      const Uint8* table;
    protected:
       void assign ( PixelType src, PixelType* dest )
       {
@@ -954,7 +954,7 @@ class ColorMerger_Alpha_XLAT_TableShifter : public ColorMerger_AlphaHandler<pixe
       };
 
    public:
-      void setNeutralTranslationTable( const char* translationTable )
+      void setNeutralTranslationTable( const Uint8* translationTable )
       {
          table = translationTable;
       };
@@ -962,7 +962,7 @@ class ColorMerger_Alpha_XLAT_TableShifter : public ColorMerger_AlphaHandler<pixe
       ColorMerger_Alpha_XLAT_TableShifter( NullParamType npt = nullParam ) : table ( NULL )
       {}
       ;
-      ColorMerger_Alpha_XLAT_TableShifter ( const char* translationTable ) : table ( translationTable )
+      ColorMerger_Alpha_XLAT_TableShifter ( const Uint8* translationTable ) : table ( translationTable )
       {}
       ;
 };
@@ -971,7 +971,7 @@ template<>
 class ColorMerger_Alpha_XLAT_TableShifter<1> : public ColorMerger_AlphaHandler<1>
 {
       typedef PixelSize2Type<1>::PixelType PixelType;
-      const char* table;
+      const Uint8* table;
    protected:
       void assign ( PixelType src, PixelType* dest )
       {
@@ -982,7 +982,7 @@ class ColorMerger_Alpha_XLAT_TableShifter<1> : public ColorMerger_AlphaHandler<1
       };
 
    public:
-      void setNeutralTranslationTable( const char* translationTable )
+      void setNeutralTranslationTable( const Uint8* translationTable )
       {
          table = translationTable;
       };
@@ -990,7 +990,7 @@ class ColorMerger_Alpha_XLAT_TableShifter<1> : public ColorMerger_AlphaHandler<1
       ColorMerger_Alpha_XLAT_TableShifter( NullParamType npt = nullParam ) : table ( NULL )
       {}
       ;
-      ColorMerger_Alpha_XLAT_TableShifter ( const char* translationTable ) : table ( translationTable )
+      ColorMerger_Alpha_XLAT_TableShifter ( const Uint8* translationTable ) : table ( translationTable )
       {}
       ;
 };

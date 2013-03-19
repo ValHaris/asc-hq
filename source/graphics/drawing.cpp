@@ -32,7 +32,7 @@ SDLmm::ColorRGB lightenColor( const SDLmm::ColorRGB& color, float factor )
 
 */
 
-char saturationTranslationTable[256][256];
+Uint8 saturationTranslationTable[256][256];
 
 class TableGenerator {
    public:
@@ -50,7 +50,7 @@ class TableGenerator {
 } tableGenerator;
 
 #if 0
-SDLmm::Color lighten_Color( SDLmm::Color color, char factor16 )
+SDLmm::Color lighten_Color( SDLmm::Color color, Uint8 factor16 )
 {
    SDLmm::Color c = saturationTranslationTable[color & 0xff][factor16] |
          (saturationTranslationTable[(color >> 8) & 0xff][factor16] << 8 ) |

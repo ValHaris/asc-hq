@@ -456,10 +456,10 @@ void Building :: write ( tnstream& stream, bool includeLoadedUnits ) const
     int i;
     for ( i = 0; i< resourceTypeNum; i++ )
        stream.writeInt ( bi_resourceplus.resource(i) );
-    stream.writeChar ( color );
+    stream.writeUint8 ( color );
     stream.writeWord ( getEntry().x );
     stream.writeWord ( getEntry().y );
-    stream.writeChar ( getCompletion() );
+    stream.writeUint8 ( getCompletion() );
     for ( i = 0; i < waffenanzahl; i++ )
        stream.writeWord ( 0 ); // was: ammoautoproduction
 
@@ -477,8 +477,8 @@ void Building :: write ( tnstream& stream, bool includeLoadedUnits ) const
 
     stream.writeWord ( maxresearchpoints );
     stream.writeWord ( researchpoints );
-    stream.writeChar ( visible );
-    stream.writeChar ( damage );
+    stream.writeUint8 ( visible );
+    stream.writeUint8 ( damage );
     stream.writeInt  ( netcontrol );
     stream.writeString ( name );
 
@@ -492,7 +492,7 @@ void Building :: write ( tnstream& stream, bool includeLoadedUnits ) const
              ++c;
 
     if ( BUILDINGVERSIONLIMIT >= -3 )
-       stream.writeChar( c );
+       stream.writeUint8( c );
     else
        stream.writeInt ( c );
 
@@ -503,7 +503,7 @@ void Building :: write ( tnstream& stream, bool includeLoadedUnits ) const
 
 
     if ( BUILDINGVERSIONLIMIT >= -4 )
-       stream.writeChar( internalUnitProduction.size() );
+       stream.writeUint8( internalUnitProduction.size() );
     else
        stream.writeInt( internalUnitProduction.size() );
 
@@ -513,7 +513,7 @@ void Building :: write ( tnstream& stream, bool includeLoadedUnits ) const
     }   
 
     if ( BUILDINGVERSIONLIMIT >= -3 )
-       stream.writeChar(0);
+       stream.writeUint8(0);
 
     stream.writeInt( view );
     stream.writeString( privateName );
@@ -541,7 +541,7 @@ Building* Building::newFromStream ( GameMap* gamemap, tnstream& stream, bool cha
        for ( int i = 0; i < 3; i++ )
           res.resource(i) = stream.readInt();
 
-       color = stream.readChar();
+       color = stream.readUint8();
        xpos = stream.readWord() ;
     } else {
        int id = version;
@@ -550,7 +550,7 @@ Building* Building::newFromStream ( GameMap* gamemap, tnstream& stream, bool cha
        if ( !typ )
           throw InvalidID ( "building", id );
 
-       color = stream.readChar();
+       color = stream.readUint8();
        xpos  = stream.readWord();
     }
 
@@ -573,12 +573,12 @@ void Building:: read ( tnstream& stream )
        for ( int i = 0; i < 3; i++ )
           bi_resourceplus.resource(i) = stream.readInt();
 
-       stream.readChar(); // color
+       stream.readUint8(); // color
        stream.readWord(); // xpos
        stream.readWord(); // ypos
     } else {
        // int id = version;
-       stream.readChar(); // color
+       stream.readUint8(); // color
        stream.readWord(); // xpos
        stream.readWord(); // ypos
        bi_resourceplus = Resources ( 0, 0, 0);
@@ -590,7 +590,7 @@ void Building:: read ( tnstream& stream )
 
 void Building :: readData ( tnstream& stream, int version )
 {
-    setCompletion ( stream.readChar(), false );
+    setCompletion ( stream.readUint8(), false );
 
     int i;
     for ( i = 0; i < waffenanzahl; i++)
@@ -616,8 +616,8 @@ void Building :: readData ( tnstream& stream, int version )
        researchpoints = typ->maxresearchpoints;
 
 
-    visible = stream.readChar();
-    damage = stream.readChar();
+    visible = stream.readUint8();
+    damage = stream.readUint8();
     
     netcontrol = stream.readInt();
     netcontrol = 0;
@@ -633,7 +633,7 @@ void Building :: readData ( tnstream& stream, int version )
     if ( version <= -4 )
        c = stream.readInt();
     else
-       c = stream.readChar();
+       c = stream.readUint8();
        
     if ( c ) {
        for ( int k = 0; k < c; k++) {
@@ -652,7 +652,7 @@ void Building :: readData ( tnstream& stream, int version )
     if ( version <= -5 )
        c = stream.readInt();
     else
-       c = stream.readChar();
+       c = stream.readUint8();
     
     if ( c ) {
        for ( int k = 0; k < c ; k++) {
@@ -670,7 +670,7 @@ void Building :: readData ( tnstream& stream, int version )
     }
 
     if ( version >= -3 ) {
-         c = stream.readChar();
+         c = stream.readUint8();
          if ( c ) {
             for ( int k = 0; k < c ; k++) {
                if ( version <= -3 )

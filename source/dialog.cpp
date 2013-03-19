@@ -77,12 +77,12 @@ void         doubleline(int x1, int y1, int x2, int y2)
 class  tstatistics : public tdialogbox {
               public:
                    int          linelength;
-                   char         categories;
+                   Uint8         categories;
                    int          l[3][4];
                    int          m[3][9];
-                   char         paintmode;
-                   char         color1,color2,color3,color4;
-                   char         action;
+                   Uint8         paintmode;
+                   Uint8         color1,color2,color3,color4;
+                   Uint8         action;
 
                    void         init ( void );
                    void         paintgraph ( void );
@@ -123,7 +123,7 @@ void         tstatisticarmies ::newknopfdruck(integer      xx1,
         collategraphicoperations cgo ( xx1, yy1, xx2, yy2 );
         mt = mouseparams.taste;
         mousevisible(false);
-        p = new char [ imagesize ( xx1 + 1,yy1 + 1,xx2 - 2,yy2 - 2 )];
+        p = new Uint8 [ imagesize ( xx1 + 1,yy1 + 1,xx2 - 2,yy2 - 2 )];
         getimage(xx1 + 1,yy1 + 1,xx2 - 2,yy2 - 2, p);
         putimage(xx1 + 3,yy1 + 3, p);
 
@@ -736,13 +736,13 @@ class  tenternamestrings : public tdialogbox {
                      typedef tdialogbox inherited;
                      ASCString dlgtitle;
                   public:
-                       char             status;
-                       char             playerexist;
+                       Uint8             status;
+                       Uint8             playerexist;
                        tnamestrings&    orgnames;
-                       char             names[9][100];
-                       char             buttonnames[9][100];
+                       Uint8             names[9][100];
+                       Uint8             buttonnames[9][100];
 
-                       void             init( char plyexistyte, int md);
+                       void             init( Uint8 plyexistyte, int md);
                        virtual void     run ( void );
                        virtual void     buttonpressed( int id );
                        void             done ( void );
@@ -758,17 +758,17 @@ class  tsetalliances : public tdialogbox {
                      virtual void redraw ( void );       
                      tmap::Shareview     sv;
                public:
-                     char                status;
-                     char                alliancedata[8][8];
-                     char                location[8];
+                     Uint8                status;
+                     Uint8                alliancedata[8][8];
+                     Uint8                location[8];
                      int                 playerpos[8];  // Beispiel: Es existieren Spieler 0 und Spieler 6; dann ist playerpos[0] = 0 und playerpos[1] = 6
                      // int                 playermode[8];    /*  0: player
                      //                                          1: ai
                      //                                          2: off  */
 
-                     char                playernum;
-                     char                playerexist;
-                     char                lastplayer;
+                     Uint8                playernum;
+                     Uint8                playerexist;
+                     Uint8                lastplayer;
                      int                 oninit;
                      int                 supervisor;
                      bool                mapeditor;
@@ -779,7 +779,7 @@ class  tsetalliances : public tdialogbox {
                      virtual void        buttonpressed( int id);
                      virtual void        run ( void );
                      virtual int         getcapabilities ( void );
-                     void                click( char bxx, char x, char y);
+                     void                click( Uint8 bxx, Uint8 x, Uint8 y);
                      void                paintkeybar ( void );
                      void                buildhlgraphics ( void );
                      void                displayplayernamesintable( void );
@@ -792,10 +792,10 @@ class  tsetalliances : public tdialogbox {
 static const char*    cens[]  = { "player", "alliance", "computer" };
 
 
-void         tenternamestrings::init(  char plyexist, int md )
+void         tenternamestrings::init(  Uint8 plyexist, int md )
 { 
 
-  char         i, j;
+	Uint8         i, j;
 
   tdialogbox::init();
   playerexist = plyexist;
@@ -1140,11 +1140,11 @@ class ResizeMap : public tdialogbox {
                         void init ( void );
                         void buttonpressed ( int id );
                         void run ( void );
-                        char checkvalue( int         id, void*      p);
+                        Uint8 checkvalue( int         id, void*      p);
                     };
 
 
-char ResizeMap :: checkvalue(int         id, void*      p)  
+Uint8 ResizeMap :: checkvalue(int         id, void*      p)
 {
    if ( id >= 3 && id <= 6 ) {
       int* wp = (int*) p;
@@ -1337,15 +1337,13 @@ void choosezoomlevel ( void )
 void showbdtbits( void )
 {
    MapField* fld = actmap->getField(actmap->getCursor());
-   char m[200];
-   m[0] = 0;
+   ASCString m;
    for (int i = 0; i < terrainPropertyNum ; i++) {
       TerrainBits bts;
       bts.set ( i );
 
       if ( (fld->bdt & bts).any() ) {
-         strcat ( m, terrainProperty[i] );
-         strcat ( m, "\n" );
+         m = m + terrainProperty[i] + "\n";
       }
    } /* endfor */
    displaymessage( m, 3 );

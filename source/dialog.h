@@ -60,10 +60,10 @@ extern char mix4colors ( int a, int b, int c, int d );
   class   tviewanytext : public tdialogbox, public tviewtextwithscrolling {
                public:
                    const char                 *txt;
-                   char              ok;
+                   int              ok;
                     
-                   char              scrollbarvisible;
-                   char                 action;
+                   int              scrollbarvisible;
+                   int                 action;
                    
                    // int                  textsizey, textsizeycomplete;
                    int                  textstart;

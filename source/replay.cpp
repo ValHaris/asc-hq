@@ -743,7 +743,7 @@ class LogActionIntoReplayInfo  {
          if ( gamemap->replayinfo && gamemap->replayinfo->actmemstream && !gamemap->replayinfo->stopRecordingActions) {
             tnstream* stream = gamemap->replayinfo->actmemstream;
          
-            stream->writeChar( rpl_runCommandAction );
+            stream->writeUint8( rpl_runCommandAction );
             
             MemoryStreamStorage buff;
             {
@@ -760,7 +760,7 @@ class LogActionIntoReplayInfo  {
             
             buff.writetostream( stream );
             for ( int i = 0; i < padding;++i )
-               stream->writeChar( 255-i );
+               stream->writeUint8( 255-i );
          }
       }
 };
@@ -1585,7 +1585,7 @@ void trunreplay :: execnextreplaymove ( void )
                                  if ( size ) {
                                     for ( int a = 0; a < 8; a++ )
                                        for ( int b = 0; b < 8; b++)
-                                           sv->mode[a][b] = stream->readChar();
+                                           sv->mode[a][b] = stream->readUint8();
                                     sv->recalculateview = stream->readInt();
 
                                     if ( actmap->shareview )
@@ -2085,7 +2085,7 @@ void trunreplay :: execnextreplaymove ( void )
             Command* a = dynamic_cast<Command*> ( readaction.get() );
             
             for ( int i = 0; i < padding;++i ) {
-               char c = stream->readChar();
+               char c = stream->readUint8();
                if ( c != 255-i )
                   error("invalid padding bytes in command action storage buffer");
             }
@@ -2127,7 +2127,7 @@ void trunreplay :: execnextreplaymove ( void )
 void trunreplay :: readnextaction ( void )
 {
       if ( stream->dataavail () )
-         nextaction = stream->readChar();
+         nextaction = stream->readUint8();
       else
          nextaction = rpl_finished;
 }
@@ -2166,7 +2166,7 @@ int  trunreplay :: run ( int player, int viewingplayer, bool performEndTurnOpera
    stream = &guidatastream;
 
    if ( stream->dataavail () )
-      nextaction = stream->readChar();
+      nextaction = stream->readUint8();
    else
       nextaction = rpl_finished;
 

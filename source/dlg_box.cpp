@@ -1641,7 +1641,7 @@ void         tdialogbox::toggleswitch(pbutton      pb)
 } 
 
 
-char      tdialogbox::checkvalue(int         id,
+Uint8      tdialogbox::checkvalue(int         id,
                                   void*      p)
 { 
    return  true;

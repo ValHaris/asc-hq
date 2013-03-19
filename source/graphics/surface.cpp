@@ -220,22 +220,22 @@ void Surface::write ( tnstream& stream ) const
    if ( !valid() ) {
       stream.writeWord( 16974 );
       stream.writeWord ( 1 );
-      stream.writeChar ( 0 );
+      stream.writeUint8 ( 0 );
       stream.writeWord ( 0 );
       stream.writeWord ( 0 );
       return;
    } 
    stream.writeWord( 16974 );
    stream.writeWord ( 1 );
-   stream.writeChar ( 0 );
+   stream.writeUint8 ( 0 );
    stream.writeWord ( w() );
    stream.writeWord ( h() );
    stream.writeInt( surfaceVersion );
 
    SDLmm::PixelFormat pf = GetPixelFormat();
 
-   stream.writeChar ( pf.BitsPerPixel() );
-   stream.writeChar ( pf.BytesPerPixel() );
+   stream.writeUint8 ( pf.BitsPerPixel() );
+   stream.writeUint8 ( pf.BytesPerPixel() );
    stream.writeInt ( GetPixelFormat().colorkey());
    stream.writeInt( flags() );
    if ( pf.BytesPerPixel() == 1 ) {
@@ -244,7 +244,7 @@ void Surface::write ( tnstream& stream ) const
       /*
       for ( int y = 0; y < h(); ++y )
          for ( int x = 0; x < w(); ++x )
-            stream.writeChar( GetPixel(x,y));
+            stream.writeUint8( GetPixel(x,y));
       */      
    } else {
       SDLmm::PixelFormat pf = GetPixelFormat();
@@ -268,7 +268,7 @@ void Surface::read ( tnstream& stream )
 
   hd.id = stream.readWord();
   hd.size = stream.readWord();
-  hd.rle = stream.readChar();
+  hd.rle = stream.readUint8();
   hd.x = stream.readWord();
   hd.y = stream.readWord();
   
@@ -307,8 +307,8 @@ void Surface::read ( tnstream& stream )
          if ( version > surfaceVersion )
             throw tinvalidversion( stream.getLocation(), version, surfaceVersion );
              
-         stream.readChar(); // int bitsPerPixel = 
-         int bytesPerPixel = stream.readChar();
+         stream.readUint8(); // int bitsPerPixel =
+         int bytesPerPixel = stream.readUint8();
          int colorkey = stream.readInt();
          int flags = stream.readInt();
          if ( bytesPerPixel == 1 ) {
@@ -318,7 +318,7 @@ void Surface::read ( tnstream& stream )
                stream.readdata( p + y*s->pitch, hd.x );
             
                /*for ( int x = 0; x< hd.x; ++x )
-                  *(p++) = stream.readChar();*/
+                  *(p++) = stream.readUint8();*/
                   
             SetSurface( s );
             assignDefaultPalette();

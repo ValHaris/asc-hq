@@ -31,7 +31,7 @@
  #include "../palette.h"
  // #include "../basegfx.h"
 
-extern char saturationTranslationTable[256][256];
+extern Uint8 saturationTranslationTable[256][256];
 
 
 inline SDLmm::Color lighten_Color( SDLmm::Color color, int factor16 )

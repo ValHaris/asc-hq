@@ -3951,7 +3951,7 @@ public:
     void init( void );
     void buttonpressed ( int id );
     void run ( void );
-    char checkvalue( int id, void* p );
+    Uint8 checkvalue( int id, void* p );
 
 protected:
 
@@ -3960,7 +3960,7 @@ protected:
     void mirrorY();
 };
 
-char MirrorMap::checkvalue( int id, void* p )
+Uint8 MirrorMap::checkvalue( int id, void* p )
 {
     return 1;
 }

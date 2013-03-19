@@ -329,12 +329,12 @@ void GameMap :: read ( tnstream& stream )
 
    
    bool loadCampaign = stream.readInt();
-   actplayer = stream.readChar();
+   actplayer = stream.readUint8();
    time.abstime = stream.readInt();   
    if(version < 9 || version >= 17){
-     stream.readChar();
-     weather.windSpeed = stream.readChar();
-     weather.windDirection = stream.readChar();
+     stream.readUint8();
+     weather.windSpeed = stream.readUint8();
+     weather.windDirection = stream.readUint8();
    }
 
    if ( version >= 11 ) 
@@ -356,9 +356,9 @@ void GameMap :: read ( tnstream& stream )
    
       
    for ( int j = 0; j < 4; j++ )
-      stream.readChar(); // was: different wind in different altitudes
+      stream.readUint8(); // was: different wind in different altitudes
    for ( int i = 0; i< 12; i++ )
-      stream.readChar(); // dummy
+      stream.readUint8(); // dummy
 
    _resourcemode = stream.readInt();
 
@@ -366,11 +366,11 @@ void GameMap :: read ( tnstream& stream )
    if ( version <= 10 )
       for ( int i = 0; i < 8; i++ )
          for ( int j = 0; j < 8; j++ )
-            alliances[j][i] = stream.readChar();
+            alliances[j][i] = stream.readUint8();
 
    int dummy_playername[9];
    for ( int i = 0; i< 9; i++ ) {
-      player[i].existanceAtBeginOfTurn = stream.readChar();
+      player[i].existanceAtBeginOfTurn = stream.readUint8();
       stream.readInt(); // dummy
       stream.readInt(); // dummy
       if ( version <= 5 )
@@ -381,8 +381,8 @@ void GameMap :: read ( tnstream& stream )
       // player[i].ai = (BaseAI*)
       stream.readInt() ;
       player[i].ai = NULL;
-      player[i].stat = Player::PlayerStatus ( stream.readChar() );
-      stream.readChar(); // dummy
+      player[i].stat = Player::PlayerStatus ( stream.readUint8() );
+      stream.readUint8(); // dummy
       dummy_playername[i] = stream.readInt();
       player[i].passwordcrc.read ( stream );
       player[i].__dissectionsToLoad = stream.readInt();
@@ -433,7 +433,7 @@ void GameMap :: read ( tnstream& stream )
 
    idManager.readData(stream );
    
-   levelfinished = stream.readChar();
+   levelfinished = stream.readUint8();
    
    bool alliance_names_not_used_any_more[8];
    if ( version <= 9 ) {
@@ -486,7 +486,7 @@ void GameMap :: read ( tnstream& stream )
 
    if ( version <= 10 )
       for ( int i = 0; i < 8; i++ )
-         stream.readChar(); // alliances_at_beginofturn[i] = 
+         stream.readUint8(); // alliances_at_beginofturn[i] =
 
    stream.readInt(); // was objectcrc = (Object*containercrcs)
    bool load_shareview = false;
@@ -536,14 +536,14 @@ void GameMap :: read ( tnstream& stream )
        if ( version <= 14 ) {
          campaign.id = stream.readWord();
          stream.readWord(); // campaign->prevmap 
-         stream.readChar(); // campaign->player 
-         campaign.directaccess = stream.readChar();
+         stream.readUint8(); // campaign->player
+         campaign.directaccess = stream.readUint8();
          campaign.avail = true;
          for ( int d = 0; d < 21; d++ )
-            stream.readChar(); // dummy
+            stream.readUint8(); // dummy
        } else {
           campaign.id = stream.readInt();
-          campaign.directaccess = stream.readChar();
+          campaign.directaccess = stream.readUint8();
           if ( version > 15 )
              campaign.avail = stream.readInt();
        }
@@ -580,7 +580,7 @@ void GameMap :: read ( tnstream& stream )
     
       for ( int i = 0; i < 8; i++ )
          for ( int j =0; j < 8; j++ ) {
-            int sv = stream.readChar();
+            int sv = stream.readUint8();
             if ( sv )
                player[i].diplomacy.setState( j, PEACE_SV );
          }      
@@ -723,12 +723,12 @@ void GameMap :: write ( tnstream& stream )
 
    
    stream.writeInt( campaign.avail  );
-   stream.writeChar( actplayer );
+   stream.writeUint8( actplayer );
    stream.writeInt( time.abstime );
    
-   stream.writeChar(0);
-   stream.writeChar( weather.windSpeed );
-   stream.writeChar( weather.windDirection );
+   stream.writeUint8(0);
+   stream.writeUint8( weather.windSpeed );
+   stream.writeUint8( weather.windDirection );
    
    stream.writeInt( 0x12345678 );
    
@@ -738,21 +738,21 @@ void GameMap :: write ( tnstream& stream )
    
    
    for  ( i= 0; i < 4; i++ )
-      stream.writeChar( 0 );
+      stream.writeUint8( 0 );
 
    for ( i = 0; i< 12; i++ )
-      stream.writeChar( 0 ); // dummy
+      stream.writeUint8( 0 ); // dummy
 
    stream.writeInt( _resourcemode );
 
    for ( i = 0; i< 9; i++ ) {
-      stream.writeChar( player[i].existanceAtBeginOfTurn );
+      stream.writeUint8( player[i].existanceAtBeginOfTurn );
       stream.writeInt( 1 ); // dummy
       stream.writeInt( 1 ); // dummy
       player[i].research.write ( stream );
       stream.writeInt( player[i].ai != NULL );
-      stream.writeChar( player[i].stat );
-      stream.writeChar( 0 ); // dummy
+      stream.writeUint8( player[i].stat );
+      stream.writeUint8( 0 ); // dummy
       stream.writeInt( 0 );
       player[i].passwordcrc.write ( stream );
       stream.writeInt( !player[i].dissections.empty() );
@@ -770,7 +770,7 @@ void GameMap :: write ( tnstream& stream )
    
    idManager.writeData(stream);
    
-   stream.writeChar( levelfinished );
+   stream.writeUint8( levelfinished );
 
    stream.writeInt( 1 );
    stream.writeInt( !messages.empty() );
@@ -825,7 +825,7 @@ void GameMap :: write ( tnstream& stream )
 
    if ( campaign.avail ) {
       stream.writeInt( campaign.id );
-      stream.writeChar( campaign.directaccess );
+      stream.writeUint8( campaign.directaccess );
       stream.writeInt( campaign.avail );
    }
 

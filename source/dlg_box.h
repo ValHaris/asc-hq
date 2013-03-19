@@ -177,7 +177,7 @@ typedef class tdialogbox* pdialogbox;
                      void         done(void);
 
 
-                      virtual char      checkvalue(int         id, void*      p)  ;
+                      virtual Uint8      checkvalue(int         id, void*      p)  ;
                       void                 editfield(pbutton      pb);
                       void                 editfield( int id );
                       void                 toggleswitch(pbutton      pb);

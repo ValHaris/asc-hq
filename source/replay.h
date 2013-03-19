@@ -49,7 +49,7 @@ class trunreplay {
             void error( const MapCoordinate& pos, const ASCString& message );
             void error( const ActionResult& res );
 
-            char nextaction;
+            int nextaction;
 
             Context createReplayContext();
             

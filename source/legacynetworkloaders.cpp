@@ -73,7 +73,7 @@ void        readLegacyNetworkData ( tnstream& stream )
       // this part is really ugly and is rewrite for ASC2
 
          for ( int i = 0; i < 8; ++i ) {
-            network.player[i].compposition = stream.readChar();
+            network.player[i].compposition = stream.readUint8();
             network.player[i].codewordcrc = stream.readInt();
          }
 

@@ -25,6 +25,7 @@
  #define basestreaminterface_h_included
 
 #include <bitset>
+#include <SDL/SDL_stdinc.h>
  #include "global.h"
 
  #include "ascstring.h"
@@ -110,14 +111,17 @@
            virtual int readWord ( void );
 
            //! Reads a 8 bit unsigned Integer. 
-           virtual char readChar ( void );
+           virtual Uint8 readUint8 ( void );
+
+           //! Read a 8 bit character
+           virtual char readCharacter ( void );
 
            template<size_t N>
            void writeBitset( const std::bitset<N>& bs ) {
               writeInt(1);
               writeInt(N);
               for( int i = 0; i < N;++i)
-                 writeChar( bs.test(i));
+                 writeUint8( bs.test(i));
            }
 
            template<size_t N>
@@ -127,7 +131,7 @@
               assert( n == N );
               bs.reset();
               for( int i = 0; i < N;++i)
-                 if ( readChar() )
+                 if ( readUint8() )
                   bs.set( i );
            }
            
@@ -150,7 +154,10 @@
            virtual void writeWord ( int w );
 
            //! Writes a 8 bit unsigned Integer. 
-           virtual void writeChar ( char c );
+           virtual void writeUint8 ( Uint8 c );
+
+           //! Writes a 8 bit character
+           virtual void writeCharacter ( char c );
 
            //! Write a floating point variable
            virtual void writeFloat ( float f );
