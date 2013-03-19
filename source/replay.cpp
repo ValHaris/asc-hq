@@ -2085,7 +2085,7 @@ void trunreplay :: execnextreplaymove ( void )
             Command* a = dynamic_cast<Command*> ( readaction.get() );
             
             for ( int i = 0; i < padding;++i ) {
-               char c = stream->readUint8();
+               Uint8 c = stream->readUint8();
                if ( c != 255-i )
                   error("invalid padding bytes in command action storage buffer");
             }

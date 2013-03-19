@@ -58,7 +58,7 @@
                                void*      data;
                                void*      data2;
                                int      min, max;   // max = itemsvisible bei scrollbar
-                               char      active;
+                               int      active;
 
                                int          keynum;
                                tkey         key[6];
@@ -66,7 +66,7 @@
                                int          markedkeynum;
                                tkey         markedkey[6];
                                int          scrollspeed;
-                               char         pressed;
+                               int         pressed;
                                int          newpressed;    // nur f?r Maus-"Dauerfeuer"
                                int          lasttick;      //  nur f?r Maus-"Dauerfeuer"
                                const char** entries;       // only for drop down
@@ -96,13 +96,13 @@
                        int         lart,
                        int         lstyle,
                        int         lid,
-                       char      enabled);
+                       bool      enabled);
                      void         addbutton( const char *       ltxt,
                        tmouserect   rect1,
                        int         lart,
                        int         lstyle,
                        int         lid,
-                       char      enabled);
+                       bool      enabled);
 
                                                        /********************************/
                                                        /* art:  0: Normaler Button     */
@@ -158,7 +158,7 @@ typedef class tdialogbox* pdialogbox;
                      int          starty;
                      int           ms;
                      void*      tp;
-                     char      imagesaved; 
+                     int      imagesaved;
                      const char*        title;
                      int         windowstyle;
                      ttaborder    taborder[100]; 
@@ -211,7 +211,7 @@ typedef class tdialogbox* pdialogbox;
                       virtual void setvirtualframebuf ( void );
                       virtual void copyvirtualframebuf ( void );
 
-                      char knopfsuccessful;
+                      int knopfsuccessful;
                       void         newknopf(int      xx1,
                                             int      yy1,
                                             int      xx2,
@@ -275,7 +275,7 @@ typedef class tdialogbox* pdialogbox;
                                                int          y1,
                                                char *       s,
                                                int          position,
-                                               char      einfuegen);
+                                               int      einfuegen);
                                                
                       void         intedit(int     *    st,
                                            int          x1,
@@ -414,11 +414,11 @@ extern ASCString readtextmessage( int id );
 class   tstringselect : public tdialogbox {
                 public :
                      char txt[2000];
-                     char  ok;
+                     int  ok;
                      int sy,ey,sx,ex,action,dx;
                      int dk;
                      int msel,mouseselect,redline,lnshown,numberoflines,firstvisibleline,startpos;
-                     char scrollbarvisible;
+                     int scrollbarvisible;
                      void init(void);
                      tstringselect ( );
                      virtual void setup(void);

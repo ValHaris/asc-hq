@@ -107,7 +107,7 @@ void toldfont::read ( tnstream& stream )
 pfont        loadfont( tnstream* stream )
 {
    toldfont     *font1;
-   char *p;
+   Uint8 *p;
    void         *q;
    int      ll, ll2;
    int i;
@@ -127,11 +127,11 @@ pfont        loadfont( tnstream* stream )
       if ( font1->character[i].size ) {
          ll2 = ( font1->character[i].size / 8 + 1) * 8;
          q = new char [ ll2+2 ];
-         font1->character[i].memposition = (char*) q;
+         font1->character[i].memposition = (Uint8*) q;
 
          if (font1->color == false) {
             ll = font1->character[i].size / 8 + 1;
-            p = new char [ ll + 2 ];
+            p = new Uint8 [ ll + 2 ];
 
             *((Uint16*)p) = stream->readWord();
 
@@ -151,13 +151,13 @@ pfont        loadfont( tnstream* stream )
       } else {
         if (i == 32) {
            ll = font1->height * ( font1->character[spacewidthkey].width - 2 );
-           p = new char [ ll+2 ];
+           p = new Uint8 [ ll+2 ];
            Uint16* pg = (Uint16*) p;
            memset(p,0,ll+2);
            *pg = font1->character[spacewidthkey].width - 2;
            font1->character[i].width = font1->character[spacewidthkey].width - 2;
            font1->character[i].size = ll;
-           font1->character[i].memposition = (char*) p;
+           font1->character[i].memposition = (Uint8*) p;
         } /* endif */
      }
    }

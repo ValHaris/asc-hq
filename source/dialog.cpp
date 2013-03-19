@@ -97,7 +97,7 @@ class  tstatisticbuildings : public tstatistics {
                };
 
 class  tstatisticarmies : public tstatistics {
-                   char         jk;
+                   Uint8         jk;
                 public:
                    void         init ( void );
                    virtual void run ( void );

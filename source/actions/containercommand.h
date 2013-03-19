@@ -31,7 +31,7 @@ class ContainerCommand : public Command {
    protected:
       ContainerBase* getContainer( bool dontThrow = false );
       const ContainerBase* getContainer( bool dontThrow = false ) const ;
-      const int getContainerID() const { return containerID; };
+      int getContainerID() const { return containerID; };
       void readData ( tnstream& stream );
       void writeData ( tnstream& stream ) const;
       ContainerCommand( ContainerBase* container );

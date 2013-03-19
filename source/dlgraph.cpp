@@ -102,7 +102,7 @@ void         tdialogbox::rahmen(bool      invers,
 {
      collategraphicoperations cgs ( x1, y1, x2, y2 );
      
-	 char col	=	(invers == false)	?	white	:	darkgray;
+	 Uint8 col	=	(invers == false)	?	white	:	darkgray;
      
 	 line(x1,y1,x1,y2,col);
      line(x1,y1,x2,y1,col); 

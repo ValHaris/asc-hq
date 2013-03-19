@@ -105,7 +105,7 @@ extern tpixelxlattable light;
 
 // tables storing the color that results when two palette colors are mixed
 extern tmixbuf *colormixbuf;
-extern char* colormixbufchar;
+extern Uint8* colormixbufchar;
 
 
 extern dacpalette256 pal;

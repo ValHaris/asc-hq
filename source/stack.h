@@ -48,15 +48,14 @@
 
 #ifndef stack_h_included
  #define stack_h_included
+ #include <SDL/SDL_stdinc.h>
 
- #define npush(a) pushdata( (char*)&a, sizeof ( a ) )
- #define npop(a) popdata ( (char*)&a, sizeof ( a ) )
+ #define npush(a) pushdata( (Uint8*)&a, sizeof ( a ) )
+ #define npop(a) popdata ( (Uint8*)&a, sizeof ( a ) )
 
- extern void  pushdata(char *       daten,
-                  int          size);
+ extern void  pushdata(Uint8 *       daten, int          size);
 
- extern void  popdata(char *       daten,
-                 int          size);
+ extern void  popdata(Uint8 *       daten, int          size);
 
  extern int   stackfree(void);
 

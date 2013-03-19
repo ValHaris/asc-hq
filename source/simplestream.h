@@ -30,7 +30,7 @@ class tnbufstream  : public tnstream {
            int datalen;
 
        protected:
-           char* zeiger;
+           Uint8* zeiger;
            IOMode  _mode;
            int   actmempos;
            int   memsize;

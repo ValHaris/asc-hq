@@ -25,7 +25,7 @@
 void testStreamEncoding1()
 {
    const int maxsize = 100000;
-   char buffer[maxsize];
+   Uint8 buffer[maxsize];
 
    int size;
 
@@ -43,7 +43,7 @@ void testStreamEncoding1()
    }
 
    {
-      char buffer2[maxsize];
+      Uint8 buffer2[maxsize];
 
       ASCIIDecodingStream stream ( encodedData );
 

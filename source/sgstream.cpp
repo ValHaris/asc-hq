@@ -71,7 +71,7 @@ void loadpalette ( void )
 
       tnfilestream stream ("palette.pal", tnstream::reading);
       stream.readdata( & pal, sizeof(pal));
-      colormixbufchar = new char [ sizeof ( tmixbuf ) ];
+      colormixbufchar = new Uint8 [ sizeof ( tmixbuf ) ];
       colormixbuf = (pmixbuf) colormixbufchar;
       stream.readdata( colormixbuf,  sizeof ( *colormixbuf ));
 

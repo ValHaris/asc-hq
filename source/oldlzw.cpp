@@ -172,7 +172,7 @@ void tlzwstreamcompression  :: LZWOut ( CodeType code )
       LZWCurrBytesIn = 0;
       LZWCurrBytesOut = 0;
   
-      char c = 0;
+      Uint8 c = 0;
       writelzwdata ( &c, 1 );
       writelzwdata ( LZ_SIGNATURE, strlen ( LZ_SIGNATURE ) + 1 );
       writelzwdata ( &c, 1 );

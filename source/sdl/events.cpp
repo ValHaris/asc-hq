@@ -251,7 +251,7 @@ void starttimer(void)
    tticker = ticker;
 }
 
-char time_elapsed(int time)
+bool time_elapsed(int time)
 {
    if (tticker + time <= ticker) return 1;
    else return 0;

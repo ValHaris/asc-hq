@@ -308,7 +308,7 @@ class GameMap {
       } idManager;
 
 
-      char         levelfinished;
+      Uint8         levelfinished;
 
       enum State { 
          Normal,

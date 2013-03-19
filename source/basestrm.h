@@ -177,7 +177,7 @@ class MemoryStreamStorage {
            int used;
            int allocated;
            int dummy[10];
-           char* buf;
+           Uint8* buf;
         public:
            MemoryStreamStorage();
 
@@ -191,7 +191,7 @@ class MemoryStreamStorage {
 
            int getMemoryFootprint() const { return allocated; };
            
-           const char* getBuffer() const { return buf; };
+           const Uint8* getBuffer() const { return buf; };
            int getSize() const { return used; };
            
            ~MemoryStreamStorage ( );
@@ -204,7 +204,7 @@ class MemoryStreamStorage {
 class MemoryStream : public tnstream {
        protected:
            int   blocksize;
-           char* pointer;
+           Uint8* pointer;
            IOMode _mode;
            int   actmempos;
            MemoryStreamStorage* buf;
@@ -293,8 +293,8 @@ class tlzwstreamcompression {
 
           protected:
 
-              typedef deque<char> CDQ;
-              queue<char,CDQ> tempbuf;
+              typedef deque<Uint8> CDQ;
+              queue<Uint8,CDQ> tempbuf;
 
               enum tmode { none, reading, writing, readingdirect, readingrle };
               tmode mode;
@@ -362,8 +362,8 @@ class libbzip_decompression {
 
 class tanycompression : public CompressionStreamInterface, public tlzwstreamcompression {
 
-                            typedef deque<char> CDQ;
-                            queue<char, CDQ> _queue;
+                            typedef deque<Uint8> CDQ;
+                            queue<Uint8, CDQ> _queue;
 
                             libbzip_compression* bzip_compress;
                             libbzip_decompression* bzip_decompress;

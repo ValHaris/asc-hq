@@ -74,7 +74,7 @@
 struct trleheader {
    unsigned short int id;
    unsigned short int size;
-   char rle;
+   Uint8 rle;
    unsigned short int x;
    unsigned short int y;
 };
@@ -203,7 +203,7 @@ void         tnstream::readrlepict( void** pnter, bool allocated, int* size)
 { 
   trleheader   hd; 
   int          w;
-  char*        q;
+  Uint8*        q;
 
   hd.id = readWord();
   hd.size = readWord();
@@ -213,9 +213,9 @@ void         tnstream::readrlepict( void** pnter, bool allocated, int* size)
 
    if (hd.id == 16973) {
       if (!allocated)
-        *pnter = new char [ hd.size + sizeof(hd) ];
+        *pnter = new Uint8 [ hd.size + sizeof(hd) ];
       memcpy( *pnter, &hd, sizeof(hd));
-      q = (char*) (*pnter) + sizeof(hd);
+      q = (Uint8*) (*pnter) + sizeof(hd);
 
       readdata( q, hd.size);  // endian ok ?
       *size = hd.size + sizeof(hd);
@@ -223,9 +223,9 @@ void         tnstream::readrlepict( void** pnter, bool allocated, int* size)
    else {
       w =  (hd.id + 1) * (hd.size + 1) + 4 ;
       if (!allocated)
-        *pnter = new char [ w ];
+        *pnter = new Uint8 [ w ];
       memcpy ( *pnter, &hd, sizeof ( hd ));
-      q = (char*) (*pnter) + sizeof(hd);
+      q = (Uint8*) (*pnter) + sizeof(hd);
       readdata ( q, w - sizeof(hd) ); // endian ok ?
       *size = w;
    }
@@ -562,7 +562,7 @@ void         tnstream::writepchar(const char* pc)
             pch1++;
          writedata( pch1, 1 );
          loop++;
-      } while ( *pch1 > 0  ); /* enddo */
+      } while ( *pch1 != 0  ); /* enddo */
    } else {
        char         pch1 = 0;
        writedata ( &pch1, 1 );
@@ -2326,7 +2326,7 @@ int checkforvaliddirectory ( char* dir )
         }
         if ( used > 0 || allocated > 0 ) {
            allocated = max(allocated,used);
-           buf = new char[allocated];
+           buf = new Uint8[allocated];
            stream->readdata ( buf, used );
         }
      }
@@ -2353,7 +2353,7 @@ MemoryStream :: MemoryStream ( MemoryStreamStorage* lbuf, IOMode lmode )
          delete[] buf->buf;
          buf->buf = NULL;
       }
-      buf->buf = new char[blocksize];
+      buf->buf = new Uint8[blocksize];
       buf->allocated = blocksize;
       buf->used = 0;
       pointer = buf->buf;
@@ -2374,7 +2374,7 @@ void MemoryStream :: writedata ( const void* nbuf, int size )
    if ( buf->used + size > buf->allocated ) {
       int newsize = ((buf->used + size + blocksize - 1) / blocksize);
       newsize *= blocksize;
-      char* tmp = new char[newsize];
+      Uint8* tmp = new Uint8[newsize];
       memcpy ( tmp, buf->buf, buf->used );
       delete[] buf->buf;
       buf->buf = tmp;

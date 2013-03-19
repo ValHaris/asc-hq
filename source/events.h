@@ -92,8 +92,8 @@ class tmousesettings {
    void *pictpointer;
    int xsize;
    int ysize;
-   char taste;
-   char status;
+   Uint8 taste;
+   Uint8 status;
    tmouserect off;
    int hotspotx;
    int hotspoty;
@@ -148,7 +148,7 @@ extern volatile tmousesettings mouseparams;
     extern void ndelay(int time);
 
     extern void starttimer(void); //resets Timer
-    extern char time_elapsed(int time); //check if time msecs are elapsed, since starttimer
+    extern bool time_elapsed(int time); //check if time msecs are elapsed, since starttimer
     extern int  releasetimeslice( void );
 
     extern int getTicker();

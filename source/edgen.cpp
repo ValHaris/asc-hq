@@ -48,13 +48,13 @@
                void resetmapfield(void);
                void addcoast(void);
                void setmap(void);
-               char checkland(int x, int y);
+               Uint8 checkland(int x, int y);
                virtual void run(void);
                virtual void buttonpressed(int  id);
        protected :
-               char flip,showland,showdesert,showforest,showmaterial,showfuel,correctvalues,calculatevalues;
-               char initialized[ layercount ];
-               char *constructionlayer;
+               Uint8 flip,showland,showdesert,showforest,showmaterial,showfuel,correctvalues,calculatevalues;
+               Uint8 initialized[ layercount ];
+               Uint8 *constructionlayer;
                int layer,actlayer;
                int barsize,maxbarsize;
                int whereland;
@@ -105,7 +105,7 @@ void         tmapgenerator::init(void)
 
    barsize = maxbarsize;
 
-   constructionlayer = new ( char[plasma.maxx * plasma.maxy ]); // =blockcount
+   constructionlayer = new ( Uint8[plasma.maxx * plasma.maxy ]); // =blockcount
 
    addbutton("",480,80,510,100,0,1,7,true);
    addkey(7,ct_down);
@@ -207,7 +207,7 @@ void         tmapgenerator::init(void)
 void tmapgenerator::montlayer(int layer)
 {
    int i,j;
-   char found;
+   Uint8 found;
  
    if ( overwritecolorcount == 0 ){
       for (i=0;i<plasma.blockcount;i++ ) {
@@ -378,7 +378,7 @@ void tmapgenerator::showmap(void)
    showmontlayer(centerlayer,centerlayer,barsize);
 }
 
-char tmapgenerator::checkland(int x, int y)
+Uint8 tmapgenerator::checkland(int x, int y)
 {
    if ( ( getfield(x,y)->typ->art & getTerrainBitType(cbwater) ).none() )
       return true;
@@ -1047,7 +1047,7 @@ void tplasma::membar( int x1 ,int y1 ,int x2 ,int y2, int color )
 
 
 
-void tplasma::generateplasma(char resettile)
+void tplasma::generateplasma(Uint8 resettile)
 {
    int colour;
    int sblocksize;

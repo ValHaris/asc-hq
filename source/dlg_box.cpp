@@ -441,7 +441,7 @@ void         tdlgengine::buttonpressed(int         id)
             }
       } 
       if (w != *pw) { 
-         char mss = getmousestatus();
+         int mss = getmousestatus();
          if (mss == 2 ) 
             mousevisible(false);
         showbutton(pb->id); 
@@ -461,7 +461,7 @@ void         tdlgengine::addbutton( const char *       ltxt,
                        int         lart,
                        int         lstyle,
                        int         lid,
-                       char      enabled)
+                       bool      enabled)
 {
    addbutton ( ltxt, rect1.x1, rect1.y1, rect1.x2, rect1.y2, lart, lstyle, lid, enabled );
 }
@@ -476,7 +476,7 @@ void         tdlgengine::addbutton(  const char *       ltxt,
                                  int         lart,
                                  int         lstyle,
                                  int         lid,
-                                 char      enabled)
+                                 bool      enabled)
 { 
   pbutton      pb; 
   char         ch; 
@@ -708,7 +708,7 @@ void         tdialogbox::showbutton(int         id)
 { 
   pbutton      pb; 
   int         c; 
-  char mss = getmousestatus();
+  int mss = getmousestatus();
 
   if (mss == 2) 
      mousevisible(false);
@@ -1328,7 +1328,7 @@ void         tdialogbox::execbutton( pbutton      pb, char      mouse )
 
 
          if ( mouseparams.y >= yb1 + 1 + l * *pw / *pw2          &&        mouseparams.y <= yb1 + 1 + l * (*pw + pb->max) / *pw2) {
-            char mss = getmousestatus ();
+            int mss = getmousestatus ();
             if (mss == 2)
                mousevisible(false);
 
@@ -1749,7 +1749,7 @@ typedef tstringa* pstringa;
 
 
 class tdisplaymessage : public tdialogbox {
-                        char status;
+                        Uint8 status;
                         int  mode;
                     public:
                         void init ( tstringa a, int md, int linenum, const char* buttonText = NULL );
@@ -2227,7 +2227,7 @@ void         tdialogbox::lne(int          x1,
                  int          y1,
                  char *       s,
                  int          position,
-                 char      einfuegen)
+                 int      einfuegen)
 {
  int          i, j, k;
 
@@ -3574,7 +3574,6 @@ void         tstringselect::resettextfield(void)
 void   tstringselect::get_text(int nr) //gibt in txt den string zur?ck
 {
   strcpy(txt,"");
-  nr = 0;
 }
 
 void tstringselect::scrollbar_on(void)
@@ -3918,11 +3917,11 @@ class   StringSelect : public tdialogbox {
                 public :
                      StringSelect( const ASCString& title, const vector<ASCString>& entries_, const vector<ASCString>& buttons_ );
                 protected:
-                     char  ok;
+                     int  ok;
                      int sy,ey,sx,ex,action,dx;
                      int dk;
                      int msel,mouseselect,redline,lnshown,numberoflines,firstvisibleline,startpos;
-                     char scrollbarvisible;
+                     int scrollbarvisible;
                      void init(void);
                      tstringselect ( );
                      virtual void run(void);
@@ -4009,7 +4008,7 @@ void         tstringselect::buttonpressed(int         id)
 
 void         tstringselect::run(void)
 {
-  char      view;
+  int      view;
   int      my;
   int         ms;
 

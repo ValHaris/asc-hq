@@ -110,7 +110,7 @@ bool mouseDraggedToField( const MapCoordinate& pos, const SPoint& mousePos, bool
 
 // � Checkobject
 
-char checkobject(MapField* pf)
+Uint8 checkobject(MapField* pf)
 {
     return !pf->objects.empty();
 }
@@ -603,7 +603,7 @@ void cdplayer( void )
 
 #ifndef pbpeditor
 
-void         k_savemap(char saveas)
+void         k_savemap(bool saveas)
 {
     ASCString filename;
 
@@ -905,7 +905,7 @@ class BuildingValues : public tdialogbox {
     Resources plus,mplus, biplus,storage;
     int col;
     int damage;
-    char tvisible;
+    Uint8 tvisible;
     char name[260];
     int ammo[waffenanzahl];
     virtual void buttonpressed(int id);
@@ -921,7 +921,7 @@ public :
 
 void         BuildingValues::init(void)
 {
-    char      b;
+	Uint8      b;
 
     for ( int i = 0; i< waffenanzahl; i++ )
         ammo[i] = gbde.ammo[i];
@@ -1537,10 +1537,10 @@ class UnitPropertyEditor: public tdialogbox {
     Vehicle*    unit;
     int         w2, heightxs;
     char        namebuffer[1000];
-    char        reactionfire;
+    Uint8        reactionfire;
     int owner;
 public:
-    // char     checkvalue( char id, char* p );
+    // char     checkvalue( Uint8 id, char* p );
     UnitPropertyEditor ( Vehicle* v ) : tus ( v ), unit ( v ) {};
     void        init( void );
     void        run( void );

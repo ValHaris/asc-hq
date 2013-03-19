@@ -478,9 +478,9 @@ void   tspfldloaders::writefields ( void )
       */
 
 
-      char b1 = 0;
-      char b3 = 0;
-      char b4 = 0;
+      Uint8 b1 = 0;
+      Uint8 b3 = 0;
+      Uint8 b4 = 0;
 
       if (fld->typ->terraintype->id > 255)
          b1 |= csm_typid32;
@@ -633,7 +633,7 @@ void tspfldloaders::readfields ( void )
 
          fld2->bdt.setInt ( 0 , 0 );
 
-         char b1, b3, b4;
+         Uint8 b1, b3, b4;
          b1 = stream->readUint8();
 
          if (b1 & csm_b3 )
@@ -710,8 +710,8 @@ void tspfldloaders::readfields ( void )
 
          if (b3 & csm_object ) {
 
-            char minetype = stream->readUint8();
-            char minestrength = stream->readUint8();
+        	Uint8 minetype = stream->readUint8();
+        	Uint8 minestrength = stream->readUint8();
             if ( minetype >> 4 ) {
                Mine m( MineTypes((minetype >> 1) & 7), minestrength, minetype >> 4, spfld );
                fld2->mines.push_back ( m );

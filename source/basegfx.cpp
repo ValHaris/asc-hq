@@ -336,10 +336,10 @@ void         xorrectangle( tmouserect r, byte         color)
 
 void* halfpict ( void* vbuf )
 {
-   char* buf = (char*) vbuf;
+   Uint8* buf = (Uint8*) vbuf;
 
    Uint16* wp = (Uint16*) xlatbuffer;
-   char* dest = (char*) xlatbuffer;
+   Uint8* dest = (Uint8*) xlatbuffer;
 
    trleheader*   hd = (trleheader*) vbuf; 
 
@@ -427,12 +427,12 @@ void* halfpict ( void* vbuf )
 void putshadow ( int x1, int y1, void* ptr, ppixelxlattable xl )
 {
    Uint16* w = (Uint16*) ptr;
-   char* c = (char*) ptr + 4;
+   Uint8* c = (Uint8*) ptr + 4;
    int spacelength = agmp->scanlinelength - *w - 1;
 
    collategraphicoperations cgo ( x1, y1, x1 + w[0], y1+w[1] );
    if ( agmp->windowstatus == 100 ) {
-      char* buf = (char*) (agmp->scanlinelength * y1 + x1 + agmp->linearaddress);
+      Uint8* buf = (Uint8*) (agmp->scanlinelength * y1 + x1 + agmp->linearaddress);
       for ( int y = w[1] + 1; y > 0; y-- ) {
          for ( int x = w[0]+1; x > 0; x-- ) {
             if ( *c != 255 )
@@ -446,15 +446,15 @@ void putshadow ( int x1, int y1, void* ptr, ppixelxlattable xl )
 
 }
 #endif
-void putpicturemix ( int x1, int y1, void* ptr, int rotation, char* mixbuf )
+void putpicturemix ( int x1, int y1, void* ptr, int rotation, Uint8* mixbuf )
 {
    Uint16* w = (Uint16*) ptr;
-   char* c = (char*) ptr + 4;
+   Uint8* c = (Uint8*) ptr + 4;
    int spacelength = agmp->scanlinelength - *w - 1;
 
    collategraphicoperations cgo ( x1, y1, x1 + w[0], y1+w[1] );
    if ( agmp->windowstatus == 100 ) {
-      char* buf = (char*) (agmp->scanlinelength * y1 + x1 + agmp->linearaddress);
+      Uint8* buf = (Uint8*) (agmp->scanlinelength * y1 + x1 + agmp->linearaddress);
       for ( int y = w[1] + 1; y > 0; y-- ) {
          for ( int x = w[0]+1; x > 0; x-- ) {
             if ( *c != 255 ) {
@@ -477,12 +477,12 @@ void putpicturemix ( int x1, int y1, void* ptr, int rotation, char* mixbuf )
 void putinterlacedrotimage ( int x1, int y1, void* ptr, int rotation )
 {
    Uint16* w = (Uint16*) ptr;
-   char* c = (char*) ptr + 4;
+   Uint8* c = (Uint8*) ptr + 4;
    int spacelength = agmp->scanlinelength - *w - 1;
 
    collategraphicoperations cgo ( x1, y1, x1 + w[0], y1+w[1] );
    if ( agmp->windowstatus == 100 ) {
-      char* buf = (char*) (agmp->scanlinelength * y1 + x1 + agmp->linearaddress);
+      Uint8* buf = (Uint8*) (agmp->scanlinelength * y1 + x1 + agmp->linearaddress);
       for ( int y = w[1] + 1; y > 0; y-- ) {
          for ( int x = w[0]+1; x > 0; x-- ) {
             if ( *c != 255 ) {
@@ -506,10 +506,10 @@ void putinterlacedrotimage ( int x1, int y1, void* ptr, int rotation )
 void rotatepict90 ( void* s, void* d )
 {
    Uint16* sw = (Uint16*) s;
-   char* sc = (char*) s + 4;
+   Uint8* sc = (Uint8*) s + 4;
    
    Uint16* dw = (Uint16*) d;
-   char* dc = (char*) d + 4;
+   Uint8* dc = (Uint8*) d + 4;
 
    dw[0] = sw[1];
    dw[1] = sw[0];
@@ -543,7 +543,7 @@ int getimagepixel ( void* image, int x, int y )
    if ( x < 0  || x >= xs || y < 0 || y >= ys )
       return -1;
    else {
-      char* pc = (char*) image;
+      Uint8* pc = (Uint8*) image;
       return pc[ 4 + y * xs + x];
    }
 }
@@ -675,10 +675,10 @@ Uint8* rotatepict_grw ( void* image, int organgle )
 void flippict ( void* s, void* d, int dir )
 {
    Uint16* sw = (Uint16*) s;
-   char* sc = (char*) s + 4;
+   Uint8* sc = (Uint8*) s + 4;
    
    Uint16* dw = (Uint16*) d;
-   char* dc = (char*) d + 4;
+   Uint8* dc = (Uint8*) d + 4;
 
    dw[1] = sw[1];
    dw[0] = sw[0];
@@ -703,13 +703,13 @@ void flippict ( void* s, void* d, int dir )
 void putpixel8 ( int x1, int y1, int color )
 {
     collategraphicoperations cgo ( x1, y1, x1, y1 );
-    char* buf = (char*) (agmp->scanlinelength * y1 + x1 * agmp->byteperpix + agmp->linearaddress);
+    Uint8* buf = (Uint8*) (agmp->scanlinelength * y1 + x1 * agmp->byteperpix + agmp->linearaddress);
     *buf = color;
 }
 
 int getpixel8 ( int x1, int y1 )
 {
-    char* buf = (char*) (agmp->scanlinelength * y1 + x1 * agmp->byteperpix + agmp->linearaddress);
+    Uint8* buf = (Uint8*) (agmp->scanlinelength * y1 + x1 * agmp->byteperpix + agmp->linearaddress);
     return *buf;
 }
 
@@ -721,7 +721,7 @@ void putpixel(int x1, int y1, int color)
       putpixel8 ( x1, y1, color );
    else {
       if ( agmp->windowstatus == 100 ) {
-         char* pc = (char*) ( agmp->linearaddress + x1 * agmp->byteperpix + y1 * agmp->scanlinelength );
+         Uint8* pc = (Uint8*) ( agmp->linearaddress + x1 * agmp->byteperpix + y1 * agmp->scanlinelength );
          int alpha = color >> 24;
          if ( alpha == 0 ) {
             pc[ agmp->redfieldposition/8 ] = color & 0xff;
@@ -739,7 +739,7 @@ void putpixel(int x1, int y1, int color)
          if ( hgmp->actsetpage != page )
             setvirtualpagepos ( page );
 
-         char* pc = (char*) ( agmp->linearaddress + (pos & 0xffff) );
+         Uint8* pc = (Uint8*) ( agmp->linearaddress + (pos & 0xffff) );
 
          int alpha = color >> 24;
          if ( alpha == 0 ) {
@@ -763,7 +763,7 @@ int getpixel(int x1, int y1)
       return getpixel8( x1, y1 );
    else {
       if ( agmp->windowstatus == 100 ) {
-         char* pc = (char*) ( agmp->linearaddress + x1 * agmp->byteperpix + y1 * agmp->scanlinelength );
+         Uint8* pc = (Uint8*) ( agmp->linearaddress + x1 * agmp->byteperpix + y1 * agmp->scanlinelength );
          trgbpixel pix;
          pix.channel.r = pc[ agmp->redfieldposition/8 ];
          pix.channel.g = pc[ agmp->greenfieldposition/8 ];
@@ -801,7 +801,7 @@ int getpixelfromimage ( void* buf, int x, int y )
    if ( x > wp[0]  ||  y > wp[1] || x < 0 || y < 0 )
       return -1;
 
-   char* pc = (char*) buf;
+   Uint8* pc = (Uint8*) buf;
    return pc[4 + x + y * (wp[0]+1) ];
 }
 
@@ -899,7 +899,7 @@ imagesize(int x1, int y1, int x2, int y2)
 }
 
 #if 0
-char* convertimage ( TrueColorImage* img, dacpalette256 pal )
+Uint8* convertimage ( TrueColorImage* img, dacpalette256 pal )
 {
   #ifndef minimal
    if ( truecolor2pal_table[0] == 255 ) {
@@ -934,8 +934,8 @@ char* convertimage ( TrueColorImage* img, dacpalette256 pal )
    }
   #endif
    int size = imagesize ( 1, 1, img->getxsize(), img->getysize() );
-   char* newimg = new Uint8[ size ] ;
-   char* start = newimg;
+   Uint8* newimg = new Uint8[ size ] ;
+   Uint8* start = newimg;
    Uint16* wp = (Uint16*) newimg;
    wp[0] = img->getxsize()-1;
    wp[1] = img->getysize()-1;
@@ -960,7 +960,7 @@ char* convertimage ( TrueColorImage* img, dacpalette256 pal )
 
    if ( newimg - start > size ) 
       printf("\a");
-   return (char*)wp;
+   return (Uint8*)wp;
 }
 #endif
 
@@ -979,11 +979,11 @@ void putmask ( int x1, int y1, void* vbuf, int newtransparence )
 
       Uint16* wp = (Uint16*) vbuf;
 
-      char* basemembuf = (char*) (agmp->linearaddress + y1 * agmp->bytesperscanline + x1 * agmp->byteperpix );
-      char* img = (char*) vbuf + 4;
+      Uint8* basemembuf = (Uint8*) (agmp->linearaddress + y1 * agmp->bytesperscanline + x1 * agmp->byteperpix );
+      Uint8* img = (Uint8*) vbuf + 4;
 
       for ( int y = 0; y <= wp[1]; y++ ) {
-         char* membuf = basemembuf + y * agmp->bytesperscanline;
+         Uint8* membuf = basemembuf + y * agmp->bytesperscanline;
 
          for ( int x = 0; x <= wp[0]; x++ ) {
             if ( *img != newtransparence )
@@ -1009,12 +1009,12 @@ void* uncompress_rlepict ( void* pict )
       h++;
       void* newbuf = malloc ( w * h + 4 );
       Uint16* wp = (Uint16*) newbuf;
-      char* dest = (char*) newbuf;
+      Uint8* dest = (Uint8*) newbuf;
       wp[0] = w-1;
       wp[1] = h-1;
       dest +=4;
    
-      char* buf = (char*) pict;
+      Uint8* buf = (Uint8*) pict;
       buf += sizeof ( *hd );
    
       for ( int c = 0; c < hd->size; c++ ) {
@@ -1095,7 +1095,7 @@ void tvirtualdisplay :: init ( int x, int y, int color, int depth )
 {
    agmp = (tgraphmodeparameters *) & activegraphmodeparameters;
    oldparams = *agmp ;
-   char* cbuf = (char*) malloc ( x * y * depth/8 );
+   Uint8* cbuf = (Uint8*) malloc ( x * y * depth/8 );
    if ( !cbuf )
       throw fatalgraphicserror ( "could not allocate memory !");
 
@@ -1241,7 +1241,7 @@ void bar(int x1, int y1, int x2, int y2, Uint8 color)
    collategraphicoperations cgo ( x1, y1, x2, y2 );
    if ( agmp->windowstatus == 100 ) {
       int spacelength = agmp->scanlinelength - (x2-x1) - 1;
-      char* buf = (char*) (agmp->scanlinelength * y1 + x1 * agmp->byteperpix + agmp->linearaddress);
+      Uint8* buf = (Uint8*) (agmp->scanlinelength * y1 + x1 * agmp->byteperpix + agmp->linearaddress);
       for ( int y = y1; y <= y2; y++ ) {
          for ( int x = x1; x <= x2; x++ ) 
             *(buf++) = color;
@@ -1257,9 +1257,9 @@ void getimage(int x1, int y1, int x2, int y2, void *buffer)
 {
    if ( agmp->windowstatus == 100 ) {
       int spacelength = agmp->scanlinelength - (x2-x1) - 1;
-      char* buf = (char*) (agmp->scanlinelength * y1 + x1 * agmp->byteperpix + agmp->linearaddress);
+      Uint8* buf = (Uint8*) (agmp->scanlinelength * y1 + x1 * agmp->byteperpix + agmp->linearaddress);
 
-      char* cb = (char*) buffer;
+      Uint8* cb = (Uint8*) buffer;
       Uint16* wb = (Uint16*) buffer;
    
       wb[0] = x2 - x1;
@@ -1279,10 +1279,10 @@ void getimage(int x1, int y1, int x2, int y2, void *buffer)
 
 void putimage ( int x1, int y1, void* img )
 {
-   char* src = (char*) img;
+   Uint8* src = (Uint8*) img;
 
    if ( agmp->windowstatus == 100 ) {
-      char* buf = (char*) (agmp->scanlinelength * y1 + x1 * agmp->byteperpix + agmp->linearaddress);
+      Uint8* buf = (Uint8*) (agmp->scanlinelength * y1 + x1 * agmp->byteperpix + agmp->linearaddress);
 
       trleheader*   hd = (trleheader*) img;
    
@@ -1372,12 +1372,12 @@ TrueColorImage* getimage ( int x1, int y1, int x2, int y2 )
 }
 
 
-void putxlatfilter ( int x1, int y1, void* pic, char* xlattables )
+void putxlatfilter ( int x1, int y1, void* pic, Uint8* xlattables )
 {
-   char* src = (char*) pic;
+   Uint8* src = (Uint8*) pic;
 
    if ( agmp->windowstatus == 100 ) {
-      char* buf = (char*) (agmp->scanlinelength * y1 + x1 * agmp->byteperpix + agmp->linearaddress);
+      Uint8* buf = (Uint8*) (agmp->scanlinelength * y1 + x1 * agmp->byteperpix + agmp->linearaddress);
       trleheader*   hd = (trleheader*) pic;
 
       if ( hd->id == 16973 ) {
@@ -1438,11 +1438,11 @@ void putxlatfilter ( int x1, int y1, void* pic, char* xlattables )
 
 void putspriteimage ( int x1, int y1, void* pic )
 {
-   char* src = (char*) pic;
+   Uint8* src = (Uint8*) pic;
 
    if ( agmp->windowstatus == 100 ) {
       trleheader*   hd = (trleheader*) pic;
-      char* buf = (char*) (agmp->scanlinelength * y1 + x1 * agmp->byteperpix + agmp->linearaddress);
+      Uint8* buf = (Uint8*) (agmp->scanlinelength * y1 + x1 * agmp->byteperpix + agmp->linearaddress);
       if ( hd->id == 16973 ) { 
          collategraphicoperations cgo ( x1, y1, x1+hd->x, y1+hd->y );
          int spacelength = agmp->scanlinelength - hd->x - 1;
@@ -1495,10 +1495,10 @@ void putspriteimage ( int x1, int y1, void* pic )
 
 void putrotspriteimage(int x1, int y1, void *pic, int rotationvalue)
 {
-   char* src = (char*) pic;
+   Uint8* src = (Uint8*) pic;
 
    if ( agmp->windowstatus == 100 ) {
-      char* buf = (char*) (agmp->scanlinelength * y1 + x1 * agmp->byteperpix + agmp->linearaddress);
+      Uint8* buf = (Uint8*) (agmp->scanlinelength * y1 + x1 * agmp->byteperpix + agmp->linearaddress);
       trleheader*   hd = (trleheader*) pic;
    
       if ( hd->id == 16973 ) { 
@@ -1567,12 +1567,12 @@ void putrotspriteimage(int x1, int y1, void *pic, int rotationvalue)
 void putrotspriteimage90(int x1, int y1, void *pic, int rotationvalue)
 {
    Uint16* w = (Uint16*) pic;
-   // char* c = (char*) pic + 4;
+   // Uint8* c = (Uint8*) pic + 4;
    int spacelength = agmp->scanlinelength - w[1] - 1;
    collategraphicoperations cgo ( x1, y1, x1+w[1], y1+w[0] );
 
    if ( agmp->windowstatus == 100 ) {
-      char* buf = (char*) (agmp->scanlinelength * y1 + x1 * agmp->byteperpix + agmp->linearaddress);
+      Uint8* buf = (Uint8*) (agmp->scanlinelength * y1 + x1 * agmp->byteperpix + agmp->linearaddress);
       for ( int y = 0; y <= w[0] ; y++ ) {
          for ( int x = 0; x <= w[1]; x++ ) {
             int d = getpixelfromimage ( pic, y, w[1] - x );
@@ -1595,11 +1595,11 @@ void putrotspriteimage180(int x1, int y1, void *pic, int rotationvalue)
 {
    Uint16* w = (Uint16*) pic;
    collategraphicoperations cgo ( x1, y1, x1+w[0], y1+w[1] );
-   // char* c = (char*) pic + 4;
+   // Uint8* c = (Uint8*) pic + 4;
    int spacelength = agmp->scanlinelength - *w - 1;
 
    if ( agmp->windowstatus == 100 ) {
-      char* buf = (char*) (agmp->scanlinelength * y1 + x1 * agmp->byteperpix + agmp->linearaddress);
+      Uint8* buf = (Uint8*) (agmp->scanlinelength * y1 + x1 * agmp->byteperpix + agmp->linearaddress);
       for ( int y = 0; y <= w[1] ; y++ ) {
          for ( int x = 0; x <= w[0]; x++ ) {
             int d = getpixelfromimage ( pic, w[0] - x, w[1] - y );
@@ -1622,11 +1622,11 @@ void putrotspriteimage270(int x1, int y1, void *pic, int rotationvalue)
 {
    Uint16* w = (Uint16*) pic;
    collategraphicoperations cgo ( x1, y1, x1+w[0], y1+w[1] );
-   // char* c = (char*) pic + 4;
+   // Uint8* c = (Uint8*) pic + 4;
    int spacelength = agmp->scanlinelength - *w - 1;
 
    if ( agmp->windowstatus == 100 ) {
-      char* buf = (char*) (agmp->scanlinelength * y1 + x1 * agmp->byteperpix + agmp->linearaddress);
+      Uint8* buf = (Uint8*) (agmp->scanlinelength * y1 + x1 * agmp->byteperpix + agmp->linearaddress);
       for ( int y = 0; y <= w[1] ; y++ ) {
          for ( int x = 0; x <= w[0]; x++ ) {
             int d = getpixelfromimage ( pic, w[1] - y, x );
@@ -1648,12 +1648,12 @@ void putrotspriteimage270(int x1, int y1, void *pic, int rotationvalue)
 void puttexture ( int x1, int y1, int x2, int y2, void *texture )
 {
    collategraphicoperations cgo ( x1, y1, x2, y2 );
-   char* c = (char*) texture;
+   Uint8* c = (Uint8*) texture;
    int spacelength = agmp->scanlinelength - (x2 - x1) - 1;
 
    if ( agmp->windowstatus == 100 ) {
       int offset = agmp->scanlinelength * y1 + x1;
-      char* buf = (char*) agmp->linearaddress;
+      Uint8* buf = (Uint8*) agmp->linearaddress;
       for ( int y = y1 ; y <= y2; y++ ) {
          for ( int x = x1; x <= x2 ; x++ ) {
             buf[offset] = c[offset];
@@ -1670,12 +1670,12 @@ void puttexture ( int x1, int y1, int x2, int y2, void *texture )
 void putspritetexture ( int x1, int y1, int x2, int y2, void *texture )
 {
    collategraphicoperations cgo ( x1, y1, x2, y2 );
-   char* c = (char*) texture;
+   Uint8* c = (Uint8*) texture;
    int spacelength = agmp->scanlinelength - (x2 - x1) - 1;
 
    if ( agmp->windowstatus == 100 ) {
       int offset = agmp->scanlinelength * y1 + x1;
-      char* buf = (char*) agmp->linearaddress;
+      Uint8* buf = (Uint8*) agmp->linearaddress;
       for ( int y = y1 ; y <= y2; y++ ) {
          for ( int x = x1; x <= x2 ; x++ ) {
         	 Uint8 d = c[offset];
@@ -1696,7 +1696,7 @@ void putimageprt ( int x1, int y1, int x2, int y2, void *texture, int dx, int dy
    int spacelength = agmp->scanlinelength - (x2-x1) - 1;
 
    if ( agmp->windowstatus == 100 ) {
-      char* buf = (char*) (agmp->scanlinelength * y1 + x1 * agmp->byteperpix + agmp->linearaddress);
+      Uint8* buf = (Uint8*) (agmp->scanlinelength * y1 + x1 * agmp->byteperpix + agmp->linearaddress);
       for ( int y = y1; y <= y2 ; y++ ) {
          for ( int x = x1; x <= x2; x++ ) {
             int p = getpixelfromimage ( texture, x - x1 + dx, y - y1 + dy );
@@ -1732,10 +1732,10 @@ void copybuf2displaymemory(int size, void *buf)
 void* xlatpict ( ppixelxlattable xl, void* vbuf )
 {
 
-   char* buf = (char*) vbuf;
+   Uint8* buf = (Uint8*) vbuf;
 
    Uint16* wp = (Uint16*) xlatbuffer;
-   char* dest = (char*) xlatbuffer;
+   Uint8* dest = (Uint8*) xlatbuffer;
 
    trleheader*   hd = (trleheader*) vbuf; 
 
@@ -1811,7 +1811,7 @@ void showtext ( const char* text, int x, int y, int textcol )
    if ( !text )
      return;
  
-   char* fb = (char*)(x * agmp->byteperpix + y * agmp->scanlinelength + agmp->linearaddress);
+   Uint8* fb = (Uint8*)(x * agmp->byteperpix + y * agmp->scanlinelength + agmp->linearaddress);
    int fontheight;
    int extraheight = 0;
    if ( activefontsettings.height == 0 )
@@ -1826,7 +1826,7 @@ void showtext ( const char* text, int x, int y, int textcol )
     const char* t = text;
     int length = 0;
 
-    char* characterpointer[1024];
+    Uint8* characterpointer[1024];
     int    characterwidth[1024];
     int    characterdist[1024];
     int ps = 0;

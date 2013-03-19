@@ -171,7 +171,7 @@ extern const char*  ceventtrigger[];
          int      id;               /* Id-Nr      ==> Technology.Requireevent; Tevent.trigger; etc.  */
        } ;
 
-       char         player;   // 0..7  fuer die normalen Spieler
+       Uint8         player;   // 0..7  fuer die normalen Spieler
        // 8 wenn das Event unabh"ngig vom Spieler sofort auftreten soll
 
        char         description[20];
@@ -222,8 +222,8 @@ extern const char*  ceventtrigger[];
 
        LargeTriggerData* trigger_data[4];
 
-       char         triggerconnect[4];   /*  CEventTriggerConn */
-       char         triggerstatus[4];   /*  Nur im Spiel: 0: noch nicht erf?llt
+       Uint8         triggerconnect[4];   /*  CEventTriggerConn */
+       Uint8         triggerstatus[4];   /*  Nur im Spiel: 0: noch nicht erf?llt
                                             1: erf?llt, kann sich aber noch "ndern
                                             2: unwiederruflich erf?llt
                                             3: unerf?llbar */

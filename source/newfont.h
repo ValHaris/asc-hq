@@ -110,11 +110,11 @@
 typedef char charr[49];
 
 struct  toldcharacter {
-           char    width;
+	       Uint8    width;
            Uint16  size;
            int     diskposition;
-           char*   memposition;
-           char    dummy;
+           Uint8*   memposition;
+           Uint8    dummy;
         };
 
 typedef signed char    tkerning[101][101];
@@ -125,17 +125,17 @@ typedef char           tkernchartable[256];
 struct toldfont {
          charr            id;
          char             name[256];
-         char             number;
-         char          color;
+         Uint8             number;
+         Uint8          color;
          toldcharacter    character[256];
          Sint16          height;
          tkernchartable   kernchartable;
          tkerning         kerning;
          Uint16           dummy;
-         char             useems;
-         char             caps;
+         Uint8             useems;
+         Uint8             caps;
          dacpalette256*   palette;
-         char      groundline;
+         Uint8      groundline;
          void read ( tnstream& stream );
       };
 
@@ -144,13 +144,13 @@ struct toldfont {
 struct  tcharacter {
            Uint16  width;
            Uint16  size;
-           char*   memposition;
+           Uint8*   memposition;
         };
 
 struct tfont {
          char*            name;
-         char          color;
-         char          caps;
+         Uint8          color;
+         Uint8          caps;
          Sint16          height;
          tcharacter       character[256];
          signed char      kerning[256][256]; 
@@ -167,16 +167,16 @@ typedef tfont* pfont;
 
 struct tfontsettings {
          pfont   font;
-         char    color;
-         char    background;
-         char    markcolor;
-         char colorfont;
+         Uint8    color;
+         Uint8    background;
+         Uint8    markcolor;
+         Uint8 colorfont;
          Uint16  length;
-         char    direction;
-         char    justify;
+         Uint8    direction;
+         Uint8    justify;
          signed char italic;
-         char    height;
-         char    compmode;
+         Uint8    height;
+         Uint8    compmode;
          pfont   markfont;
      };
 
