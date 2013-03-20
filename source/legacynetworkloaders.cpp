@@ -18,7 +18,7 @@
     Boston, MA  02111-1307  USA
 */
 
-#include <SDL/SDL_stdinc.h>
+#include <SDL_stdinc.h>
 #include "util/messaginghub.h"
 
 #pragma pack(1)

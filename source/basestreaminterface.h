@@ -25,7 +25,7 @@
  #define basestreaminterface_h_included
 
 #include <bitset>
-#include <SDL/SDL_stdinc.h>
+#include <SDL_stdinc.h>
  #include "global.h"
 
  #include "ascstring.h"
