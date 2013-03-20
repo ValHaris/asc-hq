@@ -127,7 +127,7 @@ void paintFilledRectangle( Surface& surface, const SPoint& pos, int w, int h, co
    }
 }
 
-extern char saturationTranslationTable[256][256];
+extern Uint8 saturationTranslationTable[256][256];
 
 template< int pixelsize,
 template<int> class ColorMerger >

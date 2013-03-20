@@ -169,16 +169,16 @@ void VehicleType :: read ( tnstream& stream )
    bool ___load_infotext = stream.readInt();
 
    if ( version <= 2 ) {
-      weapons.count = stream.readChar();
+      weapons.count = stream.readUint8();
       for ( j = 0; j< 8; j++ ) {
          weapons.weapon[j].set ( stream.readWord() );
-         weapons.weapon[j].targ = stream.readChar();
-         weapons.weapon[j].sourceheight = stream.readChar();
+         weapons.weapon[j].targ = stream.readUint8();
+         weapons.weapon[j].sourceheight = stream.readUint8();
          weapons.weapon[j].maxdistance = stream.readWord();
          weapons.weapon[j].mindistance = stream.readWord();
-         weapons.weapon[j].count = stream.readChar();
-         weapons.weapon[j].maxstrength = stream.readChar();
-         weapons.weapon[j].minstrength = stream.readChar();
+         weapons.weapon[j].count = stream.readUint8();
+         weapons.weapon[j].maxstrength = stream.readUint8();
+         weapons.weapon[j].minstrength = stream.readUint8();
          for ( int k = 0; k < 13; k++ )
             weapons.weapon[j].efficiency[k] = 100;
       }
@@ -199,7 +199,7 @@ void VehicleType :: read ( tnstream& stream )
       else
          picture[j] = false;
 
-   height = stream.readChar();
+   height = stream.readUint8();
    stream.readWord(); // was: researchID
    int _terrain = 0;
    int _terrainreq = 0;
@@ -209,19 +209,19 @@ void VehicleType :: read ( tnstream& stream )
       _terrainreq = stream.readInt();
       _terrainkill = stream.readInt();
    }
-   stream.readChar(); // steigung
-   jamming = stream.readChar();
+   stream.readUint8(); // steigung
+   jamming = stream.readUint8();
    view = stream.readWord();
-   wait = stream.readChar();
+   wait = stream.readUint8();
 
    if ( version <= 2 )
-      stream.readChar (); // dummy
+      stream.readUint8 (); // dummy
 
    stream.readWord(); // dummy
    stream.readWord(); // dummy
-   stream.readChar(); // dummy
-   stream.readChar(); // dummy
-   stream.readChar(); // dummy
+   stream.readUint8(); // dummy
+   stream.readUint8(); // dummy
+   stream.readUint8(); // dummy
    if ( version <= 18 )
       id = stream.readWord();
    else
@@ -242,12 +242,12 @@ void VehicleType :: read ( tnstream& stream )
 
    for ( j = 0; j < 8; j++ )
       if ( version <= 4 )
-         movement[j] = stream.readChar();
+         movement[j] = stream.readUint8();
       else
          movement[j] = stream.readInt();
 
 
-   movemalustyp = stream.readChar();
+   movemalustyp = stream.readUint8();
    if ( movemalustyp >= cmovemalitypenum )
       movemalustyp = cmovemalitypenum -1;
 
@@ -257,7 +257,7 @@ void VehicleType :: read ( tnstream& stream )
 
    bool ___load_classnames[8];
    if ( version <= 15 ) {
-      stream.readChar(); // classnum
+      stream.readUint8(); // classnum
 
       for ( j = 0; j < 8; j++ )
          ___load_classnames[j] = stream.readInt();
@@ -275,15 +275,15 @@ void VehicleType :: read ( tnstream& stream )
          for ( k = 0; k < 4; k++ )
             stream.readWord();
 
-         stream.readChar();
+         stream.readUint8();
          stream.readInt();
          if ( version <= 2 )
-            stream.readChar( ); // dummy
+            stream.readUint8( ); // dummy
       }
    }
 
-   maxwindspeedonwater = stream.readChar();
-   digrange = stream.readChar();
+   maxwindspeedonwater = stream.readUint8();
+   digrange = stream.readUint8();
    initiative = stream.readInt();
    int _terrainnot = 0;
    if ( version <= 4 ) {
@@ -606,27 +606,27 @@ void VehicleType:: write ( tnstream& stream ) const
 
    productionCost.write( stream );
    stream.writeWord( armor );
-   stream.writeChar( height );
+   stream.writeUint8( height );
    stream.writeWord(0); // researchid
-   stream.writeChar(0); // steigung
-   stream.writeChar(jamming);
+   stream.writeUint8(0); // steigung
+   stream.writeUint8(jamming);
    stream.writeWord(view);
-   stream.writeChar(wait);
+   stream.writeUint8(wait);
    stream.writeWord(0);
    stream.writeWord(0);
-   stream.writeChar(0);
-   stream.writeChar(0);
-   stream.writeChar(0);
+   stream.writeUint8(0);
+   stream.writeUint8(0);
+   stream.writeUint8(0);
    stream.writeInt(id );
    stream.writeInt(fuelConsumption );
    for ( j = 0; j < 8; j++ )
       stream.writeInt( movement[j] );
 
 
-   stream.writeChar(movemalustyp );
+   stream.writeUint8(movemalustyp );
 
-   stream.writeChar(maxwindspeedonwater );
-   stream.writeChar(digrange );
+   stream.writeUint8(maxwindspeedonwater );
+   stream.writeUint8(digrange );
    stream.writeInt(initiative );
    stream.writeInt( objectsBuildable.size() );
 

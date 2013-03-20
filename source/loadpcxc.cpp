@@ -36,21 +36,21 @@
 #pragma pack(1)
 
 struct tpcxheader{
-           char     manufacturer;
-           char     version     ;
-           char     encoding    ;
-           char     bitsperpixel;
+	       Uint8     manufacturer;
+	       Uint8     version     ;
+	       Uint8     encoding    ;
+	       Uint8     bitsperpixel;
            Uint16     xmin,ymin   ;
            Uint16     xmax,ymax   ;
            Uint16     hdpi,vdpi   ;
-           char     colormap[48];
-           char     reserved    ;
-           char     nplanes     ;
+           Uint8     colormap[48];
+           Uint8     reserved    ;
+           Uint8     nplanes     ;
            Uint16     bytesperline;
            Uint16     paletteinfo ;
            Uint16     hscreensize ;
            Uint16     vscreensize ;
-           char     dummy[50]   ;
+           Uint8     dummy[50]   ;
            int      size;            // patch to be able to read pcx files without seeking
 
           void read  ( tnstream* stream );
@@ -59,10 +59,10 @@ struct tpcxheader{
 
 void tpcxheader::read ( tnstream* stream )
 {
-   manufacturer = stream->readChar();
-   version      = stream->readChar();
-   encoding     = stream->readChar();
-   bitsperpixel = stream->readChar();
+   manufacturer = stream->readUint8();
+   version      = stream->readUint8();
+   encoding     = stream->readUint8();
+   bitsperpixel = stream->readUint8();
    xmin         = stream->readWord();
    ymin         = stream->readWord();
    xmax         = stream->readWord();
@@ -70,8 +70,8 @@ void tpcxheader::read ( tnstream* stream )
    hdpi         = stream->readWord();
    vdpi         = stream->readWord();
    stream->readdata ( colormap, 48);
-   reserved     = stream->readChar();
-   nplanes      = stream->readChar();
+   reserved     = stream->readUint8();
+   nplanes      = stream->readUint8();
    bytesperline= stream->readWord();
    paletteinfo = stream->readWord();
    hscreensize = stream->readWord();
@@ -82,10 +82,10 @@ void tpcxheader::read ( tnstream* stream )
 
 void tpcxheader::write ( tnstream* stream )
 {
-   stream->writeChar( manufacturer );
-   stream->writeChar( version );
-   stream->writeChar( encoding );
-   stream->writeChar( bitsperpixel );
+   stream->writeUint8( manufacturer );
+   stream->writeUint8( version );
+   stream->writeUint8( encoding );
+   stream->writeUint8( bitsperpixel );
    stream->writeWord( xmin        );
    stream->writeWord( ymin        );
    stream->writeWord( xmax        );
@@ -93,8 +93,8 @@ void tpcxheader::write ( tnstream* stream )
    stream->writeWord( hdpi        );
    stream->writeWord( vdpi        );
    stream->writedata ( colormap, 48);
-   stream->writeChar( reserved    );
-   stream->writeChar( nplanes     );
+   stream->writeUint8( reserved    );
+   stream->writeUint8( nplanes     );
    stream->writeWord( bytesperline);
    stream->writeWord( paletteinfo );
    stream->writeWord( hscreensize );
@@ -124,7 +124,7 @@ int pcxGetColorDepth ( const ASCString& filename, int* width, int* height )
 }
 
 
-char loadpcxxy( pnstream stream, int x, int y, bool setpalette, int* xsize, int* ysize )
+Uint8 loadpcxxy( pnstream stream, int x, int y, bool setpalette, int* xsize, int* ysize )
 {
    int read = 0;
 
@@ -186,15 +186,15 @@ char loadpcxxy( pnstream stream, int x, int y, bool setpalette, int* xsize, int*
 
 
    // some simple buffering
-   char* buf = new char[header.size];
+   Uint8* buf = new Uint8[header.size];
    // int bufdata =
    stream->readdata ( buf, header.size - sizeof( header ));
    int actpos = 0;
 
 
-   char* dest = (char*) (agmp->linearaddress + x * agmp->byteperpix + y * agmp->bytesperscanline + scanlineret[0]);
+   Uint8* dest = (Uint8*) (agmp->linearaddress + x * agmp->byteperpix + y * agmp->bytesperscanline + scanlineret[0]);
    while ( pixels ) {
-      char a;
+	   Uint8 a;
 
       a = buf[actpos++];
 
@@ -238,7 +238,7 @@ char loadpcxxy( pnstream stream, int x, int y, bool setpalette, int* xsize, int*
          actpos = dataend;
          /*
          while ( read < dataend ) {
-            char scratch[100];
+            Uint8 scratch[100];
             int datalength;
             if ( 100 > dataend - read )
                datalength = dataend - read;
@@ -250,7 +250,7 @@ char loadpcxxy( pnstream stream, int x, int y, bool setpalette, int* xsize, int*
          */
       }    
 
-      char c = buf[actpos++];
+      Uint8 c = buf[actpos++];
       if ( c == 12 ) {
          dacpalette256 pal;
          memcpy ( pal, &buf[actpos], sizeof ( pal ));
@@ -267,7 +267,7 @@ char loadpcxxy( pnstream stream, int x, int y, bool setpalette, int* xsize, int*
 }
 
 
-char loadpcxxy ( const ASCString& name, bool setpal, int xpos, int ypos, int* xsize, int* ysize )
+Uint8 loadpcxxy ( const ASCString& name, bool setpal, int xpos, int ypos, int* xsize, int* ysize )
 {
    tnfilestream s ( name, tnstream::reading );
    return loadpcxxy ( &s, xpos, ypos, setpal, xsize, ysize );
@@ -312,7 +312,7 @@ void writepcx ( const ASCString& name, int x1, int y1, int x2, int y2, dacpalett
          int lastbyte = -1;
          int count = 0;
          for ( int x = x1; x < x1 + header.bytesperline; x++ ) {
-            char c = (getpixel( x, y ) >> ( plane * 8 )) & 0xff;
+        	Uint8 c = (getpixel( x, y ) >> ( plane * 8 )) & 0xff;
 
             if ( (lastbyte == c && count < 63) || lastbyte == -1 ) {
                count ++;
@@ -320,12 +320,12 @@ void writepcx ( const ASCString& name, int x1, int y1, int x2, int y2, dacpalett
             }
             else {
                if ( count > 1 || lastbyte >= 192 ) {
-                  char d = 192 + count;
-                  stream.writeChar ( d );
+            	  Uint8 d = 192 + count;
+                  stream.writeUint8 ( d );
                   fsize += sizeof ( d );
                }
-               char lstbyte = lastbyte;
-               stream.writeChar ( lstbyte );
+               Uint8 lstbyte = lastbyte;
+               stream.writeUint8 ( lstbyte );
                fsize += sizeof ( lstbyte );
                count = 1;
                lastbyte = c;
@@ -333,19 +333,19 @@ void writepcx ( const ASCString& name, int x1, int y1, int x2, int y2, dacpalett
             
          }
          if ( count > 1 || lastbyte >= 192 ) {
-            char d = 192 + count;
-            stream.writeChar ( d );
+        	Uint8 d = 192 + count;
+            stream.writeUint8 ( d );
             fsize += sizeof ( d );
          }
-         char lstbyte = lastbyte;
-         stream.writeChar ( lstbyte );
+         Uint8 lstbyte = lastbyte;
+         stream.writeUint8 ( lstbyte );
          fsize += sizeof ( lstbyte );
    
       }
 
    if ( header.nplanes == 1 ) {
-      char d = 12;
-      stream.writeChar ( d );
+	  Uint8 d = 12;
+      stream.writeUint8 ( d );
       fsize += sizeof ( d );
 
       dacpalette256 pal2;
@@ -417,7 +417,7 @@ void writepcx ( const ASCString& name, const Surface& s, const SDLmm::SRect& rec
          int lastbyte = -1;
          int count = 0;
          for ( int x = x1; x < x1 + header.bytesperline; x++ ) {
-            char c = (s.GetPixel( x, y ) >> shift[plane]) & 0xff;
+        	Uint8 c = (s.GetPixel( x, y ) >> shift[plane]) & 0xff;
    
             if ( (lastbyte == c && count < 63) || lastbyte == -1 ) {
                count ++;
@@ -425,12 +425,12 @@ void writepcx ( const ASCString& name, const Surface& s, const SDLmm::SRect& rec
             }
             else {
                if ( count > 1 || lastbyte >= 192 ) {
-                  char d = 192 + count;
-                  stream.writeChar ( d );
+            	  Uint8 d = 192 + count;
+                  stream.writeUint8 ( d );
                   fsize += sizeof ( d );
                }
-               char lstbyte = lastbyte;
-               stream.writeChar ( lstbyte );
+               Uint8 lstbyte = lastbyte;
+               stream.writeUint8 ( lstbyte );
                fsize += sizeof ( lstbyte );
                count = 1;
                lastbyte = c;
@@ -438,19 +438,19 @@ void writepcx ( const ASCString& name, const Surface& s, const SDLmm::SRect& rec
                
          }
          if ( count > 1 || lastbyte >= 192 ) {
-            char d = 192 + count;
-            stream.writeChar ( d );
+        	Uint8 d = 192 + count;
+            stream.writeUint8 ( d );
             fsize += sizeof ( d );
          }
-         char lstbyte = lastbyte;
-         stream.writeChar ( lstbyte );
+         Uint8 lstbyte = lastbyte;
+         stream.writeUint8 ( lstbyte );
          fsize += sizeof ( lstbyte );
       
       }
 
       if ( header.nplanes == 1 ) {
-         char d = 12;
-         stream.writeChar ( d );
+    	 Uint8 d = 12;
+         stream.writeUint8 ( d );
          fsize += sizeof ( d );
 
          dacpalette256 pal2;

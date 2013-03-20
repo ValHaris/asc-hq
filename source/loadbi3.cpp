@@ -435,19 +435,19 @@ class tloadBImap {
        };
 
        typedef Uint16 TStdProdRec[64];
-       typedef char TAllianzen[6];
+       typedef Uint8 TAllianzen[6];
 
 
        struct TMISSPart {
            char ID[4];
            Uint16 Stuff1 [3];
            Uint16 NextMiss;
-           char StartWeather;
-           char WhoPlays;           // { jeder Mensch/Computer ein Bit }
-           char PlayType;           // { jeder Computer ein Bit }
-           char Recs2Win;           // { Wieviel Gewinnrecords aus map erf llt werden m ssen, damit man gewinnt (f r jeden player gleich) }
-           char Stuff2[3];
-           char Landscape;
+           Uint8 StartWeather;
+           Uint8 WhoPlays;           // { jeder Mensch/Computer ein Bit }
+           Uint8 PlayType;           // { jeder Computer ein Bit }
+           Uint8 Recs2Win;           // { Wieviel Gewinnrecords aus map erf llt werden m ssen, damit man gewinnt (f r jeden player gleich) }
+           Uint8 Stuff2[3];
+           Uint8 Landscape;
            TAllianzen Allianz;      // { Wer mit wem }
            Uint16 Stuff3[65];
            TStdProdRec StdProd;
@@ -461,7 +461,7 @@ class tloadBImap {
        struct TFileMap { 
               Uint16 What1;
               Uint16 Round, Move;
-              char Player, What2;
+              Uint8 Player, What2;
               Uint16 Stuff2;
               Uint16 Zero1;
               Uint16 Nr1;
@@ -497,7 +497,7 @@ class tloadBImap {
                Uint16 Name;
                Uint16 Pos2;
                Uint16 E, M;
-               char EP, MP ;
+               Uint8 EP, MP ;
                TShopContent Content;
                Uint16 ShopType2;
                TProduceRec Produce;
@@ -507,15 +507,15 @@ class tloadBImap {
                Uint16 Stuff66[7];  // { Zero }
             } a;
             struct {
-                char Zero2[6];
+                Uint8 Zero2[6];
                 Uint16 W0A;
-                char Zero3[6];
+                Uint8 Zero3[6];
                 Uint16 W48;
                 Uint16 W4A;
-                char Zero4[2];
+                Uint8 Zero4[2];
                 Uint16 W4E;
             } b;
-            char raw[76];
+            Uint8 raw[76];
          };
        };
 
@@ -760,7 +760,7 @@ void InsertBiMap :: preparemap ( int x, int y  )
 
 void  stu_height ( Vehicle* vehicle )
 {
-   char l;
+   Uint8 l;
    MapField* fld = getfield ( vehicle->xpos, vehicle->ypos );
 
    vehicle->height = chfahrend;
@@ -1499,13 +1499,13 @@ void tloadBImap :: LoadTXTFile ( char* filename )
       
       while (outptr<txtsize)
       {
-         char code=0;
-         char inbuf[16]; // worst case buffer usage is 8*2
+         Uint8 code=0;
+         Uint8 inbuf[16]; // worst case buffer usage is 8*2
          memset(inbuf,0,16);
          int inptr=0;
          if ( fread(&code, 1, 1, fp) != 1 )
             throw treadafterend( filename );
-         char bitsset=((code>>7)&1)+((code>>6)&1)+((code>>5)&1)+((code>>4)&1)+((code>>3)&1)+((code>>2)&1)+((code>>1)&1)+((code>>0)&1);
+         Uint8 bitsset=((code>>7)&1)+((code>>6)&1)+((code>>5)&1)+((code>>4)&1)+((code>>3)&1)+((code>>2)&1)+((code>>1)&1)+((code>>0)&1);
          
          int toread = min(8+bitsset, int(txtsize-outptr));
          fread(&inbuf, toread, 1, fp);
@@ -1519,7 +1519,7 @@ void tloadBImap :: LoadTXTFile ( char* filename )
                outptr++; inptr++;
             } else {
                // repeat
-               char d0,d1;
+               Uint8 d0,d1;
 	       d0=inbuf[inptr]; inptr++;
 	       d1=inbuf[inptr]; inptr++;
                int blklen=(d0&0xf)+3;

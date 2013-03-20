@@ -264,8 +264,8 @@ void BuildingType :: read ( tnstream& stream )
       jamming = stream.readInt( );
       view = stream.readInt( );
       stream.readInt( ); // was: loadcapacity
-      stream.readChar( ); // was: loadcapability =
-      stream.readChar( ); // was: unitheightreq =
+      stream.readUint8( ); // was: loadcapability =
+      stream.readUint8( ); // was: unitheightreq =
       productionCost.material = stream.readInt( );
       productionCost.fuel = stream.readInt( );
       if ( version <= 9 ) {
@@ -273,8 +273,8 @@ void BuildingType :: read ( tnstream& stream )
          convertOldFunctions( special, stream.getLocation() );
       }
 
-      technologylevel = stream.readChar( );
-      stream.readChar( ); // was: researchid 
+      technologylevel = stream.readUint8( );
+      stream.readUint8( ); // was: researchid
 
       terrainaccess.read ( stream );
 
@@ -412,12 +412,12 @@ void BuildingType :: write ( tnstream& stream ) const
    stream.writeInt ( jamming );
    stream.writeInt ( view );
    stream.writeInt ( 0 );
-   stream.writeChar ( 0);
-   stream.writeChar ( 0 );
+   stream.writeUint8 ( 0);
+   stream.writeUint8 ( 0 );
    stream.writeInt ( productionCost.material );
    stream.writeInt ( productionCost.fuel );
-   stream.writeChar ( technologylevel );
-   stream.writeChar ( 0 );
+   stream.writeUint8 ( technologylevel );
+   stream.writeUint8 ( 0 );
 
    terrainaccess.write ( stream );
 

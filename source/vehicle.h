@@ -118,7 +118,7 @@ class UnitHooveringLogic {
     int          height;
 
     //! the direction in which the unit is facing
-    char         direction;
+    Uint8         direction;
 
     //! the position on the map
     int          xpos, ypos;

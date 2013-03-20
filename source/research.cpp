@@ -647,7 +647,7 @@ void Research :: read_struct ( tnstream& stream, bool merge )
       stream.readWord(); // unitimprovement.armor =
 
       for ( int j = 0; j < 44-researchableWeaponImprovements*2; j++ )
-          stream.readChar(); // dummy
+          stream.readUint8(); // dummy
 
       stream.readInt(); // techlevel =
       stream.readInt(); // __loader_techsAvail =

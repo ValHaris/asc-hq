@@ -27,11 +27,10 @@
 #include "basestreaminterface.h"
 
 class tnbufstream  : public tnstream {
-           char  minbuf;
            int datalen;
 
        protected:
-           char* zeiger;
+           Uint8* zeiger;
            IOMode  _mode;
            int   actmempos;
            int   memsize;

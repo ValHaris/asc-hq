@@ -1022,6 +1022,9 @@ bool MapDisplayPG::eventMouseButtonDown (const SDL_MouseButtonEvent *button)
    }
 
 
+   if ( !actmap )
+      return false;
+
    if ( !(mc.valid() && mc.x < actmap->xsize && mc.y < actmap->ysize ))
       return false;
 
@@ -1053,6 +1056,9 @@ bool MapDisplayPG::eventMouseButtonDown (const SDL_MouseButtonEvent *button)
 
 bool MapDisplayPG::eventMouseMotion (const SDL_MouseMotionEvent *button)
 {
+   if ( !actmap )
+       return false;
+
    MapCoordinate mc = screenPos2mapPos( SPoint(button->x, button->y));
    if ( !(mc.valid() && mc.x < actmap->xsize && mc.y < actmap->ysize ))
       return false;

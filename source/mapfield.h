@@ -50,7 +50,7 @@ class  MapField {
     /** mineral resources on this field. 
         \note that mineral resources are different from #Resources , there is a factor of #resource_fuel_factor and #resource_material_factor in between
     */
-    char         fuel, material;
+    Uint8       fuel, material;
 
     int getMineralMaterial() const;
     int getMineralFuel() const;
@@ -69,8 +69,8 @@ class  MapField {
     //! Various algorithms need to store some information in the fields they process. These variables are used for this.
     union  {
       struct {
-        char         temp;
-        char         temp2;
+        Uint8         temp;
+        Uint8         temp2;
       }a;
       Uint16 tempw;
     };
@@ -97,9 +97,9 @@ class  MapField {
       Resourceview ( void );
       void setview( int player, int material, int fuel );
       void resetview( int player );
-      char    visible;      // BM
-      char    fuelvisible[8];
-      char    materialvisible[8];
+      Uint8    visible;      // BM
+      Uint8    fuelvisible[8];
+      Uint8    materialvisible[8];
     };
 
     //! the mineral resources that were seen by a player on this field; since the actual amount may have decreased since the player looked, this value is not identical to the fuel and material fields.
@@ -216,7 +216,7 @@ class  MapField {
     struct View {
       int view;
       int jamming;
-      char mine, satellite, sonar, direct;
+      Uint8 mine, satellite, sonar, direct;
     } view[8];
 
    /** The visibility status for all players is stored in a bitmapped variable. This functions changes the status in this variable for a single player

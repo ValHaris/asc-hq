@@ -27,8 +27,8 @@ VehicleType {
    Armor -= 300
    View = 70
 
-   TerrainAccess.Terrain_any += spaceport
-   Movement += 0 0 0 0 70 100 0 0
+   TerrainAccess.Terrain_any += spaceport runway
+   Movement += 0 0 0 40 70 100 0 0
    FuelConsuption = 45
    Height = floating ground_level low_level_flight medium_level_flight
    Weapons { 
@@ -89,7 +89,7 @@ VehicleType {
       canattack = true
    } HeightChangeMethod4
    HeightChangeMethod5 {
-      movecost = 0
+      movecost = 10
       heightdelta = 1
       dist = 0
       startheight = ground_level

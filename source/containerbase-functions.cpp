@@ -693,7 +693,7 @@ void MiningStation :: testfield ( const MapCoordinate& mc )
          if ( toExtract_thisTurn.resource(r) > 0 ) {
 
             float resourceFactor;
-            char *fieldResource;
+            Uint8 *fieldResource;
 
             if ( r==1) {
                // resourceFactor = resource_material_factor * double(bld->baseType->efficiencymaterial) / 1024;

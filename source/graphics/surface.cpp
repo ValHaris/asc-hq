@@ -220,31 +220,31 @@ void Surface::write ( tnstream& stream ) const
    if ( !valid() ) {
       stream.writeWord( 16974 );
       stream.writeWord ( 1 );
-      stream.writeChar ( 0 );
+      stream.writeUint8 ( 0 );
       stream.writeWord ( 0 );
       stream.writeWord ( 0 );
       return;
    } 
    stream.writeWord( 16974 );
    stream.writeWord ( 1 );
-   stream.writeChar ( 0 );
+   stream.writeUint8 ( 0 );
    stream.writeWord ( w() );
    stream.writeWord ( h() );
    stream.writeInt( surfaceVersion );
 
    SDLmm::PixelFormat pf = GetPixelFormat();
 
-   stream.writeChar ( pf.BitsPerPixel() );
-   stream.writeChar ( pf.BytesPerPixel() );
+   stream.writeUint8 ( pf.BitsPerPixel() );
+   stream.writeUint8 ( pf.BytesPerPixel() );
    stream.writeInt ( GetPixelFormat().colorkey());
    stream.writeInt( flags() );
    if ( pf.BytesPerPixel() == 1 ) {
       for ( int y = 0; y < h(); ++y )
-         stream.writedata( ((char*)me->pixels) + y*pitch(), w() );
+         stream.writedata( ((Uint8*)me->pixels) + y*pitch(), w() );
       /*
       for ( int y = 0; y < h(); ++y )
          for ( int x = 0; x < w(); ++x )
-            stream.writeChar( GetPixel(x,y));
+            stream.writeUint8( GetPixel(x,y));
       */      
    } else {
       SDLmm::PixelFormat pf = GetPixelFormat();
@@ -268,7 +268,7 @@ void Surface::read ( tnstream& stream )
 
   hd.id = stream.readWord();
   hd.size = stream.readWord();
-  hd.rle = stream.readChar();
+  hd.rle = stream.readUint8();
   hd.x = stream.readWord();
   hd.y = stream.readWord();
   
@@ -278,13 +278,13 @@ void Surface::read ( tnstream& stream )
   }
 
    if (hd.id == 16973) {
-      char *pnter = new char [ hd.size + sizeof(hd) ];
+      Uint8 *pnter = new Uint8 [ hd.size + sizeof(hd) ];
       memcpy( pnter, &hd, sizeof(hd));
-      char* q = pnter + sizeof(hd);
+      Uint8* q = pnter + sizeof(hd);
 
       stream.readdata( q, hd.size);  // endian ok ?
 
-      char* uncomp = (char*) uncompress_rlepict ( pnter );
+      Uint8* uncomp = (Uint8*) uncompress_rlepict ( pnter );
       pixelDataPointer = uncomp;
       
       // TODO fix memory leak: uncomp will not be deleted
@@ -292,7 +292,7 @@ void Surface::read ( tnstream& stream )
 
       SDL_Surface* surface = SDL_CreateRGBSurface( SDL_SWSURFACE, hd.x+1, hd.y+1, 8,  0, 0, 0, 0 );
       for ( int y = 0; y <= hd.y; ++y ) {
-         char* dest = ((char*)surface->pixels) + y * surface->pitch;
+         Uint8* dest = ((Uint8*)surface->pixels) + y * surface->pitch;
          memcpy( dest, uncomp+4 + y * (hd.x+1), hd.x+1);
       } 
       free ( uncomp );
@@ -307,8 +307,8 @@ void Surface::read ( tnstream& stream )
          if ( version > surfaceVersion )
             throw tinvalidversion( stream.getLocation(), version, surfaceVersion );
              
-         stream.readChar(); // int bitsPerPixel = 
-         int bytesPerPixel = stream.readChar();
+         stream.readUint8(); // int bitsPerPixel =
+         int bytesPerPixel = stream.readUint8();
          int colorkey = stream.readInt();
          int flags = stream.readInt();
          if ( bytesPerPixel == 1 ) {
@@ -318,7 +318,7 @@ void Surface::read ( tnstream& stream )
                stream.readdata( p + y*s->pitch, hd.x );
             
                /*for ( int x = 0; x< hd.x; ++x )
-                  *(p++) = stream.readChar();*/
+                  *(p++) = stream.readUint8();*/
                   
             SetSurface( s );
             assignDefaultPalette();
@@ -351,10 +351,10 @@ void Surface::read ( tnstream& stream )
          SDL_Surface* s = SDL_CreateRGBSurface( SDL_SWSURFACE, hd.id+1, hd.size+1, 8, 0,0,0,0 );
 
          for ( int y = 0; y <= hd.size; ++y ) {
-            char* pixeldata = (char*)(s->pixels) + y * s->pitch;
+            Uint8* pixeldata = (Uint8*)(s->pixels) + y * s->pitch;
             if ( y == 0 ) {
-               memcpy ( pixeldata, ((char*)&hd) + 4, sizeof ( hd ) - 4);
-               char* q = pixeldata + sizeof(hd) - 4;
+               memcpy ( pixeldata, ((Uint8*)&hd) + 4, sizeof ( hd ) - 4);
+               Uint8* q = pixeldata + sizeof(hd) - 4;
                stream.readdata ( q, s->w - sizeof(hd) + 4 ); 
             } else {
                stream.readdata ( pixeldata, s->w ); 
@@ -362,7 +362,7 @@ void Surface::read ( tnstream& stream )
          }
 /*
 
-         char* pntr = (char*) asc_malloc( w );
+         Uint8* pntr = (Uint8*) asc_malloc( w );
          stream.readdata ( q, w - sizeof(hd) + 4 ); // endian ok ?
 
          SDL_SWSURFACE
@@ -702,7 +702,7 @@ Surface rotateSurface( Surface& s, int degrees )
 void* Surface::toBGI() const
 {
    void* p = malloc( imagesize(1,1,w(),h()) );
-   char* c = (char*) p;
+   Uint8* c = (Uint8*) p;
    Uint16* ww = (Uint16*) p;
    ww[0] = w()-1;
    ww[1] = h()-1;
@@ -735,7 +735,7 @@ void Surface::ColorKey2AlphaChannel()
 {
    Lock();
    for ( int y = 0; y < h(); ++y ) {
-      char* cp = (char*) pixels();
+      Uint8* cp = (Uint8*) pixels();
       cp += y * pitch();
       int* ip = (int*) cp;
       for ( int x = 0; x < w(); ++x, ++ip ) 

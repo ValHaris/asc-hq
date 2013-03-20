@@ -18,6 +18,7 @@
     Boston, MA  02111-1307  USA
 */
 
+#include <SDL/SDL_stdinc.h>
 #include "util/messaginghub.h"
 
 #pragma pack(1)
@@ -27,7 +28,7 @@ enum tnetworkchannel { TN_RECEIVE, TN_SEND };
  typedef class tnetwork* pnetwork;
 
 #define tnetworkdatasize 100
-typedef char tnetworkconnectionparameters[ tnetworkdatasize ];
+typedef Uint8 tnetworkconnectionparameters[ tnetworkdatasize ];
 typedef tnetworkconnectionparameters* pnetworkconnectionparameters;
 
 class tnetworkcomputer {
@@ -44,7 +45,7 @@ class tnetworkcomputer {
 class  tnetwork {
   public:
     struct {
-      char         compposition;   // Nr. des Computers, an dem der SPieler spielt    => network.computernames
+      Uint8         compposition;   // Nr. des Computers, an dem der SPieler spielt    => network.computernames
       int          codewordcrc;
     } player[8];
 
@@ -73,7 +74,7 @@ void        readLegacyNetworkData ( tnstream& stream )
       // this part is really ugly and is rewrite for ASC2
 
          for ( int i = 0; i < 8; ++i ) {
-            network.player[i].compposition = stream.readChar();
+            network.player[i].compposition = stream.readUint8();
             network.player[i].codewordcrc = stream.readInt();
          }
 

@@ -52,18 +52,18 @@ extern void  dispmessage2( const ActionResult& result );
    
 
 
-extern char mix3colors ( int p1, int p2, int p3 );
-extern char mix2colors ( int a, int b );
-extern char mix4colors ( int a, int b, int c, int d );
+extern Uint8 mix3colors ( int p1, int p2, int p3 );
+extern Uint8 mix2colors ( int a, int b );
+extern Uint8 mix4colors ( int a, int b, int c, int d );
 
 
   class   tviewanytext : public tdialogbox, public tviewtextwithscrolling {
                public:
                    const char                 *txt;
-                   char              ok;
+                   int              ok;
                     
-                   char              scrollbarvisible;
-                   char                 action;
+                   int              scrollbarvisible;
+                   int                 action;
                    
                    // int                  textsizey, textsizeycomplete;
                    int                  textstart;

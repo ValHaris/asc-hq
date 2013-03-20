@@ -77,7 +77,7 @@ extern bool mouseDraggedToField( const MapCoordinate& pos, const SPoint& mousePo
 
 extern void         setstartvariables(void);
 extern void         exchg(int *a1,int *a2);
-extern void         k_savemap(char saveas);
+extern void         k_savemap(bool saveas);
 extern void         k_loadmap(void);
 extern void         lines(int      x1,int      y,int      x2,int      y2);
 

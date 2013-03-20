@@ -193,7 +193,7 @@ void TerrainType::MoveMalus::read( tnstream& stream, int defaultValue, int moveM
       if (j < moveMalusCount ) {
          int i;
          if ( version < 2 )
-            i = stream.readChar();
+            i = stream.readUint8();
          else
             i = stream.readInt();
          push_back ( i );
@@ -236,13 +236,13 @@ void TerrainType::Weather::read ( tnstream& stream, int version )
       stream.readInt(); //dummy1
       defensebonus = stream.readWord();
       attackbonus = stream.readWord();
-      basicjamming = stream.readChar();
+      basicjamming = stream.readUint8();
    } else {
       defensebonus = stream.readInt();
       attackbonus = stream.readInt();
       basicjamming = stream.readInt();
    }
-   int move_maluscount = stream.readChar();
+   int move_maluscount = stream.readUint8();
    stream.readInt(); // pgbt->movemalus = (char*)
    stream.readInt(); // pgbt->terraintype
    stream.readInt(); // bool readQuickView
@@ -280,7 +280,7 @@ void TerrainType::Weather::write ( tnstream& stream ) const
    stream.writeInt ( defensebonus );
    stream.writeInt ( attackbonus );
    stream.writeInt ( basicjamming );
-   stream.writeChar ( 0 ); // was: movemalus count
+   stream.writeUint8 ( 0 ); // was: movemalus count
    stream.writeInt ( 1 );
    stream.writeInt ( 1 );
    stream.writeInt ( 0); // was: quickview

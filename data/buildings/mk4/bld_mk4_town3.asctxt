@@ -1,0 +1,16 @@
+BuildingType { 
+   Name = Town
+   ID = 1004
+   parent = 24
+
+   Weather = dry few_snow much_snow snow_and_ice
+
+   Fields = A1 
+   Pictures { 
+      dry = bld_mk4_town3.png
+      few_snow = bld_mk4_town3_fs.png
+      much_snow = bld_mk4_town3_ms.png
+      snow_and_ice = bld_mk4_town3_ms.png
+   } Pictures
+
+} BuildingType

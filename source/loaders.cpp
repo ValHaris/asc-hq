@@ -478,9 +478,9 @@ void   tspfldloaders::writefields ( void )
       */
 
 
-      char b1 = 0;
-      char b3 = 0;
-      char b4 = 0;
+      Uint8 b1 = 0;
+      Uint8 b3 = 0;
+      Uint8 b4 = 0;
 
       if (fld->typ->terraintype->id > 255)
          b1 |= csm_typid32;
@@ -517,13 +517,13 @@ void   tspfldloaders::writefields ( void )
       if ( b3 )
          b1 |= csm_b3;
 
-      stream->writeChar( b1 );
+      stream->writeUint8( b1 );
 
       if (b1 & csm_b3 )
-         stream->writeChar ( b3 );
+         stream->writeUint8 ( b3 );
 
       if (b3 & csm_b4 )
-         stream->writeChar ( b4 );
+         stream->writeUint8 ( b4 );
 
       if (b1 & csm_cnt2 )
          stream->writeInt ( cnt2 );
@@ -544,7 +544,7 @@ void   tspfldloaders::writefields ( void )
       if (b1 & csm_typid32 )
          stream->writeInt ( fld->typ->terraintype->id );
       else
-         stream->writeChar ( fld->typ->terraintype->id );
+         stream->writeUint8 ( fld->typ->terraintype->id );
 
       if (b1 & csm_vehicle )
          fld->vehicle->write ( *stream );
@@ -554,10 +554,10 @@ void   tspfldloaders::writefields ( void )
          fld->building->write ( *stream );
 
       if (b3 & csm_material )
-         stream->writeChar ( fld->material );
+         stream->writeUint8 ( fld->material );
 
       if (b3 & csm_fuel )
-         stream->writeChar ( fld->fuel );
+         stream->writeUint8 ( fld->fuel );
 
       if (b3 & csm_visible )
          stream->writeWord ( fld->visible );
@@ -589,11 +589,11 @@ void   tspfldloaders::writefields ( void )
       }
 
       if (b4 & csm_resources ) {
-         stream->writeChar ( fld->resourceview->visible );
+         stream->writeUint8 ( fld->resourceview->visible );
          for ( int i = 0; i < 8; i++ )
-            stream->writeChar ( fld->resourceview->fuelvisible[i] );
+            stream->writeUint8 ( fld->resourceview->fuelvisible[i] );
          for ( int i = 0; i < 8; i++ )
-            stream->writeChar ( fld->resourceview->materialvisible[i] );
+            stream->writeUint8 ( fld->resourceview->materialvisible[i] );
       }
 
       if ( b4 & csm_connection )
@@ -633,16 +633,16 @@ void tspfldloaders::readfields ( void )
 
          fld2->bdt.setInt ( 0 , 0 );
 
-         char b1, b3, b4;
-         b1 = stream->readChar();
+         Uint8 b1, b3, b4;
+         b1 = stream->readUint8();
 
          if (b1 & csm_b3 )
-            b3 = stream->readChar();
+            b3 = stream->readUint8();
          else
             b3 = 0;
 
          if (b3 & csm_b4 )
-            b4 = stream->readChar();
+            b4 = stream->readUint8();
          else
             b4 = 0;
 
@@ -664,7 +664,7 @@ void tspfldloaders::readfields ( void )
          if (b1 & csm_typid32 )
             k = stream->readInt();
          else
-            k = stream->readChar();
+            k = stream->readUint8();
 
          pterraintype trn = terrainTypeRepository.getObject_byID ( k );
          if ( !trn )
@@ -678,7 +678,7 @@ void tspfldloaders::readfields ( void )
          }
 
          if (b1 & csm_direction )
-            stream->readChar();  // fld2->direction = 0;
+            stream->readUint8();  // fld2->direction = 0;
 
 
          if (b1 & csm_vehicle ) {
@@ -692,12 +692,12 @@ void tspfldloaders::readfields ( void )
          }
 
          if (b3 & csm_material)
-            fld2->material = stream->readChar();
+            fld2->material = stream->readUint8();
          else
             fld2->material = 0;
 
          if (b3 & csm_fuel)
-            fld2->fuel = stream->readChar();
+            fld2->fuel = stream->readUint8();
          else
             fld2->fuel = 0;
 
@@ -710,8 +710,8 @@ void tspfldloaders::readfields ( void )
 
          if (b3 & csm_object ) {
 
-            char minetype = stream->readChar();
-            char minestrength = stream->readChar();
+        	Uint8 minetype = stream->readUint8();
+        	Uint8 minestrength = stream->readUint8();
             if ( minetype >> 4 ) {
                Mine m( MineTypes((minetype >> 1) & 7), minestrength, minetype >> 4, spfld );
                fld2->mines.push_back ( m );
@@ -802,11 +802,11 @@ void tspfldloaders::readfields ( void )
 
          if (b4 & csm_resources ) {
             fld2->resourceview = new MapField::Resourceview;
-            fld2->resourceview->visible = stream->readChar();
+            fld2->resourceview->visible = stream->readUint8();
             for ( int i = 0; i < 8; i++ )
-               fld2->resourceview->fuelvisible[i] = stream->readChar();
+               fld2->resourceview->fuelvisible[i] = stream->readUint8();
             for ( int i = 0; i < 8; i++ )
-               fld2->resourceview->materialvisible[i] = stream->readChar();
+               fld2->resourceview->materialvisible[i] = stream->readUint8();
          }
 
          if ( b4 & csm_connection )

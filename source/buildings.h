@@ -38,7 +38,7 @@ class MapField;
 class  Building : public ContainerBase {
     MapCoordinate entryPosition;
 
-    char         _completion;
+    Uint8         _completion;
 
     friend class tprocessminingfields;
     

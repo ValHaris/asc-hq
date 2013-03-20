@@ -54,7 +54,7 @@ tnbufstream::tnbufstream (  )
 
   do {
       memsize = maxav;
-      zeiger = new char [ memsize ];
+      zeiger = new Uint8 [ memsize ];
 
       maxav /= 0x10;
      

@@ -387,10 +387,12 @@ void  checkforvictory ( GameMap* gamemap, bool hasTurnControl )
 
 
             if ( !gamemap->campaign.avail ) {
-               char txt[1000];
+               const int bufsize= 1000;
+               char txt[bufsize];
                const char* sp = getmessage( 10010 ); // Message "player has been terminated"
+               txt[bufsize-1] = 0;
    
-               sprintf ( txt, sp, gamemap->player[i].getName().c_str() );
+               snprintf ( txt, bufsize, sp, gamemap->player[i].getName().c_str() );
                new Message ( txt, gamemap, to  );
             } 
 

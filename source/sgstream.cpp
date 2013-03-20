@@ -71,7 +71,7 @@ void loadpalette ( void )
 
       tnfilestream stream ("palette.pal", tnstream::reading);
       stream.readdata( & pal, sizeof(pal));
-      colormixbufchar = new char [ sizeof ( tmixbuf ) ];
+      colormixbufchar = new Uint8 [ sizeof ( tmixbuf ) ];
       colormixbuf = (pmixbuf) colormixbufchar;
       stream.readdata( colormixbuf,  sizeof ( *colormixbuf ));
 
@@ -441,7 +441,7 @@ void checkFileLoadability ( const ASCString& filename )
 {
    try {
       tnfilestream strm ( filename, tnstream::reading );
-      strm.readChar();
+      strm.readUint8();
    }
    catch ( ASCexception ) {
       ASCString msg = "Unable to access " + filename + "\n";

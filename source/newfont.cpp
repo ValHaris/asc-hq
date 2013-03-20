@@ -81,33 +81,33 @@ void toldfont::read ( tnstream& stream )
 {
    stream.readdata ( &id, sizeof ( id ));
    stream.readdata ( &name, sizeof ( name ));
-   number = stream.readChar();
-   color = stream.readChar();
+   number = stream.readUint8();
+   color = stream.readUint8();
    for ( int i = 0; i < 256; ++i ) {
-      character[i].width = stream.readChar();
+      character[i].width = stream.readUint8();
       character[i].size = stream.readWord();
       character[i].diskposition = stream.readInt();
       character[i].memposition = NULL; stream.readInt();
-      character[i].dummy = stream.readChar();
+      character[i].dummy = stream.readUint8();
    }
    height = stream.readWord();
    for ( int i = 0; i < 256; ++i )
-      kernchartable[i] = stream.readChar();
+      kernchartable[i] = stream.readUint8();
    for ( int i = 0; i < 101; ++i )
       for ( int j = 0; j < 101; ++j )
-         kerning[i][j] = stream.readChar();
+         kerning[i][j] = stream.readUint8();
 
    dummy = stream.readWord();
-   useems = stream.readChar();
-   caps = stream.readChar();
+   useems = stream.readUint8();
+   caps = stream.readUint8();
    palette = NULL; stream.readInt();
-   groundline = stream.readChar();
+   groundline = stream.readUint8();
 }
 
 pfont        loadfont( tnstream* stream )
 {
    toldfont     *font1;
-   char *p;
+   Uint8 *p;
    void         *q;
    int      ll, ll2;
    int i;
@@ -127,11 +127,11 @@ pfont        loadfont( tnstream* stream )
       if ( font1->character[i].size ) {
          ll2 = ( font1->character[i].size / 8 + 1) * 8;
          q = new char [ ll2+2 ];
-         font1->character[i].memposition = (char*) q;
+         font1->character[i].memposition = (Uint8*) q;
 
          if (font1->color == false) {
             ll = font1->character[i].size / 8 + 1;
-            p = new char [ ll + 2 ];
+            p = new Uint8 [ ll + 2 ];
 
             *((Uint16*)p) = stream->readWord();
 
@@ -151,13 +151,13 @@ pfont        loadfont( tnstream* stream )
       } else {
         if (i == 32) {
            ll = font1->height * ( font1->character[spacewidthkey].width - 2 );
-           p = new char [ ll+2 ];
+           p = new Uint8 [ ll+2 ];
            Uint16* pg = (Uint16*) p;
            memset(p,0,ll+2);
            *pg = font1->character[spacewidthkey].width - 2;
            font1->character[i].width = font1->character[spacewidthkey].width - 2;
            font1->character[i].size = ll;
-           font1->character[i].memposition = (char*) p;
+           font1->character[i].memposition = (Uint8*) p;
         } /* endif */
      }
    }

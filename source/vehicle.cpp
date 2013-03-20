@@ -1101,7 +1101,7 @@ void Vehicle :: fillMagically( bool ammunition, bool resources )
 
 
 
-const int vehicleVersion = 10;
+const int vehicleVersion = 11;
 
 void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits ) const
 {
@@ -1109,13 +1109,10 @@ void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits ) const
     stream.writeInt( min( vehicleVersion, UNITVERSIONLIMIT ) );
     stream.writeInt( typ->id );
 
-    stream.writeChar ( color );
+    stream.writeUint8 ( color );
 
     int bm = cem_version;
 
-    if ( experience_offensive )
-       bm |= cem_experience;
-    
     if ( damage    )
        bm |= cem_damage;
 
@@ -1173,11 +1170,8 @@ void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits ) const
 
     stream.writeInt( min( vehicleVersion, UNITVERSIONLIMIT )  );
 
-    if ( bm & cem_experience )
-         stream.writeChar ( experience_offensive );
-
     if ( bm & cem_damage )
-         stream.writeChar ( damage );
+         stream.writeUint8 ( damage );
 
     if ( bm & cem_fuel )
          stream.writeInt ( tank.fuel );
@@ -1199,7 +1193,7 @@ void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits ) const
        if ( UNITVERSIONLIMIT > 3 ) 
          stream.writeInt ( c );
        else
-         stream.writeChar ( c );
+         stream.writeUint8 ( c );
 
        for ( Cargo::const_iterator i = cargo.begin(); i != cargo.end(); ++i )
           if ( *i ) 
@@ -1207,13 +1201,13 @@ void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits ) const
     }
 
     if ( bm & cem_height )
-         stream.writeChar ( height );
+         stream.writeUint8 ( height );
 
     if ( bm & cem_movement )
          stream.writeInt ( _movement );
 
     if ( bm & cem_direction )
-         stream.writeChar ( direction );
+         stream.writeUint8 ( direction );
 
     if ( bm & cem_material )
          stream.writeInt ( tank.material );
@@ -1225,13 +1219,13 @@ void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits ) const
          stream.writeInt ( networkid );
 
     if ( bm & cem_attacked )
-         stream.writeChar ( attacked );
+         stream.writeUint8 ( attacked );
 
     if ( bm & cem_name     )
          stream.writeString ( name );
 
     if ( bm & cem_reactionfire )
-       stream.writeChar ( reactionfire.status );
+       stream.writeUint8 ( reactionfire.status );
 
     if ( bm & cem_poweron )
        stream.writeInt ( generatoractive );
@@ -1276,6 +1270,7 @@ void   Vehicle::write ( tnstream& stream, bool includeLoadedUnits ) const
     stream.writeString( privateName );
     
     stream.writeInt( experience_defensive );
+    stream.writeInt( experience_offensive );
 }
 
 void   Vehicle::read ( tnstream& stream )
@@ -1286,7 +1281,7 @@ void   Vehicle::read ( tnstream& stream )
        _id = stream.readInt();
     }
 
-    stream.readChar (); // color
+    stream.readUint8 (); // color
     if ( _id != typ->id )
        fatalError ( "Vehicle::read - trying to read a unit of different type" );
 
@@ -1303,7 +1298,7 @@ void   Vehicle::readData ( tnstream& stream )
        version = stream.readInt();
 
     if ( bm & cem_experience ) {
-       experience_offensive = stream.readChar();
+       experience_offensive = stream.readUint8();
 
        if ( version < 10 )
        	experience_offensive *= experienceResolution;
@@ -1312,7 +1307,7 @@ void   Vehicle::readData ( tnstream& stream )
        experience_offensive = 0;
     
     if ( bm & cem_damage )
-       damage = stream.readChar();
+       damage = stream.readUint8();
     else
        damage = 0;
 
@@ -1356,7 +1351,7 @@ void   Vehicle::readData ( tnstream& stream )
     if ( bm & cem_loading ) {
        int c;
        if ( version <= 3 )
-          c = stream.readChar();
+          c = stream.readUint8();
        else
           c = stream.readInt();   
 
@@ -1375,7 +1370,7 @@ void   Vehicle::readData ( tnstream& stream )
     }
 
     if ( bm & cem_height )
-       height = stream.readChar();
+       height = stream.readUint8();
     else
        height = chfahrend;
 
@@ -1385,7 +1380,7 @@ void   Vehicle::readData ( tnstream& stream )
     if ( bm & cem_movement ) {
        int m;
        if ( version <= 6 )
-          m = stream.readChar();
+          m = stream.readUint8();
        else
           m = stream.readInt();
        
@@ -1394,7 +1389,7 @@ void   Vehicle::readData ( tnstream& stream )
        setMovement ( typ->movement [ getFirstBit ( height ) ], 0 );
 
     if ( bm & cem_direction )
-       direction = stream.readChar();
+       direction = stream.readUint8();
     else
        direction = 0;
 
@@ -1411,7 +1406,7 @@ void   Vehicle::readData ( tnstream& stream )
        tank.energy = getStorageCapacity().energy;
 
     if ( bm & cem_class )
-       stream.readChar(); // was: class
+       stream.readUint8(); // was: class
 
     if ( bm & cem_armor )
        stream.readWord(); // was: armor
@@ -1422,7 +1417,7 @@ void   Vehicle::readData ( tnstream& stream )
        networkid = 0;
 
     if ( bm & cem_attacked )
-       attacked = stream.readChar();
+       attacked = stream.readUint8();
     else
        attacked = false;
 
@@ -1431,11 +1426,11 @@ void   Vehicle::readData ( tnstream& stream )
 
     int reactionfirestatus = 0;
     if ( bm & cem_reactionfire )
-       reactionfirestatus = stream.readChar();
+       reactionfirestatus = stream.readUint8();
 
     int reactionfireenemiesAttackable = 0;
     if ( bm & cem_reactionfire2 )
-       reactionfireenemiesAttackable = stream.readChar();  
+       reactionfireenemiesAttackable = stream.readUint8();
 
     if ( reactionfirestatus >= 8 && reactionfireenemiesAttackable <= 4 ) { // for transition from the old reactionfire system ( < ASC1.2.0 ) to the new one ( >= ASC1.2.0 )
        reactionfire.status = ReactionFire::Status ( reactionfireenemiesAttackable );
@@ -1532,6 +1527,9 @@ void   Vehicle::readData ( tnstream& stream )
        experience_defensive = stream.readInt();
     else
        experience_defensive = experience_offensive;
+    
+    if ( version >= 11 )
+       experience_offensive = stream.readInt();
 }
 
 MapCoordinate3D Vehicle :: getPosition ( ) const
@@ -1713,7 +1711,7 @@ Vehicle* Vehicle::newFromStream ( GameMap* gamemap, tnstream& stream, int forceN
    if ( !fzt )
       throw InvalidID ( "vehicle", id );
 
-   int color = stream.readChar ();
+   int color = stream.readUint8 ();
 
    // a forced networkID of -2 will prevent any ID from being assigned and the unit not being registered in the ID cache
    Vehicle* v = new Vehicle ( fzt, gamemap, color/8, -2 );

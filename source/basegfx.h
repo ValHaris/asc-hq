@@ -62,14 +62,14 @@ struct  tgraphmodeparameters {
             int           byteperpix       ;       //!< the distance between two pixel
             PointerSizedInt linearaddress    ;       //!< the pointer to the actual memory (typecast to char* )
             int           pagetoset        ;       //!< only used in DOS with paged graphic memory
-            char          redmasksize       ;      //!< RGB only: the number of bits in the red component
-            char          redfieldposition  ;      //!< RGB only: the position of the first red bit relative to the start of the pixel
-            char          greenmasksize     ;      //!< RGB only: the number of bits in the green component
-            char          greenfieldposition;      //!< RGB only: the position of the first green bit relative to the start of the pixel
-            char          bluemasksize      ;      //!< RGB only: the number of bits in the blue component
-            char          bluefieldposition ;      //!< RGB only: the position of the first blue bit relative to the start of the pixel
-            char          bitperpix         ;      //!< the size of a pixel(?) in bits
-            char          memorymodel;             //!< unused
+            Uint8          redmasksize       ;      //!< RGB only: the number of bits in the red component
+            Uint8          redfieldposition  ;      //!< RGB only: the position of the first red bit relative to the start of the pixel
+            Uint8          greenmasksize     ;      //!< RGB only: the number of bits in the green component
+            Uint8          greenfieldposition;      //!< RGB only: the position of the first green bit relative to the start of the pixel
+            Uint8          bluemasksize      ;      //!< RGB only: the number of bits in the blue component
+            Uint8          bluefieldposition ;      //!< RGB only: the position of the first blue bit relative to the start of the pixel
+            Uint8          bitperpix         ;      //!< the size of a pixel(?) in bits
+            Uint8          memorymodel;             //!< unused
             int           directscreenaccess;      //!< if 0 no call to an update function (which copies the buffer to the screen) is performed
             Surface*      surface;
             tgraphmodeparameters() : surface(NULL) {};
@@ -79,7 +79,7 @@ struct  tgraphmodeparameters {
 struct trleheader {
    Uint16 id;
    Uint16 size;
-   char rle;
+   Uint8 rle;
    Uint16 x;
    Uint16 y;
 };
@@ -117,7 +117,7 @@ extern void*     xlatbuffer;
 
 
  //! paints a colored bar
- extern void bar(int x1, int y1, int x2, int y2, char color);
+ extern void bar(int x1, int y1, int x2, int y2, Uint8 color);
 
  //! copy an image to a buffer. buffer must have been alloced before with malloc ( imagesize ( x1,y1,x2,y2 ))
  extern void getimage(int x1, int y1, int x2, int y2, void *buffer);
@@ -215,7 +215,7 @@ extern void*     xlatbuffer;
       palette pal. offset and size specify a range of colors that are assumed to be a linear
       transition from white to black. So all colors are mapped to one of the colors of the
       offset-size range. */
- extern void  generategrayxlattable( ppixelxlattable tab, char offset, char size, dacpalette256* pal );
+ extern void  generategrayxlattable( ppixelxlattable tab, Uint8 offset, Uint8 size, dacpalette256* pal );
 
 #if 0
  /** puts a shadow of an image on the screen. This is done by replacing all pixels on the screen
@@ -230,20 +230,20 @@ extern void*     xlatbuffer;
 extern void         rahmen( bool invers, int x1, int y1, int x2, int y2);
 
 //! draws a simple line on the screen. Not very fast...
-extern void         line(int x1, int y1, int x2, int y2, char color );
+extern void         line(int x1, int y1, int x2, int y2, Uint8 color );
 
 /** draws a simple line on the screen, but performs a XOR operation between the pixel already 
      on screen and color. Thus the line will always have a color different then the one
      that was previously there. And it can be undone by displaying it a second time. */
-extern void xorline( int x1, int y1, int x2, int y2, char color );
+extern void xorline( int x1, int y1, int x2, int y2, Uint8 color );
 
 //! draws a simple rectangl
-extern void rectangle(int x1, int y1, int x2, int y2, char color );
+extern void rectangle(int x1, int y1, int x2, int y2, Uint8 color );
 
 /** draws a simple rectangle on the screen, but performs a XOR operation between the pixel already
      on screen and color. Thus the rectangle will always have a color different then the one
      that was previously there. And it can be undone by displaying it a second time. */
-extern void  xorrectangle(int x1, int y1, int x2, int y2, char color) ;
+extern void  xorrectangle(int x1, int y1, int x2, int y2, Uint8 color) ;
 
 //! obsolete. not used any more. can be removed.
 void putinterlacedrotimage ( int x1, int y1, void* ptr, int rotation );
@@ -265,12 +265,12 @@ void* halfpict ( void* vbuf );
 
 /** rotates the picture image by angle clockwise. The resulting image will have exactly the
     same size as the original image, resulting in the image being clipped      */
-char* rotatepict ( void* image, int angle );
+Uint8* rotatepict ( void* image, int angle );
 
 
 /** rotates the picture image by angle clockwise. The resulting image will be larger
     than the original one   */
-char* rotatepict_grw ( void* image, int organgle );
+Uint8* rotatepict_grw ( void* image, int organgle );
 
 
 //! returns the pixel at position x/y of the image buf or -1 if the pixel does not exist
@@ -336,9 +336,9 @@ struct trgbpixel {
          union {
             int rgb;
             #if SDL_BYTEORDER == SDL_LIL_ENDIAN
-            struct { char r,g,b,a;  }channel;
+            struct { Uint8 r,g,b,a;  }channel;
             #else
-            struct { char a,b,g,r;  }channel;
+            struct { Uint8 a,b,g,r;  }channel;
             #endif
           };
        //    mix ( const trgbpixel* pix );
@@ -377,7 +377,7 @@ extern char* convertimage ( TrueColorImage* img, dacpalette256 pal );
 
 /** a table to speed up conversion from truecolor to 8bit palette. The 6 most significant bits
      of each color component (RGB) form the the index.       */
-// extern char truecolor2pal_table[262144];
+// extern Uint8 truecolor2pal_table[262144];
 
 //! puts the image pointed to by tci to the screen. Both must be truecolor images. This function is a quick and unoptimized hack!
 extern void putimage ( int x1, int y1, TrueColorImage* tci );

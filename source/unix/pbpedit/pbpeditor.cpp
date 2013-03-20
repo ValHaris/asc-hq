@@ -2,7 +2,7 @@ static ASCString ASCfilename;
 
 #include "network/simple_file_transfer.h"
 
-void         k_savemap(char saveas)
+void         k_savemap(bool saveas)
 {
    ASCString filename;
 

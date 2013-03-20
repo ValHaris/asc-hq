@@ -74,7 +74,7 @@
 struct trleheader {
    unsigned short int id;
    unsigned short int size;
-   char rle;
+   Uint8 rle;
    unsigned short int x;
    unsigned short int y;
 };
@@ -203,19 +203,19 @@ void         tnstream::readrlepict( void** pnter, bool allocated, int* size)
 { 
   trleheader   hd; 
   int          w;
-  char*        q;
+  Uint8*        q;
 
   hd.id = readWord();
   hd.size = readWord();
-  hd.rle = readChar();
+  hd.rle = readUint8();
   hd.x = readWord();
   hd.y = readWord();
 
    if (hd.id == 16973) {
       if (!allocated)
-        *pnter = new char [ hd.size + sizeof(hd) ];
+        *pnter = new Uint8 [ hd.size + sizeof(hd) ];
       memcpy( *pnter, &hd, sizeof(hd));
-      q = (char*) (*pnter) + sizeof(hd);
+      q = (Uint8*) (*pnter) + sizeof(hd);
 
       readdata( q, hd.size);  // endian ok ?
       *size = hd.size + sizeof(hd);
@@ -223,9 +223,9 @@ void         tnstream::readrlepict( void** pnter, bool allocated, int* size)
    else {
       w =  (hd.id + 1) * (hd.size + 1) + 4 ;
       if (!allocated)
-        *pnter = new char [ w ];
+        *pnter = new Uint8 [ w ];
       memcpy ( *pnter, &hd, sizeof ( hd ));
-      q = (char*) (*pnter) + sizeof(hd);
+      q = (Uint8*) (*pnter) + sizeof(hd);
       readdata ( q, w - sizeof(hd) ); // endian ok ?
       *size = w;
    }
@@ -247,7 +247,7 @@ void tnstream :: writeImage ( const void* buf, bool compress )
 	 trleheader* hd = (trleheader*) tempbuf;
 	 writeWord( hd->id );
 	 writeWord( hd->size );
-	 writeChar( hd->rle );
+	 ( hd->rle );
 	 writeWord( hd->x );
 	 writeWord( hd->y );
 	 
@@ -295,9 +295,16 @@ int tnstream::readWord ( void )
    return SDL_SwapLE16( w );
 }
 
-char tnstream::readChar ( void )
+char tnstream::readCharacter ( void )
 {
    char c;
+   readdata2 ( c );
+   return c;
+}
+
+Uint8 tnstream::readUint8 ( void )
+{
+   Uint8 c;
    readdata2 ( c );
    return c;
 }
@@ -307,7 +314,7 @@ float SwapFloat( float f )
   union
   {
     float f;
-    unsigned char b[4];
+    Uint8 b[4];
   } dat1, dat2;
 
   dat1.f = f;
@@ -365,7 +372,12 @@ void tnstream::writeWord ( int w )
    writedata2 ( w2 );
 }
 
-void tnstream::writeChar ( char c )
+void tnstream::writeCharacter ( char c )
+{
+   writedata2 ( c );
+}
+
+void tnstream::writeUint8 ( Uint8 c )
 {
    writedata2 ( c );
 }
@@ -550,7 +562,7 @@ void         tnstream::writepchar(const char* pc)
             pch1++;
          writedata( pch1, 1 );
          loop++;
-      } while ( *pch1 > 0  ); /* enddo */
+      } while ( *pch1 != 0  ); /* enddo */
    } else {
        char         pch1 = 0;
        writedata ( &pch1, 1 );
@@ -1737,7 +1749,7 @@ static const char asciiCodingTable[64] = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H
 ASCIIEncodingStream::ASCIIEncodingStream() : shift(0), buf(0) {};
 
 void ASCIIEncodingStream::writedata ( const void* buf, int size ) {
-   const char* c = (const char*)buf;
+   const Uint8* c = (const Uint8*)buf;
    for ( int i = 0; i < size; ++i )
       put ( c[i] );
 }
@@ -1745,7 +1757,7 @@ int ASCIIEncodingStream::readdata  ( void* buf, int size, bool excpt  ) {
    throw  tinvalidmode ( "Base64SerializingStream", reading, writing );
 }
 
-void ASCIIEncodingStream::put( char c )
+void ASCIIEncodingStream::put( Uint8 c )
  {
     if ( shift == 0 ) {
        buf = c >> 6;
@@ -1814,21 +1826,21 @@ int ASCIIDecodingStream :: readdata  ( void* buffer, int size, bool excpt  )
 {
    int i = 0;
    try {
-      char* cbuf = (char*) buffer;
+      Uint8* cbuf = (Uint8*) buffer;
       for ( i = 0; i < size; ++i ) {
          if ( shift == 0 ) {
-            char c = get();
-            char c2 = get();
+            int c = get();
+            int c2 = get();
             cbuf[i] = c | ((c2 << 6) & 0xff);
             shift = 2;
             buf = c2 >> 2;
          } else if ( shift == 2 ) {
-            char c = get();
+            int c = get();
             cbuf[i] = buf | ((c << 4) &  0xff );
             buf = c >> 4;
             shift = 4;
          } else if ( shift == 4 ) {
-            char c = get();
+            int c = get();
             cbuf[i] = buf | (c << 2 );
             shift = 0;
          }
@@ -2314,7 +2326,7 @@ int checkforvaliddirectory ( char* dir )
         }
         if ( used > 0 || allocated > 0 ) {
            allocated = max(allocated,used);
-           buf = new char[allocated];
+           buf = new Uint8[allocated];
            stream->readdata ( buf, used );
         }
      }
@@ -2341,7 +2353,7 @@ MemoryStream :: MemoryStream ( MemoryStreamStorage* lbuf, IOMode lmode )
          delete[] buf->buf;
          buf->buf = NULL;
       }
-      buf->buf = new char[blocksize];
+      buf->buf = new Uint8[blocksize];
       buf->allocated = blocksize;
       buf->used = 0;
       pointer = buf->buf;
@@ -2362,7 +2374,7 @@ void MemoryStream :: writedata ( const void* nbuf, int size )
    if ( buf->used + size > buf->allocated ) {
       int newsize = ((buf->used + size + blocksize - 1) / blocksize);
       newsize *= blocksize;
-      char* tmp = new char[newsize];
+      Uint8* tmp = new Uint8[newsize];
       memcpy ( tmp, buf->buf, buf->used );
       delete[] buf->buf;
       buf->buf = tmp;

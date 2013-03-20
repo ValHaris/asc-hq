@@ -65,14 +65,16 @@
 #ifndef palette_h_included
  #define palette_h_included
 
+#include <SDL/SDL_stdinc.h>
+
 #pragma pack(1)
 
-typedef char tmixbuf[256][256];
+typedef Uint8 tmixbuf[256][256];
 typedef tmixbuf* pmixbuf;
-typedef char tpixelxlattable[256];
+typedef Uint8 tpixelxlattable[256];
 typedef tpixelxlattable* ppixelxlattable; 
-typedef char dacpalette256[256][3];
-typedef char dacpalettefst[256][4];
+typedef Uint8 dacpalette256[256][3];
+typedef Uint8 dacpalettefst[256][4];
 
 
    struct txlattables {
@@ -103,7 +105,7 @@ extern tpixelxlattable light;
 
 // tables storing the color that results when two palette colors are mixed
 extern tmixbuf *colormixbuf;
-extern char* colormixbufchar;
+extern Uint8* colormixbufchar;
 
 
 extern dacpalette256 pal;

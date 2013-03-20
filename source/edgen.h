@@ -107,7 +107,7 @@ struct tmemoryblock {
    int color[maxtilevals+1];
    int tileval[maxtilevals];
    char bordername[maxtilevals][20];
-   char generated;
+   Uint8 generated;
    int startblocksize;
    int tilevalcount,acttile;
    };
@@ -117,7 +117,7 @@ typedef tmemoryblock *pmemoryblock;
 class tplasma {
     public :
         int maxx,maxy,maxvalue;
-        char flip;
+        Uint8 flip;
         int blockcount;
         pmemoryblock memblock;
         tplasma(void);
@@ -127,7 +127,7 @@ class tplasma {
         void setmemory(int x, int y, int color);
         /*void preview(int sx, int sy,int barsize);
         void process(int sx, int sy,int barsize);*/
-        void generateplasma(char resettile);
+        void generateplasma(Uint8 resettile);
 
         int xsymm, ysymm;
    };
