@@ -48,7 +48,7 @@
 
 #ifndef stack_h_included
  #define stack_h_included
- #include <SDL/SDL_stdinc.h>
+ #include <SDL_stdinc.h>
 
  #define npush(a) pushdata( (Uint8*)&a, sizeof ( a ) )
  #define npop(a) popdata ( (Uint8*)&a, sizeof ( a ) )
