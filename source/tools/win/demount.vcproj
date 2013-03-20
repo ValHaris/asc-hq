@@ -47,7 +47,6 @@
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
-				DefaultCharIsUnsigned="true"
 				WarningLevel="3"
 				DebugInformationFormat="3"
 				DisableSpecificWarnings="4800;4018;4244;4355;4305;4786;4996"
@@ -133,7 +132,6 @@
 				MinimalRebuild="false"
 				RuntimeLibrary="2"
 				BufferSecurityCheck="false"
-				DefaultCharIsUnsigned="true"
 				WarningLevel="3"
 				DisableSpecificWarnings="4800;4018;4244;4355;4305;4786;4996"
 			/>

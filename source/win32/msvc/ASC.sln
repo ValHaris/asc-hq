@@ -45,13 +45,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "paragui_static", "..\..\lib
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pbpeditor", "pbpeditor\pbpeditor.vcproj", "{1203BEF2-3F60-449A-9E7D-3BC0BF261D7C}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "makegfx", "..\..\tools\win\makegfx.vcproj", "{1D6CCCEF-902C-4AE7-A79F-7AD9F4576209}"
-	ProjectSection(ProjectDependencies) = postProject
-		{2D401A22-BAA4-11D5-8156-00805F852A9B} = {2D401A22-BAA4-11D5-8156-00805F852A9B}
-		{E14FAA4A-B45F-4E09-9BE6-78CA0247F915} = {E14FAA4A-B45F-4E09-9BE6-78CA0247F915}
-		{7DD5348B-0DE1-4810-B856-723BA5D3733A} = {7DD5348B-0DE1-4810-B856-723BA5D3733A}
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -87,8 +80,6 @@ Global
 		{269CF622-CA89-4BAB-A3EC-E2895969DCE3}.Release|Win32.Build.0 = Release|Win32
 		{1203BEF2-3F60-449A-9E7D-3BC0BF261D7C}.Debug|Win32.ActiveCfg = Debug|Win32
 		{1203BEF2-3F60-449A-9E7D-3BC0BF261D7C}.Release|Win32.ActiveCfg = Release|Win32
-		{1D6CCCEF-902C-4AE7-A79F-7AD9F4576209}.Debug|Win32.ActiveCfg = Debug|Win32
-		{1D6CCCEF-902C-4AE7-A79F-7AD9F4576209}.Release|Win32.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
