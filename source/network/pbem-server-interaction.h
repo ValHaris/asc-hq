@@ -53,6 +53,8 @@
 #include <iostream>
 #include <vector>
 
+#include <SDL_stdinc.h>
+
 #include <curl/curl.h>
 #include <curl/types.h>
 #include <curl/easy.h>
@@ -66,13 +68,13 @@ class ASC_PBEM_FileUploadControl // just a better struct so we can use const dat
       int step;
       int sent_step;
       const int size;
-      const char* data;
+      const Uint8* data;
       ASCString fileName;
       ASCString boundary;
       
       std::vector<ASCString> parameters;
       
-      ASC_PBEM_FileUploadControl( const char* dataParam, const int sizeParam ): size( sizeParam ), data( dataParam ) {};
+      ASC_PBEM_FileUploadControl( const Uint8* dataParam, const int sizeParam ): size( sizeParam ), data( dataParam ) {};
       
 };
 
@@ -85,7 +87,7 @@ class ASC_PBEM_FileUploadControl // just a better struct so we can use const dat
  struct TFileData
 {
    ASCString fileName;
-   char* fileData;
+   Uint8* fileData;
    int fileSize;
 };
 
@@ -172,7 +174,7 @@ class ASC_PBEM_FileUploadControl // just a better struct so we can use const dat
       
       /** @return true if upload went ok, false on failure
          */
-      bool uploadFile( ASCString fileName, const char* data, const int size, const int gameID );
+      bool uploadFile( ASCString fileName, const Uint8* data, const int size, const int gameID );
 
       /** @return a vector of TUserData structs containing the ascpbem server accounts
          * @param activeOnly if true, only return data about active (activated) players
@@ -181,7 +183,7 @@ class ASC_PBEM_FileUploadControl // just a better struct so we can use const dat
       
       /** @return true if game creation went ok, false on failure
          */
-      bool createGame( ASCString fileName, const char* data, const int size, ASCString gameName, ASCString fileNamePattern, char* roles, int* players, int projectID = -1, int turn = 1, int currentSlot = 1);
+      bool createGame( ASCString fileName, const Uint8* data, const int size, ASCString gameName, ASCString fileNamePattern, char* roles, int* players, int projectID = -1, int turn = 1, int currentSlot = 1);
       
       /** @return a vector of TGameInfo structs containing the current games of the logged in player
          * @param myTurnOnly if true, only return info about games where it's the turn of the currenty logged in player

@@ -32,7 +32,7 @@ size_t ASC_PBEM_writeInternal( void* inboundData, size_t size, size_t nmemb, voi
 }
 
 
-int ASC_PBEM_writeBuffer( char* buffer, const char* source, int startPos, int bufferSize, int sourceSize )
+int ASC_PBEM_writeBuffer( Uint8* buffer, const Uint8* source, int startPos, int bufferSize, int sourceSize )
 {
    int i=0;
    for( ; i<bufferSize && i<(sourceSize-startPos); i++ )
@@ -44,7 +44,7 @@ int ASC_PBEM_writeBuffer( char* buffer, const char* source, int startPos, int bu
    return i;
 }
 
-size_t ASC_PBEM_readInternal( char* outboundBuffer, size_t size, size_t nitems, void *infoStruct )
+size_t ASC_PBEM_readInternal( Uint8* outboundBuffer, size_t size, size_t nitems, void *infoStruct )
 {
    ASC_PBEM_FileUploadControl * control = (ASC_PBEM_FileUploadControl*) infoStruct;
    
@@ -57,7 +57,7 @@ size_t ASC_PBEM_readInternal( char* outboundBuffer, size_t size, size_t nitems, 
             control->fileName + "\"\n" +
             "Content-Type: application/octet-stream\n \n";
          // end of header has to be a \n<space>\n for the server to reliably identify it as empty line
-         int sent = ASC_PBEM_writeBuffer( outboundBuffer, header.c_str(), control->sent_step, size*nitems, header.size() );
+         int sent = ASC_PBEM_writeBuffer( outboundBuffer, (const Uint8*) header.c_str(), control->sent_step, size*nitems, header.size() );
          if( sent+control->sent_step == header.size() )
          {
             control->sent_step = 0;
@@ -94,7 +94,7 @@ size_t ASC_PBEM_readInternal( char* outboundBuffer, size_t size, size_t nitems, 
          else
             header += "\n";
             
-         int sent = ASC_PBEM_writeBuffer( outboundBuffer, header.c_str(), control->sent_step, size*nitems, header.size() );
+         int sent = ASC_PBEM_writeBuffer( outboundBuffer, (const Uint8*) header.c_str(), control->sent_step, size*nitems, header.size() );
          if( sent+control->sent_step == header.size() )
          {
             control->sent_step = 0;
@@ -126,7 +126,7 @@ size_t ASC_PBEM_readInternal( char* outboundBuffer, size_t size, size_t nitems, 
                data += "--\n";
             }
 
-            int sent = ASC_PBEM_writeBuffer( outboundBuffer, data.c_str(), control->sent_step, size*nitems, data.size() );
+            int sent = ASC_PBEM_writeBuffer( outboundBuffer, (const Uint8*) data.c_str(), control->sent_step, size*nitems, data.size() );
             if( sent+control->sent_step == data.size() )
             {
                control->sent_step = 0;
@@ -429,7 +429,7 @@ bool ASC_PBEM::activateAccount( ASCString user, ASCString code )
    return statusCode == 202;
 }
 
-bool ASC_PBEM::uploadFile( ASCString fileName, const char* data, const int size, const int gameID )
+bool ASC_PBEM::uploadFile( ASCString fileName, const Uint8* data, const int size, const int gameID )
 {
    if( ! loggedIn ) return false;
    
@@ -452,7 +452,7 @@ bool ASC_PBEM::uploadFile( ASCString fileName, const char* data, const int size,
    return statusCode == 201;
 }
 
-bool ASC_PBEM::createGame( ASCString fileName, const char* data, const int size, ASCString gameName, ASCString fileNamePattern, char* roles, int* players, int projectID, int turn, int currentSlot )
+bool ASC_PBEM::createGame( ASCString fileName, const Uint8* data, const int size, ASCString gameName, ASCString fileNamePattern, char* roles, int* players, int projectID, int turn, int currentSlot )
 {
    if( ! loggedIn ) return false;
    
@@ -641,8 +641,8 @@ TFileData* ASC_PBEM::downloadGame( TGameInfo game )
       TFileData *data = new TFileData;
       data->fileName = game.currentSaveGameName;
       data->fileSize = bodyString.size();
-      data->fileData = new char[ bodyString.size() ];
-      ASC_PBEM_writeBuffer( data->fileData, bodyString.c_str(), 0, bodyString.size(), bodyString.size() );
+      data->fileData = new Uint8[ bodyString.size() ];
+      ASC_PBEM_writeBuffer( data->fileData, (const Uint8*) bodyString.c_str(), 0, bodyString.size(), bodyString.size() );
       
       return data;
    }
