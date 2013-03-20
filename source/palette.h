@@ -65,7 +65,7 @@
 #ifndef palette_h_included
  #define palette_h_included
 
-#include <SDL/SDL_stdinc.h>
+#include <SDL_stdinc.h>
 
 #pragma pack(1)
 
