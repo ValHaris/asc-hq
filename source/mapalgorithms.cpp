@@ -26,7 +26,6 @@
 #include "errors.h"
 #include "gamemap.h"
 
-
 tdrawgettempline :: tdrawgettempline ( int _freefields, GameMap* _gamemap )
 {
    gamemap = _gamemap;
@@ -90,7 +89,8 @@ void tdrawgettempline :: init ( void )
       for ( i = 0; i < sidenum; i++ ) {
          sx = 10;
          sy = 10;
-         getnextfield ( sx, sy, i );
+	 sx += getnextdx( i, sy );
+	 sy += getnextdy( i );
          dirs[i] = winkel ( 10, 10 );
       }
       offset = dirs[0];
@@ -98,7 +98,8 @@ void tdrawgettempline :: init ( void )
       for ( i = 0; i < sidenum; i++ ) {
          sx = 10;
          sy = 10;
-         getnextfield ( sx, sy, i );
+	 sx += getnextdx( i, sy );
+	 sy += getnextdy( i );
          dirs[i] = winkel ( 10, 10 );
       }
 
@@ -165,7 +166,8 @@ void tdrawgettempline :: start ( int x1, int y1, int x2, int y2 )
       }
    */
 
-   getnextfield( x, y, dir );
+   x += getnextdx( dir, y );
+   y += getnextdy( dir );
    while ( x != x2 || y != y2 ) {
 #ifdef checkvisibility
       int ldist2 = beeline ( x, y, x2, y2 );
@@ -195,7 +197,8 @@ void tdrawgettempline :: start ( int x1, int y1, int x2, int y2 )
       if ( dir >= sidenum )
          dir = dir % sidenum;
 
-      getnextfield ( x, y, dir );
+      x += getnextdx( dir, y );
+      y += getnextdy( dir );
    }
    putpix8 ( x, y );
 }
@@ -253,7 +256,8 @@ void         SearchFields::startsearch(void)
                   if ( cancelSearch )
                      return;
                }
-               getnextfield ( mc.x, mc.y, dir );
+	       mc.x += getnextdx( dir, mc.y );
+	       mc.y += getnextdy( dir );
             }
 
          }
@@ -293,55 +297,18 @@ int         ccmpheighchangemovedir[6]  = {0, 1, 5, 2, 4, 3 };
 MapCoordinate3D getNeighbouringFieldCoordinate( const MapCoordinate3D& pos, int direc)
 {
   MapCoordinate3D mc = pos;
-  getnextfield ( mc.x, mc.y, direc );
+  mc.x += getnextdx( direc, mc.y );
+  mc.y += getnextdy( direc );
   return mc;
 }
 
 MapCoordinate getNeighbouringFieldCoordinate( const MapCoordinate& pos, int direc)
 {
   MapCoordinate mc = pos;
-  getnextfield ( mc.x, mc.y, direc );
+  mc.x += getnextdx( direc, mc.y );
+  mc.y += getnextdy( direc );
   return mc;
 }
-
-
-void         getnextfield(int&       x,
-                          int&       y,
-                          int       direc)
-{
-   switch (direc) {
-
-      case 0:
-         y-=2   ;                      /*  oben  */
-         break;
-
-      case 1:
-         if ((y & 1) == 1) x+=1;        /*  rechts oben  */
-         y-=1;
-         break;
-
-      case 2:
-         if ((y & 1) == 1) x+=1;        /*  rechts unten  */
-         y+=1;
-         break;
-
-      case 3:
-         y+=2;                          /*  unten  */
-         break;
-
-      case 4:
-         if ((y & 1) == 0) x-=1;        /*  links unten  */
-         y+=1;
-         break;
-
-      case 5:
-         if ((y & 1) == 0) x-=1;        /*  links oben  */
-         y-=1;
-         break;
-
-   }
-}
-
 
 int getdirection( const MapCoordinate& start, const MapCoordinate& dest )
 {
@@ -353,30 +320,20 @@ int          getdirection(    int      x1,
                               int      x2,
                               int      y2)
 {
-   int a;
-   int dx = (2 * x2 + (y2 & 1)) - (2 * x1 + (y1 & 1));
    int dy = y2 - y1;
-
+   int dx = x2 - x1;
    if (dx < 0)
-      if (dy < 0)
-         a = 5;
-      else
-         a = 4;
-   else
-      if (dx > 0)
-         if (dy < 0)
-            a = 1;
-         else
-            a = 2;
-      else  // dx is 0
-         if (dy < 0)
-            a = 0;
-         else
-            if ( dy > 0 )
-               a = 3;
-            else
-               a = -1;
-   return a;
+      return (dy < 0) ? 5 : 4;
+   if (dx > 0)
+      return (dy < 0) ? 1 : 2;
+   // dx == 0
+   int dOdd = (y2 & 1) - (y1 & 1);
+   if (dOdd == -1)
+      return (dy < 0) ? 5 : 4;
+   if (dOdd == 1)
+      return (dy < 0) ? 1 : 2;
+   // dOdd == 0
+   return (dy < 0) ? 0 : (dy > 0) ? 3 : -1;
 }
 
 
@@ -404,7 +361,9 @@ int beeline ( int x1, int y1, int x2, int y2 )
    int num = 0;
    while ( x1 != x2  || y1 != y2 ) {
       num++;
-      getnextfield ( x1, y1, getdirection ( x1, y1, x2, y2 ));
+      int direc = getdirection (x1, y1, x2, y2);
+      x1 += getnextdx ( direc, y1 );
+      y1 += getnextdy ( direc );
    }
 
    if ( num != num2 )
@@ -414,14 +373,18 @@ int beeline ( int x1, int y1, int x2, int y2 )
 }
 
 
-int square ( int i )
+inline int square ( int i )
 {
    return i*i;
 }
 
 inline float square ( float i )
 {
-   return i*i;
+   #ifdef __GNUC__
+   return __builtin_powif(i, 2);
+   #else
+   return pow(i, 2);
+   #endif
 }
 
 
@@ -467,14 +430,6 @@ WindMovement::WindMovement ( const Vehicle* vehicle )
             wm[(6-i+vehicle->getMap()->weather.windDirection)%6] = wmn[i];
       }
    }
-}
-
-
-
-int WindMovement::getDist ( int dir )
-{
-   assert( dir >= 0 && dir <= 5 );
-   return wm[dir];
 }
 
 

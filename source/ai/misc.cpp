@@ -141,7 +141,7 @@ class SaveUnitMovement {
 
 
 
-void AI::RefuelConstraint::findPath()
+void AI::RefuelConstraint::findPath( bool markTemps )
 {
    if ( !ast ) {
 
@@ -156,7 +156,7 @@ void AI::RefuelConstraint::findPath()
       } else
          dist = maxMove;
 
-      ast = new AStar3D ( ai.getMap(), veh, true, dist );
+      ast = new AStar3D ( ai.getMap(), veh, markTemps, dist );
       ast->findAllAccessibleFields ( );
       // tanker planes may have a very large range; that's why we top the distance at 100 fields
    }
@@ -175,10 +175,11 @@ MapCoordinate3D AI::RefuelConstraint::getNearestRefuellingPosition ( bool buildi
    y2 = min(veh->ypos + fuel / veh->typ->fuelConsumption, ai.getMap()->ysize );
    */
 
-   for ( AStar3D::Container::iterator i = ast->visited.begin(); i != ast->visited.end(); i++ ) {
-      int dist = int(i->gval );
-      if ( i->h.getNumericalHeight() == -1 ) {
-          MapField* fld = ai.getMap()->getField( i->h.x, i->h.y );
+   for ( AStar3D::VisitedContainer::iterator i = ast->visited.begin(); i != ast->visited.end(); i++ ) {
+      AStar3D::Node n = *i;
+      int dist = int(n.gval );
+      if ( n.h.getNumericalHeight() == -1 ) {
+          MapField* fld = ai.getMap()->getField( n.h.x, n.h.y );
           if ( fld->building && fld->building->color == veh->color )
              reachableBuildings[ dist ] = fld->building;
       }
@@ -188,11 +189,11 @@ MapCoordinate3D AI::RefuelConstraint::getNearestRefuellingPosition ( bool buildi
 
 
        // let's check for landing
-       if ((veh->height > chfahrend) && (i->h.getNumericalHeight() == chfahrend) ) {
+       if ((veh->height > chfahrend) && (n.h.getNumericalHeight() == chfahrend) ) {
           // we don't want to land in hostile territory
-          FieldInformation& fi = ai.getFieldInformation ( i->h.x, i->h.y );
+          FieldInformation& fi = ai.getFieldInformation ( n.h.x, n.h.y );
           if ( fi.control == -1 || !ai.getMap()->player[fi.control].diplomacy.isHostile( ai.getPlayerNum() ) )
-              landingPositions[dist] = i->h;
+              landingPositions[dist] = n.h;
        }
    }
 
@@ -259,10 +260,10 @@ bool AI::RefuelConstraint::returnFromPositionPossible ( const MapCoordinate3D& p
       positionsCalculated = true;
    }
 
-   if ( !ast->fieldVisited(pos) )
+   const AStar3D::Node* n  = ast->visited.find(pos);
+   if (!n)
       return false;
-
-   int dist  = int( ast->fieldVisited(pos)->gval );
+   const int dist = (int)n->gval;
    int dist2;
    if ( !reachableBuildings.empty() ) {
       ReachableBuildings::iterator rb = reachableBuildings.begin();
@@ -491,72 +492,6 @@ AI::AiResult AI::transports( int process )
 
 bool AI :: moveUnit ( Vehicle* veh, const MapCoordinate3D& destination, bool intoBuildings, bool intoTransports )
 {
-   // are we operating in 3D space or 2D space? Pathfinding in 3D has not
-   // been available at the beginning of the AI work; and it is faster anyway
-   #if 0
-   if ( destination.getNumericalHeight() == -1 ) {
-
-      Vehicle!!Movement vm ( mapDisplay, NULL );
-      vm.execute ( veh, -1, -1, 0, -1, -1 );
-
-      std::vector<MapCoordinate> path;
-      AStar* ast = NULL;
-      if ( veh->aiparam[getPlayerNum()]->getJob() == AiParameter::job_conquer )
-         ast = new HiddenAStar ( this, veh );
-      else
-         ast = new StratAStar ( this, veh );
-
-      auto_ptr<AStar> ap ( ast );
-
-      ast->findPath ( AStar::HexCoord ( veh->xpos, veh->ypos ), AStar::HexCoord ( destination.x, destination.y ), path );
-
-      int xtogo = veh->xpos;
-      int ytogo = veh->ypos;
-
-      for ( unsigned int i = 0; i < path.size(); i++ ) {
-         int x = path[i].x;
-         int y = path[i].y;
-
-         MapField* fld = getfield ( x, y );
-         if ( !fld)
-            break;
-
-
-         if ( vm.reachableFields.isMember ( x, y )
-              && fieldaccessible ( fld, veh ) == 2
-              && (!fld->building  || intoBuildings)
-              && (!fld->vehicle || intoTransports )) {
-            xtogo = x;
-            ytogo = y;
-         }
-      }
-
-      if ( xtogo != veh->xpos || ytogo != veh->ypos ) {
-         if (  getfield ( xtogo, ytogo )->building )
-            if ( checkReConquer ( getfield ( xtogo, ytogo )->building, veh ))
-               return false;
-
-         int nwid  = veh->networkid;
-         vm.execute ( NULL, xtogo, ytogo, 2, -1, -1 );
-         if ( vm.getStatus() != 3 )
-            displaymessage ( "AI :: moveUnit \n error in movement step 2 with unit %d", 1, veh->networkid );
-
-         vm.execute ( NULL, xtogo, ytogo, 3, -1,  1 );
-         if ( vm.getStatus() != 1000 )
-            displaymessage ( "AI :: moveUnit \n error in movement step 3 with unit %d", 1, veh->networkid );
-
-         if ( getMap()->getUnit(nwid) )
-            if ( destination.x == xtogo && destination.y == ytogo )
-               if ( veh->aiparam[getPlayerNum()]->getJob() == AiParameter::job_conquer )
-                  if ( getfield ( xtogo, ytogo)->building )
-                     veh->aiparam[getPlayerNum()]->clearJobs();
-
-
-         return true;
-      }
-      return false;
-   } else {
-   #endif
       if ( veh->getPosition3D() == destination )
          return true;
          
@@ -574,81 +509,63 @@ bool AI :: moveUnit ( Vehicle* veh, const MapCoordinate3D& destination, bool int
       AStar3D::Path path;
       ast->findPath ( path, destination );
 
-      return moveUnit ( veh, path, intoBuildings, intoTransports ) == 1 ;
-//   }
-}
-
-int AI::moveUnit ( Vehicle* veh, const AStar3D::Path& path, bool intoBuildings, bool intoTransports )
-{
-   auto_ptr<MoveUnitCommand> mum ( new MoveUnitCommand( veh ));
-   mum->searchFields();
-   
-   
-   int oldHeight = veh->getPosition3D().getNumericalHeight();
-   AStar3D::Path::const_iterator pi = path.begin();
-   if ( pi == path.end() )
-      return 0;
-
-   int nwid = veh->networkid;
-
-   AStar3D::Path::const_iterator lastmatch = pi;
-   while ( pi != path.end() ) {
-      MapField* fld = getMap()->getField ( pi->x, pi->y );
-      bool ok = true;
-      if ( fld->getContainer() ) {
-         if ( pi+1 !=path.end() )
-             ok = false;
-         else {
-            if ( fld->building && !intoBuildings )
-               ok = false;
-            if ( fld->vehicle && !intoTransports )
-               ok = false;
-         }
-      }
-
-      if ( ok )
-         if ( mum->isFieldReachable3D(*pi, true) )
-            lastmatch = pi;
-
-      ++pi;
-   }
-
-   if ( getMap()->getField ( lastmatch->x, lastmatch->y )->building )
-      if ( checkReConquer ( getMap()->getField ( lastmatch->x, lastmatch->y )->building, veh ))
+      if ( path.empty() )
          return false;
 
-   if ( lastmatch == path.begin() )
-      return 0;
-  
-   mum->setDestination( *lastmatch );
-   mum->setFlags( MoveUnitCommand::NoInterrupt );
-   
-   
-   ActionResult res = mum->execute( getContext() );
-   if ( res.successful() ) {
-      mum.release();
-      if ( getMap()->getUnit ( nwid ) && (oldHeight != veh->getPosition3D().getNumericalHeight()) )
-         veh->aiparam[ getPlayerNum()]->setNewHeight();
-   } else {
-      displaymessage ( "AI :: moveUnit (path) \n error in movement step 3 with unit %d", 1, veh->networkid );
-      return -1;
-   }
+      auto_ptr<MoveUnitCommand> mum ( new MoveUnitCommand( veh ));
+      mum->searchFields();
+      // CODE DUPLICATION: MoveUnitCommand::findPath()
+      const AStar3D::Node* n;
+      for (n = ast->visited.find(path.back()); n != NULL; n = n->previous) {
+         if ( (n->gval <= veh->getMovement() ) && n->canStop ) {
+            MapField* fld = getMap()->getField ( n->h );
+            if ( fld->getContainer() ) {
+               if ( n->h != path.back() ) {
+                  continue;
+               }
+            } else {
+               if ( ( fld->building && !intoBuildings ) || ( fld->vehicle && !intoTransports ) ) {
+                  continue;
+               }
+            }
+            mum->setDestination( n->h );
+            break;
+         }
+      }
+      if ( n == NULL )
+         return false;
 
-   //! the unit may have been shot down
-   if ( ! getMap()->getUnit ( nwid ))
-      return 1;
+      mum->setFlags( MoveUnitCommand::NoInterrupt );
 
-   if ( pi == path.end() ) 
+      int nwid = veh->networkid;
+      int oldHeight = veh->getPosition3D().getNumericalHeight();
+
+      if ( getMap()->getField ( n->h )->building )
+         if ( checkReConquer ( getMap()->getField ( n->h )->building, veh ) )
+            return false;
+
+      ActionResult res = mum->execute( getContext() );
+      if ( res.successful() ) {
+         mum.release();
+         if ( getMap()->getUnit ( nwid ) && (oldHeight != veh->getPosition3D().getNumericalHeight()) )
+            veh->aiparam[ getPlayerNum()]->setNewHeight();
+      } else {
+         displaymessage ( "AI :: moveUnit (path) \n error in movement step 3 with unit %d", 1, veh->networkid );
+         return false;
+      }
+
+      //! the unit may have been shot down
+      if ( ! getMap()->getUnit ( nwid ))
+         return true;
+
       if ( veh->aiparam[getPlayerNum()]->getJob() == AiParameter::job_conquer )
          if ( getMap()->getField ( veh->getPosition() )->building )
             veh->aiparam[getPlayerNum()]->clearJobs();
 
-   return 1;
+      return true;
+
+//   }
 }
-
-
-
-
 
 AI:: CheckFieldRecon :: CheckFieldRecon ( AI* _ai ) : SearchFields ( _ai->getMap() ), player(_ai->getPlayerNum()), ai ( _ai )
 {
@@ -723,16 +640,18 @@ void AI ::  runReconUnits ( )
                // the unit is not standing on a reconposition
                int mindist = maxint;
                MapCoordinate mc;
-               for ( ReconPositions::iterator i = reconPositions.begin(); i != reconPositions.end(); i++ ) {
-                  MapField* fld = getMap()->getField( i->first );
-                  if ( !fld->vehicle && !fld->building ) {
-                     AStar ast ( getMap(), veh );
-                     ast.findAllAccessibleFields( maxUnitMovement );
-                     if ( fld->a.temp ) {
-                        int vdist = beeline ( veh->getPosition(), i->first )*(1+i->second/2);
-                        if( vdist < mindist ) {
-                           mindist = vdist;
-                           mc = i->first;
+               if ( !reconPositions.empty() ) {
+                  AStar3D ast ( getMap(), veh, false, maxUnitMovement );
+                  ast.findAllAccessibleFields( );
+                  for ( ReconPositions::iterator i = reconPositions.begin(); i != reconPositions.end(); i++ ) {
+                     MapField* fld = getMap()->getField( i->first );
+                     if ( !fld->vehicle && !fld->building ) {
+                        if ( ast.getFieldAccess( i->first ) ) {
+                           int vdist = beeline ( veh->getPosition(), i->first )*(1+i->second/2);
+                           if( vdist < mindist ) {
+                              mindist = vdist;
+                              mc = i->first;
+                           }
                         }
                      }
                   }

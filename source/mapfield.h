@@ -26,14 +26,15 @@ class Context;
 class  MapField {
     GameMap* gamemap;
     void init();
+    int index;
   protected:
-    MapField (  );
+    MapField (  ) { init(); };
     friend class GameMap;
   public:
-    MapField ( GameMap* gamemap_ );
+    MapField ( GameMap* gamemap_, int index_ ) { init(); setMap(gamemap_, index_); };
     void operator= ( const MapField& f );
 
-    void setMap ( GameMap* gamemap_ ) { gamemap = gamemap_; };
+    void setMap ( GameMap* gamemap_, int index_ ) { gamemap = gamemap_; index = index_; };
     GameMap* getMap() const { return gamemap; };
 
     //! the terraintype of the field
@@ -66,16 +67,23 @@ class  MapField {
 
 
     //@{ 
-    //! Various algorithms need to store some information in the fields they process. These variables are used for this.
-    union  {
-      struct {
-        Uint8         temp;
-        Uint8         temp2;
-      }a;
-      Uint16 tempw;
-    };
-    int          temp3;
-    int          temp4;
+    //! Various algorithms need to store some information in the fields they process.
+    // These getters/setters are used for this.
+    void setaTemp (Uint8 atemp);
+    Uint8 getaTemp ();
+
+    void setaTemp2 (Uint8 atemp2);
+    Uint8 getaTemp2 ();
+
+    void setTempw (Uint16 tempw);
+    Uint16 getTempw ();
+
+    void setTemp3 (int temp3);
+    int getTemp3 ();
+
+    void setTemp4 (int temp4);
+    int getTemp4 ();
+    
     //@}
 
     Vehicle*     vehicle;

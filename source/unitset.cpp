@@ -128,7 +128,7 @@ void SingleUnitSet::read ( tnstream* stream )
          data = stream->readTextString ( s2 );
 
          size_t seppos = s2.find_first_of ( separator );
-         if ( seppos >= 0 ) {
+         if ( seppos !=  ASCString::npos ) {
             ASCString b = s2.substr(0, seppos);
             ASCString e = s2.substr( seppos+1 );
             if ( b == "NAME" )
@@ -167,7 +167,7 @@ void SingleUnitSet::read ( tnstream* stream )
       }
    } else {
       size_t seppos = s.find_first_of ( ';' );
-      if ( seppos >= 0 ) {
+      if ( seppos != ASCString::npos ) {
          ASCString b = s.substr(0, seppos);
          ASCString e = s.substr( seppos+1 );
          name = b;

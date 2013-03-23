@@ -345,6 +345,10 @@ CPPFLAGS=$OLDCPPFLAGS
 #AC_MSG_RESULT("yes")
 
 
+AC_LANG_CPLUSPLUS
+
+AC_CHECK_HEADERS([boost/unordered_map.hpp],,AC_LIB_MISSING( Boost version >= 1.49, http://www.boost.org/, [(which may be splitted into several distinct libraries)]))
+
 AC_CHECK_LIB( boost_regex-mt, main, BOOST_LIBS="-lboost_regex-mt", BOOSTERR=yes)
 if test x$BOOSTERR = xyes ; then
 

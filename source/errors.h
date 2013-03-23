@@ -27,12 +27,12 @@
  #include "misc.h"
 
 
- #ifdef HAVE_EXCEPTION
-  #include <exception>
-  class ASCexception : public exception { };
- #else
+// #ifdef HAVE_EXCEPTION
+//  #include <exception>
+//  class ASCexception : public exception { };
+ //#else
   class ASCexception {};
- #endif
+ // #endif
 
   class ASCmsgException : public ASCexception {
       protected:

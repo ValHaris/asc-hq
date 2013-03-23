@@ -22,12 +22,6 @@
 #include "../actions/moveunitcommand.h"
 
 
-void AI::findStratPath ( vector<MapCoordinate>& path, Vehicle* veh, int x, int y )
-{
-  StratAStar stratAStar ( this, veh );
-  stratAStar.findPath ( AStar::HexCoord ( veh->xpos, veh->ypos ), AStar::HexCoord ( x, y ), path );
-}
-
 int aiDebugInterruptHelper = -1;
 
 AI::AiResult AI::strategy( void )

@@ -6,92 +6,13 @@
 #ifndef astar2H
  #define astar2H
 
-
  #include <vector>
- #include <map>
- #include <set>
  #include "mapalgorithms.h"
  #include "gamemap.h"
 
-
-
+ #include <boost/unordered_map.hpp>
 
  enum HexDirection { DirN, DirNE, DirSE, DirS, DirSW, DirNW, DirNone };
-
-
- //! A 2dimensional path finding algorithm, from Amit J. Patel
- class AStar {
-    public:
-       typedef vector<MapCoordinate> Path;
-
-    protected:
-       int MAXIMUM_PATH_LENGTH;
-       GameMap* tempsMarked;
-       Path *_path;
-       Vehicle* _veh;
-       GameMap* gamemap;
-
-
-       //! returns the movement cost for the unit to travel from x1/y1 to x2/y2
-       virtual int getMoveCost ( int x1, int y1, int x2, int y2, const Vehicle* vehicle );
-    public:
-       AStar ( GameMap* actmap, Vehicle* veh );
-
-       //! A hexagonal Coordinate. This structure is used instead of MapCoordinate to reduce the amount of modifications to Amits path finding code.
-       struct HexCoord{
-           int m, n;
-           HexCoord(): m(0), n(0) {}
-           HexCoord( int m_, int n_ ): m(m_), n(n_) {}
-           ~HexCoord() {}
-       };
-
-       struct Node {
-           HexCoord h;        // location on the map, in hex coordinates
-           int gval;        // g in A* represents how far we've already gone
-           int hval;        // h in A* represents an estimate of how far is left
-           Node(): h(0,0), gval(0), hval(0) {}
-           bool operator< ( const Node& a ) const;
-           bool operator> ( const Node& a ) const;
-       };
-
-       int dist( HexCoord a, HexCoord b );
-
-       typedef std::vector<Node> Container;
-	   std::greater<Node> comp;
-
-       inline void get_first( Container& v, Node& n );
-
-
-       Container visited;
-
-       //! searches for a path from A to B and stores it in path
-       void findPath( HexCoord A, HexCoord B, Path& path );
-
-       //! searches for a path from the units current position to dest and stores it in path
-       void findPath( Path& path, int x, int y );
-
-       /** searches for all fields that are within the range of maxDist and marks them.
-           On each field one bit for each level of height will be set.
-           The Destructor removes all marks.
-       */
-       void findAllAccessibleFields ( int maxDist = maxint );  // all accessible fields will have a.temp set to 1
-
-       //! returns the distance of the last found path, or -1 on any error
-       int getDistance( );
-
-       //! returns the number of turns that the unit will need to travel along the last found path
-       int getTravelTime( );
-
-       //! checks weather the field fld was among the visited fields during the last search
-       bool fieldVisited ( int x, int y);
-      
-       virtual ~AStar ( );
- };
-
-
- //! finding a path for unit veh to position x, y on map actmap.
-extern void findPath( GameMap* actmap, AStar::Path& path, Vehicle* veh, int x, int y );
-
 
 
 //! A 3D path finding algorithm, based on the 2D algorithm by Amit J. Patel
@@ -124,17 +45,30 @@ class AStar3D {
              static PathPoint newFromStream( tnstream& stream );
        };
 
-       typedef vector<PathPoint> Path;
+       typedef deque<PathPoint> Path;
+
+       struct hash_MapCoordinate3D {
+          size_t operator()(const MapCoordinate3D &h) const{
+             return h.x ^ (h.y << 12) ^ (h.getNumericalHeight() << 24);
+          }
+       };
+
+       struct hash_MapCoordinate {
+          size_t operator()(const MapCoordinate &h) const{
+             return h.x ^ (h.y << 16);
+          }
+       };
+
        struct Node {
-           MapCoordinate3D h;        //! location on the map, in hex coordinates
-           AStar3D::DistanceType gval;        //! g in A* represents how far we've already gone
-           AStar3D::DistanceType hval;        //! h in A* represents an estimate of how far is left
-           bool canStop;
-           bool hasAttacked;
-           int enterHeight;
-           Node(): gval(0), hval(0), canStop(false), enterHeight(-1), deleted(false) {}
-           bool deleted;
-           bool operator< ( const Node& b ) const;
+          const Node* previous;
+          MapCoordinate3D h;        // location on the map, in hex coordinates
+          AStar3D::DistanceType gval;        // g in A* represents how far we've already gone
+          AStar3D::DistanceType hval;        // h in A* represents an estimate of how far is left
+          int enterHeight;
+          bool canStop;
+          bool hasAttacked;
+          bool operator< ( const Node& b ) const;
+          bool operator> ( const Node& b ) const;
        };
 
     protected:
@@ -149,49 +83,52 @@ class AStar3D {
        bool markTemps;
        WindMovement* wind;
 
-       virtual DistanceType getMoveCost ( const MapCoordinate3D& start, const MapCoordinate3D& dest, const Vehicle* vehicle, bool& canStop, bool& hasAttacked );
+       virtual DistanceType getMoveCost ( const MapCoordinate3D& start, const MapCoordinate3D& dest, const Vehicle* vehicle, bool& hasAttacked );
 
-       HexDirection* posDirs;
-       int*          posHHops;
-       int*          fieldAccess;
-
-       HexDirection& getPosDir ( const MapCoordinate3D& pos ) { return posDirs [(pos.y * actmap->xsize + pos.x) * 9 + 1+pos.getNumericalHeight()]; };
-       int& getPosHHop ( const MapCoordinate3D& pos )         { return posHHops[(pos.y * actmap->xsize + pos.x) * 9 + 1+pos.getNumericalHeight()]; };
+       typedef boost::unordered_map<MapCoordinate, int, hash_MapCoordinate> fieldAccessType;
+       fieldAccessType fieldAccess;
 
        DistanceType dist( const MapCoordinate3D& a, const MapCoordinate3D& b );
        DistanceType dist( const MapCoordinate3D& a, const vector<MapCoordinate3D>& b );
 
     public:
-
-       class Container: protected multiset<Node, less<Node> > {
-          public:
-             typedef multiset<Node, less<Node> > Parent;
-
-             // Container() {};
-             void add ( const Node& node ) { insert ( node ); };
-             bool update ( const Node& node );
-             Node getFirst() { Node n = *Parent::begin(); Parent::erase ( Parent::begin() ); return n; };
-             bool empty() { return Parent::empty(); };
-
-
-             typedef Parent::iterator iterator;
-             iterator find( const MapCoordinate3D& pos );
-
-             iterator begin() { return Parent::begin(); };
-             iterator end() { return Parent::end(); };
-
-       };
-
        //! the reachable fields
-       Container visited;
-       // vector<Node> visited;
+       // pointers to nodes in this container need to stay valid when the
+       // container grows, so we can't use a vector for this.
+       class VisitedContainer {
+             typedef boost::unordered_map<MapCoordinate3D, Node*, hash_MapCoordinate3D> index_t;
+             typedef deque<Node> storage_t;
+             index_t index;
+             storage_t storage;
+          public:
+             typedef storage_t::iterator iterator;
+             const Node* add ( const Node& n) {
+                storage.push_back(n);
+                index.insert(make_pair(n.h, &storage.back()));
+                return &storage.back();
+             };
+             const Node* find ( const MapCoordinate3D& pos ) {
+                index_t::iterator i = index.find(pos); 
+                if (i == index.end()) return NULL;
+                else return i->second;
+             }
+
+             iterator begin() { return storage.begin(); };
+             iterator end() { return storage.end(); };
+             const Node& back() { return storage.back(); };
+             int size() const { return storage.size(); };
+             int empty() const { return storage.empty(); };
+      };
+       VisitedContainer visited;
     protected:
 
-       
-       bool get_first( Container& v, Node& n );
-
-       void nodeVisited ( const Node& n, HexDirection direc, Container& open, int prevHeight = -10, int heightChangeDist = 0 );
-
+       int initNode ( Node& newN,
+                      const Node* oldN_ptr,
+                      const MapCoordinate3D& newpos,
+                      const vector<MapCoordinate3D>& B,
+                      bool disableAttack=false,
+                      bool enter=false,
+                      bool dock=false);
 
     public:
        AStar3D ( GameMap* actmap, Vehicle* veh, bool markTemps_ = true, int maxDistance = maxint );
@@ -200,21 +137,30 @@ class AStar3D {
        //! the search can be restricted to certain operations
        void registerOperationLimiter( OperationLimiter* ol ) { operationLimiter = ol; };
 
-       //! searches for a path from A to B and stores it in path
-       void findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>& B, Path& path );
+       //! searches for a path from the unit's current position to dest
+       bool findPath( const MapCoordinate3D& dest );
+
+       //! searches for a path from the units current position to one of the dest fields
+       bool findPath( const vector<MapCoordinate3D>& dest );
 
        //! searches for a path from the unit's current position to dest and stores it in path
        void findPath( Path& path, const MapCoordinate3D& dest );
 
        //! searches for a path from the units current position to one of the dest fields and stores it in path
-       void findPath( Path& path, const vector<MapCoordinate3D>& dest );
+       bool findPath( Path& path, const vector<MapCoordinate3D>& dest );
 
        /** searches for all fields that are within the range of maxDist and marks them.
            On each field one bit for each level of height will be set.
            The Destructor removes all marks.
            \param path if non-null, all fields will be stored there
        */
-       void findAllAccessibleFields ( vector<MapCoordinate3D>* path = NULL );
+       void findAllAccessibleFields ( );
+
+       //! construct a path from a pointer to a visited node, return false if pointer is NULL, else true
+       bool constructPath( Path& path, const Node* n);
+
+       //! construct a path from a pointer to a visited node; return false if position doesn't exist, else true
+       inline bool constructPath( Path& path, const MapCoordinate3D& pos) { return constructPath ( path, visited.find (pos) ); }
 
        //! returns the distance of the last found path, or -1 on any error
        int getDistance( );
@@ -222,11 +168,8 @@ class AStar3D {
        //! returns the number of turns that the unit will need to travel along the last found path
        int getTravelTime( );
 
-       //! checks weather the field fld was among the visited fields during the last search
-       const Node* fieldVisited ( const MapCoordinate3D& fld );
-
-       int& getFieldAccess ( int x, int y );
-       int& getFieldAccess ( const MapCoordinate& mc );
+       int getFieldAccess ( int x, int y );
+       int getFieldAccess ( const MapCoordinate& mc );
 
        //! for debugging: dumps the contents of the visited node to stdout
        void dumpVisited();

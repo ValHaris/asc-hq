@@ -347,7 +347,7 @@ int  evaluateviewcalculation ( GameMap* gamemap, int player_fieldcount_mask, boo
                
                if ( firstLoop )
                   // first player in loop, so we save the current state as the 'original' state
-                  fld->temp3 = fld->visible;
+                  fld->setTemp3(fld->visible);
                
                if ( player_fieldcount_mask & (1 << player ))
                   fieldsChanged += evaluatevisibilityfield ( gamemap, fld, player, add, initial );
@@ -363,11 +363,11 @@ int  evaluateviewcalculation ( GameMap* gamemap, int player_fieldcount_mask, boo
       for ( int y = 0; y < gamemap->ysize; ++y )
          for ( int x = 0; x < gamemap->xsize; ++x ) {
             MapField* fld = gamemap->getField(x,y);
-            if ( fld->visible != fld->temp3 ) {
+            if ( fld->visible != fld->getTemp3() ) {
                // we are running under action control, the change shall be done by the action and not here,
                // so we are undoing our change for the moment
                viewState[MapCoordinate(x,y)] = fld->visible;
-               fld->visible = fld->temp3;
+               fld->visible = fld->getTemp3();
             }
          }
       

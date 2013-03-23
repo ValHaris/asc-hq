@@ -32,7 +32,7 @@ AI :: AI ( GameMap* _map, int _player ) : activemap ( _map ) , sections ( this )
 
    player = _player;
 
-   _isRunning = false;
+   isRunning(false);
    fieldInformation = NULL;
 
    reset();
@@ -248,8 +248,8 @@ void AI:: run ( bool benchMark, MapDisplayInterface* myMapDisplay )
    AiResult res;
 
    unitCounter = 0;
-   _isRunning = true;
-   _vision = visible_ago;
+   isRunning(true);
+   setVision(visible_ago);
 
    int setupTime = ticker;
    
@@ -309,7 +309,7 @@ void AI:: run ( bool benchMark, MapDisplayInterface* myMapDisplay )
 
    checkGameEvents();
 
-   _isRunning = false;
+   isRunning(false);
    if ( !mapDisplay )
       repaintMap();
    int duration = ticker-startTime;
@@ -367,18 +367,6 @@ void AI :: diplomacy ()
    }
 }
 
-
-bool AI :: isRunning ( void )
-{
-   return _isRunning;
-}
-
-
-VisibilityStates AI:: getVision ( void )
-{
-   return _vision;
-}
-
 void AI :: showFieldInformation ( int x, int y )
 {
    if ( !fieldInformation )
@@ -416,14 +404,14 @@ void AI :: showFieldInformation ( int x, int y )
 
       if ( aip.dest.x >= 0 && aip.dest.y >= 0 ) {
          getMap()->cleartemps ( 1 );
-         getMap()->getField ( aip.dest.x, aip.dest.y )->a.temp = 1;
+         getMap()->getField ( aip.dest.x, aip.dest.y )->setaTemp(1);
       }
 
 
    }
 
    for ( ReconPositions::iterator i = reconPositions.begin(); i != reconPositions.end(); i++ )
-      getMap()->getField( i->first )->a.temp2 = 1;
+      getMap()->getField( i->first )->setaTemp2(1);
 
    repaintMap();
 
@@ -483,8 +471,8 @@ void AI :: read ( tnstream& stream )
    int version = stream.readInt ( );
    if ( version > currentServiceOrderVersion )
       throw tinvalidversion ( "AI :: read", currentServiceOrderVersion, version );
-   _isRunning = stream.readInt ();
-   _vision = VisibilityStates(stream.readInt ( ));
+   isRunning(stream.readInt ());
+   setVision(VisibilityStates(stream.readInt ( )));
    unitCounter = stream.readInt ( );
 
    int i = stream.readInt();
@@ -556,8 +544,8 @@ void AI :: write ( tnstream& stream ) const
 {
    const int version = currentAiStreamVersion;
    stream.writeInt ( version );
-   stream.writeInt ( _isRunning );
-   stream.writeInt ( _vision );
+   stream.writeInt ( isRunning() );
+   stream.writeInt ( getVision() );
    stream.writeInt ( unitCounter );
 
    for ( ServiceOrderContainer::const_iterator i = serviceOrders.begin(); i != serviceOrders.end(); i++) {

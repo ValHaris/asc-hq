@@ -825,7 +825,7 @@ protected:
     virtual void setpointabs ( int x,  int y  ) {
         MapField* ffield = getfield ( x , y );
         if (ffield)
-            ffield->a.temp2 = 1;
+            ffield->setaTemp2(1);
     };
 public:
     bool paintPolygon   (  const Poly_gon& poly ) {
@@ -833,7 +833,7 @@ public:
         for ( int i = 0; i < poly.vertex.size(); ++i ) {
             MapField* ffield = actmap->getField ( poly.vertex[i] );
             if (ffield)
-                ffield->a.temp = 1;
+                ffield->setaTemp(1);
         }
         return res;
     };
@@ -4721,9 +4721,9 @@ void testDebugFunction()
         for ( int y = 0; y < actmap->ysize; ++y ) {
             MapField* fld = actmap->getField(x,y);
             if ( fld->getVisibility(5) >= visible_now )
-                fld->a.temp = 1;
+                fld->setaTemp(1);
             else
-                fld->a.temp = 0;
+                fld->setaTemp(0);
         }
 
     repaintMap();

@@ -633,14 +633,13 @@ AI::Section& AI :: Sections :: getForPos ( int xn, int yn )
 /*
   This is like some ball rolling down from some high potential spike
 */
-MapCoordinate AI :: Sections :: getAlternativeField( const MapCoordinate& pos, map<MapCoordinate,int>* destinationCounter, int height )
+MapCoordinate AI :: Sections :: getAlternativeField( const MapCoordinate& pos, map<MapCoordinate,int>* destinationCounter, int height, AStar3D* ast )
 {
    MapCoordinate result  = pos;
    int potential = destinationCounter->operator[](pos);
    for ( int d = 0; d< 6; ++d ) {
       MapCoordinate m = getNeighbouringFieldCoordinate( pos, d );
-      MapField* fld = ai->getMap()->getField(m );
-      if ( fld && (fld->a.temp & height) ) {
+      if ( ast->getFieldAccess(m) & height) {
          if ( destinationCounter->find( m ) == destinationCounter->end() )
             return m;
          else {
@@ -654,7 +653,7 @@ MapCoordinate AI :: Sections :: getAlternativeField( const MapCoordinate& pos, m
    if ( result == pos )
       return result;
    else
-      return getAlternativeField( result , destinationCounter, height );
+      return getAlternativeField( result , destinationCounter, height, ast );
 }
 
 
@@ -666,22 +665,6 @@ AI::Section* AI :: Sections :: getBest ( int pass, Vehicle* veh, MapCoordinate3D
       In the second pass the threat of a section is devided by the number of units that
       are going there
    */
-
-   AStar3D* ast = 0;
-   RefuelConstraint* rfc = NULL;
-   if ( RefuelConstraint::necessary ( veh, *ai )) {
-      if ( secondRun )
-         rfc = new RefuelConstraint ( *ai, veh, veh->maxMovement()*5 );
-      else
-         rfc = new RefuelConstraint ( *ai, veh );
-
-      rfc->findPath();
-   } else {
-      ast = new AStar3D ( ai->getMap(), veh );
-      ast->findAllAccessibleFields (  );
-   }
-
-
    AiParameter& aip = *veh->aiparam[ ai->getPlayerNum() ];
 
    float d = minfloat;
@@ -697,6 +680,9 @@ AI::Section* AI :: Sections :: getBest ( int pass, Vehicle* veh, MapCoordinate3D
               maxSectionThread = threat;
       }
 
+   AStar3D* ast = 0;
+   bool deleteAst = false;
+   RefuelConstraint* rfc = NULL;
 
    TemporaryContainerStorage tus ( veh );
    veh->resetMovement(); // to make sure the wait-for-attack flag doesn't hinder the attack
@@ -704,6 +690,42 @@ AI::Section* AI :: Sections :: getBest ( int pass, Vehicle* veh, MapCoordinate3D
 
    int sectionsPossibleWithMaxFuell = 0;
 
+   /*
+   int actfields = 0;
+
+   for ( int h = 1; h < 0xff; h<<= 1 ) {
+      if ( veh->typ->height & h ) {
+         for ( int y = 0; y < numY; y++ ) {
+            for ( int x = 0; x < numX; x++ ) {
+                AI::Section& sec = getForPos( x, y );
+                float t = 0;
+                for ( int i = 0; i < aiValueTypeNum; i++ )
+                   t += aip.threat.threat[i] * sec.value[i];
+
+                float f = t;
+
+                if ( sec.avgUnitThreat.threat[ veh->getValueType(h) ] ) {
+                   int relThreat = int( 4*maxSectionThread / sec.avgUnitThreat.threat[veh->getValueType(h)] + 1);
+                   f /= relThreat;
+                }
+
+                int dist = beeline ( veh->xpos, veh->ypos, sec.centerx, sec.centery ) + 3 * veh->maxMovement();
+                if ( dist )
+                   f /= log(double(dist));
+
+                if ( f > d ) {
+                   actfields += abs(sec.y1 - sec.y2) * abs(sec.x1 - sec.x2);
+                }
+            }
+         }
+      }
+   }
+
+   if (actfields == 0) {
+      return NULL;
+   }
+   */
+  
    for ( int h = 1; h < 0xff; h<<= 1 )
       if ( veh->typ->height & h )
          for ( int y = 0; y < numY; y++ )
@@ -740,11 +762,27 @@ AI::Section* AI :: Sections :: getBest ( int pass, Vehicle* veh, MapCoordinate3D
                    int mindist = maxint;
                    int targets = 0;
 
+                   // create an AStar3D object only when needed
+                   if ( !ast ) {
+                      if ( RefuelConstraint::necessary ( veh, *ai )) {
+                         if ( secondRun )
+                            rfc = new RefuelConstraint ( *ai, veh, veh->maxMovement()*5 );
+                         else
+                            rfc = new RefuelConstraint ( *ai, veh );
+
+                         rfc->findPath( false );
+                         ast = rfc->getAst();
+                      } else {
+                         ast = new AStar3D ( ai->getMap(), veh, false );
+                         ast->findAllAccessibleFields (  );
+                         deleteAst = true;
+                      }
+                   }
+
 
                    for ( int yp = sec.y1; yp <= sec.y2; yp++ )
                       for ( int xp = sec.x1; xp <= sec.x2; xp++ ) {
-                         MapField* fld = ai->getMap()->getField(xp, yp );
-                         if ( fld->a.temp & h ) {
+                         if ( ast->getFieldAccess(xp, yp) & h ) {
                             int mandist = abs( sec.centerx - xp ) + 2*abs ( sec.centery - yp );
                             if ( mandist < mindist ) {
                                mindist = mandist;
@@ -754,7 +792,7 @@ AI::Section* AI :: Sections :: getBest ( int pass, Vehicle* veh, MapCoordinate3D
                                      check how many are for neighbouringfields */
                                   
                                   
-                                  MapCoordinate alt = getAlternativeField( MapCoordinate(xp,yp), destinationCounter, h );
+                                  MapCoordinate alt = getAlternativeField( MapCoordinate(xp,yp), destinationCounter, h, ast );
                                   xtogoSec = alt.x;
                                   ytogoSec = alt.y;
                                } else {
@@ -763,7 +801,7 @@ AI::Section* AI :: Sections :: getBest ( int pass, Vehicle* veh, MapCoordinate3D
                                }
                             }
 
-                            ai->_vision = visible_all;
+                            ai->setVision(visible_all);
 
                             ac++;
 
@@ -776,7 +814,7 @@ AI::Section* AI :: Sections :: getBest ( int pass, Vehicle* veh, MapCoordinate3D
                                attack.searchTargets();
                                targets += attack.getAttackableUnits().size();
                             }
-                            ai->_vision = visible_ago;
+                            ai->setVision(visible_ago);
                          } else
                             nac++;
                       }
@@ -804,8 +842,12 @@ AI::Section* AI :: Sections :: getBest ( int pass, Vehicle* veh, MapCoordinate3D
             }
 
    tus.restore();
-   delete ast;
-   delete rfc;
+   if ( deleteAst ) {
+      delete ast;
+   } else {
+      ast = NULL;
+      delete rfc;
+   }
 
    if ( !frst ) {
       if ( sectionsPossibleWithMaxFuell && allowRefuellOrder )

@@ -311,13 +311,12 @@ class UnitMovementRangeLayer : public MapLayer, public SigC::Object {
          int counter = 0;
          
          AStar3D pathfinder( veh->getMap(), veh, false, veh->maxMovement() );
-         vector<MapCoordinate3D> fieldList;
-         pathfinder.findAllAccessibleFields( &fieldList );
+         pathfinder.findAllAccessibleFields( );
          
-         for ( vector<MapCoordinate3D>::iterator i = fieldList.begin(); i != fieldList.end(); ++i )
-            if ( fieldvisiblenow ( veh->getMap()->getField(*i) )) {
+         for ( AStar3D::VisitedContainer::iterator i = pathfinder.visited.begin(); i != pathfinder.visited.end(); ++i )
+            if ( fieldvisiblenow ( veh->getMap()->getField(i->h) )) {
                ++counter;
-               markField( *i );
+               markField( i->h );
             }
       
          if ( counter )
