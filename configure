@@ -2220,11 +2220,11 @@ fi
 
 } # ac_fn_c_check_header_mongrel
 
-# ac_fn_c_check_type LINENO TYPE VAR INCLUDES
-# -------------------------------------------
+# ac_fn_cxx_check_type LINENO TYPE VAR INCLUDES
+# ---------------------------------------------
 # Tests whether TYPE exists after having included INCLUDES, setting cache
 # variable VAR accordingly.
-ac_fn_c_check_type ()
+ac_fn_cxx_check_type ()
 {
   as_lineno=${as_lineno-"$1"} as_lineno_stack=as_lineno_stack=$as_lineno_stack
   { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $2" >&5
@@ -2245,7 +2245,7 @@ if (sizeof ($2))
   return 0;
 }
 _ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
+if ac_fn_cxx_try_compile "$LINENO"; then :
   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 $4
@@ -2258,7 +2258,7 @@ if (sizeof (($2)))
   return 0;
 }
 _ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
+if ac_fn_cxx_try_compile "$LINENO"; then :
 
 else
   eval "$3=yes"
@@ -2272,7 +2272,74 @@ eval ac_res=\$$3
 $as_echo "$ac_res" >&6; }
   eval $as_lineno_stack; ${as_lineno_stack:+:} unset as_lineno
 
-} # ac_fn_c_check_type
+} # ac_fn_cxx_check_type
+
+# ac_fn_cxx_check_func LINENO FUNC VAR
+# ------------------------------------
+# Tests whether FUNC exists, setting the cache variable VAR accordingly
+ac_fn_cxx_check_func ()
+{
+  as_lineno=${as_lineno-"$1"} as_lineno_stack=as_lineno_stack=$as_lineno_stack
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $2" >&5
+$as_echo_n "checking for $2... " >&6; }
+if eval \${$3+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+/* Define $2 to an innocuous variant, in case <limits.h> declares $2.
+   For example, HP-UX 11i <limits.h> declares gettimeofday.  */
+#define $2 innocuous_$2
+
+/* System header to define __stub macros and hopefully few prototypes,
+    which can conflict with char $2 (); below.
+    Prefer <limits.h> to <assert.h> if __STDC__ is defined, since
+    <limits.h> exists even on freestanding compilers.  */
+
+#ifdef __STDC__
+# include <limits.h>
+#else
+# include <assert.h>
+#endif
+
+#undef $2
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char $2 ();
+/* The GNU C library defines this for functions which it implements
+    to always fail with ENOSYS.  Some functions are actually named
+    something starting with __ and the normal name is an alias.  */
+#if defined __stub_$2 || defined __stub___$2
+choke me
+#endif
+
+int
+main ()
+{
+return $2 ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+  eval "$3=yes"
+else
+  eval "$3=no"
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+fi
+eval ac_res=\$$3
+	       { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_res" >&5
+$as_echo "$ac_res" >&6; }
+  eval $as_lineno_stack; ${as_lineno_stack:+:} unset as_lineno
+
+} # ac_fn_cxx_check_func
 cat >config.log <<_ACEOF
 This file contains any messages produced by compilers while
 running configure, to aid debugging if configure makes a mistake.
@@ -18224,6 +18291,34 @@ CPPFLAGS=$OLDCPPFLAGS
 #AC_MSG_RESULT("yes")
 
 
+ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+
+for ac_header in boost/unordered_map.hpp
+do :
+  ac_fn_cxx_check_header_mongrel "$LINENO" "boost/unordered_map.hpp" "ac_cv_header_boost_unordered_map_hpp" "$ac_includes_default"
+if test "x$ac_cv_header_boost_unordered_map_hpp" = xyes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_BOOST_UNORDERED_MAP_HPP 1
+_ACEOF
+
+else
+
+   as_fn_error $? " ASC requires the Boost version >= 1.49 library(which may be splitted into several distinct libraries).
+       If you have a distribution supplied Boost version >= 1.49 package installed,
+       perhaps the Boost version >= 1.49-devel package is missing.
+       If your distribution does not include the Boost version >= 1.49 library, you can get it from
+       http://www.boost.org/ " "$LINENO" 5
+
+fi
+
+done
+
+
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for main in -lboost_regex-mt" >&5
 $as_echo_n "checking for main in -lboost_regex-mt... " >&6; }
 if ${ac_cv_lib_boost_regex_mt_main+:} false; then :
@@ -18243,7 +18338,7 @@ return main ();
   return 0;
 }
 _ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
+if ac_fn_cxx_try_link "$LINENO"; then :
   ac_cv_lib_boost_regex_mt_main=yes
 else
   ac_cv_lib_boost_regex_mt_main=no
@@ -18282,7 +18377,7 @@ return main ();
   return 0;
 }
 _ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
+if ac_fn_cxx_try_link "$LINENO"; then :
   ac_cv_lib_boost_regex_gcc_mt_main=yes
 else
   ac_cv_lib_boost_regex_gcc_mt_main=no
@@ -18321,7 +18416,7 @@ return main ();
   return 0;
 }
 _ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
+if ac_fn_cxx_try_link "$LINENO"; then :
   ac_cv_lib_boost_regex_main=yes
 else
   ac_cv_lib_boost_regex_main=no
@@ -18360,7 +18455,7 @@ return main ();
   return 0;
 }
 _ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
+if ac_fn_cxx_try_link "$LINENO"; then :
   ac_cv_lib_boost_regex_gcc_main=yes
 else
   ac_cv_lib_boost_regex_gcc_main=no
@@ -18579,7 +18674,7 @@ return FT_Init_FreeType ();
   return 0;
 }
 _ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
+if ac_fn_cxx_try_link "$LINENO"; then :
   ac_cv_lib_freetype_FT_Init_FreeType=yes
 else
   ac_cv_lib_freetype_FT_Init_FreeType=no
@@ -18594,7 +18689,7 @@ if test "x$ac_cv_lib_freetype_FT_Init_FreeType" = xyes; then :
   have_freetype=yes
 fi
 
-      ac_fn_c_check_header_mongrel "$LINENO" "ft2build.h" "ac_cv_header_ft2build_h" "$ac_includes_default"
+      ac_fn_cxx_check_header_mongrel "$LINENO" "ft2build.h" "ac_cv_header_ft2build_h" "$ac_includes_default"
 if test "x$ac_cv_header_ft2build_h" = xyes; then :
   have_ft2build=yes
 fi
@@ -18630,7 +18725,7 @@ $as_echo "$ft2inc" >&6; }
 fi
 
 
-ac_fn_c_check_header_mongrel "$LINENO" "expat.h" "ac_cv_header_expat_h" "$ac_includes_default"
+ac_fn_cxx_check_header_mongrel "$LINENO" "expat.h" "ac_cv_header_expat_h" "$ac_includes_default"
 if test "x$ac_cv_header_expat_h" = xyes; then :
 
 else
@@ -18669,7 +18764,7 @@ return XML_ParserCreate ();
   return 0;
 }
 _ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
+if ac_fn_cxx_try_link "$LINENO"; then :
   ac_cv_lib_expat_XML_ParserCreate=yes
 else
   ac_cv_lib_expat_XML_ParserCreate=no
@@ -18757,7 +18852,7 @@ PHYSFS_LIB="-lphysfs"
 PHYSFS_SUBDIR=""
 LIBPHYSFS="-lphysfs"
 
-ac_fn_c_check_header_mongrel "$LINENO" "physfs.h" "ac_cv_header_physfs_h" "$ac_includes_default"
+ac_fn_cxx_check_header_mongrel "$LINENO" "physfs.h" "ac_cv_header_physfs_h" "$ac_includes_default"
 if test "x$ac_cv_header_physfs_h" = xyes; then :
 
 else
@@ -18796,7 +18891,7 @@ return PHYSFS_init ();
   return 0;
 }
 _ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
+if ac_fn_cxx_try_link "$LINENO"; then :
   ac_cv_lib_physfs_PHYSFS_init=yes
 else
   ac_cv_lib_physfs_PHYSFS_init=no
@@ -18897,7 +18992,7 @@ return BZ2_bzReadOpen ();
   return 0;
 }
 _ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
+if ac_fn_cxx_try_link "$LINENO"; then :
   ac_cv_lib_bz2_BZ2_bzReadOpen=yes
 else
   ac_cv_lib_bz2_BZ2_bzReadOpen=no
@@ -18925,7 +19020,7 @@ else
 
 fi
 
-ac_fn_c_check_header_mongrel "$LINENO" "bzlib.h" "ac_cv_header_bzlib_h" "$ac_includes_default"
+ac_fn_cxx_check_header_mongrel "$LINENO" "bzlib.h" "ac_cv_header_bzlib_h" "$ac_includes_default"
 if test "x$ac_cv_header_bzlib_h" = xyes; then :
 
 else
@@ -18971,7 +19066,7 @@ return png_create_write_struct ();
   return 0;
 }
 _ACEOF
-if ac_fn_c_try_link "$LINENO"; then :
+if ac_fn_cxx_try_link "$LINENO"; then :
   ac_cv_lib_png_png_create_write_struct=yes
 else
   ac_cv_lib_png_png_create_write_struct=no
@@ -19005,7 +19100,7 @@ fi
 for ac_header in exception limits
 do :
   as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
-ac_fn_c_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
+ac_fn_cxx_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
 if eval test \"x\$"$as_ac_Header"\" = x"yes"; then :
   cat >>confdefs.h <<_ACEOF
 #define `$as_echo "HAVE_$ac_header" | $as_tr_cpp` 1
@@ -19038,7 +19133,7 @@ return 0;
   return 0;
 }
 _ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
+if ac_fn_cxx_try_compile "$LINENO"; then :
   eval "$as_ac_Header=yes"
 else
   eval "$as_ac_Header=no"
@@ -19090,7 +19185,7 @@ for ac_lib in '' dir; do
     ac_res=-l$ac_lib
     LIBS="-l$ac_lib  $ac_func_search_save_LIBS"
   fi
-  if ac_fn_c_try_link "$LINENO"; then :
+  if ac_fn_cxx_try_link "$LINENO"; then :
   ac_cv_search_opendir=$ac_res
 fi
 rm -f core conftest.err conftest.$ac_objext \
@@ -19147,7 +19242,7 @@ for ac_lib in '' x; do
     ac_res=-l$ac_lib
     LIBS="-l$ac_lib  $ac_func_search_save_LIBS"
   fi
-  if ac_fn_c_try_link "$LINENO"; then :
+  if ac_fn_cxx_try_link "$LINENO"; then :
   ac_cv_search_opendir=$ac_res
 fi
 rm -f core conftest.err conftest.$ac_objext \
@@ -19194,7 +19289,7 @@ return 0;
   return 0;
 }
 _ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
+if ac_fn_cxx_try_compile "$LINENO"; then :
   ac_cv_header_time=yes
 else
   ac_cv_header_time=no
@@ -19298,7 +19393,7 @@ main ()
   return 0;
 }
 _ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
+if ac_fn_cxx_try_compile "$LINENO"; then :
   ac_cv_c_const=yes
 else
   ac_cv_c_const=no
@@ -19313,7 +19408,7 @@ $as_echo "#define const /**/" >>confdefs.h
 
 fi
 
-ac_fn_c_check_type "$LINENO" "size_t" "ac_cv_type_size_t" "$ac_includes_default"
+ac_fn_cxx_check_type "$LINENO" "size_t" "ac_cv_type_size_t" "$ac_includes_default"
 if test "x$ac_cv_type_size_t" = xyes; then :
 
 else
@@ -19344,7 +19439,7 @@ return 0;
   return 0;
 }
 _ACEOF
-if ac_fn_c_try_compile "$LINENO"; then :
+if ac_fn_cxx_try_compile "$LINENO"; then :
   ac_cv_header_time=yes
 else
   ac_cv_header_time=no
@@ -19362,7 +19457,7 @@ fi
 
 for ac_func in select
 do :
-  ac_fn_c_check_func "$LINENO" "select" "ac_cv_func_select"
+  ac_fn_cxx_check_func "$LINENO" "select" "ac_cv_func_select"
 if test "x$ac_cv_func_select" = xyes; then :
   cat >>confdefs.h <<_ACEOF
 #define HAVE_SELECT 1
@@ -19373,7 +19468,7 @@ done
 
 for ac_func in itoa
 do :
-  ac_fn_c_check_func "$LINENO" "itoa" "ac_cv_func_itoa"
+  ac_fn_cxx_check_func "$LINENO" "itoa" "ac_cv_func_itoa"
 if test "x$ac_cv_func_itoa" = xyes; then :
   cat >>confdefs.h <<_ACEOF
 #define HAVE_ITOA 1
@@ -19384,7 +19479,7 @@ done
 
 for ac_func in stricmp
 do :
-  ac_fn_c_check_func "$LINENO" "stricmp" "ac_cv_func_stricmp"
+  ac_fn_cxx_check_func "$LINENO" "stricmp" "ac_cv_func_stricmp"
 if test "x$ac_cv_func_stricmp" = xyes; then :
   cat >>confdefs.h <<_ACEOF
 #define HAVE_STRICMP 1

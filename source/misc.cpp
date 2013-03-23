@@ -44,6 +44,11 @@ char strstring[1000];
 
 int getFirstBit(int zahl)
 {
+   #ifdef __GNUC__ // GCC-intrinsic (TODO: Visual C++ intrinsics, can't test is right now).
+   // the return value for __builtin_ctz(0) is undefined; it does set the zero flag, but we
+   // cant' read it from C/C++ :(
+   return (zahl != 0 ) ? __builtin_ctz(zahl) : 0;
+   #else
    if (zahl != 0) {
       int log = 0;
       while ( !(zahl & 1))  {
@@ -53,6 +58,7 @@ int getFirstBit(int zahl)
       return log;
    } else
       return 0;
+   #endif
 }
 
 

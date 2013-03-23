@@ -21,13 +21,14 @@
 
 float AI :: getCaptureValue ( const Building* bld, Vehicle* veh  )
 {
-   HiddenAStar ast ( this, veh );
-   HiddenAStar::Path path;
-   ast.findPath ( path, bld->getEntry().x, bld->getEntry().y );
-   if ( ast.getTravelTime() >= 0 )
+   HiddenAStar3D ast ( this, veh );
+   HiddenAStar3D::Path path;
+   ast.findPath ( path, bld->getEntry() );
+   //if ( ast.getTravelTime() >= 0 )
+   if ( ast.visited.back().gval >= 0 )
       // everything else being equal, prefer cheapest unit
       // TODO: factor 0.0001 should be made configurable
-      return getCaptureValue ( bld, ast.getTravelTime() )-0.0001*veh->aiparam[getPlayerNum()]->getValue() ;
+      return getCaptureValue ( bld, ast.visited.back().gval / veh->getMovement() )-0.0001*veh->aiparam[getPlayerNum()]->getValue() ;
    else
       return -1;
       // return minfloat; // this makes no sense as minfloat>0!

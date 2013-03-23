@@ -41,7 +41,6 @@
 #include "packagemanager.h"
 #include "tasks/abstracttaskcontainer.h"
 
-
 RandomGenerator::RandomGenerator(int seedValue){
 
 }
@@ -235,6 +234,10 @@ GameMap :: GameMap ( void )
    xsize = 0;
    ysize = 0;
    field = NULL;
+   temp = NULL;
+   temp2 = NULL;
+   temp3 = NULL;
+   temp4 = NULL;
 
    actplayer = -1;
    time.abstime = 0;
@@ -960,24 +963,20 @@ MapCoordinate GameMap::getCursor() const
 
 void GameMap :: cleartemps( int b, int value )
 {
-  if ( xsize <= 0 || ysize <= 0)
-     return;
+   if ( xsize <= 0 || ysize <= 0)
+      return;
 
-  int l = 0;
-  for ( int x = 0; x < xsize ; x++)
-     for ( int y = 0; y <  ysize ; y++) {
-
-         if (b & 1 )
-           field[l].a.temp = value;
-         if (b & 2 )
-           field[l].a.temp2 = value;
-         if (b & 4 )
-           field[l].temp3 = value;
-         if (b & 8 )
-           field[l].temp4 = value;
-
-         l++;
-     }
+   size_t lmax = xsize * ysize;
+   if (b & 1)
+      memset(temp, value, lmax);
+   if (b & 2)
+      memset(temp2, value, lmax);
+   if (b & 4)
+      for (int l = 0; l < lmax; ++l)
+         temp3[l] = value;
+   if (b & 8)
+      for (int l = 0; l < lmax; ++l)
+         temp4[l] = value;
 }
 
 void GameMap :: allocateFields ( int x, int y, TerrainType::Weather* terrain )
@@ -988,10 +987,14 @@ void GameMap :: allocateFields ( int x, int y, TerrainType::Weather* terrain )
          field[i].typ = terrain;
          field[i].setparams();
       }
-      field[i].setMap ( this );
+      field[i].setMap ( this, i );
    }
    xsize = x;
    ysize = y;
+   temp = new char[x*y]();
+   temp2 = new char[x*y]();
+   temp3 = new int[x*y]();
+   temp4 = new int[x*y]();
    overviewMapHolder.connect();
 }
 
@@ -999,28 +1002,6 @@ void GameMap :: allocateFields ( int x, int y, TerrainType::Weather* terrain )
 void GameMap :: calculateAllObjects ( void )
 {
    calculateallobjects( this );
-}
-
-MapField*  GameMap :: getField(int x, int y)
-{
-   if ((x < 0) || (y < 0) || (x >= xsize) || (y >= ysize))
-      return NULL;
-   else
-      return (   &field[y * xsize + x] );
-}
-
-const MapField*  GameMap :: getField(int x, int y) const
-{
-   if ((x < 0) || (y < 0) || (x >= xsize) || (y >= ysize))
-      return NULL;
-   else
-      return (   &field[y * xsize + x] );
-}
-
-
-MapField*  GameMap :: getField(const MapCoordinate& pos )
-{
-   return getField ( pos.x, pos.y );
 }
 
 int   GameMap :: getPlayerView() const
@@ -1548,6 +1529,22 @@ GameMap :: ~GameMap ()
    delete tasks;
    tasks = NULL;
    
+   if (temp) {
+      delete[] temp;
+      temp = NULL;
+   }
+   if (temp2) {
+      delete[] temp2;
+      temp2 = NULL;
+   }
+   if (temp3) {
+      delete[] temp3;
+      temp3 = NULL;
+   }
+   if (temp4) {
+      delete[] temp4;
+      temp4 = NULL;
+   }
 }
 
 /*
@@ -1690,7 +1687,7 @@ int  GameMap::resize( int top, int bottom, int left, int right )  // positive: l
 
   MapField* newfield = new MapField [ newx * newy ];
   for ( int i = 0; i < newx * newy; i++ )
-     newfield[i].setMap ( this );
+     newfield[i].setMap ( this, i );
 
   int x;
   for ( x = ox1; x < ox2; x++ )
@@ -1700,27 +1697,27 @@ int  GameMap::resize( int top, int bottom, int left, int right )  // positive: l
         *dst = *org;
      }
 
-  MapField defaultfield;
-  defaultfield.setMap ( this );
-  defaultfield.typ = getterraintype_byid ( 30 )->weather[0];
+  //MapField defaultfield;
+  //defaultfield.setMap ( this );
+  //defaultfield.typ = getterraintype_byid ( 30 )->weather[0];
 
   for ( x = 0; x < left; x++ )
      for ( int y = 0; y < newy; y++ )
-        newfield[ x + y * newx ] = defaultfield;
+        newfield[ x + y * newx ].typ = getterraintype_byid ( 30 )->weather[0];
 
   for ( x = xsize + left; x < xsize + left + right; x++ )
      for ( int y = 0; y < newy; y++ )
-        newfield[ x + y * newx ] = defaultfield;
+        newfield[ x + y * newx ].typ = getterraintype_byid ( 30 )->weather[0];
 
 
   int y;
   for ( y = 0; y < top; y++ )
      for ( int x = 0; x < newx; x++ )
-        newfield[ x + y * newx ] = defaultfield;
+        newfield[ x + y * newx ].typ = getterraintype_byid ( 30 )->weather[0];
 
   for ( y = ysize + top; y < ysize + top + bottom; y++ )
      for ( int x = 0; x < newx; x++ )
-        newfield[ x + y * newx ] = defaultfield;
+        newfield[ x + y * newx ].typ = getterraintype_byid ( 30 )->weather[0];
 
   calculateallobjects( this );
 
@@ -1732,6 +1729,14 @@ int  GameMap::resize( int top, int bottom, int left, int right )  // positive: l
   xsize = newx;
   ysize = newy;
 
+  delete[] temp;
+  delete[] temp2;
+  delete[] temp3;
+  delete[] temp4;
+  temp = new char[newx*newy]();
+  temp2 = new char[newx*newy]();
+  temp3 = new int[newx*newy]();
+  temp4 = new int[newx*newy]();
 
   for (int s = 0; s < 9; s++)
      for ( Player::BuildingList::iterator i = player[s].buildingList.begin(); i != player[s].buildingList.end(); i++ ) {
@@ -1940,11 +1945,10 @@ VisibilityStates GameMap::getInitialMapVisibility( int player )
    VisibilityStates c = VisibilityStates( getgameparameter ( cgp_initialMapVisibility ));
 
    if ( this->player[player].ai ) {
-      if ( this->player[player].ai->isRunning() ) {
-         if ( c < this->player[player].ai->getVision() )
-            c = this->player[player].ai->getVision();
+      if ( this->playerAiRunning[player] ) {
+         if ( c < this->playerAiVision[player] )
+            c = this->playerAiVision[player];
       } else
-         // this is a hack to make the replays of the AI work
          if ( c < visible_ago )
             c = visible_ago;
    }

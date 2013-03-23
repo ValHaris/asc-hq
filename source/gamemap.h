@@ -181,6 +181,13 @@ class GameMap {
       bool dialogsHooked;
       int serverMapID;
    public:
+      char* temp;
+      char* temp2;
+      int* temp3;
+      int* temp4;
+
+      bool playerAiRunning[9];
+      VisibilityStates playerAiVision[9];
 
       void setServerMapID( int id ) { serverMapID = id; };
       int  getServerMapID() const { return serverMapID; };
@@ -452,9 +459,13 @@ class GameMap {
       void setgameparameter ( GameParameter num, int value );
       void cleartemps( int b = -1, int value = 0 );
       bool isResourceGlobal ( int resource );
-      MapField* getField ( int x, int y );
-      const MapField* getField ( int x, int y ) const;
-      MapField* getField ( const MapCoordinate& pos );
+      inline MapField* getField ( int x, int y ) {
+         return ((x < 0) || (y < 0) || (x >= xsize) || (y >= ysize)) ? NULL : &field[y * xsize + x];
+      }
+      inline const MapField* getField ( int x, int y ) const {
+         return ((x < 0) || (y < 0) || (x >= xsize) || (y >= ysize)) ? NULL : &field[y * xsize + x];
+      }
+      inline MapField* getField ( const MapCoordinate& pos ) { return getField ( pos.x, pos.y ); }
       
       
       /** @name Turn Management

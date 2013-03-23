@@ -31,18 +31,6 @@
 #include "actions/context.h"
 #include "actions/removeobject.h"
 
-MapField :: MapField ( GameMap* gamemap_ )
-{
-  init();
-  setMap( gamemap_ );
-}
-
-MapField :: MapField (  )
-{
-  init();
-}
-
-
 void MapField::init ()
 {
    bdt.set ( 0 );
@@ -50,10 +38,6 @@ void MapField::init ()
    vehicle = NULL;
    secondvehicle = NULL;
    building = NULL;
-   a.temp = 0;
-   a.temp2 = 0;
-   temp3 = 0;
-   temp4 = 0;
    visible = 0;
    fuel = 0;
    material = 0;
@@ -62,6 +46,41 @@ void MapField::init ()
    gamemap = NULL;
    viewbonus = 0;
 }
+void MapField::setaTemp (Uint8 temp) {
+   gamemap->temp[index] = temp;
+};
+Uint8 MapField::getaTemp () {
+   return gamemap->temp[index];
+};
+
+void MapField::setaTemp2 (Uint8 temp2) {
+   gamemap->temp2[index] = temp2;
+};
+Uint8 MapField::getaTemp2 () {
+   return gamemap->temp2[index];
+};
+
+void MapField::setTempw (Uint16 tempw) {
+   gamemap->temp[index] = tempw>>8;
+   gamemap->temp2[index] = tempw & 0xFF;
+};
+Uint16 MapField::getTempw () {
+   return gamemap->temp[index]<<8 | gamemap->temp2[index];
+};
+
+void MapField::setTemp3 (int temp3) {
+   gamemap->temp3[index] = temp3;
+};
+int MapField::getTemp3 () {
+   return gamemap->temp3[index];
+};
+
+void MapField::setTemp4 (int temp4) {
+   gamemap->temp4[index] = temp4;
+};
+int MapField::getTemp4 () {
+   return gamemap->temp4[index];
+};
 
 int MapField::getMineralMaterial() const
 {
@@ -139,9 +158,6 @@ void MapField::operator= ( const MapField& f )
    fuel = f.fuel;
    material = f.material;
    visible = f.visible;
-   tempw = f.tempw;
-   temp3 = f.temp3;
-   temp4 = f.temp4;
    vehicle = f.vehicle;
    building = f.building;
    if ( f.resourceview ) {

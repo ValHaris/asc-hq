@@ -4,12 +4,10 @@
 
 
 
-#include <stack>
 #include <vector>
-#include <functional>
-#include <algorithm>
 #include <cmath>
-#include <iostream>
+
+#include <boost/heap/pairing_heap.hpp>
 
 #include "vehicletype.h"
 #include "spfst.h"
@@ -17,345 +15,89 @@
 
 #include "astar2.h"
 
+#include <iostream>
 
-// The mark array marks directions on the map.  The direction points
-// to the spot that is the previous spot along the path.  By starting
-// at the end, we can trace our way back to the start, and have a path.
-
-
-// mark -> temp3
-
-bool AStar::Node::operator< ( const AStar::Node& a ) const
-{
-    // To compare two nodes, we compare the `f' value, which is the
-    // sum of the g and h values.
-    return (gval+hval) < (a.gval+a.hval);
+void dumpNode(const AStar3D::Node& n) {
+   cout << "(" << n.h.x << "," << n.h.y << "," << n.h.getNumericalHeight() << ")@" << n.gval << "\n";
 }
 
-bool AStar::Node::operator> ( const AStar::Node& a ) const
-{
-    return (gval+hval) > (a.gval+a.hval);
+class OpenContainer {
+      typedef boost::heap::pairing_heap<
+         AStar3D::Node,
+         boost::heap::compare<greater<AStar3D::Node> >,
+         boost::heap::stable<true>,
+         boost::heap::constant_time_size<false>
+      > storage_t;
+      typedef boost::unordered_map<
+         MapCoordinate3D,
+         storage_t::handle_type,
+         AStar3D::hash_MapCoordinate3D
+      > index_t;
+      typedef storage_t::handle_type handle_type;
+      storage_t storage;
+      index_t index;
+   public:
+      const AStar3D::Node& top() const { return storage.top(); }
+      void pop() { index.erase(storage.top().h); storage.pop(); }
+      int empty() const { return storage.empty(); }
+      void pushOrUpdate ( const AStar3D::Node& n ) {
+         const index_t::iterator i = index.find(n.h);
+         if (i == index.end()) {
+            index[n.h] = storage.push(n);
+         } else if (((*i->second).gval > n.gval) || ((*i->second).gval == n.gval && (*i->second).hasAttacked && !n.hasAttacked)) {
+            storage.increase(i->second, n);
+         }
+      }
+};
+
+static inline int windbeeline ( const MapCoordinate& start, const MapCoordinate& dest, const WindMovement* wm ) {
+   int distance = 0;
+   int dx = dest.x - start.x;
+   int dy = dest.y - start.y;
+   int dyOdd = ((start.y & 1) - (dest.y & 1));
+
+   if (dx == 0) {
+      if (dy > 0) {
+         distance = (minmalq - wm->getDist(2)) * ((dy - (dyOdd != 0)) / 2);
+         if (dyOdd == -1) {
+            distance += minmalq - wm->getDist(2);
+         } else if (dyOdd == 1) {
+            distance += minmalq - wm->getDist(4);
+         }
+      } if (dy < 0) {
+         distance = (minmalq - wm->getDist(2)) * -((dy + (dyOdd != 0)) / 2);
+         if (dyOdd == -1) {
+            distance += minmalq - wm->getDist(1);
+         } else if (dyOdd == 1) {
+            distance += minmalq - wm->getDist(5);
+         }
+      } // if dy == 0 then all values stay 0
+   } else if (dx > 0) {
+      if (dy >= (dx * 2)) {
+         distance = (minmalq - wm->getDist(3)) * (((dy + dyOdd) / 2) - dx)
+                  + (minmalq - wm->getDist(2)) * (-dyOdd + dx * 2);
+      } else if (-dy >= (dx * 2)) {
+         distance = (minmalq - wm->getDist(0)) * (-((dy - dyOdd) / 2) - dx)
+                  + (minmalq - wm->getDist(1)) * (-dyOdd + dx * 2);
+      } else {
+         distance = (minmalq - wm->getDist(2)) * (((dy - dyOdd) / 2) + dx)
+                  + (minmalq - wm->getDist(1)) * (((-dy - dyOdd) / 2) + dx);
+      }
+   } else if (dx < 0) {
+      if (dy >= -(dx * 2)) {
+         distance = (minmalq - wm->getDist(3)) * (((dy - dyOdd) / 2) + dx)
+                  + (minmalq - wm->getDist(4)) * (dyOdd - dx * 2);
+      } else if (-dy >= -(dx * 2)) {
+         distance = (minmalq - wm->getDist(0)) * (-((dy + dyOdd) / 2) + dx)
+                  + (minmalq - wm->getDist(5)) * (dyOdd - dx * 2);
+      } else {
+         distance = (minmalq - wm->getDist(4)) * (((dy + dyOdd) / 2) - dx)
+                  + (minmalq - wm->getDist(5)) * (((-dy + dyOdd) / 2) - dx);
+      }
+   }
+
+   return distance;
 }
-
-
-bool operator == ( const AStar::HexCoord& a, const AStar::HexCoord& b )
-{
-   return (a.m == b.m) && (a.n == b.n );
-}
-
-
-bool operator == ( const AStar::Node& a, const AStar::Node& b )
-{
-    // Two nodes are equal if their components are equal
-    return (a.h == b.h) && (a.gval == b.gval ) && (a.hval == b.hval );
-}
-
-
-
-HexDirection ReverseDirection( HexDirection d )
-{
-    // With hexagons, I'm numbering the directions 0 = N, 1 = NE,
-    // and so on (clockwise).  To flip the direction, I can just
-    // add 3, mod 6.
-    return HexDirection( ( 3+int(d) ) % 6 );
-}
-
-
-AStar :: AStar ( GameMap* actmap, Vehicle* veh )
-{
-   tempsMarked = NULL;
-   _path = NULL;
-   _veh = veh;
-   gamemap = actmap;
-   MAXIMUM_PATH_LENGTH = maxint;
-}
-
-AStar :: ~AStar ( )
-{
-   if ( tempsMarked )
-      tempsMarked->cleartemps( 1 );
-}
-
-int AStar::dist( HexCoord a, HexCoord b )
-{
-   /*
-    // The **Manhattan** distance is what should be used in A*'s heuristic
-    // distance estimate, *not* the straight-line distance.  This is because
-    // A* wants to know the estimated distance for its paths, which involve
-    // steps along the grid.  (Of course, if you assign 1.4 to the cost of
-    // a diagonal, then you should use a distance function close to the
-    // real distance.)
-
-    // Here I compute a ``Manhattan'' distance for hexagons.  Nifty, eh?
-    int a1 = a.m*2;
-    int a2 = a.n*2-(a.m%2)-2*(a.m/2);
-    int a3 = -a1-a2;
-    int b1 = b.m*2;
-    int b2 = b.n*2-(b.m%2)-2*(b.m/2);
-    int b3 = -b1-b2;
-
-
-    // 2*D/path_div lets me scale the value.  Scaling is nice because you
-    // can adjust the accuracy/speed tradeoff.  If you want a faster
-    // search, you can get an approximate answer.
-    return 2*(abs(a1-b1)+abs(a2-b2)+abs(a3-b3))/path_div;
-    */
-    return beeline ( a.m, a.n, b.m, b.n );
-}
-
-int AStar::getMoveCost ( int x1, int y1, int x2, int y2, const Vehicle* vehicle )
-{
-    if ( !fieldAccessible ( gamemap->getField ( x2, y2 ), vehicle ))
-       return MAXIMUM_PATH_LENGTH;
-
-    return calcMoveMalus ( MapCoordinate3D(x1, y1, vehicle->height), MapCoordinate3D(x2, y2, vehicle->height), vehicle ).first;
-}
-
-
-
-// greater(Node) is an STL thing to create a 'comparison' object out of
-// the greater-than operator, and call it comp.
-
-
-// I'm using a priority queue implemented as a heap.  STL has some nice
-// heap manipulation functions.  (Look at the source to `priority_queue'
-// for details.)  I didn't use priority_queue because later on, I need
-// to traverse the entire data structure to update certain elements; the
-// abstraction layer on priority_queue wouldn't let me do that.
-
-inline void AStar::get_first( Container& v, Node& n )
-{
-    n = v.front();
-    pop_heap( v.begin(), v.end(), comp );
-    v.pop_back();
-}
-
-
-
-// Here's the algorithm.  I take a map, two points (A and B), and then
-// output the path in the `path' vector.
-
-
-
-void AStar::findPath( HexCoord A, HexCoord B, Path& path )
-{
-    _path = &path;
-    Vehicle* veh = _veh;
-
-    if ( gamemap->getField(A.m, A.n)->unitHere(veh) )
-       if ( !veh->canMove() )
-          return;
-
-    for ( int y = gamemap->xsize * gamemap->ysize -1; y >= 0; y-- )
-       gamemap->field[y].temp3 = DirNone;
-
-    Node N;
-    Container open;
-    {
-        // insert the original node
-        N.h = A;
-        N.gval = 0;
-        N.hval = dist(A,B);
-        open.push_back(N);
-    }
-
-
-    // Remember which nodes we visited, so that we can clear the mark array
-    // at the end.
-
-    // While there are still nodes to visit, visit them!
-    while( !open.empty() )
-    {
-        get_first( open, N );
-        visited.push_back( N );
-        // If we're at the goal, then exit
-        if( N.h == B )
-            break;
-
-        // Every other column gets a different order of searching dirs
-        // (Alternatively, you could pick one at random).  I don't want
-        // to be too biased by my choice of order in which I look at the
-        // neighboring grid spots.
-
-        int directions1[6] = {0,1,2,3,4,5};
-        int directions2[6] = {5,4,3,2,1,0};
-        int *directions;
-        if( N.h.m % 2 == 0 )
-            directions = directions1;
-        else
-            directions = directions2;
-
-        // Look at your neighbors.
-        for( int dci = 0; dci < 6; dci++ )
-        {
-#if 0
-            {
-                // Random permutation of directions
-                int i = random(6-dci);
-                swap( directions[dci+i], directions[dci] );
-            }
-#endif
-
-            HexDirection d = HexDirection(directions[dci]);
-            HexCoord hn = N.h;
-            getnextfield ( hn.m, hn.n, d );
-            // If it's off the end of the map, then don't keep scanning
-            if( hn.m < 0 || hn.n < 0 || hn.m >= gamemap->xsize || hn.n >= gamemap->ysize || !fieldAccessible ( gamemap->getField ( hn.m, hn.n ), veh ))
-                continue;
-
-            // cursor.gotoxy ( hn.m, hn.n );
-            int k = getMoveCost( N.h.m, N.h.n, hn.m, hn.n, veh );
-            if ( k > veh->maxMovement() )
-               k = MAXIMUM_PATH_LENGTH;
-
-            Node N2;
-            N2.h = hn;
-
-            if ( k == MAXIMUM_PATH_LENGTH )
-               N2.gval = k;
-            else
-               N2.gval = N.gval + k;
-
-            N2.hval = dist( hn, B );
-            // If this spot (hn) hasn't been visited, its mark is DirNone
-            if( gamemap->getField (hn.m,hn.n)->temp3 == DirNone ) {
-
-                // The space is not marked
-
-                if ( N.gval < MAXIMUM_PATH_LENGTH ) {
-                   gamemap->getField (hn.m,hn.n)->temp3 = ReverseDirection(d);
-                   open.push_back( N2 );
-                   push_heap( open.begin(), open.end(), comp );
-                }
-            }
-            else
-            {
-                // Search for hn in open
-                Container::iterator find1 = open.end();
-                for( Container::iterator i = open.begin(); i != open.end(); i++ )
-                    if( (*i).h == hn )
-                    {
-                        find1 = i;
-                        break;
-                    }
-                // if found, call it N3
-                if( find1 != open.end() )
-                {
-                    Node N3 = *find1;
-                    if( N3.gval > N2.gval )
-                    {
-                        gamemap->getField (hn.m,hn.n)->temp3 = ReverseDirection(d);
-                        // Replace N3 with N2 in the open list
-                        Container::iterator last = open.end() - 1;
-                        *find1 = *last;
-                        *last = N2;
-                        push_heap( open.begin(), open.end(), comp );
-                    }
-                }
-            }
-        }
-    }
-
-    if( N.h == B && N.gval < MAXIMUM_PATH_LENGTH )
-    {
-        // We have found a path, so let's copy it into `path'
-        std::vector<int> tempPath;
-
-        HexCoord h = B;
-        while( !(h == A) )
-        {
-            HexDirection dir = HexDirection ( gamemap->getField (h.m, h.n)->temp3 );
-            tempPath.push_back( int( ReverseDirection( dir ) ) );
-            getnextfield ( h.m, h.n, dir );
-        }
-
-        // tempPath now contains the directions the unit must travel .. backwards
-        // (like a stack)
-
-        int x = A.m;
-        int y = A.n;
-
-        for ( int i = tempPath.size()-1; i >= 0 ; i-- ) {
-           getnextfield ( x, y, tempPath[i] );
-           path.push_back ( MapCoordinate ( x, y ));
-        }
-    }
-    else
-    {
-        // No path
-    }
-
-    gamemap->cleartemps ( 4 ); 
-}
-
-int AStar::getDistance ( )
-{
-   if ( !_path || !_veh || ! gamemap )
-      return -1;
-
-   if ( _path->size() <= 0 )
-      return -1;
-
-   int dist = 0;
-   for ( Path::iterator i = _path->begin(); i != _path->end(); i++ )
-      dist += gamemap->getField ( *i )->getmovemalus ( _veh->typ->movemalustyp );
-
-   return dist;
-}
-
-int AStar::getTravelTime( )
-{
-   int dist = getDistance();
-   if ( dist < 0 )
-      return dist;
-   else
-      return dist / _veh->typ->movement[ getFirstBit ( _veh->height ) ];
-}
-
-bool AStar::fieldVisited ( int x, int y)
-{
-   HexCoord hn ( x,y );
-   for( Container::iterator i = visited.begin(); i != visited.end(); i++ )
-       if( (*i).h == hn )
-          return true;
-
-   return false;
-}
-
-void AStar::findAllAccessibleFields ( int maxDist )
-{
-   gamemap->cleartemps ( 1 );
-
-   MAXIMUM_PATH_LENGTH = maxDist;
-
-   Path dummy;
-   findPath ( dummy, gamemap->xsize, gamemap->ysize );  //this field does not exist...
-   for ( Container::iterator i = visited.begin(); i != visited.end(); i++ )
-      gamemap->getField ( (*i).h.m, (*i).h.n )->a.temp = 1;
-
-   tempsMarked = gamemap;
-}
-
-
-void AStar::findPath( Path& path, int x, int y )
-{
-  findPath ( AStar::HexCoord ( _veh->xpos, _veh->ypos ), AStar::HexCoord ( x, y ), path );
-}
-
-
-
-
-void findPath( GameMap* actmap, AStar::Path& path, Vehicle* veh, int x, int y )
-{
-  AStar as ( actmap, veh );
-  as.findPath ( AStar::HexCoord ( veh->xpos, veh->ypos ), AStar::HexCoord ( x, y ), path );
-//   int og = godview;
-//   godview = 1;
-//   AStar ( actmap, HexCoord ( veh->xpos, veh->ypos ), HexCoord ( x, y ), path, veh );
-//   godview = og;
-}
-
-
 
 
 ///////////////////////////////////////////////////////////////////
@@ -368,64 +110,20 @@ bool AStar3D::Node::operator< ( const AStar3D::Node& b ) const
 {
     // To compare two nodes, we compare the `f' value, which is the
     // sum of the g and h values.
-    if ( hval >= AStar3D::longestPath || b.hval >= AStar3D::longestPath )
-       return gval < b.gval;
-    else
-       return (gval+hval) < (b.gval+b.hval);
-
+   return (gval+hval) < (b.gval+b.hval);
 }
-/*
-bool operator< ( const AStar3D::Node& a, const AStar3D::Node& b )
+bool AStar3D::Node::operator> ( const AStar3D::Node& b ) const
 {
     // To compare two nodes, we compare the `f' value, which is the
     // sum of the g and h values.
-    if ( a.hval >= AStar3D::longestPath || b.hval >= AStar3D::longestPath )
-       return a.gval < b.gval;
-    else
-       return (a.gval+a.hval) < (b.gval+b.hval);
+   return (gval+hval) > (b.gval+b.hval);
 }
-*/
-bool operator> ( const AStar3D::Node& a, const AStar3D::Node& b )
-{
-    if ( a.hval >= AStar3D::longestPath || b.hval >= AStar3D::longestPath )
-       return a.gval > b.gval;
-    else
-       return (a.gval+a.hval) > (b.gval+b.hval);
-}
-
 
 bool operator == ( const AStar3D::Node& a, const AStar3D::Node& b )
 {
     // Two nodes are equal if their components are equal
     return (a.h == b.h) && (a.gval == b.gval ) && (a.hval == b.hval );
 }
-
-
-
-
-bool AStar3D::Container::update ( const Node& node )
-{
-   iterator i = find ( node.h );
-   if ( i != Parent::end() )
-      if (i->gval > node.gval || (i->gval == node.gval && i->hasAttacked && !node.hasAttacked)) {
-         Parent::erase ( i );
-         add ( node );
-         return true;
-      }
-   return false;
-}
-
-AStar3D::Container::iterator AStar3D::Container::find ( const MapCoordinate3D& pos )
-{
-   for ( iterator i = begin(); i != end(); i++ )
-      if ( i->h == pos )
-         return i;
-   return end();
-}
-
-
-
-
 
 AStar3D :: AStar3D ( GameMap* actmap_, Vehicle* veh_, bool markTemps_, int maxDistance )
          : operationLimiter ( NULL )
@@ -462,23 +160,14 @@ AStar3D :: AStar3D ( GameMap* actmap_, Vehicle* veh_, bool markTemps_, int maxDi
    for ( int i = 0; i < 8; ++i )
       maxVehicleSpeedFactor = max( maxVehicleSpeedFactor, vehicleSpeedFactor[i] );
    
-   int cnt = actmap->xsize*actmap->ysize*9;
-   posDirs = new HexDirection[cnt];
-   posHHops = new int[cnt];
-   fieldAccess = new int[cnt];
-
-   for ( int i = 0; i < cnt; i++ ) {
-      posDirs[i] = DirNone;
-      posHHops[i] = -20;
-      fieldAccess[i] = 0;
-   }
-
-   if ( (veh->typ->height & ( chtieffliegend | chfliegend | chhochfliegend )) && actmap->weather.windSpeed ) {
+   if ( (veh->typ->height & ( chtieffliegend | chfliegend | chhochfliegend )) && actmap->weather.windSpeed )
       wind = new WindMovement ( veh );
-   } else
+   else
       wind = NULL;
 
 }
+
+const AStar3D::DistanceType AStar3D::longestPath = 1e9;
 
 
 AStar3D :: ~AStar3D ( )
@@ -490,10 +179,6 @@ AStar3D :: ~AStar3D ( )
       delete wind;
       wind = NULL;
    }
-
-   delete[] posDirs;
-   delete[] posHHops;
-   delete[] fieldAccess;
 }
 
 AStar3D::DistanceType AStar3D::dist( const MapCoordinate3D& a, const MapCoordinate3D& b )
@@ -504,42 +189,38 @@ AStar3D::DistanceType AStar3D::dist( const MapCoordinate3D& a, const MapCoordina
    else
       heightDiff = 0;
 
+   DistanceType dist;
    if ( b.valid() ) {
-      if  ( wind && ((b.getBitmappedHeight() | a.getBitmappedHeight()) & ( chtieffliegend | chfliegend | chhochfliegend )))
-         return windbeeline(a, b, wind ) + heightDiff;
-      else
-         return beeline ( a, b ) + heightDiff;
-   } else
-      return longestPath;
+      if  ( wind && ((b.getBitmappedHeight() | a.getBitmappedHeight()) & ( chtieffliegend | chfliegend | chhochfliegend ))) {
+         dist = windbeeline(a, b, wind ) + heightDiff;
+      } else {
+         dist = beeline ( a, b ) + heightDiff;
+      }
+   } else {
+      dist = 0;
+   }
+   return dist;
 }
 
 AStar3D::DistanceType AStar3D::dist ( const MapCoordinate3D& a, const vector<MapCoordinate3D>& b )
 {
-   DistanceType d = longestPath;
-   for ( vector<MapCoordinate3D>::const_iterator i = b.begin(); i != b.end(); i++ ) {
-      DistanceType e = dist(a,*i);
+   if (b.empty())
+      return 0;
+   DistanceType e;
+   for ( vector<MapCoordinate3D>::const_iterator i = b.begin(); i != b.end(); ++i ) {
+      e = dist(a,*i);
       if ( maxVehicleSpeedFactor )
          e /= maxVehicleSpeedFactor;
-      if ( d > e )
-         d = e;
    }
-   return d;
+   return min(e, longestPath);
 }
 
 
-AStar3D::DistanceType AStar3D::getMoveCost ( const MapCoordinate3D& start, const MapCoordinate3D& dest, const Vehicle* vehicle, bool& canStop, bool& hasAttacked )
+AStar3D::DistanceType AStar3D::getMoveCost ( const MapCoordinate3D& start, const MapCoordinate3D& dest, const Vehicle* vehicle, bool& hasAttacked )
 {
     // since we are operating at different levels of height and the unit has different
     // speeds at different levels of height, we must not optimize for distance, but for
     // travel time.
-
-    int fa = fieldAccessible ( actmap->getField ( dest ), vehicle, dest.getBitmappedHeight(), &hasAttacked );
-
-    canStop = fa >= 2;
-
-    if ( !fa )
-       return longestPath;
-
     int movecost = calcMoveMalus ( start, dest, vehicle, wind, &hasAttacked ).first;
 
     if ( start.getNumericalHeight() >= 0 )
@@ -556,34 +237,56 @@ AStar3D::DistanceType AStar3D::getMoveCost ( const MapCoordinate3D& start, const
           return movecost / vehicleSpeedFactor[start.getNumericalHeight()];
 }
 
+int AStar3D::initNode ( Node& newN,
+                const Node* oldN_ptr,
+                const MapCoordinate3D& newpos,
+                const vector<MapCoordinate3D>& B,
+                bool disableAttack,
+                bool enter,
+                bool dock) {
+   int fa;
 
+   newN.h = newpos;
 
-// greater(Node) is an STL thing to create a 'comparison' object out of
-// the greater-than operator, and call it comp.
+   // No need to reassess already visited Node
+   if ( (oldN_ptr->previous) && (newN.h == oldN_ptr->previous->h) )
+      return 0;
 
-// I'm using a priority queue implemented as a heap.  STL has some nice
-// heap manipulation functions.  (Look at the source to `priority_queue'
-// for details.)  I didn't use priority_queue because later on, I need
-// to traverse the entire data structure to update certain elements; the
-// abstraction layer on priority_queue wouldn't let me do that.
+   // If it's off the end of the map, then don't keep scanning
+   if( newN.h.x < 0 || newN.h.y < 0 || newN.h.x >= actmap->xsize || newN.h.y >= actmap->ysize )
+      return 0;
 
-
-void AStar3D :: nodeVisited ( const Node& N2, HexDirection direc, Container& open, int prevHeight, int heightChangeDist )
-{
-   if ( N2.gval <= MAXIMUM_PATH_LENGTH && N2.gval < longestPath ) {
-      if ( getPosDir(N2.h) == DirNone ) {
-         open.add ( N2 );
-         getPosDir(N2.h) = ReverseDirection(direc);
-         getPosHHop(N2.h) = 10 + prevHeight + 1000 * heightChangeDist;
-      } else {
-         if ( open.update ( N2 ) ) {
-            getPosDir(N2.h) = ReverseDirection(direc);
-            getPosHHop(N2.h) = 10 + prevHeight + 1000 * heightChangeDist;
-         }
-      }
+   if (enter) {
+      newN.enterHeight = newN.h.getNumericalHeight();
+      newN.h.setNumericalHeight(-1);
+   } else {
+      newN.enterHeight = -1;
    }
-}
 
+   if ( visited.find(newN.h) )
+      return 0;
+
+   newN.hasAttacked = oldN_ptr->hasAttacked || disableAttack;
+
+   if ( !dock ) {
+      fa = fieldAccessible ( actmap->getField ( newN.h ), veh, newN.h.getBitmappedHeight(), &newN.hasAttacked );
+      if ( !fa )
+         return 0;
+      newN.canStop = fa >= 2;
+
+      newN.gval = oldN_ptr->gval + getMoveCost ( oldN_ptr->h, newN.h, veh, newN.hasAttacked );
+   } else {
+      fa = 1;
+      newN.canStop = true;
+      newN.gval = oldN_ptr->gval + 10;
+   }
+   if ( (newN.gval >= longestPath) || ( newN.gval > MAXIMUM_PATH_LENGTH ) )
+      return 0;
+
+   newN.previous = oldN_ptr;
+   newN.hval = dist(newN.h, B);
+   return fa;
+}
 
 const int* getDirectionOrder ( int x, int y, int x2, int y2 )
 {
@@ -615,104 +318,102 @@ const int* getDirectionOrder ( int x, int y, int x2, int y2 )
     return (const int*)(&directions[b][a]);
 }
 
-const AStar3D::DistanceType AStar3D::longestPath = 1e9;
+bool AStar3D::findPath( Path& path, const vector<MapCoordinate3D>& B ) {
+   _path = &path;
 
-void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>& B, Path& path )
-{
-    _path = &path;
+   if (findPath (B)) {
+      constructPath ( path, &visited.back() );
+      return true;
+   } else {
+      return false;
+   }
+         
+}
 
-    Node N;
-    Container open;
+bool AStar3D::findPath( const MapCoordinate3D& B ) {
+   vector<MapCoordinate3D> vB;
+   vB.push_back(B);
+   return findPath(vB);
+}
+
+bool AStar3D::findPath( const vector<MapCoordinate3D>& B ) {
+
+   MapCoordinate3D A = veh->getPosition3D();
+
+    OpenContainer open;
 
     /* this should be checked outside by giving the pathfinder the right movement
     if ( !veh->canMove() )
        return;
     */
 
-    if ( actmap->getField(A)->unitHere(veh) ) {
+    if ( !visited.find(A) ) {
+       Node firstNode = Node();
+       firstNode.previous = NULL;
+       firstNode.gval = 0;
+       firstNode.hval = dist(A, B);
+       firstNode.enterHeight = -1;
+       firstNode.canStop = true;
+       firstNode.hasAttacked = veh->attacked;
+
+       firstNode.h = A;
+       if ( !(actmap->getField(A)->unitHere(veh)) ) {
+          firstNode.h.setNumericalHeight(-1);
+       }
        // insert the original node
-       N.h = A;
-    } else {
-       N.h.setnum(A.x, A.y, -1 );
+       open.pushOrUpdate(firstNode);
     }
-    N.hasAttacked = veh->attacked;
-    N.gval = 0;
-    N.hval = dist(A,B);
-    open.add(N);
-
-    // Remember which nodes we visited, so that we can clear the mark array
-    // at the end.
-
     bool found = false;
-    MapCoordinate3D endpos;
+    const Node* N_ptr;
 
     // While there are still nodes to visit, visit them!
     while( !open.empty() ) {
-        N = open.getFirst();
-       
-        visited.add( N );
+        //N_ptr = visited.add(*open.begin());
+        N_ptr = visited.add(open.top());
+        open.pop();
         // If we're at the goal, then exit
+        MapField* oldFld = actmap->getField(N_ptr->h);
         for ( vector<MapCoordinate3D>::const_iterator i = B.begin(); i != B.end(); i++ )
-           if( N.h == *i ) {
-              MapField* fld = actmap->getField(N.h);
-              if ( N.h.getNumericalHeight() == -1 || !(fld->building || (fld->vehicle && fld->vehicle != veh ))) {
+           if( N_ptr->h == *i ) {
+              if ( N_ptr->h.getNumericalHeight() == -1 || !(oldFld->building || (oldFld->vehicle && oldFld->vehicle != veh ))) {
                  found = true;
-                 endpos = N.h;
                  break;
               }
-
            }
         if ( found )
            break;
 
-
-        if ( N.h.getNumericalHeight() == -1 ) {
+        if ( N_ptr->h.getNumericalHeight() == -1 ) {
            // the unit is inside a container
 
           if ( !operationLimiter || operationLimiter->allowLeavingContainer() ) {
              for ( int dir = 0; dir < 6; dir++ ) {
-                MapCoordinate3D pos = getNeighbouringFieldCoordinate ( N.h, dir );
+                MapCoordinate3D pos = getNeighbouringFieldCoordinate ( N_ptr->h, dir );
                 if ( actmap->getField(pos)) {
-                   int h = actmap->getField(N.h)->getContainer()->vehicleUnloadable(veh->typ);
+                   int h = oldFld->getContainer()->vehicleUnloadable(veh->typ);
                    for ( int i = 0; i < 8; i++ )
                       if ( h & (1<<i)) {
-                         Node N2;
-                         N2.h.setnum ( pos.x, pos.y, i );
-                         N2.hasAttacked = N.hasAttacked;
-                         const ContainerBaseType::TransportationIO* tio = actmap->getField(N.h)->getContainer()->vehicleUnloadSystem( veh->typ, 1<<i);
+                         const ContainerBaseType::TransportationIO* tio = oldFld->getContainer()->vehicleUnloadSystem( veh->typ, 1<<i);
                          if ( tio ) {
-                            if ( tio->disableAttack )
-                               N2.hasAttacked = true;
-
-                            DistanceType k = getMoveCost( N.h, N2.h, veh, N2.canStop, N2.hasAttacked );
-                            if ( k > veh->typ->movement[N2.h.getNumericalHeight()]  )
-                               if ( k < longestPath )
-                                  k = longestPath;
-                                  /*
-                               if ( k < MAXIMUM_PATH_LENGTH )
-                                  k = MAXIMUM_PATH_LENGTH;
-                                  */
-
-                            if ( k >= longestPath || N.gval >= longestPath )
-                               N2.gval = longestPath;
-                            else
-                               N2.gval = N.gval + k;
-
-                            N2.hval = dist(N2.h,B);
+                            pos.setNumericalHeight(i);
+                            Node N2 = Node();
+                            if (!initNode(N2, N_ptr, pos, B, tio->disableAttack))
+                               continue;
 
                             if ( N2.canStop && actmap->getField(N2.h)->getContainer() && actmap->getField(N2.h)->vehicle != veh) {
                                  // there's an container on the field that can be entered. This means, the unit can't stop 'over' the container...
                                  N2.canStop = false;
-                                 nodeVisited ( N2, HexDirection(dir), open, N.h.getNumericalHeight(), maxmalq );
+                                 open.pushOrUpdate ( N2 );
 
                                  // ... only inside it
                                  N2.canStop = true;
                                  N2.enterHeight = N2.h.getNumericalHeight() ;
-                                 N2.h.setnum ( N2.h.x, N2.h.y, -1 );
+                                 N2.h.setNumericalHeight(-1);
                                  // N2.hasAttacked = true;
-                                 nodeVisited ( N2, HexDirection(dir), open, N.h.getNumericalHeight(), maxmalq );
+                                 if (!visited.find(N2.h))
+                                    open.pushOrUpdate ( N2 );
                             } else
-                                 nodeVisited ( N2, HexDirection(dir), open, N.h.getNumericalHeight(), maxmalq );
+                                 open.pushOrUpdate ( N2 );
                          }
 
                       }
@@ -721,27 +422,24 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
           }
 
           if ( !operationLimiter || operationLimiter->allowDocking() ) {
-             int dock = actmap->getField(N.h)->getContainer()->vehicleDocking(veh, true );
+             int dock = oldFld->getContainer()->vehicleDocking(veh, true );
              for ( int dir = 0; dir < 6; dir++ ) {
                 if ( dock ) {
-                   for ( int dir = 0; dir < 6; dir++ ) {
-                      MapCoordinate3D pos = getNeighbouringFieldCoordinate ( N.h, dir );
-                      MapField* fld = actmap->getField( pos );
-                      if ( fld && fld->getContainer() && ( fld->getContainer() != actmap->getField(N.h)->getContainer() ))
-                         if ( fld->getContainer()->vehicleDocking(veh, false ) & dock )
-                            if ( fld->getContainer()->getOwner() == actmap->getField(N.h)->getContainer()->getOwner() 
-                                 && veh->getMap()->getPlayer(veh).diplomacy.isAllied( fld->getContainer() ))
-                               if ( !fld->building || (fld->bdt & getTerrainBitType(cbbuildingentry) ).any()) {
-                                  Node N2 = N;
-                                  N2.h.setnum ( pos.x, pos.y, -1);
-                                  N2.canStop = true;
-                                  N2.gval = N.gval + 10;
-                                  N2.hval = dist ( N2.h, B );
-                                  nodeVisited ( N2, HexDirection(dir), open );
-                               }
-                   }
+                   MapCoordinate3D pos = getNeighbouringFieldCoordinate ( N_ptr->h, dir );
+                   MapField* fld = actmap->getField( pos );
+                   if ( fld && fld->getContainer() && ( fld->getContainer() != oldFld->getContainer() ))
+                      if ( fld->getContainer()->vehicleDocking(veh, false ) & dock )
+                         if ( fld->getContainer()->getOwner() == oldFld->getContainer()->getOwner() 
+                              && veh->getMap()->getPlayer(veh).diplomacy.isAllied( fld->getContainer() ))
+                            if ( !fld->building || (fld->bdt & getTerrainBitType(cbbuildingentry) ).any()) {
+                               pos.setNumericalHeight(-1);
+                               Node N2 = Node();
+                               if ( !initNode(N2, N_ptr, pos, B, false, false, true) )
+                                  continue;
+                               open.pushOrUpdate ( N2 );
+                            }
                 }
-            }
+             }
           }
 
 
@@ -749,8 +447,8 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
            // the unit is not inside a container
 
            const int* directions;
-           if ( B.begin()->valid() ) {
-              directions = getDirectionOrder ( N.h.x, N.h.y, B.begin()->x, B.begin()->y );
+           if ( !B.empty() && B.begin()->valid() ) {
+              directions = getDirectionOrder ( N_ptr->h.x, N_ptr->h.y, B.begin()->x, B.begin()->y );
            } else {
               static const int d[6] = {0,1,2,3,4,5};
               directions = d;
@@ -759,58 +457,39 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
            if ( !operationLimiter || operationLimiter->allowMovement() )
               for( int dci = 0; dci < 6; dci++ ) {
 
-                  HexDirection dir = HexDirection(directions[dci]);
-                  MapCoordinate3D hn = getNeighbouringFieldCoordinate ( N.h, dir );
-
-                  // If it's off the end of the map, then don't keep scanning
-                  if( hn.x < 0 || hn.y < 0 || hn.x >= actmap->xsize || hn.y >= actmap->ysize || !fieldAccessible ( actmap->getField ( hn ), veh, hn.getBitmappedHeight() ))
-                      continue;
-
-                  // cursor.gotoxy ( hn.m, hn.n );
-
-                  Node N2;
-                  N2.hasAttacked = N.hasAttacked;
-                  DistanceType k = getMoveCost( N.h, hn, veh, N2.canStop, N2.hasAttacked );
-
-                  if ( k <= 0 )
-                     k = 1;
-                  N2.h = hn;
-
-                  if ( k >= longestPath )
-                     N2.gval = longestPath;
-                  else
-                     N2.gval = N.gval + k;
-
-                  N2.hval = dist( N2.h,B);
-
-                  if ( N2.canStop && actmap->getField(N2.h)->getContainer() && actmap->getField(N2.h)->vehicle != veh) {
+                 HexDirection dir = HexDirection(directions[dci]);
+                 Node N2 = Node();
+                 if ( !initNode(N2, N_ptr, getNeighbouringFieldCoordinate(N_ptr->h, dir), B) )
+                    continue;
+                 if ( N2.canStop && actmap->getField(N2.h)->getContainer() && actmap->getField(N2.h)->vehicle != veh) {
                      // there's an container on the field that can be entered. This means, the unit can't stop 'over' the container...
                      if ( !veh->typ->hasFunction( ContainerBaseType::OnlyMoveToAndFromTransports  ) ) {
                         N2.canStop = false;
-                        nodeVisited ( N2, dir, open );
+                        open.pushOrUpdate ( N2 );
                      }
 
                      // ... only inside it
                      N2.canStop = true;
                      N2.enterHeight = N2.h.getNumericalHeight() ;
-                     N2.h.setnum ( N2.h.x, N2.h.y, -1 );
+                     N2.h.setNumericalHeight (-1);
                      // N2.hasAttacked = true;
-                     nodeVisited ( N2, dir, open, N.h.getNumericalHeight(), maxmalq );
+                     if (!visited.find(N2.h))
+                        open.pushOrUpdate ( N2 );
                   } else
                      if ( !veh->typ->hasFunction( ContainerBaseType::OnlyMoveToAndFromTransports  ) )
-                        nodeVisited ( N2, dir, open );
+                        open.pushOrUpdate ( N2 );
               }
 
            // and now change the units' height. That's only possible on fields where the unit can stop it's movement
 
 
               if ( (!operationLimiter || operationLimiter->allowHeightChange()) && !(veh->typ->hasFunction( ContainerBaseType::OnlyMoveToAndFromTransports  )) )
-              if ( (fieldAccessible ( actmap->getField(N.h), veh, N.h.getBitmappedHeight() ) == 2 ) || actmap->getgameparameter( cgp_movefrominvalidfields) )
+              if ( (fieldAccessible ( oldFld, veh, N_ptr->h.getBitmappedHeight() ) == 2 ) || actmap->getgameparameter( cgp_movefrominvalidfields) )
                  for ( int heightDelta = -1; heightDelta <= 1; heightDelta += 2 ) {
-                    const VehicleType::HeightChangeMethod* hcm = veh->getHeightChange( heightDelta, N.h.getBitmappedHeight());
+                    const VehicleType::HeightChangeMethod* hcm = veh->getHeightChange( heightDelta, N_ptr->h.getBitmappedHeight());
                     if ( hcm ) {
                        for ( int dir = 0; (dir < 6 && hcm->dist) || (dir < 1 && !hcm->dist); dir++ ) {
-                          MapCoordinate3D newpos = N.h;
+                          MapCoordinate3D newpos = N_ptr->h;
                           bool access = true;
                           for ( int step = 0; step <= hcm->dist; step++ ) {
                              MapField* fld = actmap->getField(newpos);
@@ -819,40 +498,32 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
                                 break;
                              }
 
-                             if (  !fieldAccessible ( fld, veh, N.h.getBitmappedHeight()) && (actmap->getgameparameter( cgp_movefrominvalidfields)==0 || step>0))
+                             if (  !fieldAccessible ( fld, veh, N_ptr->h.getBitmappedHeight()) && (actmap->getgameparameter( cgp_movefrominvalidfields)==0 || step>0))
                                 access = false;
 
-                             if ( !fieldAccessible( fld, veh, 1 << (N.h.getNumericalHeight() + hcm->heightDelta)) )
+                             if ( !fieldAccessible( fld, veh, 1 << (N_ptr->h.getNumericalHeight() + hcm->heightDelta)) )
                                 access = false;
 
                              if ( fld && fld->building )
                                 access = false;
 
-                             if ( step < hcm->dist )
-                                getnextfield ( newpos.x, newpos.y, dir );
-                             else
+                             if ( step < hcm->dist ) {
+                                newpos.x += getnextdx( dir, newpos.y );
+                                newpos.y += getnextdy( dir );
+                             } else {
                                 if ( fld && (fld->building || (fld->vehicle && fld->vehicle != veh)))
                                    access = false;
+                             }
                           }
 
                           MapField* fld = actmap->getField( newpos );
                           if ( fld && access ) {
-                             Node N2;
-                             N2.h.setnum ( newpos.x, newpos.y, N.h.getNumericalHeight() + hcm->heightDelta );
-                             if ( fieldAccessible( fld, veh, N2.h.getBitmappedHeight() ) == 2 ) {
-
-                                N2.canStop = true;
-                                N2.hasAttacked= N.hasAttacked;
-                                N2.gval = N.gval + getMoveCost( N.h, N2.h, veh, N2.canStop, N2.hasAttacked );
-
-                                if ( actmap->getField(N2.h)->getContainer() && actmap->getField(N2.h)->vehicle != veh ) {
-                                   N2.enterHeight = N2.h.getNumericalHeight() ;
-                                   N2.h.setnum ( N2.h.x, N2.h.y, -1 );
-                                }
-
-                                N2.hval = dist(N2.h,B);
-                                nodeVisited ( N2, HexDirection(dir), open, N.h.getNumericalHeight() , hcm->dist * maxmalq );
-                             }
+                             newpos.setNumericalHeight(newpos.getNumericalHeight() + hcm->heightDelta);
+                             bool enter = actmap->getField(newpos)->getContainer() && actmap->getField(newpos)->vehicle != veh;
+                             Node N2 = Node();
+                             if ( initNode(N2, N_ptr, newpos, B, false, enter ) != 2)
+                                continue;
+                            open.pushOrUpdate ( N2 );
                           }
                        }
                     }
@@ -862,97 +533,55 @@ void AStar3D::findPath( const MapCoordinate3D& A, const vector<MapCoordinate3D>&
         }
     }
 
-    if( found && N.gval <= MAXIMUM_PATH_LENGTH && N.gval <= longestPath ) {
-        // We have found a path, so let's copy it into `path'
+    return found;
+}
 
-        MapCoordinate3D h = endpos;
-
-        path.insert ( path.begin(), PathPoint ( h, int(N.gval), N.enterHeight, N.hasAttacked ) );
-        while( !(h == A) )
-        {
-            // tfield* fld = actmap->getField ( h );
-            HexDirection dir = HexDirection ( getPosDir(h) );
-
-            int prevHeight = getPosHHop(h);
-            if ( prevHeight == -20 )
-               fatalError ( "AStar3D : Unknown Position ");
-            int heightChangeDist = prevHeight / 1000;
-            prevHeight -= 10 + heightChangeDist * 1000;
-
-            if ( prevHeight > -10  ) {
-               for ( int i = 0; i < heightChangeDist; i += maxmalq )
-                  getnextfield ( h.x, h.y, dir );
-
-               h.setnum ( h.x, h.y, prevHeight );
-            } else
-                getnextfield ( h.x, h.y, dir );
-
-            const Node* n = fieldVisited ( h );
-            path.insert ( path.begin(), PathPoint(h, int(n->gval), n->enterHeight, n->hasAttacked) );
-        }
-    }
-    else
-    {
-        // No path
-    }
+bool AStar3D::constructPath( Path& path, const Node* n_ptr) {
+   if ( n_ptr == NULL )
+      return false;
+   for ( const Node* n = n_ptr; n != NULL; n = n->previous )
+      path.push_front ( PathPoint(n->h, int(n->gval), n->enterHeight, n->hasAttacked) );
+   return true;
 }
 
 void AStar3D::findPath( Path& path, const MapCoordinate3D& dest )
 {
   vector<MapCoordinate3D> d;
   d.push_back ( dest );
-  findPath ( veh->getPosition3D() , d, path );
-}
-
-void AStar3D::findPath( Path& path, const vector<MapCoordinate3D>& dest )
-{
-  findPath ( veh->getPosition3D(), dest, path );
+  findPath ( path, d );
 }
 
 
-void AStar3D::findAllAccessibleFields ( vector<MapCoordinate3D>* path )
+void AStar3D::findAllAccessibleFields ()
 {
    if ( markTemps )
       actmap->cleartemps ( 3 );
 
-   Path dummy;
-   findPath ( dummy, MapCoordinate3D(actmap->xsize, actmap->ysize, veh->height) );  //this field does not exist...
-   for ( Container::iterator i = visited.begin(); i != visited.end(); ++i ) {
-      int& fa = getFieldAccess( i->h );
-      fa |= i->h.getBitmappedHeight();
-      if ( markTemps )
-         actmap->getField ( i->h )->a.temp  |= i->h.getBitmappedHeight();
-      
-      if ( path )
-         path->push_back( i->h );
+   vector<MapCoordinate3D> v;
+   findPath ( v );
+   for ( VisitedContainer::iterator i = visited.begin(); i != visited.end(); ++i ) {
+      fieldAccess[i->h] |= i->h.getBitmappedHeight();
+
+      if ( markTemps ) {
+         char atemp = actmap->getField ( i->h )->getaTemp();
+         actmap->getField ( i->h )->setaTemp( atemp | i->h.getBitmappedHeight());
+      }
    }
    
    if ( markTemps )
       tempsMarked = actmap;
 }
 
-
-
-const AStar3D::Node* AStar3D::fieldVisited ( const MapCoordinate3D& pos )
+int AStar3D::getFieldAccess ( int x, int y )
 {
-   Container::iterator i = visited.find( pos );
-   if ( i != visited.end() )
-       return &(*i);
-
-   return NULL;
+   return getFieldAccess( MapCoordinate(x, y) );
 }
 
-
-int& AStar3D::getFieldAccess ( int x, int y )
+int AStar3D::getFieldAccess ( const MapCoordinate& mc )
 {
-   return fieldAccess[x + y * actmap->xsize];
+   fieldAccessType::iterator i = fieldAccess.find(mc);
+   return (i == fieldAccess.end()) ? 0 : i->second;
 }
-
-int& AStar3D::getFieldAccess ( const MapCoordinate& mc )
-{
-   return fieldAccess[mc.x + mc.y * actmap->xsize];
-}
-
              
 void AStar3D::PathPoint::write( tnstream& stream ) const
 {
@@ -982,10 +611,8 @@ AStar3D::PathPoint AStar3D::PathPoint::newFromStream( tnstream& stream )
 
 void AStar3D::dumpVisited()
 {
-	for ( Container::iterator i = visited.begin(); i != visited.end(); ++i ) {
-		cout << "(" << i->h.x << "," << i->h.y << "," << i->h.getNumericalHeight() << ")@" << i->gval << "\n";
-	}
+   for ( VisitedContainer::iterator i = visited.begin(); i != visited.end(); ++i ) {
+      dumpNode(*i);
+   }
 }
-
-
 

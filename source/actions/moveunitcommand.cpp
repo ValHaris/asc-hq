@@ -149,26 +149,27 @@ void PathFinder :: getMovementFields ( set<MapCoordinate3D>& reachableFields, se
 
    // there are different entries for the same x/y coordinate but different height.
    // Since the UI is only in xy, we need to find the height which is the easiest to reach
-   typedef multimap<MapCoordinate,Container::iterator > Fields;
+   typedef multimap<MapCoordinate, Node* > Fields;
    Fields fields;
    int orgHeight=-1;
    int minMovement = maxint;
-   for ( Container::iterator i = visited.begin(); i != visited.end(); ++i ) {
-      if ( i->h.x != veh->getPosition().x || i->h.y != veh->getPosition().y || i->h.getNumericalHeight() != unitHeight ) {
-         int h = i->h.getNumericalHeight();
+   for ( AStar3D::VisitedContainer::iterator i = visited.begin(); i != visited.end(); ++i ) {
+      AStar3D::Node node = *i;
+      if ( node.h.x != veh->getPosition().x || node.h.y != veh->getPosition().y || node.h.getNumericalHeight() != unitHeight ) {
+         int h = node.h.getNumericalHeight();
          // if ( h == -1 )
-         //   h = i->enterHeight;
+         //   h = node.enterHeight;
          if ( h == -1 || height == -1 || h == height ) {
-            if ( i->canStop )
-               fields.insert(make_pair(MapCoordinate(i->h),  i));
+            if ( node.canStop )
+               fields.insert(make_pair(MapCoordinate(node.h),  &(*i)));
             else
-               reachableFieldsIndirect.insert( i->h );
+               reachableFieldsIndirect.insert( node.h );
          }
       }
-      if ( i->h.getNumericalHeight() >= 0 )
-         if ( i->gval < minMovement ) {
-            orgHeight = i->h.getNumericalHeight();
-            minMovement = int (i->gval);
+      if ( node.h.getNumericalHeight() >= 0 )
+         if ( node.gval < minMovement ) {
+            orgHeight = node.h.getNumericalHeight();
+            minMovement = int (node.gval);
          }
    }
    for ( Fields::iterator i = fields.begin(); i != fields.end();  ) {
@@ -288,64 +289,26 @@ bool MoveUnitCommand::isFieldReachable( const MapCoordinate& pos, bool direct )
    return false;  
 }
 
-bool MoveUnitCommand::isFieldReachable3D( const MapCoordinate3D& pos, bool direct )
+void MoveUnitCommand::calcPath( AStar3D* const astar)
 {
-   AStar3D ast ( getMap(), getUnit(), false, getUnit()->getMovement() );
-   AStar3D::Path localPath;
-   ast.findPath ( localPath, pos );
-   return !localPath.empty();
-}
 
-
-void MoveUnitCommand::calcPath()
-{
+   const int maxMovement = getUnit()->getMovement();
    path.clear();
-   {
-      AStar3D ast ( getMap(), getUnit(), false, getUnit()->getMovement() );
-      ast.findPath ( path, destination );
-   }
-   
-   
-   if ( path.empty() && multiTurnMovement ) {
-      
-      bool enterContainer = true;
-      
-      AStar3D::Path totalPath;
-      AStar3D astar ( getMap(), getUnit(), false );
-   
-      astar.findPath ( totalPath, destination );
-      if ( totalPath.empty() )
-         return;
-   
-      AStar3D::Path::const_iterator pi = totalPath.begin();
-      AStar3D::Path::const_iterator lastmatch = totalPath.begin();
-      
-      while ( pi != totalPath.end() ) {
-         MapField* fld = getMap()->getField ( pi->x, pi->y );
-         bool ok = true;
-         if ( fld->getContainer() ) {
-            if ( pi+1 !=totalPath.end() )
-               ok = false;
-            else {
-               if ( fld->building && !enterContainer )
-                  ok = false;
-               if ( fld->vehicle && !enterContainer )
-                  ok = false;
-            }
-         }
+   const bool enterContainer = true;
 
-         if ( ok )
-            if ( isFieldReachable3D(*pi, true) )
-               lastmatch = pi;
+   AStar3D::Path totalPath;
 
-         ++pi;
+   astar->findPath ( totalPath, destination );
+   if ( totalPath.empty() ) // found no path at all
+      return;
+   
+   // trace the found path back to the furthest point we can reach this round
+   for ( const AStar3D::Node* n = astar->visited.find(destination); n != NULL; n = n->previous ) {
+      if ( ( n->gval <= maxMovement ) && n->canStop) {
+         // found!
+         astar->constructPath ( path, n );
+         break;
       }
-
-      if ( lastmatch == totalPath.begin() )
-         return;
-  
-      AStar3D ast ( getMap(), getUnit(), false, getUnit()->getMovement() );
-      ast.findPath ( path, *lastmatch );
    }
 }
 

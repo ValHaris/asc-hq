@@ -453,7 +453,7 @@ bool NewGuiHost::mapIconProcessing( const MapCoordinate& pos, const SPoint& mous
    if ( ( fld->vehicle || fld->building) && fieldvisiblenow(fld) )
       positionedUnderCursor = true;
    
-   if ( fld->a.temp ) {
+   if ( fld->getaTemp() ) {
       positionedUnderCursor = true;
       cursorChanged = false;
    }

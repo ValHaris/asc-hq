@@ -96,7 +96,7 @@ void AI :: searchTargets ( Vehicle* veh, const MapCoordinate3D& pos, TargetVecto
             MapCoordinate mc = getNeighbouringFieldCoordinate ( MapCoordinate ( mv->attackx, mv->attacky), nf );
             MapField* fld = getMap()->getField(mc);
             if ( fld && !veh->typ->wait)
-               mv->neighbouringFieldsReachable[nf] = (vm.fieldVisited( MapCoordinate3D(mc.x, mc.y, pos.getBitmappedHeight()) ) || ( veh->xpos == mc.x && veh->ypos == mc.y )) && !fld->building && (!fld->vehicle || fld->unitHere(veh));
+               mv->neighbouringFieldsReachable[nf] = (vm.visited.find( MapCoordinate3D(mc.x, mc.y, pos.getBitmappedHeight()) ) || ( veh->xpos == mc.x && veh->ypos == mc.y )) && !fld->building && (!fld->vehicle || fld->unitHere(veh));
             else
                mv->neighbouringFieldsReachable[nf] = false;
 
@@ -191,11 +191,12 @@ void AI::getAttacks ( AStar3D& vm, Vehicle* veh, TargetVector& tv, int hemmingBo
    int x2 = veh->xpos;
    int y2 = veh->ypos;
 
-   for ( AStar3D::Container::iterator ff = vm.visited.begin(); ff != vm.visited.end(); ++ff ) {
-      x1 = min ( x1, ff->h.x );
-      y1 = min ( y1, ff->h.y );
-      x2 = max ( x2, ff->h.x );
-      y2 = max ( y2, ff->h.y );
+   for ( AStar3D::VisitedContainer::iterator ff = vm.visited.begin(); ff != vm.visited.end(); ++ff ) {
+      AStar3D::Node n = *ff;
+      x1 = min ( x1, n.h.x );
+      y1 = min ( y1, n.h.y );
+      x2 = max ( x2, n.h.x );
+      y2 = max ( y2, n.h.y );
    }
 
    int maxrange = 0;
@@ -240,18 +241,20 @@ void AI::getAttacks ( AStar3D& vm, Vehicle* veh, TargetVector& tv, int hemmingBo
         apl = new RefuelConstraint( *this, veh );
 
       int fuelLacking = 0;
-      for ( AStar3D::Container::iterator ff = vm.visited.begin(); ff != vm.visited.end(); ++ff )
-         if ( !ff->hasAttacked ) {
-            MapField* fld = getMap()->getField (ff->h);
+      for ( AStar3D::VisitedContainer::iterator ff = vm.visited.begin(); ff != vm.visited.end(); ++ff ) {
+         AStar3D::Node node = *ff;
+         if ( !node.hasAttacked ) {
+            MapField* fld = getMap()->getField (node.h);
             if ( !fld->vehicle && !fld->building ) {
-                if ( !apl || apl->returnFromPositionPossible ( ff->h )) {
-                   searchTargets ( veh, ff->h, tv, beeline ( ff->h.x, ff->h.y, orgxpos, orgypos ), vm, hemmingBonus );
+                if ( !apl || apl->returnFromPositionPossible ( node.h )) {
+                   searchTargets ( veh, node.h, tv, beeline ( node.h.x, node.h.y, orgxpos, orgypos ), vm, hemmingBonus );
                    if ( tv.size() && justOne )
                       return;
                 } else
                    fuelLacking++;
              }
          }
+      }
 
       if ( apl ) {
          delete apl;
@@ -271,8 +274,8 @@ AI::AiResult AI::executeMoveAttack ( Vehicle* veh, TargetVector& tv )
    MoveVariant* mv = *max_element( tv.begin(), tv.end(), moveVariantComp );
 
    if ( mv->movePos != veh->getPosition3D() ) {
-      VisibilityStates org_vision =  _vision ;
-      _vision = visible_now;
+      VisibilityStates org_vision =  getVision() ;
+      setVision(visible_now);
       
       auto_ptr<MoveUnitCommand> muc ( new MoveUnitCommand( veh ));
       muc->setFlags ( MoveUnitCommand::NoInterrupt );
@@ -285,7 +288,7 @@ AI::AiResult AI::executeMoveAttack ( Vehicle* veh, TargetVector& tv )
       }
 
       result.unitsMoved ++;
-      _vision = org_vision;
+      setVision(org_vision);
    }
 
    // the unit may have been shot down due to reactionfire during movement
@@ -683,8 +686,8 @@ AI::AiResult AI::tactics( void )
                            Since all units now only attack the neighbouring fields, which is generally
                            visible, the AI does not cheat here.
                         */
-                        VisibilityStates org_vision =  _vision ;
-                        _vision = visible_all;
+                        VisibilityStates org_vision = getVision();
+                        setVision(visible_all);
    
                         AiResult res = executeMoveAttack ( veh, tv );
                         i = tactVehicles.erase ( i );
@@ -699,7 +702,7 @@ AI::AiResult AI::tactics( void )
                         
                         directAttackNum++;
    
-                        _vision = org_vision;
+                        setVision(org_vision);
    
                      } else {
                         targets[mv->enemy->networkid].push_back( *mv );
@@ -745,8 +748,8 @@ AI::AiResult AI::tactics( void )
             Since all units now only attack the neighbouring fields, which is generally
             visible, the AI does not cheat here.
          */
-         VisibilityStates org_vision =  _vision ;
-         _vision = visible_all;
+         VisibilityStates org_vision =  getVision();
+         setVision(visible_all);
 
          /* we don't need to discard all the calculations made above after a single attack.
             Only the attacks that are near enough to be affected by the last movement and attack
@@ -779,13 +782,13 @@ AI::AiResult AI::tactics( void )
                   for ( int i = 0; i < sidenum; i++ )
                      if ( finalPositions[i] ) {
                         int nwid = finalPositions[i]->networkid;
-                        _vision = org_vision;
+                        setVision(org_vision);
                         MapCoordinate affected =  MapCoordinate(finalPositions[i]->xpos, finalPositions[i]->ypos);
                         MapCoordinate3D dst = getNeighbouringFieldCoordinate( MapCoordinate3D( enemy->xpos, enemy->ypos, finalPositions[i]->height ), i);
                         dst.setnum ( dst.x, dst.y, -2 );
                         
                         moveUnit ( finalPositions[i], dst );
-                        _vision = visible_all;
+                        setVision(visible_all);
 
                         affectedFields.push_back ( affected );
                         // the unit may have been shot down due to reaction fire
@@ -884,7 +887,7 @@ AI::AiResult AI::tactics( void )
 
          } while ( currentTarget != targets.end() );
 
-         _vision = org_vision;
+         setVision(org_vision);
 
       } else {
          // no attacks are possible

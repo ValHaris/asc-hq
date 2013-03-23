@@ -45,8 +45,8 @@
            bool benchMark;
            bool strictChecks;
 
-           bool _isRunning;
-           VisibilityStates _vision;
+           //bool _isRunning;
+           //VisibilityStates _vision;
            int unitCounter;
            int player;
 
@@ -160,8 +160,9 @@
                    MapCoordinate3D getNearestRefuellingPosition ( bool buildingRequired, bool refuel, bool repair );
                    bool returnFromPositionPossible ( const MapCoordinate3D& pos, int theoreticalFuel = -1 );
                    //! checks whether the unit can crash do to lack of fuel; this is usually true for airplanes. A unit that does not crash does not need to care about landing positions.
-                   void findPath();
+                   void findPath( bool markTemps=true);
                    static bool necessary (const Vehicle* veh, AI& ai );
+                   AStar3D* getAst() { return ast; };
                    ~RefuelConstraint() { if (ast) delete ast; };
            };
            friend class RefuelConstraint;
@@ -327,12 +328,6 @@
 
             bool moveUnit ( Vehicle* veh, const MapCoordinate3D& destination, bool intoBuildings = true, bool intoTransports = true );
 
-            /** \returns 1 = destination reached;
-                         0 = everything ok, but not enough movement to reach destination;
-                         -1 = error
-             */
-            int moveUnit ( Vehicle* veh, const AStar3D::Path& path, bool intoBuildings = true, bool intoTransports = true );
-
             void getAttacks ( AStar3D& vm, Vehicle* veh, TargetVector& tv, int hemmingBonus, bool justOne = false, bool executeService = true );
             void searchTargets ( Vehicle* veh, const MapCoordinate3D& pos, TargetVector& tl, int moveDist, AStar3D& vm, int hemmingBonus );
             bool targetsNear( Vehicle* veh );
@@ -371,11 +366,6 @@
             AiResult  tactics( void );
             void tactics_findBestAttackOrder ( Vehicle** units, int* attackOrder, Vehicle* enemy, int depth, int damage, int& finalDamage, int* finalOrder, int& finalAttackNum );
             void tactics_findBestAttackUnits ( const MoveVariantContainer& mvc, MoveVariantContainer::iterator& m, Vehicle** positions, float value, Vehicle** finalposition, float& finalvalue, int unitsPositioned, int recursionDepth, int startTime );
-
-            /** a special path finding where fields occupied by units get an addidional movemalus.
-                This helps finding a path that is not thick with units and prevents units to queue all one after another
-            */
-            void findStratPath ( vector<MapCoordinate>& path, Vehicle* veh, int x2, int y2 );
 
             class  UnitDistribution {
                public:
@@ -460,7 +450,7 @@
             class Sections {
                   AI* ai;
                   Section* section;
-                  MapCoordinate getAlternativeField( const MapCoordinate& pos, map<MapCoordinate,int>* destinationCounter, int height );
+                  MapCoordinate getAlternativeField( const MapCoordinate& pos, map<MapCoordinate,int>* destinationCounter, int height, AStar3D* ast );
                public:
                   int sizeX ;
                   int sizeY ;
@@ -494,6 +484,7 @@
 
            //! returns the map this AI runson
            GameMap* getMap ( void ) { return activemap; };
+           const GameMap* getMap ( void ) const { return activemap; };
 
            //! returns the number of the player which is controlled by this ai
            int getPlayerNum ( void ) { return player; };
@@ -502,14 +493,19 @@
            Player& getPlayer ( int player ) { return getMap()->player[player]; };
            Player& getPlayer ( PlayerID id ) { return getMap()->player[id.getID()]; };
            void showFieldInformation ( int x, int y );
-           bool isRunning ( void );
+           //inline bool isRunning ( void ) {return _isRunning;};
+           inline bool isRunning ( void ) {return getMap()->playerAiRunning[player];};
+           inline bool isRunning ( void ) const {return getMap()->playerAiRunning[player];};
+           inline void isRunning ( bool b ) { getMap()->playerAiRunning[player] = b;};
 
            /**  the AI uses a different vision than human player, to counter the fact
                 that a human player can "know" a map and take a look before starting to
                 play. This function returns the minimum visibility state of a field.
                 \sa tfield::visible , VisibilityStates
            */
-           VisibilityStates getVision ( void );
+           inline VisibilityStates getVision ( void ) { return getMap()->playerAiVision[player]; };
+           inline VisibilityStates getVision ( void ) const { return getMap()->playerAiVision[player]; };
+           inline void setVision ( VisibilityStates v ) { getMap()->playerAiVision[player] = v; };
 
            void read ( tnstream& stream );
            void write ( tnstream& stream ) const ;

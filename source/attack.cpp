@@ -56,7 +56,8 @@ bool  AttackFormula :: checkHemming ( Vehicle*     d_eht,  int     direc )
 
    int x = d_eht->xpos;
    int y = d_eht->ypos; 
-   getnextfield(x, y, direc);
+   x += getnextdx ( direc, y);
+   y += getnextdy ( direc );
    MapField* fld = d_eht->getMap()->getField(x,y);
 
    if ( fld )
