@@ -1523,9 +1523,11 @@ void   Vehicle::readData ( tnstream& stream )
        privateName = "";
     
 
-    if ( version >= 9 )
+    if ( version >= 9 ) {
        experience_defensive = stream.readInt();
-    else
+       if ( version == 9 )
+    	   experience_defensive *= experienceResolution;
+    } else
        experience_defensive = experience_offensive;
     
     if ( version >= 11 )
