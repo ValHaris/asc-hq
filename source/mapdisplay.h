@@ -60,7 +60,10 @@ class MapRenderer {
       };
 
     protected:
-       MapRenderer(); 
+       MapRenderer();
+
+       void paintUnitOntoField( const MapRenderer::FieldRenderInfo& fieldInfo,  int binaryUnitHeight, const SPoint& pos, Vehicle* vehicle );
+
 
       static const int surfaceBorder = 90;
             
