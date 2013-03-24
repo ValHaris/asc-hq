@@ -422,6 +422,14 @@ int MapRenderer::bitmappedHeight2pass( int height )
 }
 
 
+void MapRenderer::paintUnitOntoField( const MapRenderer::FieldRenderInfo& fieldInfo,  int binaryUnitHeight, const SPoint& pos, Vehicle* vehicle )
+{
+    if ( vehicle  &&  (vehicle->height == binaryUnitHeight))
+       if ( ( vehicle->getOwner() == fieldInfo.playerView ) || (fieldInfo.visibility == visible_all) || ((vehicle->height >= chschwimmend) && (vehicle->height <= chhochfliegend)))
+          vehicle->paint( fieldInfo.surface, pos );
+
+}
+
 void MapRenderer::paintSingleField( const MapRenderer::FieldRenderInfo& fieldInfo,  int layer, const SPoint& pos )
 {
 
@@ -445,9 +453,9 @@ void MapRenderer::paintSingleField( const MapRenderer::FieldRenderInfo& fieldInf
 
 
       /* display units */
-      if ( fld->vehicle  &&  (fld->vehicle->height == binaryUnitHeight))
-         if ( ( fld->vehicle->getOwner() == fieldInfo.playerView ) || (fieldInfo.visibility == visible_all) || ((fld->vehicle->height >= chschwimmend) && (fld->vehicle->height <= chhochfliegend)))
-            fld->vehicle->paint( fieldInfo.surface, pos );
+      paintUnitOntoField( fieldInfo, binaryUnitHeight, pos, fld->vehicle );
+      paintUnitOntoField( fieldInfo, binaryUnitHeight, pos, fld->secondvehicle );
+
 
    }
 

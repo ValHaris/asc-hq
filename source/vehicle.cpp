@@ -1555,7 +1555,8 @@ int Vehicle::getArmor() const
 void Vehicle::paint ( Surface& s, SPoint pos, int shadowDist ) const
 {
   #ifdef sgmain
-   bool shaded = (!canMove()) && maxMovement() && ( color == gamemap->actplayer*8) && (attacked || !typ->weapons.count || CGameOptions::Instance()->units_gray_after_move );
+   bool secondUnit = gamemap->getField ( getPosition() )->secondvehicle == this;
+   bool shaded = (!canMove() && !secondUnit) && maxMovement() && ( color == gamemap->actplayer*8) && (attacked || !typ->weapons.count || CGameOptions::Instance()->units_gray_after_move );
   #else
    bool shaded = 0;
   #endif
