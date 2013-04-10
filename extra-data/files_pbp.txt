@@ -115,4 +115,4 @@ sy/sy-vari/*.*
 sy/sy-vfatr/*.*
 sy/sy-view/*.*
 sy/sy-parent/*.*
-trrobj/objects/buildable/*.*
+
