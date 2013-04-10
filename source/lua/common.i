@@ -149,6 +149,9 @@ class Building : public ContainerBase {
       Building();
    public:
       const BuildingType* getType();
+#ifdef mapeditor
+      void convert ( int player );
+#endif      
 };
 
 class Vehicle : public ContainerBase {
