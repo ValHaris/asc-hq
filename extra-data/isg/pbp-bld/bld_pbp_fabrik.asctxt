@@ -1,0 +1,38 @@
+BuildingType {
+   Name = Fabrik
+   ID = 12032
+   parent = 499
+   InfoText = [Produktionsanlage für Landfahrzeuge, incl. Munitionsproduktion, Reparatur und Wiederverwertung.]
+ 
+   Armor = 200000
+   notRemovable = true
+   Features = Vehicle_Production Ammo_Production Repair_Facility recycling NoProductionCustomization
+   CategoriesProduceable = default trooper light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle hoovercraft helicopter light_aircraft medium_aircraft heavy_aircraft building|turret|object
+
+   ConstructionStages = 1
+   Weather = dry 
+   Fields = A1
+   UseGFXpics = false
+   Pictures { 
+      dry = bld_pbp_fabrik.png
+      few_snow = bld_asc_factory.png
+      much_snow = bld_asc_factory.png
+      snow_and_ice = bld_asc_factory.png
+   } Pictures
+   RubbleObjects = false
+   Entry = A1
+
+   Transportation { 
+      MaxLoadableUnits = 5
+      MaxLoadableUnitSize = 300
+      MaxLoadableMass = 300
+      CategoriesNOT = light_ship medium_ship heavy_ship
+   } Transportation
+
+   MaxResearch = 0
+   ConstructionCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } ConstructionCost
+} BuildingType

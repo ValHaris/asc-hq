@@ -16,9 +16,9 @@ VehicleType {
 
    Tank.Fuel = 70000
    Tank.Material = 70000
-   TerrainAccess ->* VehicleType.hooverfull_terrain
+   TerrainAccess ->* VehicleType.hoover_terrain
    MovementSound = jet_pass.ogg
-   Movement -= 0 0 0 20 50 50 0 0 
+   Movement -= 0 0 0 10 50 50 0 0 
       
    Construction { 
       Buildings = 1 2 4 6 7 13-14 16-20 23 30 32 35-37 39 40 41 15001-15015 15033
@@ -28,6 +28,7 @@ VehicleType {
       Objects = 44 2098 2096 2097 996 997 1000
       ObjectsRemovable = 
       ObjectGroupsRemovable = 2 3 4 6 7 8 13
+      UnitConstructionMoveCostPercentage = 60
    } Construction
 
    WaitForAttack = false

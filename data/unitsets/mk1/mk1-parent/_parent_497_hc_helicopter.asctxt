@@ -39,7 +39,7 @@ VehicleType {
       canattack = true
    } HeightChangeMethod4
    HeightChangeMethod5 {
-      movecost = 15
+      movecost = 20
       heightdelta = -1
       dist = 0
       startheight = low_level_flight

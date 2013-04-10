@@ -17,6 +17,7 @@ VehicleType {
    MaxSurvivableStorm = 255
    ResourceDrillingRange = 0
    SelfRepairRate = 0
+   minFieldRepairDamage = 20
 
    Height = ground_level 
    Tank { 

@@ -9,7 +9,7 @@ VehicleType {
    GuideSortHelp = 505 301 0 0 0 0 0 0 0 0
 
 
-   Armor = 280
+   Armor = 320
    View = 20
    WaitForAttack = true
    Features += no_reactionfire
@@ -29,6 +29,7 @@ VehicleType {
       terrain_not = morass swamp large_rocks 
       terrain_kill = Shallow_water Water Deep_water River lava 
    } TerrainAccess
+
    Weapons { 
       Initiative = 0
       Number = 1

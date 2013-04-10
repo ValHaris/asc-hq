@@ -32,7 +32,7 @@ ObjectType {
    } ConstructionCost
    RemovalCost { 
       Energy = 0
-      Material = -350
+      Material = -250
       fuel = 50
       Movement = 20
    } RemovalCost

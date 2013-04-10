@@ -19,6 +19,7 @@ VehicleType {
    Category = default
    Movement = 0 0 0 0 130 150 150 0 
    Weight = 3
+   minFieldRepairDamage = 50
    Weapons { 
       Initiative = 120
       Number = 1

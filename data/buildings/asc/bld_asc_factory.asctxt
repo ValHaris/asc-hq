@@ -27,28 +27,6 @@ BuildingType {
       MaxLoadableUnitSize = 5000
       MaxLoadableMass = 100000
       CategoriesNOT = default helicopter light_aircraft medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship
-      EntranceSystemNum = 2
-      EntranceSystem0 {
-        Mode = In out docking
-        UnitHeightAbs = floating ground_level 
-        UnitHeightRel = -100
-        ContainerHeight = floating ground_level
-        CategoriesNOT = default building|turret|object
-        DockingHeightAbs = floating ground_level 
-        DockingHeightRel = -100 
-        DisableAttack = false
-      } EntranceSystem0
-      EntranceSystem1 {
-        Mode = In out docking
-        UnitHeightAbs = floating ground_level 
-        UnitHeightRel = -100
-        ContainerHeight = floating ground_level
-        CategoriesNOT = trooper light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle hoovercraft
-        DockingHeightAbs = floating ground_level 
-        DockingHeightRel = -100 
-        DisableAttack = false
-        Movecost = 10
-      } EntranceSystem1
    } Transportation
    Functions = Vehicle_Production Ammo_Production Repair_Facility recycling
    CategoriesProduceable = medium_wheeled_vehicle heavy_wheeled_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle hoovercraft building|turret|object

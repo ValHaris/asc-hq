@@ -12,8 +12,8 @@ VehicleType {
    Armor = 320
    Transportation { 
       MaxLoadableUnits = 6
-      MaxLoadableUnitSize = 30
-      MaxLoadableMass = 60
+      MaxLoadableUnitSize = 45
+      MaxLoadableMass = 90
       CategoriesNOT -> VehicleType.cargo_allground.CategoriesNOT
       EntranceSystemNum = 5
       EntranceSystem0 ->* VehicleType.GrIO

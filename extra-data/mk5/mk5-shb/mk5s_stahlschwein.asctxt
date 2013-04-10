@@ -18,24 +18,30 @@ VehicleType {
    Weapons {
       Number = 4
       Weapon0 ->* VehicleType.Rampart 
-      Weapon0.Punch@MinRange = 130
-      Weapon0.Punch@MaxRange = 130
+      Weapon0.Punch@MinRange = 140
+      Weapon0.Punch@MaxRange = 140
       
       Weapon1 ->* VehicleType.DCS
+      Weapon1.Punch@MinRange = 140
+      Weapon1.Punch@MaxRange = 140
       Weapon1.Ammo = 8
       Weapon1.MaxRange = 30
-      Weapon1.ReactionFireShots = 1
+      Weapon1.ReactionFireShots = 2
 
       Weapon2 ->* VehicleType.GrL
+      Weapon2.Punch@MinRange = 120
+      Weapon2.Punch@MaxRange = 100
       Weapon2.Ammo = 10
       Weapon2.MinRange = 10
       Weapon2.MaxRange = 40
-      Weapon2.ReactionFireShots = 1
+      Weapon2.ReactionFireShots = 2
 
       Weapon3 ->* VehicleType.SAMH
-      Weapon3.Ammo = 4
+      Weapon3.Punch@MinRange = 80
+      Weapon3.Punch@MaxRange = 80
+      Weapon3.Ammo = 6
       Weapon3.MaxRange = 40
-      Weapon3.ReactionFireShots = 1
+      Weapon3.ReactionFireShots = 2
       
    } Weapons
 

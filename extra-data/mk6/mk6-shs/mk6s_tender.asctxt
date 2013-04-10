@@ -54,10 +54,15 @@ VehicleType {
       Weapon0 ->* VehicleType.UTorp 
 
       Weapon1 ->* VehicleType.SAMH 
+      Weapon1.Punch@MaxRange = 80
+	  Weapon1.Punch@MinRange = 80
       Weapon1.ShotFrom = submerged floating low_level_flight
       Weapon1.HitAccuracy.0 = 100
       Weapon1.MaxRange = 30
       Weapon1.Ammo = 10
+	  
+	  Weapon2 ->* VehicleType.ServiceSpSub
+      Weapon2.HitAccuracy.d1 = 100
 
    } Weapons
    HeightChangeMethodNum = 4
@@ -79,14 +84,14 @@ VehicleType {
       movecost = 5
       heightdelta = -1
       dist = 0
-      startheight = floating ground_level
+      startheight = floating
       canattack = true
    } HeightChangeMethod2
    HeightChangeMethod3 {
       movecost = 5
       heightdelta = -1
       dist = 0
-      startheight = low_level_flight 
+      startheight = low_level_flight ground_level
       canattack = true
    } HeightChangeMethod3
 } VehicleType

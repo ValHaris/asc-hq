@@ -1,0 +1,18 @@
+TerrainType { 
+   Name = Z 11 part of starfieldpic
+   ID = 4036
+   Weather = dry 
+
+   dry { 
+      UseGFXpics = false
+      Picture = hin_z11.png
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 0
+      MoveMalus = 255
+      TerrainProperties =
+   } dry
+   
+
+   
+} TerrainType

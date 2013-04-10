@@ -7,8 +7,8 @@ VehicleType {
    Infotext = [ ]
    GuideSortHelp = 516 235 507 508 0 509 550 553 0 0
 
-   Armor = 650
-   View = 100
+   Armor = 700
+   View = 110
    ResourceDrillingRange = 6
    SelfRepairRate = 10
    Weight = 505
@@ -23,31 +23,37 @@ VehicleType {
       fuel = 16000
    } Tank
    Height = orbit 
-   Movement = 0 0 0 0 0 0 0 20 
+   Movement = 0 0 0 0 0 0 0 24 
    FuelConsumption = 100
    TerrainAccess ->* VehicleType.sat_terrain 
    MovementSound = move_air_jet_s.ogg
 
    WaitForAttack = true
    Weapons { 
-      Initiative = 0
       Number = 4
 
       Weapon0 ->* VehicleType.OAM 
       Weapon0.Ammo = 30
-      Weapon0.Punch@MaxRange = 80
-      Weapon0.Punch@MinRange = 80
-      Weapon0.ReactionFireShots = 2
+	  Weapon0.MaxRange = 50
+      Weapon0.Punch@MaxRange = 85
+      Weapon0.Punch@MinRange = 85
+      Weapon0.ReactionFireShots = 1
 
-      Weapon1 ->* VehicleType.OGM 
+      Weapon1 ->* VehicleType.OGM
+      Weapon1.targets = submerged floating ground_level	  
       Weapon1.MaxRange = 40
       Weapon1.Ammo = 30
       Weapon1.Punch@MaxRange = 100
       Weapon1.Punch@MinRange = 100
 
       Weapon2 ->* VehicleType.OCM 
+      Weapon2.Punch@MaxRange = 120
+      Weapon2.Punch@MinRange = 120
 
       Weapon3 ->* VehicleType.Orbit_Cannon 
+      Weapon3.HitAccuracy.d2 = 90
+	  Weapon3.MaxRange = 30
+      Weapon3.ReactionFireShots = 2
 
    } Weapons
 } VehicleType

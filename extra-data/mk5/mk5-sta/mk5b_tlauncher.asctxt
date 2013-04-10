@@ -45,8 +45,8 @@ VehicleType {
       Weapon0.MaxRange = 50
       Weapon0.Ammo = 6
       Weapon0.ReactionFireShots = 2
-      Weapon0.Punch@MaxRange = 125
-      Weapon0.Punch@MinRange = 125
+      Weapon0.Punch@MaxRange = 130
+      Weapon0.Punch@MinRange = 130
    } Weapons
 
    HeightChangeMethodNum = 4

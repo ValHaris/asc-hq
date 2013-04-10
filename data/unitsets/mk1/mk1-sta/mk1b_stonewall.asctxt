@@ -10,9 +10,4 @@ VehicleType {
    InfoImageSmall = mk1b_stonewall_k.png
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
    
-   Features += ManualSelfDestruct
-   
-   Weapons {
-      Weapon0.MaxRange = 40
-   } Weapons
 } VehicleType

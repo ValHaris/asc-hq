@@ -48,7 +48,7 @@ ObjectType {
                                forest installation
                                track_possible harbour
                                small_rocks large_rocks hillside mountains High_mountains
-                               road railroad runway ditch river]
+                               road railroad runway ditch]
    TerrainProperties_Add = turret_foundation 
    dry { 
       UseGFXpics = false

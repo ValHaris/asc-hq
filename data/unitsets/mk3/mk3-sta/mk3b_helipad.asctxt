@@ -10,7 +10,7 @@ VehicleType {
    
    GuideSortHelp = 550 553 565 0 3 0 0 0 0 0
 
-   Armor -= 200
+   Armor -= 100
    Jamming = 21
    Transportation { 
       MaxLoadableUnits = 3
@@ -33,7 +33,10 @@ VehicleType {
 
    Weapons { 
       Number = 6
-      Weapon0 ->* VehicleType.MiniGun
+      Weapon0 ->* VehicleType.BigMiniGun
+	  Weapon0.MaxRanbe = 30
+	  Weapon0.Punch@MaxRange = 55
+	  Weapon0.Punch@MinRange = 65
       Weapon0.Ammo = 100
       Weapon1 ->* VehicleType.AmmoBomb
       Weapon1.Ammo = 40

@@ -13,12 +13,14 @@ VehicleType {
    Movement += 77 77 0 0 0 0 0 0 
 
    Weapons { 
-      Initiative = 0
       Number = 4
       Weapon0 ->* VehicleType.UTorp 
       Weapon0.Ammo = 5
 
       Weapon1 ->* VehicleType.Ship_Flak
+      Weapon1.maxRange = 40
+	  Weapon1.targets = low_level_flight medium_level_flight high_level_flight
+      Weapon1.Punch@MaxRange = 75
 
       Weapon2 ->* VehicleType.Ship_Gun
       Weapon2.MaxRange = 30

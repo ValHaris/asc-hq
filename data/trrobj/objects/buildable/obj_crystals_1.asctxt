@@ -5,7 +5,7 @@ ObjectType {
          
    secondaryIDs = 
    Armor = 350
-       
+         
    groupID = 11
    TechAdapterRequired = o2105
    Weather = dry
@@ -20,7 +20,7 @@ ObjectType {
    } ConstructionCost
    RemovalCost { 
       Energy = 0
-      Material = -350
+      Material = -250
       fuel = 50
       Movement = 20
    } RemovalCost

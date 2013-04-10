@@ -27,13 +27,16 @@
    MaxSurvivableStorm = 200
    ResourceDrillingRange = 0
    SelfRepairRate = 0
+   minFieldRepairDamage = 10
    Weight = 200
    TerrainAccess ->* VehicleType.rail_terrain 
+
    Construction { 
       Buildings = 
       Vehicles = 
       Objects = 
    } Construction
+
    Weapons { 
       Initiative = 0
       Number = 0

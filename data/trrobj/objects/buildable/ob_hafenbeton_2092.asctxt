@@ -9,9 +9,10 @@ ObjectType {
    LinkableObjects = 2094 2095 12012
    LinkableTerrain = 10
    NetBehaviour = NetToSelf AutoBorder NetToBorder
+   Height = 87
 
    TerrainAccess.terrain_any = shallow_water
-   TerrainAccess.terrain_not = harbour installation
+   TerrainAccess.terrain_not = installation
    TerrainAccess.terrain_kill = water deep_water lava
 
    Armor = 2500

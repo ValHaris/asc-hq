@@ -5,12 +5,12 @@ VehicleType {
    parent = 400 401 402 412
 
    Description = railroad rocket
-   Infotext = [Railbased medium range surface-surface rocket system.]
    WreckageObject = 483
    GuideSortHelp = 505 299 0 0 0 0 0 0 0 0
+   Infotext = [Railbased medium range surface-surface rocket system.]
 
 
-   Armor = 350
+   Armor = 400
    WaitForAttack = true
    Features = no_reactionfire
    Weight = 250
@@ -22,8 +22,8 @@ VehicleType {
    } Tank
    FuelConsumption = 20
    Movement = 0 0 0 80 0 0 0 0 
+
    Weapons { 
-      Initiative = 0
       Number = 1
       Weapon0 ->* VehicleType.CMK 
    } Weapons

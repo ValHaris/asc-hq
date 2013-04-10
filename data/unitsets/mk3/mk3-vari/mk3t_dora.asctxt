@@ -15,6 +15,7 @@ InfoImage/Text = Wikipedia]
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
    Features += no_reactionfire
+   Armor -= 50
    Weight += 100
    Movement -= 0 0 0 20 0 0 0 0 
 

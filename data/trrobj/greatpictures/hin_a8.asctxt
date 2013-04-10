@@ -1,0 +1,18 @@
+TerrainType { 
+   Name = A 8 part of starfieldpic
+   ID = 4008
+   Weather = dry 
+
+   dry { 
+      UseGFXpics = false
+      Picture = hin_a8.png
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 0
+      MoveMalus = 255
+      TerrainProperties =
+   } dry
+   
+
+   
+} TerrainType

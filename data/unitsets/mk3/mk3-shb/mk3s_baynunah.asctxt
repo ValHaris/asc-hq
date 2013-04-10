@@ -9,13 +9,9 @@ VehicleType {
    picture = MK3s_baynunah.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
-   Features += jam_only_own_field Repair_Facility
    jamming += 11
-   Transportation ->* VehicleType.TransCorvette 
-   Transportation.MaxLoadableUnits = 2
-   Transportation.MaxLoadableUnitSize = 60
-   Transportation.MaxLoadableMass = 60
-   Tank.Material += 2000
+   Transportation ->* VehicleType.TransCruiserSmall 
+   Features += jam_only_own_field Repair_Facility
 
    Weapons { 
       Initiative = 0

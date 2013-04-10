@@ -33,8 +33,8 @@ BuildingType {
    AutoHarvestObjects {
       Objects = 
       ObjectGroups = 15
-      Range = 14
-      MaxFieldsPerTurn = 10
+      Range = 20
+      MaxFieldsPerTurn = 15
    } AutoHarvestObjects
 
    Transportation { 

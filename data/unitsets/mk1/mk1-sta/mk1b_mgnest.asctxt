@@ -7,5 +7,7 @@ VehicleType {
    Infotext = [ Durch Sandsäcke geschützte MG Stellung]
    picture = mk1b_mgnest.png
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+   
+   Armor += 50
 
 } VehicleType

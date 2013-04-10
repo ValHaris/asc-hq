@@ -4,6 +4,8 @@ VehicleType {
    ID = 15247
 
    Picture = mk6a_viewer.pcx
+   InfoImage = mk6a_viewer.jpg
+   InfoImageSmall = mk6a_viewer_k.png
    GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
 
    Features += MoveDuringReactionFire

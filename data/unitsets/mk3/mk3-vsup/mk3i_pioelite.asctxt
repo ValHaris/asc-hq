@@ -29,6 +29,7 @@ VehicleType {
       Objects = 10 44 2093 2096 2097 2098
       ObjectsRemovable = 988 2097
       ObjectGroupsRemovable = 2 4 5 6 7 8 10 11 13 21
+      UnitConstructionMoveCostPercentage = 62
    } Construction
 
    Weapons { 

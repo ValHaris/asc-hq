@@ -1,0 +1,18 @@
+TerrainType { 
+   Name = H 9 part of starfieldpic
+   ID = 4149
+   Weather = dry 
+
+   dry { 
+      UseGFXpics = false
+      Picture = hin_h9.png
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 0
+      MoveMalus = 255
+      TerrainProperties =
+   } dry
+   
+
+   
+} TerrainType

@@ -27,7 +27,7 @@ TerrainType {
       BasicJamming = 3
    ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
       Movemalus = 24  24  24  24  26  28  28  24  15  28  28  16  28  28  28  28  28  24
-      TerrainProperties = hillside hard_sand mud  track_possible
+      TerrainProperties = hillside hard_sand mud track_possible
    } heavy_rain
 
    few_snow ->* TerrainType.dry 

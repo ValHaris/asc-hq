@@ -1,0 +1,18 @@
+TerrainType { 
+   Name = L 10 part of starfieldpic
+   ID = 4230
+   Weather = dry 
+
+   dry { 
+      UseGFXpics = false
+      Picture = hin_l10.png
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 0
+      MoveMalus = 255
+      TerrainProperties =
+   } dry
+   
+
+   
+} TerrainType

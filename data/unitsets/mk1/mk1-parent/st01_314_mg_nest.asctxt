@@ -9,7 +9,7 @@ VehicleType {
    WreckageObject = 
    GuideSortHelp = 507 314 0 0 0 0 0 0 0 0
 
-   Armor = 400
+   Armor = 500
    View = 30
    Jamming = 11
    Features += self_repairing jam_only_own_field MoveDuringReactionFire
@@ -26,9 +26,10 @@ VehicleType {
    TerrainAccess ->* VehicleType.Device_terrain 
 
    Weapons { 
-      Initiative = 0
       Number = 1
       Weapon0 ->* VehicleType.MiniGun 
+	  Weapon0.Punch@MaxRange = 65
+	  Weapon0.Punch@MinRange = 70
       Weapon0.Ammo = 20
       Weapon0.ReactionFireShots = 3
    } Weapons

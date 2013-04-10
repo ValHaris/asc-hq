@@ -1,0 +1,45 @@
+VehicleType { 
+   Name = EMPM
+   parent = 249 15000
+   ID = 15249
+
+   Description = EMP Mine
+   Picture = mk6d_empm.png
+   GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
+
+   Features += MoveDuringReactionFire
+   
+   Height = deep_submerged submerged
+   Movement = 11 11 0 0 0 0 0 0
+   Tank.Fuel = 4500
+   Tank.Material = 900
+   
+   Weapons {
+      Number = 1
+	  Weapon0 ->* VehicleType.TeccEMP
+      Weapon0.Punch@MinRange = 160
+      Weapon0.Punch@MaxRange = 160
+      Weapon0.MaxRange = 10
+      Weapon0.LaserRechargeCost.fuel = 0
+      Weapon0.HitAccuracy.d1 = 100
+      Weapon0.HitAccuracy.u1 = 100
+      Weapon0.HitAccuracy.u2 = 50
+   } Weapons
+
+   HeightChangeMethodNum = 2
+   HeightChangeMethod0 {
+      movecost = 5
+      heightdelta = 1
+      dist = 0
+      startheight = deep_submerged
+      canattack = true
+   } HeightChangeMethod0
+   HeightChangeMethod1 {
+      movecost = 5
+      heightdelta = 1
+      dist = 0
+      startheight = submerged
+      canattack = true
+   } HeightChangeMethod1
+
+} VehicleType

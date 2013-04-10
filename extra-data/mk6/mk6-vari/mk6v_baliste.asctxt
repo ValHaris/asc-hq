@@ -28,7 +28,6 @@ Aufgrund des Rückstoßes des Geschützes ist die BALISTE nur in der Lage im geland
    MovementSound = jet_pass.ogg
 
    Weapons { 
-      Initiative = 0
       Number = 2
       Weapon0.Punch@MaxRange -= 4
       Weapon1 ->* VehicleType.NLS

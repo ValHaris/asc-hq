@@ -23,9 +23,9 @@ ObjectType {
    growthRate = 0.15
    RemovalCost { 
       Energy = 0
-      Material = -150
-      fuel = -75
-      Movement = 20
+      Material = -100
+      fuel = 20
+      Movement = 15
    } RemovalCost
 
    TerrainAccess { 

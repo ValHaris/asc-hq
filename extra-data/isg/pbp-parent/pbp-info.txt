@@ -36,6 +36,8 @@ ID 12027 COLONY Center RZ
 ID 12028 AP1
 ID 12029 AP2
 ID 12030 AP3
+ID 12031 Pyramide
+ID 12032 Fabrik
 
 ***Objects***
 ID 12000 LZ Down
@@ -54,6 +56,8 @@ ID 12012 ISG Beton
 ID 12013 ISG Sockel
 ID 12014 Homebase Center
 ID 12015 ISG Zone NEW
+ID 12016 Fabrik oben
+ID 12017 Fabrik unten
 
 ID 12020 KolonieHQ LZN
 ID 12021 KolonieHQ LZS
@@ -93,6 +97,7 @@ ID 12017 SV Kolonie
 ID 12018 Sektion Schiffe
 ID 12019 Sektion Flugzeuge
 ID 12020 Sektion Fahrzeuge
+ID 12021 Asteroidenfeld
 
 Bugs
 ID 12100 Bug Krabbler

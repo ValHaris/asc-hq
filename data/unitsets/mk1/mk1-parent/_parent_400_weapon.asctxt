@@ -86,7 +86,7 @@
          heavy_aircraft = 100
    } AntiAirWeapon
 
-;   WeaponX.WeaponEffectiveness ->* VehicleType.Anti100
+   ;   WeaponX.WeaponEffectiveness ->* VehicleType.Anti100
    Anti100 {      
          default = 100
 		 trooper = 100
@@ -464,6 +464,7 @@
       HitAccuracy ->* VehicleType.HitAcc
       HitAccuracy.u1 = 100
       HitAccuracy.u2 = 95
+      HitAccuracy.u3 = 85
 
       WeaponEffectiveness {      
          trooper = 100
@@ -491,6 +492,7 @@
    } Flak
 
    AA_Gun ->* Vehicletype.Tank_Gun
+   AA_Gun.Sound = aa_gun_s.ogg
    AA_Gun.targets = low_level_flight medium_level_flight high_level_flight
    AA_Gun.shotFrom = low_level_flight medium_level_flight high_level_flight
    AA_Gun.MaxRange = 20
@@ -499,6 +501,7 @@
    AA_Gun.WeaponEffectiveness ->* VehicleType.AntiAirWeapon
 
    AU_Gun ->* Vehicletype.Tank_Gun
+   AU_Gun.Sound = aa_gun_s.ogg
    AU_Gun.targets = floating ground_level low_level_flight medium_level_flight high_level_flight
    AU_Gun.shotFrom = low_level_flight medium_level_flight high_level_flight
    AU_Gun.MaxRange = 20
@@ -779,15 +782,15 @@
 ; surface-highair misslie
       SAMT ->* VehicleType.SAMH 
       SAMT.MAxRange = 60
-      SAMT.Punch@MaxRange = 80
-      SAMT.Punch@MinRange = 80
+      SAMT.Punch@MaxRange = 85
+      SAMT.Punch@MinRange = 85
       SAMT.ReactionFireShots = 2
       SAMT.WeaponEffectiveness.heavy_aircraft = 120
 ; surface-highair misslie
       SAMB ->* VehicleType.SAMH 
       SAMB.MaxRange = 90
-      SAMB.Punch@MaxRange = 85
-      SAMB.Punch@MinRange = 85
+      SAMB.Punch@MaxRange = 95
+      SAMB.Punch@MinRange = 95
       SAMB.ReactionFireShots = 3
       SAMB.WeaponEffectiveness.heavy_aircraft = 120
 
@@ -1222,7 +1225,7 @@
       SOMB.Punch@MaxRange = 110
       SOMB.Punch@MinRange = 110
 
-; air missile orbit
+; air missle orbit
       AMO {
          Type = air_missile shootable 
          targets = orbit 

@@ -7,7 +7,7 @@ VehicleType {
    Infotext = []
    GuideSortHelp = 509 237 600 0 0 0 0 0 0 0
 
-   Armor += 50
+   Armor += 250
    View = 60
    Features += satelliteview ManualSelfDestruct MoveDuringReactionFire
    TerrainAccess ->* VehicleType.Turret_only 

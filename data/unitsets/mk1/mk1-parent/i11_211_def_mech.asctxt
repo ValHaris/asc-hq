@@ -20,17 +20,20 @@ VehicleType {
       Weapon0 ->* VehicleType.SSM 
       Weapon0.MaxRange = 30
       Weapon0.Ammo = 6
-      Weapon0.Punch@MaxRange = 80
-      Weapon0.Punch@MinRange = 80
+      Weapon0.Punch@MaxRange = 85
+      Weapon0.Punch@MinRange = 85
       Weapon0.Reactionfireshots = 2 
 
       Weapon1 ->* VehicleType.Flak 
       Weapon1.MaxRange = 30
+      Weapon0.Punch@MaxRange = 65
       Weapon1.Reactionfireshots = 1 
       Weapon1.Ammo = 10
 
       Weapon2 ->* VehicleType.MiniGun
       Weapon2.Reactionfireshots = 1 
+      Weapon2.Punch@MaxRange = 55
+      Weapon2.Punch@MinRange = 65
       Weapon2.Ammo = 10
 
    } Weapons

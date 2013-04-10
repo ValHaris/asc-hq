@@ -14,8 +14,8 @@ VehicleType {
 
    Jamming = 15
    Features += jam_only_own_field moveduringreactionfire
-   Armor -= 100
-   Weight -= 1000
+   Armor -= 50
+   Weight -= 500
 
    Movement += 0 11 0 0 0 0 0 0
 
@@ -33,7 +33,7 @@ VehicleType {
       Weapon2.MaxRange = 60
       Weapon2.MinRange = 20
       Weapon2.Ammo = 4
-      Weapon2.Punch@MaxRange = 100
-      Weapon2.Punch@MinRange = 100
+      Weapon2.Punch@MaxRange = 110
+      Weapon2.Punch@MinRange = 110
    } Weapons
 } VehicleType

@@ -11,7 +11,7 @@ VehicleType {
    Category = light_wheeled_vehicle
    Features += MoveDuringReactionFire move_after_attack
    Armor = 250
-   Weight = 20
+   Weight = 25
 
    Tank { 
       Energy = 0

@@ -9,6 +9,8 @@ VehicleType {
    GuideSortHelp = 221 508 0 0 0 0 0 0 0 0
 
    Features += MoveDuringReactionFire move_after_attack
+   Armor += 50
+   
    Tank { 
       Energy = 0
       Material = 0
@@ -18,20 +20,19 @@ VehicleType {
 
    WaitForAttack = true
    Weapons { 
-      Initiative = 20
       Number = 3
 
       Weapon0 ->* VehicleType.SAMH 
-      Weapon0.Punch@MaxRange = 75
-      Weapon0.Punch@MinRange = 75
+      Weapon0.Punch@MaxRange = 80
+      Weapon0.Punch@MinRange = 80
       Weapon0.MaxRange = 70
       Weapon0.MinRange = 20
       Weapon0.Ammo = 10
       Weapon0.Reactionfireshots = 1
 
       Weapon1 ->* VehicleType.SAMH
-      Weapon1.Punch@MaxRange = 75
-      Weapon1.Punch@MinRange = 75
+      Weapon1.Punch@MaxRange = 80
+      Weapon1.Punch@MinRange = 80
       Weapon1.MaxRange = 40
       Weapon1.Reactionfireshots = 1
 

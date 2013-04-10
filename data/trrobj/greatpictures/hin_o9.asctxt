@@ -1,0 +1,18 @@
+TerrainType { 
+   Name = O 9 part of starfieldpic
+   ID = 4289
+   Weather = dry 
+
+   dry { 
+      UseGFXpics = false
+      Picture = hin_o9.png
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 0
+      MoveMalus = 255
+      TerrainProperties =
+   } dry
+   
+
+   
+} TerrainType

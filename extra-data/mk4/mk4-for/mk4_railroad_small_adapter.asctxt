@@ -1,0 +1,6 @@
+Techadapter {
+   Name = o991
+   ;Bezeichnung der verknüpften Technologie: Railroad small
+   TechnologiesRequired = 100020
+   RequireAllListedTechnologies = false
+} TechAdapter

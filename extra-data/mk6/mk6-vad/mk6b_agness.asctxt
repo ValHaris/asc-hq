@@ -11,8 +11,8 @@ VehicleType {
    
    Armor -= 100
    View = 0
-   Tank.Fuel = 10000
-   Tank.Material = 5000
+   Tank.Fuel = 11500
+   Tank.Material = 5500
    Jumpdrive ->* VehicleType.TeccnolsJump3
 
    Weapons {
@@ -20,7 +20,7 @@ VehicleType {
          Name = Ground-Air Railgun
          sound = lasergun.ogg
          Type = Laser shootable 
-	 LaserRechargeRate = 1
+	     LaserRechargeRate = 1
          LaserRechargeCost {
             energy = 0
             material = 200

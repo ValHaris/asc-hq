@@ -1,0 +1,18 @@
+TerrainType { 
+   Name = E 4 part of starfieldpic
+   ID = 4084
+   Weather = dry 
+
+   dry { 
+      UseGFXpics = false
+      Picture = hin_e4.png
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 0
+      MoveMalus = 255
+      TerrainProperties =
+   } dry
+   
+
+   
+} TerrainType

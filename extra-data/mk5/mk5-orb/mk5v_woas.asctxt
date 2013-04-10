@@ -13,7 +13,6 @@ VehicleType {
 
    WaitForAttack = true
    Weapons { 
-      Initiative = 0
       Number = 1
       Weapon0 ->* VehicleType.CMO
       Weapon0.targets = high_level_flight orbit

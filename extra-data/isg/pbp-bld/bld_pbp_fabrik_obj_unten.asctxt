@@ -1,0 +1,10 @@
+ObjectType {
+   name = ISG Fabrikteil unten
+   ID = 12017
+   parent = 12016
+
+   dry { 
+      UseGFXpics = false
+      picture = bld_pbp_fabrik_obj_unten.png 1
+   } dry
+} ObjectType

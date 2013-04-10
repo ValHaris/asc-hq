@@ -60,10 +60,10 @@ VehicleType {
       Weapon0.LaserRechargeRate = 1
       Weapon0.LaserRechargeCost.material = 0
       Weapon0.LaserRechargeCost.fuel = 0
-      Weapon0.MaxRange = 100
+      Weapon0.MaxRange = 120
       Weapon0.MinRange = 20
-      Weapon0.Punch@MaxRange = 100
-      Weapon0.Punch@MinRange = 100
+      Weapon0.Punch@MaxRange = 120
+      Weapon0.Punch@MinRange = 120
       Weapon0.Ammo = 6
       Weapon0.ReactionFireShots = 2
 
@@ -74,8 +74,8 @@ VehicleType {
       Weapon1.LaserRechargeCost.fuel = 0
       Weapon1.MaxRange = 100
       Weapon1.MinRange = 20
-      Weapon1.Punch@MaxRange = 80
-      Weapon1.Punch@MinRange = 80
+      Weapon1.Punch@MaxRange = 85
+      Weapon1.Punch@MinRange = 85
       Weapon1.Ammo = 6
 
       Weapon2 ->* VehicleType.SOM
@@ -85,8 +85,8 @@ VehicleType {
       Weapon2.LaserRechargeCost.fuel = 0
       Weapon2.MaxRange = 100
       Weapon2.MinRange = 10
-      Weapon2.Punch@MaxRange = 80
-      Weapon2.Punch@MinRange = 80
+      Weapon2.Punch@MaxRange = 90
+      Weapon2.Punch@MinRange = 90
       Weapon2.Ammo = 5
 
       Weapon3 ->* VehicleType.Laser_gun
@@ -100,8 +100,8 @@ VehicleType {
       Weapon3.LaserRechargeCost.fuel = 0
       Weapon3.MaxRange = 30
       Weapon3.MinRange = 10
-      Weapon3.Punch@MaxRange = 65
-      Weapon3.Punch@MinRange = 65
+      Weapon3.Punch@MaxRange = 75
+      Weapon3.Punch@MinRange = 75
       Weapon3.Ammo = 10
       Weapon3.ReactionFireShots = 4
 

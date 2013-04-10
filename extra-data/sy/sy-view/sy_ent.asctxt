@@ -27,6 +27,7 @@ VehicleType {
    Movement = 0 0 0 0 140 140 140 0 
 
    Weapons { 
+      Initiative = 0
       Number = 0
    } Weapons
 } VehicleType

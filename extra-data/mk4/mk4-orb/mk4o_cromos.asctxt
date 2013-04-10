@@ -12,13 +12,22 @@ Mit Ihrer Defensivbewaffnung bietet sie gegen angreifende Luft- und Orbitaleinhe
  
 ]
 
-   Armor += 20
+   Transportation.EntranceSystemNum = 2
+   Transportation.EntranceSystem0.Mode = In out
+   Transportation.EntranceSystem1 ->* VehicleType.OrbIO
+   Transportation.EntranceSystem1.Mode = In out
+   Transportation.EntranceSystem1.UnitHeightAbs = high_level_flight 
+   Transportation.EntranceSystem1.MoveCost = 50
+   Transportation.EntranceSystem1.DockingHeightAbs =  
+
+   Armor += 50
  
    Tank { 
       Material += 4000
       fuel += 4000
    } Tank
    FuelConsumption = 110
+   movement -= 0 0 0 0 0 0 0 2
 
    Weapons { 
       Weapon3 ->* VehicleType.type_small_missile

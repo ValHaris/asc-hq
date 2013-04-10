@@ -1,0 +1,75 @@
+BuildingType {
+   Name = Aussenposten
+   ID = 12031
+   parent = 24
+
+   Description = [Aussenposten]
+   InfoImageSmall = 
+   InfoImage = 
+   Infotext = [
+              ]
+
+   Armor = 100000
+   View = 200
+   Features += satelliteview Ammo_Production Repair_Facility Recycling
+   notRemovable = true
+   MaxResearch = 0
+   NominalResearch = 0
+
+   ConstructionStages = 1
+   ConstructionCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } ConstructionCost
+
+   Weather = dry
+   Fields = A1 
+   UseGFXpics = false
+   Pictures { 
+      dry = bld_pbp_pyramide.png
+;      few_snow = bld_asc_radar.png
+;      much_snow = bld_asc_radar.png
+;      snow_and_ice = bld_asc_radar.png
+   } Pictures
+   RubbleObjects = false
+;   rubble {
+;      A1 = 76
+;   } rubble
+   Entry = A1
+   TerrainAccess { 
+      terrain_any = Lowland Hard_sand Soft_sand
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = 
+   } TerrainAccess
+
+   Transportation { 
+      MaxLoadableUnits = 5
+      MaxLoadableUnitSize = 60
+      MaxLoadableMass = 70
+      CategoriesNOT = Heavy_tracked_vehicle Heavy_wheeled_vehicle Light_aircraft Medium_aircraft Heavy_aircraft Light_ship Medium_ship Heavy_Ship Building|turret|object Rail_vehicle
+   } Transportation
+
+   MaxResourceProduction { 
+      Energy = 50
+      Material = 0
+      fuel = 50
+   } MaxResourceProduction
+
+   defaultProduction {
+      energy = 50
+      material = 0
+      fuel = 100
+   } defaultProduction
+
+   StorageCapacity { 
+      ASCmode { 
+         Energy = 500
+         Material = 5000
+         fuel = 5000
+      } ASCmode
+   } StorageCapacity
+
+
+} BuildingType

@@ -12,8 +12,8 @@ VehicleType {
    Infotext = [Railbased anti satellite rocket system.
    InfoImage = BananaJoe]
 
-   WaitForAttack = true
    Features += move_after_attack MoveDuringReactionFire
+   Armor += 50
    Weight = 250
 
    Tank { 
@@ -23,6 +23,7 @@ VehicleType {
    } Tank
    FuelConsumption = 20
 
+   WaitForAttack = true
    Weapons { 
       Initiative = 0
       Number = 2

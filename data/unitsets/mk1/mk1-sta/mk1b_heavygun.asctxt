@@ -15,6 +15,5 @@ VehicleType {
               InfoImage = BananaJoe]
    
    Armor += 50
-   Features += ManualSelfDestruct
 
 } VehicleType

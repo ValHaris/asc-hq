@@ -1,0 +1,18 @@
+TerrainType { 
+   Name = C 2 part of starfieldpic
+   ID = 4042
+   Weather = dry 
+
+   dry { 
+      UseGFXpics = false
+      Picture = hin_c2.png
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 0
+      MoveMalus = 255
+      TerrainProperties =
+   } dry
+   
+
+   
+} TerrainType

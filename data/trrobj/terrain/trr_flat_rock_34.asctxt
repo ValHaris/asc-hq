@@ -2,6 +2,7 @@ TerrainType {
    Name = Flat Rock 34
    ID = 34
    Parent = 505
+   weather -= snow_and_ice
    dry { 
       UseGFXpics = false
       picture = texture-n3b0d3.png
@@ -23,5 +24,4 @@ TerrainType {
 	picture = texture-n3b0d3.png
 	GraphicOperations = snow
    } much_snow
-   snow_and_ice ->* TerrainType.much_snow
 } TerrainType

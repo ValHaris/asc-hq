@@ -1,5 +1,5 @@
 VehicleType { 
-   Name = ISG Carrier
+   Name = ISG Ship Carrier
    parent = 401 497
    ID = 12004
 
@@ -30,8 +30,8 @@ VehicleType {
    } JumpDrive
 
    Category = heavy_aircraft
-   Features = self_repairing icebreaker no_midair_refuel
-   Armor = 500
+   Features = self_repairing icebreaker no_midair_refuel Repair_Facility
+   Armor = 600
    Weight = 2000
    View = 0
    Jamming = 0
@@ -52,10 +52,10 @@ VehicleType {
    FuelConsumption = 200
    Tank { 
       Energy = 0
-      Material = 10000
-      fuel = 20000
+      Material = 20000
+      fuel = 30000
    } Tank
-   Movement = 0 0 0 50 100 110 0 0 
+   Movement = 0 0 0 50 100 120 0 0 
    TerrainAccess { 
       terrain_any = spaceport runway shallow_water water deep_water river
       terrain_all = 

@@ -1,0 +1,47 @@
+ObjectType {
+   name = ISG Fabrikteil oben
+   ID = 12016
+   Weather = dry
+   visible_in_fogOfWar = true
+   canExistBeneathBuildings = false
+   LinkableObjects = 
+   Armor = 0
+   ;                def lTr mTr hvT lWh mWh hWh tro rlv mAC mSh BTO lAC hAC lSh hSh Hli hov
+   Movemalus_plus = 10
+   Movemalus_abs = -1
+   AttackBonus_abs = -1
+   AttackBonus_plus = 0
+   DefenseBonus_abs = 0
+   DefenseBonus_plus = 0
+   ViewBonus_plus = 10
+   Jamming_abs = -1
+   Jamming_plus = 0
+   Height = 118
+   ConstructionCost { 
+      Energy = 0
+      Material = 00
+      fuel = 0
+      Movement = 00
+   } ConstructionCost
+   RemovalCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+      Movement = 0
+   } RemovalCost
+
+   NoSelfChaining = true
+   TerrainAccess { 
+      terrain_any = lowland hard_sand soft_sand
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = 
+   } TerrainAccess
+   TerrainProperties_Filter = Shallow_water Lowland Swamp Forest High_mountains Road Railroad Harbour Runway Hard_sand Soft_sand Track_possible Small_rocks Mud Snow Deep_snow Mountains Very_shallow_water Large_rocks Ditch Morass Installation Frozen_water water deep_water
+   TerrainProperties_Add = installation
+
+   dry { 
+      UseGFXpics = false
+      picture = bld_pbp_fabrik_obj_oben.png 1
+   } dry
+} ObjectType

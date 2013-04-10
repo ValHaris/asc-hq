@@ -29,6 +29,7 @@
    MaxSurvivableStorm = 190
    ResourceDrillingRange = 0
    SelfRepairRate = 0
+   minFieldRepairDamage = 20
    Weight = 120
    Construction { 
       Buildings = 

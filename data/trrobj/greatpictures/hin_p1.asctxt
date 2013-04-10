@@ -1,0 +1,18 @@
+TerrainType { 
+   Name = P 1 part of starfieldpic
+   ID = 4301
+   Weather = dry 
+
+   dry { 
+      UseGFXpics = false
+      Picture = hin_p1.png
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 0
+      MoveMalus = 255
+      TerrainProperties =
+   } dry
+   
+
+   
+} TerrainType

@@ -5,15 +5,15 @@ VehicleType {
    parent = 400 401 402 405
 
    Description = heavy artillery
-   Infotext = []
    WreckageObject = 402
    GuideSortHelp = 506 252 0 0 0 0 0 0 0 0
+   Infotext = []
 
 
    Armor = 380
    Weight = 45
-   WaitForAttack = true
    Features += move_after_attack
+
    Tank { 
       Energy = 0
       Material = 0
@@ -24,6 +24,8 @@ VehicleType {
    TerrainAccess { 
       terrain_not = forest small_rocks large_rocks swamp morass deep_snow
    } TerrainAccess
+
+   WaitForAttack = true
    Weapons { 
       Initiative = 0
       Number = 1
@@ -31,7 +33,7 @@ VehicleType {
       Weapon0.MaxRange = 60
       Weapon0.MinRange = 30
       Weapon0.Ammo = 8
-      Weapon0.Punch@MaxRange = 80
-      Weapon0.Punch@MinRange = 100
+      Weapon0.Punch@MaxRange = 85
+      Weapon0.Punch@MinRange = 105
    } Weapons
 } VehicleType

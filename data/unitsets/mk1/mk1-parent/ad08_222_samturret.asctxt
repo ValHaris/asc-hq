@@ -9,6 +9,7 @@ VehicleType {
    GuideSortHelp = 222 508 0 0 0 0 0 0 0 0
 
    Features += MoveDuringReactionFire ManualSelfDestruct
+   Armor += 100
    view = 50
    Weight = 290
 

@@ -10,7 +10,7 @@ VehicleType {
    Features += MoveDuringReactionFire satelliteview move_after_attack
    Armor = 1200
    Weight = 3000
-   View = 80
+   View = 90
    Jamming = 20
 
    Height = medium_level_flight high_level_flight orbit 

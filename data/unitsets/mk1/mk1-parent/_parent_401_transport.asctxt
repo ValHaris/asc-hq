@@ -311,13 +311,13 @@
       container_in_out {
         Mode = in out
         UnitHeightAbs = ground_level
-        UnitHeightRel = -1
+        UnitHeightRel = -100
         ContainerHeight = low_level_flight
         CategoriesNOT -> VehicleType.cargo_deftur_only.CategoriesNOT
         DockingHeightAbs = 
-        DockingHeightRel = 0
-        MoveCost = 12
-        DisableAttack = false
+        DockingHeightRel = -100
+        MoveCost = 11
+        DisableAttack = true
       } container_in_out
 
       ship_out {

@@ -1,0 +1,55 @@
+VehicleType { 
+   Name = LEO
+   ID = 12582
+   parent = 401 402 415 497 15000
+   Description = Heavy Aircraft Lifter
+   Infotext		= [Der LEO ist die neuste technische Errungenschaft der SUX. Auf der Basis eines Cargo MX, ausgestattet mit der 
+					neusten Generation des Jumpdrive ermöglicht der LEO dem SUX Militär das schnellste Verlegen von Truppenverbänden, 
+					teilweise auch hinter den feindlichen Linien.
+					Als weitere Besonderheit erhielt der LEO den Prototyp eines extra weitreichenden Tunnel-EMP welcher ihn sogar im 
+					Flug in die Lage versetzt sowohl gegnerische Flugzeuge, als auch Landstreitkräfte unter Beschuss zu nehmen.]
+
+   Picture = pua_leo.png
+
+   Weight = 300
+   Armor = 600
+   View = 0
+   JumpDrive ->* VehicleType.TeccnolsJump4
+   WaitForAttack = true
+   
+	 Tank.Material = 2400
+	 Tank.fuel = 22000
+
+   movement = 0 0 0 30 60 80 0 0
+   FuelConsumption = 60
+   Terrainaccess ->* VehicleType.heli_terrain
+   Height = ground_level low_level_flight medium_level_flight
+   MovementSound = jet_pass.ogg
+   
+   Transportation { 
+		MaxLoadableUnits = 10
+		MaxLoadableUnitSize = 800
+		MaxLoadableMass = 800
+		CategoriesNOT = 
+		CargoMovementDivisor = 1.8
+		EntranceSystemNum = 1
+		EntranceSystem0 ->* VehicleType.container_in_out
+		EntranceSystem0.CategoriesNOT = 
+
+	} Transportation
+
+    Weapons.Number = 1
+	Weapon0.TeccEMPAir ->* vehicleType.TeccEMP 
+	Weapon0.targets = floating ground_level low_level_flight medium_level_flight high_level_flight orbit
+	Weapon0.shotFrom = low_level_flight medium_level_flight 
+	Weapon0.HitAccuracy.u2 = 80
+	Weapon0.HitAccuracy.u1 = 90
+	Weapon0.HitAccuracy.d1 = 90
+	Weapon0.HitAccuracy.d2 = 80
+	Weapon0.Punch@MaxRange = 80
+	Weapon0.Punch@MinRange = 100
+	Weapon0.MaxRange = 80
+	Weapon0.MinRange = 40
+	Weapon0.ReactionFireShots = 0
+	
+} VehicleType

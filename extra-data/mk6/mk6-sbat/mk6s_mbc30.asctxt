@@ -33,6 +33,7 @@ VehicleType {
    Armor += 100
    Tank.fuel += 2000
    Tank.material += 2000
+   inFieldRepairDamage = 20
 
    Weapons { 
       Number = 6

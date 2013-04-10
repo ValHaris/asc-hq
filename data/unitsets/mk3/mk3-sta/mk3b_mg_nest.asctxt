@@ -9,8 +9,11 @@ VehicleType {
    picture = MK3b_mg_nest.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
+   Jamming += 10
+   
    Weapons { 
       Weapon0.Punch@MaxRange += 5
       Weapon0.Punch@MinRange += 5
    } Weapons
+   
 } VehicleType

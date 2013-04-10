@@ -11,9 +11,14 @@ VehicleType {
    Armor -= 50
    picture = mk3s_lrfive.png
    infoImage = mk3s_lrfive.jpg
-   Features += externalFuelTransfer externalAmmoTransfer
+   Features += externalFuelTransfer externalAmmoTransfer construct_vehicles
+
+   Construction { 
+      Vehicles = 531 617 510 511 624 625 621
+   } Construction
 
    Weapons { 
+      Initiative = 0
       Number = 8
       Weapon0 ->* VehicleType.ServiceGround 
       Weapon0.targets = deep_submerged submerged floating ground_level

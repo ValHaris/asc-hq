@@ -18,6 +18,7 @@
    MaxSurvivableStorm = 0
    ResourceDrillingRange = 0
    SelfRepairRate = 0
+   minFieldRepairDamage = 10
 
    Height = ground_level orbit 
    Tank { 

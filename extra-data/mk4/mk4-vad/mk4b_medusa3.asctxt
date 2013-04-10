@@ -31,7 +31,6 @@ Da vor allem in letzter Zeit immer mehr Völker auch auf orbitale Angriffssysteme
    TerrainAccess ->* VehicleType.turret_all 
 
    Weapons { 
-      Initiative = 0
       Number = 2
       Weapon0.targets = low_level_flight medium_level_flight high_level_flight 
       Weapon0.MaxRange -= 20

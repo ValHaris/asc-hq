@@ -12,7 +12,7 @@ VehicleType {
 ;   Armor += 100
    View = 0
 
-   Movement = 0 0 0 20 0 0 0 40
+   Movement = 0 0 0 20 0 0 0 50
    Tank.Material += 10000
    Tank.Fuel += 10000
    Height = ground_level orbit 
@@ -50,6 +50,10 @@ VehicleType {
       Weapon1.HitAccuracy.0 = 100
       Weapon1.HitAccuracy.d4 = 0
       Weapon1.ReactionFireShots = 2
+	  Weapon1.WeaponEffectiveness.light_aircraft = 85
+	  Weapon1.WeaponEffectiveness.medium_aircraft = 85
+	  Weapon1.WeaponEffectiveness.heavy_aircraft = 85
+	  Weapon1.WeaponEffectiveness.helicopter = 85
 
       Weapon2 ->* VehicleType.ServiceGround
       Weapon2.targets = floating ground_level orbit

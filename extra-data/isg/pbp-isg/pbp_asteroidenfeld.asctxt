@@ -1,0 +1,218 @@
+VehicleType { 
+   Name = Asteroidenfeld
+   parent = 400
+   ID = 12021
+
+   Description = Asteroidenfeld
+   Infotext = [Tödliches Asteroidenfeld, kein Luft- und Orbitalflug möglich, gelegendliche Einschläge auf der Oberfläche.]
+   Picture = pbp_asteroidenfeld.png
+
+   Category = heavy_aircraft
+   Armor = 200000
+   View = 0
+   Jamming = 100
+   Features = 
+   MaxSurvivableStorm = 255
+   ResourceDrillingRange = 0
+   SelfRepairRate = 50
+   Weight = 120000
+
+   Height = orbit 
+   FuelConsumption = 0
+   Movement = 0 0 0 0 0 0 0 0 
+   Tank { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+   } Tank
+   TerrainAccess { 
+      terrain_any = 
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = 
+   } TerrainAccess
+
+   Construction { 
+      Buildings = 
+      Vehicles =  
+      Objects = 
+      ObjectsRemovable = 
+      ObjectGroupsRemovable = 
+   } Construction
+
+   WaitForAttack = false
+   Weapons { 
+      Number = 3
+      Weapon0 { 
+         Name = Asteroiden
+         Sound = pbp_kollisionswarnung.ogg
+         Type = laser shootable 
+         targets = medium_level_flight high_level_flight orbit 
+         shotFrom = orbit 
+         MaxRange = 1000
+         MinRange = 10
+         Ammo = 100
+	 ReactionFireShots = 100
+	 LaserRechargeRate = 10
+         LaserRechargeCost {
+            energy = 0
+            material = 0
+            fuel = 0
+         } LaserRechargeCost
+         Punch@MaxRange = 1000
+         Punch@MinRange = 1000
+         HitAccuracy { 
+            d6 = 100
+            d5 = 100
+            d4 = 100
+            d3 = 100
+            d2 = 100
+            d1 = 100
+            0 = 100
+            u1 = 100
+            u2 = 100
+            u3 = 100
+            u4 = 100
+            u5 = 100
+            u6 = 100
+         } HitAccuracy
+      WeaponEffectiveness {      
+         trooper = 500
+         rail_vehicle = 500
+         building|turret|object = 500
+         hoovercraft = 500
+         helicopter = 500
+
+         light_tracked_vehicle = 500
+         medium_tracked_vehicle = 500
+         heavy_tracked_vehicle = 500
+
+         light_wheeled_vehicle = 500
+         medium_wheeled_vehicle = 500
+         heavy_wheeled_vehicle = 500
+         
+         light_ship = 500
+         medium_ship  = 500
+         heavy_ship = 500
+
+         light_aircraft = 500
+         medium_aircraft  = 500
+         heavy_aircraft = 500
+      } WeaponEffectiveness
+      } Weapon0
+      Weapon1 { 
+         Name = Asteroiden
+         Sound = pbp_kollisionswarnung.ogg
+         Type = laser shootable 
+         targets = low_level_flight 
+         shotFrom = orbit 
+         MaxRange = 500
+         MinRange = 10
+         Ammo = 100
+	 ReactionFireShots = 20
+	 LaserRechargeRate = 2
+         LaserRechargeCost {
+            energy = 0
+            material = 0
+            fuel = 0
+         } LaserRechargeCost
+         Punch@MaxRange = 30
+         Punch@MinRange = 30
+         HitAccuracy { 
+            d6 = 100
+            d5 = 100
+            d4 = 100
+            d3 = 100
+            d2 = 100
+            d1 = 100
+            0 = 100
+            u1 = 100
+            u2 = 100
+            u3 = 100
+            u4 = 100
+            u5 = 100
+            u6 = 100
+         } HitAccuracy
+      WeaponEffectiveness {      
+         trooper = 100
+         rail_vehicle = 500
+         building|turret|object = 500
+         hoovercraft = 500
+         helicopter = 100
+
+         light_tracked_vehicle = 300
+         medium_tracked_vehicle = 300
+         heavy_tracked_vehicle = 300
+
+         light_wheeled_vehicle = 300
+         medium_wheeled_vehicle = 300
+         heavy_wheeled_vehicle = 300
+         
+         light_ship = 300
+         medium_ship  = 300
+         heavy_ship = 300
+
+         light_aircraft = 100
+         medium_aircraft  = 100
+         heavy_aircraft = 100
+      } WeaponEffectiveness
+      } Weapon1
+      Weapon2 { 
+         Name = Asteroiden
+         Sound = pbp_kollisionswarnung.ogg
+         Type = laser shootable 
+         targets = floating ground_level 
+         shotFrom = orbit 
+         MaxRange = 500
+         MinRange = 10
+         Ammo = 100
+	 ReactionFireShots = 0
+	 LaserRechargeRate = 5
+         LaserRechargeCost {
+            energy = 0
+            material = 0
+            fuel = 0
+         } LaserRechargeCost
+         Punch@MaxRange = 100
+         Punch@MinRange = 100
+         HitAccuracy { 
+            d6 = 100
+            d5 = 100
+            d4 = 100
+            d3 = 100
+            d2 = 100
+            d1 = 100
+            0 = 100
+            u1 = 100
+            u2 = 100
+            u3 = 100
+            u4 = 100
+            u5 = 100
+            u6 = 100
+         } HitAccuracy
+      WeaponEffectiveness {      
+         trooper = 100
+         rail_vehicle = 100
+         building|turret|object = 100
+         hoovercraft = 100
+         helicopter = 100
+
+         light_tracked_vehicle = 100
+         medium_tracked_vehicle = 100
+         heavy_tracked_vehicle = 100
+
+         light_wheeled_vehicle = 100
+         medium_wheeled_vehicle = 100
+         heavy_wheeled_vehicle = 100
+         
+         light_ship = 100
+         medium_ship  = 100
+         heavy_ship = 100
+
+         light_aircraft = 100
+         medium_aircraft  = 100
+         heavy_aircraft = 100
+      } WeaponEffectiveness
+      } Weapon2
+   } Weapons
+} VehicleType

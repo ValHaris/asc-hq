@@ -2,27 +2,29 @@ BuildingType {
    Name = Shipyard N
    ID = 16
    parent = 499
+
    Infotext = [Fertigungsanlage für Schiffe, incl. Munition, Reparatur und Wiederverwertung.]
+
    ConstructionStages = 1
    Weather = dry
+   Entry = A4
    Fields = A1 A3 A4 B1 B3 
+   ConstructionCost { 
+      Energy = 0
+      Material = 12000
+      fuel = 9000
+   } ConstructionCost
    UseGFXpics = false
    Pictures { 
       dry = bld_ASC_port.png
    } Pictures
    RubbleObjects = false
-   Entry = A4
+
+   Features = Vehicle_Production Ammo_Production Repair_Facility ExternalMaterialTransfer ExternalFuelTransfer ExternalAmmoTransfer recycling
    Armor = 2500
-   Transportation { 
-      MaxLoadableUnits = 6
-      MaxLoadableUnitSize = 6900
-      MaxLoadableMass = 50000
-      CategoriesNOT =  
-      DisableAttack = false
-   } Transportation
-   Functions = Vehicle_Production Ammo_Production Repair_Facility External_Loading recycling
+   ExternalLoading = floating ground_level 
    CategoriesProduceable = light_ship medium_ship heavy_ship hoovercraft default heavy_aircraft
-   
+
    Transportation { 
       MaxLoadableUnits = 6
       MaxLoadableUnitSize = 6900
@@ -51,16 +53,12 @@ BuildingType {
       } EntranceSystem1
    } Transportation
 
+
    TerrainAccess { 
       terrain_any = Shallow_water Water Very_shallow_water river lowland hard_sand
       terrain_all = 
       terrain_not = 
       terrain_kill = lava deep_water
    } TerrainAccess
-   ConstructionCost { 
-      Energy = 0
-      Material = 12000
-      fuel = 9000
-   } ConstructionCost
-   ExternalLoading = floating ground_level 
+
 } BuildingType

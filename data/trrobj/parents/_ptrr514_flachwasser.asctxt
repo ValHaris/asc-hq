@@ -8,7 +8,7 @@ TerrainType {
       AttackBonus = 0
       BasicJamming = 0
   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
-      MoveMalus = 10  14  14  14  16  16  16  12  10  15  10  11  15  15  10  10  19  10
+      MoveMalus = 10  14  14  14  16  16  16  12  10  19  10  11  19  19  10  10  19  10
       TerrainProperties = shallow_water 
    } dry
    
@@ -20,17 +20,14 @@ TerrainType {
    
    few_snow ->* TerrainType.dry
    few_snow.BasicJamming = 1
-  ;                     def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
-   few_snow.MoveMalus = 20  20  20  20  20  20  20  15  10  20  15  12  25  25  15  15  30  20
-   few_snow.TerrainProperties = shallow_water Pack_ice
    
    much_snow { 
       DefenseBonus = 0
       AttackBonus = 0
       BasicJamming = 2
   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
-      MoveMalus = 13  13  13  13  14  14  14  12  12  14  22  16  14  14  22  22  14  10
-      TerrainProperties = shallow_water frozen_water track_possible snow
+      MoveMalus = 30  30  30  30  30  30  30  30  10  30  20  12  30  30  19  18  30  30
+      TerrainProperties = shallow_water Pack_ice
    } much_snow
    
    snow_and_ice { 

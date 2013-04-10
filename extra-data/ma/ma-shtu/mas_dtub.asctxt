@@ -25,14 +25,14 @@ VehicleType {
    Weight = 3000
 
    Weapons { 
-      Initiative = 0
       Number = 3
       Weapon0 ->* VehicleType.UTorp 
       Weapon0.Type = torpedo ammo_transfer shootable 
       Weapon0.Ammo = 25
       Weapon0.MaxRange = 10
       Weapon1 ->* VehicleType.Ship_Flak
-      Weapon1.Type = cannon ammo_transfer shootable 
+	  Weapon1.targets = low_level_flight medium_level_flight high_level_flight
+      Weapon1.Punch@MaxRange = 75
       Weapon1.Ammo = 40
       Weapon2 ->* VehicleType.AmmoBomb 
       Weapon2.Ammo = 25

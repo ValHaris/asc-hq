@@ -7,7 +7,6 @@ VehicleType {
    Description = SSM medium range
    Picture = Mk3v_lance.png
    GuideSortHelp = 505 413 0 0 3 0 0 0 0 0
-   InfoText = [Die MGM-52 LANCE ist eine ballistische Rakete, welche von der M667 abgefeuert wird. Sie reicht weiter als die gängigen Artilleriekanonen und hat eine gute Durchschlagskraft. Diese Einheit wird in der Regel aus der Dritten Reihe eingesetzt, um auf dem Schlachtfeld auch feindliche Einheiten hinter der Front anzugreifen. die Abschussvorrichtung wird in der Regel von einem Transporter getragen und bei Einsatzbedarf abgeladen und in Stellung gebracht. Aufgrund der hohen Munitionskosten sollte ihr Einsatz allerdings immer gut überlegt werden und die Einheit selbst sollte niemals unbewacht sein, vor allem gegen Luftangriffe. Desweiteren wird für fortwährendes Feuer ein Truck oder anderer Munitionstransporter benötigt, da die Abschussvorrichtung nur platz für eine einzige Rakete hat.]
 
    MovementSound = wheeled_l_g.ogg
 } VehicleType

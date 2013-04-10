@@ -9,7 +9,7 @@ VehicleType {
    GuideSortHelp = 507 318 0 0 0 0 0 0 0 0
 
    Features += ManualSelfDestruct
-   Armor -= 400
+   Armor -= 200
    View = 60
    Transportation ->* VehicleType.TransLowTrooper3 
 
@@ -24,17 +24,22 @@ VehicleType {
       Initiative = 0
       Number = 3
       Weapon0 ->* VehicleType.BigMiniGun
-      Weapon0.MaxRange = 20
+      Weapon0.MaxRange = 30
+      Weapon0.Punch@MaxRange = 55
+      Weapon0.Punch@MinRange = 65
       Weapon0.Ammo = 20
       Weapon0.ReactionFireShots = 2
       
       Weapon1 ->* VehicleType.SAMH
+	  Weapon1.MaxRange = 50
       Weapon1.Ammo = 6
       Weapon1.ReactionFireShots = 1
-      
+      Weapon1.Punch@MaxRange = 80
+      Weapon1.Punch@MinRange = 80
+	  
       Weapon2 ->* VehicleType.smSSM
-      Weapon2.Punch@MaxRange = 80
-      Weapon2.Punch@MinRange = 80
+      Weapon2.Punch@MaxRange = 95
+      Weapon2.Punch@MinRange = 95
       Weapon2.maxRange = 40
       Weapon2.Ammo = 8
       Weapon2.ReactionFireShots = 2

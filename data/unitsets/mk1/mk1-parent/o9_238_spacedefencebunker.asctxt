@@ -9,13 +9,12 @@ VehicleType {
    GuideSortHelp = 509 238 600 0 0 0 0 0 0 0
 
 
-   Armor -= 100
+   Armor += 100
    Features += satelliteview ManualSelfDestruct
 
    TerrainAccess ->* VehicleType.turret_Lowland 
 
    Weapons { 
-      Initiative = 0
       Number = 2
       Weapon0 ->* VehicleType.SOMB 
       Weapon1 ->* VehicleType.Def_MG 

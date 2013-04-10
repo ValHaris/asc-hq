@@ -49,7 +49,7 @@ ID 15241 Evi
 ID 15243 Signal
 ID 15242 Devo R
 ID 15305 Deltaseacher
-ID 15244 Terminal
+ID 15444 Terminal
 
 --Jamming--
 ID 15306 Shadow
@@ -81,7 +81,6 @@ ID 15105 Meta SV
 15246 Global
 15232 Blaster
 15235 Brownie
-15313 Mons
 
 --Aircraft--
 ID 15100 Defkind
@@ -91,10 +90,9 @@ ID 15271 Asus
 ID 15270 Deltafighter
 ID 15276 Deltabomber
 ID 15326 Deltahunter
-ID 15327 Delta
+ID 15xxx Delta
 ID 15xxx Doomsday
 ID 15277 Inova
-ID 15298 Damon
 
 Aircraft Support
 ID 15102 Cargo MX

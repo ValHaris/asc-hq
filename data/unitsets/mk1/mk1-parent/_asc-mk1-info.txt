@@ -110,7 +110,6 @@ ID  52/326  EAGLE            seaplane
 ID  69/     Butterfly        light bomber
 ID  68/279  Hawk             stealth bomber
 ID  70/272  Predator         stealth fighter
-ID  82      Sinner
 ID  92/271  BOOMERANG        medium fighter
 ID 123/327  Rasak            defence fighter
 
@@ -156,6 +155,7 @@ ID 21  Impact
 ID 33  Vertic
 ID 90  Terror          trooper hunter
 ID 54         Inca                      
+ID 82         Sinner
 ID 78  (-)   (   ) Ralago     heavy attack helicopter
 ID 116 Raven2       heavy transport plane
 

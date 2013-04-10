@@ -1,0 +1,34 @@
+VehicleType { 
+   Name = IMP
+   ID = 1353
+   parent = 1395 202
+
+   Description = special trooper
+   Picture = syi_imp.png
+   Infotext = []
+
+   Armor -= 50
+   Jamming += 0
+   SelfRepairRate = 20
+   Features += construct_specific_buildings
+   
+   ; Liks, Bughole, Mine , Fuel, Beton
+   Construction.ObjectGroupsRemovable = 2 3 4 6 7 8
+
+   Height = deep_submerged submerged ground_level orbit
+   Movement += 11 11 0 0 0 0 0 10
+   Tank { 
+      Energy = 0
+      Material = 2000
+      fuel = 3000
+   } Tank
+
+   Weapons { 
+      Number = 1
+      Weapon0 ->* VehicleType.SY_Trooper 
+	  Weapon0.name = Stabwaffe
+      Weapon0.MinRange = 10
+      Weapon0.Punch@MinRange += 2
+      Weapon0.WeaponEffectiveness.trooper = 100
+   } Weapons
+} VehicleType

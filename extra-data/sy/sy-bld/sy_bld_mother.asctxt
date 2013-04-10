@@ -32,7 +32,7 @@ BuildingType {
         DockingHeightRel = -100 
       } EntranceSystem0
    } Transportation
-   Functions = Research Vehicle_Production Ammo_Production Repair_Facility Recycling matter_converter External_Loading Produce_Units_that_cannot_leave NoObjectChaining
+   Features = Research Vehicle_Production Ammo_Production Repair_Facility Recycling matter_converter ExternalMaterialTransfer ExternalFuelTransfer Produce_Units_that_cannot_leave NoObjectChaining
    Techlevel = 0
    TerrainAccess { 
       terrain_any = Shallow_water Lowland High_mountains Road Runway Water Deep_water Hard_sand Soft_sand Mountains Very_shallow_water Lava Ditch Hillside Turret_foundation Installation River 

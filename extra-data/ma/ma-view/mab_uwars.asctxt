@@ -31,9 +31,8 @@ VehicleType {
       Objects = 
    } Construction
    Weapons { 
-      Initiative = 120
       Number = 0
-         } Weapons
+   } Weapons
    HeightChangeMethodNum = 2
    HeightChangeMethod0 {
       movecost = 10

@@ -9,7 +9,7 @@ VehicleType {
    GuideSortHelp = 507 315 0 0 0 0 0 0 0 0
 
    Features +=  ManualSelfDestruct
-   Armor -= 200
+   Armor -= 0
    View = 40
    Transportation ->* VehicleType.TransLowTrooper3
    Weight = 400
@@ -22,16 +22,17 @@ VehicleType {
    TerrainAccess ->* VehicleType.turret_lowland 
 
    Weapons { 
-      Initiative = 0
       Number = 2
       Weapon0 ->* VehicleType.Artillery 
       Weapon0.MaxRange = 40
       Weapon0.Ammo = 20
-      Weapon0.Punch@MaxRange = 90
-      Weapon0.Punch@MinRange = 110
+      Weapon0.Punch@MaxRange = 105
+      Weapon0.Punch@MinRange = 125
       Weapon0.ReactionFireShots = 2
 
       Weapon1 ->* VehicleType.MiniGun 
+      Weapon1.Punch@MaxRange = 50
+      Weapon1.Punch@MinRange = 60
       Weapon1.Ammo = 30
 
    } Weapons

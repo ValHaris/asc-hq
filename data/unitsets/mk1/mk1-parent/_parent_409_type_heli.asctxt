@@ -10,31 +10,36 @@
 
    Infotext = []
    RecommendedAIJob = fight
+   WreckageObject = 495 496
+
+   Features = move_after_attack no_midair_refuel cruiserlanding
+   Category = helicopter
    Armor = 300
    View = 40
-   WreckageObject = 495 496
-   Height = ground_level low_level_flight medium_level_flight
    Jamming = 0
-   WaitForAttack = false
+   ResourceDrillingRange = 0
+   MaxSurvivableStorm = 150
+   SelfRepairRate = 0
+   minFieldRepairDamage = 10
+   Weight = 30
+
+   Height = ground_level low_level_flight medium_level_flight
    Tank { 
       Energy = 0
       Material = 0
       fuel = 4000
    } Tank
    FuelConsumption = 20
-   Features = move_after_attack no_midair_refuel cruiserlanding
    Movement = 0 0 0 35 130 130 0 0 
    TerrainAccess ->* VehicleType.heli_terrain 
-   Category = helicopter
-   MaxSurvivableStorm = 150
-   ResourceDrillingRange = 0
-   SelfRepairRate = 0
-   Weight = 30
+
    Construction { 
       Buildings = 
       Vehicles = 
       Objects = 
    } Construction
+
+   WaitForAttack = false
    Weapons { 
       Initiative = 0
       Number = 0

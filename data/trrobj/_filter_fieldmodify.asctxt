@@ -1,0 +1,10 @@
+itemfilter {
+   Vehicles = 
+   Buildings = 
+   Objects = 2612-2626
+   Terrain = 
+   Technologies = 
+   name = ASC field modify objects
+   activated = true
+} itemfilter
+   

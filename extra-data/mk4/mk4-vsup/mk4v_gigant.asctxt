@@ -49,6 +49,7 @@ Von der Panzerung her entspricht der Gigant in etwa dem normalen Baufahrzeug-Sta
       Objects = 
       ObjectsRemovable = 988
       ObjectGroupsRemovable = 14
+      UnitConstructionMoveCostPercentage = 76
    } Construction
    CategoriesProduceable = building|turret|object
 

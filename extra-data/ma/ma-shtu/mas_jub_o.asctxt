@@ -5,7 +5,7 @@ VehicleType {
 
    Description = Anti-Orbit-U-Boot
    Infotext = [Das JUB O basiert auf dem standart Jagt-U-Boot der malanischen Seestreitkräfte. Es verfügt aber nur über ein Torpedorohr. Der freiwerdende Platz wurde für die Energiespeicherbänke des Anti-Orbital-Laser benötigt. Das U-Boot besitzt sowohl starke offensiv, als auch Defensivmöglichkeiten, welche sich allerdings nur an der wasseroberfläche, vollständig auswirken. Ein Abfeuern des lasers unter wasser ist zwar möglich, allerdings dämpft die Flüssigkeit die Effektivität erheblich.  ]
-   Picture = mas_jub_o.pcx
+   Picture = mas_jub_o.png
    WreckageObject = 435
 
    Features += MoveDuringReactionFire

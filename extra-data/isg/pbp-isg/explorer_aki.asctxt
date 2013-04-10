@@ -21,6 +21,7 @@ VehicleType {
    Features = self_repairing jam_only_own_field MoveDuringReactionFire
    Armor += 200
    View += 60
+   Weight = 20000
 
    Movement += 0 0 0 0 40 20 20 20 
 

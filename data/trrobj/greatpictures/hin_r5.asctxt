@@ -1,0 +1,18 @@
+TerrainType { 
+   Name = R 5 part of starfieldpic
+   ID = 4345
+   Weather = dry 
+
+   dry { 
+      UseGFXpics = false
+      Picture = hin_r5.png
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 0
+      MoveMalus = 255
+      TerrainProperties =
+   } dry
+   
+
+   
+} TerrainType

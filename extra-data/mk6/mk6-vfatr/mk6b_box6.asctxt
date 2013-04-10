@@ -15,7 +15,7 @@ VehicleType {
    JumpDrive.consumption.Material = 150
    JumpDrive.consumption.Fuel = 1500
 
-   Armor -= 200
+   Armor -= 100
    View = 0
    Features = MoveDuringReactionFire
    Weight = 1000

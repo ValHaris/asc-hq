@@ -11,7 +11,7 @@ VehicleType {
 
    Features += MoveDuringReactionFire
    
-   Armor += 100
+   Armor += 150
    Weight = 2
    View += 21
    TerrainAccess ->* VehicleType.Device_terrain 
@@ -19,9 +19,10 @@ VehicleType {
 
    WaitForAttack = true
    Weapons { 
-      Initiative = 50
       Number = 1
       Weapon0 ->* VehicleType.MiniGun 
+      Weapon0.Punch@MinRange = 60
+	  Weapon0.Punch@MaxRange = 70
       Weapon0.Ammo = 20
       Weapon0.ReactionFireShots = 3
    } Weapons

@@ -20,10 +20,10 @@ VehicleType {
       Weapon0.ReactionFireShots = 0
 
       Weapon1 ->* VehicleType.Ship_Flak
-      Weapon1.targets =  low_level_flight medium_level_flight high_level_flight 
+	  Weapon1.targets = low_level_flight medium_level_flight high_level_flight
+      Weapon1.Punch@MaxRange = 75
       Weapon1.MaxRange = 30
       Weapon1.Ammo = 10
-      Weapon1.HitAccuracy.u3 = 75
       Weapon1.ReactionFireShots = 1
 
       Weapon2 ->* VehicleType.Ship_Flak

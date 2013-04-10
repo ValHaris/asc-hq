@@ -7,7 +7,7 @@ VehicleType {
    Description = constructing pioneers
    picture = MK3i_piobuild.png
    GuideSortHelp = 554 558 0 0 3 0 0 0 0 0
-   Infotext = [Die Building Pioneers sind das Rückgrat des Basisaufbaus der Terraner. Sie errichten fst alle für die Grundversorung einer Basis notwendigen Gebäude, sowie elementare Turrets für die Basisverteidigung. Desweiteren sind sie in der Lage durch den Abbau von Wald, Steinen und Gebäuden Ressourcen aus ihrer Umgebung zu gewinnen. Ihre rudimentäre Bewaffung mit einem MG erfordert Schutz durch kampfstärkere Einheiten.
+   Infotext = [Die Building Pioneers sind das Rückgrat des Basisaufbaus der Terraner. Sie errichten fast alle für die Grundversorung einer Basis notwendigen Gebäude, sowie elementare Turrets für die Basisverteidigung. Desweiteren sind sie in der Lage durch den Abbau von Wald, Steinen und Gebäuden Ressourcen aus ihrer Umgebung zu gewinnen. Ihre rudimentäre Bewaffung mit einem MG erfordert Schutz durch kampfstärkere Einheiten.
 ]
 
    Armor = 250
@@ -28,6 +28,7 @@ VehicleType {
       Objects = 10 44 2093 2098 2097
       ObjectsRemovable = 2097
       ObjectGroupsRemovable = 1 2 3 4 5 6 7 8 9 10 11 12 13 21
+      UnitConstructionMoveCostPercentage = 62
    } Construction
 
    Weapons {

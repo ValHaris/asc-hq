@@ -11,8 +11,6 @@ VehicleType {
    Infotext = [Main space defence system - long range rockets to fight against enemy satellites, 
    spaceships and spacestations.]
    
-   Features += ManualSelfDestruct
-
    Weapons { 
       Weapon0.Punch@MaxRange -= 5
       Weapon0.Punch@MinRange -= 5

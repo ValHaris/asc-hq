@@ -1,0 +1,10 @@
+itemfilter {
+   Vehicles = 
+   Buildings = 
+   Objects = 
+   Terrain = 4000-4999
+   Technologies = 
+   name = PBP Starfield Terrain
+   activated = true
+} itemfilter
+   

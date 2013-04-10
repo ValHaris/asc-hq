@@ -5,8 +5,8 @@ VehicleType {
    abstract = true
 
    Description = defence turret
-   Infotext = []
    GuideSortHelp = 507 317 0 0 0 0 0 0 0 0
+   Infotext = []
 
    Transportation { 
       MaxLoadableUnits = 6
@@ -18,8 +18,9 @@ VehicleType {
    } Transportation
    
    Features += ManualSelfDestruct
+   Armor += 100
    View = 60
-   Weight = 450
+   Weight = 390
 
    Tank { 
       Energy = 0
@@ -30,20 +31,22 @@ VehicleType {
 
    WaitForAttack = true
    Weapons { 
-      Initiative = 0
       Number = 5
       Weapon0 ->* VehicleType.Artillery 
       Weapon0.ReactionFireShots = 2
       Weapon0.MaxRange = 40
       Weapon0.Ammo = 20
-      Weapon0.Punch@MaxRange = 95
-      Weapon0.Punch@MinRange = 115
+      Weapon0.Punch@MaxRange = 105
+      Weapon0.Punch@MinRange = 125
 
       Weapon1 ->* VehicleType.SAMH 
+      Weapon1.Punch@MaxRange = 80
+      Weapon1.Punch@MinRange = 80
       Weapon1.Ammo = 20
 
-      Weapon2 ->* VehicleType.Ship_MG 
-      Weapon2.MaxRange = 20
+      Weapon2 ->* VehicleType.MiniGun 
+      Weapon1.Punch@MaxRange = 55
+      Weapon1.Punch@MinRange = 65
       Weapon2.Ammo = 50
 
       Weapon3 ->* VehicleType.AmmoSM 

@@ -22,19 +22,7 @@ VehicleType {
    Movement = 0 0 0 10 0 0 0 0 
 ;   ObjectsLayedByMovement = 1301
 
-   JumpDrive { 
-      Height = ground_level
-      consumption { 
-         Energy = 0
-         Material = 300
-         fuel = 300
-      } consumption
-      terrain_any -> VehicleType.TerrainAccess.terrain_any 
-      terrain_all = 
-      terrain_not -> VehicleType.TerrainAccess.terrain_not
-      terrain_kill = 
-      MaxDistance = 50
-   } JumpDrive
+   JumpDrive ->* VehicleType.SY_worm_jump 
 
    Weapons { 
       Number = 2

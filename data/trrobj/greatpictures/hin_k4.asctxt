@@ -1,0 +1,18 @@
+TerrainType { 
+   Name = K 4 part of starfieldpic
+   ID = 4204
+   Weather = dry 
+
+   dry { 
+      UseGFXpics = false
+      Picture = hin_k4.png
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 0
+      MoveMalus = 255
+      TerrainProperties =
+   } dry
+   
+
+   
+} TerrainType

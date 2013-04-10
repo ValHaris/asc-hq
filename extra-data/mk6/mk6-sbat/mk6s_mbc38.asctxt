@@ -32,7 +32,7 @@ Den größten Platz beansprucht die gigantische Ortungsanlage, welche sogar im get
    Armor += 200
    Tank.fuel += 15000
    Tank.material += 5000
-   inFieldRepairDamage = 80
+   minFieldRepairDamage = 20
 
    WaitForAttack = true
    Weapons { 

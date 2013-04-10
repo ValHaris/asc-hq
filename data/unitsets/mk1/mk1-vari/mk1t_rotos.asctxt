@@ -18,6 +18,7 @@ VehicleType {
               Ammunition Transports.]
 
    Armor += 50
+
    Weapons { 
    } Weapons
 } VehicleType

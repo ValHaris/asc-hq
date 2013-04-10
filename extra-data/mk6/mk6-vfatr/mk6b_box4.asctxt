@@ -15,7 +15,7 @@ VehicleType {
    JumpDrive.consumption.Material = 100
    JumpDrive.consumption.Fuel = 1000
 
-   Armor -= 300
+   Armor -= 200
    View = 0
    Features = MoveDuringReactionFire
    Weight = 800
@@ -33,6 +33,5 @@ VehicleType {
       Number = 1
       Weapon0 ->* VehicleType.DLS 
       Weapon0.MaxRange = 40
-      Weapon0.Punch@MaxRange = 60
    } Weapons
 } VehicleType

@@ -10,13 +10,17 @@ VehicleType {
    picture = mk4b_rocky.png
 
    Weight = 490
-   Features += ManualSelfDestruct onlyTransMove
+   Armor -= 100
+   Features += onlyTransMove
 
    Movement = 0 0 0 18 0 0 0 0 
    Terrainaccess ->* VehicleType.Turret_all
    
    Weapons {
       Number = 3
+      Weapon0.Punch@MaxRange -= 5
+      Weapon0.Punch@MinRange -= 5
+
       Weapon2 ->* VehicleType.Flame_Thrower
    } Weapons
 

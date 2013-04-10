@@ -18,8 +18,8 @@ VehicleType {
 
    Weapons {
       Weapon0 ->* VehicleType.type_large_missile 
-      Weapon0.Punch@MaxRange = 105
-      Weapon0.Punch@MinRange = 105
+      Weapon0.Punch@MaxRange = 120
+      Weapon0.Punch@MinRange = 120
       Weapon1 ->* VehicleType.NLS
    } Weapons
 } VehicleType

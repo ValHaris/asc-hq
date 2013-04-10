@@ -11,17 +11,18 @@ Der Rumpf ist ähnlich dem eines Schlacht-U-Bootes, was dem Schiff eine recht gut
 ]
 
 
-   Armor += 200
+   Armor += 100
    View = 90
    Features += move_after_attack MoveDuringReactionFire
    TerrainAccess ->* VehicleType.bigship_terrain
 
+   WaitForAttack = true
    Weapons { 
-      Initiative = 0
       Number = 1
       Weapon0 ->* VehicleType.UTorp 
+      Weapon0.MaxRange = 30
       Weapon0.Ammo = 6
-      Weapon0.Punch@MaxRange = 100
-      Weapon0.Punch@MinRange = 100
+      Weapon0.Punch@MaxRange = 110
+      Weapon0.Punch@MinRange = 110
    } Weapons
 } VehicleType

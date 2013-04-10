@@ -10,6 +10,7 @@ VehicleType {
    Armor = 1000
    View = 40
    Weight = 850
+   minFieldRepairDamage = 5
 
    Tank { 
       Energy = 0

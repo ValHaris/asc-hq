@@ -16,7 +16,7 @@ kann bis zu 4 kleine Roboter aufnehmen. Um ans Ziel zu gelangen benoetigt die Bo
    JumpDrive.consumption.Material = 500
    JumpDrive.consumption.Fuel = 5000
 
-   Armor -= 400
+   Armor -= 300
    View = 0
    Features = MoveDuringReactionFire
    Weight = 600

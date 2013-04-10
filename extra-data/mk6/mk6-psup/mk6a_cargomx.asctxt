@@ -8,7 +8,7 @@ VehicleType {
 
    Transportation ->* VehicleType.TransPlane
 
-   Weight = 300
+   Weight = 250
    View = 40
    Features = ExternalMaterialTransfer ExternalFuelTransfer ExternalAmmoTransfer
 

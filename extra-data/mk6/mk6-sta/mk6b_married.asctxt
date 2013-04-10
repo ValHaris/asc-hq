@@ -9,7 +9,7 @@ VehicleType {
    GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
    Infotext = []
    
-   Armor = 500
+   Armor = 550
    Weight = 400
    Features = 
    View = 0
@@ -22,7 +22,7 @@ VehicleType {
    TerrainAccess.Terrain_any = runway spaceport turret_foundation
    TerrainAccess.Terrain_not = large_rocks bridge
    Jumpdrive ->* VehicleType.TeccnolsJump6
-   Jumpdrive.MaxDistance = 80
+   Jumpdrive.MaxDistance = 100
    Jumpdrive.consumption.Material = 300
    Jumpdrive.consumption.Fuel = 1000
 
@@ -34,10 +34,10 @@ VehicleType {
       Weapon0.sound = lasergun.ogg
       Weapon0.MaxRange = 80
       Weapon0.ShotFrom = ground_level orbit
-      Weapon0.Targets = ground_level low_level_flight medium_level_flight high_level_flight
+      Weapon0.Targets = floating ground_level low_level_flight medium_level_flight high_level_flight
       Weapon0.MinRange = 40
-      Weapon0.Punch@MaxRange = 100
-      Weapon0.Punch@MinRange = 120
+      Weapon0.Punch@MaxRange = 110
+      Weapon0.Punch@MinRange = 125
       Weapon0.Ammo = 4
       Weapon0.LaserRechargeRate = 1
       Weapon0.LaserRechargeCost.material = 200

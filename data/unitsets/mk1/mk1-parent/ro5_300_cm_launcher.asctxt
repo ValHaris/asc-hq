@@ -9,7 +9,7 @@ VehicleType {
    GuideSortHelp = 505 300 0 0 0 0 0 0 0 0
 
 
-   Armor = 300
+   Armor = 350
    View = 20
    Jamming = 30
    WaitForAttack = true

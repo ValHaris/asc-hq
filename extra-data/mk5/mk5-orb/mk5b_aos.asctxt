@@ -17,6 +17,6 @@ VehicleType {
       Weapon0.Punch@MaxRange -= 10
       Weapon0.Punch@MinRange -= 10
       Weapon0.targets = high_level_flight orbit
-      Weapon0.HitAccuracy.u3 = 100
+      Weapon0.HitAccuracy.u3 = 80
    } Weapons
 } VehicleType

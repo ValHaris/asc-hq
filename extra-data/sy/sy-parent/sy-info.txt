@@ -69,6 +69,7 @@ Units
 1350 AD
 1351 Exol
 1352 Neks   Käfigfahrzeug
+1353 IMP
 
 Objekte
 

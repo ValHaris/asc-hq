@@ -63,6 +63,8 @@ trrobj/objects/buildable/*.png
 trrobj/parents/*.asctxt
 trrobj/terrain/*.asctxt
 trrobj/terrain/*.png
+trrobj/greatpictures/*.png
+trrobj/greatpictures/*.asctxt
 unitsets/mk1/mk1-bld/*.asctxt
 unitsets/mk1/mk1-for/*.asctxt
 unitsets/mk1/mk1-heli/*.asctxt

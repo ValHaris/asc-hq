@@ -32,10 +32,10 @@ VehicleType {
       Weapon1.ReactionFireShots = 2
 
       Weapon2 ->* VehicleType.Ship_Flak
+	  Weapon2.targets = low_level_flight medium_level_flight high_level_flight
+      Weapon2.Punch@MaxRange = 75
       Weapon2.MaxRange = 30
       Weapon2.Ammo = 10
-      Weapon2.Punch@MaxRange = 60
-      Weapon2.Punch@MinRange = 80
 
       Weapon3 ->* VehicleType.UTorp 
       Weapon3.Ammo = 5

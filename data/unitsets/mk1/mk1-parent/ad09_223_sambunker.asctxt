@@ -6,12 +6,15 @@ VehicleType {
 
    Description = air-defence bunker
    Picture = b_sambunker.pcx
-   Infotext = [ ]
    GuideSortHelp = 223 508 0 0 0 0 0 0 0 0
+   Infotext = [ ]
 
    Features += ManualSelfDestruct
+   Armor += 200
    view = 60
+
    TerrainAccess ->* VehicleType.Turret_lowland 
+
    Weapons { 
       Initiative = 0
       Number = 3

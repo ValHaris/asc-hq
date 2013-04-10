@@ -18,7 +18,7 @@ VehicleType {
    } Transportation
 
    Features += ManualSelfDestruct
-   Armor -= 200
+   Armor -= 0
 
    Tank { 
       Energy = 0
@@ -28,16 +28,17 @@ VehicleType {
    TerrainAccess ->* VehicleType.Turret_all 
 
    Weapons { 
-      Initiative = 0
       Number = 2
       Weapon0 ->* VehicleType.BigMiniGun
       Weapon0.Ammo = 20
-      Weapon0.Punch@MinRange = 60
+      Weapon0.Punch@MaxRange = 65
+      Weapon0.Punch@MinRange = 75
       Weapon0.MaxRange = 30
  
       Weapon1 ->* VehicleType.AirMiniGun
       Weapon1.Ammo = 20
-      Weapon1.Punch@MinRange = 60
+      Weapon1.Punch@MaxRange = 60
+      Weapon1.Punch@MinRange = 70
       Weapon1.MaxRange = 30
    } Weapons
 } VehicleType

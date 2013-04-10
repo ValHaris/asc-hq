@@ -5,9 +5,9 @@ VehicleType {
    parent = 304
 
    Description = Raketensilo
+   Infotext = [Atlas ICBM Silo]
    Picture = mk3b_icbm.png
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
-   Infotext = [Die abschussvorrichtung für die Interkontinentalraketen sind selten auf dem Schlachtfeld anzutreffen. Wenn sie mal gebaut wurden, dann hatte dies in der Regel weitreichende Konsequenzen und wurde gut abgewägt, da jeder Schuss eine teure Cruise Missile ist. Allerdings gibt es bei den Terranern nichts, das weiter feuern kann, und so kann sie zum Beispiel zum auseinandernehmen von gut befestigten Stellungen verwendet werden. Jedes Silo deutet auf massive Auseinandersetzungen hin, da ihre Reichweite phänomenal ist, und daher auf Schlachtfeldern sogar die hintersten Verteidigungslinien bedroht. Desweiteren kommt man an Sie nicht ohne Hilfe von Aufklärern, da in diese Systeme aufgrund ihres hohen Bedrohungsgrades ein hoher Aufwand in ihre Tarnung gesteckt wurde.]
 
    Armor -= 100
    Jamming = 80

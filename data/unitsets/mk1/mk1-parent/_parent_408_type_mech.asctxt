@@ -18,7 +18,7 @@
    Jamming = 0
    MaxSurvivableStorm = 150
    ResourceDrillingRange = 0
-   SelfRepairRate = 0
+   SelfRepairRate = 10
 
    Height = ground_level 
    Tank { 

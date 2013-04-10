@@ -60,12 +60,16 @@ ObjectType {
    few_snow ->* ObjectType.dry
    few_snow.Jamming_abs = 1
 
-   much_snow ->* ObjectType.few_snow
+   much_snow ->* ObjectType.dry
    ;                        def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
    much_snow.MoveMalus_abs = 13  13  13  13  13  14  14  12  12  14  22  16  14  14  22  22  14  12
    much_snow.TerrainProperties_Add = Very_shallow_water frozen_water track_possible snow
    much_snow.Jamming_abs = 2
 
-   snow_and_ice ->* ObjectType.much_snow
+   snow_and_ice ->* ObjectType.dry
+   ;                        def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+   snow_and_ice.MoveMalus_abs = 13  13  13  13  13  14  14  12  12  14  22  16  14  14  22  22  14  12
+   snow_and_ice.TerrainProperties_Add = Very_shallow_water frozen_water track_possible snow
+   snow_and_ice.Jamming_abs = 2
 
 } ObjectType

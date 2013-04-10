@@ -16,7 +16,7 @@ VehicleType {
    Weapons {
       Weapon0 ->* VehicleType.EMP
       Weapon0.Ammo = 2
-      Weapon0.Punch@MaxRange = 100
+      Weapon0.Punch@MaxRange = 110
       Weapon0.Punch@MinRange = 150
       Weapon0.WeaponEffectiveness.trooper = 0
       Weapon0.LaserRechargeCost.material = 300
@@ -29,8 +29,8 @@ VehicleType {
       
       Weapon2 ->* VehicleType.smMSM
       Weapon2.maxRange = 40
-      Weapon2.Punch@MaxRange = 78
-      Weapon2.Punch@MinRange = 78
+      Weapon2.Punch@MaxRange = 85
+      Weapon2.Punch@MinRange = 85
       Weapon2.Ammo = 8
       Weapon2.ReactionFireShots = 2
       Weapon2.WeaponEffectiveness.trooper = 0

@@ -29,13 +29,13 @@ VehicleType {
       Weapon0.MaxRange = 60
       Weapon0.MinRange = 30
       Weapon0.Ammo = 5
-      Weapon0.Punch@MaxRange = 80
-      Weapon0.Punch@MinRange = 90
+      Weapon0.Punch@MaxRange = 85
+      Weapon0.Punch@MinRange = 95
       Weapon1 ->* VehicleType.Artillery 
       Weapon1.MaxRange = 60
       Weapon1.MinRange = 30
       Weapon1.Ammo = 5
-      Weapon1.Punch@MaxRange = 80
-      Weapon1.Punch@MinRange = 90
+      Weapon1.Punch@MaxRange = 85
+      Weapon1.Punch@MinRange = 95
    } Weapons
 } VehicleType

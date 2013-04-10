@@ -10,5 +10,5 @@ VehicleType {
    InfoImageSmall = mk1t_follow_k.png
    WreckageObject = 483
    Infotext = [Railbased medium range surface-surface rocket system.]
-
+   
 } VehicleType

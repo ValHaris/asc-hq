@@ -24,6 +24,7 @@ VehicleType {
    MaxSurvivableStorm = 180
    ResourceDrillingRange = 0
    SelfRepairRate = 0
+   minFieldRepairDamage = 10
    Weight = 200
    TerrainAccess ->* VehicleType.smallship_terrain
    Construction { 

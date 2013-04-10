@@ -15,7 +15,7 @@ VehicleType {
    WreckageObject = 458
    GuideSortHelp = 506 255 0 0 0 0 0 0 0 0
 
-   Armor -= 100
+   Armor -= 50
    View = 30
    WaitForAttack = true
    Tank { 
@@ -33,15 +33,15 @@ VehicleType {
       Weapon0.MaxRange = 70
       Weapon0.MinRange = 40
       Weapon0.Ammo = 3
-      Weapon0.Punch@MaxRange = 80
-      Weapon0.Punch@MinRange = 100
+      Weapon0.Punch@MaxRange = 90
+      Weapon0.Punch@MinRange = 110
 
       Weapon1 ->* VehicleType.Artillery 
       Weapon1.MaxRange = 70
       Weapon1.MinRange = 40
       Weapon1.Ammo = 3
-      Weapon1.Punch@MaxRange = 80
-      Weapon1.Punch@MinRange = 100
+      Weapon1.Punch@MaxRange = 90
+      Weapon1.Punch@MinRange = 110
 
 
    } Weapons

@@ -11,7 +11,7 @@ VehicleType {
    Geschwindigkeit abgefeuert werden. Die Treffergenauigkeit ist enorm und die Schaeden an den 
    gegnerischen Maschienen betraechtlich. Fehlende Bodenverteidigung macht staendigen Schutz notwendig.]
 
-   Armor = 500
+   Armor = 550
    Weight = 40
    jamming = 31
    Features += jam_only_own_field ManualSelfDestruct
@@ -22,11 +22,11 @@ VehicleType {
       Weapon0.targets = low_level_flight medium_level_flight high_level_flight 
       Weapon0.MaxRange = 50
       Weapon0.Ammo = 15
-      Weapon0.Punch@MaxRange = 70
-      Weapon0.Punch@MinRange = 90
+      Weapon0.Punch@MaxRange = 75
+      Weapon0.Punch@MinRange = 95
       Weapon0.HitAccuracy.u1 = 90
       Weapon0.HitAccuracy.u2 = 100
-      Weapon0.HitAccuracy.u3 = 85
+      Weapon0.HitAccuracy.u3 = 90
       Weapon0.ReactionFireShots = 3
       Weapon0.WeaponEffectiveness.Helicopter = 120
       Weapon0.WeaponEffectiveness.heavy_aircraft = 120

@@ -10,7 +10,7 @@ VehicleType {
    GuideSortHelp = 505 304 0 0 0 0 0 0 0 0
 
 
-   Armor -= 500
+   Armor -= 300
    View = 30
    Features = no_reactionfire ManualSelfDestruct
 

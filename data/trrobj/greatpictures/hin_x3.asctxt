@@ -1,0 +1,18 @@
+TerrainType { 
+   Name = X 3 part of starfieldpic
+   ID = 4095
+   Weather = dry 
+
+   dry { 
+      UseGFXpics = false
+      Picture = hin_x3.png
+      DefenseBonus = 0
+      AttackBonus = 0
+      BasicJamming = 0
+      MoveMalus = 255
+      TerrainProperties =
+   } dry
+   
+
+   
+} TerrainType

@@ -122,6 +122,7 @@ VehicleType {
               InfoImage = BananaJoe]
 
    Armor += 20
+
    Weapons { 
       Initiative = 0
       Number = 2

@@ -23,7 +23,7 @@ BuildingType {
    TerrainAccess { 
       terrain_any = Water
       terrain_all = 
-      terrain_not = 
+      terrain_not = river harbour
       terrain_kill = lava
    } TerrainAccess
    ConstructionCost { 
