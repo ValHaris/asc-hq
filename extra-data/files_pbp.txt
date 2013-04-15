@@ -28,6 +28,7 @@ isg/pbp-for/*.*
 isg/pbp-isg/*.*
 isg/pbp-bugs/*.*
 isg/pbp-obj/*.*
+isg/pbp-pu/*.*
 isg/pu-air/*.*
 isg/pu-ground/*.*
 isg/pu-inaktiv/*.*

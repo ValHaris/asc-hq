@@ -6,9 +6,11 @@ if test "X$1" = X--speed; then
    export CXXFLAGS="-O3 -g -Wall -Wextra -Wno-unused-parameter -ansi "
 #-floop-interchange -floop-strip-mine -floop-block
    export CFLAGS="-O3 -g -Wall -Wextra -Wno-unused-parameter"
+   export PARAM=
 else
    export CXXFLAGS="-O0 -g -Wall -Wextra -Wno-unused-parameter -ansi"
    export CFLAGS="-O0 -g -Wall -Wextra -Wno-unused-parameter"
+   export PARAM=$*
 fi
 
 export CC="ccache gcc"
@@ -17,5 +19,6 @@ export CXX="ccache g++"
 if test "X$1" = X--coverage; then
    export CXXFLAGS="$CXXFLAGS -fprofile-arcs -ftest-coverage "
    export CFLAGS="$CFLAGS   -fprofile-arcs -ftest-coverage "
+   export PARAM=
 fi
-./configure --enable-unittestcoverage --enable-extradata $*
+./configure --enable-unittestcoverage --enable-extradata $PARAM
