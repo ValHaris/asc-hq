@@ -262,24 +262,24 @@ void ReactionFireLayer::paintSingleField( const MapRenderer::FieldRenderInfo& fi
 //The Class UnitInfoLayer paint informations about the health and the fuel on the top of the unit
 class UnitInfoLayer : public MapLayer {
 
-   Surface& image;
-   void paintBar( const MapRenderer::FieldRenderInfo& fieldInfo, const SPoint& pos, int position, int max, int FromTop, int color, bool OverrideColor  )
-   {
-	   float FlLength = ((float)29 / (float)max * position);
-	   int length = int(floor(FlLength));
-	   // int maxlength = 29;
-	   int paintcolor;
-	   if (OverrideColor == true) {
-		   if (length > 20)
-			   paintcolor = 0x00FF04;
-		   else if (length > 10)
-			   paintcolor = 0xFBFF00;
-		   else if (length >= 0)
-			   paintcolor = 0xFF0400;
-	   }
-	   else paintcolor = color;
-       paintFilledRectangle<4>( fieldInfo.surface, SPoint( pos.x + 9 , pos.y + FromTop), length, 3,  ColorMerger_ColoredOverwrite<4>( paintcolor ) );
-   };
+    Surface& image;
+    void paintBar( const MapRenderer::FieldRenderInfo& fieldInfo, const SPoint& pos, int position, int max, int FromTop, int color, bool OverrideColor  )
+    {
+        float FlLength = ((float)29 / (float)max * position);
+        int length = int(floor(FlLength));
+        // int maxlength = 29;
+        int paintcolor;
+        if (OverrideColor == true) {
+            if (length > 20)
+                paintcolor = 0x00FF04;
+            else if (length > 10)
+                paintcolor = 0xFBFF00;
+            else if (length >= 0)
+                paintcolor = 0xFF0400;
+        }
+        else paintcolor = color;
+        paintFilledRectangle<4>( fieldInfo.surface, SPoint( pos.x + 9 , pos.y + FromTop), length, 3,  ColorMerger_ColoredOverwrite<4>( paintcolor ) );
+    };
 
 
    public: 
@@ -291,20 +291,19 @@ class UnitInfoLayer : public MapLayer {
 void UnitInfoLayer::paintSingleField( const MapRenderer::FieldRenderInfo& fieldInfo,  int layer, const SPoint& pos )
 {
 
-
-     if ( fieldInfo.visibility > visible_ago) {
-       if ( fieldInfo.fld->vehicle ) {
-    	   if ( ( fieldInfo.fld->vehicle->getOwner() == fieldInfo.playerView ) || (fieldInfo.visibility == visible_all) || ((fieldInfo.fld->vehicle->height >= chschwimmend) && (fieldInfo.fld->vehicle->height <= chhochfliegend))) {
-    	  MegaBlitter<colorDepth,colorDepth,ColorTransform_None,ColorMerger_AlphaMerge> blitter;
-			//paint the BGimage
-			blitter.blit( image, fieldInfo.surface, pos);
-			//paint the bars
-			//1. damage / health
-			paintBar( fieldInfo, pos, 100-fieldInfo.fld->vehicle->damage, 100, 1,  0, true );
-			//2. fuel
-			paintBar( fieldInfo, pos, fieldInfo.fld->vehicle->getTank().fuel, fieldInfo.fld->vehicle->getStorageCapacity().fuel, 4,  0xFFB700, false );
-    	 }
-      }   
+    if ( fieldInfo.visibility > visible_ago) {
+        if ( fieldInfo.fld->vehicle ) {
+            if ( ( fieldInfo.fld->vehicle->getOwner() == fieldInfo.playerView ) || (fieldInfo.visibility == visible_all) || ((fieldInfo.fld->vehicle->height >= chschwimmend) && (fieldInfo.fld->vehicle->height <= chhochfliegend))) {
+                MegaBlitter<colorDepth,colorDepth,ColorTransform_None,ColorMerger_AlphaMerge> blitter;
+                //paint the BGimage
+                blitter.blit( image, fieldInfo.surface, pos);
+                //paint the bars
+                //1. damage / health
+                paintBar( fieldInfo, pos, 100-fieldInfo.fld->vehicle->damage, 100, 1,  0, true );
+                //2. fuel
+                paintBar( fieldInfo, pos, fieldInfo.fld->vehicle->getTank().fuel, fieldInfo.fld->vehicle->getStorageCapacity().fuel, 4,  0xFFB700, false );
+            }
+        }
    }
 }
 
@@ -320,16 +319,19 @@ class UnitTrainingLayer : public MapLayer {
 void UnitTrainingLayer::paintSingleField( const MapRenderer::FieldRenderInfo& fieldInfo,  int layer, const SPoint& pos )
 {
     if ( fieldInfo.visibility > visible_ago) {
-      if ( fieldInfo.fld->vehicle ) {
-   	   if ( ( fieldInfo.fld->vehicle->getOwner() == fieldInfo.playerView ) || (fieldInfo.visibility == visible_all) || ((fieldInfo.fld->vehicle->height >= chschwimmend) && (fieldInfo.fld->vehicle->height <= chhochfliegend))) {
+        if ( fieldInfo.fld->vehicle ) {
+            if ( ( fieldInfo.fld->vehicle->getOwner() == fieldInfo.playerView ) || (fieldInfo.visibility == visible_all) || ((fieldInfo.fld->vehicle->height >= chschwimmend) && (fieldInfo.fld->vehicle->height <= chhochfliegend))) {
 
-         MegaBlitter<colorDepth,colorDepth,ColorTransform_None,ColorMerger_AlphaMerge> blitter;
-		ASCString training = "unitlevel-" + ASCString::toString(fieldInfo.fld->vehicle->getExperience_offensive()+1) +".png";
-		blitter.blit( IconRepository::getIcon(training), fieldInfo.surface, pos);
-   	   }
-         
-      }   
-   }
+                MegaBlitter<colorDepth,colorDepth,ColorTransform_None,ColorMerger_AlphaMerge> blitter;
+                AttackFormula af ( fieldInfo.gamemap );
+                int idx = af.getIconIndex( fieldInfo.fld->vehicle->getExperience_offensive(), true );
+
+                ASCString training = "unitlevel-" + ASCString::toString(idx+1) +".png";
+                blitter.blit( IconRepository::getIcon(training), fieldInfo.surface, pos);
+            }
+
+        }
+    }
 }
 
 class WeaponRange : public SearchFields
