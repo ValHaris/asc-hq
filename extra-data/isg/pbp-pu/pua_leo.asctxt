@@ -38,18 +38,20 @@ VehicleType {
 
 	} Transportation
 
-    Weapons.Number = 1
-	Weapon0.TeccEMPAir ->* vehicleType.TeccEMP 
-	Weapon0.targets = floating ground_level low_level_flight medium_level_flight high_level_flight orbit
-	Weapon0.shotFrom = low_level_flight medium_level_flight 
-	Weapon0.HitAccuracy.u2 = 80
-	Weapon0.HitAccuracy.u1 = 90
-	Weapon0.HitAccuracy.d1 = 90
-	Weapon0.HitAccuracy.d2 = 80
-	Weapon0.Punch@MaxRange = 80
-	Weapon0.Punch@MinRange = 100
-	Weapon0.MaxRange = 80
-	Weapon0.MinRange = 40
-	Weapon0.ReactionFireShots = 0
+    Weapons {
+		Number = 1
+		Weapon0 ->* VehicleType.TeccEMPAir 
+		Weapon0.targets = floating ground_level low_level_flight medium_level_flight high_level_flight orbit
+		Weapon0.shotFrom = low_level_flight medium_level_flight 
+		Weapon0.HitAccuracy.u2 = 80
+		Weapon0.HitAccuracy.u1 = 90
+		Weapon0.HitAccuracy.d1 = 90
+		Weapon0.HitAccuracy.d2 = 80
+		Weapon0.Punch@MaxRange = 80
+		Weapon0.Punch@MinRange = 100
+		Weapon0.MaxRange = 80
+		Weapon0.MinRange = 40
+		Weapon0.ReactionFireShots = 0
+	} Weapons
 	
 } VehicleType
