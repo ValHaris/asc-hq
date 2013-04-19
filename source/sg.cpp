@@ -256,7 +256,8 @@ void runOpenTasks()
             TaskInterface* ti = dynamic_cast<TaskInterface*>( c );
             
             if ( ti->operatable() ) {
-               ActionResult res = c->execute( createFollowerContext( map ));
+               ReplayContext context( map );
+               ActionResult res = c->execute( context.getContext() );
                if ( !res.successful() )
                   dispmessage2(res);
             }

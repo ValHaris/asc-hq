@@ -24,14 +24,14 @@
 #include "actions/context.h"
 #include "replaymapdisplay.h"
 
-class ReplayContext : public Context {
-      ReplayMapDisplay repDisplay;
-   public:
-      ReplayContext();
-};
-
 /** creates a context that will move the map so that any action can be seen by the user */
-extern ReplayContext createFollowerContext( GameMap* gamemap );
+class ReplayContext {
+      ReplayMapDisplay repDisplay;
+      Context context;
+   public:
+      ReplayContext( GameMap* gamemap );
+      Context& getContext();
+};
 
 extern Context createContext( GameMap* gamemap );
 

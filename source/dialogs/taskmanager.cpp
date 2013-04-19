@@ -52,7 +52,8 @@ class TaskWidget: public ActionWidget
          TaskInterface* ti = dynamic_cast<TaskInterface*>( command );
          
          if ( ti->operatable() ) {
-            ActionResult res = command->execute( createFollowerContext( gamemap ));
+            ReplayContext context( gamemap );
+            ActionResult res = command->execute( context.getContext() );
             if ( !res.successful() )
                displayActionError(res);
          }
@@ -149,7 +150,8 @@ class TaskManager : public ASC_PG_Dialog {
                TaskInterface* ti = dynamic_cast<TaskInterface*>( c );
          
                if ( ti->operatable() ) {
-                  ActionResult res = c->execute( createFollowerContext( gamemap ));
+                  ReplayContext context( gamemap );
+                  ActionResult res = c->execute( context.getContext() );
                   if ( !res.successful() )
                      dispmessage2(res);
                }

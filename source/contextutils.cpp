@@ -21,21 +21,6 @@
 #include "contextutils.h"
 #include "gamemap.h"
 
-            
-/** creates a context that will move the map so that any action can be seen by the user */
-ReplayContext createFollowerContext( GameMap* gamemap )
-{
-   ReplayContext context;
-   // Context context;
-   // context.display = new ReplayMapDisplay( &getDefaultMapDisplay() );
-   
-   context.gamemap = gamemap;
-   context.actingPlayer = &gamemap->getPlayer( gamemap->actplayer );
-   context.parentAction = NULL;
-   context.viewingPlayer = gamemap->getPlayerView(); 
-   context.actionContainer = &gamemap->actions;
-   return context;   
-}
 
 Context createContext( GameMap* gamemap )
 {
@@ -50,9 +35,17 @@ Context createContext( GameMap* gamemap )
    return context;   
 }
 
-ReplayContext::ReplayContext() 
-   : Context(), repDisplay( &getDefaultMapDisplay() )
+ReplayContext::ReplayContext( GameMap* gamemap )
+   : repDisplay( &getDefaultMapDisplay() )
 {
-   display= &repDisplay;
+   context.display= &repDisplay;
+   context.gamemap = gamemap;
+   context.actingPlayer = &gamemap->getPlayer( gamemap->actplayer );
+   context.parentAction = NULL;
+   context.viewingPlayer = gamemap->getPlayerView();
+   context.actionContainer = &gamemap->actions;
 }
 
+Context& ReplayContext::getContext() {
+    return context;
+}
