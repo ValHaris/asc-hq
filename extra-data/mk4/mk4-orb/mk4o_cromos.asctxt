@@ -19,6 +19,7 @@ Mit Ihrer Defensivbewaffnung bietet sie gegen angreifende Luft- und Orbitaleinhe
    Transportation.EntranceSystem1.UnitHeightAbs = high_level_flight 
    Transportation.EntranceSystem1.MoveCost = 50
    Transportation.EntranceSystem1.DockingHeightAbs =  
+   Transportation.EntranceSystem1.RequireUnitFunction = paratrooper
 
    Armor += 50
  

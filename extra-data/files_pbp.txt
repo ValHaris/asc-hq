@@ -116,4 +116,5 @@ sy/sy-vari/*.*
 sy/sy-vfatr/*.*
 sy/sy-view/*.*
 sy/sy-parent/*.*
-*.gameparam
+files_pbp.txt
+pbp_mapparameter_z113.asc.gameparam

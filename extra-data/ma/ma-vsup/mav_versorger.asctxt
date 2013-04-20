@@ -21,7 +21,7 @@ VehicleType {
    Weapons { 
       Number = 5
       Weapon0 ->* VehicleType.Def_MG
-      Weapon1.Ammo = 100
+      Weapon0.Ammo = 100
       Weapon1 ->* vehicleType.AmmoBomb 
       Weapon2 ->* VehicleType.AmmoCannon 
       Weapon2.Ammo = 30
