@@ -184,6 +184,10 @@
    TurretOut.CategoriesNOT -> VehicleType.cargo_turret_only.CategoriesNOT
    TurretOut.MoveCost = 10 
 
+   TurretOut2 ->* VehicleType.GrIO
+   TurretOut2.CategoriesNOT -> VehicleType.cargo_turret_only.CategoriesNOT
+   TurretOut2.MoveCost = 15 
+
 
 ; ----------------------------------------------------------------------------------------------------------------
 ; -----   S U B M A R I N E   ------------------------------------------------------------------------------------
@@ -375,12 +379,13 @@
       MaxLoadableMass = 800
       CargoMovementDivisor = 1.2
       CategoriesNOT -> VehicleType.cargo_trtrain.CategoriesNOT
-      EntranceSystemNum = 2
+      EntranceSystemNum = 3
       EntranceSystem0 ->* VehicleType.GrIO
-      EntranceSystem0.CategoriesNOT = light_ship
+      EntranceSystem0.CategoriesNOT = light_ship building|turret|object
       EntranceSystem1 ->* VehicleType.GrIO
       EntranceSystem1.CategoriesNOT -> VehicleType.cargo_lship_only.CategoriesNOT
       EntranceSystem1.DisableAttack = true
+      EntranceSystem2 ->* VehicleType.TurretOut2
    } TransTrain
 
 ; Transportzug
@@ -455,9 +460,7 @@
       EntranceSystem1 ->* VehicleType.GrIO
       EntranceSystem1.CategoriesNOT -> VehicleType.cargo_lship_only.CategoriesNOT
       EntranceSystem1.DisableAttack = true
-      EntranceSystem2 ->* VehicleType.GrIO
-      EntranceSystem2.CategoriesNOT -> VehicleType.cargo_turret_only.CategoriesNOT
-      EntranceSystem2.MoveCost = 10 
+      EntranceSystem2 ->* VehicleType.TurretOut2
    } TransVehicleHeavy
 
 ;---------- Hoovercraft ----------
@@ -469,8 +472,10 @@
       MaxLoadableMass = 170
       CargoMovementDivisor = 1.3
       CategoriesNOT -> VehicleType.cargo_vehicle_heavy.CategoriesNOT
-      EntranceSystemNum = 1
+      EntranceSystemNum = 2
       EntranceSystem0 ->* VehicleType.GrIO
+      EntranceSystem0.CategoriesNOT = building|turret|object
+      EntranceSystem1 ->* VehicleType.TurretOut2
    } TransHoovercraft
 
 ;---------- Ships -------------
@@ -503,12 +508,13 @@
       MaxLoadableMass = 8000
       CargoMovementDivisor = 1.4
       CategoriesNOT = medium_ship heavy_ship 
-      EntranceSystemNum = 2
+      EntranceSystemNum = 3
       EntranceSystem0 ->* VehicleType.GrIO
-      EntranceSystem0.CategoriesNOT = light_ship heavy_aircraft
+      EntranceSystem0.CategoriesNOT = light_ship heavy_aircraft building|turret|object
       EntranceSystem1 ->* VehicleType.GrIO
       EntranceSystem1.CategoriesNOT -> VehicleType.cargo_lship_only.CategoriesNOT
       EntranceSystem1.DisableAttack = true
+      EntranceSystem2 ->* VehicleType.TurretOut2
    } TransShip
 
    TransShipArmor {
@@ -517,8 +523,10 @@
       MaxLoadableMass = 4000
       CargoMovementDivisor = 1.4
       CategoriesNOT = light_ship medium_ship heavy_ship medium_aircraft heavy_aircraft
-      EntranceSystemNum = 1
+      EntranceSystemNum = 2
       EntranceSystem0 ->* VehicleType.GrIO
+      EntranceSystem0.CategoriesNOT = building|turret|object
+      EntranceSystem1 ->* VehicleType.TurretOut2
    } TransShipArmor
 
 
@@ -735,11 +743,14 @@
       MaxLoadableMass = 120
       CargoMovementDivisor = 1.3
       CategoriesNOT = hoovercraft light_aircraft Medium_aircraft Heavy_aircraft Helicopter Medium_ship Heavy_Ship
-      EntranceSystemNum = 4
+      EntranceSystemNum = 5
       EntranceSystem0 ->* VehicleType.GrIO
+      EntranceSystem0.CategoriesNOT = building|turret|object
       EntranceSystem1 ->* VehicleType.ParaTr
       EntranceSystem2 ->* VehicleType.ParaVeh
       EntranceSystem3 ->* VehicleType.Diver_Out
+      EntranceSystem4 ->* VehicleType.TurretOut2
+
    } TransHeliHvy
 
 ;---------- Orbital ----------
