@@ -134,11 +134,10 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/MP"
-				Optimization="0"
+				Optimization="3"
 				InlineFunctionExpansion="2"
 				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
-				OmitFramePointers="false"
 				AdditionalIncludeDirectories="../.;&quot;$(SDL)/include&quot;;../../../libs/sdlmm/src;../../../libs/getopt;&quot;$(libsigcpp)&quot;;../../../libs/paragui/include;&quot;../../../libs/loki-0.1.6/include&quot;;../../../libs/bzlib"
 				PreprocessorDefinitions="WIN32;NDEBUG;sgmain;FREEMAPZOOM;_WIN32_;NEWKEYB;LUAINTERFACE;_SDL_;NOMINMAX;XVIDEXPORT"
 				RuntimeLibrary="2"
@@ -910,6 +909,10 @@
 				</File>
 				<File
 					RelativePath="..\..\..\dialogs\vehicleproductionselection.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\dialogs\vehiclepropertyeditor.cpp"
 					>
 				</File>
 				<File
