@@ -84,7 +84,7 @@ libgamedialogs_la_OBJECTS = $(am_libgamedialogs_la_OBJECTS)
 libmapeddialogs_la_DEPENDENCIES =
 am_libmapeddialogs_la_OBJECTS = cargoeditor.lo cargowidget.lo \
 	eventeditor.lo newmap.lo exchangegraphics.lo importbi3map.lo \
-	edittechadapter.lo
+	edittechadapter.lo vehiclepropertyeditor.lo
 libmapeddialogs_la_OBJECTS = $(am_libmapeddialogs_la_OBJECTS)
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -312,7 +312,9 @@ libgamedialogs_la_SOURCES = cargodialog.cpp unitcounting.cpp cargowidget.cpp amm
                               actionwidget.cpp unitnaming.cpp
 
 libgamedialogs_la_LIBADD = @SDL_LIBS@ 
-libmapeddialogs_la_SOURCES = cargoeditor.cpp cargowidget.cpp eventeditor.cpp newmap.cpp exchangegraphics.cpp importbi3map.cpp edittechadapter.cpp
+libmapeddialogs_la_SOURCES = cargoeditor.cpp cargowidget.cpp eventeditor.cpp newmap.cpp exchangegraphics.cpp importbi3map.cpp edittechadapter.cpp \
+                               vehiclepropertyeditor.cpp
+
 libmapeddialogs_la_LIBADD = @SDL_LIBS@
 EXTRA_DIST = $(srcdir)/*.h
 all: all-am
@@ -414,6 +416,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unitinfodialog.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/unitnaming.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vehicleproductionselection.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vehiclepropertyeditor.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/vehicletypeselector.Plo@am__quote@
 
 .cpp.o:

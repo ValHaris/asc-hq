@@ -20,7 +20,8 @@ libgamedialogs_la_SOURCES   = cargodialog.cpp unitcounting.cpp cargowidget.cpp a
                               
 libgamedialogs_la_LIBADD    = @SDL_LIBS@ 
 
-libmapeddialogs_la_SOURCES   = cargoeditor.cpp cargowidget.cpp eventeditor.cpp newmap.cpp exchangegraphics.cpp importbi3map.cpp edittechadapter.cpp
+libmapeddialogs_la_SOURCES   = cargoeditor.cpp cargowidget.cpp eventeditor.cpp newmap.cpp exchangegraphics.cpp importbi3map.cpp edittechadapter.cpp \ 
+                               vehiclepropertyeditor.cpp
 libmapeddialogs_la_LIBADD    = @SDL_LIBS@
 
 EXTRA_DIST=$(srcdir)/*.h

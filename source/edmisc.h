@@ -81,7 +81,6 @@ extern void         k_savemap(bool saveas);
 extern void         k_loadmap(void);
 extern void         lines(int      x1,int      y,int      x2,int      y2);
 
-extern void         changeunitvalues(Vehicle* ae);
 extern void         changeresource(void);
 extern void         changebuildingvalues( Building& b);
 extern void         changeminestrength(void);
@@ -143,9 +142,6 @@ extern void editResearch();
 extern void editResearchPoints();
 extern void generateTechTree();
 extern void editTechAdapter();
-// extern Vehicle* selectUnitFromContainer( ContainerBase* container );
-// extern Vehicle*  selectUnitFromMap();
-// extern void resetPlayerData();
 
 extern void placeCurrentItem();
 extern bool removeCurrentItem();

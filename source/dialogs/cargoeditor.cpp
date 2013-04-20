@@ -18,6 +18,7 @@
 #include <pgprogressbar.h>
 #include "../paradialog.h"
 #include "cargowidget.h"
+#include "vehiclepropertyeditor.h"
 
 #include "../clipboard.h"
 #include "../edselfnt.h"
@@ -83,7 +84,7 @@ class CargoEditor : public PG_Window {
 
       bool editUnit()
       {
-         changeunitvalues( cargoWidget->getMarkedUnit() );
+         changeUnitPropertyDialog( cargoWidget->getMarkedUnit() );
          updateGraph();
          return true;
       }

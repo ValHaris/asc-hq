@@ -61,6 +61,7 @@
 #include "dialogs/importbi3map.h"
 #include "dialogs/unitguidedialog.h"
 #include "dialogs/fileselector.h"
+#include "dialogs/vehiclepropertyeditor.h"
 #include "stack.h"
 
    
@@ -594,7 +595,7 @@ void execaction( int code)
                  MapField* pf2 = getactfield();
                  if ( pf2  ) {
                     if ( pf2->vehicle ) {
-                       changeunitvalues(pf2->vehicle);
+                       changeUnitPropertyDialog(pf2->vehicle);
                        displaymap();
                     }
                     else if ( pf2->building ) {
