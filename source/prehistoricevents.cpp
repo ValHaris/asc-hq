@@ -167,7 +167,7 @@ extern const char*  ceventtrigger[];
    class PrehistoricEventStructure {
      public:
        union {
-         struct {  Uint16         saveas; char action, num;  }a;  /*  CEventActions  */
+         struct {  Uint16         saveas; Uint8 action, num;  }a;  /*  CEventActions  */
          int      id;               /* Id-Nr      ==> Technology.Requireevent; Tevent.trigger; etc.  */
        } ;
 
