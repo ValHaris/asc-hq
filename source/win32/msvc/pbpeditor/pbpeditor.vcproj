@@ -728,6 +728,10 @@
 					RelativePath="..\..\..\dialogs\unitinfodialog.cpp"
 					>
 				</File>
+				<File
+					RelativePath="..\..\..\dialogs\vehiclepropertyeditor.cpp"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="widgets"
