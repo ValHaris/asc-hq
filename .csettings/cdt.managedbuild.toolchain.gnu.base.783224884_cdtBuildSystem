@@ -14,6 +14,7 @@
 							<listOptionValue builtIn="false" value="/usr/include/sigc++-1.2/"/>
 							<listOptionValue builtIn="false" value="/usr/include"/>
 							<listOptionValue builtIn="false" value="/usr/include/c++/4.7/x86_64-linux-gnu"/>
+							<listOptionValue builtIn="false" value="/usr/include/lua5.1"/>
 						</option>
 						<option id="gnu.cpp.compiler.option.preprocessor.def.1316201208" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
 							<listOptionValue builtIn="false" value="_UNIX_"/>
@@ -28,6 +29,7 @@
 							<listOptionValue builtIn="false" value="/usr/include/SDL"/>
 							<listOptionValue builtIn="false" value="/usr/include/sigc++-1.2/"/>
 							<listOptionValue builtIn="false" value="/usr/include"/>
+							<listOptionValue builtIn="false" value="/usr/include/lua5.1"/>
 						</option>
 						<option id="gnu.c.compiler.option.preprocessor.def.symbols.1517196610" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" valueType="definedSymbols">
 							<listOptionValue builtIn="false" value="_UNIX_"/>
@@ -49,6 +51,7 @@
 							<listOptionValue builtIn="false" value="/usr/include/SDL"/>
 							<listOptionValue builtIn="false" value="/usr/include/sigc++-1.2/"/>
 							<listOptionValue builtIn="false" value="/usr/include"/>
+							<listOptionValue builtIn="false" value="/usr/include/lua5.1"/>
 						</option>
 						<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1861756393" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 					</tool>

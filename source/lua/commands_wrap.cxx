@@ -3073,12 +3073,37 @@ fail:
 }
 
 
+static int _wrap_Building_getVisible(lua_State* L) {
+  int SWIG_arg = 0;
+  Building *arg1 = (Building *) 0 ;
+  bool result;
+  
+  SWIG_check_num_args("Building::getVisible",1,1)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("Building::getVisible",1,"Building *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_Building,0))){
+    SWIG_fail_ptr("Building_getVisible",1,SWIGTYPE_p_Building);
+  }
+  
+  result = (bool)(arg1)->getVisible();
+  lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static void swig_delete_Building(void *obj) {
 Building *arg1 = (Building *) obj;
 delete arg1;
 }
 static swig_lua_method swig_Building_methods[] = {
     {"getType", _wrap_Building_getType}, 
+    {"getVisible", _wrap_Building_getVisible}, 
     {0,0}
 };
 static swig_lua_attribute swig_Building_attributes[] = {

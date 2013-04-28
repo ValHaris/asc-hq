@@ -62,6 +62,8 @@ class  Building : public ContainerBase {
     //! is the building visible? Building can be made invisible, but this feature should be used only in some very special cases
     bool         visible;
 
+    bool getVisible() { return visible; };
+
 
     AiValue*      aiparam[8];
 

@@ -149,6 +149,7 @@ class Building : public ContainerBase {
       Building();
    public:
       const BuildingType* getType();
+      bool getVisible();
 #ifdef mapeditor
       void convert ( int player );
 #endif      
