@@ -912,10 +912,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\dialogs\vehiclepropertyeditor.cpp"
-					>
-				</File>
-				<File
 					RelativePath="..\..\..\dialogs\vehicletypeselector.cpp"
 					>
 				</File>
