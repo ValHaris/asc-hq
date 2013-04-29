@@ -45,7 +45,7 @@ Resources PBPUnitCostCalculator :: productionCost( const VehicleType* vehicle )
    res.material = 0;
    res.fuel = 0;
    // int typecoste = 0;
-   int typecostm = 0;
+   float typecostm = 0;
    // int weaponcoste = 0;
    int weaponcostm = 0;
    //int specialcoste = 0;
@@ -424,7 +424,7 @@ Resources PBPUnitCostCalculator :: productionCost( const VehicleType* vehicle )
    }
 
    // Part VI - Addition
-   res.material += typecostm + weaponcostm + specialcostm;
+   res.material += (int)typecostm + weaponcostm + specialcostm;
 
    // Part VII Abschlaege
    // keine Luftbetankung

@@ -294,7 +294,6 @@ void MoveUnitCommand::calcPath( AStar3D* const astar)
 
    const int maxMovement = getUnit()->getMovement();
    path.clear();
-   const bool enterContainer = true;
 
    AStar3D::Path totalPath;
 

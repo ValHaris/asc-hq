@@ -28,7 +28,7 @@ float AI :: getCaptureValue ( const Building* bld, Vehicle* veh  )
    if ( ast.visited.back().gval >= 0 )
       // everything else being equal, prefer cheapest unit
       // TODO: factor 0.0001 should be made configurable
-      return getCaptureValue ( bld, ast.visited.back().gval / veh->getMovement() )-0.0001*veh->aiparam[getPlayerNum()]->getValue() ;
+      return getCaptureValue ( bld, (int)(ast.visited.back().gval / veh->getMovement() ))-0.0001*veh->aiparam[getPlayerNum()]->getValue() ;
    else
       return -1;
       // return minfloat; // this makes no sense as minfloat>0!
