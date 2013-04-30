@@ -429,22 +429,22 @@ Resources PBPUnitCostCalculator :: productionCost( const VehicleType* vehicle )
    // Part VII Abschlaege
    // keine Luftbetankung
    if ( vehicle->hasFunction( ContainerBaseType::NoInairRefuelling )) {
-      res.material -= typecostm/7;
+      res.material -= int(typecostm/7);
    }
 
    // Kamikazeeinheiten
    if ( vehicle->hasFunction( ContainerBaseType::KamikazeOnly )) {
-      res.material -= (typecostm+weaponcostm)/2;
+      res.material -= int((typecostm+weaponcostm)/2);
    }
 
    // low movement
    if (maxmoverange < 20 ) {
-      res.material -= typecostm/4;
+      res.material -= int(typecostm/4);
    }
 
    // low movement
    if (maxmoverange < 11 ) {
-      res.material -= typecostm/4;
+      res.material -= int(typecostm/4);
       res.energy = res.material/20;
    } else {
       res.energy = res.material/2;
