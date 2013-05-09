@@ -366,8 +366,8 @@ void showAttackAnimation( tfight& battle, GameMap* actmap, int ad, int dd )
       at->setBarGraphValue( "attacker_unitstatusbar", avd + (avd2-avd) * p );
       at->setBarGraphValue( "defender_unitstatusbar", dvd + (dvd2-dvd) * p );
 
-      at->setLabelText( "attacker_unitstatus", int( 100.0 * (avd + (avd2-avd) * p )) );
-      at->setLabelText( "defender_unitstatus", int( 100.0 * (dvd + (dvd2-dvd) * p )) );
+      at->setLabelText( "attacker_unitstatus", int( 100.0 * (avd + (avd2-avd) * p ) + 0.5) );
+      at->setLabelText( "defender_unitstatus", int( 100.0 * (dvd + (dvd2-dvd) * p ) + 0.5) );
       at->Update();
 
       releasetimeslice();
