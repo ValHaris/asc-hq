@@ -6,8 +6,8 @@
 /* Define to 1 if you have the <bitset> header file. */
 #undef HAVE_BITSET
 
-/* Define to 1 if you have the <boost/unordered_map.hpp> header file. */
-#undef HAVE_BOOST_UNORDERED_MAP_HPP
+/* Define to 1 if you have the <boost/heap/pairing_heap.hpp> header file. */
+#undef HAVE_BOOST_HEAP_PAIRING_HEAP_HPP
 
 /* Define to 1 if you have the <dirent.h> header file, and it defines `DIR'.
    */

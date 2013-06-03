@@ -18353,12 +18353,12 @@ ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ex
 ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
 
-for ac_header in boost/unordered_map.hpp
+for ac_header in boost/heap/pairing_heap.hpp
 do :
-  ac_fn_cxx_check_header_mongrel "$LINENO" "boost/unordered_map.hpp" "ac_cv_header_boost_unordered_map_hpp" "$ac_includes_default"
-if test "x$ac_cv_header_boost_unordered_map_hpp" = xyes; then :
+  ac_fn_cxx_check_header_mongrel "$LINENO" "boost/heap/pairing_heap.hpp" "ac_cv_header_boost_heap_pairing_heap_hpp" "$ac_includes_default"
+if test "x$ac_cv_header_boost_heap_pairing_heap_hpp" = xyes; then :
   cat >>confdefs.h <<_ACEOF
-#define HAVE_BOOST_UNORDERED_MAP_HPP 1
+#define HAVE_BOOST_HEAP_PAIRING_HEAP_HPP 1
 _ACEOF
 
 else
