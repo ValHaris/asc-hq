@@ -10,7 +10,7 @@ VehicleType {
               to hunt down enemy infantrists.]
    GuideSortHelp = 503 333 0 0 0 0 0 0 0 0
 
-   Armor = 500
+   Armor = 550
    Weight = 50
 
    Tank { 

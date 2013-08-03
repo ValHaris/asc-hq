@@ -14,8 +14,8 @@ VehicleType {
       Number = 3
       Weapon0 ->* VehicleType.SY_AirL
       Weapon0.MaxRange = 50
-      Weapon0.Punch@MaxRange = 70
-      Weapon0.Punch@MinRange = 75
+      Weapon0.Punch@MaxRange = 80
+      Weapon0.Punch@MinRange = 85
       Weapon0.LaserRechargeCost.material = 75
       Weapon0.LaserRechargeCost.fuel = 200
       

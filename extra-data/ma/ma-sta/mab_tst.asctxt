@@ -7,7 +7,7 @@ VehicleType {
    Infotext = [Stationaere Abschussvorrichtung fuer Torpedos kann nur im getauchtem Zustand feuern.]
    Picture = mab_tst.pcx
 
-   Features += MoveDuringReactionFire sonar
+   Features += sonar
    Armor = 800
    Weight = 500
    View = 50
@@ -25,16 +25,15 @@ VehicleType {
 
    WaitForAttack = true
    Weapons { 
-      Initiative = 120
       Number = 1
       Weapon0 ->* VehicleType.UTorp
-      Weapon0.shotFrom =  deep_submerged submerged floating 
+      Weapon0.shotFrom = deep_submerged submerged floating 
       Weapon0.targets = deep_submerged submerged floating 
       Weapon0.Ammo = 5
-      Weapon0.MaxRange = 60
+      Weapon0.MaxRange = 50
       Weapon0.MinRange = 10
-      Weapon0.Punch@MaxRange = 120
-      Weapon0.Punch@MinRange = 120
+      Weapon0.Punch@MaxRange = 130
+      Weapon0.Punch@MinRange = 130
       Weapon0.ReactionFireShots = 2
    } Weapons
 } VehicleType

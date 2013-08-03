@@ -7,28 +7,27 @@ VehicleType {
    Infotext = [Der Zug, um Bahntrassen vor feindlichen Panzerverbaenden zu beschuetzen.]
    Picture = mat_btd.pcx
 
-   Armor += 100
+   Armor += 200
    Movement = 0 0 0 100 0 0 0 0 
    Weight = 150
    Features += MoveDuringReactionFire
 
    WaitForAttack = true
    Weapons { 
-      Initiative = -50
       Number = 3
       Weapon0 ->* VehicleType.Tank_Gun 
       Weapon0.MaxRange = 30
       Weapon0.Ammo = 6
-      Weapon0.Punch@MaxRange = 100
-      Weapon0.Punch@MinRange = 110
+      Weapon0.Punch@MaxRange = 110
+      Weapon0.Punch@MinRange = 120
       Weapon1 ->* VehicleType.Tank_Gun 
       Weapon1.MaxRange = 20
       Weapon1.Ammo = 6
-      Weapon1.Punch@MaxRange = 100
-      Weapon1.Punch@MinRange = 110
+      Weapon1.Punch@MaxRange = 110
+      Weapon1.Punch@MinRange = 120
       Weapon2 ->* VehicleType.MiniGun
       Weapon2.Ammo = 10
-      Weapon2.Punch@MaxRange = 30
+      Weapon2.Punch@MaxRange = 40
       Weapon2.Punch@MinRange = 50
    } Weapons
 } VehicleType

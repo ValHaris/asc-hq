@@ -13,6 +13,7 @@ VehicleType {
    ResourceDrillingRange = 4
    SelfRepairRate = 10
    Transportation ->* VehicleType.TransTurretBig2
+   Transportation.MoveCost = 12 
 
    Tank { 
       Material = 40000
@@ -21,7 +22,7 @@ VehicleType {
 
    Construction { 
       Buildings = 13 14 16 17 18 19 40 41
-      Vehicles = 56 61 76 95 110 119
+      Vehicles = 119
       Objects = 995 996 997 998 999 1000 44 30 3
       ObjectGroupsRemovable = 1 2 3 4 6 7 8 10 11 13 14 15
       UnitConstructionMoveCostPercentage = 73

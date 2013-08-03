@@ -8,6 +8,8 @@ VehicleType {
    GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
 
    Features += ExternalFuelTransfer ExternalMaterialTransfer
+   View = 60
+   Jamming = 55
    
    Tank.Material = 20000
    Tank.Fuel = 50000

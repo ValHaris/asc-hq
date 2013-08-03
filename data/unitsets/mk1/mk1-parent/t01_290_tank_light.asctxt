@@ -16,7 +16,7 @@ VehicleType {
 ;   Picture = g_termite.pcx
 
    Category = medium_tracked_vehicle
-   Armor = 550
+   Armor = 600
    Weight = 55
 
    Tank { 

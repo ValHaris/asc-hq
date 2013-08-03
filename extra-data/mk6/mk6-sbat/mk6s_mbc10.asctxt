@@ -8,20 +8,35 @@ VehicleType {
    InfoImage = mk6s_mbc10.jpg
    GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
 
-   Height = floating submerged
-   Movement += 0 40 0 0 0 0 0 0 
+   Features = MoveDuringReactionFire sonar jam_only_own_field 
    Jamming = 65
    View += 10
 
-   Features = MoveDuringReactionFire sonar jam_only_own_field 
-   Terrainaccess ->* VehicleType.mediumship_terrain
    Transportation ->* VehicleType.notrans
    
+   Height = floating submerged
+   Terrainaccess ->* VehicleType.mediumship_terrain
+   Movement += 0 37 0 0 0 0 0 0 
    Tank { 
       Energy = 0
       Material = 0
       fuel = 5500
    } Tank
+    HeightChangeMethodNum = 2
+    HeightChangeMethod0 {
+        movecost = 5
+        heightdelta = 1
+        dist = 0
+        startheight = submerged
+        canattack = true
+    } HeightChangeMethod0
+    HeightChangeMethod1 {
+        movecost = 5
+        heightdelta = -1
+        dist = 0
+        startheight = floating
+        canattack = true
+    } HeightChangeMethod1
 
    Weapons { 
       Initiative = 0

@@ -13,7 +13,7 @@ VehicleType {
    WreckageObject = 457
    GuideSortHelp = 503 552 0 0 0 0 0 0 0 0
 
-   Armor += 300
+   Armor += 350
    Weight = 250
    Transportation ->* VehicleType.TransLowTrooper2 
    Features += moveduringreactionfire

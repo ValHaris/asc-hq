@@ -7,11 +7,11 @@ VehicleType {
    Infotext = [Tödliches Asteroidenfeld, kein Luft- und Orbitalflug möglich, gelegendliche Einschläge auf der Oberfläche.]
    Picture = pbp_asteroidenfeld.png
 
-   Category = heavy_aircraft
+   Category = default
    Armor = 200000
-   View = 0
+   View = 100
    Jamming = 100
-   Features = 
+   Features = Jam_only_own_field
    MaxSurvivableStorm = 255
    ResourceDrillingRange = 0
    SelfRepairRate = 50
@@ -116,8 +116,8 @@ VehicleType {
             material = 0
             fuel = 0
          } LaserRechargeCost
-         Punch@MaxRange = 30
-         Punch@MinRange = 30
+         Punch@MaxRange = 20
+         Punch@MinRange = 20
          HitAccuracy { 
             d6 = 100
             d5 = 100

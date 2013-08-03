@@ -9,13 +9,6 @@ VehicleType {
    Infotext = [Diese Geschützkuppel dient dazu eigene Stellungen zu festigen und einen Angriff des Gegners zu erschweren bis eigene Verstärkung herangezogen werden kann. Sie ist so konstruiert, dass ein Eindringen des Feindes möglichst erschwert, aber die Verteidigung einfach ist. Der um 360° frei drehbare Geschützaufbau ist mit einer extrem harter Pilzhaube versehen, sodass senkrecht fallende Bomben an diesem abgleiten und so die Trefferwirkung verringert wird. Allerdings sind diese Bunkeranlagen gegenüber Hoehenbomber aufgrund Ihrer preiswerten Kanonen-Bewaffnung wehrlos. ]
    picture = mk4b_rocky.png
 
-   Weight = 490
-   Armor -= 100
-   Features += onlyTransMove
-
-   Movement = 0 0 0 18 0 0 0 0 
-   Terrainaccess ->* VehicleType.Turret_all
-   
    Weapons {
       Number = 3
       Weapon0.Punch@MaxRange -= 5

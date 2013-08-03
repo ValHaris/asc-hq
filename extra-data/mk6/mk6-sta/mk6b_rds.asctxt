@@ -22,14 +22,14 @@ VehicleType {
       Weapon0 ->* VehicleType.SSM
       Weapon0.MaxRange = 60
       Weapon0.Ammo = 8
-      Weapon0.Punch@MaxRange = 115
-      Weapon0.Punch@MinRange = 115
+      Weapon0.Punch@MaxRange = 125
+      Weapon0.Punch@MinRange = 125
       Weapon0.Reactionfireshots = 2
       Weapon0.Sound = groundmissile_g.ogg
       Weapon1 ->* VehicleType.TeccEMP2
       Weapon1.MaxRange = 20
       Weapon1.Reactionfireshots = 1
-      Weapon1.Punch@MaxRange = 140
+      Weapon1.Punch@MaxRange = 150
       Weapon1.Punch@MinRange = 160
    } Weapons
 } VehicleType

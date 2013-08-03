@@ -14,30 +14,28 @@ Bei der Cita GD handelt es sich um eine Spezialausführung für den Bodenkampf. Di
 
    WaitForAttack = true
    Weapons { 
-      Initiative = 0
       Number = 4
       Weapon0 ->* VehicleType.type_large_missile 
-      Weapon0.MaxRange -= 10
-      Weapon0.MinRange -= 10
+      Weapon0.Punch@MinRange -= 10
       Weapon0.Punch@MaxRange -> VehicleType.Weapons.Weapon0.Punch@MinRange
       Weapon0.ReactionFireShots = 2
 
       Weapon1 ->* VehicleType.Tank_Gun 
       Weapon1.MaxRange = 20
       Weapon1.Ammo = 12
-      Weapon1.Punch@MaxRange = 75
-      Weapon1.Punch@MinRange = 85
+      Weapon1.Punch@MaxRange = 90
+      Weapon1.Punch@MinRange = 95
 
       Weapon2 ->* VehicleType.SAMH 
-      Weapon2.Punch@MaxRange = 75
-      Weapon2.Punch@MinRange = 75
+      Weapon2.Punch@MaxRange = 80
+      Weapon2.Punch@MinRange = 80
       Weapon2.MaxRange = 30
       Weapon2.Ammo = 8
       Weapon2.ReactionFireShots = 1
 
       Weapon3 ->* VehicleType.BigMiniGun
       Weapon3.Ammo = 20
-      Weapon3.ReactionFireShots = 0
+      Weapon3.ReactionFireShots = 1
 
    } Weapons
 } VehicleType

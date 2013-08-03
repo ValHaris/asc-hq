@@ -15,8 +15,8 @@ VehicleType {
       Weapon0.MaxRange = 50
       Weapon0.MinRange = 20     
       Weapon0.Ammo = 8
-      Weapon0.Punch@MaxRange = 120
-      Weapon0.Punch@MinRange = 150
+      Weapon0.Punch@MaxRange = 130
+      Weapon0.Punch@MinRange = 160
       Weapon0.ReactionFireShots = 2
       Weapon1 ->* VehicleType.BigMiniGun
     } Weapons

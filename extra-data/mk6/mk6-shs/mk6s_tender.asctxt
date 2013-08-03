@@ -14,7 +14,7 @@ VehicleType {
    Jumpdrive.terrain_any = deep_water water river shallow_water Spaceport
    View = 0
    
-   Features = MoveDuringReactionFire Repair_Facility self_repairing construct_specific_buildings icebreaker
+   Features = MoveDuringReactionFire Repair_Facility self_repairing construct_specific_buildings icebreaker ExternalFueltransfer ExternalMaterialTransfer ExternalAmmoTransfer
    Armor = 1600
    Weight = 4000
    SelfRepairRate = 10
@@ -44,9 +44,10 @@ VehicleType {
 
    Construction { 
       Buildings = 6 13 14 16-19 61 38 40 41
-      Vehicles = 
+      Vehicles = 15249
       Objects = 996 997 998 1000 44 30 3 15003
       ObjectGroupsRemovable = 1 2 3 4 6 7 8 10 11 13 14 15
+      UnitConstructionMoveCostPercentage = 90
    } Construction
 
    Weapons { 

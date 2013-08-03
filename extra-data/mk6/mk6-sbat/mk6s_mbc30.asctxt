@@ -6,12 +6,6 @@ VehicleType {
    picture = mk6s_mbc30.png
    WreckageObject = 437
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
-
-   Features += sonar jam_only_own_field
-   Jamming = 50
-   View += 10
-   Height = floating submerged
-   Movement += 0 30 0 0 0 0 0 0 
    Description = Schlachtschiff
    InfoText = [ Schlachtschiffe der Vengance Klasse sind die Könige der See. Massiv gepanzert und schwerst bewaffnet
 			lehren sie jedes Schiff das in ihre Nähe kommt eine tödliche Lektion: mit Teccnols ist nicht zu spaßen.
@@ -29,11 +23,33 @@ VehicleType {
 			von Marschflugkörpern konzipiert wurde, jedoch auch gegen andere Ziele eingesetzt werden kann.
 			]
 
-
+   Features += sonar jam_only_own_field
    Armor += 100
+   Jamming = 50
+   View += 10
+
    Tank.fuel += 2000
    Tank.material += 2000
    inFieldRepairDamage = 20
+   
+    Height = floating submerged
+    Movement += 0 27 0 0 0 0 0 0 
+    HeightChangeMethodNum = 2
+    HeightChangeMethod0 {
+        movecost = 5
+        heightdelta = 1
+        dist = 0
+        startheight = submerged
+        canattack = true
+    } HeightChangeMethod0
+    HeightChangeMethod1 {
+        movecost = 5
+        heightdelta = -1
+        dist = 0
+        startheight = floating
+        canattack = true
+    } HeightChangeMethod1
+
 
    Weapons { 
       Number = 6

@@ -32,11 +32,11 @@ VehicleType {
 
    Construction { 
       Buildings = 26 35-37 1400 1401
-      Vehicles = 1405 1414 1419 1422 1428 1432 1433 1472 1478 1486 1494
+      Vehicles = 1472 1478 1486 1494
       Objects = 9 10 44 2093 2096 2098 2099 16901
       ObjectsRemovable = 988
-      ObjectGroupsRemovable = 1 2 3 4 5 6 7 8 10 11 12 13 14
-      UnitConstructionMoveCostPercentage = 66
+      ObjectGroupsRemovable = 1 2 3 4 5 6 7 8 10 11 12 13 14 21
+      UnitConstructionMoveCostPercentage = 85
    } Construction
 
    WaitForAttack = true
@@ -44,7 +44,7 @@ VehicleType {
       Number = 6
       Weapon0 ->* VehicleType.Def_MG
       Weapon0.Ammo = 100
-      Weapon1 ->* VehicleType.ServiceTurret 
+      Weapon1 ->* VehicleType.ServiceGround
       Weapon1.targets = submerged floating ground_level
       Weapon1.shotfrom = submerged floating ground_level
       Weapon2 ->* VehicleType.AmmoCannon

@@ -7,7 +7,7 @@ VehicleType {
    InfoImage = mk6s_ksb.jpg
    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
-   Armor += 250
+   Armor += 200
 
    Movement -= 11 11 0 0 0 0 0 0 
    Tank.material = 600
@@ -18,7 +18,7 @@ VehicleType {
       Weapon0.Ammo = 20
       Weapon0.Punch@MaxRange = 130
       Weapon0.Punch@MinRange = 130
-      Weapon0.ReactionFireShots = 3
+      Weapon0.ReactionFireShots = 2
 
       Weapon1 ->* VehicleType.DLS 
    } Weapons

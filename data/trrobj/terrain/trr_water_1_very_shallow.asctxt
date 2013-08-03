@@ -18,7 +18,7 @@ TerrainType {
    much_snow { 
       UseGFXpics = false
       Picture = trr_water_1_very_shallow_ms.png
-      TerrainProperties = shallow_water snow frozen_water track_possible
+      TerrainProperties = very_shallow_water snow frozen_water track_possible
    } much_snow
    snow_and_ice { 
       UseGFXpics = false

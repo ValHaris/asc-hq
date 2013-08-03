@@ -14,18 +14,9 @@ VehicleType {
    View = 30
    Features = no_reactionfire ManualSelfDestruct
 
-   Tank { 
-      Energy = 0
-      Material = 0
-      fuel = 0
-   } Tank
-   FuelConsumption = 0
-   Movement = 0 0 0 0 0 0 0 0 
    TerrainAccess ->* VehicleType.turret_lowland 
 
-   WaitForAttack = true
    Weapons { 
-      Initiative = 0
       Number = 2
       Weapon0 ->* VehicleType.CMB 
       Weapon0.Ammo = 3

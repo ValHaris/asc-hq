@@ -21,12 +21,12 @@ VehicleType {
 
    Construction {
       Buildings = 2 4 6 30 32 39 15008
-      Vehicles = 15222 15243 
+      Vehicles = 15243 
 ;							   LaZa JuTur
       Objects = 1 3 10 30 45 181 2153 1000 998 997 2098 44 2658 15003
       ObjectsRemovable = 2658
       ObjectGroupsRemovable = 1 2 3 4 5 6 7 8 9 10 11 12 13 14 21
-      UnitConstructionMoveCostPercentage = 76
+      UnitConstructionMoveCostPercentage = 90
    } Construction
 
    Weapons { 

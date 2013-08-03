@@ -6,21 +6,15 @@ VehicleType {
    Description = Orbitalabwehr
    Infotext = [ Der Deneb ist ein teilstationärer Turret im herkömmlichen Stile cromonischer Verteidigungsanlangen. Das bedeutet, dass er nicht für immer an ein und derselben Stelle verbleibt, sondern - mittels geeigneter Transporter - seine Position bei Bedarf auch verändern kann. Innerhalb der cromonischen Streitkräfte fällt ihm dabei die Aufgabe der Orbitalabwehr zu.
 
-
 Zu diesem Zweck ist der Deneb mit Anti-Orbital-Raketen ausgerüstet, welche auch auf große Entfernungen gegnerische Orbitalstreitkräfte bekämpfen können. Da diese Raketen in ihrer Reichweite sogar noch die der Medusa 3 übertreffen, ist es durchaus eine Überlegung wert, die beiden Einheitentypen im Feld direkt hintereinander gestaffelt aufzustellen, und so einen noch effektiveren Schutz zu erzielen. Um den Deneb noch zu verbessern, wurde die Feuerleitung der AO-Raketen über ein leistungsfähiges RF-Gerät gelegt.
-
 
 Da die eigenen Radaranlagen eher unterdimensioniert sind, empfielt es sich, auf die Daten anderer Aufklärer zurückzugreifen - vor allem natürlich solcher, deren Sicht bis in die Planetenumlaufbahn reicht.
 
-
 Die Verteidigung des Deneb beruht vorrangig auf zwei Dingen: seiner starken Panzerung, und seinem Fla-Rak-System. Die Panzerung besteht aus mehreren Schichten hochspeziellen Stahlbetons. Dadurch erreichte man zwar einerseits einen Schutz gegen Feindbeschuss, der sogar den eines Sam-3-Panzers übertrifft - andererseits ging dies deutlich zu Lasten seines Gewichts und damit auch der Transportierbarkeit. Als bereits angesprochenes Flugabwehrsystem dient nichts anderes als der Geschützturm einer Medusa 2. Dieser wurde nahezu ohne weitere Modifikationen so übernommen, wie er war (also inklusive Munitionsart und RF-System).
-
 
 So gesehen verfügt der Deneb also über zwei RF-Geräte - eines für die Flug- und eines für die Orbitalabwehr. Beide Geräte können auch während der Bewegung und des Transports aktiviert bleiben. Es muss jedoch noch erwähnt werden, dass sie nicht separat deaktivierbar sind!
 
-
 Gegen angreifende Infanterie und Flieger im Tiefflug, verfügt der Deneb noch über ein mittleres Maschinengewehr mit nur recht geringer Reichweite. Da ein Deneb jedoch eindeutig eine Einheit für die hintersten Reihen der Schlachtaufstellung darstellt, muss sich ein Kommandant wohl deutliche Fehlplanung vorwerfen lassen, wenn der Turret dieses MG tatsächlich einmal zum Einsatz bringen muss.
-
 
 Gebaut werden kann der Deneb normal in der großen Fabrik. Im Felde wird er durch den Lurat errichtet, der ihn jedoch nicht transportieren kann. Effektiv kann dies nämlich nur der Gigant - der aber wiederum nicht dazu in der Lage ist, selbst Denebs zu bauen. Kommt man also in die Verlegenheit, Denebs errichten und verlegen zu müssen, braucht man ein Team aus Lurats (zum Errichten der notwendigen Sockelkonstruktionen, sowie zum Bau der Denebs selbst) und Gigants (zum Abtransport und späteren Wiederaussetzen). Auf See hingegen können alle diese Aufgaben durch den Taros erledigt werden.]
    Picture = mk4b_deneb.png

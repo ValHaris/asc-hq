@@ -25,8 +25,10 @@ VehicleType {
       EntranceSystemNum = 2
       EntranceSystem0 ->* VehicleType.GrIO
       EntranceSystem0.DisableAttack = true
+	  EntranceSystem0.CategoriesNOT = building|turret|object default
       EntranceSystem1 ->* VehicleType.OrbIO
       EntranceSystem1.DisableAttack = true
+	  EntranceSystem2 ->* VehicleType.TurretOut
    } transportation
    ConstructionCost { 
       CalculationMethod = manual

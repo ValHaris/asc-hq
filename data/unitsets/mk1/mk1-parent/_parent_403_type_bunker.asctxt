@@ -1,37 +1,41 @@
  VehicleType { 
-   Abstract = true
-   ID = 403
+    Abstract = true
+    ID = 403
 
 ; ----------------------------------------------------------------------------------------------------------------
 ; -----   B U N K E R    -----------------------------------------------------------------------------------------
 ; ----------------------------------------------------------------------------------------------------------------
 
-   Armor = 1100
-   View = 40
-   WreckageObject = 497 496
-   Height = ground_level 
-   Jamming = 0
-   WaitForAttack = false
-   Tank { 
-      Energy = 0
-      Material = 0
-      fuel = 0
-   } Tank
-   FuelConsumption = 0
-   Features = 
-   Movement = 0 0 0 0 0 0 0 0 
-   Category = building|turret|object
-   MaxSurvivableStorm = 255
-   ResourceDrillingRange = 0
-   SelfRepairRate = 0
-   Weight = 7000
-   Construction { 
-      Buildings = 
-      Vehicles = 
-      Objects = 
-   } Construction
-   Weapons {
-      Initiative = 0
-      Number = 0
-   } Weapons
+    WreckageObject = 497 496
+
+    Features = onlyTransMove
+    Category = building|turret|object
+    Armor = 1100
+    Weight = 20000
+    View = 40
+    Jamming = 0
+    MaxSurvivableStorm = 255
+    ResourceDrillingRange = 0
+    SelfRepairRate = 0
+
+    Height = ground_level 
+    Movement = 0 0 0 10 0 0 0 0 
+    Tank { 
+        Energy = 0
+        Material = 0
+        fuel = 0
+    } Tank
+    FuelConsumption = 0
+
+	Construction { 
+        Buildings = 
+        Vehicles = 
+        Objects = 
+    } Construction
+
+    WaitForAttack = true
+    Weapons {
+        Number = 0
+    } Weapons
+	
 } VehicleType

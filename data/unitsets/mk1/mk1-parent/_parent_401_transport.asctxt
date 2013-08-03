@@ -182,7 +182,7 @@
 
    TurretOut ->* VehicleType.GrIO
    TurretOut.CategoriesNOT -> VehicleType.cargo_turret_only.CategoriesNOT
-   TurretOut.MoveCost = 10 
+   TurretOut.MoveCost = 12 
 
    TurretOut2 ->* VehicleType.GrIO
    TurretOut2.CategoriesNOT -> VehicleType.cargo_turret_only.CategoriesNOT
@@ -779,9 +779,9 @@
 ;---------- TurretSystem -----------
 
    TransDevice { 
-      MaxLoadableUnits = 2
-      MaxLoadableUnitSize = 4
-      MaxLoadableMass = 4
+      MaxLoadableUnits = 3
+      MaxLoadableUnitSize = 6
+      MaxLoadableMass = 6
       CargoMovementDivisor = 1.8
       CategoriesNOT -> VehicleType.cargo_deftur_only.CategoriesNOT
       EntranceSystemNum = 1
@@ -798,7 +798,7 @@
       CategoriesNOT -> VehicleType.cargo_turret_only.CategoriesNOT
       EntranceSystemNum = 1
       EntranceSystem0 ->* VehicleType.GrIO
-      EntranceSystem0.MoveCost = 10
+      EntranceSystem0.MoveCost = 12
       EntranceSystem0.DisableAttack = true
    } TransTurretMed
 
@@ -810,7 +810,7 @@
       CategoriesNOT -> VehicleType.cargo_turret_only.CategoriesNOT
       EntranceSystemNum = 1
       EntranceSystem0 ->* VehicleType.GrIO
-      EntranceSystem0.MoveCost = 10
+      EntranceSystem0.MoveCost = 12
       EntranceSystem0.DisableAttack = true
    } TransTurretBig
 
@@ -822,7 +822,7 @@
       CategoriesNOT -> VehicleType.cargo_turret_only.CategoriesNOT
       EntranceSystemNum = 1
       EntranceSystem0 ->* VehicleType.GrIO
-      EntranceSystem0.MoveCost = 10
+      EntranceSystem0.MoveCost = 12
       EntranceSystem0.DisableAttack = true
    } TransTurretBig2
 

@@ -17,8 +17,13 @@ VehicleType {
 
    Tank.Material = 30000
    Tank.Fuel += 10000
-   movement -= 0 0 0 20 20 20 0 0
-   Terrainaccess ->* VehicleType.heli_terrain
+   movement -= 0 0 0 15 20 20 0 0
+   TerrainAccess {
+      terrain_any = Road Runway Spaceport Hard_sand
+      terrain_all =
+      terrain_not = hillside forest turret_foundation Installation large_rocks railroad bridge
+      terrain_kill = Shallow_water Water Deep_water River lava
+   } TerrainAccess   
    MovementSound = jet_pass.ogg
 
    Weapons { 

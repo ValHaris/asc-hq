@@ -8,7 +8,7 @@ VehicleType {
    Infotext = []
    GuideSortHelp = 502 211 507 0 0 0 0 0 0 0
 
-   Armor = 440
+   Armor = 490
    Weight += 1
    Features += moveduringreactionfire
    Movement -= 0 0 0 10 0 0 0 0 
@@ -20,20 +20,21 @@ VehicleType {
       Weapon0 ->* VehicleType.SSM 
       Weapon0.MaxRange = 30
       Weapon0.Ammo = 6
-      Weapon0.Punch@MaxRange = 85
-      Weapon0.Punch@MinRange = 85
+      Weapon0.Punch@MaxRange = 95
+      Weapon0.Punch@MinRange = 95
       Weapon0.Reactionfireshots = 2 
 
       Weapon1 ->* VehicleType.Flak 
       Weapon1.MaxRange = 30
-      Weapon0.Punch@MaxRange = 65
+	  Weapon1.Punch@MinRange = 85
+      Weapon1.Punch@MaxRange = 75
       Weapon1.Reactionfireshots = 1 
       Weapon1.Ammo = 10
 
       Weapon2 ->* VehicleType.MiniGun
       Weapon2.Reactionfireshots = 1 
-      Weapon2.Punch@MaxRange = 55
-      Weapon2.Punch@MinRange = 65
+      Weapon2.Punch@MaxRange = 60
+      Weapon2.Punch@MinRange = 70
       Weapon2.Ammo = 10
 
    } Weapons

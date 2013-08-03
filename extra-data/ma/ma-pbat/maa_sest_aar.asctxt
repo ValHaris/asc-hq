@@ -17,11 +17,10 @@ Die neuartige Panzerung ist zwar recht stabil, doch sind die Piloten angehalten,
    Picture = maa_sest_aar.pcx
 
    Armor += 30
-   Movement = 0 0 0 30 170 180 0 0 
+   Movement = 0 0 0 30 170 170 0 0 
    FuelConsumption = 32
 
    Weapons { 
-      Initiative = 0
       Number = 2
       Weapon0 ->* VehicleType.type_cannon 
       Weapon0.MaxRange = 20

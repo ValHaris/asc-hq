@@ -82,24 +82,24 @@ ID 22517    Tank-S.
 
 Turrets (510)
 
-ID 22600    AA-Turret		Airdefenceturret
-ID 22601    AO-T.		Orbitalabwehr
-ID 22602    Fort		Bunker
-ID 22603    hightech Radar-T.   sehr guter Radarturret mit schwacher Panzerung
-ID 22604    Jamming-T.		Störerturm
-ID 22605    Kanonen-T.
-ID 22606    Mega-AA-T.
+ID 22600    Blitzer		Airdefenceturret
+ID 22601    SDT  		Orbitalabwehr
+ID 22602    MAFA		Turrets
+ID 22603    HiRAD               sehr guter Radarturret mit schwacher Panzerung
+ID 22604    MATU RJ		Störerturm
+ID 22605    Kanonenturm
+ID 22606    Blitzer2
 ID 22607    Mega Fort
-ID 22608    Mega-Kanonen-T.
+ID 22608    MKB
 ID 22609    Radar-T.		standard Radarstation
-ID 22610    Radarbunker         die Radarstation für die vorderste Front
+ID 22610    BS RAJA         die Radarstation für die vorderste Front
 ID 22611    Torpedo-T.
 ID 22612    U-AAO-T.		Unterwasserflugkörperabwehrstellung
 ID 22613    U-Radarstation
 ID 22614    AT-Stellung
 ID 22615    Tripplekanonenturm
 ID 22616    Sonarboje
-ID 22617    AA-Bunker           vollstationäre Luftabwehr zur Basissicherung
+ID 22617    Donner             vollstationäre Luftabwehr zur Basissicherung
 ID 22618    Railgun
 
 

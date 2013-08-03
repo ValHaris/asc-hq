@@ -17,7 +17,6 @@ VehicleType {
    Movement = 66 66 70 0 0 0 0 0 
 
    Weapons { 
-      Initiative = 0
       Number = 5
       Weapon0 ->* VehicleType.UTorp 
       Weapon0.Type = torpedo ammo_transfer shootable 

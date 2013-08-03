@@ -12,7 +12,6 @@ VehicleType {
    Weight = 150
 
    Weapons { 
-      Initiative = 0
       Weapon0 { 
          Type = laser shootable
          MaxRange += 10

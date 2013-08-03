@@ -305,8 +305,8 @@ VehicleType {
          Ammo = 4
          MinRange = 10
          MaxRange = 30
-         Punch@MaxRange = 70
-         Punch@MinRange = 75
+         Punch@MaxRange = 80
+         Punch@MinRange = 85
          LaserRechargeCost.fuel = 150
          LaserRechargeCost.material = 75
 	 LaserRechargeRate = 2
@@ -361,8 +361,8 @@ VehicleType {
          MaxRange = 20
          MinRange = 10
          Ammo = 6
-         Punch@MaxRange = 80
-         Punch@MinRange = 80
+         Punch@MaxRange = 85
+         Punch@MinRange = 85
 	 LaserRechargeRate = 1
          LaserRechargeCost {
             energy = 0

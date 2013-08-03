@@ -13,7 +13,7 @@ ObjectType {
 
    TerrainAccess.terrain_any = Lowland Hard_sand Soft_sand Very_shallow_water
    TerrainAccess.terrain_not = forest large_rocks installation
-   TerrainAccess.terrain_kill = water deep_water lava
+   TerrainAccess.terrain_kill = river water deep_water lava
 
    Armor = 2500
    ConstructionCost { 
@@ -33,7 +33,7 @@ ObjectType {
       UseGFXpics = false
       picture = ob_hafenbeton_2095.png 65
       TerrainAccess.terrain_any = Lowland Hard_sand Soft_sand Very_shallow_water
-      TerrainAccess.terrain_not = harbour forest large_rocks installation
+      TerrainAccess.terrain_not = forest large_rocks installation
       TerrainAccess.terrain_kill = river water deep_water lava
    } dry
    much_Snow { 
@@ -41,7 +41,7 @@ ObjectType {
       picture = ob_hafenbeton_2095.png 65
       GraphicOperations = Snow
       TerrainAccess.terrain_any = Lowland Hard_sand Soft_sand Very_shallow_water
-      TerrainAccess.terrain_not = harbour forest large_rocks installation
+      TerrainAccess.terrain_not = forest large_rocks installation
       TerrainAccess.terrain_kill = river water deep_water lava
    } much_Snow
    snow_And_ice { 
@@ -49,7 +49,7 @@ ObjectType {
       picture = ob_hafenbeton_2095.png 65
       GraphicOperations = Snow
       TerrainAccess.terrain_any = Lowland Hard_sand Soft_sand Very_shallow_water
-      TerrainAccess.terrain_not = harbour forest large_rocks installation
+      TerrainAccess.terrain_not = forest large_rocks installation
       TerrainAccess.terrain_kill = river water deep_water lava
    } snow_and_ice
 } ObjectType

@@ -71,7 +71,7 @@ VehicleType {
       terrain_all = 
       terrain_not = swamp very_shallow_water shallow_water river water deep_water
       terrain_kill = very_shallow_water shallow_water river water deep_water 
-      MaxDistance = 50
+      MaxDistance = 100
    } SY_worm_jump
 
 

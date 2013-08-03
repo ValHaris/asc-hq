@@ -316,8 +316,8 @@
          MaxRange = 30
          MinRange = 20
          Ammo = 4
-         Punch@MaxRange = 100
-         Punch@MinRange = 120
+         Punch@MaxRange = 110
+         Punch@MinRange = 130
          HitAccuracy { 
             d6 = 
             d5 = 
@@ -782,15 +782,15 @@
 ; surface-highair misslie
       SAMT ->* VehicleType.SAMH 
       SAMT.MAxRange = 60
-      SAMT.Punch@MaxRange = 85
-      SAMT.Punch@MinRange = 85
+      SAMT.Punch@MaxRange = 90
+      SAMT.Punch@MinRange = 90
       SAMT.ReactionFireShots = 2
       SAMT.WeaponEffectiveness.heavy_aircraft = 120
 ; surface-highair misslie
       SAMB ->* VehicleType.SAMH 
       SAMB.MaxRange = 90
-      SAMB.Punch@MaxRange = 95
-      SAMB.Punch@MinRange = 95
+      SAMB.Punch@MaxRange = 100
+      SAMB.Punch@MinRange = 100
       SAMB.ReactionFireShots = 3
       SAMB.WeaponEffectiveness.heavy_aircraft = 120
 

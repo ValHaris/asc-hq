@@ -9,7 +9,7 @@ VehicleType {
 
    Armor = 310
    FuelConsumption = 30
-   Movement = 0 0 0 40 160 170 0 0 
+   Movement = 0 0 0 40 160 160 0 0 
 
    Weapons { 
       Number = 4

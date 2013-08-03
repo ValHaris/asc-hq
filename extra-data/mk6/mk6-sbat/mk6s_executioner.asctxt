@@ -3,45 +3,60 @@ VehicleType {
    ID = 15367
    parent = 367 15000
 
-   Description = SubHunter
+    Picture = mk6s_executioner.png
+    InfoImage = 
+    Description = SubHunter
    
-   Picture = mk6s_executioner.png
-   InfoImage = 
-   Infotext = [
+    Infotext = [
 Die Executioner-Klasse ist ausgelegt für den Unterwasserkampf. Dazu verfügt es über einen neuartigen V-EMP, dieser lässt sich Vertikal nach Unten abfeuern und trifft so die elektrischen Systeme von Uboote.
 Zum schutz vor Uboot angriffen hebt sich die executioner, dank der spezielen Form des Rumpfes, leicht aus dem Wasser. So ist es hoch genug um den Sonar zu entgehen und tief genug um unter dem Radar zu bleiben. Im Notfall kann es auch tauchen um so Schiffen aus dem weg zu gehen.
 Die weitere Bewaffnung sind weitreichende Unterwassertorpedos und ein Defence-Laser-System.]
    
-   Features += Sonar MoveDuringReactionFire
-   Jamming = 36
-   View = 30
-   Movement += 0 38 -10 -10 0 0 0 0
-   Height = submerged floating ground_level 
-   Tank.Material = 500  
-
-   Transportation ->* VehicleType.notrans
+    Features += Sonar MoveDuringReactionFire
+    Jamming = 36
+    View = 30
    
-   Weapons {
-      Number = 3
-       Weapon0 ->* VehicleType.SUSTorp
+    Transportation ->* VehicleType.notrans
+   
+    Movement += 0 38 -10 -10 0 0 0 0
+    Height = submerged floating ground_level 
+    Tank.Material = 500  
+    HeightChangeMethodNum = 2
+    HeightChangeMethod0 {
+        movecost = 5
+        heightdelta = 1
+        dist = 0
+        startheight = submerged floating
+        canattack = true
+    } HeightChangeMethod0
+    HeightChangeMethod1 {
+        movecost = 5
+        heightdelta = -1
+        dist = 0
+        startheight = floating ground_level
+        canattack = true
+    } HeightChangeMethod1
+
+    Weapons {
+        Number = 3
+        Weapon0 ->* VehicleType.SUSTorp
         Weapon0.shotFrom = submerged floating ground_level
         Weapon0.MaxRange = 30
-	Weapon0.Punch@MaxRange = 115
+	    Weapon0.Punch@MaxRange = 115
         Weapon0.Punch@MinRange = 130
-	Weapon0.HitAccuracy.d1 = 100
-	Weapon0.HitAccuracy.u1 = 100
-	Weapon0.Ammo = 4
-	Weapon0.ReactionFireShots = 0
-       Weapon1 ->* VehicleType.DLS
-       Weapon2 ->* VehicleType.EMP
-	Weapon2.targets = deep_submerged submerged
-	Weapon2.Punch@MaxRange = 150
+	    Weapon0.HitAccuracy.d1 = 100
+	    Weapon0.HitAccuracy.u1 = 100
+	    Weapon0.Ammo = 4
+	    Weapon0.ReactionFireShots = 0
+        Weapon1 ->* VehicleType.DLS
+        Weapon2 ->* VehicleType.EMP
+	    Weapon2.targets = deep_submerged submerged
+	    Weapon2.Punch@MaxRange = 150
         Weapon2.Punch@MinRange = 150
-	Weapon2.HitAccuracy.d1 = 100
-	Weapon2.HitAccuracy.d2 = 80
-	Weapon2.ReactionFireShots = 0
+	    Weapon2.HitAccuracy.d1 = 100
+	    Weapon2.HitAccuracy.d2 = 80
+	    Weapon2.ReactionFireShots = 0
         Weapon2.MaxRange = 10
-
-   } Weapons
+    } Weapons
 
 } VehicleType

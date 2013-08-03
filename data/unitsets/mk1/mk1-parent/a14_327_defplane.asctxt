@@ -24,14 +24,13 @@ VehicleType {
    MovementSound = aircraft_l_g.ogg
 
    Weapons { 
-      Initiative = 0
       Number = 2
       
       Weapon0 ->* VehicleType.AAMH2 
       Weapon0.Ammo = 10
       Weapon0.MaxRange = 30
-      Weapon0.Punch@MaxRange = 80
-      Weapon0.Punch@MinRange = 80
+      Weapon0.Punch@MaxRange = 85
+      Weapon0.Punch@MinRange = 85
       Weapon0.HitAccuracy.d2 = 0
       Weapon0.HitAccuracy.u2 = 0
 	  Weapon0.ReactionFireShots = 2
@@ -39,8 +38,8 @@ VehicleType {
       Weapon1 ->* VehicleType.AAMH 
       Weapon1.Type = ground_missile shootable
 	  Weapon1.Ammo = 10
-      Weapon1.Punch@MaxRange = 75
-      Weapon1.Punch@MinRange = 75
+      Weapon1.Punch@MaxRange = 80
+      Weapon1.Punch@MinRange = 80
       
    } Weapons
 } VehicleType

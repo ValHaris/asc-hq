@@ -49,7 +49,7 @@ ObjectType {
          terrain_not = forest large_rocks swamp installation
          terrain_kill = swamp river Water Deep_water Lava 
       } TerrainAccess
-      TerrainProperties_Filter = Road Lowland Turret_foundation Forest High_mountains Railroad Runway Shallow_water Very_shallow_water Water Deep_water Hard_sand Soft_sand Small_rocks Mud Snow Deep_snow Mountains Large_rocks Ditch Hillside Morass Installation Frozen_water 
+      TerrainProperties_Filter = Spaceport Runway Road Railroad Lowland Hard_sand Soft_sand Turret_foundation Forest Small_rocks High_mountains Very_shallow_water Shallow_water River Water Deep_water Mud Snow Deep_snow Mountains Large_rocks Ditch Hillside Morass Installation Frozen_water 
       TerrainProperties_Add =  
    } dry
 } ObjectType

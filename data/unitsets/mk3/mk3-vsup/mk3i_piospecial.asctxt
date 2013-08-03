@@ -14,7 +14,7 @@ Desweiteren pflanzen sie Wälder und Raps, und sind in der Lage selbige zur Gewin
 
    Armor = 250
    Transportation ->* VehicleType.TransDevice 
-   Features = mine_layer mineview construct_vehicles ExternalRepair conquer_buildings self_repairing automatic_resource_searching jam_only_own_field
+   Features = mine_layer mineview ExternalRepair conquer_buildings self_repairing automatic_resource_searching jam_only_own_field
    ResourceDrillingRange = 1
    SelfRepairRate = 50
    Weight = 3
@@ -28,10 +28,11 @@ Desweiteren pflanzen sie Wälder und Raps, und sind in der Lage selbige zur Gewin
 
    Construction { 
       Buildings = 
-      Vehicles = 544 545 573
+      Vehicles =
       Objects = 1 9 10 45 181 998 2099 2153 
       ObjectsRemovable = 
       ObjectGroupsRemovable = 1 2 5 6 8 10 11 12 13 14
+      UnitConstructionMoveCostPercentage = 85
    } Construction
 
    Weapons { 

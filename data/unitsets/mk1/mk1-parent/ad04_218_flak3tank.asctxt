@@ -6,20 +6,21 @@ VehicleType {
 
    Description = anti aircraft tank
    Infotext = [Ein Flakpanzer (kurz für Flugabwehrkanonenpanzer) ist ein leicht gepanzertes Fahrzeug. Sie bekämpft den Luftfeind im niedrigen und mittleren Flughöhenbereich, auf kurze und mittlere Distanz und schützt Truppen, deren Einrichtungen und Anlagen. Diese Flak  ist aufgrund Ihrer Beweglichkeit so eine Art "Feuerwehr". Sie führt Kampfunterstützungsaufgaben durch. Die Bewaffnung dieser Panzer besteht aus Maschinenkanonen, die für die Luftabwehr modifiziert oder entwickelt wurden. Neben dem leistungsfähigen Radar, kann diese Einheit auch gegen Landziele eingesetzt werden, was Ihre Einsetzmöglichkeiten noch weiter erhöht. Der Nachteil dieser Einheit ist ihre geringe Panzerung, Höhe und offener Aufbau. Das Hauptaufgabengebiet von Flakpanzern ist die schnelle Verteidigung der kämpfenden Bodentruppe und die Verteidigung von frontnahen Stützpunkten gegen Luftziele.
-Im Rudel eingesetzt können diese äusserst schnellen Comet Flakpanzer eine echte Bedrohung für angreifende Tiefflieger werden. Eigene empfindliche Verluste müssen aber bei dieser geringen Kampfdistanz stets einkalkuliert werden. 
+Im Rudel eingesetzt können diese äusserst schnellen Flakpanzer eine echte Bedrohung für angreifende Tiefflieger werden. Eigene empfindliche Verluste müssen aber bei dieser geringen Kampfdistanz stets einkalkuliert werden. 
 ]
    GuideSortHelp = 218 508 0 0 0 0 0 0 0 0
 
 
-   Armor = 400
+   Armor = 450
    Features += MoveDuringReactionFire
-   Weight = 35
+   Weight = 45
 
    Movement = 0 0 0 72 0 0 0 0 
    Weapons { 
-      Initiative = 10
       Number = 1
-      Weapon0 ->* VehicleType.Flak 
+      Weapon0 ->* VehicleType.Flak
+      Weapon0.Punch@MaxRange = 70
+      Weapon0.Punch@MinRange = 80
       Weapon0.Ammo = 10
       Weapon0.maxRange = 40
    } Weapons
