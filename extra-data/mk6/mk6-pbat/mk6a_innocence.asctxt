@@ -16,13 +16,13 @@ Diese ganzen Fähigkeiten haben jedoch einen Preis - und den nicht nur in den Kon
 
    Category = heavy_aircraft
    Weight = 400
-   Armor -= 10
+   Armor += 50
    View = 50
    jamming = 0
 
    Tank.Material = 2000
    Tank.Fuel = 12000
-   movement += 0 0 0 0 30 30 30 0
+   movement += 0 0 0 5 30 30 30 0
 
    Weapons { 
       Number = 5

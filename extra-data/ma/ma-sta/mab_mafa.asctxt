@@ -10,19 +10,18 @@ VehicleType {
    TerrainAccess ->* VehicleType.Turret_only 
 
    Weapons { 
-      Initiative = 0
       Number = 3
       Weapon0 ->* VehicleType.Tank_Gun
       Weapon0.Ammo = 10
       Weapon0.MaxRange = 30
-      Weapon0.Punch@MaxRange = 60
-      Weapon0.Punch@MinRange = 80
+      Weapon0.Punch@MaxRange = 70
+      Weapon0.Punch@MinRange = 90
       Weapon0.ReactionFireShots = 2
       Weapon1 ->* VehicleType.Flak
       Weapon1.targets =  low_level_flight medium_level_flight high_level_flight 
       Weapon1.Ammo = 10
-      Weapon1.Punch@MaxRange = 60
-      Weapon1.Punch@MinRange = 80
+      Weapon1.Punch@MaxRange = 70
+      Weapon1.Punch@MinRange = 90
       Weapon1.HitAccuracy.u3 = 75
       Weapon2 ->* VehicleType.BigMiniGun
     } Weapons

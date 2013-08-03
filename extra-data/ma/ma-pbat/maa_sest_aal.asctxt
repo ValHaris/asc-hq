@@ -10,7 +10,7 @@ Die Panzerung ist recht dünn, der AAL überlebt hauptsächlich durch seine gute Ma
 Die Konstruktion ist ausgereift und seit vielen Jahren nicht mehr geändert worden. Trotzdem sind die Verluste an AAL in Luftkämpfen recht hoch. Die hervorragenden Rettungskapseln und der günstige Preis sorgen allerdings dafür, daß immer wieder neue Maschinen produziert werden.]
 
    Armor += 30
-   Movement = 0 0 0 30 170 190 0 0 
+   Movement = 0 0 0 30 170 180 0 0 
    FuelConsumption = 28
    
    Weapons { 

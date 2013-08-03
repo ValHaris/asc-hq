@@ -12,7 +12,7 @@ VehicleType {
    WreckageObject = 404
    GuideSortHelp = 503 293 0 0 0 0 0 0 0 0
 
-   Armor = 1000
+   Armor = 1100
    Weight = 100
 
    Tank {

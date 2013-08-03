@@ -22,8 +22,8 @@ Die Position im Orbit birgt für die humanuiden Völker einige Probleme. Die Stell
       Weapon0.Targets = high_level_flight medium_level_flight
       Weapon0.MaxRange = 60
       Weapon0.MinRange = 20
-      Weapon0.Punch@MaxRange = 75
-      Weapon0.Punch@MinRange = 85
+      Weapon0.Punch@MaxRange = 85
+      Weapon0.Punch@MinRange = 95
       Weapon0.LaserRechargeCost.fuel = 300
       Weapon0.LaserRechargeCost.material = 150
 
@@ -33,8 +33,8 @@ Die Position im Orbit birgt für die humanuiden Völker einige Probleme. Die Stell
       Weapon1.LaserRechargeCost.material = 75
       Weapon1.MaxRange = 30
       Weapon1.MinRange = 10
-      Weapon1.Punch@MaxRange = 80
-      Weapon1.Punch@MinRange = 85
+      Weapon1.Punch@MaxRange = 90
+      Weapon1.Punch@MinRange = 95
       Weapon1.ReactionFireShots = 1
 
    } Weapons

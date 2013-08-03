@@ -13,7 +13,7 @@ Beim Einsatz von Defkind sind aber zwei wichtige Punkte zu beachten: Die massive
 
    Category = heavy_aircraft
    Weight = 300
-   Armor += 160
+   Armor += 250
    View = 0
    jamming = 0
    Features -= Jam_Only_Own_Field Move_After_Attack
@@ -22,9 +22,14 @@ Beim Einsatz von Defkind sind aber zwei wichtige Punkte zu beachten: Die massive
 
    Tank.Material = 2000
    Tank.Fuel = 12000
-   movement += 0 0 0 -40 -50 -50 130 0
-   Terrainaccess ->* VehicleType.heli_terrain
+   movement += 0 0 0 -35 -50 -50 130 0
    Height = ground_level low_level_flight medium_level_flight high_level_flight
+   TerrainAccess {
+      terrain_any = Road Runway Spaceport Hard_sand
+      terrain_all =
+      terrain_not = hillside forest turret_foundation Installation large_rocks railroad bridge
+      terrain_kill = Shallow_water Water Deep_water River lava
+   } TerrainAccess   
    MovementSound = jet_pass.ogg
 
    WaitForAttack = true
@@ -32,21 +37,23 @@ Beim Einsatz von Defkind sind aber zwei wichtige Punkte zu beachten: Die massive
       Number = 4
       Weapon0 ->* VehicleType.AAMH
       Weapon0.MaxRange = 50
-      Weapon0.Punch@MaxRange = 75
-      Weapon0.Punch@MinRange = 75
+      Weapon0.Punch@MaxRange = 85
+      Weapon0.Punch@MinRange = 85
       Weapon0.ReactionFireShots = 2
-      Weapon0.Ammo = 8
+      Weapon0.Ammo = 10
       Weapon1 ->* VehicleType.AMO
       Weapon1.MaxRange = 60
-      Weapon1.Punch@MaxRange = 80
-      Weapon1.Punch@MinRange = 80
+      Weapon1.Punch@MaxRange = 90
+      Weapon1.Punch@MinRange = 90
       Weapon1.ReactionFireShots = 1
+      Weapon2.Ammo = 6
       Weapon2 ->* Vehicletype.smASM
       Weapon2.MaxRange = 50
-      Weapon2.Punch@MaxRange = 85
-      Weapon2.Punch@MinRange = 85
+      Weapon2.Punch@MaxRange = 95
+      Weapon2.Punch@MinRange = 95
       Weapon2.ReactionFireShots = 1
       Weapon2.WeaponEffectiveness.trooper = 0
+      Weapon2.Ammo = 6
       Weapon3 ->* Vehicletype.TDW
       Weapon3.MaxRange = 40
    } Weapons

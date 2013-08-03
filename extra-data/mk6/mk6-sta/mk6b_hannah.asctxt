@@ -10,16 +10,17 @@ VehicleType {
 ;   InfoImage = mk3b_ss74.jpg
    GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
 
-   Armor -= 100
    View = 0
    Tank.Fuel = 10400
    Tank.Material = 5050
    Jumpdrive ->* VehicleType.TeccnolsJump3
 
-   Weapons {
-      Weapon0 ->* VehicleType.type_large_missile 
-      Weapon0.Punch@MaxRange = 120
-      Weapon0.Punch@MinRange = 120
-      Weapon1 ->* VehicleType.NLS
+    Weapons {
+        Weapon0 ->* VehicleType.type_large_missile 
+        Weapon0.Punch@MaxRange = 140
+        Weapon0.Punch@MinRange = 140
+        Weapon0.Reactionfireshots = 2
+
+        Weapon1 ->* VehicleType.NLS
    } Weapons
 } VehicleType

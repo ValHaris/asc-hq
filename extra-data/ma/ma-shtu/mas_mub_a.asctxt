@@ -23,13 +23,14 @@ Es handelt sich alles in allem um eine sehr gelungene Konstruktion, die für jede
 
    WaitForAttack = true
    Weapons { 
-      Initiative = 0
       Number = 2
       
       Weapon0 ->* VehicleType.UTorp 
       Weapon0.Ammo = 4
-      Weapon0.MaxRange = 20
-      Weapon0.ReactionFireShots = 1
+      Weapon0.MaxRange = 30
+	  Weapon0.Punch@MinRange = 125
+	  Weapon0.Punch@MaxRange = 125
+      Weapon0.ReactionFireShots = 2
       
       Weapon1 { 
          Type = laser shootable
@@ -38,8 +39,8 @@ Es handelt sich alles in allem um eine sehr gelungene Konstruktion, die für jede
          MaxRange = 60
          MinRange = 10
          Ammo = 10
-         Punch@MaxRange = 75
-         Punch@MinRange = 80
+         Punch@MaxRange = 85
+         Punch@MinRange = 90
          LaserRechargeRate = 2
          ReactionFireShots = 3
          LaserRechargeCost {

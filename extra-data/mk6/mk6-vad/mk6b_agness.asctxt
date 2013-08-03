@@ -9,7 +9,6 @@ VehicleType {
 ;   InfoImage = mk1b_silo.jpg
    GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
    
-   Armor -= 100
    View = 0
    Tank.Fuel = 11500
    Tank.Material = 5500
@@ -26,13 +25,14 @@ VehicleType {
             material = 200
             fuel = 500
          } LaserRechargeCost
-         MaxRange -= 10
          Ammo = 6
          ReactionFireShots = 2
          Punch@MinRange += 20
       } Weapon0
+
       Weapon1 ->* VehicleType.GALS
       Weapon1.MaxRange = 30
+
       Weapon2 ->* VehicleType.NLS
    } Weapons
 } VehicleType

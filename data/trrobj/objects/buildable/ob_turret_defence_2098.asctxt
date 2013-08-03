@@ -43,12 +43,12 @@ ObjectType {
       terrain_not = road railroad runway ditch bridge installation hillside
       terrain_kill = shallow_water water deep_water river lava
    } TerrainAccess
-   TerrainProperties_Filter = [Lowland Hard_sand Soft_sand
+   TerrainProperties_Filter = [ runway road Lowland Hard_sand Soft_sand mountains High_mountains
                                Swamp mud morass
-                               forest installation
+                               forest small_rocks large_rocks hillside 
                                track_possible harbour
-                               small_rocks large_rocks hillside mountains High_mountains
-                               road railroad runway ditch]
+                               railroad ditch installation
+							   ]
    TerrainProperties_Add = turret_foundation 
    dry { 
       UseGFXpics = false

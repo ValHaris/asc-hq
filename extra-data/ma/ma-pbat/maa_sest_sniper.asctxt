@@ -9,7 +9,7 @@ VehicleType {
    gegnerische Infantrieverbaende. Die sehr weitreichende Spezialkanone bekämft die Gegner aus der Distance, aber auch im Nahkampf.]
 
    FuelConsumption = 28
-   Movement = 0 0 0 30 170 180 0 0 
+   Movement = 0 0 0 30 170 170 0 0 
    Weight = 50
 
    Weapons { 

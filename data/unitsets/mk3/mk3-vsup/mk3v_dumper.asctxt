@@ -21,10 +21,11 @@ VehicleType {
    Weight = 80
 
    Tank { 
-      Material = 30000
+      Material = 50000
       fuel = 2000
    } Tank
-   FuelConsumption = 12
+   Movement += 0 0 0 20 0 0 0 0
+   FuelConsumption = 15
    TerrainAccess ->* VehicleType.offroad 
    
    Construction { 
@@ -33,7 +34,6 @@ VehicleType {
    } Construction
 
    Weapons { 
-      Initiative = 0
       Number = 1
       Weapon0 ->* Vehicletype.ServiceGround 
    } Weapons

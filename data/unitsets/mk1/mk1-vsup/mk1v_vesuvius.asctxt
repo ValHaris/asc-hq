@@ -19,7 +19,8 @@ VehicleType {
    Weight = 65
    Features = construct_vehicles construct_specific_buildings leaves_tracks NoProductionCustomization externalFuelTransfer externalMaterialTransfer externalAmmoTransfer
 
-   Transportation ->* VehicleType.TransTurretBig 
+   Transportation ->* VehicleType.TransTurretBig
+   
 
    Tank { 
       Material = 30000
@@ -29,12 +30,12 @@ VehicleType {
 
    Construction { 
       Buildings = 1 2 4-7 10-23 30-32 40 41
-      Vehicles =  49 93 61 56 95 104 110
+      Vehicles = 49 93 95
       Vehiclesinternally =
       Objects = 44 2098 2097
       ObjectsRemovable = 2097
       ObjectGroupsRemovable = 1 2 3 4 6 7 8 11 13
-      UnitConstructionMoveCostPercentage = 76
+      UnitConstructionMoveCostPercentage = 90
    } Construction
    Weapons { 
       Number = 4

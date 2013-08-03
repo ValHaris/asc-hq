@@ -3,7 +3,7 @@ VehicleType {
    parent = 12006
    ID = 12007
 
-   Description = Command Unit
+   Description = Landezonenverteidiger
    Infotext = [Waechter des HQ]
    Picture = isg_defender.png
 
@@ -11,10 +11,14 @@ VehicleType {
       CalculationMethod = auto
    } ConstructionCost
 
-   Features = MoveDuringReactionFire ManualSelfDestruct
-   Armor = 2000
+   Features = onlyTransMove ManualSelfDestruct
+   Armor = 3000
+   Weight = 6000
    View = 100
    Jamming = 0
+   
+   Movement = 0 0 0 20 0 0 0 0
+
 
    TerrainAccess { 
       terrain_any = turret_foundation

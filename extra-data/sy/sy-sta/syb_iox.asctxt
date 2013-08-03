@@ -16,8 +16,8 @@ VehicleType {
       Weapon0.MaxRange = 60
       Weapon0.MinRange = 20
       Weapon0.LaserRechargeCost.fuel = 105
-      Weapon0.Punch@MaxRange = 90
-      Weapon0.Punch@MinRange = 105
+      Weapon0.Punch@MaxRange = 100
+      Weapon0.Punch@MinRange = 115
       Weapon0.HitAccuracy.u1 = 80
       Weapon0.HitAccuracy.u2 = 0
       Weapon0.HitAccuracy.u3 = 0

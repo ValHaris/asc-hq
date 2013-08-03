@@ -9,11 +9,11 @@ VehicleType {
    GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
    InfoText = [ Das Coast Patrol Ship Serie 7 ist eine weitere technische Meisterleistung der Teccnol Wissenschaft. In konsequenter Leichtbauweise gefertigt wurde Tiefgang des Schiffes soweit reduziert, dass es nun auch in flachsten Gewaessern fahren kann. Die Bewaffnung ist gegenüber den Raketenkreuzern deutlich reduziert, kann sich aber für ein Schiff der Kuestenwache mehr als nur verteidigen. Ein spezielles Highlight ist der neu entwickelte Abwehrlaser vom Typ 2. Er ist jetzt in der Lage kleinere Ziele besser und eher zu bekämpfen und verhindert einen unsinnigen Schuss auf stark gepanzerte Ziele.]
 
+   Features = MoveDuringReactionFire sonar jam_only_own_field 
    Height = floating submerged
-   Movement += 0 40 0 0 0 0 0 0 
+   Movement += 0 37 0 0 0 0 0 0 
    Jamming = 70
 
-   Features = MoveDuringReactionFire sonar jam_only_own_field 
    Transportation ->* VehicleType.notrans
    
    Tank { 
@@ -21,6 +21,21 @@ VehicleType {
       Material = 500
       fuel = 4000
    } Tank
+    HeightChangeMethodNum = 2
+    HeightChangeMethod0 {
+        movecost = 5
+        heightdelta = 1
+        dist = 0
+        startheight = submerged
+        canattack = true
+    } HeightChangeMethod0
+    HeightChangeMethod1 {
+        movecost = 5
+        heightdelta = -1
+        dist = 0
+        startheight = floating
+        canattack = true
+    } HeightChangeMethod1
 
    Weapons { 
       Number = 4
@@ -44,7 +59,7 @@ VehicleType {
       Weapon2.WeaponEffectiveness.trooper = 0
 
       Weapon3 ->* VehicleType.DLS
-	  Weapon3.name  = DLS TYP2
+	  Weapon3.name = DLS TYP2
       Weapon3.Ammo = 8
       Weapon3.MaxRange = 30
       Weapon3.WeaponEffectiveness.trooper = 150

@@ -1,10 +1,10 @@
 VehicleType { 
-   Name = ZT TuBu
+   Name = ZT BuBu
    parent = 400 401 22997
    ID = 22831
    
-   Description = Turretmontage
-   Infotext = [HitecTurretbauer]
+   Description = Bunkermontage
+   Infotext = [HitecBunkerbauer]
    Picture = mat_zt_tubu.png
 
    Armor = 400
@@ -24,10 +24,11 @@ VehicleType {
 
    Construction { 
       Buildings = 26
-      Vehicles = 22618 22603 22606 22617 22608 22607 22615 22610
+      Vehicles = 22618 22617 22608 22607 22610
       Objects = 44 2093 2098 2096
       ObjectsRemovable = 
       ObjectGroupsRemovable = 
+      UnitConstructionMoveCostPercentage = 90
    } Construction
 
    WaitForAttack = true

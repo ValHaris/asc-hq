@@ -8,7 +8,7 @@ VehicleType {
    Infotext = [schwerer Senkrechtstarter, sowohl fuer den Luft- und Bodenkampf - wie beim kleinen Bruder gibts auch hier ordentlich Abstriche bei Panzerung, Feuerkraft und Geschwindigkeit]
 
    FuelConsumption = 32
-   Movement = 0 0 0 40 150 160 0 0 
+   Movement = 0 0 0 40 150 150 0 0 
 
    Weapons { 
       Initiative = 0

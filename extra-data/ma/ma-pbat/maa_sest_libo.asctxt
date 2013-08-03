@@ -10,11 +10,10 @@ Seine größte Schwäche stellt das Fehlen von Distanzwaffen dar. Durch die Senkrec
 
 
    Armor += 30
-   Movement = 0 0 0 30 170 180 0 0 
+   Movement = 0 0 0 30 170 170 0 0 
    FuelConsumption = 28
 
    Weapons { 
-      Initiative = 0
       Number = 2
       Weapon0 ->* VehicleType.medBomb 
       Weapon0.Ammo = 6

@@ -21,7 +21,7 @@ VehicleType {
       CategoriesNOT = hoovercraft light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle rail_vehicle medium_aircraft medium_ship light_aircraft heavy_aircraft light_ship heavy_ship helicopter 
       EntranceSystemNum = 2
       EntranceSystem0 ->* VehicleType.GrIO
-      EntranceSystem0.CategoriesNOT = building|turret|object
+      EntranceSystem0.CategoriesNOT = building|turret|object default
       EntranceSystem1 ->* VehicleType.TurretOut
    } Transportation
 

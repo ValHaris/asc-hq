@@ -15,7 +15,7 @@ VehicleType {
    Armor -= 50
    Weight -= 5
    Transportation ->* VehicleType.TransTurretMed
-   Transportation.MaxLoadableUnits = 2
+   Transportation.MaxLoadableUnits = 4
    Transportation.MaxLoadableMass = 90
    Features += ExternalAmmoTransfer ExternalRepair
 
@@ -29,10 +29,10 @@ VehicleType {
 
    Construction { 
       Buildings = 7 26
-      Vehicles = 1431 1430
+      Vehicles = 
       Objects = 3 30 991 1000 998 997 1401 44 2093 2098 2097 2099
       ObjectsRemovable = 
-      ObjectGroupsRemovable = 2 3 4 6 8 9 13 14
+      ObjectGroupsRemovable = 2 3 4 6 7 8 9 13 14
    } Construction
 
    Weapons { 

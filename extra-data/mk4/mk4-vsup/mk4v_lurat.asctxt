@@ -4,10 +4,10 @@ VehicleType {
    parent = 336
    
    Description = Baufzg.Abwehranlagen
-   Infotext = [ Das Lurat-System ist ein weiteres notwendiges Baufahrzeug. Es ist in der Lage 
-   auf vorhandene Turret-Sockel stationaere Verteidigungsanlagen zu errichten und kleinere Sockeleinheiten zu transportieren.]
    picture = mk4v_lurat.png
    wreckageobject = 14240
+   Infotext = [ Das Lurat-System ist ein Spezialfahrzeug für die Bunker und Geschützturmversorgung. Es ist in der Lage mittlere Geschütztürme
+   zu versetzen und aufzustellen und den Rocky Bunker zu errichten.]
 
    Armor -= 100
    Transportation ->* VehicleType.TransTurretMed 
@@ -17,13 +17,14 @@ VehicleType {
       Material = 25000
       fuel = 25000
    } Tank
-   TerrainAccess ->* VehicleType.offroad 
+   TerrainAccess ->* VehicleType.offroad
+   Movement += 0 0 0 22 0 0 0 0 
 
    Construction { 
-      Vehicles = 1221 1222 1219 1278 1295
+      Vehicles = 1276 1295
       Objects = 44 2096 2098
       ObjectGroupsRemovable = 7 11 13
-      UnitConstructionMoveCostPercentage = 76
+      UnitConstructionMoveCostPercentage = 80
    } Construction
 
    Weapons { 
@@ -32,10 +33,10 @@ VehicleType {
       Weapon0.Ammo = 50
 
       Weapon1 ->* VehicleType.AmmoCannon 
-      Weapon1.Ammo = 50
+      Weapon1.Ammo = 70
 
       Weapon2 ->* VehicleType.AmmoLM 
-      Weapon2.Ammo = 30
+      Weapon2.Ammo = 50
 
       Weapon3 ->* VehicleType.ServiceTurret
 

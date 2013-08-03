@@ -27,11 +27,10 @@ VehicleType {
       fuel = 5000
    } Tank
    FuelConsumption = 0
-   Movement = 0 0 0 0 0 0 0 0 
    TerrainAccess ->* VehicleType.Turret_lowland 
 
    Weapons { 
-      Number = 3
+      Number = 4
       Weapon0 ->* VehicleType.Artillery 
       Weapon0.MaxRange = 50
       Weapon0.Ammo = 22
@@ -51,6 +50,8 @@ VehicleType {
       Weapon2.Ammo = 20
       Weapon2.Punch@MaxRange = 85
       Weapon2.Punch@MinRange = 85
+	  
+	  Weapon3 ->* VehicleType.MiniGun
 
    } Weapons
 } VehicleType

@@ -31,7 +31,6 @@ Er ist in der Lage mehere Drohne zuegig aufzutanken und aufzumunitionieren und s
    } Tank
 
    Weapons { 
-      Initiative = 0
       Number = 6
       Weapon0 ->* VehicleType.Minigun
       Weapon0.Ammo = 30

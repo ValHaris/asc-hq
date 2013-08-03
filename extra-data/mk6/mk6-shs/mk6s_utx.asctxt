@@ -8,18 +8,21 @@ VehicleType {
    picture = mk6s_utx.png
    WreckageObject = 436
    GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
-   Features += mine_layer mineview
+
+   Features += mine_layer mineview ExternalFuelTransfer
 
    Transportation ->* VehicleType.TransSubmarine 
 
    Tank.Material = 25000
    Tank.Fuel = 50000
    Movement += 33 33 3 0 0 0 0 0 
-   TerrainAccess ->* VehicleType.smallship_terrain 
+   TerrainAccess ->* VehicleType.verysmallship_allterrain 
 
    Construction.ObjectGroupsRemovable = 9 15
+
    Weapons { 
-      Number = 1
+      Number = 2
       Weapon0 ->* VehicleType.AntiMine
+	  Weapon1 ->* VehicleType.ServiceSpSub
    } Weapons
 } VehicleType

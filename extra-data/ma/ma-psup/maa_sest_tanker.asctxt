@@ -17,10 +17,9 @@ Als reine Serviceeinheit ist der SEST TANKER unbewaffnet und nur mäßig gepanzert
    Tank.fuel = 20000
    FuelConsumption = 30
 
-   Movement -= 0 0 0 20 10 20 0 0 
+   Movement = 0 0 0 30 150 150 0 0 
    Weight = 60
    Weapons { 
-      Initiative = 0
       Number = 1
       Weapon0 ->* VehicleType.ServiceAir 
    } Weapons

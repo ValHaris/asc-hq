@@ -23,11 +23,10 @@ VehicleType {
    Tank.Fuel += 1000
 
    Armor += 30
-   Movement = 0 0 0 30 170 180 0 0 
+   Movement = 0 0 0 30 170 170 0 0 
    FuelConsumption = 32
 
    Weapons { 
-      Initiative = 0
       Number = 2
       Weapon0 ->* VehicleType.type_cannon 
       Weapon0.MaxRange = 20

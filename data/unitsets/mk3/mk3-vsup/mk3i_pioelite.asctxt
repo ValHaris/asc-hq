@@ -25,11 +25,11 @@ VehicleType {
 
    Construction { 
       Buildings = 7 26 29 35-37
-      Vehicles = 511 572 573 574 579 617 625
+      Vehicles = 511 572 574 617 625
       Objects = 10 44 2093 2096 2097 2098
       ObjectsRemovable = 988 2097
       ObjectGroupsRemovable = 2 4 5 6 7 8 10 11 13 21
-      UnitConstructionMoveCostPercentage = 62
+      UnitConstructionMoveCostPercentage = 85
    } Construction
 
    Weapons { 

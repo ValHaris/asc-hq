@@ -15,7 +15,7 @@ Einige übliche Wasserbomben zur U-Bootbekämpfung runden das Waffenarsenal ab.
 Damit ist er hervorragend an seinen Einsatzzweck angepaßt. Leider geht dies zu Lasten seiner Verteidigungsfähigkeiten. Gegen Boden- und Lufteinheiten ist der SEST AM völlig wehrlos, was besonders bei der Anwesenheit von Tragflächenbooten und Bodeneffektfahrzeugen im Kampfgebiet fatale Konsequenzen haben kann. Die Geschwaderführer sind daher anzuweisen, stets im Verband mit entsprechenden Sicherungseinheiten zu agieren.]
 
    Armor += 20
-   Movement = 0 0 0 30 170 170 0 0 
+   Movement = 0 0 0 30 160 160 0 0 
    FuelConsumption = 30
 
     Weapons { 

@@ -11,7 +11,7 @@ Die Baukosten liegen zwar deutlich höher als beim AAL, rechnen sich aber mit der
    Picture = maa_sest_aam.pcx
 
    Armor += 30
-   Movement = 0 0 0 30 170 180 0 0 
+   Movement = 0 0 0 30 170 170 0 0 
    FuelConsumption = 30
 
    Weapons { 

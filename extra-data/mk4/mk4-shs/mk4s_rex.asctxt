@@ -24,7 +24,6 @@ VehicleType {
    } Construction
 
    Weapons { 
-      Initiative = 0
       Number = 9
       Weapon0 ->* VehicleType.ServiceGround 
 

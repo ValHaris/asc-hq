@@ -5,12 +5,12 @@ VehicleType {
    parent = 400 401 402 411
 
    Description = slow missile air defence
-   Infotext = []
+   Picture = G_patriot.pcx
    GuideSortHelp = 219 508 0 0 0 0 0 0 0 0
+   Infotext = []
 
    Armor = 300
    View = 50
-   Picture = G_patriot.pcx
    Tank { 
       Energy = 0
       Material = 0
@@ -29,7 +29,6 @@ VehicleType {
    } TerrainAccess
 
    Weapons { 
-      Initiative = 0
       Number = 1
       Weapon0 ->* VehicleType.SAMH 
       Weapon0.MaxRange = 60

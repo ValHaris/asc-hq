@@ -7,7 +7,7 @@ VehicleType {
    Infotext = []
    Picture = maa_vzt.pcx
 
-   Armor = 450
+   Armor = 500
    View = 40
 
    Transportation { 
@@ -37,8 +37,8 @@ VehicleType {
       Weapon0.MinRange = 10
       Weapon0.Ammo = 10
       Weapon0.ReactionFireShots = 2
-      Weapon0.Punch@MaxRange = 70
-      Weapon0.Punch@MinRange = 70
+      Weapon0.Punch@MaxRange = 80
+      Weapon0.Punch@MinRange = 80
       Weapon0.HitAccuracy.d1 = 80
       Weapon0.HitAccuracy.0 = 100
       Weapon0.HitAccuracy.u1 = 80

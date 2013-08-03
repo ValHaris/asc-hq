@@ -21,7 +21,6 @@ VehicleType {
    TerrainAccess ->* VehicleType.Turret_ditch
 
    Weapons { 
-      Initiative = 0
       Number = 3
       Weapon0 ->* VehicleType.BigMiniGun
       Weapon0.MaxRange = 30

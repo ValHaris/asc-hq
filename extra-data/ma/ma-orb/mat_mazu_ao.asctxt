@@ -7,7 +7,7 @@ VehicleType {
    Infotext = [die mobile Satellitenabwehr]
    Picture = mat_mazu_ao.pcx
 
-   Armor = 400
+   Armor = 450
    Weight = 200
 
    Tank { 
@@ -20,7 +20,6 @@ VehicleType {
    TerrainAccess ->* VehicleType.rail_terrain 
 
    Weapons { 
-      Initiative = 0
       Number = 2
         Weapon0 { 
          Type = laser shootable

@@ -30,7 +30,7 @@ VehicleType {
       Weapon3 ->* VehicleType.TeccEMP2
       Weapon3.MaxRange = 20
       Weapon3.Reactionfireshots = 1
-      Weapon3.Punch@MaxRange = 140
+      Weapon3.Punch@MaxRange = 150
       Weapon3.Punch@MinRange = 160
       Weapon3.Ammo = 1
    } Weapons

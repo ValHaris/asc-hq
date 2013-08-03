@@ -49,7 +49,8 @@ ID 15241 Evi
 ID 15243 Signal
 ID 15242 Devo R
 ID 15305 Deltaseacher
-ID 15444 Terminal
+ID 15244 Terminal
+ID 15249 EMPM
 
 --Jamming--
 ID 15306 Shadow
@@ -71,6 +72,8 @@ ID 15304 Debugg
 ID 15223 Married
 ID 15318 LDS
 ID 15222 RDS
+ID 14224 Agness (Air)
+ID 15322 Hannah (Ground)
 
 --SupportVehice--
 ID 15103 Cilla SV

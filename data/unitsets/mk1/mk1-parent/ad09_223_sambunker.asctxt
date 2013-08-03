@@ -16,7 +16,6 @@ VehicleType {
    TerrainAccess ->* VehicleType.Turret_lowland 
 
    Weapons { 
-      Initiative = 0
       Number = 3
       Weapon0 ->* VehicleType.SAMB 
       Weapon0.Ammo = 20

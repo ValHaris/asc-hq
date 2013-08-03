@@ -9,13 +9,14 @@ VehicleType {
 
    ConstructionCost { 
       CalculationMethod = manual
-      Energy = 80000
-      Material = 80000
+      Energy = 10000
+      Material = 10000
       fuel = 0
    } ConstructionCost
 
    Features = Sonar satelliteview MoveDuringReactionFire
-   Armor = 3500
+   Armor = 5000
+   minFieldRepairDamage = 80
    View = 150
    Jamming = 105
    Category = building|turret|object
@@ -62,8 +63,8 @@ VehicleType {
       Weapon0.LaserRechargeCost.fuel = 0
       Weapon0.MaxRange = 120
       Weapon0.MinRange = 20
-      Weapon0.Punch@MaxRange = 120
-      Weapon0.Punch@MinRange = 120
+      Weapon0.Punch@MaxRange = 130
+      Weapon0.Punch@MinRange = 130
       Weapon0.Ammo = 6
       Weapon0.ReactionFireShots = 2
 
@@ -74,8 +75,8 @@ VehicleType {
       Weapon1.LaserRechargeCost.fuel = 0
       Weapon1.MaxRange = 100
       Weapon1.MinRange = 20
-      Weapon1.Punch@MaxRange = 85
-      Weapon1.Punch@MinRange = 85
+      Weapon1.Punch@MaxRange = 100
+      Weapon1.Punch@MinRange = 100
       Weapon1.Ammo = 6
 
       Weapon2 ->* VehicleType.SOM
@@ -83,10 +84,10 @@ VehicleType {
       Weapon2.LaserRechargeRate = 1
       Weapon2.LaserRechargeCost.material = 0
       Weapon2.LaserRechargeCost.fuel = 0
-      Weapon2.MaxRange = 100
+      Weapon2.MaxRange = 120
       Weapon2.MinRange = 10
-      Weapon2.Punch@MaxRange = 90
-      Weapon2.Punch@MinRange = 90
+      Weapon2.Punch@MaxRange = 100
+      Weapon2.Punch@MinRange = 100
       Weapon2.Ammo = 5
 
       Weapon3 ->* VehicleType.Laser_gun
@@ -100,8 +101,8 @@ VehicleType {
       Weapon3.LaserRechargeCost.fuel = 0
       Weapon3.MaxRange = 30
       Weapon3.MinRange = 10
-      Weapon3.Punch@MaxRange = 75
-      Weapon3.Punch@MinRange = 75
+      Weapon3.Punch@MaxRange = 85
+      Weapon3.Punch@MinRange = 85
       Weapon3.Ammo = 10
       Weapon3.ReactionFireShots = 4
 
@@ -116,8 +117,8 @@ VehicleType {
       Weapon4.LaserRechargeCost.fuel = 0
       Weapon4.MaxRange = 50
       Weapon4.MinRange = 10
-      Weapon4.Punch@MaxRange = 65
-      Weapon4.Punch@MinRange = 65
+      Weapon4.Punch@MaxRange = 80
+      Weapon4.Punch@MinRange = 80
       Weapon4.Ammo = 10
       Weapon4.ReactionFireShots = 4
    } Weapons

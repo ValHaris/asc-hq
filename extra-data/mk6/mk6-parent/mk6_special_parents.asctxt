@@ -325,8 +325,8 @@ Plasmabomb {
          targets = floating ground_level low_level_flight medium_level_flight
          shotFrom = floating ground_level low_level_flight medium_level_flight
 	 ReactionFireShots = 2
-         Punch@MaxRange = 110
-         Punch@MinRange = 130
+         Punch@MaxRange = 130
+         Punch@MinRange = 150
          MaxRange = 30
          MinRange = 10
          Ammo = 4

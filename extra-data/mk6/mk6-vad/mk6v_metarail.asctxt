@@ -30,8 +30,8 @@ VehicleType {
       Weapon0.MinRange = 20
       Weapon0.MaxRange = 70
       Weapon0.Ammo = 3
-      Weapon0.Punch@MaxRange = 75
-      Weapon0.Punch@MinRange = 90
+      Weapon0.Punch@MaxRange = 80
+      Weapon0.Punch@MinRange = 95
 
       Weapon1 ->* VehicleType.MG45med
       Weapon1.Name = Nadel Laser System

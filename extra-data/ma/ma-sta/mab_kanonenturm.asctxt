@@ -10,8 +10,8 @@ VehicleType {
               get a lock on very small targets.]
    Picture = mab_kanonenturm.pcx
 
-   Weapons { 
-      Weapon0.Punch@MaxRange += 10
-      Weapon0.Punch@MinRange += 10
-      } Weapons
+    Weapons { 
+        Weapon0.Punch@MaxRange += 10
+        Weapon0.Punch@MinRange += 10
+    } Weapons
 } VehicleType

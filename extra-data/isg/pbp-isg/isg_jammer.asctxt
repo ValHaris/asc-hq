@@ -11,7 +11,7 @@ VehicleType {
       CalculationMethod = auto
    } ConstructionCost
 
-   Features = ManualSelfDestruct
+   Features = ManualSelfDestruct onlyTransMove
    Armor = 2000
    Weight = 6000
    View = 100

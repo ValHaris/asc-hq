@@ -8,7 +8,7 @@ VehicleType {
    Picture = sya_drus.png
 
    Features += MoveDuringReactionFire
-   Armor = 750
+   Armor = 850
    Weight = 500
    Jamming = 40
    Height = low_level_flight medium_level_flight high_level_flight orbit 
@@ -26,7 +26,9 @@ VehicleType {
    WaitForAttack = true
    Weapons { 
       Number = 2
-      Weapon0 ->* VehicleType.SY_Fighter_AD 
+      Weapon0 ->* VehicleType.SY_Fighter_AD
+	  Weapon0.Punch@MinRange = 100
+	  Weapon0.Punch@MaxRange = 90
       Weapon0.MinRange = 10
       Weapon0.MaxRange = 60
       Weapon0.ReactionFireShots = 2
@@ -34,6 +36,8 @@ VehicleType {
 
       Weapon1 ->* VehicleType.SY_Fighter_Gun 
       Weapon1 { 
+    	  Punch@MinRange = 120
+	      Punch@MaxRange = 110
          targets = floating ground_level low_level_flight medium_level_flight high_level_flight 
          MaxRange = 50
          ReactionFireShots = 1
