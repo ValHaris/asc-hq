@@ -185,8 +185,11 @@ void BuildingConquered::arm()
 
 void BuildingConquered::triggered()
 {
-   if ( isFulfilled() )
+   displayLogMessage ( 6, " EVENT: BuildingConquered::triggered for %d / %d \n", pos.x, pos.y );
+   if ( isFulfilled() ) {
+      displayLogMessage ( 6, " EVENT: BuildingConquered is fulfilled \n" );
       eventReady( gamemap );
+   }
 }
 
 

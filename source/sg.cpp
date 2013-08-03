@@ -1288,9 +1288,11 @@ bool mainloopidle( PG_MessageObject* msgObj )
       return false;
 
    if ( actmap ) {
-      while ( actmap->player[ actmap->actplayer ].queuedEvents )
+      while ( actmap->player[ actmap->actplayer ].queuedEvents ) {
+         displayLogMessage ( 6, " EVENT: queued events to be evaluated for player %d \n", actmap->actplayer );
          if ( !checkevents( actmap, &getDefaultMapDisplay() ))
             return false;
+      }
 
       checktimedevents( actmap, &getDefaultMapDisplay() );
 

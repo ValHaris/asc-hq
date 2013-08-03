@@ -33,7 +33,7 @@
 #include "typen.h"
 #include "gamemap.h"
 #include "spfst.h"
-
+#include "util/messaginghub.h"
 
 
 
@@ -234,8 +234,7 @@ void Event::execute( MapDisplayInterface* md )
 
          if ( delayedexecution.move  || delayedexecution.turn ) {
 
-            if ( gamemap.getgameparameter(cgp_debugEvents) )
-               infoMessage( "Event " + description + " timer started");
+            debugMessage( "Event " + description + " timer started", 1);
 
             triggerTime.set ( gamemap.time.turn() + delayedexecution.turn, gamemap.time.move() + delayedexecution.move - 1 );
             if ( triggerTime.move() < 0 )
@@ -263,8 +262,7 @@ void Event::execute( MapDisplayInterface* md )
          else
             status = Executed;
 
-         if ( gamemap.getgameparameter(cgp_debugEvents) )
-            infoMessage( "Event " + description + " executed");
+         debugMessage( "Event " + description + " executed", 1);
 
          executed();
 
@@ -277,6 +275,13 @@ void Event::execute( MapDisplayInterface* md )
    }
 }
 
+void Event::debugMessage( const ASCString& msg, int threshhold ) {
+   if ( gamemap.getgameparameter(cgp_debugEvents) >= threshhold  )
+      infoMessage(msg);
+
+   displayLogMessage ( 6, " EVENT: MESSAGE: " + msg + " \n" );
+}
+
 void Event::check( MapDisplayInterface* md )
 {
     if ( playerBitmap & (1 << gamemap.actplayer ))
@@ -287,31 +292,24 @@ void Event::check( MapDisplayInterface* md )
                EventTrigger::State s = (*i)->state( gamemap.actplayer );
                if ( s == EventTrigger::unfulfilled || s == EventTrigger::finally_failed ) {
                   status = Untriggered;
-
-                  if ( gamemap.getgameparameter(cgp_debugEvents) == 2 )
-                     infoMessage( "Event " + description + " / Trigger " + (*i)->getDetailledName() + ": false" );
+                  debugMessage( "Event " + description + " / Trigger " + (*i)->getDetailledName() + ": false" );
                } else
-                  if ( gamemap.getgameparameter(cgp_debugEvents) == 2 )
-                     infoMessage( "Event " + description + " / Trigger " + (*i)->getDetailledName() + ": true" );
+                  debugMessage( "Event " + description + " / Trigger " + (*i)->getDetailledName() + ": true" );
             }
          } else {
             for ( Trigger::iterator i = trigger.begin(); i != trigger.end(); i++ ) {
                EventTrigger::State s = (*i)->state( gamemap.actplayer );
                if ( s == EventTrigger::fulfilled || s == EventTrigger::finally_fulfilled ) {
                   status = Triggered;
-
-                  if ( gamemap.getgameparameter(cgp_debugEvents) == 2 )
-                     infoMessage( "Event " + description + " / Trigger " + (*i)->getDetailledName() + ": true" );
+                  debugMessage( "Event " + description + " / Trigger " + (*i)->getDetailledName() + ": true" );
                } else
-                  if ( gamemap.getgameparameter(cgp_debugEvents) == 2 )
-                     infoMessage( "Event " + description + " / Trigger " + (*i)->getDetailledName() + ": false" );
+                  debugMessage( "Event " + description + " / Trigger " + (*i)->getDetailledName() + ": false" );
 
             }
          }
 
          if ( status == Triggered )
-            if ( gamemap.getgameparameter(cgp_debugEvents) )
-               infoMessage( "Event " + description + " triggered");
+            debugMessage( "Event " + description + " triggered", 1 );
 
       }
 

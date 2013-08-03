@@ -70,6 +70,7 @@ class EventTrigger {
    private:
       State stateCache;
       bool triggerFinal;
+
    public:
       bool invert;
       //! takes the inversion into account, which getState(int) does not
@@ -115,6 +116,7 @@ class Event {
       GameMap& gamemap;
 
       void clear();
+      void debugMessage( const ASCString& msg, int threshhold = 2 );
    public:
       Event( GameMap& map_ );
       const GameMap* getMap() const { return &gamemap; };
