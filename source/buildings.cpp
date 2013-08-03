@@ -146,7 +146,7 @@ void Building :: convert ( int player, bool recursive )
 
    color = player * 8;
 
-   if ( hadViewOnMap && player < 8 )
+   if ( (hadViewOnMap && (player < 8)) || ( oldcol ==8 ) )
       addview();
 
    if ( recursive )
