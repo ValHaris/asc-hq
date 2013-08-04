@@ -42,3 +42,11 @@ Condition de victoire supplémentaire: La Crab (ravitailleur blindé) atteint la p
 Défaite supplémentaire: La Crab (ravitailleur blindé) n'y arrive pas à l'heure et les dirigeables empêchent le rendez-vous.]]
 asc.setLocalizedEventMessage( map, 1131, message )
 
+--- ===== Event 1230  ======= 
+message = [[Nous n'étions pas assez rapides. Les Zeppelins venus de partout. Bien que le croiseur et nos hélicoptères ont tout essayé, ils n'ont pas pu empêcher le feu concentré sur le cargo.
+
+«Nous coulons!"
+
+Puis tout est devenu noir.]]
+asc.setLocalizedEventMessage( map, 1230, message )
+

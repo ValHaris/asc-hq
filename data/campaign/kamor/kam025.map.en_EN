@@ -1,0 +1,52 @@
+map = asc.getLoadingMap() 
+--- ===== Event 1  ======= 
+message = [[You gave myself a break. Immediately after our successful defense of El malicious came the cry of the fleet. The Oilcompany had some ascended to fleet, but it would not be enough. The enemy was too strong.
+
+I sent everything the same as in air force what I had to offer. With transport helicopters to fleet, what should that help? Perhaps one or the other would Bumblebee can bring a torpedo to the target? Or should we give up the position back there again? We would lose the supplies by sea. It would not take long, and then also on the supply air would dry up. And the oil pumped here means also reach by air, land and water.
+
+At the same time I got a message that a transport had arrived railway vehicles. Our deadly artillery, unfortunately tied to rail? If we can somehow use it against the enemy fleet, our chances would rise.
+
+
+Win Condition: Hold it stood the enemy fleet.
+
+Defeat: The enemy fleet wins.]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== Event 634  ======= 
+message = [[A submarine? Right under our noses? It could not be? But it was true. This U-boat I have ever seen show up. It was the Clam, Clam same, which transported us back then, of which we had stormed the super platform and should follow my paratroopers commanded by then? Rambo? Head? No time to think about it more now since. We had to fight and by all means.
+
+advanced scenario:
+
+Use them to lay mines around the clam, but not lose the clam.]]
+asc.setLocalizedEventMessage( map, 634, message )
+
+--- ===== Event 636  ======= 
+message = [[A radio message came to pass.
+
+Commander Miner. This is the captain of the Nautilus. We would love to help them. Please point us to destinations.
+
+Nautilus? The voice sounded familiar, but I had not heard in a while. It was the voice of Head. In me was spinning. Even if there was any help welcome, I'd think a bone to pick with Head. But had to pluck the chicken wait, we were in the middle of a battle.
+
+advanced scenario:
+
+Take advantage of the destructive power of the Nautilus, but beware that it is not destroyed.]]
+asc.setLocalizedEventMessage( map, 636, message )
+
+--- ===== Event 659  ======= 
+message = [[Results! Sunk! Unfortunately, this was not Battleships, but a bitter reality. But we won. Again.
+
+The hatches of the good old Ariel opened and a grinning Rambo looked out.
+
+"Well, Weaselkiller, the commander of the carrier pigeon, quite a successful career. Already conquered new lands today? And if you head look, please do not kill him right away."
+
+I grinned back, but my smile was brief. The second submarine, the Nautilus was approaching and I did not know how I should behave when I would watch the man in the eye, which then sent me almost to death.
+
+And then it was time. My old commander, the defector animal, Head aka Headshot stood before me. He wore the uniform of my past. In this command structure, I would not even corporal and he was my boss. Will he now take command here and remind me of my old military rank?
+
+I doubt that the Oilcompany only partially someone else like me, as Commander would also accept.
+
+"Miner Commander," Head interrupted my stream of thought, but he saluted me. Can we discuss below 4 eyes? "
+
+"Yes, we can," I replied, and bowed formally withdrew.]]
+asc.setLocalizedEventMessage( map, 659, message )
+

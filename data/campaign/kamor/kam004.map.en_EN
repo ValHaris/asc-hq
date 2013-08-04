@@ -1,0 +1,74 @@
+map = asc.getLoadingMap() 
+--- ===== Event 1  ======= 
+message = [[Because of team spirit, because of sitting comfortably in the van and only abschnarchen times a round. The whole street to the south is full of mines and who is the only one which can do that? Of course I do!
+
+At least the two could move their fat asses and join me. No, instead they sit in the van. Whenever I watch times, they beckon me. Sometimes encouraging calls come as you do that already "Miner".
+
+Yes they call me now Miner! Weaselkiller they were too long, Rambo is also probably just as well as I kill the weasel. The Commander we now call only Head, the Ari we have baptized Else and the Van Berta. Lifts the team morale when a few women are.
+
+...
+
+
+Chain noise coming from the south, I give the warning sign. Finally, the two move times and bounce hurry out of the van.
+
+"Watch where your step!"
+
+
+Victory Condition: Continue south
+
+Defeat: Miner, Head Rambo or fall]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== Event 9  ======= 
+message = [[Head remembers that he had long ago issued a command troops in the area.
+
+1 tank, 2 Weasel, a few troopers, two stationary machine-gun and sniper he says.
+
+Damn, next to all the mines around here, so we may even overturn machine-gun nests and play targets for the sniper.
+
+We must assume the position and eliminate the sniper before the contact appears. Which contact?
+
+OK, machine-gun nests. By Ari no problem if you see it then. Where is our radar? We need air reconnaissance, such a bitch. So run there where the shots are coming from and we hope that we can turn off the machine-gun and sniper faster as the us. This is gonna hurt.]]
+asc.setLocalizedEventMessage( map, 9, message )
+
+--- ===== Event 10  ======= 
+message = [[The western solar power plant is ingested.]]
+asc.setLocalizedEventMessage( map, 10, message )
+
+--- ===== Event 11  ======= 
+message = [[The eastern solar power plant is ours.]]
+asc.setLocalizedEventMessage( map, 11, message )
+
+--- ===== Event 14  ======= 
+message = [[The Western Depot is secured.]]
+asc.setLocalizedEventMessage( map, 14, message )
+
+--- ===== Event 15  ======= 
+message = [[The eastern depot now belongs to us.]]
+asc.setLocalizedEventMessage( map, 15, message )
+
+--- ===== Event 16  ======= 
+message = [[The port is occupied. Here we can manufacture ammunition even if enough resources are available.]]
+asc.setLocalizedEventMessage( map, 16, message )
+
+--- ===== Event 20  ======= 
+message = [[
+A sniper less.]]
+asc.setLocalizedEventMessage( map, 20, message )
+
+--- ===== Event 216  ======= 
+message = [[Der Laden gehört uns und alle feindlichen Truppen in dieser Gegend sind ausgeschaltet. Hier können wir uns ausruhen und neu ausrüsten. Im Haven gab es eine Hoverwerft, aber so eine Hover ist nicht hochseetauglich, wie soll es weitergehen?
+
+...
+
+Es dauerte nicht lange und meine Frage wurde beantwortet. Das Auftauchen eines U-Bootes direkt vor der Nase ist schon recht beeindruckend. Eine Clam ist im Hafen eingelaufen.]]
+asc.setLocalizedEventMessage( map, 216, message )
+
+--- ===== Building -983043  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 3, 15 ), [[solar West]] ) 
+--- ===== Building -983047  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 7, 15 ), [[solar East]] ) 
+--- ===== Building -1310725  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 5, 20 ), [[Depot West]] ) 
+--- ===== Building -1310726  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 6, 20 ), [[Depot East]] ) 

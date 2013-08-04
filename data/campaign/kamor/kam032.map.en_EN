@@ -1,0 +1,15 @@
+map = asc.getLoadingMap() 
+--- ===== Event 1  ======= 
+message = [[At the top there was not much to see. The roof of the laboratory, a staircase, the blocked elevator, a landing site for a copter and just started Bumblebee.
+
+Professor Badra flees.]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== Event 3  ======= 
+message = [[Professor Badra escapes. The helicopter is out of reach. No chance to even catch.]]
+asc.setLocalizedEventMessage( map, 3, message )
+
+--- ===== Event 6  ======= 
+message = [[I will send a scope behind that is to find out where Professor Badra hardly visible. But I can already imagine where Badra want to go.]]
+asc.setLocalizedEventMessage( map, 6, message )
+

@@ -1,0 +1,15 @@
+map = asc.getLoadingMap() 
+--- ===== Event 1  ======= 
+message = [[Au sommet il n'y avait pas grand chose à voir. Le toit du laboratoire, un escalier, l'ascenseur bloqué, un site d'atterrissage pour un hélicoptère et a juste commencé Bumblebee.
+
+Professeur Badra fuit.]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== Event 3  ======= 
+message = [[Professeur Badra échappe. L'hélicoptère est hors de portée. Aucune chance de même attraper.]]
+asc.setLocalizedEventMessage( map, 3, message )
+
+--- ===== Event 6  ======= 
+message = [[Je vais envoyer une portée derrière qui est de savoir où le professeur Badra à peine visible. Mais je peux déjà imaginer où Badra voulez aller.]]
+asc.setLocalizedEventMessage( map, 6, message )
+

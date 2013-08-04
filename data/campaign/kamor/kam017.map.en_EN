@@ -1,0 +1,70 @@
+map = asc.getLoadingMap() 
+--- ===== Event 200  ======= 
+message = [[It was the bloodiest battle that I had ever experienced. In these mountains Snipers are just deadly. Snipers are best fought here myself with Snipers or uses Air Force. To call our Air Force as a transport helicopter, would be a bit exaggerated, but the correct use of our Bumblebee can greatly simplify the life of this region.
+
+The destroyed wreck this railgun, our scientists have taken a closer look locally. Also, this ammunition transporter. But they need to perform further research in the laboratory. We have also sent weapons this Samtroopers and Gunner to the laboratory. They should also be examined there. Research should begin with the Samtrooper! Then the Gunner?
+
+We must be quick! The road and the tracks that run east provide for us as the biggest threat. They would be to mine the one thing, but to block it would be a different matter, of much greater value. A helicopter is ready, he should invite Troopers and as far as possible follow the tracks and the road. Our bulldozers could, too? Dismantle seemed far enough away. The best so far that hostile rail artillery can not reach us.
+
+Nevertheless, it is risky mitzuschicken the bulldozer! A loss of the bulldozer we would not be so quick to replace. We could alternatively destroy the tracks with our Troopers? In turn would of bulldozers dismantle these tracks much faster, and also win more material for us.
+
+This has been another problem. Our mines and oil pumps seem to have encouraged most of the resources. The development of new resources was inevitable. For these purposes, we have a fully loaded Vesuvius again. We have also built a Surveyor. The Surveyor would hopefully find some new resources for us. Material we can win in an emergency or by the removal of disused buildings.
+
+And do not exaggerate with the same research, what good these rail artillery, when we have no resources. Our ranger was south of our oil production accounted for a forest. Again, we can gain material.
+
+But now go, the most important thing was the interruption of the rails at a sufficient distance, maybe even more?
+
+
+Victory Condition: Explore and conquer everything they discover.
+
+Defeat: Miner falls.]]
+asc.setLocalizedEventMessage( map, 200, message )
+
+--- ===== Event 549  ======= 
+message = [[Here we can stop the enemy!]]
+asc.setLocalizedEventMessage( map, 549, message )
+
+--- ===== Event 550  ======= 
+message = [[The production of our mines is getting worse, and the oil is no longer long enough.]]
+asc.setLocalizedEventMessage( map, 550, message )
+
+--- ===== Event 570  ======= 
+message = [[Fucking bunker. Tough, reach and fighting strength! Nevertheless, no problem for a rail artillery. One only has to see the bunker.
+
+In our further advance we also have the options wegzubomben the rails in sufficient distance with our Ari to impede the enemy as a possible backlash on track. Our bulldozer can repair the rails again as needed.]]
+asc.setLocalizedEventMessage( map, 570, message )
+
+--- ===== Event 571  ======= 
+message = [[That was tough until here, but these two mines no longer provide the enemy with material now.]]
+asc.setLocalizedEventMessage( map, 571, message )
+
+--- ===== Event 572  ======= 
+message = [[Depot and the weapons factory are taken. We are now at the "train".]]
+asc.setLocalizedEventMessage( map, 572, message )
+
+--- ===== Event 573  ======= 
+message = [[Small arms factory and depot in our hands. We can now also produce light tanks.]]
+asc.setLocalizedEventMessage( map, 573, message )
+
+--- ===== Event 574  ======= 
+message = [[These mines are under our control.]]
+asc.setLocalizedEventMessage( map, 574, message )
+
+--- ===== Event 575  ======= 
+message = [[Occupied port. Here no hostile speedboats longer be produced now.]]
+asc.setLocalizedEventMessage( map, 575, message )
+
+--- ===== Event 577  ======= 
+message = [[From here came the terror that is now history.]]
+asc.setLocalizedEventMessage( map, 577, message )
+
+--- ===== Event 578  ======= 
+message = [[This was the last chance for the produce here locally Troopers enemy.]]
+asc.setLocalizedEventMessage( map, 578, message )
+
+--- ===== Event 579  ======= 
+message = [[The enemy has surrendered. We won. This region should belong to us. The streets and the railroad tracks to the south are now easy to hold for us. But for opponents, so we should wait for a push further south now.
+
+I realized that had greatly improved the situation of my battalion. For the first time since Langen, we were not on the run. The conquest of this region had been hard. But it is also an important turning point of my story!]]
+asc.setLocalizedEventMessage( map, 579, message )
+

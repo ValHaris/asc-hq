@@ -1,0 +1,84 @@
+map = asc.getLoadingMap() 
+--- ===== Event 1  ======= 
+message = [[Rambo war nicht bei den Anderen. Das U-Boot sank und überall drang Wasser ein. Mit letzter Kraft, gegen die einströmenden Wassermassen kämpfend, erreichte Rambo den Schrank. Den Schrank, der ihn und später auch uns rettete.
+
+Er schnappte sich zuerst das Atemgerät und dann den Sauerstofftank. Er hatte Luft, aber das Boot sank weiter, keiner wusste, wie tief hier der Ozean sein würde. Rambo wollte nicht so lange warten, bis das Wasser die Clam zerquetschen würde. Geschwind legte er sich den Rest der Taucherausrüstung an. Atemgerät und Sauerstoff wurden schnellstens am Körper befestigt. 
+
+Zuletzt schnappte er sich noch die übliche Marinekampfausrüstung. Ein Gewehr, wozu ein Gewehr unter Wasser? Und etwas Sprengstoff.
+
+Nachdem genug Wasser in das Boot eingeströmt war, war es für Rambo wieder möglich sich im Boot zu bewegen. Aber zuerst wollte er mal raus hier. Er fand schnell einen größeren Riss im Rumpf der Clam, wo er mit Leichtigkeit die Clam verlassen konnte. Aber er bemerkte auch ein geschlossenes Schott. Bevor er sich entschied, die Clam zu verlassen, klopfte er nochmal gegen das Schott und es war kein Echo, was er dort hörte. Jemand antwortete auf sein Klopfen. Da war noch wer am Leben.
+
+Verdammt was sollte er tun. Sich selber hätte er mit Leichtigkeit retten können. Aber wie rettet man Eingeschlossene in einem sinkenden U-Boot?
+
+Bevor er darüber weitergrübeln konnte, machte es auch schon einen gewaltigen Krach und ein kräftiger Ruck ging durch das Boot. Die Clam hatte den Grund erreicht. Aber änderte das was? Er hatte nicht ewig Sauerstoff und würde selber sehr viel Sauerstoff verbrauchen, wollte er, ohne an Dekompression zu erkranken, auftauchen.
+
+Verdammt, er hatte nicht viel Zeit. Er musste sich ein Überblick verschaffen, in und außerhalb des U-Bootes. War es überhaupt möglich die anderen zu retten oder musste er sie alle im Stich lassen?
+
+
+Siegbedingung: Retten sie die Clam und ihre Besatzung.
+
+Niederlage: Sie verlieren Rambo.]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== Event 4  ======= 
+message = [[Irgendwas Ungewöhnliches war da im Süden. Es sah aus wie größere Luftblasen.]]
+asc.setLocalizedEventMessage( map, 4, message )
+
+--- ===== Event 7  ======= 
+message = [[Rambo glaubte seinen Augen nicht. Im tiefsten Ozean so etwas wie eine Höhle. Und in der Höhle musste ein Luftvorkommen sein. Von Zeit zu Zeit blubberten dort kleine Sauerstoffblasen aus der Höhle.]]
+asc.setLocalizedEventMessage( map, 7, message )
+
+--- ===== Event 8  ======= 
+message = [[Wahnsinn, Rambo konnte es nicht begreifen, aber er fand sich hier in einer riesigen unterirdischen Höhle wieder und es gab Maschinen im Süden. Und diese Maschinen waren in Betrieb.]]
+asc.setLocalizedEventMessage( map, 8, message )
+
+--- ===== Event 9  ======= 
+message = [[Hm, hier war niemand? Aber die Maschinen liefen und sie sahen gut geölt aus. Rambo untersuchte den ganzen Maschinenkomplex. Ein Teil schien für die Sauerstoffzufuhr in diesen Höhlenkomplex verantwortlich zu sein.
+
+Er müsste irgendwie die Clam nochmal notdürftig zum Laufen bringen. Irgendwie die Schiffschraube anwerfen und hoffen, dass die Clam nicht zerbricht, wenn sie über die Meeresboden kreucht. Aber wie sollte er das anstellen?]]
+asc.setLocalizedEventMessage( map, 9, message )
+
+--- ===== Event 10  ======= 
+message = [[Achtung Minen. Betreten dieser Passage auf eigene Gefahr.]]
+asc.setLocalizedEventMessage( map, 10, message )
+
+--- ===== Event 12  ======= 
+message = [["Hihihi."
+
+Rambo konnte sich gerade noch zügeln nicht abzudrücken. Ein alter Mann sprang ihn an. Der alte Mann schien total von Sinnen zu sein, aber Rambo gelang es, ihn ruhigzustellen. Mehr und mehr beruhigte sich der alte Mann. 
+
+Rambo fand heraus, das er Nemo hieß und sich vor langen hier zurückgezogen hatte. Er war Kommandant eines U-Bootes gewesen, war aber nicht mehr den Befehlen seinen Oberkommandos einverstanden. Er sollte zivile Ziele und damit auch jede Menge Frauen und Kinder mit seinem U-Boot bombardieren. Diese Last wollte er seinem Gewissen nicht zumuten und so trickste er seine Mannschaft aus und verschwand alleine mit seiner Nautilus, wie er sein U-Boot liebevoll nannte, während die Mannschaft Landgang hatte.
+
+Er fand damals dieses Höhlensystem und es war Ideal für ihn, sich hier zur Ruhe zur setzen. Er baute eine Maschine um Wasser zu dehydrieren und ernährte sich von Fischen und Algen. Sogar Pilze züchtete er hier unten in den Gängen. Er arbeitete an einen System Sauerstoff aus Wasser zu filtern.
+
+Rambo war fasziniert, aber unterbrach den alten Mann dann, um ihn über die Clam und seinen dort eingesperrten Kameraden zu informieren. Nemo war zuerst nicht begeistert, das hier noch mehr Menschen in sein Versteck eindringen sollten, aber es blieb ihm dann keine Wahl. Er hatte ein Gewissen und musste Rambo helfen, die Clam zu bergen.
+
+"Wir müssen in den anderen Gang, zur Nautilus."]]
+asc.setLocalizedEventMessage( map, 12, message )
+
+--- ===== Event 13  ======= 
+message = [[Die Nautilus! Nemo hatte sie hier her gebracht.
+
+Er hatte ein System entwickelt, womit er die Nautilus über Boden transportieren konnte. Es waren nur ein paar Räder und Achsen und ein Hebesystem, aber das reichte aus, um die Nautilus hierher zu bringen. Für die Clam würden sie noch so etwas wie ein Unterwasserantrieb brauchen, das könnte er aber schnell improvisieren. Er hatte noch Torpedos an Bord der Nautilus, da würde er einen von umfunktionieren.
+
+Alles Notwendige zur Rettung der Clam würde Rambo im Aggregatraum finden.]]
+asc.setLocalizedEventMessage( map, 13, message )
+
+--- ===== Event 23  ======= 
+message = [[Es war geschafft, die Clam war in der Höhle. Es war dann ein leichtes, sie von dort aus dem Wasser zu ziehen.
+
+Wir waren gerettet, wie durch ein Märchen. Jemand der nicht selber dabei war, würde es schwer haben, das alles zu glauben.
+
+Neptune musste damals seine schützenden Hände über uns gelegt haben, anders war das nicht zu erklären.
+
+Aber wir brauchten noch viel Zeit, um die Clan wieder voll einsatzfähig zu bekommen. Wir überredeten auch Nemo, seine Nautilus wieder in Gang zu bringen. Ich schaffte es Kontakt mit unserem Oberkommando aufzunehmen, bekam aber wenig oder gar keine Informationen über Soldat "Brieftaube". Man gab mir Anweisungen mich erstmal in Richtung Oilcompany nach Südwesten zu begeben. Diese Oilcompany schien gegen den gleichen Feind, wie wir vorzugehen. Ein Commander Miner schien dort unsere Feinde zu beschäftigen.
+
+Irgendwie ahnte ich schon, wer dieser Commander Miner war.
+
+Was für eine Geschichte, die dir Head da erzählte. Aber es gab keine Zeit weiter darüber nachzudenken, die Offensive gegen das Wüstenvolk musste zu Ende gebracht werden.]]
+asc.setLocalizedEventMessage( map, 23, message )
+
+--- ===== Building -1900548  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 4, 29 ), [[Nautika]] ) 
+--- ===== Building -2162695  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 7, 33 ), [[Nautilus Aggregatraum]] ) 

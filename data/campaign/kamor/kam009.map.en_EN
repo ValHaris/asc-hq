@@ -1,0 +1,24 @@
+map = asc.getLoadingMap() 
+--- ===== Event 1  ======= 
+message = [[I do not know how long we now stop us already in this desert, it does not stop! But the advantage of it is, we are not dogs!
+
+
+Victory Condition: Next to the south.
+
+Defeat: A hovercraft or the miner drops.]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== Event 4  ======= 
+message = [[A bulldozer, we should not destroy that could be useful for us.]]
+asc.setLocalizedEventMessage( map, 4, message )
+
+--- ===== Event 14  ======= 
+message = [[We should be careful nonetheless! Our attack on Abdul-Dan, including the tanker, which we took from there, will not remain without consequences. So keep your eyes open when we move south!]]
+asc.setLocalizedEventMessage( map, 14, message )
+
+--- ===== Event 15  ======= 
+message = [[We have Al Anf Alabab secured for our purposes. We have energy, oil and may even degrade material. Here we should pause times only to regain strength.]]
+asc.setLocalizedEventMessage( map, 15, message )
+
+--- ===== Building -2424837  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 5, 37 ), [[Al Anf Alabab]] ) 

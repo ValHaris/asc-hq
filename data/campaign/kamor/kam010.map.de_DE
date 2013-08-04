@@ -1,70 +1,74 @@
 map = asc.getLoadingMap() 
---- ===== 1  ======= 
-message = [[Hier lässt es sich Leben! Zumindest im Moment. Das Platoon hat sich von den vergangenen Strapazen recht schnell erholt. Soldaten sind halt hart im nehmen! Ich kenne die Jungs jetzt alle bei Namen und sie nennen mich Captain. Unsere beiden Hovers, Fury und Missi haben wir im Depot erstmal einer gründlichen Inspektion unterzogen. Jetzt sehen sie wieder aus wie neu. Unser Steinbeisser, wie wir den Bulldozer nennen hilft uns bei der Materialgewinnung. Die Oelstation pumpt wie wild Oel aus dem Sand und unser Solarkraftwerk liefert mehr Strom wie wir brauchen.
+--- ===== Event 1  ======= 
+message = [[Hier lässt es sich Leben! Zumindest im Moment. Das Platoon hat sich von den vergangenen Strapazen recht schnell erholt. Soldaten sind halt hart im Nehmen! Ich kenne die Jungs jetzt alle bei Namen und sie nennen mich Captain. Unsere beiden Hovers, Fury und Missi haben wir im Depot erst mal einer gründlichen Inspektion unterzogen. Jetzt sehen sie wieder aus wie neu. Unser Steinbeißer, wie wir den Bulldozer nennen hilft uns bei der Materialgewinnung. Die Ölstation pumpt wie wild Öl aus dem Sand und unser Solarkraftwerk liefert mehr Strom wie wir brauchen.
 
 ...
 
-Die Wüste ist riesengroß, vielleicht sollten wir sie erkunden? Oder lieber noch ein wenig warten? Ich denke es ist besser, wenn ich das Platoon zusammenhalte, wer weiss was hier in der Wüste rumstrauchelt? Schicke ich einzelne Scouts, haben sie draussen keine Chance, hier haben wir Munition und Ressourcen. Auch muss der Abbau im Steinbruch überwacht werden. Wir sind einfach zu wenig, als das wir uns trennen sollten. Keinen aus meinem Platoon kann ich als Scout entbehren, erstmal die nahe Gegend im Auge behalten!
+Die Wüste ist riesengroß, vielleicht sollten wir sie erkunden? Oder lieber noch ein wenig warten? Ich denke es ist besser, wenn ich das Platoon zusammenhalte, wer weiß was hier in der Wüste rumstrauchelt? Schicke ich einzelne Scouts, haben sie draußen keine Chance, hier haben wir Munition und Ressourcen. Auch muss der Abbau im Steinbruch überwacht werden. Wir sind einfach zu wenig, als das wir uns trennen sollten. Keinen aus meinem Platoon kann ich als Scout entbehren, erst mal die nahe Gegend im Auge behalten!
 
-Trotzdem würde ich gerne wissen, ob es hier draussen in der endlosen Weite der Wüste noch was anderes gibt wie Sand?
+Trotzdem würde ich gerne wissen, ob es hier draußen in der endlosen Weite der Wüste noch was anderes gibt wie Sand?
 
 
-Siegbedingung: Erforschen sie die südlichen Regionen der Karte, besonders die Flanken Südöst und Südwest. Sollten sie feindliche Gebäude finden erobern sie diese. Was sie nicht erobern können sollten sie zumindest so gründlich wie möglich begutachten (spezielles Feld betreten).
+Siegbedingung: Erforschen sie die südlichen Regionen der Karte, besonders die Flanken Südost und Südwest. Sollten sie feindliche Gebäude finden erobern sie diese. Was sie nicht erobern können sollten sie zumindest so gründlich wie möglich begutachten (spezielles Feld betreten).
 
 Niederlage: Captain Miner fällt.]]
 asc.setLocalizedEventMessage( map, 1, message )
 
---- ===== 26  ======= 
+--- ===== Event 26  ======= 
 message = [[Der Sand gibt teilweise eine Straße frei, die weiter nach Süden führt.]]
 asc.setLocalizedEventMessage( map, 26, message )
 
---- ===== 27  ======= 
+--- ===== Event 27  ======= 
 message = [[Ein erloschener Vulcan mitten in der Wüste? Der Sand der Wüste hat sich von allen Seiten an den Vulcan gepirscht, aber den Vulcan selber konnte auch der Sand nicht bezwingen. Vielleicht sollten wir ein Trooper den Krater erkunden lassen? Man kann den Krater von hier unten nicht einsehen.]]
 asc.setLocalizedEventMessage( map, 27, message )
 
---- ===== 28  ======= 
+--- ===== Event 28  ======= 
 message = [[Dieser verdammte Hurensohn von Sniper, aber wir haben ihn erledigt. Was hat er hier verloren, auf dem Krater des erloschenen Vulcans?]]
 asc.setLocalizedEventMessage( map, 28, message )
 
---- ===== 29  ======= 
+--- ===== Event 29  ======= 
 message = [[Wer hätte das gedacht. Unten im Krater befindet sich ein Zugang zu einer Art Höhlensystem. Wir sollten später ein kleines Team runterschicken und die Höhlen erkunden.
 
 Auftrag Südost erkundet abgeschlossen.]]
 asc.setLocalizedEventMessage( map, 29, message )
 
---- ===== 35  ======= 
+--- ===== Event 35  ======= 
 message = [[Angriffe aus dem Süden, unsere stärksten Waffen sind unsere Minen. Wir sollten in der Defensive bleiben.]]
 asc.setLocalizedEventMessage( map, 35, message )
 
---- ===== 36  ======= 
-message = [[Es ist zum weinen! Der Gegner könnte aus allen Richtungen kommen. Wir dürfen unsere Flanken nicht vernachlässigen! Aus Norden wird wohl nichts kommen, hoffe ich?]]
+--- ===== Event 36  ======= 
+message = [[Es ist zum Weinen! Der Gegner könnte aus allen Richtungen kommen. Wir dürfen unsere Flanken nicht vernachlässigen! Aus Norden wird wohl nichts kommen, hoffe ich?]]
 asc.setLocalizedEventMessage( map, 36, message )
 
---- ===== 37  ======= 
-message = [[Unsere Stellung ist sowas von offen, ich will fast verzweifeln! Kühlen Kopf bewaren! Noch mehr die West und Ostflanken verstärken.]]
+--- ===== Event 37  ======= 
+message = [[Unsere Stellung ist so was von offen, ich will fast verzweifeln! Kühlen Kopf bewahren! Noch mehr die West und Ostflanken verstärken.]]
 asc.setLocalizedEventMessage( map, 37, message )
 
---- ===== 38  ======= 
+--- ===== Event 38  ======= 
 message = [[Die Angriffe aus Süden haben nachgelassen. Dennoch werde ich das Gefühl nicht los, wir sind hier unbeliebt und jemand will uns vertreiben?]]
 asc.setLocalizedEventMessage( map, 38, message )
 
---- ===== 39  ======= 
-message = [[Der Sturm flaut ab! Die Angriffe werden weniger. Wir können von Glück reden, das der Angreifer nicht zeitgleich von allen Flanken angegriffen hat. Wir sollten Scouts in Richtung Südwest und Südost schicken, evtl. sogar unsere Hovers incl. ein paar Troopers. Die Strasse nach Süden sollten wir im Auge behalten. Aber wenn ich richtig vermute, werden wir im Süden am ehesten auf zu großen Wiederstand treffen? Für unsere weitere Fluchtroute schlage ich eine Kurskorektur vor! Entweder Südwest oder Südost, das sollen unsere Scoutteams rausfinden? Alles was mit Norden zu tun hat, wäre töricht!]]
+--- ===== Event 39  ======= 
+message = [[Der Sturm flaut ab! Die Angriffe werden weniger. Wir können von Glück reden, das der Angreifer nicht zeitgleich von allen Flanken angegriffen hat. Wir sollten Scouts in Richtung Südwest und Südost schicken, evtl. sogar unsere Hovers incl. ein paar Troopers. Die Straße nach Süden sollten wir im Auge behalten. Aber wenn ich richtig vermute, werden wir im Süden am ehesten auf zu großen Wiederstand treffen? Für unsere weitere Fluchtroute schlage ich eine Kurskorrektur vor! Entweder Südwest oder Südost, das sollen unsere Scout Teams rausfinden? Alles was mit Norden zu tun hat, wäre töricht!]]
 asc.setLocalizedEventMessage( map, 39, message )
 
---- ===== 40  ======= 
-message = [[Eine Stadt und eine Truppenfabrik und ein Fluss! Fluss bedeutet Leben, sogar in der Wüste. Die Stadt hat Oel, Material und Energie und produziert diese sogar. Eine nicht zu verachtende Ressource!
+--- ===== Event 40  ======= 
+message = [[Eine Stadt und eine Truppenfabrik und ein Fluss! Fluss bedeutet Leben, sogar in der Wüste. Die Stadt hat Öl, Material und Energie und produziert diese sogar. Eine nicht zu verachtende Ressource!
 
-Weiterhin haben Flüsse die Angewohnheit sich irgendwann mit dem Meer zu vereinen. Auch wenn sie sich vorher in andere Flüße oder Seen ergiessen, ist ihr finales Ziel doch immer das Meer!
+Weiterhin haben Flüsse die Angewohnheit sich irgendwann mit dem Meer zu vereinen. Auch wenn sie sich vorher in andere Flüsse oder Seen ergießen, ist ihr finales Ziel doch immer das Meer!
 
 Auftrag: Südwest erkundet erfolgreich beendet.]]
 asc.setLocalizedEventMessage( map, 40, message )
 
---- ===== 42  ======= 
+--- ===== Event 42  ======= 
 message = [[Mein Plan steht fest. Wir werden erst das Höhlensystem erforschen und dann weiter nach Hama Dalan ziehen. Weiter weg von unserem nördlichen Feind und was auch immer im Süden liegt, werden wir versuchen auszuweichen.]]
 asc.setLocalizedEventMessage( map, 42, message )
 
---- ===== 142  ======= 
+--- ===== Event 142  ======= 
 message = [[Gebäudekomplexe!]]
 asc.setLocalizedEventMessage( map, 142, message )
 
+--- ===== Building -2424855  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 23, 37 ), [[Al Anf Alabab]] ) 
+--- ===== Building -3801090  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 2, 58 ), [[Hama Dalan]] ) 

@@ -1,0 +1,33 @@
+map = asc.getLoadingMap() 
+--- ===== Event 1  ======= 
+message = [[Es waren nur wenigen Stunden nach unserer Trennung damals. Head hatte die ganze Plattform präpariert. Sprengladungen waren überall an den richtigen Stellen deponiert, um die Superplattform für immer verschwinden zu lassen.
+
+Im Hafen konnte die Crew auch noch ein paar Torpedos und Minen sicherstellen, mit der die Clam bewaffnet wurde. Dann gab Head das Kommando gen Süden.
+
+Siegbedingung: Hören sie sich die Geschichte an.
+
+Hinweis: Runde beenden]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== Event 165  ======= 
+message = [[Mit etwas Distanz zur Plattform drückte Head den Auslöser für die Sprengung.]]
+asc.setLocalizedEventMessage( map, 165, message )
+
+--- ===== Event 200  ======= 
+message = [[Es folgten weitere Explosionen, Treibstofflager gingen in Flammen auf und ganze Gebäude stürzten ein.]]
+asc.setLocalizedEventMessage( map, 200, message )
+
+--- ===== Event 227  ======= 
+message = [[Das Flammeninferno wurde zu einem riesigen Feuerspektabel.]]
+asc.setLocalizedEventMessage( map, 227, message )
+
+--- ===== Event 375  ======= 
+message = [[Dann verschwand alles in Rauch, eine riesige schwarze Nebelwand bedeckte das ganze Areal.]]
+asc.setLocalizedEventMessage( map, 375, message )
+
+--- ===== Event 473  ======= 
+message = [[Leider waren wir etwas unvorsichtig. 
+
+Während wir das ganze Spektakel vom U-Boot im aufgetauchten Zustand beobachteten, blubberte etwas im Wasser in unserer Nähe.]]
+asc.setLocalizedEventMessage( map, 473, message )
+

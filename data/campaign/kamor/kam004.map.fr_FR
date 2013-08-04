@@ -20,7 +20,15 @@ Défaite: Miner, Head ou Rambo meurent à la guerre.]]
 asc.setLocalizedEventMessage( map, 1, message )
 
 --- ===== 9  ======= 
-message = [[Je deviens fou, on ne voit presque rien. Ca semble être une Jamming Station (brouillage radar) ennemie. Est-ce que je sais, moi? Ils vont nous tirer sans que nous les voyions. Ça va faire mal.]]
+message = [[Head se souvient qu'il avait depuis longtemps émis un commander des troupes dans la région.
+
+1 réservoir, 2 Weasel, quelques soldats, deux mitrailleuses fixes et sniper dit-il.
+
+Merde, à côté de toutes les mines autour d'ici, afin que nous puissions même renverser des nids de mitrailleuses et de jouer des cibles pour le sniper.
+
+Nous devons assumer la position et éliminer le sniper avant que le contact s'affiche. Où le contact?
+
+OK, nids de mitrailleuses. Par Ari aucun problème si vous voyez là. Où est notre radar? Nous avons besoin de reconnaissance aérienne, telle une chienne. Il ya donc courir où les coups viennent et nous espérons que nous pouvons éteindre la machine-gun et plus rapide que le sniper nous. Ça va faire mal.]]
 asc.setLocalizedEventMessage( map, 9, message )
 
 --- ===== 10  ======= 

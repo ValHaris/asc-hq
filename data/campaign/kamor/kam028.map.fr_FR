@@ -1,0 +1,23 @@
+map = asc.getLoadingMap() 
+--- ===== Event 1  ======= 
+message = [[Avant que nous puissions réagir, nous avions déjà nous a attrapé une première torpille.
+
+Nous avons dû dès que possible couler le sous-marin.
+
+Condition de victoire: détruire l'ennemi, ils sous-marin.
+
+Défaite: Le sous-marin ennemi les détruit.]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== Event 20  ======= 
+message = [[Nous avons coulé le sous-marin ennemi. Mais malheureusement, encore plus de navires ennemis sont à proximité et ont immédiatement fait sûr pour nous car nous étions situés. Il avait l'air mauvais.]]
+asc.setLocalizedEventMessage( map, 20, message )
+
+--- ===== Event 23  ======= 
+message = [[Nous n'avions aucune chance. Nous avons été durement frappés et partout pénétré eau. Nous coulé. Avec ses dernières forces, nous avons essayé d'éviter l'énorme inondation. Nous avons réussi à sceller un espace où la forclusion et de se noyer immédiatement.
+
+Mais la palourde a encore diminué et nous n'avions pas plus de contrôle sur le bateau. Nous ne savions pas combien de temps l'espace insulaire serait toujours répondre à la pression accrue de l'eau et combien de temps nous aurons d'oxygène pour respirer ici.
+
+Nous n'avions pas beaucoup d'espoir que nous aurions une très longue durée de vie. Nous ne pouvions attendre et laisser faire les choses.]]
+asc.setLocalizedEventMessage( map, 23, message )
+

@@ -1,0 +1,84 @@
+map = asc.getLoadingMap() 
+--- ===== Event 1  ======= 
+message = [[Rambo n'était pas avec les autres. Le sous-marin a coulé et a pénétré l'eau partout. Avec ses dernières forces, luttant contre les masses d'eau qui s'y jettent, Rambo a atteint le placard. Le cabinet, et le plus tard nous lui avons sauvé.
+
+Il saisit le premier masque, puis le réservoir d'oxygène. Il avait l'air, mais le bateau a coulé plus loin, on ne savait pas à quelle profondeur l'océan serait ici. Rambo ne voulait pas attendre que l'eau écraserait la palourde. Il a rapidement mis sur le reste de l'équipement de plongée. Appareil respiratoire et d'oxygène ont été rapidement attachés au corps.
+
+Plus récemment, il a attrapé encore la tenue de combat de la Marine habitude. Un fusil, dont un pistolet sous l'eau? Et des explosifs.
+
+Avoir suffisamment d'eau avait coulé dans le bateau, il était possible pour Rambo à nouveau pour déplacer le bateau. Mais d'abord, il voulait sortir d'ici. Il a rapidement trouvé une large fissure dans la coque de la palourde où il pourrait laisser la palourde avec facilité. Mais il a aussi remarqué une cloison fermée. Avant, il a décidé de quitter la palourde, il frappa à nouveau contre la cloison et il n'y avait pas d'écho ce qu'il a entendu là-bas. Quelqu'un a répondu à son coup. Depuis là-bas qui était vivant.
+
+Putain ce qu'il doit faire. Lui-même aurait pu sauver avec facilité. Mais comme vous le sauvetage piégés dans un sous-marin en perdition?
+
+Avant qu'il ait pu continuer à ruminer ce sujet, il fait déjà un énorme accident et une secousse puissante allé dans le bateau. La palourde avait atteint le fond. Mais cela a changé quoi? Lui-même ne serait pas durer éternellement oxygène et consomment beaucoup d'oxygène, il voulait sans développer décompression apparaissent.
+
+Bon sang, il n'a pas eu beaucoup de temps. Il devait donner un aperçu, dans et hors du sous-marin. Est-il même possible de sauver les autres ou il devait faire tous vers le bas?
+
+
+Victoire Condition: Enregistrer la palourde elle et son équipage.
+
+Défaite: Vous perdez Rambo.]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== Event 4  ======= 
+message = [[Y at-il quelque chose d'inhabituel dans le sud. Il ressemblait à grosses bulles d'air.]]
+asc.setLocalizedEventMessage( map, 4, message )
+
+--- ===== Event 7  ======= 
+message = [[Rambo n'en croyait pas ses yeux. Dans le plus profond des océans quelque chose comme une grotte. Et dans la grotte devait être un moyens aériens. De temps en temps il y barboter petites bulles d'oxygène à partir de la grotte.]]
+asc.setLocalizedEventMessage( map, 7, message )
+
+--- ===== Event 8  ======= 
+message = [[Madness, Rambo ne pouvait pas comprendre, mais il se trouve ici dans une immense grotte à nouveau et il y avait des machines dans le sud. Et ces machines étaient en service.]]
+asc.setLocalizedEventMessage( map, 8, message )
+
+--- ===== Event 9  ======= 
+message = [[Eh bien, voici en avait pas? Mais les machines ont manqué et ils avaient l'air bien huilée. Rambo a examiné l'ensemble des machines complexes. Une partie semblait être responsable de la fourniture d'oxygène dans ces cavernes.
+
+Il serait en quelque sorte ramènerai les palourdes fortune fonctionnement. D'une certaine manière le feu de l'hélice et l'espoir que la palourde ne casse pas quand il rampe sur le fond. Mais comment pouvait-il faire cela?]]
+asc.setLocalizedEventMessage( map, 9, message )
+
+--- ===== Event 10  ======= 
+message = [[Mines d'avertissement. En entrant dans ce passage à vos propres risques.]]
+asc.setLocalizedEventMessage( map, 10, message )
+
+--- ===== Event 12  ======= 
+message = [["Hehehe. "
+
+Rambo ne put retenir lui-même il suffit de tirer sur la gâchette. Un vieil homme bondit sur lui. Le vieil homme semblait être totalement hors de son esprit, mais Rambo a réussi à le calmer. De plus en plus calmé le vieil homme
+
+Rambo a découvert que son nom était Nemo et avait pris sa retraite il ya longtemps ici. Il avait été commandant d'un sous-marin, mais n'était plus accepter les commandes son haut commandement. Il faut bombarder des cibles civiles et donc beaucoup de femmes et d'enfants avec son sous-marin. Ce fardeau, il ne s'attendait pas à sa conscience, alors il a trompé son équipe et a disparu seul avec sa Nautilus, comme il l'appelait affectueusement son sous-marin, tandis que l'équipage était à terre.
+
+Il a alors découvert ce système de grottes et c'était idéal pour lui de s'asseoir pour se reposer ici. Il a construit une machine à déshydrater l'eau et se nourrissait de poissons et algues. Même les champignons qu'il élevés ici-bas dans les allées. Il a travaillé à un atome d'oxygène pour filtrer système d'eau.
+
+Rambo était intrigué, mais interrompit le vieil homme, puis, pour l'informer de la palourde et ses camarades emprisonnés là. Nemo a été initialement pas ravie que plus de gens devraient toujours pénétrer dans la clandestinité ici, mais il lui laissait pas le choix alors. Il avait une conscience et avait besoin d'aide pour récupérer le Clam Rambo.
+
+«Nous devons faire la transition à l'autre, au Nautilus."]]
+asc.setLocalizedEventMessage( map, 12, message )
+
+--- ===== Event 13  ======= 
+message = [[Le Nautilus! Nemo avait amenée ici.
+
+Il avait développé un système par lequel il pouvait transporter le sol Nautilus. Il y avait seulement un couple des roues et des essieux, et d'un système de levage, mais c'était assez pour amener le Nautilus ici. Pour la palourde ils seraient encore besoin de quelque chose comme un disque sous l'eau, mais il ne pouvait improviser rapidement. Il avait toujours des torpilles à bord du Nautilus, car il serait réutiliser l'un des.
+
+Tout le nécessaire pour sauver la palourde trouverait Rambo dans l'espace global.]]
+asc.setLocalizedEventMessage( map, 13, message )
+
+--- ===== Event 23  ======= 
+message = [[Elle a été faite, la palourde était dans la caverne. Il était alors facile de les sortir de l'eau à partir de là.
+
+Nous avons été sauvés., Comme à travers un conte de fées Quelqu'un qui n'était pas là moi-même, il aurait du mal à croire tout cela.
+
+Neptune avait ensuite ses mains protectrices ont placé au-dessus de nous, et l'autre n'a pas pu être expliqué.
+
+Mais nous avons besoin de beaucoup de temps pour obtenir le clan de nouveau pleinement opérationnel. Nous avons également parlé de Nemo, afin de la ramener son Nautilus. J'ai réussi à prendre contact avec notre haut commandement, mais j'ai reçu peu ou pas d'informations sur Soldier "pigeon voyageur". Ils m'ont donné des instructions pour me mettre d'abord dans la direction Oilcompany au sud-ouest. Cela semblait Oilcompany contre le même ennemi que nous avançons. Un commandant Miner il semblait occuper nos ennemis.
+
+Quelque part, je savais déjà qui il était commandant Miner.
+
+Quelle histoire, la tête vous dit là-bas. Mais il n'y avait pas de temps à y penser, l'offensive contre le désert gens devaient être mis fin.]]
+asc.setLocalizedEventMessage( map, 23, message )
+
+--- ===== Building -1900548  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 4, 29 ), [[Nautika]] ) 
+--- ===== Building -2162695  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 7, 33 ), [[L'espace d'agrégat Nautilus]] ) 

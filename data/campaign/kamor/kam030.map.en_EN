@@ -1,0 +1,54 @@
+map = asc.getLoadingMap() 
+--- ===== Event 3  ======= 
+message = [[Ben Hir, such was the capital of this desert nation. In Ben Hir we would deliver the decisive blow against these desert warriors. Ben Hir was the focal point of their entire economy, the generals were sitting here, everything was coordinated.
+
+We had to get more termites and Hovers from the new country. Lots of Crazy's and a few new prototypes to combat robot that could take on Air Force.
+
+I also had a command skydivers and lots of transport helicopter.
+
+We had while even a few rail cars, but the mobility on track was not very big here. The constant desert wind burying everything that did not move immediately with sand. Just as quickly as we could lay rails, they were gone again. However, I was hoping for something by the railway artillery reinsurance.
+
+There were reports from our air reconnaissance that both enemy air associations, as well as ground troops from South moved towards Ben Hir. So we would have to act quickly and Ben Hir crowded more or less with a lightning storm.
+
+It would be a bloody battle.
+
+
+Victory Condition: she Conquer Ben Hir.
+
+Defeat: You lose Miner Commander or their invasion is repelled.
+
+Note: You should be fast, otherwise you will be flanked attack. In the first round they still get more troops as reinforcement.]]
+asc.setLocalizedEventMessage( map, 3, message )
+
+--- ===== Event 21  ======= 
+message = [[Miner Commander, this is the Captain of the scope. Enemy air formations approaching from the northeast.]]
+asc.setLocalizedEventMessage( map, 21, message )
+
+--- ===== Event 112  ======= 
+message = [[We had won. Ben Hir was now in our hands and that would also not change. The desert now belonged to us.
+
+But this victory was dearly bought, and sometimes I wish I could go back in time and do something differently in the past, so I would not be where I am now. Why must we go to war always people?
+
+As I'm in the army at that time, I did not begin to get an idea of ??how bloody the war. I knew war only from movies or games and it was never really there. But if you're standing there in the middle between and around you die your comrades, you'll eventually tired of the war.
+
+Melancholy is your companion. Short is just the cry of victory. The battle was won, but the real winner was again the death.
+
+We have much to do here in Ben Hir now. burning fires, collapsed buildings, lots of scrap geschossener together and all the dead had to be overcome.
+
+The desert people had surrendered, what could they do otherwise. Taking their Hauptquartieres I now had all the information on other raw materials and final settlements scattered in the south.
+
+But what was even more important as taking the headquarters, access to the research center here was. Because I still had to solve a puzzle.
+
+What was Genesis?]]
+asc.setLocalizedEventMessage( map, 112, message )
+
+--- ===== Event 374  ======= 
+message = [["Miner Commander, this is the Captain of the Raven. I bring material and oil, as well as vehicles for cleanup. In addition, Professor Brain sends another greeting. He managed to recreate one of these machine-gun nests."]]
+asc.setLocalizedEventMessage( map, 374, message )
+
+--- ===== Event 436  ======= 
+message = [[This is not only a depot here also material from the palm wood is apparently made.
+
+Note: The Custodian 3000 producing material each round.]]
+asc.setLocalizedEventMessage( map, 436, message )
+

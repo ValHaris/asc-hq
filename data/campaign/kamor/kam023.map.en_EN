@@ -1,0 +1,42 @@
+map = asc.getLoadingMap() 
+--- ===== Event 1  ======= 
+message = [[The rest of the trip, if you can call it anything, without complications.
+
+I had high stakes with the transportation and won, and the enemy had high stakes, with the attack and lost at sea. Maybe he would prefer to withdraw its zeppelins, and then to defend the country? But the lure to sink the crab was probably too large.
+
+The fleet has split again. A few ships are used elsewhere, for escort services. Super, would that can not wait until we land? Well, at least let us have the scope. Might be helpful.
+
+The first platforms are in sight.
+
+
+Victory Condition: El Take it harmful
+
+Defeat: The enemy manages to stop the invasion at El harmful.]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== Event 270  ======= 
+message = [[The three oil platforms are still there, but looks as if anyone here has built a few Bigguns? This could be uncomfortable? And the river delta was already packed with a mine belt, I do not think that one has cleared away in the meantime, rather the opposite will be the case.]]
+asc.setLocalizedEventMessage( map, 270, message )
+
+--- ===== Event 309  ======= 
+message = [[We had made it, damn that was hard. The capture of El harmful should be a walk, but that someone here hinstellt elite Bigguns for defense, was not planned. No time to ponder, it must go on. I immediately ordered the construction of the airport.]]
+asc.setLocalizedEventMessage( map, 309, message )
+
+--- ===== Event 349  ======= 
+message = [[Commander Miner, a crab from the new country has arrived. On board material, more termites and a greeting by Professor Brain.]]
+asc.setLocalizedEventMessage( map, 349, message )
+
+--- ===== Event 351  ======= 
+message = [[Commander Miner, our allied Oilcompany sends us another fix. You mean it might be beneficial if we create a pipeline into the interior, so as to shorten the supply routes. Even the blueprints for a gas station are on board.]]
+asc.setLocalizedEventMessage( map, 351, message )
+
+--- ===== Event 353  ======= 
+message = [[Miner Commander, we learn of the loss of their air reconnaissance. We have been assigned to you as a reserve.]]
+asc.setLocalizedEventMessage( map, 353, message )
+
+--- ===== Event 487  ======= 
+message = [[Miner Commander, Captain of the Nightcap here. We bring fuel for the scope.]]
+asc.setLocalizedEventMessage( map, 487, message )
+
+--- ===== Building -1114157  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 45, 17 ), [[El Schad]] ) 

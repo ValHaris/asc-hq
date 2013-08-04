@@ -1,5 +1,5 @@
 map = asc.getLoadingMap() 
---- ===== 1  ======= 
+--- ===== Event 1  ======= 
 message = [[Der Rest der Reise, wenn man es überhaupt so nennen kann, verlief ohne Komplikationen.
 
 Ich hatte hoch gepokert mit dem Transport und gewonnen und der Gegner hatte hoch gepokert, mit dem Angriff auf See und verloren. Vielleicht hätte er seine Zeppeline lieber zurückziehen sollen, um dann das Land zu verteidigen? Aber die Verlockung, die Crab zu versenken, war wohl zu groß.
@@ -14,27 +14,29 @@ Siegbedingung: Erobern sie El Schad
 Niederlage: Der Feind schafft es, die Invasion auf El Schad zu stoppen.]]
 asc.setLocalizedEventMessage( map, 1, message )
 
---- ===== 270  ======= 
-message = [[Die drei Oelplatformen sind immer noch vorhanden, sieht aber so aus, als wenn hier jemand ein paar Bigguns gebaut hat? Das könnte unangenehm werden? Und das Flußdelta war schon damals mit einen Minengürtel gespickt, ich denke nicht, das die einer in der Zwischenzeit weggeräumt hat, eher das Gegenteil wird der Fall sein.]]
+--- ===== Event 270  ======= 
+message = [[Die drei Ölplattformen sind immer noch vorhanden, sieht aber so aus, als wenn hier jemand ein paar Bigguns gebaut hat? Das könnte unangenehm werden? Und das Flussdelta war schon damals mit einen Minengürtel gespickt, ich denke nicht, das die einer in der Zwischenzeit weggeräumt hat, eher das Gegenteil wird der Fall sein.]]
 asc.setLocalizedEventMessage( map, 270, message )
 
---- ===== 309  ======= 
-message = [[Wir hatten es geschafft, verdammt war das hart. Die Einnahme von El Schad sollte ein Spaziergang werden, aber das hier jemand Elite-Bigguns zur Verteidigung hinstellt, war so nicht geplant. Keine Zeit zum Grübeln, es muß weitergehen. Ich habe umgehend den Bau des Flughafens befohlen.]]
+--- ===== Event 309  ======= 
+message = [[Wir hatten es geschafft, verdammt war das hart. Die Einnahme von El Schad sollte ein Spaziergang werden, aber dass hier jemand Elite-Bigguns zur Verteidigung hinstellt, war so nicht geplant. Keine Zeit zum Grübeln, es muss weitergehen. Ich habe umgehend den Bau des Flughafens befohlen.]]
 asc.setLocalizedEventMessage( map, 309, message )
 
---- ===== 349  ======= 
+--- ===== Event 349  ======= 
 message = [[Commander Miner, eine Crab aus den neuen Land ist eingetroffen. An Bord Material, weitere Termiten und ein Gruß von Professor Brain.]]
 asc.setLocalizedEventMessage( map, 349, message )
 
---- ===== 351  ======= 
+--- ===== Event 351  ======= 
 message = [[Commander Miner, unsere verbündete Oilcompany schickt uns einen weiteren Fix. Sie meinen es könnte von Vorteil sein, wenn wir eine Pipeline ins Landesinnere legen, um so die Versorgungswege zu verkürzen. Auch die Baupläne für eine Tankstelle sind an Bord.]]
 asc.setLocalizedEventMessage( map, 351, message )
 
---- ===== 353  ======= 
-message = [[Commander Miner, wird haben von den Verlust ihres Luftaufklärers erfahren. Wir sind Ihnen als Reserve zugeteilt wurden.]]
+--- ===== Event 353  ======= 
+message = [[Commander Miner, wir haben von den Verlust ihres Luftaufklärers erfahren. Wir sind Ihnen als Reserve zugeteilt wurden.]]
 asc.setLocalizedEventMessage( map, 353, message )
 
---- ===== 487  ======= 
+--- ===== Event 487  ======= 
 message = [[Commander Miner, hier Captain der Nightcap. Wir bringen Treibstoff für den Scope.]]
 asc.setLocalizedEventMessage( map, 487, message )
 
+--- ===== Building -1114157  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 45, 17 ), [[El Schad]] ) 

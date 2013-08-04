@@ -8,9 +8,9 @@ Avant de partir j'ai encore dit au revoir à mon ancien instructeur.  ""Tu étais 
 
 ...
 
-Un camion-citerne m'a passé sur le chemin.  Je ne sais pas pourquoi, mais j'avais le goût d'essayer une de mes deux mines.  Boum, c'était le feu d'artifice, il ne reste plus beaucoup du camion-citerne.  Il doit avoir été plein d'essence autant que le camion est explosé.  J'ai encore mal aux oreilles de ce boucan, mais le plaisir valait la peine.
+Un camion-citerne m'a passé sur le chemin.  Je ne sais pas pourquoi, mais j'avais le goût d'essayer mes mines.  Boum, c'était le feu d'artifice, il ne reste plus beaucoup du camion-citerne.  Il doit avoir été plein d'essence autant que le camion est explosé.  J'ai encore mal aux oreilles de ce boucan, mais le plaisir valait la peine.
 
-Même si je n'ai plus qu'une seule mine maintenant, il y a quelqu'un à quelque part qui ne recevra plus d'essence.  Ça pourrait être un avantage pour moi.  Mais je ne devrais pas passer trop de temps dans la rue et je devrais me cacher plutôt en montagne.  Mon petit feu d'artifice pourrait attirer des curieux.
+Même si j'ai maintenant moins de mines, il y a quelqu'un à quelque part qui ne recevra plus d'essence.  Ça pourrait être un avantage pour moi.  Mais je ne devrais pas passer trop de temps dans la rue et je devrais me cacher plutôt en montagne.  Mon petit feu d'artifice pourrait attirer des curieux.
 
 
 Condition de victoire: Trouvez l'homme de contact
@@ -69,11 +69,11 @@ asc.setLocalizedEventMessage( map, 43, message )
 --- ===== 44  ======= 
 message = [[Génial, c'est un Weasel (véhicule à chenilles) abandonné ou plus précisément un ancien Weasel ennemi. Il ne semble plus avoir de l'essence. Non seulement le véhicule, mais encore toute la station service ne semblent plus avoir d'essence. Je savais qu'il y a quelqu'un à quelque part qui attend le camion-citerne. C'est vraiment bien que j'ai toujours un peu d'essence avec moi. Je l'utilise parfois pour me cautériser les blessures.
 
-Je devrais mettre un peu d'essence dans le Weasel (véhicule à chenilles). A l'aide de la Jamming Station (brouillage radar) je pourrais essayer d'aller jusqu'au pont. Je vais être à portée du Biggun (tour de défense), mais le brouillage radar doit suffire.
+Je devrais mettre un peu d'essence dans le Weasel (véhicule à chenilles). A l'aide de la Jamming Station (brouillage radar) je pourrais essayer d'aller sur le pont. Je vais être à portée du Biggun (tour de défense), mais le brouillage radar doit suffire.
 
 Respirer un bon coup et rouler à fond. La rue vers le sud-est serait ma mort. Mais le Weasel (véhicule à chenilles) doit seulement me conduire à travers le barbelé. J'espère que je serai loin du Biggun (tour de défense) quand je suis dans la forêt.
 
-Ce sont deux bunkers et le Biggun (tour de défense) que le Weasel (véhicule à chenilles) doit avaler. Ce machin devrait être capable de l'enduire. Bon, se baisser et courage! Parfois il est utile de dire une prière avant.]]
+Ce sont deux MG-Nest, un bunker et le Biggun (tour de défense) que le Weasel (véhicule à chenilles) doit avaler. Ce machin devrait être capable de l'enduire. Bon, se baisser et courage! Parfois il est utile de dire une prière avant.]]
 asc.setLocalizedEventMessage( map, 44, message )
 
 --- ===== 46  ======= 
@@ -85,7 +85,7 @@ message = [[Ohé! C'est un Hovercraft!  J'en ai toujours rêvé. Je vais m'assurer 
 
 Le Hover ne va pas être capable d'y entrer. Il faudra traîner les bidons à la main, mais ce n'est pas de problème. L'essence suffira peut-être ensuite pour s'avancer en mer.
 
-Mais je ne devrais pas gaspiller tant du peu d'essence et choisir ma route soigneusement. Et toujours rester hors de portée du Biggun (tour de défense)! Il faudra passer devant un bunker, mais je pense que ce ne sera pas un problème. La meilleure solution est de choisir un bunker qui n'est pas tellement détruit. 
+Mais je ne devrais pas gaspiller tant du peu d'essence et choisir ma route soigneusement. Et toujours rester hors de portée du Biggun (tour de défense)! Il faudra passer devant un MG-Nest, mais je pense que ce ne sera pas un problème. La meilleure solution est de choisir un MG-Nest qui n'est pas tellement détruit. 
 
 Allons-y! ;-)]]
 asc.setLocalizedEventMessage( map, 47, message )

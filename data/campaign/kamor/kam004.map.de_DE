@@ -1,10 +1,10 @@
 map = asc.getLoadingMap() 
---- ===== 1  ======= 
-message = [[Von wegen Teamgeist, von wegen bequem im Transporter sitzen und erstmal ne Runde abschnarchen. Die ganze Strasse nach Süden ist voller Minen und wer ist hier der Einzige, der damit klarkommt? Natürlich ich!
+--- ===== Event 1  ======= 
+message = [[Von wegen Teamgeist, von wegen bequem im Transporter sitzen und erst mal eine Runde abschnarchen. Die ganze Straße nach Süden ist voller Minen und wer ist hier der Einzige, der damit klarkommt? Natürlich ich!
 
 Wenigstens könnten die Beiden ihre fetten Ärsche bewegen und sich zu mir gesellen. Ne, statt dessen hocken sie im Van. Immer wenn ich mal gucke, winken sie mir. Manchmal kommen aufmunternde Rufe, wie du machst das schon "Miner".
 
-Ja sie nennen mich jetzt Miner! Weaselkiller fanden sie zu lang, ausserdem ist Rambo wohl genauso gut im Weasel killen wie ich. Den Commander nennen wir jetzt nur noch Head, die Ari habe wir Else getauft und den Van Berta. Hebt die Teammoral, wenn ein paar Frauen dabei sind.
+Ja sie nennen mich jetzt Miner! Weaselkiller fanden sie zu lang, außerdem ist Rambo wohl genauso gut im Weasel killen wie ich. Den Commander nennen wir jetzt nur noch Head, die Ari habe wir Else getauft und den Van Berta. Hebt die Teammoral, wenn ein paar Frauen dabei sind.
 
 ...
 
@@ -19,55 +19,43 @@ Siegbedingung: Weiter nach Süden
 Niederlage: Miner, Head oder Rambo fallen]]
 asc.setLocalizedEventMessage( map, 1, message )
 
---- ===== 9  ======= 
-message = [[Das ist zum verückt werden, man sieht fast gar nichts. Sieht nach einer feindlichen Jammingstation aus, oder weiss der Geier was? Sie werden auf uns schiessen, ohne das wir sie sehen. Das wird wehtun.]]
+--- ===== Event 9  ======= 
+message = [[Head erinnert sich, das er vor längeren einen Truppenbefehl in diese Gegend ausgestellt hatte.
+
+1 Panzer, 2 Weasel, ein paar Trooper, zwei stationäre MG-Nester und Sniper sagt er.
+
+Verdammt, neben den ganzen Minen hier in der Gegend dürfen wir also auch noch MG-Nester aushebeln und Zielscheiben für die Sniper spielen.
+
+Wir müssen die Stellung einnehmen und die Sniper eliminieren, bevor der Kontakt auftaucht. Welcher Kontakt?
+
+OK, MG-Nester. Mit der Ari kein Problem, wenn man sie denn sieht. Wo ist unser Radar? Wir brauchen Luftaufklärung, so ein Mist. Also dort hinrennen, wo die Schüsse herkommen und hoffen, dass wir die MG-Nester und Sniper schneller ausschalten können, wie die uns. Das wird wehtun.]]
 asc.setLocalizedEventMessage( map, 9, message )
 
---- ===== 10  ======= 
+--- ===== Event 10  ======= 
 message = [[Das westliche Solarkraftwerk ist eingenommen.]]
 asc.setLocalizedEventMessage( map, 10, message )
 
---- ===== 11  ======= 
+--- ===== Event 11  ======= 
 message = [[Das östliche Solarkraftwerk ist unser.]]
 asc.setLocalizedEventMessage( map, 11, message )
 
---- ===== 12  ======= 
-message = [[Sniper, überall Sniper!]]
-asc.setLocalizedEventMessage( map, 12, message )
-
---- ===== 13  ======= 
-message = [[Jetzt jammen wir!]]
-asc.setLocalizedEventMessage( map, 13, message )
-
---- ===== 14  ======= 
+--- ===== Event 14  ======= 
 message = [[Das westliche Depot ist gesichert.]]
 asc.setLocalizedEventMessage( map, 14, message )
 
---- ===== 15  ======= 
+--- ===== Event 15  ======= 
 message = [[Das östliche Depot gehört nun uns.]]
 asc.setLocalizedEventMessage( map, 15, message )
 
---- ===== 16  ======= 
+--- ===== Event 16  ======= 
 message = [[Der Hafen ist eingenommen. Hier können wir sogar Munition herstellen, wenn genug Ressourcen vorhanden sind.]]
 asc.setLocalizedEventMessage( map, 16, message )
 
---- ===== 17  ======= 
-message = [[Bum, kaputt ist er.]]
-asc.setLocalizedEventMessage( map, 17, message )
-
---- ===== 18  ======= 
-message = [[Ein Fall für die Schrottpresse.]]
-asc.setLocalizedEventMessage( map, 18, message )
-
---- ===== 19  ======= 
-message = [[War das ein Panzer?]]
-asc.setLocalizedEventMessage( map, 19, message )
-
---- ===== 20  ======= 
+--- ===== Event 20  ======= 
 message = [[Ein Sniper weniger.]]
 asc.setLocalizedEventMessage( map, 20, message )
 
---- ===== 216  ======= 
+--- ===== Event 216  ======= 
 message = [[Der Laden gehört uns und alle feindlichen Truppen in dieser Gegend sind ausgeschaltet. Hier können wir uns ausruhen und neu ausrüsten. Im Haven gab es eine Hoverwerft, aber so eine Hover ist nicht hochseetauglich, wie soll es weitergehen?
 
 ...
@@ -75,3 +63,11 @@ message = [[Der Laden gehört uns und alle feindlichen Truppen in dieser Gegend s
 Es dauerte nicht lange und meine Frage wurde beantwortet. Das Auftauchen eines U-Bootes direkt vor der Nase ist schon recht beeindruckend. Eine Clam ist im Hafen eingelaufen.]]
 asc.setLocalizedEventMessage( map, 216, message )
 
+--- ===== Building -983043  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 3, 15 ), [[Solar West]] ) 
+--- ===== Building -983047  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 7, 15 ), [[Solar Ost]] ) 
+--- ===== Building -1310725  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 5, 20 ), [[Depot West]] ) 
+--- ===== Building -1310726  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 6, 20 ), [[Depot Ost]] ) 

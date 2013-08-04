@@ -1,0 +1,70 @@
+map = asc.getLoadingMap() 
+--- ===== Event 200  ======= 
+message = [[Before us is an enemy depot. We need a shelter and maybe we can find something helpful in this vault?
+
+
+Victory Condition: Explore and conquer, what they can.
+
+Defeat: Miner, one of the two Hovers, the bulldozers, tankers, Vesuvius or Ranger destroyed. Beware especially on the dilapidated ranger.]]
+asc.setLocalizedEventMessage( map, 200, message )
+
+--- ===== Event 262  ======= 
+message = [[The depot is empty except for an ammunition box filled with guns and sniper ammunition. Something.]]
+asc.setLocalizedEventMessage( map, 262, message )
+
+--- ===== Event 296  ======= 
+message = [[This mine seems to be very rich in ore! With enough energy we get a lot of material here.]]
+asc.setLocalizedEventMessage( map, 296, message )
+
+--- ===== Event 297  ======= 
+message = [[Very beautiful! Two wind power plants in our hands.]]
+asc.setLocalizedEventMessage( map, 297, message )
+
+--- ===== Event 298  ======= 
+message = [[Is scrap! Hopefully there is not here any more of those?]]
+asc.setLocalizedEventMessage( map, 298, message )
+
+--- ===== Event 299  ======= 
+message = [[Depot and barracks are occupied. These buildings must be maintained. With enough energy we can train more snipers.
+
+In a sign of snow here helipad can be seen. This brings me to an idea that we should build yourself helicopter.
+
+We need a research center, where we can analyze the enemy transport helicopters and an airport where we can build the helicopter. We need space for two buildings in the mountains. The south of the airport, we can build helipad, but the research laboratory, we need a little more space.]]
+asc.setLocalizedEventMessage( map, 299, message )
+
+--- ===== Event 300  ======= 
+message = [[Fill her up please! And thanks for providing us with oil for the pipeline.]]
+asc.setLocalizedEventMessage( map, 300, message )
+
+--- ===== Event 301  ======= 
+message = [[And even more oil. These two oil rigs are in our hands.]]
+asc.setLocalizedEventMessage( map, 301, message )
+
+--- ===== Event 302  ======= 
+message = [[I call this wind! Four wind power plants in our power.]]
+asc.setLocalizedEventMessage( map, 302, message )
+
+--- ===== Event 303  ======= 
+message = [[What a cannon on rails! But it is now scrap. Once you're near it, this track is no more enemy artillery.]]
+asc.setLocalizedEventMessage( map, 303, message )
+
+--- ===== Event 304  ======= 
+message = [[Enemy machine-gun nest eliminated.]]
+asc.setLocalizedEventMessage( map, 304, message )
+
+--- ===== Event 305  ======= 
+message = [[Two other works of mine, the Custodian and the small car factory are in our hands.]]
+asc.setLocalizedEventMessage( map, 305, message )
+
+--- ===== Event 306  ======= 
+message = [[These three wind power plants are under our control. Now we have wind energy in abundance.]]
+asc.setLocalizedEventMessage( map, 306, message )
+
+--- ===== Event 307  ======= 
+message = [[We won. The enemy has surrendered. At least here. Now we have to think, what to do next? In the small car factory, we can build a Surveyor, a vehicle for the resource search. Could be useful.]]
+asc.setLocalizedEventMessage( map, 307, message )
+
+--- ===== Event 360  ======= 
+message = [[Is done! But we should expect the worst, lots of enemy sniper! We must proceed with extreme caution, we can not afford any losses, let alone the loss of our elite sniper! Without them we have no chance here.]]
+asc.setLocalizedEventMessage( map, 360, message )
+

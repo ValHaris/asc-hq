@@ -1,42 +1,48 @@
 map = asc.getLoadingMap() 
---- ===== 1  ======= 
+--- ===== Event 1  ======= 
 message = [[Die Stellung in Al Anf Alabab haben wir aufgegeben, kein Material dort und einfach zu schwer zu verteidigen. Hier haben wir ein wenig Ressourcen und der Fluss selber kann auch strategisch genutzt werden.
 
-Ich habe Anweisung gegeben Süd zu verminen. Wir müssen mit weiteren Angriffen aus südlicher Richtung rechnen. Meine Elitetroopers sind umgerüstet. Einige auf Scharfschütze, die Anderen haben sich einen Raketenwerfer geschnappt. Das Minenlegen können wir auch den neuen Rekruten überlassen.
+Ich habe Anweisung gegeben Süd zu verminen. Wir müssen mit weiteren Angriffen aus südlicher Richtung rechnen. Meine Elitetroopers sind umgerüstet. Einige auf Scharfschütze, die anderen haben sich einen Raketenwerfer geschnappt. Das Minenlegen können wir auch den neuen Rekruten überlassen.
 
 Die Hovers sind voll mit Sprit und bereit den Fluss zu erkunden.
 
 
-Siegbedingung: Schlagen sie sich am Fluß. Erobern sie die Bereiche, die sie durchquerren müssen.
+Siegbedingung: Schlagen sie sich am Fluss durch. Erobern sie die Bereiche, die sie durchqueren müssen.
 
 Niederlage: Captain Miner fällt.]]
 asc.setLocalizedEventMessage( map, 1, message )
 
---- ===== 74  ======= 
+--- ===== Event 74  ======= 
 message = [[Die Stadt ist unser. Der Fluss ändert von hier seine Richtung mehr in Richtung Süden. Wir können in dieser Stadt unser Platoon mit Material und Treibstoff versorgen. Was wir hier nicht haben ist Munition! Dies sollten wir berücksichtigen.
 
-Es wäre schlecht, wenn wir im Süden auf noch mehr Widerstand stossen und stehen auf einmal ohne Munition da.
+Es wäre schlecht, wenn wir im Süden auf noch mehr Widerstand stoßen und stehen auf einmal ohne Munition da.
 
 Auch eine Idee wert, wäre die beiden Städte mit einer Pipeline zu verbinden? Dadurch erhöhen wir sowohl Gesamtlagerkapazität, wie auch unsere Produktion in der Kaserne.]]
 asc.setLocalizedEventMessage( map, 74, message )
 
---- ===== 92  ======= 
+--- ===== Event 92  ======= 
 message = [[Die drei Solarkraftwerke gehören uns.]]
 asc.setLocalizedEventMessage( map, 92, message )
 
---- ===== 93  ======= 
+--- ===== Event 93  ======= 
 message = [[Ein Hafen in der Wüste, wer hätte das gedacht? Hier gibt es Trockendocks für Hovers und Speedboote.]]
 asc.setLocalizedEventMessage( map, 93, message )
 
---- ===== 94  ======= 
+--- ===== Event 94  ======= 
 message = [[Von dieser Tankanlage führt eine riesige Pipeline nach Südost.]]
 asc.setLocalizedEventMessage( map, 94, message )
 
---- ===== 96  ======= 
+--- ===== Event 96  ======= 
 message = [[Das scheint hier der letzte Sniper gewesen zu sein?]]
 asc.setLocalizedEventMessage( map, 96, message )
 
---- ===== 97  ======= 
-message = [[Die Gegend ist unser. Ein See mitten in der Wüste. Unser Fluss zieht von hier weiter nach Westen. Im Hafen können wir Speedboote bauen, evtl. wären ein oder zwei Speedboote einen kurzen Zwischenstop wert?]]
+--- ===== Event 97  ======= 
+message = [[Die Gegend ist unser. Ein See mitten in der Wüste. Unser Fluss zieht von hier weiter nach Westen. Im Hafen können wir Speedboote bauen, evtl. wären ein oder zwei Speedboote einen kurzen Zwischenstopp wert?]]
 asc.setLocalizedEventMessage( map, 97, message )
 
+--- ===== Building -655386  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 26, 10 ), [[Hama Dalan]] ) 
+--- ===== Building -917518  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 14, 14 ), [[Dana]] ) 
+--- ===== Building -3080197  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 5, 47 ), [[El Schad]] ) 

@@ -1,5 +1,5 @@
 map = asc.getLoadingMap() 
---- ===== 200  ======= 
+--- ===== Event 200  ======= 
 message = [[Vor uns liegt ein feindliches Depot. Wir brauchen einen Unterschlupf und evtl. finden wir in diesem Depot etwas Hilfreiches?
 
 
@@ -8,23 +8,23 @@ Siegbedingung: Erkunden und erobern sie, was sie können.
 Niederlage: Miner, einer der beiden Hovers, der Bulldozer, Tankwagen, Vesuvius oder Ranger werden zerstört. Passen sie besonders auf den schrottreifen Ranger auf.]]
 asc.setLocalizedEventMessage( map, 200, message )
 
---- ===== 262  ======= 
-message = [[Das Depot ist leer, bis auf eine Munitionkiste, gefüllt mit MG und Sniper Munition. Immerhin etwas.]]
+--- ===== Event 262  ======= 
+message = [[Das Depot ist leer, bis auf eine Munitionskiste, gefüllt mit MG und Sniper Munition. Immerhin etwas.]]
 asc.setLocalizedEventMessage( map, 262, message )
 
---- ===== 296  ======= 
+--- ===== Event 296  ======= 
 message = [[Diese Mine scheint sehr reichhaltig an Erz zu sein! Mit genügend Energieversorgung bekommen wir hier jede Menge Material.]]
 asc.setLocalizedEventMessage( map, 296, message )
 
---- ===== 297  ======= 
+--- ===== Event 297  ======= 
 message = [[Sehr schön! Zwei Windkraftwerke in unserer Hand.]]
 asc.setLocalizedEventMessage( map, 297, message )
 
---- ===== 298  ======= 
+--- ===== Event 298  ======= 
 message = [[Der ist Schrott! Hoffentlich gibt es hier nicht noch mehr von denen?]]
 asc.setLocalizedEventMessage( map, 298, message )
 
---- ===== 299  ======= 
+--- ===== Event 299  ======= 
 message = [[Depot und Kaserne sind eingenommen. Diese Gebäude müssen gehalten werden. Mit genügend Energieversorgung können wir weitere Snipers ausbilden.
 
 Im Schnee hier sind Zeichen eines Hubschrauberlandeplatzes zu erkennen. Das bringt mich auf eine Idee, wir sollten selber Hubschrauber bauen.
@@ -32,39 +32,39 @@ Im Schnee hier sind Zeichen eines Hubschrauberlandeplatzes zu erkennen. Das brin
 Wir brauchen ein Forschungszentrum, wo wir den feindlichen Transporthubschrauber analysieren können und einen Flughafen, wo wir den Hubschrauber bauen können. Wir brauchen Platz für zwei Gebäude in den Bergen. Den Flughafen können wir südlich des Hubschrauberlandeplatzes bauen, aber für das Forschungslabor brauchen wir etwas mehr Platz.]]
 asc.setLocalizedEventMessage( map, 299, message )
 
---- ===== 300  ======= 
-message = [[Einmal volltanken bitte! Und danke für die Pipeline die uns mit Oel versorgt.]]
+--- ===== Event 300  ======= 
+message = [[Einmal volltanken bitte! Und danke für die Pipeline die uns mit Öl versorgt.]]
 asc.setLocalizedEventMessage( map, 300, message )
 
---- ===== 301  ======= 
-message = [[Und noch mehr Oel. Auch diese beiden Oelförderanlagen sind in unserer Hand.]]
+--- ===== Event 301  ======= 
+message = [[Und noch mehr Öl. Auch diese beiden Ölförderanlagen sind in unserer Hand.]]
 asc.setLocalizedEventMessage( map, 301, message )
 
---- ===== 302  ======= 
+--- ===== Event 302  ======= 
 message = [[Das nenne ich Windkraft! Vier Windkraftwerke in unserer Gewalt.]]
 asc.setLocalizedEventMessage( map, 302, message )
 
---- ===== 303  ======= 
-message = [[Was für eine Kanone auf Schienen! Doch ist sie jetzt Schrott. Wenn man erstmal nah dran ist, ist diese Schienenartilerie kein Gegner mehr.]]
+--- ===== Event 303  ======= 
+message = [[Was für eine Kanone auf Schienen! Doch ist sie jetzt Schrott. Wenn man erst mal nah dran ist, ist diese Schienenartillerie kein Gegner mehr.]]
 asc.setLocalizedEventMessage( map, 303, message )
 
---- ===== 304  ======= 
-message = [[Feindliches MG-Nest eleminiert.]]
+--- ===== Event 304  ======= 
+message = [[Feindliches MG-Nest eliminiert.]]
 asc.setLocalizedEventMessage( map, 304, message )
 
---- ===== 305  ======= 
+--- ===== Event 305  ======= 
 message = [[Zwei weitere Minenwerke, das Depot und die kleine Fahrzeugfabrik sind in unserer Hand.]]
 asc.setLocalizedEventMessage( map, 305, message )
 
---- ===== 306  ======= 
-message = [[Auch diese drei Windkraftwerke sind unter unserer Kontrolle. Jetzt haben wir Windenergie im Ueberfluß.]]
+--- ===== Event 306  ======= 
+message = [[Auch diese drei Windkraftwerke sind unter unserer Kontrolle. Jetzt haben wir Windenergie im Überfluss.]]
 asc.setLocalizedEventMessage( map, 306, message )
 
---- ===== 307  ======= 
+--- ===== Event 307  ======= 
 message = [[Wir haben gewonnen. Der Feind hat kapituliert. Zumindest hier. Jetzt müssen wir uns Gedanken machen, wie es weitergeht? In der kleinen Fahrzeugfabrik können wir einen Surveyor bauen, ein Fahrzeug für die Ressourcensuche. Könnte nützlich sein.]]
 asc.setLocalizedEventMessage( map, 307, message )
 
---- ===== 360  ======= 
-message = [[Der ist erledigt! Doch sollten wir mit dem schlimmsten rechnen, jede Menge Feindsniper! Wir müssen mit äusserster Vorsicht vorgehen, wir können uns keine Verluste leisten und schon gar nicht den Verlust unserer Elitesniper! Ohne sie haben wir hier keine Chance.]]
+--- ===== Event 360  ======= 
+message = [[Der ist erledigt! Doch sollten wir mit dem schlimmsten rechnen, jede Menge Feindsniper! Wir müssen mit äußerster Vorsicht vorgehen, wir können uns keine Verluste leisten und schon gar nicht den Verlust unserer Elitesniper! Ohne sie haben wir hier keine Chance.]]
 asc.setLocalizedEventMessage( map, 360, message )
 

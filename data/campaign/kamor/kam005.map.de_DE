@@ -1,12 +1,12 @@
 map = asc.getLoadingMap() 
---- ===== 1  ======= 
+--- ===== Event 1  ======= 
 message = [[Wir haben Else in die Clam verladen, die dicke Berta war leider zu dick, die konnten wir nicht mitnehmen. Wir haben sie aber doch mitgenommen! Treibstoff und Material von der Berta sind jetzt an Bord dieses U-Bootes, die Berta selber haben wir liebevoll zerlegt und in ihre tausend Einzelteile auf das U-Boot verladen. Wir überlassen das arme Mädel doch nicht den Feind.
 
-Ausserdem haben wir die Zeit im Hafen genutzt, um dort ein wenig Ersatzmunition herzustellen, die auch verladen an Bord unserer Ariel ist. Ja so heisst unser U-Boot jetzt! Ariel die Meerjungfrau!
+Außerdem haben wir die Zeit im Hafen genutzt, um dort ein wenig Ersatzmunition herzustellen, die auch verladen an Bord unserer Ariel ist. Ja so heißt unser U-Boot jetzt! Ariel die Meerjungfrau!
 
-Ich habe keine Ahnung, wo uns unsere Reise nun hinführen wird? Auch wenn ich mit Head jetzt schon mehr wie eine Schlacht geschlagen habe, gibt es immer noch bescheidene Informationen von ihm. Selbst dem Captain hat er nur sehr kurze Anweisungen gegeben. Auf jedenfall muss unter den Papieren, die ich Head gebracht habe, ein Dokument dabei gewesen sein, das dem Captain zu bedingungslosen Gehorsam veranlasst hat.
+Ich habe keine Ahnung, wo uns unsere Reise nun hinführen wird? Auch wenn ich mit Head jetzt schon mehr wie eine Schlacht geschlagen habe, gibt es immer noch bescheidene Informationen von ihm. Selbst dem Captain hat er nur sehr kurze Anweisungen gegeben. Auf jeden Fall muss unter den Papieren, die ich Head gebracht habe, ein Dokument dabei gewesen sein, das dem Captain zu bedingungslosen Gehorsam veranlasst hat.
 
-Die Reise soll lang werden, weiter Richtung Süden? Hätte nie gedacht, jemals auf einem U-Boot zu landen. Ich werde die Zeit nutzen, um wieder ein wenig zu Kräften zu kommen und wann immer ich kann, werde ich ne Mütze Schlaf nehmen.
+Die Reise soll lang werden, weiter Richtung Süden? Hätte nie gedacht, jemals auf einem U-Boot zu landen. Ich werde die Zeit nutzen, um wieder ein wenig zu Kräften zu kommen und wann immer ich kann, werde ich eine Mütze Schlaf nehmen.
 
 
 Siegbedingung: Dringen sie weiter nach Süden vor.
@@ -14,25 +14,25 @@ Siegbedingung: Dringen sie weiter nach Süden vor.
 Niederlage: Ihr U-Boot wird vernichtet.]]
 asc.setLocalizedEventMessage( map, 1, message )
 
---- ===== 3  ======= 
-message = [[Schlachtkreuzer! Wir können von Glück sagen, das wir unter Wasser reisen, wenn wir auftauchen sind wir tot.
+--- ===== Event 3  ======= 
+message = [[Schlachtkreuzer! Wir können von Glück sagen, dass wir unter Wasser reisen, wenn wir auftauchen sind wir tot.
 
 Wird nicht leicht. Wir müssen sehr knapp unter der Oberfläche manövrieren. Dem Sonar nach gibt es eine Passage knapp unter Wasser, außer Reichweite der Kreuzer. Die sollten wir nehmen.]]
 asc.setLocalizedEventMessage( map, 3, message )
 
---- ===== 10  ======= 
+--- ===== Event 10  ======= 
 message = [[Wir nähern uns den Riffen!]]
 asc.setLocalizedEventMessage( map, 10, message )
 
---- ===== 14  ======= 
-message = [[Verdammt Speedboote! Und davon garantiert mehr wie eins. Wir sollten bloss unten bleiben.]]
+--- ===== Event 14  ======= 
+message = [[Verdammt Speedboote! Und davon garantiert mehr wie eins. Wir sollten bloß unten bleiben.]]
 asc.setLocalizedEventMessage( map, 14, message )
 
---- ===== 15  ======= 
+--- ===== Event 15  ======= 
 message = [[Hier ist Ende unserer Unterwasserfahrt. Die Speedboote werden sich freuen mit uns ein wenig spielen zu dürfen. Trotzdem irgendwie müssen wir hier durch. Vielleicht gibt es im Riff ein paar Stellen, wo wir wieder abtauchen können?]]
 asc.setLocalizedEventMessage( map, 15, message )
 
---- ===== 16  ======= 
-message = [[Wir haben es geschafft! Unsere Reise kann nun weitergehen. Richtung Süden. Zeit für ne Mütze Schlaf.]]
+--- ===== Event 16  ======= 
+message = [[Wir haben es geschafft! Unsere Reise kann nun weitergehen. Richtung Süden. Zeit für eine Mütze Schlaf.]]
 asc.setLocalizedEventMessage( map, 16, message )
 

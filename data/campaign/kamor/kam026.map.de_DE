@@ -1,0 +1,13 @@
+map = asc.getLoadingMap() 
+--- ===== Event 1  ======= 
+message = [[Nachdem klar war, das Head mir nicht meine Funktion als Commander streitig machen wollte und ich meinem Gram überwunden hatte, weil er mich "damals" fast in den Tod geschickt hat, fingen wir an uns gegenseitig auszutauschen, was den so alles passiert war inzwischen.
+
+Ich erzählte ihm die ganze Geschichte, von unserer Flucht in die Wüste, wie wir das erste Mal auf das Wüstenvolk trafen, von dem Vulcan in der Wüste und unsere weitere Flucht auch vor dem Wüstenvolk, wie ich das erste Mal auf die Oilcompany traf, welche uns ins neue Land führte.
+
+Head schmunzelte, wie ich ihm von dem eingefrorenen Zerstörer im neuen Land erzählte, und wie wir diesen Zerstörer dann mit Infanterieraketen bekämpften. Ich erzählte wie wir im neuen Land weiter fliehen mussten, weg von der Küste ins Inland und dann von der großen Schlacht in den Bergen, überall Schnee und selbst die besten Sniper nur mit geringen Sichtweiten. Ich erzählte, wie ich an den Punkt kam, wo ich das erste Mal die Stärke hatte zu kämpfen, wo wir nicht mehr fliehen mussten, wo wir anfingen zurückzuschlagen und selbst zu erobern. Unser Eroberungsfeldzug, der Schienenkrieg und die Kapitulation unseres Feindes im neuen Land. Mein Agreement mit der Oilcompany, der Überraschungsangriff des hiesigen Wüstenvolkes auf unseren Forschungskomplex, weil wir wohl eine Akte mit deren Technologie aus dem Vulkan entwendet hatten. Von "Genesis" erzählte ich aber nichts, stattdessen redete ich von dem Prototypen des Kampfroboters, der mir und meinen Jungs damals den Arsch rettete. Mein Entschluss diesen Übergriff des Wüstenvolkes zu kontern mit einer Blitzinvasion, unseren riskanten Seetransport, die Rückeroberung dieser Ölplattformen, die Invasion auf El Schad dem Konterangriff, einschließlich dieses Seegefechtes, wo Head selber dabei war.
+
+Head staunte nicht schlecht, seine Geschichte war nicht so lang, aber nicht weniger spektakulär.
+
+Er fing an sie mir zu erzählen.]]
+asc.setLocalizedEventMessage( map, 1, message )
+

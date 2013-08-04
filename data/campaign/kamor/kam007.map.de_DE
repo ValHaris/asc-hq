@@ -1,34 +1,34 @@
 map = asc.getLoadingMap() 
---- ===== 1  ======= 
-message = [[Die braucht ihr, hat der Captain gesagt! Und hat uns dann die Fallschirme in die Hand gedrückt? Wir werden keine Landebahn finden. Wer kämpfen will muss vorher springen!
+--- ===== Event 1  ======= 
+message = [[Die braucht ihr, hat der Captain gesagt, und hat uns dann die Fallschirme in die Hand gedrückt? Wir werden keine Landebahn finden. Wer kämpfen will muss vorher springen!
 
-Wer will kämpfen, wer will springen? Das darf nicht war sein! Erst die Mücken, dann tagelang in diesem U-Boot, wo es immer so gut belüftet war. Dann der lange Flug fast auf dem Wasser, um feindlichen Radar keine Fläche zu bieten, wie der Captain gesagt hat. Nur einmal sind wir kurz hoch, um dann ratzfatz ein Luftbetankungsmanöver durchzuführen und so schnell wie wir hoch sind, sind wir dann auch wieder runter. Wieder so tief, das ich manchmal das Gefühl hatte direkt neben mir taucht ein Wal auf. Als nächstes also Fallschirm springen? Das kann ja lustig werden!
+Wer will kämpfen, wer will springen? Das darf nicht wahr sein! Erst die Mücken, dann tagelang in diesem U-Boot, wo es immer so gut belüftet war. Dann der lange Flug fast auf dem Wasser, um feindlichen Radar keine Fläche zu bieten, wie der Captain gesagt hat. Nur einmal sind wir kurz hoch, um dann ratzfatz ein Luftbetankungsmanöver durchzuführen und so schnell wie wir hoch sind, sind wir dann auch wieder runter. Wieder so tief, das ich manchmal das Gefühl hatte direkt neben mir taucht ein Wal auf. Als nächstes also Fallschirm springen? Das kann ja lustig werden!
 
 Unsere werte Else musste leider zurückbleiben, sie ist wieder an Bord der Ariel. Head und Rambo sind ebenfalls zurückgeblieben. "Es gibt hier noch einiges zu erledigen, wir folgen dann im U-Boot."
 
-Toller Plan! Ich habe den ganzen Stress und Head und Rambo kuttern gemütlich hinterher. Naja zumindest habe ich jetzt hier das sagen. Noch nicht ganz, hier aufn Flieger gilt noch das Wort des Captains. Aber wenn wir raus sind, ist es mein Kommando. Ich weiss nicht ob ich mich darüber freuen soll.
+Toller Plan! Ich habe den ganzen Stress und Head und Rambo kuttern gemütlich hinterher. Naja zumindest habe ich jetzt hier das sagen. Noch nicht ganz, hier aufn Flieger gilt noch das Wort des Captains. Aber wenn wir raus sind, ist es mein Kommando. Ich weiß nicht ob ich mich darüber freuen soll.
 
-Die Anweisungen von Head waren kurz und präsise. Raus ausm Flieger und Angriff! Gebäude so schnell wie möglich einnehmen und halten! Schnelligkeit ist der Sieg, Überraschung unsere stärkste Waffe.
+Die Anweisungen von Head waren kurz und präzise. Raus aus dem Flieger und Angriff! Gebäude so schnell wie möglich einnehmen und halten! Schnelligkeit ist der Sieg, Überraschung unsere stärkste Waffe.
 
 Es geht los. Unser Tankflugzeug dreht ab. Mal sehen was unser Flieger so aushält.
 
 
 Siegbedingung: feindliche Stellungen einnehmen
 
-Niederlage: Der feindlich Hafen wird nicht in Runde 1 eingenommen oder ihre Einheiten werden besiegt.
+Niederlage: Der feindliche Hafen wird nicht in Runde 1 eingenommen oder ihre Einheiten werden besiegt.
 
 ]]
 asc.setLocalizedEventMessage( map, 1, message )
 
---- ===== 17  ======= 
+--- ===== Event 17  ======= 
 message = [[Der Hafen ist unser! 2 Hovercraft und 1 Zerstörer. Das nenne ich fette Beute.]]
 asc.setLocalizedEventMessage( map, 17, message )
 
---- ===== 18  ======= 
-message = [[Der Bereich südlich des Hafens ist gesichert! Jede Menge Energie, aber keine Treibstoff oder Materialkapazitäten! Zumindest können wir im Hafen mit dem Wenigen, was wir haben Munition produzieren. Und die Jungs haben erstmal eine Pause verdient und ich auch.]]
+--- ===== Event 18  ======= 
+message = [[Der Bereich südlich des Hafens ist gesichert! Jede Menge Energie, aber keine Treibstoff oder Materialkapazitäten! Zumindest können wir im Hafen mit dem Wenigen, was wir haben Munition produzieren. Und die Jungs haben erst mal eine Pause verdient und ich auch.]]
 asc.setLocalizedEventMessage( map, 18, message )
 
---- ===== 32  ======= 
+--- ===== Event 32  ======= 
 message = [[Die vier Solarwerke sind unter unserer Kontrolle!]]
 asc.setLocalizedEventMessage( map, 32, message )
 

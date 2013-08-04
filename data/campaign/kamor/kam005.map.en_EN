@@ -1,0 +1,38 @@
+map = asc.getLoadingMap() 
+--- ===== Event 1  ======= 
+message = [[Else we have loaded in the Clam, the Big Bertha was too thick that we could not take. We have yet taken! Fuel and material from the Berta are now on board the submarine, Berta myself we have lovingly dismantled and loaded into their thousand items on the submarine. We leave the poor girl but not the enemy.
+
+We have also used the time in port, there to make a little spare ammunition is also loaded on board our Ariel. Yes so is our submarine now! Ariel the mermaid!
+
+I have no idea where our journey will now lead? Even though I've beaten with Head now more like a battle, there are still modest information from him. He has given very brief instructions to the captain himself. In any case, a document must be in the papers that I brought Head, have been there, which prompted the captain to unconditional obedience.
+
+The journey will be long, further south? Never thought ever to land on a submarine. I will use the time to come back a little to forces and whenever I can, I'll take a nap.
+
+
+Victory Condition: Penetrate it before further south.
+
+Defeat: your submarine is destroyed.]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== Event 3  ======= 
+message = [[Battle Cruiser! We are fortunate that we travel under water when we show up we are dead
+
+Is not easy. We must be very maneuver just below the surface. The sonar after there is a passage just under water, out of reach of the cruiser. We should take.]]
+asc.setLocalizedEventMessage( map, 3, message )
+
+--- ===== Event 10  ======= 
+message = [[We are approaching the reefs!]]
+asc.setLocalizedEventMessage( map, 10, message )
+
+--- ===== Event 14  ======= 
+message = [[Damn speedboats! And it guarantees more like one. We should just stay down.]]
+asc.setLocalizedEventMessage( map, 14, message )
+
+--- ===== Event 15  ======= 
+message = [[Here is the end of our underwater journey. The speed boats will be looking forward to be able to play a little. Still somehow we must here. Perhaps there is in the reef a couple of places where we can go back down?]]
+asc.setLocalizedEventMessage( map, 15, message )
+
+--- ===== Event 16  ======= 
+message = [[We did it! Our journey may go on now. South. Time for a nap.]]
+asc.setLocalizedEventMessage( map, 16, message )
+

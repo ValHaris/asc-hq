@@ -1,46 +1,50 @@
 map = asc.getLoadingMap() 
---- ===== 1  ======= 
-message = [[Hama Dalan haben wir schon lange aufgegeben. Auch wenn es dort Ressourcen und eine Truppenproduktionstätte gibt, ist es doch strategisch unklug diesen Ort zu halten. Wir sind stärker geworden, wohl war. Aber ein Gebiet dieser Größe von Hama Dalan bis hier zu uns in El Schad, mit unserem Truppenkontingent verteidigen zu versuchen, ist Wahnsinn! Inclusive Dana hätten wir dann drei Angriffsflächen für unsere Feinde und die können von überall kommen.
+--- ===== Event 1  ======= 
+message = [[Hama Dalan haben wir schon lange aufgegeben. Auch wenn es dort Ressourcen und eine Truppenproduktionstätte gibt, ist es doch strategisch unklug diesen Ort zu halten. Wir sind stärker geworden, wohl war. Aber ein Gebiet dieser Größe von Hama Dalan bis hier zu uns in El Schad, mit unserem Truppenkontingent verteidigen zu versuchen, ist Wahnsinn! Inklusive Dana hätten wir dann drei Angriffsflächen für unsere Feinde und die können von überall kommen.
 
 Die große Pipeline nach Südosten ist irgendwie versiegt. Ich denke am anderen Ende der Pipeline hat irgendwer den Hahn zugedreht. Von allen drei Orten, die wir besetzt halten ist El Schad der Wichtigste und das wird unser Feind auch so sehen. Ich rechne mit einer großen Invasion auf unsere Stellung hier. Doch so eine Invasion muss vorbereitet werden, was Zeit kostet.
 
-Diese Zeit haben wir genutzt und uns neu gerüstet. Das Platoon ist voll aufmunitioniert, ja wir haben sogar das Unmögliche vollbracht und in der Werft zwei Speedboote gebastelt. Wir warten nur noch auf die zweite Hover mit einer weiteren Lieferung Material aus Dana, dann werden wir auch diese Stellung aufgeben und weiter dem Fluss folgen.
+Diese Zeit haben wir genutzt und uns neu gerüstet. Das Platoon ist voll auf munitioniert, ja wir haben sogar das Unmögliche vollbracht und in der Werft zwei Speedboote gebastelt. Wir warten nur noch auf die zweite Hover mit einer weiteren Lieferung Material aus Dana, dann werden wir auch diese Stellung aufgeben und weiter dem Fluss folgen.
 
 
-Siegbedingung: Folgen sie den Fluß nach Westen.
+Siegbedingung: Folgen sie den Fluss nach Westen.
 
-Niederlage: Captain Miner, eine der beiden Hoovers oder das Baufahrzeug werden zerstört]]
+Niederlage: Captain Miner, eine der beiden Hoovers oder das Baufahrzeug werden zerstört.]]
 asc.setLocalizedEventMessage( map, 1, message )
 
---- ===== 92  ======= 
+--- ===== Event 92  ======= 
 message = [[Verdammter Bomber. Aber jetzt ist er Geschichte.]]
 asc.setLocalizedEventMessage( map, 92, message )
 
---- ===== 93  ======= 
+--- ===== Event 93  ======= 
 message = [[Geschafft. Diese drei Zeppeline können uns jetzt nichts mehr anhaben.]]
 asc.setLocalizedEventMessage( map, 93, message )
 
---- ===== 94  ======= 
-message = [[Der Fluß verwandelt sich hier in ein sumpfiges Flußdelta. Hätte nie gedacht, das ich mich jemals freuen würde, wieder einen Sumpf zu durchqueren.]]
+--- ===== Event 94  ======= 
+message = [[Der Fluss verwandelt sich hier in ein sumpfiges Flussdelta. Hätte nie gedacht, das ich mich jemals freuen würde, wieder einen Sumpf zu durchqueren.]]
 asc.setLocalizedEventMessage( map, 94, message )
 
---- ===== 131  ======= 
-message = [[Oelförderstationen hier? Wir sollten dies genauer untersuchen.]]
+--- ===== Event 131  ======= 
+message = [[Ölförderstationen hier? Wir sollten dies genauer untersuchen.]]
 asc.setLocalizedEventMessage( map, 131, message )
 
---- ===== 133  ======= 
-message = [[Hier wird das geförderte Oel verladen,  die Platformen und die Schiffe gehören einer mir bisher unbekannten Company an. Glücklicherweise verlief unsere Begegnung friedlich. Die beiden hier stationierten Kriegsschiffe hätten mit uns kurzem Prozess machen können. Man hat uns wahrscheinlich angesehen, wie fertig wir sind.
+--- ===== Event 133  ======= 
+message = [[Hier wird das geförderte Öl verladen,  die Plattformen und die Schiffe gehören einer mir bisher unbekannten Company an. Glücklicherweise verlief unsere Begegnung friedlich. Die beiden hier stationierten Kriegsschiffe hätten mit uns kurzem Prozess machen können. Man hat uns wahrscheinlich angesehen, wie fertig wir sind.
 
 ...
 
-Ich hatte ein Gespräch mit den hier stationierten Führungskräften. Sie waren sehr interresiert an allem, was ich zu erzählen hatte. Ich gab ihn sämtliche Informationen, die ich auf unserer Flucht über dieses Wüstenvolk erfahren hatte. Nur den Vulkan und die geheimen Forschungsunterlagen habe ich verheimlicht.
+Ich hatte ein Gespräch mit den hier stationierten Führungskräften. Sie waren sehr interessiert an allem, was ich zu erzählen hatte. Ich gab ihn sämtliche Informationen, die ich auf unserer Flucht über dieses Wüstenvolk erfahren hatte. Nur den Vulkan und die geheimen Forschungsunterlagen habe ich verheimlicht.
 
 Sie selber informierten mich, das sie einige Grenzstreitigkeiten mit den Wüstensöhnen haben, sich sonst aber gegenseitig meiden. Die Schiffsproduktionsstätte in El Schad hatte sie am meisten beunruhigt. Sie würden dies ihrem Hauptquartier melden. Auch alle weiteren taktischen Informationen, die ich ihnen geliefert habe.
 
-Im Gegenzug könnten sie mir anbieten, mein Platoon auf den Frachter zu verladen. Der Frachter soll das hier geförderte Oel zu einem Hafen im neuen Land bringen. Dort würde es dringenst gebraucht. Was hatte ich für eine andere Wahl?]]
+Im Gegenzug könnten sie mir anbieten, mein Platoon auf den Frachter zu verladen. Der Frachter soll das hier geförderte Öl zu einem Hafen im neuen Land bringen. Dort würde es dringendst gebraucht. Was hatte ich für eine andere Wahl?]]
 asc.setLocalizedEventMessage( map, 133, message )
 
---- ===== 203  ======= 
+--- ===== Event 203  ======= 
 message = [[Feindliche Radarstation in Sicht!]]
 asc.setLocalizedEventMessage( map, 203, message )
 
+--- ===== Building -1114147  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 35, 17 ), [[El Schad]] ) 
+--- ===== Building -59  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 59, 0 ), [[temp. bugfix]] ) 

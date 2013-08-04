@@ -1,38 +1,38 @@
 map = asc.getLoadingMap() 
---- ===== 1  ======= 
+--- ===== Event 1  ======= 
 message = [[Wir sind am Ziel! Kurz bevor wir hier eintrafen, hat Head einige Karten aufgedeckt und uns genaustens über den bevorstehenden Einsatz informiert.
 
-Es handelt sich um so eine Art Superplatform auf dem Meer! Größer wie die Welt je gesehen hat! Soll später uneinnehmbar werden und dieser Gegend ihren Stempel aufdrücken.Der einzige Schwachpunkt ist wohl, das sie noch nicht fertig gestellt ist! Jede Menge Verteidigungsanlagen sind noch im Aufbau.
+Es handelt sich um so eine Art Superplattform auf dem Meer! Größer wie die Welt je gesehen hat! Soll später uneinnehmbar werden und dieser Gegend ihren Stempel aufdrücken. Der einzige Schwachpunkt ist wohl, dass sie noch nicht fertig gestellt ist! Jede Menge Verteidigungsanlagen sind noch im Aufbau.
 
-Unsere Flotte hätte hier nie rechtzeitig eintreffen können, geschweige denn, das dann die Feindflotte nicht auch noch hier zur Verteidigung rangezogen würde. Stattdessen haben unsere Generäle diesen verrückten Plan entwurfen. Ein kleiner Trupp der sich anschleicht, und naja wir werden sehen?
+Unsere Flotte hätte hier nie rechtzeitig eintreffen können, geschweige denn, dass dann die Feindflotte nicht auch noch hier zur Verteidigung ran gezogen würde. Stattdessen haben unsere Generäle diesen verrückten Plan entworfen. Ein kleiner Trupp der sich anschleicht, und naja wir werden sehen?
 
-Weiterhin führen unsere Flottenverbände Ablenkungsangriffe, um evtl. Schutzschiffe dieser Plattform woanders zu binden. Hoffen wir das sich hier nicht noch irgendwo Flotte aufhält?
+Weiterhin führen unsere Flottenverbände Ablenkungsangriffe, um evtl. Schutzschiffe dieser Plattform woanders zu binden. Hoffen wir dass sich hier nicht noch irgendwo Flotte aufhält?
 
 ...
 
-Es muss schnellgehen, so schnell und so nah wie möglich ran! Dann auftauchen, raus und den Flughafen einnehmen! Wir müssen unbedingt Luftwaffe ergattern, sonst könnten wir in Schwierigkeiten geraten. Piloten sind an Bord der Ariel, um schnell jedes ergatterte Fluggerät für uns durchzustarten. Ausserdem haben sich einige Jungs hier an Bord mit Boden-Luft-Raketen bestückt. Auch wenn sie wenig Ahnung haben, wie man damit umgeht, vielleicht hilft es?
+Es muss schnellgehen, so schnell und so nah wie möglich ran! Dann auftauchen, raus und den Flughafen einnehmen! Wir müssen unbedingt Luftwaffe ergattern, sonst könnten wir in Schwierigkeiten geraten. Piloten sind an Bord der Ariel, um schnell jedes ergatterte Fluggerät für uns durchzustarten. Außerdem haben sich einige Jungs hier an Bord mit Boden-Luft-Raketen bestückt. Auch wenn sie wenig Ahnung haben, wie man damit umgeht, vielleicht hilft es?
 
 Im Flughafen soll sich eine Transportmaschine, sowie ein Lufttanker befinden. Diese müssen in unsere Hand fallen, sie dürfen nicht zerstört werden, dies hat Head mehrere Male betont. Ich hoffe er meint, wir steigen nach erfolgreicher Erledigung dieser Mission bequem in den Flieger und fliegen nach Hause. Aber irgendwie glaube ich nicht daran?
 
 
-Siegbedingung: Erobern sie die Platform.
+Siegbedingung: Erobern sie die Plattform.
 
 Niederlage: Der Flughafen wird nicht in Runde 1 eingenommen oder ihre Einheiten werden zerstört.]]
 asc.setLocalizedEventMessage( map, 1, message )
 
---- ===== 5  ======= 
-message = [[Die Platform dürfte nun unter unserer Kontrolle sein. Wir haben gesiegt!]]
+--- ===== Event 5  ======= 
+message = [[Die Plattform dürfte nun unter unserer Kontrolle sein. Wir haben gesiegt!]]
 asc.setLocalizedEventMessage( map, 5, message )
 
---- ===== 16  ======= 
+--- ===== Event 16  ======= 
 message = [[Wir haben den Flughafen unter unserer Kontrolle!]]
 asc.setLocalizedEventMessage( map, 16, message )
 
---- ===== 17  ======= 
+--- ===== Event 17  ======= 
 message = [[Alle vier Radarstation unter unserer Kontrolle!]]
 asc.setLocalizedEventMessage( map, 17, message )
 
---- ===== 18  ======= 
+--- ===== Event 18  ======= 
 message = [[Sieht so aus, als wenn das der letzte feindliche Hubschrauber war!]]
 asc.setLocalizedEventMessage( map, 18, message )
 

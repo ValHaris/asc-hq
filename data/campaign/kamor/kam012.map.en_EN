@@ -1,0 +1,48 @@
+map = asc.getLoadingMap() 
+--- ===== Event 1  ======= 
+message = [[The position in Al Anf Alabab we have given up trying to hard to defend and there is no material easy. Here we have a few resources and the river itself can also be used strategically.
+
+I have given instructions to mine south. We should expect more attacks from the south. My Elite Troopers are converted. Some of sniper, the other is a rocket launcher have caught. The mine laying, we can also leave the new recruits.
+
+The Hovers are full of fuel and ready to explore the river.
+
+
+Victory Condition: Beat it by the river. Conquer the areas that they need to cross.
+
+Defeat Captain Miner falls.]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== Event 74  ======= 
+message = [[The city is ours. The river changes its direction from here more to the south. We can supply in that city platoon with material and fuel. What we have here is not ammunition! This is what we should consider.
+
+It would be bad if we meet in the south to more resistance and are at once without ammunition there.
+
+Well worth the idea, the two cities would be connected to a pipeline? Thus we increase both total storage capacity, as well as our production in the barracks.]]
+asc.setLocalizedEventMessage( map, 74, message )
+
+--- ===== Event 92  ======= 
+message = [[The three solar power plants belong to us.]]
+asc.setLocalizedEventMessage( map, 92, message )
+
+--- ===== Event 93  ======= 
+message = [[A port in the desert, who would have thought? Here there are dry docks for Hovers and speedboats.]]
+asc.setLocalizedEventMessage( map, 93, message )
+
+--- ===== Event 94  ======= 
+message = [[From this tank system performs a huge pipeline to southeast.]]
+asc.setLocalizedEventMessage( map, 94, message )
+
+--- ===== Event 96  ======= 
+message = [[This seems to have been the last sniper?]]
+asc.setLocalizedEventMessage( map, 96, message )
+
+--- ===== Event 97  ======= 
+message = [[The area is ours. A lake in the middle of the desert. Our flow goes from here further to the west. In the harbor we can build speedboats, may have had a one or two speed boats worth a quick stop?]]
+asc.setLocalizedEventMessage( map, 97, message )
+
+--- ===== Building -655386  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 26, 10 ), [[Hama Dalan]] ) 
+--- ===== Building -917518  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 14, 14 ), [[Dana]] ) 
+--- ===== Building -3080197  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 5, 47 ), [[El Schad]] ) 

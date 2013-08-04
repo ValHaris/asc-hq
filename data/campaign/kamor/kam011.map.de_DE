@@ -1,5 +1,5 @@
 map = asc.getLoadingMap() 
---- ===== 1  ======= 
+--- ===== Event 1  ======= 
 message = [[Wir sind unten im Krater des Vulcans. Der Eingang zu den Höhlen liegt im Süden. Die Flinte vom Sniper, der den Vulcan bewacht hatte, habe ich mir einfach mal geschnappt. Mal sehen wie gut ich damit umgehen kann?
 
 
@@ -8,25 +8,25 @@ Siegbedingung: Erforschen und erobern sie den Höhlenkomplex.
 Niederlage: Captain Miner fällt.]]
 asc.setLocalizedEventMessage( map, 1, message )
 
---- ===== 9  ======= 
+--- ===== Event 9  ======= 
 message = [[Hat jemand ne Taschenlampe? Hier unten ist es zappenduster.]]
 asc.setLocalizedEventMessage( map, 9, message )
 
---- ===== 10  ======= 
+--- ===== Event 10  ======= 
 message = [[Rechts oder Links?]]
 asc.setLocalizedEventMessage( map, 10, message )
 
---- ===== 11  ======= 
+--- ===== Event 11  ======= 
 message = [[Fahr zur Hölle!]]
 asc.setLocalizedEventMessage( map, 11, message )
 
---- ===== 13  ======= 
-message = [[Produktion, Labor und Versorgung gehören jetzt uns. Wir haben im Labor äussert interessante Unterlagen gefunden! Auch wenn wir den Text nicht entziffern können, zumindest die Bilder zeigen etwas von derartiger Größe, was man sich gar nicht vorstellen kann. Vielleicht sollten wir uns hier einnisten, anstatt nach Hama Dalan weiterzuziehen? Das ganze scheint ein Superversteck zu sein! Nur mit dem Problem, das jemand im Süden dieses Versteck kennt!
+--- ===== Event 13  ======= 
+message = [[Produktion, Labor und Versorgung gehören jetzt uns. Wir haben im Labor äußert interessante Unterlagen gefunden! Auch wenn wir den Text nicht entziffern können, zumindest die Bilder zeigen etwas von derartiger Größe, was man sich gar nicht vorstellen kann. Vielleicht sollten wir uns hier einnisten, anstatt nach Hama Dalan weiterzuziehen? Das ganze scheint ein Superversteck zu sein! Nur mit dem Problem, das jemand im Süden dieses Versteck kennt!
 
-Ausserdem traue ich dem Frieden nicht. Hier bekämpfen sich Naturgewalten. Wasser und Lava! Es sieht wie ein Unentschieden aus, aber das kann sich jederzeit ändern. Trotzdem habe ich mir mit dem Platoon den Spass erlaubt und wir sind baden gegangen. Das Wasser ist hier angenehm temperiert. Man darf nur nicht zu weit Richtung Lava schwimmen, es sei denn man steht auf Kochtopfatmosphäre.
+Außerdem traue ich dem Frieden nicht. Hier bekämpfen sich Naturgewalten. Wasser und Lava! Es sieht wie ein Unentschieden aus, aber das kann sich jederzeit ändern. Trotzdem habe ich mir mit dem Platoon den Spaß erlaubt und wir sind baden gegangen. Das Wasser ist hier angenehm temperiert. Man darf nur nicht zu weit Richtung Lava schwimmen, es sei denn man steht auf Kochtopfatmosphäre.
 
 ...
 
-Das Bad tat uns allen gut. Wir sollten uns jetzt aber schleunigst zu den Hovern begeben und dann auf den schnellsten Weg nach Hama Dalan. Wir sind zu wenig, um uns irgendwo einzuschanzen und der Fluss bei Hama Dalan führt zum Meer und irgendwo kuttert vielleicht noch ein U-Boot rum? Obwohl ich daran nicht mehr glaube. Manchmal kommen mir Gedanken, das unser Fallschirmspringerangriff sinnlos war? Unser Platoon hatte doch gar keine Chance? Oder war es der Sinn, den Gegenangriff auf uns zu provozieren?]]
+Das Bad tat uns allen gut. Wir sollten uns jetzt aber schleunigst zu den Hovern begeben und dann auf den schnellsten Weg nach Hama Dalan. Wir sind zu wenig, um uns irgendwo ein zuschanzen und der Fluss bei Hama Dalan führt zum Meer und irgendwo kuttert vielleicht noch ein U-Boot rum? Obwohl ich daran nicht mehr glaube. Manchmal kommen mir Gedanken, das unser Fallschirmspringerangriff sinnlos war? Unser Platoon hatte doch gar keine Chance? Oder war es der Sinn, den Gegenangriff auf uns zu provozieren?]]
 asc.setLocalizedEventMessage( map, 13, message )
 

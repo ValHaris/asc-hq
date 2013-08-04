@@ -1,10 +1,10 @@
 map = asc.getLoadingMap() 
---- ===== 1  ======= 
-message = [[Auf jeden fühle ich mich jetzt ein wenig besser. Bevor wir los sind, haben wir noch die Waffenkammer geplündert. Voll aufmunitioniert, sogar zwei neue Minen habe ich, neues Sanimaterial und das bewährte Wundenausbrennöl ist auch gemaxed. Irgendwo im Süden soll unser Ziel sein?
+--- ===== Event 1  ======= 
+message = [[Auf jeden fühle ich mich jetzt ein wenig besser. Bevor wir los sind, haben wir noch die Waffenkammer geplündert. Voll auf munitioniert, inklusive neue Minen, neues Sanimaterial und das bewährte Wundenausbrennöl ist auch gemaxed. Irgendwo im Süden soll unser Ziel sein?
 
 ...
 
-Wald, nichts als Wald, oben, unten, rechts, links, vorne, hinten. Und wie ich geahnt hatte Waldmücken! Aber diese Waldmücken sind harmlos gegenüber den Sumpfmücken, vielleicht bin ich auch nur Mücken resistenter geworden. Aber dieses Kommandotier neben mir ist die ganze Zeit am rumfluchen. Ja beisst ihn, saugt ihn aus, quält ihn zu Tode, meine kleinen Blutsaugerfreunde.
+Wald, nichts als Wald, oben, unten, rechts, links, vorne, hinten. Und wie ich geahnt hatte Waldmücken! Aber diese Waldmücken sind harmlos gegenüber den Sumpfmücken, vielleicht bin ich auch nur Mücken resistenter geworden. Aber dieses Kommandotier neben mir ist die ganze Zeit am rumfluchen. Ja beißt ihn, saugt ihn aus, quält ihn zu Tode, meine kleinen Blutsaugerfreunde.
 
 ...
 
@@ -16,11 +16,13 @@ Siegbedingung: Schlagen sie sich nach Süden durch.
 Niederlage: Einer ihrer Soldaten fällt.]]
 asc.setLocalizedEventMessage( map, 1, message )
 
---- ===== 5  ======= 
+--- ===== Event 5  ======= 
 message = [[Waldingen, ein Bett, ein wenig Ruhe, ja hier würde ich am liebsten eine Woche nur durchpennen und von schönen Dingen träumen!
 
 Aber wir haben nicht viel Zeit, der Hinterhalt war wohl selbst vom Commander nicht geplant gewesen? Sieht so aus, als hätten sie sein falsches Spiel schon viel eher entlarvt. 
 
-Immerhin ein alter und treuer Freund des Commanders schliesst sich uns ans. Sie nennen ihn Rambo.]]
+Immerhin ein alter und treuer Freund des Commanders schließt sich uns ans. Sie nennen ihn Rambo.]]
 asc.setLocalizedEventMessage( map, 5, message )
 
+--- ===== Building -1507333  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 5, 23 ), [[Waldingen]] ) 

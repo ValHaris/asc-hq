@@ -1,20 +1,20 @@
 map = asc.getLoadingMap() 
---- ===== 1  ======= 
+--- ===== Event 1  ======= 
 message = [[Ich bin hier im oberen Komplex unseres wissenschaftlichen Instituts und habe gerade ein Gespräch mit dem Projektleiter. Er sagt, er habe sowas noch nie gesehen. Die Unterlagen, die ich ihm zur Analyse dagelassen habe, haben zwei Gesichter.
 
 Der eine Teil war leicht zu verstehen, geschrieben in der Sprache des Wüstenvolkes. Es sind Studien einer neuen mechanischen Infanterieeinheit, bzw. eine Art Kampfroboter, der die Kampfkraft eines Troopers erheblich steigert. Diesbezüglich hat der Projektleiter auch schon den Bau eines ersten Prototypen angeordnet.
 
-Aber der zweite Teil war immer noch ein Rätsel. Die Aufzeichungen dieses Teiles unterscheiden sich massiv von dem ersten Teil. Die benutze Sprache dieses Teiles lassen sich selbst mit den besten Computersprachalgoryhtmen nicht übersetzen. Auch geben die bildlichen Darstellung des zweiten Teiles keinen Sinn. Es sieht so aus, als wenn sowohl Texte, wie auch Bilder des zweiten Teils massiv verschlüsselt sind. Das einzige, was nicht verschlüsselt ist, ist der Name der Mappe zum zweiten Teil. Und dort steht in der Schrift des Wüstenvolkes nur ein großes Wort drauf:
+Aber der zweite Teil war immer noch ein Rätsel. Die Aufzeichnungen dieses Teiles unterscheiden sich massiv von dem ersten Teil. Die benutze Sprache dieses Teiles lassen sich selbst mit den besten Computersprachalgorithmen nicht übersetzen. Auch geben die bildlichen Darstellungen des zweiten Teiles keinen Sinn. Es sieht so aus, als wenn sowohl Texte, wie auch Bilder des zweiten Teils massiv verschlüsselt sind. Das einzige, was nicht verschlüsselt ist, ist der Name der Mappe zum zweiten Teil. Und dort steht in der Schrift des Wüstenvolkes nur ein großes Wort drauf:
 
 GENESIS
 
-Zeitgleich mit dem Aussprechen des Wortes Genesis fielen Schüsse im unteren Komplex. Verdammt wer schiesst da unten?
+Zeitgleich mit dem Aussprechen des Wortes Genesis fielen Schüsse im unteren Komplex. Verdammt wer schießt da unten?
 
-Ein Soldat kommt aufgeregt aus den unteren Komplex.
+Ein Soldat kam aufgeregt aus dem unteren Komplex.
 
-"Sir, Commander, Sir. Feindliche Fallschirmspringer sind direkt vor dem Forschungsinstitut abgesprungen. Der Feind stürmt direkt auf den oberen Komplex zu. Die feindlichen Soldaten kommen schreiend auf uns zugerannt. Welch eine Wahnsinn treibt Soldaten an, das sie dermassen hohe Verluste in Kauf nehmen? Sir, sie sind uns zahlenmässig überlegen."
+"Sir, Commander, Sir. Feindliche Fallschirmspringer sind direkt vor dem Forschungsinstitut abgesprungen. Der Feind stürmt direkt auf den oberen Komplex zu. Die feindlichen Soldaten kommen schreiend auf uns zugerannt. Welch eine Wahnsinn treibt Soldaten an, dass sie dermaßen hohe Verluste in Kauf nehmen? Sir, sie sind uns zahlenmäßig überlegen."
 
-Verzweifelung stand den jungen Rekruten ins Gesicht geschrieben. Viele von Ihnen waren noch frisch hinter den Ohren. Hatte ich einen Fehler gemacht, das ich das wissenschaftliche Institut in der Mehrzahl nur durch unerfahrende Truppen bewachen ließ?
+Verzweiflung stand den jungen Rekruten ins Gesicht geschrieben. Viele von Ihnen waren noch frisch hinter den Ohren. Hatte ich einen Fehler gemacht, dass ich das wissenschaftliche Institut in der Mehrzahl nur durch unerfahrene Truppen bewachen ließ?
 
 "Commander Miner", rief der Projektleiter, "es ist Zeit den Prototypen einzusetzen."
 
@@ -22,19 +22,19 @@ Ich wurde wieder wach, wieviel Sekunden stand ich da regungslos? Eine, zwei oder
 
 "RÜCKZIEHENDE VERTEIDIGUNG! Wir versuchen den Prototypen zu erreichen!"
 
-"Sir, ja, sir"
+"Sir, ja, Sir"
 
 Die Verzweiflung in den Augen des Soldaten wurde verdrängt durch ein neues Ziel. Was für ein Ziel? Irgendein Prototyp zu erreichen, um dann dort zu sterben?
 
-"Es gibt drei Räume in Norden", rief der Projektleiter. Der Prototyp befindet sich im mittleren Raum. Dieser Raum ist durch ein Sicherheitssystem verschlossen. Wir müssen die beiden Schalter "Zugang: rechts" und "Zugang: links" aktivieren. Wir müssen aber zuerst nach Süden und dann die äusseren Koridore nach Norden nehmen. Wenn wir uns aufteilen, können wir Zeit sparen. Commander ich schlage vor sie nehmen den Westkoridor und ich den Oestlichen."
+"Es gibt drei Räume in Norden", rief der Projektleiter. Der Prototyp befindet sich im mittleren Raum. Dieser Raum ist durch ein Sicherheitssystem verschlossen. Wir müssen die beiden Schalter "Zugang: rechts" und "Zugang: links" aktivieren. Wir müssen aber zuerst nach Süden und dann die äußeren Korridore nach Norden nehmen. Wenn wir uns aufteilen, können wir Zeit sparen. Commander ich schlage vor sie nehmen den Westkorridor und ich den Östlichen."
 
 "Nein, wir bleiben zusammen!", sagte ich. "Sie sind unbewaffnet und wir kämpfen hier gegen Fallschirmspringer! Können sie Ausschließen, das der Feind nicht auch von oben einfallen kann?"
 
-"Hm? Der obere Komplex ist eigentlich nur durch den unteren Komplex zu erreichen", antwortete der Projektleiter," evtl. könnte man aber ..."
+"Hm? Der obere Komplex ist eigentlich nur durch den unteren Komplex zu erreichen", antwortete der Projektleiter, " evtl. könnte man aber ..."
 
-Ich ließ ihn nicht ausprechen und zog ihn einfach an der Jacke hinter mir her. Wir hatten keine Zeit zu verlieren.
+Ich ließ ihn nicht aussprechen und zog ihn einfach an der Jacke hinter mir her. Wir hatten keine Zeit zu verlieren.
 
-"Vielleicht haben sie recht, Commander. Aber unbewaffnet bin ich nicht." Grinsend zeigte er mir zwei Sprengstoffpackete incl. Kontaktzünder. "Meine selbstgebauten Minen."
+"Vielleicht haben sie Recht, Commander. Aber unbewaffnet bin ich nicht." Grinsend zeigte er mir zwei Sprengstoffpakete inklusive Kontaktzünder. "Meine selbstgebauten Minen."
 
 
 Siegbedingung: Miner und Brain erreichen den Prototypen.
@@ -42,69 +42,69 @@ Siegbedingung: Miner und Brain erreichen den Prototypen.
 Niederlage: Einer der beiden stirbt.]]
 asc.setLocalizedEventMessage( map, 1, message )
 
---- ===== 3  ======= 
+--- ===== Event 3  ======= 
 message = [[Schalter Zugang links ist aktiviert.]]
 asc.setLocalizedEventMessage( map, 3, message )
 
---- ===== 4  ======= 
+--- ===== Event 4  ======= 
 message = [[Schalter Zugang rechts ist aktiviert.]]
 asc.setLocalizedEventMessage( map, 4, message )
 
---- ===== 6  ======= 
+--- ===== Event 6  ======= 
 message = [[Die Sicherheitstür ist nun offen. Jetzt müssen wir nur noch zum Prototypen kommen.]]
 asc.setLocalizedEventMessage( map, 6, message )
 
---- ===== 62  ======= 
+--- ===== Event 62  ======= 
 message = [[Da bin ich, jetzt fehlt nur noch Projektleiter Brain.]]
 asc.setLocalizedEventMessage( map, 62, message )
 
---- ===== 63  ======= 
+--- ===== Event 63  ======= 
 message = [[Projektleiter Brain hat den Prototypen erreicht. Ich bin auch gleich da.]]
 asc.setLocalizedEventMessage( map, 63, message )
 
---- ===== 91  ======= 
+--- ===== Event 91  ======= 
 message = [[Sehr schön. Dann wollen wir mal sehen, was der Prototyp so drauf hat.]]
 asc.setLocalizedEventMessage( map, 91, message )
 
---- ===== 172  ======= 
+--- ===== Event 172  ======= 
 message = [["Sir, Commander, Sir. Der untere Komplex ist fast überrannt." Der junge Soldat war wieder da.
 
 "Folgen sie uns Soldat,  es ist besser, wenn wir zusammenbleiben!"]]
 asc.setLocalizedEventMessage( map, 172, message )
 
---- ===== 174  ======= 
+--- ===== Event 174  ======= 
 message = [[Ein weiterer Trooper aus dem unteren Komplex.
 
 "Sir, einen habe ich erwischt."]]
 asc.setLocalizedEventMessage( map, 174, message )
 
---- ===== 224  ======= 
+--- ===== Event 224  ======= 
 message = [[Und noch ein Trooper der es von unten geschafft hat.
 
 "Sir, ich habe nur noch zwei Schuss im Scharfschützengewehr!"]]
 asc.setLocalizedEventMessage( map, 224, message )
 
---- ===== 226  ======= 
-message = [["Sir, ich bin verletzt, Sir"]]
+--- ===== Event 226  ======= 
+message = [["Sir, ich bin verletzt, Sir."]]
 asc.setLocalizedEventMessage( map, 226, message )
 
---- ===== 248  ======= 
+--- ===== Event 248  ======= 
 message = [["Sanitäter!"]]
 asc.setLocalizedEventMessage( map, 248, message )
 
---- ===== 250  ======= 
+--- ===== Event 250  ======= 
 message = [["Sir, mein halbes Magazin ist leer!"]]
 asc.setLocalizedEventMessage( map, 250, message )
 
---- ===== 252  ======= 
+--- ===== Event 252  ======= 
 message = [["Der untere Komplex ist gefallen, Sir. Keine Munition mehr, eine Mine noch, Sir!"]]
 asc.setLocalizedEventMessage( map, 252, message )
 
---- ===== 254  ======= 
+--- ===== Event 254  ======= 
 message = [["Kamikaze!"]]
 asc.setLocalizedEventMessage( map, 254, message )
 
---- ===== 350  ======= 
+--- ===== Event 350  ======= 
 message = [[Verdammt, die haben die Wand gesprengt.]]
 asc.setLocalizedEventMessage( map, 350, message )
 

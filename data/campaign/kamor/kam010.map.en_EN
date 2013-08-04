@@ -1,0 +1,74 @@
+map = asc.getLoadingMap() 
+--- ===== Event 1  ======= 
+message = [[It can be life! At least at the moment. The platoon has recovered quite quickly from past hardships. Soldiers are just tough! I know the guys now all by name, and they call me Captain. Our two Hovers, Fury and Missi we first subjected to a thorough inspection of the depot. Now they look like new again. Our catfish, as we call the bulldozer helps us to material recovery. The oil terminal is pumping like crazy oil from the sand and our solar power plant delivers more power as we need.
+
+...
+
+The desert is vast, perhaps we should explore? Or would you rather wait a little longer? I think it's better if I keep the platoon together, who knows what rumstrauchelt here in the desert? I'll send some scouts, they have no chance out there, here we have ammunition and resources. Also, the quarry must be monitored. We are simply not enough, as we should split up. None of my platoon I can do without as a scout, first time keep the area near the eye!
+
+Nevertheless, I would like to know if there out there in the endless expanse of desert is something else here, like sand?
+
+
+Victory Condition: they explore the southern regions of the map, especially the southeast and southwest flanks. If they find they conquer this enemy buildings. What they can not conquer it should at least examine as thoroughly as possible (special field enter).
+
+Defeat Captain Miner falls.]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== Event 26  ======= 
+message = [[The sand is partially exposed a road that leads further to the south.]]
+asc.setLocalizedEventMessage( map, 26, message )
+
+--- ===== Event 27  ======= 
+message = [[An extinct volcano in the middle of the desert? The sand of the desert has stalked from all sides of the volcano, but the volcano itself could not overcome even the sand. Maybe we should let a trooper explore the crater? You can not see the crater from below.]]
+asc.setLocalizedEventMessage( map, 27, message )
+
+--- ===== Event 28  ======= 
+message = [[That fucking son of a bitch by Sniper, but we have done it. What was he doing here, in the crater of the extinct volcano?]]
+asc.setLocalizedEventMessage( map, 28, message )
+
+--- ===== Event 29  ======= 
+message = [[Who would have thought. Bottom of the crater there is a access to a sort of cave system. We would later send down a small team and explore the caves.
+
+Order Southeast explored completed.]]
+asc.setLocalizedEventMessage( map, 29, message )
+
+--- ===== Event 35  ======= 
+message = [[Attacks from the south, our strongest weapons are our mines. We should remain on the defensive.]]
+asc.setLocalizedEventMessage( map, 35, message )
+
+--- ===== Event 36  ======= 
+message = [[It is to cry! The enemy could come from any direction. We must not neglect our flanks! Nothing will probably come from the north, I hope?]]
+asc.setLocalizedEventMessage( map, 36, message )
+
+--- ===== Event 37  ======= 
+message = [[Our position is open as of what I want to despair! Keep a cool head! Even more strengthen the western and eastern flanks.]]
+asc.setLocalizedEventMessage( map, 37, message )
+
+--- ===== Event 38  ======= 
+message = [[The attacks from the south have subsided. Nevertheless, I will not shake the feeling we are unpopular here and someone wants to sell us?]]
+asc.setLocalizedEventMessage( map, 38, message )
+
+--- ===== Event 39  ======= 
+message = [[The storm subsides! The attacks are less. We are lucky that the attacker has not simultaneously attacked from all sides. We should send scouts in southwest and southeast, and possibly even our Hovers including a few troopers. The road to the south, we should keep in mind. But if I guess correctly, we will most likely meet in the south at large resistance? For our other escape route, I suggest a course correction! Either East or West, which should find out our scout team? Everything that has to do with the north would be foolish!]]
+asc.setLocalizedEventMessage( map, 39, message )
+
+--- ===== Event 40  ======= 
+message = [[A city and a troop factory and a river! River means life, even in the desert. The city has oil, material and energy and produces even this. A not insignificant resource!
+
+Furthermore, rivers have the habit to unite at some point with the sea. Even if they pour into other rivers or lakes beforehand, their ultimate goal is always the sea!
+
+Order: West explored successfully.]]
+asc.setLocalizedEventMessage( map, 40, message )
+
+--- ===== Event 42  ======= 
+message = [[My plan is fixed. We will not explore the cave system and then move on to Hama Dalan. Further away from our northern enemy, and whatever is in the south, we will try to avoid.]]
+asc.setLocalizedEventMessage( map, 42, message )
+
+--- ===== Event 142  ======= 
+message = [[Gebäudekomplexe!]]
+asc.setLocalizedEventMessage( map, 142, message )
+
+--- ===== Building -2424855  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 23, 37 ), [[Al Anf Alabab]] ) 
+--- ===== Building -3801090  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 2, 58 ), [[Hama Dalan]] ) 

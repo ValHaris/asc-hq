@@ -1,0 +1,23 @@
+map = asc.getLoadingMap() 
+--- ===== Event 1  ======= 
+message = [[Bevor wir reagieren konnten, hatten wir uns auch schon einen ersten Torpedo eingefangen.
+
+Wir mussten schnellstmöglich das U-Boot versenken.
+
+Siegbedingung: Zerstören sie das feindliche U-Boot.
+
+Niederlage: Das feindliche U-Boot zerstört sie.]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== Event 20  ======= 
+message = [[Wir versenkten das feindliche U-Boot. Aber leider befanden sich noch weitere Feindschiffe in der Nähe und die hatten sofort Kurs auf uns gemacht, wie wir geortet wurden. Es sah schlecht aus.]]
+asc.setLocalizedEventMessage( map, 20, message )
+
+--- ===== Event 23  ======= 
+message = [[Wir hatten keine Chance. Wir waren schwer getroffen und von überall drang Wasser ein. Wir sanken. Mit letzter Kraft versuchten wir den enormen Wassereinbruch zu verhindern. Wir schafften es, einen Raum soweit abzudichten und abzuschotten, um nicht sofort zu ertrinken.
+
+Doch die Clam sank weiter und wir hatten keine Kontrolle mehr über das Boot. Wir wussten nicht, wie lange der abgeschottete Raum noch dem zunehmenden Wasserdruck standhalten würde und wie lange wir hier unten noch Sauerstoff zum Atmen hätten.
+
+Wir machten uns nicht mehr viel Hoffnung, dass wir noch sehr lange Leben würden. Wir konnten nur noch abwarten und die Dinge geschehen lassen.]]
+asc.setLocalizedEventMessage( map, 23, message )
+

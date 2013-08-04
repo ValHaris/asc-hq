@@ -1,0 +1,110 @@
+map = asc.getLoadingMap() 
+--- ===== Event 1  ======= 
+message = [[I'm here at the top of our complex scientific institute and have just a conversation with the project manager. He says he has never seen one. The documents that I have prep him for analysis, have two faces.
+
+One part was easy to understand, written in the language of the desert people. There are studies of a new mechanical Infantry unit, or a kind of fighting robot, which considerably increases the combat power of Troopers. In this regard, the project has already ordered the construction of a first prototype.
+
+But the second part was still a mystery. The records of this part differ greatly from the first part. Use the language of this part can be even with the best computer language algorithms do not translate. Also give the pictorial representations of the second part does not make sense. It looks as if both texts as well as pictures of the second part are heavily encrypted. The only thing that is not encrypted, is the name of the folder to the second part. And there is written that the desert nation just a big word for it:
+
+GENESIS
+
+Coinciding with the utterance of the word Genesis shots were fired in the lower complex. Damn who shoots down there?
+
+A soldier was excited from the lower complex.
+
+"Sir, Commander, sir. Enemy parachutists have jumped in front of the research institute. The enemy storms directly to the upper complex. The enemy soldiers come screaming running towards us. What a madness drives soldiers that they take such high losses in ? sir, they outnumber us. "
+
+Despair was written on the face of the young recruits. Many of you were still fresh behind the ears. I had made a mistake, that I was guarding the scientific institute in the majority only by inexperienced troops?
+
+"Miner Commander," said the project manager, "it's time to use the prototype."
+
+I was awake again, how many seconds I stood there motionless? One, two or three?
+
+"BACK EXECUTIVE DEFENSE! Prototypes We try to achieve!"
+
+"Sir, yes sir"
+
+The desperation in the eyes of the soldier was replaced by a new target. What a goal? To reach any prototype, and then to die there?
+
+"There are three areas in the north," said the project manager. The prototype is located in the middle room. This space is closed by a security system. We have the two switches "Access: the right" and "Access: left" to activate. But we must first south and then take the outer corridors to the north. If we split up, we can save time. Commander, I suggest you take the western corridor and I the Eastern. "
+
+"No, we stay together," I said. "They are unarmed and we are fighting against parachutists! Can you exclude that can not come from the top of the enemy?"
+
+"Hm? The upper complex is actually only accessible through the lower complex," said the project manager, "but maybe you could ..."
+
+I would not let him speak and simply dragged him to the jacket behind me. We had no time to lose.
+
+"Maybe they're right, Commander. Unarmed But I'm not." Grinning, he showed me two explosive packages including contact fuze. "My self-built mines."
+
+
+Victory Condition: Brain and Miner reach the prototype.
+
+Loss: One of the two dies.]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== Event 3  ======= 
+message = [[Access switch is left on.]]
+asc.setLocalizedEventMessage( map, 3, message )
+
+--- ===== Event 4  ======= 
+message = [[Switch access right is selected.]]
+asc.setLocalizedEventMessage( map, 4, message )
+
+--- ===== Event 6  ======= 
+message = [[The safety door is now open. Now we just need to get to the prototype.]]
+asc.setLocalizedEventMessage( map, 6, message )
+
+--- ===== Event 62  ======= 
+message = [[Since I am now missing is Brain Project.]]
+asc.setLocalizedEventMessage( map, 62, message )
+
+--- ===== Event 63  ======= 
+message = [[Brain project has reached the prototype. I'm right there.]]
+asc.setLocalizedEventMessage( map, 63, message )
+
+--- ===== Event 91  ======= 
+message = [[Very beautiful. Then let's see what the prototype is made off.]]
+asc.setLocalizedEventMessage( map, 91, message )
+
+--- ===== Event 172  ======= 
+message = [["Sir, Commander, sir. The lower complex is almost overrun. "The young soldier was back.
+
+"Follow us soldier, it's better if we stay together!"]]
+asc.setLocalizedEventMessage( map, 172, message )
+
+--- ===== Event 174  ======= 
+message = [[Another trooper from the lower complex.
+
+"Sir, one I've caught."]]
+asc.setLocalizedEventMessage( map, 174, message )
+
+--- ===== Event 224  ======= 
+message = [[And another trooper who made it from the bottom.
+
+"Sir, I have only two shots in the sniper rifle!"]]
+asc.setLocalizedEventMessage( map, 224, message )
+
+--- ===== Event 226  ======= 
+message = [["Sir, I am hurt, sir."]]
+asc.setLocalizedEventMessage( map, 226, message )
+
+--- ===== Event 248  ======= 
+message = [["Medic!"]]
+asc.setLocalizedEventMessage( map, 248, message )
+
+--- ===== Event 250  ======= 
+message = [["Sir, my magazine is half empty!"]]
+asc.setLocalizedEventMessage( map, 250, message )
+
+--- ===== Event 252  ======= 
+message = [["The lower complex is like, sir. No more ammunition, a mine, sir!"]]
+asc.setLocalizedEventMessage( map, 252, message )
+
+--- ===== Event 254  ======= 
+message = [["Kamikaze!"]]
+asc.setLocalizedEventMessage( map, 254, message )
+
+--- ===== Event 350  ======= 
+message = [[Damn, who blew up the wall.]]
+asc.setLocalizedEventMessage( map, 350, message )
+

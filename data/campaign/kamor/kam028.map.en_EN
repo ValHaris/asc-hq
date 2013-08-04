@@ -1,0 +1,23 @@
+map = asc.getLoadingMap() 
+--- ===== Event 1  ======= 
+message = [[Before we could react, we had already caught us a first torpedo.
+
+We had to as soon as possible sink the submarine.
+
+Win Condition: Destroy the enemy they Submarine.
+
+Defeat: The enemy submarine destroys them.]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== Event 20  ======= 
+message = [[We sank the enemy submarine. But unfortunately, even more enemy ships were in the vicinity and had immediately made ??course for us as we were located. It looked bad.]]
+asc.setLocalizedEventMessage( map, 20, message )
+
+--- ===== Event 23  ======= 
+message = [[We had no chance. We were hit hard and everywhere penetrated water. We sank. With his last strength, we tried to prevent the enormous flooding. We managed to seal a space where foreclose and to drown immediately.
+
+But the clam fell further and we had no more control over the boat. We did not know how long the insular space would still meet the increased water pressure and how long we will have oxygen to breathe down here.
+
+We did not have much hope that we would have a very long life. We could only wait and let things happen.]]
+asc.setLocalizedEventMessage( map, 23, message )
+

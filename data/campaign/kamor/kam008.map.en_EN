@@ -1,0 +1,38 @@
+map = asc.getLoadingMap() 
+--- ===== Event 1  ======= 
+message = [[We have been waiting for days in vain for our submarine! We have energy in excess, but hardly material and fuel. The parachutes are no longer inhibit below only our mobility.
+
+We have used the time and the area is a "little" mined. The destroyer or what remains of it left, we have used otherwise. The lesioned Hovers we have spared.
+
+The guys running the patrol in the desert, grumbling that they must complete walk these routes. But the few fuel we have left, we should not consume useless! So we have the option in an emergency, to cover a few quick miles with Hovers! There are always two men in my platoon Hovers to liberate them from disturbing the sand. Those who do not move here in the desert is covered with sand!
+
+...
+
+Just when I'm on my way to the dock, the guard comes to meet me excited. "Ships! The whole sea full of ships! And I do not think it's ours." There was not much to consider. I have never screamed so loud as in that moment. "Alarm!" sounded it out of my throat, and not just once.
+
+It took a moment before my boys were all ready, some still had sleep in my eyes. Then the ships were already there! I've never seen so many. And none of these beasts was well disposed towards us!
+
+"We flee to the south!"
+
+
+Victory Condition: they reached the south.
+
+Defeat: Miner falls.]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== Event 45  ======= 
+message = [[A city in the middle of the desert? I see a glimmer of hope in the eyes of my platoon.]]
+asc.setLocalizedEventMessage( map, 45, message )
+
+--- ===== Event 46  ======= 
+message = [[Abdul-Dan! A city in the desert and the oasis here is beautiful. But we can not stay here long, we must continue. The boys have found a tank vehicle, including fuel loaded. While the tanker is not full, but the fuel found in multiples of what we have left.
+
+When I look to the south, I see only desert. But what we have a choice? South is the way that most takes us away from the north and that is a good thing. With the Army in the north we can not begin to absorb it. Whether the Ariel was sunk by the enemy fleet?]]
+asc.setLocalizedEventMessage( map, 46, message )
+
+--- ===== Event 59  ======= 
+message = [[South, welcome to the south! Here is everything you desire! Sun, Summer and lots of sand! Your friends will ask, where have they been on holiday? And they will say: "In the south, in the desert ...". Oops, I think I've gotten a sunburn?]]
+asc.setLocalizedEventMessage( map, 59, message )
+
+--- ===== Building -4259846  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 6, 65 ), [[Abdul-Dan]] ) 

@@ -1,5 +1,5 @@
 map = asc.getLoadingMap() 
---- ===== 1  ======= 
+--- ===== Event 1  ======= 
 message = [["Der Auftrag lautet, bringen sie diesen Brief zu unserem Kontaktmann, sie müssen nur ein wenig die feindlichen Stellungen umlaufen und schon sind sie da, sollte nicht so schwer sein und für den Notfall haben sie ja immer noch ihr MG, sowie die Minen. Parole Brieftaube."
 
 Dabei hat er mich auch noch angegrinst, wie er mir den Befehl gegeben hat. Habe mich dann militärisch verabschiedet und bin ohne mit der Wimper zu zucken raus aus dem Kommandobunker.
@@ -8,9 +8,9 @@ Bevor ich los bin, habe ich mich noch von meinem alten Ausbilder verabschiedet. 
 
 ...
 
-Auf den Weg hierher ist mir ein Tankfahrzeug begegnet. Weiss auch nicht wieso, aber irgendwie musste ich mal eine meiner beiden Minen ausprobieren. Bumm, war das ein Feuerwerk, von dem Tanker ist nicht mehr viel übrig. Der muss voll mit Sprit gewesen sein, so wie das Ding weg gekracht ist. Mir tun jetzt noch die Ohren weh von dem Wums, aber der Spaß war es wert.
+Auf den Weg hierher ist mir ein Tankfahrzeug begegnet. Weiß auch nicht wieso, aber irgendwie musste ich mal meine Minen ausprobieren. Bum, war das ein Feuerwerk, von dem Tanker ist nicht mehr viel übrig. Der muss voll mit Sprit gewesen sein, so wie das Ding weggekracht ist. Mir tun jetzt noch die Ohren weh von dem Wums, aber der Spaß war es wert.
 
-Auch wenn ich jetzt nur noch eine Mine habe, irgendwo wird irgendjemand jetzt keinen neuen Sprit bekommen. Könnte für mich von Vorteil sein. Dennoch sollte ich mich nicht zu lange auf der Straße aufhalten und mich lieber in die Berge verkriechen. Mein kleines Feuerwerk könnte Neugierige anlocken.
+Auch wenn ich jetzt weniger Minen habe, irgendwo wird irgendjemand jetzt keinen neuen Sprit bekommen. Könnte für mich von Vorteil sein. Dennoch sollte ich mich nicht zu lange auf der Straße aufhalten und mich lieber in die Berge verkriechen. Mein kleines Feuerwerk könnte Neugierige anlocken.
 
 
 Siegbedingung: Finden sie den Kontaktmann
@@ -18,93 +18,95 @@ Siegbedingung: Finden sie den Kontaktmann
 Niederlage: Soldat Brieftaube fällt]]
 asc.setLocalizedEventMessage( map, 1, message )
 
---- ===== 18  ======= 
-message = [[Das war ja leicht. Rein und das MG knattern lassen, schon gehört der Laden mir. Hm, was hat der Commander gesagt? "Ein paar Stellungen umgehen, ansonsten wird es ein Spaziergang." Wenn ich hier wieder lebend raus komme werde ich ihm eine Mine sonst wo hin stecken.
+--- ===== Event 18  ======= 
+message = [[Das war ja leicht. Rein und das MG knattern lassen, schon gehört der Laden mir. Hm, was hat der Commander gesagt? "Ein paar Stellungen umgehen, ansonsten wird es ein Spaziergang." Wenn ich hier wieder lebend rauskomme werde ich ihm eine Mine sonst wo hinstecken.
 
-Naja, ich denke ich sollte weiter nach Süden. Dann werde ich mich wohl durch den Sumpf schlagen müssen. Ich sehe mich schon wie ein Berserker gegen eine Überzahl von Stechmücken kämpfen. Aber besser Stechmücken, wie der Bunker im Osten. Mücken pieksen und es juckt danach, aber ein Bunker tut weh.]]
+Naja, ich denke ich sollte weiter nach Süden. Dann werde ich mich wohl durch den Sumpf schlagen müssen. Ich sehe mich schon wie ein Berserker gegen eine Überzahl von Stechmücken kämpfen. Aber besser Stechmücken, wie das MG-Nest im Osten. Mücken piksen und es juckt danach, aber ein MG-Nest tut weh.]]
 asc.setLocalizedEventMessage( map, 18, message )
 
---- ===== 23  ======= 
+--- ===== Event 23  ======= 
 message = [[Eine Jamming Station. Jamming kann ein Segen sein, wenn man es selber einsetzt und kann ein Fluch sein, wenn der Gegner es benutzt. Zumindest habe ich mal eine Runde Waffenstillstand mit den freundlichen Sumpfmücken.
 
-Bevor ich ihm die Mine in seinen Allerwertesten stecke, stülpe ich ihm noch eine große Vase überm Kopf, gefüllt mit diesen kleinen Blutsaugern. Ja das werde ich machen, wenn ich hier jemals lebend raus komme und den Commander wiedersehe.]]
+Bevor ich ihm die Mine in seinen Allerwertesten stecke, stülpe ich ihm noch eine große Vase überm Kopf, gefüllt mit diesen kleinen Blutsaugern. Ja das werde ich machen, wenn ich hier jemals lebend rauskomme und den Commander wiedersehe.]]
 asc.setLocalizedEventMessage( map, 23, message )
 
---- ===== 24  ======= 
-message = [[Noch ne Radarstellung. Sieht so aus als müsste ich jetzt die Straße nach Norden nehmen. Das gefällt mir gar nicht.
+--- ===== Event 24  ======= 
+message = [[Noch eine Radarstellung. Sieht so aus als müsste ich jetzt die Straße nach Norden nehmen. Das gefällt mir gar nicht.
 
-Des weiteren frage ich mich, wieso mir nicht schon ein paar Soldaten das Leben schwer machen? Der Feind müsste mich doch gesehen haben, bevor ich die beiden Radarstellungen eingenommen habe? 
+Des Weiteren frage ich mich, wieso mir nicht schon ein paar Soldaten das Leben schwer machen? Der Feind müsste mich doch gesehen haben, bevor ich die beiden Radarstellungen eingenommen habe? 
 
 Besser nicht weiter drüber nachdenken.]]
 asc.setLocalizedEventMessage( map, 24, message )
 
---- ===== 26  ======= 
+--- ===== Event 26  ======= 
 message = [[Harhar! Jetzt bist du nur noch ein Haufen Schrott. Gar nicht so schwer gewesen, das Teil zu zerlegen. Und fortan nannten sie ihn alle "Weaselkiller". :-)
 
 Hm, irgendwie habe ich das Gefühl ich bin gerade 10 cm. gewachsen, kann mich aber auch täuschen? ;-)]]
 asc.setLocalizedEventMessage( map, 26, message )
 
---- ===== 27  ======= 
+--- ===== Event 27  ======= 
 message = [["Mein Depot, alles meins. Erst, das Depot, dann die ganze Welt."
 
 Scherz beiseite, das Depot ist leer. Nichts was ich gebrauchen könnte. Aber zumindest ist es Mücken sicher.
 
-Vielleicht steht hier ja irgendwo noch ne Vase rum? ]]
+Vielleicht steht hier ja irgendwo eine Vase rum? ]]
 asc.setLocalizedEventMessage( map, 27, message )
 
---- ===== 28  ======= 
-message = [[Und noch eine Radarstellung, und ein feindliches Hauptquartier, und jede Menge Bunker, und ne BigGun, und Stacheldraht, und mir wird schlecht. Wahrscheinlich ne Mückenallergie, vielleicht auch ein wenig überanstrengt, vielleicht auch beides?
+--- ===== Event 28  ======= 
+message = [[Und noch eine Radarstellung, und ein feindliches Hauptquartier, und jede Menge Bunker, und eine BigGun, und Stacheldraht, und mir wird schlecht. Wahrscheinlich eine Mückenallergie, vielleicht auch ein wenig überanstrengt, vielleicht auch beides?
 
-Egal ich muss weiter. Nach Südosten die Straße wäre glatter Selbstmord. Bleibt mir wohl nichts anderes übrig, wie mich sumpfwärts nach Osten weiter zuschlagen. Hoffe nur, das mein Körper das Blut schneller nach produziert, wie die Mücken es mir abzapfen.
+Egal ich muss weiter. Nach Südosten die Straße wäre glatter Selbstmord. Bleibt mir wohl nichts anderes übrig, wie mich sumpfwärts nach Osten weiterzuschlagen. Hoffe nur, dass mein Körper das Blut schneller nachproduziert, wie die Mücken es mir abzapfen.
 
-Grrr ... Ich bring ihn um, wenn ich hier je wieder lebend raus komme.]]
+Grrr ... Ich bring ihn um, wenn ich hier je wieder lebend rauskomme.]]
 asc.setLocalizedEventMessage( map, 28, message )
 
---- ===== 43  ======= 
-message = [[Noch ne Jamming Station. Vielleicht hilft die mir ja auch gegen die Mücken? Antimückenjamming, das wäre cool!
+--- ===== Event 43  ======= 
+message = [[Noch eine Jamming Station. Vielleicht hilft die mir ja auch gegen die Mücken? Antimückenjamming, das wäre cool!
 
 Außerdem steht hier in einer Ecke ein kleiner Kanister mit Treibstoff. Hm, vielleicht kann ich den gebrauchen?]]
 asc.setLocalizedEventMessage( map, 43, message )
 
---- ===== 44  ======= 
-message = [[Yeah, ein herrenloses Weasel oder genauer gesagt ein ehemaliges Feind Weasel. Scheint kein Sprit zu haben. Sowohl das Fahrzeug, wie die ganze Tankstation scheint ohne Treibstoff zu sein. Wusste doch, das irgendwo irgendjemand auf den Tanker wartet. Man gut das ich immer ein wenig Treibstoff dabei habe. Damit brenne ich mir manchmal sogar die Wunden aus.
+--- ===== Event 44  ======= 
+message = [[Yeah, ein herrenloses Weasel oder genauer gesagt ein ehemaliges Feindweasel. Scheint kein Sprit zu haben. Sowohl das Fahrzeug, wie die ganze Tankstation scheint ohne Treibstoff zu sein. Wusste doch, dass irgendwo irgendjemand auf den Tanker wartet. Man gut das ich immer ein wenig Treibstoff dabei habe. Damit brenne ich mir manchmal sogar die Wunden aus.
 
-Ich sollte ein wenig Treibstoff in das Weasel umfüllen. Mit Hilfe der Jammingstation könnte ich versuchen bis kurz vor die Brücke zu fahren. Bin dann zwar schon in Reichweite der Biggun, aber das Jamming reicht hoffentlich aus?
+Ich sollte ein wenig Treibstoff in das Weasel umfüllen. Mit Hilfe der Jammingstation könnte ich versuchen erst mal auf die Brücke zu fahren. Bin dann zwar schon in Reichweite der Biggun, aber das Jamming reicht hoffentlich aus?
 
-Dann nochmal kurz durch atmen und Vollgas. Die Straße nach Südosten wäre mein Tod. Aber das Weasel muss mich nur über diesen Stacheldraht bringen. Und ich dann in den Wald, hoffentlich außer Sichtweite der Biggun?
+Dann nochmal kurz durchatmen und Vollgas. Die Straße nach Südosten wäre mein Tod. Aber das Weasel muss mich nur über diesen Stacheldraht bringen. Und ich dann in den Wald, hoffentlich außer Sichtweite der Biggun?
 
-Zwei Bunker und die Biggun, die das Weasel einstecken muss. Das müsste der Gaul aushalten. Also ducken und durch, evtl. vorher noch mal beten, manchmal soll das sogar helfen?]]
+Zwei Mg-Nester, die Biggun und einen Bunker, wo das Weasel einstecken muss. Das müsste der Gaul aushalten. Also ducken und durch, evtl. vorher noch mal beten, manchmal soll das sogar helfen?]]
 asc.setLocalizedEventMessage( map, 44, message )
 
---- ===== 46  ======= 
+--- ===== Event 46  ======= 
 message = [[Wahnsinn! Die Plattform ist zwar nicht einsatzbereit, aber hier stehen einige Treibstoffkanister rum. Ich sollte mitnehmen, was ich schleppen kann.]]
 asc.setLocalizedEventMessage( map, 46, message )
 
---- ===== 47  ======= 
-message = [[Ahoi! Ne Hover! Davon habe ich schon immer geträumt. Den Gaul schnapp ich mir. Nur leider ist das Teil ebenfalls ohne Sprit. Kann ich aber schnell ändern. Erstmal mein Vorrat da rein drücken, dann den Rest von der Oelstation abholen.
+--- ===== Event 47  ======= 
+message = [[Ahoy! Ne Hover! Davon habe ich schon immer geträumt. Den Gaul schnapp ich mir. Nur leider ist das Teil ebenfalls ohne Sprit. Kann ich aber schnell ändern. Erst mal mein Vorrat da reindrücken, dann den Rest von der Ölstation abholen.
 
-Die Hover wird da nicht rein fahren können. Muss ich wohl von Hand die Kanister hin und her schleppen, aber das mache ich doch gerne. Vielleicht reicht dann der Treibstoff aus, um über See weiter zukommen?
+Die Hover wird da nicht reinfahren können. Muss ich wohl von Hand die Kanister hin und her schleppen, aber das mache ich doch gerne. Vielleicht reicht dann der Treibstoff aus, um über See weiterzukommen?
 
-Sollte nur nicht soviel sinnlos den wenigen Sprit verheizen und meine Route mit Bedacht wählen. Schön außerhalb der Reichweite der Biggun bleiben! An einem Bunker muss ich wohl vorbei, aber das dürfte nicht das Problem sein. Am besten nehme ich einen Bunker, der sich noch nicht so eingeschossen hat. 
+Sollte nur nicht so viel sinnlos den wenigen Sprit verheizen und meine Route mit Bedacht wählen. Schön außerhalb der Reichweite der Biggun bleiben! An einem MG-Nest muss ich wohl vorbei, aber das dürfte nicht das Problem sein. Am besten nehme ich einen MG-Nest, der sich noch nicht so eingeschossen hat. 
 
-Dann lass mal los hovern. ;-)]]
+Dann lass mal loshovern. ;-)]]
 asc.setLocalizedEventMessage( map, 47, message )
 
---- ===== 73  ======= 
+--- ===== Event 73  ======= 
 message = [[Ah, die Fahrt auf dem Wasser war die reinste Wohltat! Kein Sumpf! Keine Mücken! Am liebsten hätte ich mich mit der Hover Richtung weites Meer verpisst, aber mein Auftrag und die Treibstoffmenge ließen mir keine andere Chance, wie hier im Hafen zu landen.
 
 Frage mich echt, wieso ich jedes Gebäude so einfach einnehmen kann? Ich sollte mich dennoch nicht zu lange im Hafen aufhalten und den Pfad nach Süden versuchen, vielleicht finde ich dort, was ich suche?]]
 asc.setLocalizedEventMessage( map, 73, message )
 
---- ===== 87  ======= 
-message = [[Eine Villa mitten im Walde, welch eine Idylle. Wahrscheinlich wohnt hier irgend so ein reicher Fuzie, vielleicht sogar ein hoher militärischer Rang, wäre doch ne Idee wert einen der feindlichen Lenkerköpfe auszuschalten?
+--- ===== Event 87  ======= 
+message = [[Eine Villa mitten im Walde, welch eine Idylle. Wahrscheinlich wohnt hier irgend so ein reicher Fuzzi, vielleicht sogar ein hoher militärischer Rang, wäre doch eine Idee wert, einen der feindlichen Lenkerköpfe auszuschalten?
 
-"Pst... hier...Du musst der Bote sein. Parole Brieftaube. Wir haben nicht viel Zeit, hätte nicht gedacht, das du mich je erreichen würdest, hatte Zugang zu den Radarstation und konnte dich beobachten, zumindest solange bist du die Radarstationen übernommen hattest. Jedes mal wenn du mehr gesehen hast, habe ich weniger gesehen.
+"Pst... hier...Du musst der Bote sein. Parole Brieftaube. Wir haben nicht viel Zeit, hätte nicht gedacht, das du mich je erreichen würdest, hatte Zugang zu den Radarstation und konnte dich beobachten, zumindest solange bist du die Radarstationen übernommen hattest. Jedes Mal wenn du mehr gesehen hast, habe ich weniger gesehen.
 
-Außerdem habe ich ein wenig Verwirrung gestiftet. Die Truppen sind irgendwo und jagen Phantome, die es nicht gibt. Doch werden sie bald zurückkommen und dann werden sie hier aufräumen. Und man wird merken, das ihr alter Kommandant ein falsches Spiel mit ihnen getrieben hat. Wir sollten keine Zeit vergeuden und uns schnellstens in den südlichen Wald verdrücken.
+Außerdem habe ich ein wenig Verwirrung gestiftet. Die Truppen sind irgendwo und jagen Phantome, die es nicht gibt. Doch werden sie bald zurückkommen und dann werden sie hier aufräumen. Und man wird merken, dass ihr alter Kommandant ein falsches Spiel mit ihnen getrieben hat. Wir sollten keine Zeit vergeuden und uns schnellstens in den südlichen Wald verdrücken.
 
 Deine Hover ist leider nicht waldtauglich und andere Fahrzeuge kommen nicht in Frage, weil irgendjemand hier Tanker schrotten muss. ;-) Ist wohl aber auch besser, zu Fuß sind wir im Wald fast nicht zu orten. Außerdem sitze ich sowieso schon zu lange in meinem bequemen Kommandosessel, so ein kleiner Fußmarsch tut mir sicherlich mal ganz gut."
 
-Einfach nur abdrücken, einfach nur das Gewehr anlegen, den Finger an den Abzug und abdrücken. Statt dessen händigst du diesem hohen Überläufertier diesen dummen Brief aus und folgst ihm. So ein kleiner Fußmarsch? Dir kommen fast die Tränen. Naja zumindest keine Sumpfmücken mehr, dafür gibt es jetzt Waldmücken! Ein hoch auf die Abwechslung im Leben.]]
+Einfach nur abdrücken, einfach nur das Gewehr anlegen, den Finger an den Abzug und abdrücken. Stattdessen händigst du diesem hohen Überläufertier diesen dummen Brief aus und folgst ihm. So ein kleiner Fußmarsch? Dir kommen fast die Tränen. Naja zumindest keine Sumpfmücken mehr, dafür gibt es jetzt Waldmücken! Ein hoch auf die Abwechslung im Leben.]]
 asc.setLocalizedEventMessage( map, 87, message )
 
+--- ===== Building -1441807  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 15, 22 ), [[Villa]] ) 

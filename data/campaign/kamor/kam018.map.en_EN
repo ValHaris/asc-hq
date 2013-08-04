@@ -1,0 +1,63 @@
+map = asc.getLoadingMap() 
+--- ===== Event 678  ======= 
+message = [[So here we were now. But what next? So far there was not much to consider. Either I had a job, or I was on the run. Sorry, I mean we had an order, or we were on the run. I have to be careful that I do not increase my new rank to his head. My boys have promoted me to commander. I do not know who started it. Commander to say, but the rest has joined immediately. So now I'm Commander.
+
+Commander? What? Far away from home, against whom we are fighting? In the south, expect further rail vehicles, armored vehicles, a lot of troopers, maybe even Air Force?
+
+Furthermore, our entire lake is open to the east. Particularly critical is the location of the newly conquered oil platforms. To keep in case of emergency impossible without a fleet. The space occupied port indicates maritime activities, even if here are only for production hovercrafts and speedboats. We are far away from our original enemy, but that means nothing.
+
+As if that was not enough, we still have the mountain lake. I have no ideas about how the southern end of the lake looks like and how attacks are to be expected there by light water vehicles or aircraft.
+
+And the north? We ourselves have taken this position over the mountains in the north. So not entirely negligible.
+
+Remains of the west, a river that leads from the lake to the west. North and south of the river forest, the mountain chain moves on. I would love to piss me off with my boys to the west, where we find a small village with only women, then hallelujah. But with my luck, the women are likely Amazons and trained in the art of war.
+
+Furthermore, we still have a resource problem, the resources that we have found so far were, but depleted very quickly. I will definitely send a scout team to the western river. They should explore what awaits us there.
+
+I also have our research department, handed the documents found in the volcano. You should take a look there once.
+
+The harbor, I transferred the old port head. For one, I had a debt to pay, on the other hand I hope for the support of his high command. This I have told him that. Its port he can hold only if he organizes reinforcement. His company is hot on oil, I give them oil. If they help us get the northern oil platforms, which do not promote a lot more at the moment of the country. But I think if it is to relocate to promote water, the area is still rich in oil. But they should also send a few warships and do not let her go without an escort van.
+
+The West will be explored, from the north, I hope to support troops. The East, I can only watch. If the south. And here I've just decided to attack me. Sometimes offense is the best defense. Let's wait and hide us, I give the decision which fought the enemy off. And then the attack can come from anywhere, possibly even coordinated attacks from different directions?
+
+Our greatest weapon is the rail and that's where we fight. Armored vehicles and helicopters to escort a few, maybe we could also keep helicopters ready, loaded with infantry. The biggest problem is the view. Our rail artillery radar needs support. I have said this to our harbor master. He gives this request with the highest priority on. Seeunterstützung is good,
+but for my Blitzkrieg to the south I could use radar.
+
+Anyway, the guide-rail contactors are available, repaired and new ammunition in our big weapons factory.
+
+
+Victory Condition: she Conquer the southern positions.
+
+Defeat Captain Miner falls.]]
+asc.setLocalizedEventMessage( map, 678, message )
+
+--- ===== Event 691  ======= 
+message = [[Good news from the harbor master. It's a plane on the way to take us a few moments. Until the plane is here, but it will still take a bit. So a little time to prepare the offensive. It could be beneficial if we loaded some helicopters with Troopers, then we would have the option to fly over the enemy, and it might shake up locally.]]
+asc.setLocalizedEventMessage( map, 691, message )
+
+--- ===== Event 706  ======= 
+message = [[Miner Commander, this is the Captain of the Raven. We deliver a cargo of "eyes." Please make the necessary preparations and keep it absolutely free of the runway. Otherwise we can not deliver.]]
+asc.setLocalizedEventMessage( map, 706, message )
+
+--- ===== Event 731  ======= 
+message = [[Two eyes for us. Now you can start.]]
+asc.setLocalizedEventMessage( map, 731, message )
+
+--- ===== Event 746  ======= 
+message = [[There was easy. There was no supporting troops for the defense of Biggun. A good or a bad sign?]]
+asc.setLocalizedEventMessage( map, 746, message )
+
+--- ===== Event 747  ======= 
+message = [[The bunker is history, but I have a bad feeling. The biggest problem is that we can not efficiently use our adjacent railway artillery.]]
+asc.setLocalizedEventMessage( map, 747, message )
+
+--- ===== Event 757  ======= 
+message = [[This is our headquarters, now just off the remaining troops and take other important buildings.]]
+asc.setLocalizedEventMessage( map, 757, message )
+
+--- ===== Event 758  ======= 
+message = [[That was it. We won. But I'm not really happy. This victory has cost us a lot. Man and material. But that probably belongs to this war. At least we have one less problem. And I'm sure now that my decision to go on the offensive, had been right.
+
+A message from the research center. I should come over there personally. There is at the moment anyway nothing more for me to do. Time for a visit to the research center.]]
+asc.setLocalizedEventMessage( map, 758, message )
+

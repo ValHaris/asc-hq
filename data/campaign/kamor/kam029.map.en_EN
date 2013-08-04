@@ -1,0 +1,85 @@
+map = asc.getLoadingMap() 
+--- ===== Event 1  ======= 
+message = [[Rambo was not with the others. The submarine sank and penetrated water everywhere. With his last strength, fighting against the inflowing water masses, Rambo reached the closet. The cabinet, and the later we rescued him.
+
+He snatched the first respirator and then the oxygen tank. He had air, but the boat sank further, no one knew how deep the ocean would be here. Rambo did not want to wait until the water would crush the clam. He quickly put on the rest of the diving equipment. Breathing apparatus and oxygen were quickly attached to the body.
+
+Most recently, he grabbed yet the usual Marine combat gear. A rifle, including a gun under water? And some explosives.
+
+Having enough water had flowed into the boat, it was possible for Rambo again to move the boat. But first he wanted to get out of here. He quickly found a large crack in the hull of the clam where he could leave the clam with ease. But he also noticed a closed bulkhead. Before he decided to leave the clam, he knocked again against the bulkhead and there was no echo what he heard there. Someone answered his knock. Since there who was alive.
+
+Damn what he should do. Himself he could have saved with ease. But as you rescue Trapped in a sinking submarine?
+
+Before he could continue to ruminate about it, it made ??already a huge crash and a powerful jolt went through the boat. The clam had reached the bottom. But that changed what? He himself would not last forever oxygen and consume a lot of oxygen, he wanted without developing decompression appear.
+
+Hell, he did not have much time. He had to give an overview, in and out of the submarine. Was it even possible to save the others or he had to make them all down?
+
+
+Victory Condition: Save the clam she and her crew.
+
+Defeat: You lose Rambo.
+]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== Event 4  ======= 
+message = [[Was there anything unusual in the south. It looked like large air bubbles.]]
+asc.setLocalizedEventMessage( map, 4, message )
+
+--- ===== Event 7  ======= 
+message = [[Rambo did not believe his eyes. In the deepest ocean something like a cave. And in the cave had to be an air resources. From time to time there bubbled small oxygen bubbles from the cave.]]
+asc.setLocalizedEventMessage( map, 7, message )
+
+--- ===== Event 8  ======= 
+message = [[Madness, Rambo could not understand it, but he found himself here in a huge underground cave again and there were machines in the south. And these machines were in operation.]]
+asc.setLocalizedEventMessage( map, 8, message )
+
+--- ===== Event 9  ======= 
+message = [[Well, here was none? But the machines ran out and they looked well oiled. Rambo examined the whole complex machinery. A part seemed to be responsible for the supply of oxygen in these cave complex.
+
+He would somehow bring again the clam makeshift running. Somehow the propeller fire up and hope that the clam does not break when it crawls on the seafloor. But how could he do that?]]
+asc.setLocalizedEventMessage( map, 9, message )
+
+--- ===== Event 10  ======= 
+message = [[Achtung Minen. Betreten dieser Passage auf eigene Gefahr.]]
+asc.setLocalizedEventMessage( map, 10, message )
+
+--- ===== Event 12  ======= 
+message = [["Hehehe."
+
+Rambo could not restrain himself just pull the trigger. An old man sprang at him. The old man seemed to be totally out of his mind, but Rambo was able to pacify him. More and more calmed the old man
+
+Rambo found out that his name was Nemo and had retired long ago here. He had been commander of a submarine, but was no longer agree to the commands his high command. It should bombard civilian targets and thus a lot of women and children with his submarine. This burden, he did not expect his conscience, so he tricked his team and disappeared alone with his Nautilus, as he called his submarine lovingly, while the crew was ashore.
+
+He then found this cave system and it was ideal for him to sit down to rest here. He built a machine to dehydrate water and fed on fish and algae. Even mushrooms he bred down here in the aisles. He worked at an oxygen to filter out water system.
+
+Rambo was intrigued, but interrupted the old man, then, to inform him of the clam and his comrades imprisoned there. Nemo was initially not thrilled that more people should still penetrate into hiding here, but it left him no choice then. He had a conscience and needed help to recover the Clam Rambo.
+
+"We need to transition to the other, to the Nautilus."]]
+asc.setLocalizedEventMessage( map, 12, message )
+
+--- ===== Event 13  ======= 
+message = [[The Nautilus! Nemo had brought her here.
+
+He had developed a system whereby he could transport the Nautilus floor. There were only a couple of wheels and axles, and a lifting system, but that was enough to bring the Nautilus here. For the clam they would still need something like an underwater drive, but he could improvise quickly. He still had torpedoes on board the Nautilus, as it would repurpose one of.
+
+Everything necessary to rescue the clam would find Rambo in the aggregate space.]]
+asc.setLocalizedEventMessage( map, 13, message )
+
+--- ===== Event 23  ======= 
+message = [[It was done, the clam was in the cave. It was then easy to pull them out of the water from there.
+
+We were saved., Such as through a fairy tale Someone who was not there myself, it would have a hard time believing all that.
+
+Neptune then had his protective hands have placed over us, and another could not be explained.
+
+But we needed a lot of time to get the clan again fully operational. We also talked about Nemo, to bring his Nautilus again. I managed to take contact with our high command, but got little or no information about Soldier "carrier pigeon". They gave me instructions to put myself first in the direction Oilcompany to the southwest. This seemed Oilcompany against the same enemy as we proceed. A Commander Miner there seemed to occupy our enemies.
+
+Somehow I already knew who he was Commander Miner.
+
+What a story, head told you there. But there was no time to think about it, the offensive against the desert people had to be brought to an end.]]
+asc.setLocalizedEventMessage( map, 23, message )
+
+--- ===== Building -1900548  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 4, 29 ), [[Nautika]] ) 
+--- ===== Building -2162695  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 7, 33 ), [[Nautilus aggregate space]] ) 

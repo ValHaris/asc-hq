@@ -1,38 +1,33 @@
 map = asc.getLoadingMap() 
---- ===== 1  ======= 
+--- ===== Event 1  ======= 
 message = [[Der Prototyp ist noch bewegungsunfähig, erwähnte Brain nebenbei. Aber er kann immerhin schon schießen. Genauso schnell wie ich in den Prototypen reingeklettert bin, hat Brain jeden der Jungs noch ein Magazin mit Scharfschützenmunition zugeworfen.
 
 "Massive Verteidigung, Jungs! Wer hier rein will, wird das teuer bezahlen!"
 
 
-SIegbedingung: Miner und Brain müssen überleben
+Siegbedingung: Miner und Brain müssen überleben
 
-Verloren: Einer der beiden stirbt.
-
-
-
-
-]]
+Verloren: Einer der beiden stirbt.]]
 asc.setLocalizedEventMessage( map, 1, message )
 
---- ===== 500  ======= 
+--- ===== Event 500  ======= 
 message = [["War das der Letzte?"
 
 ...
 
-Es scheint wir haben es geschafft. Es sind keine Schüsse mehr zu hören. Die Junges können ihr Glück noch nicht fassen. Ich selber habe auch nicht mehr daran gedacht, hier noch lebend rauszukommen. Unser Feind muß ein ganzes Infanteriebatallion Fallschirmspringer geopfert haben. Wofür? Für Genesis?
+Es scheint wir haben es geschafft. Es sind keine Schüsse mehr zu hören. Die Junges können ihr Glück noch nicht fassen. Ich selber habe auch nicht mehr daran gedacht, hier noch lebend rauszukommen. Unser Feind muss ein ganzes Infanteriebataillon Fallschirmspringer geopfert haben. Wofür? Für Genesis?
 
 Weiterhin gibt mir die Zielstrebigkeit mit der diese Troopers vorgegangen sind, zu denken. Sie kannten die genaue Architektur dieses Gebäudes und haben selbst den Weg vom Dach direkt in den oberen Komplex gefunden. Dafür gibt es nur ein Antwort: Wir haben einen Spion in unseren Reihen.
 
-Die Mappe Genesis nehme ich erstmal wieder an mich. Brain soll sich um das Sicherheitsleck kümmern, ausserdem soll er allen im Forschungsinstitut die Information zukommen lassen, das die Mappe Genesis aus Sicherheitsgründen an einen geheimen Ort gebracht wird.
+Die Mappe Genesis nehme ich erstmal wieder an mich. Brain soll sich um das Sicherheitsleck kümmern, außerdem soll er allen im Forschungsinstitut die Information zukommen lassen, das die Mappe Genesis aus Sicherheitsgründen an einen geheimen Ort gebracht wird.
 
 "Nettes Spielzeug habt ihr da gebastelt, Professor Brain". Ich musste ihn einfach Professor nennen, obwohl er es nicht war. Und es schien ihm zu gefallen, zumindest seinem Grinsen nach.
 
-Dann wand ich mich den überlebenden Soldaten zu: "Jungs, ihr seit saumässig stark im Fangen von Munition." Ein leichtes Lachen entstieg den Soldaten. Die Entspannung wich nun der Erschöpfung. Jetzt kommt die schlimmste Zeit für die Soldaten. Sie haben wieder Zeit zu denken. Es war ihr erster Einsatz und sie haben jede Menge ihrer Kameraden verloren, mit denen sie wahrscheinlich gestern noch zusammen Zeit verbracht hatten.
+Dann wand ich mich den überlebenden Soldaten zu: "Jungs, ihr seid saumäßig stark im Fangen von Munition." Ein leichtes Lachen entstieg den Soldaten. Die Entspannung wich nun der Erschöpfung. Jetzt kommt die schlimmste Zeit für die Soldaten. Sie haben wieder Zeit zu denken. Es war ihr erster Einsatz und sie haben jede Menge ihrer Kameraden verloren, mit denen sie wahrscheinlich gestern noch zusammen Zeit verbracht hatten.
 
-"Und ihr seit eine saumässig starke Truppe, auch die vielen Jungs die heute gefallen sind, haben das unmögliche vollbracht und ein ganzes Feindbatallion gut trainierter Fallschirmspringer eleminiert. Wir können die Gefallenen nicht wieder ins Leben zurückrufen. Aber wir können erzählen von diesem Tag und jeder soll wissen, das die Truppe hier heute unmögliches vollbracht hat. Das war es Jungs, und glaubt mir, ich fühle mich genauso beschissen wie ihr. Wegtreten!"
+"Und ihr seid eine saumäßig starke Truppe, auch die vielen Jungs die heute gefallen sind, haben das unmögliche vollbracht und ein ganzes Feindbataillon gut trainierter Fallschirmspringer eliminiert. Wir können die Gefallenen nicht wieder ins Leben zurückrufen. Aber wir können erzählen von diesem Tag und jeder soll wissen, dass die Truppe hier heute unmögliches vollbracht hat. Das war es Jungs, und glaubt mir, ich fühle mich genauso beschissen wie ihr. Wegtreten!"
 
-Dann kamen auch schon unsere Soldaten aus den unteren Gebäudekomplex, wir hatten das Gebäude wieder unter Kontrolle.
+Dann kamen auch schon unsere Soldaten aus dem unteren Gebäudekomplex, wir hatten das Gebäude wieder unter Kontrolle.
 
 "Professor Brain, wir bleiben in Kontakt. Findet mir diesen Spion."]]
 asc.setLocalizedEventMessage( map, 500, message )

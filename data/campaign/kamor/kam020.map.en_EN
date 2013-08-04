@@ -1,0 +1,34 @@
+map = asc.getLoadingMap() 
+--- ===== Event 1  ======= 
+message = [[The prototype is still unable to move, Brain mentioned in passing. But he can shoot after all, already. Just as quickly as I am pure climbed into the prototype, Brain has thrown any of the guys have a magazine with sniper ammo.
+
+"Solid defense, guys! Who purely want here is to pay the expensive!"
+
+
+Victory Condition: Miner and Brain must survive
+
+Lost: One of the two dies.]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== Event 500  ======= 
+message = [["Was this the last one? "
+
+...
+
+It seems we have made it. It can be heard no more shots. The Young still can not believe her luck. I myself have not even thought about it, get out of here alive. Our enemy must have sacrificed a whole battalion of infantry parachutists. What for? For Genesis?
+
+Furthermore gives me the determination with which these Troopers have proceeded to think. They knew the exact architecture of this building and have found themselves the way from the roof directly into the upper complex. There is only one answer: We have a spy in our ranks.
+
+The folder Genesis I take first again at me. Brain is to look after the security leak, and he should leave all the research institute to get the information that the folder Genesis is brought to a secret place for security reasons.
+
+"Nice toy you have tinkered there, Professor Brain". I just had to call him Professor, although he was not there. And it seemed to please him, at least according to his grin.
+
+Then I forced myself to the surviving soldiers: "You guys are bloody strong in the capture of ammunition." A slight smile emerged from the soldiers. The relaxation now gave way to exhaustion. Now comes the worst time for the soldiers. You have time to think again. It was her first job and they have lost a lot of their comrades with whom they had probably spent time together yesterday.
+
+"And you're a bloody strong force, and the many guys who have fallen today, have the impossible accomplished and eliminated an entire enemy battalion of well-trained parachutists., We can the dead do not call back again to life., But we can tell from that day and every should know that the Force has accomplished here today impossible. That's it guys, and believe me, I feel just as shitty as you. Dismissed! "
+
+Then already our soldiers came from the lower complex, we had the building under control.
+
+"Professor Brain, we stay in touch. Finds me this spy."]]
+asc.setLocalizedEventMessage( map, 500, message )
+

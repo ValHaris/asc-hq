@@ -1,0 +1,48 @@
+map = asc.getLoadingMap() 
+--- ===== Event 200  ======= 
+message = [[After a long discussion with the Port Warden, the decision finally was made. It would further attacks against warships come and we are helpless here. So we have gone out of range of a possible Seebedrohung.
+
+My suggestion to remove all buildings, led to an increase in the eyes of the port warden tears. Nevertheless, on the one hand we need the material, what we get during the demolition, on the other hand our enemy will search in vain for a port and no longer understand the world. Also, we should dismantle the pipelines. The shot-up remains of the Biggun we have already dismantled by hand.
+
+The trip should then go south. There, our scout team did find a collection of smaller stones. Wating for our catfish. The massive snow slows our vehicles. Our Troopers are progressing very slowly. So our two Gold Hovers are again worth.
+
+
+Victory Condition: Next to the south.
+
+Defeat: Miner, one of the hovercraft, the bulldozers, tankers or Vesuvius destroyed.]]
+asc.setLocalizedEventMessage( map, 200, message )
+
+--- ===== Event 213  ======= 
+message = [[The barren land changes character here. A modest vegetation grows here.]]
+asc.setLocalizedEventMessage( map, 213, message )
+
+--- ===== Event 214  ======= 
+message = [[This is more dense vegetation, could look bad for our Hovers. Possibly. we must leave the Hovers for this bush? The do not like it.]]
+asc.setLocalizedEventMessage( map, 214, message )
+
+--- ===== Event 215  ======= 
+message = [[Lots of mountains, even if we have to leave now our other vehicles, it could be fatal!]]
+asc.setLocalizedEventMessage( map, 215, message )
+
+--- ===== Event 216  ======= 
+message = [[This river, it would be easy to cross it, if we had our Hovers. Only do not come through this bush. Maybe our catfish can help?]]
+asc.setLocalizedEventMessage( map, 216, message )
+
+--- ===== Event 221  ======= 
+message = [[A quarry, wonderful! We will take our catfish here. (Victory condition)]]
+asc.setLocalizedEventMessage( map, 221, message )
+
+--- ===== Event 222  ======= 
+message = [[Very beautiful! We have re-mastered a hurdle. This quarry is just waiting to be harvested by us.
+
+Only this path to the south gives me consider.]]
+asc.setLocalizedEventMessage( map, 222, message )
+
+--- ===== Event 341  ======= 
+message = [[What's this? An abandoned Ranger unit here? But it looks a little chipped. Maybe we will get the scrap heap to work?]]
+asc.setLocalizedEventMessage( map, 341, message )
+
+--- ===== Event 396  ======= 
+message = [[These soldiers seem already to belong to a new group. Super! For negotiations with which it is probably too late now.]]
+asc.setLocalizedEventMessage( map, 396, message )
+

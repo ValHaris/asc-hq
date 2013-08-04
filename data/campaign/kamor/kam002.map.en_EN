@@ -1,0 +1,28 @@
+map = asc.getLoadingMap() 
+--- ===== Event 1  ======= 
+message = [[Anyway I feel a little better now. Before we go, we still have looted the armory. Full on munitioniert, including new mines, new Sanimaterial and the proven Wundenausbrennöl is also gemaxed. Somewhere in the south should be our goal?
+
+...
+
+Forest, nothing but forest, up, down, right, left, front, back. And as I had suspected forest mosquitoes! But this forest mosquitoes are harmless compared to the marsh mosquitoes, maybe I'm just mosquitoes become resistant. But this command is rumfluchen animal all the time on my side. Yes bites him, sucks him, tortures him to death, my little bloodsuckers friends.
+
+...
+
+Did not we just make a sound? Could also be just an animal, but somehow seems to strike my sixth sense. Also, the command animal next to me seems to have heard of. Yes, that even sounds like a car! Damn, here in the forest, it is not easy to use the mines, the enemy could come from anywhere and easily circumvent or avoid a mine. That does not make things easier.
+
+
+Victory Condition: Beat it by to the south.
+
+Defeat: one of their soldiers fall.]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== Event 5  ======= 
+message = [[Forest Ingen, a bed, a little rest, so here I would prefer only by kip a week and dreaming of beautiful things!
+
+But we do not have much time, the ambush was probably not planned by the Commander himself? Looks like they could have been foul play much more exposed.
+
+After all, an old and faithful friend of the Commander joins us to the. They call him Rambo.]]
+asc.setLocalizedEventMessage( map, 5, message )
+
+--- ===== Building -1507333  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 5, 23 ), [[Forest Ingen]] ) 

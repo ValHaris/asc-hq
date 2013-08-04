@@ -1,9 +1,52 @@
 map = asc.getLoadingMap() 
---- ===== 1  ======= 
-message = [[Félicitations que vous y êtes arrivés jusqu'à ici!
+--- ===== Event 1  ======= 
+message = [[Vous me donnais une pause. Immédiatement après notre défense réussie de El malveillant est venu le cri de la flotte. Le Oilcompany avait quelque monté à la flotte, mais il ne serait pas suffisant. L'ennemi était trop forte.
 
-Non, ce n'est pas encore la fin de la campagne. Cela va se poursuivre, mais pas pour le moment.
+J'ai envoyé tout la même que dans l'aviation ce que j'avais à offrir. Avec hélicoptères de transport à la flotte, ce qui devrait aider à ce que? Peut-être l'un ou l'autre aurait Bourdon peut apporter une torpille de la cible? Ou devrions-nous abandonner la position retourner là-bas? Nous perdrions les approvisionnements par voie maritime. Il ne faudrait pas longtemps, et puis aussi sur l'air d'alimentation serait tarir. Et le pétrole pompé ici signifie aussi atteindre par air, terre et eau.
 
-]]
+Dans le même temps j'ai reçu un message que le transport était arrivé véhicules ferroviaires. Notre artillerie meurtrière, malheureusement attaché au rail? Si nous pouvons en quelque sorte l'utiliser contre la flotte ennemie, nos chances augmenteraient.
+
+
+Condition de victoire: Garder qu'elle était la flotte ennemie.
+
+Défaite: La flotte ennemie gagne.]]
 asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== Event 634  ======= 
+message = [[Un sous-marin? Juste sous notre nez? Il ne pouvait pas l'être? Mais c'était vrai. Ce sous-marin que j'ai jamais vu se manifester. C'était la palourde, palourdes même, qui nous transporte à l'époque, dont nous avions pris d'assaut la plate-forme superbe et nous devrions suivre mes parachutistes commandés par là? Rambo? Head? Pas le temps d'y penser plus maintenant depuis. Nous avons dû lutter et par tous les moyens.
+
+scénario avancé:
+
+Utilisez-les pour poser des mines autour de la palourde, mais ne pas perdre la palourde.]]
+asc.setLocalizedEventMessage( map, 634, message )
+
+--- ===== Event 636  ======= 
+message = [[Un message radio arriva.
+
+Commandant Miner. C'est le capitaine du Nautilus. Nous serions ravis de les aider. S'il vous plaît nous signaler destinations.
+
+Nautilus? La voix semblait familier, mais je n'avais pas entendu depuis un certain temps. C'était la voix de tête. En me tournait. Même s'il y avait une aide bienvenue, je pense qu'un os à ronger avec Head. Mais a dû arracher l'attente de poulet, nous étions au milieu d'une bataille.
+
+scénario avancé:
+
+Profitez de la puissance destructrice du Nautilus, mais méfiez-vous qu'il ne soit pas détruit.]]
+asc.setLocalizedEventMessage( map, 636, message )
+
+--- ===== Event 659  ======= 
+message = [[Résultats! Coulé! Malheureusement, ce n'était pas Battleships, mais une réalité amère. Mais nous avons gagné. Encore une fois.
+
+Les trappes de la bonne vieille Ariel ouverts et un Rambo grimaçant regardaient.
+
+"Eh bien, Weaselkiller, le commandant de la pigeon voyageur, tout une carrière réussie. Déjà conquis de nouvelles terres aujourd'hui? Et si vous vous dirigez regarder, s'il vous plaît ne pas le tuer tout de suite."
+
+J'ai souri en arrière, mais mon sourire était brève. Le second sous-marin, le Nautilus se rapprochait et je ne savais pas comment me comporter quand je veux regarder l'homme dans les yeux, ce qui m'a ensuite envoyé presque à mort.
+
+Et puis il était temps. Mon ancien commandant, l'animal transfuge, chef aka Tête tenait devant moi. Il portait l'uniforme de mon passé. Dans cette structure de commandement, je n'aurais même pas corporels et il était mon patron. T-il maintenant prendre le commandement ici et me rappeler de mon ancien grade militaire?
+
+Je doute que le Oilcompany que partiellement quelqu'un d'autre comme moi, en tant que commandant accepterait également.
+
+"Mineur commandant,« chef interrompu mon courant de pensée, mais il me salua. Pouvons-nous discuter en dessous de 4 yeux? "
+
+«Yes, we can», lui répondis-je, et s'inclina officiellement retiré.]]
+asc.setLocalizedEventMessage( map, 659, message )
 

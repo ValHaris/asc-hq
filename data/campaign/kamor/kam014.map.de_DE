@@ -1,14 +1,14 @@
 map = asc.getLoadingMap() 
---- ===== 7  ======= 
-message = [[Hier ist wirklich der Hund begraben! Wo sind wir nur gelandet? Ausser der Biggun gibt es hier keine militärischen Einheiten zur Verteidigung. Sie sagen, sie haben hier keine Feinde. Dies ist ein Ort des Friedens. Naja, wer es glaubt wird selig.
+--- ===== Event 7  ======= 
+message = [[Hier ist wirklich der Hund begraben! Wo sind wir nur gelandet? Außer der Biggun gibt es hier keine militärischen Einheiten zur Verteidigung. Sie sagen, sie haben hier keine Feinde. Dies ist ein Ort des Friedens. Naja, wer es glaubt wird selig.
 
 ...
 
-Der Oeltransporter ist wieder auf dem Weg um noch mehr Oel  zu holen. Am liebsten hätte ich den Kutter für meine Zwecke in Beschlag genommen. Mit der einen Biggun wären wir fertig geworden. Dann hätten wir uns den Kutter geschnapt und ab nach Hause. Aber erstens haben uns die Jungs hier geholfen und zweitens haben wir schon mehr als genug Feinde. Wir brauchen nicht noch eine dritte Partei, die uns auf dem Kicker hat.
+Der Öltransporter ist wieder auf dem Weg um noch mehr Öl  zu holen. Am liebsten hätte ich den Kutter für meine Zwecke in Beschlag genommen. Mit der einen Biggun wären wir fertig geworden. Dann hätten wir uns den Kutter geschnappt und ab nach Hause. Aber erstens haben uns die Jungs hier geholfen und zweitens haben wir schon mehr als genug Feinde. Wir brauchen nicht noch eine dritte Partei, die uns auf dem Kicker hat.
 
 ...
 
-So hängen wir hier fest, für wie lange? Zumindest wurde ich informiert, das ein Transport aus Nordwest mit Material erwartet wird. Ich frage mich nur, was wir hier die ganze Zeit machen sollen? Wir werden wohl Karten spielen und uns dieses interessante Fahrzeug "Vesuvius" genannt mal näher ansehen.
+So hängen wir hier fest, für wie lange? Zumindest wurde ich informiert, dass ein Transport aus Nordwest mit Material erwartet wird. Ich frage mich nur, was wir hier die ganze Zeit machen sollen? Wir werden wohl Karten spielen und uns dieses interessante Fahrzeug "Vesuvius" genannt mal näher ansehen.
 
 Nebenbei weht hier ein verdammt kalter Wind. Das Platoon tut sich schwer, sich so schnell an diese Kälte zu gewönnen. Direkt aus der Wüste in den Winter.
 
@@ -18,25 +18,25 @@ Siegbedingung: unbekannt
 Niederlage: Miner, eine der beiden Hovers oder der Bulldozer werden zerstört.]]
 asc.setLocalizedEventMessage( map, 7, message )
 
---- ===== 52  ======= 
+--- ===== Event 52  ======= 
 message = [[Soso, dies ist eine friedliche Gegend. Den Tanker hat es erwischt. Wir können froh sein, das wir nicht mehr auf den Kutter waren.
 
 Aus der Traum von ein paar friedlichen Stunden.]]
 asc.setLocalizedEventMessage( map, 52, message )
 
---- ===== 106  ======= 
+--- ===== Event 106  ======= 
 message = [[So ein Mist. Jetzt fängt es auch noch an zu schneien.]]
 asc.setLocalizedEventMessage( map, 106, message )
 
---- ===== 107  ======= 
+--- ===== Event 107  ======= 
 message = [[Noch mehr Schnee und das Wasser scheint zu frieren, vielleicht ist das unsere Chance gegen diesen Kreuzer?]]
 asc.setLocalizedEventMessage( map, 107, message )
 
---- ===== 108  ======= 
+--- ===== Event 108  ======= 
 message = [[Ja, das Meer ist noch weiter zugefroren.]]
 asc.setLocalizedEventMessage( map, 108, message )
 
---- ===== 173  ======= 
-message = [[Wir haben diesen Kreuzer zerstört. Doch wie geht es nun weiter? Wir werden kein Oel mehr bekommen und ob die angekündigte Materiallieferung hier eintreffen wird, sei in Frage gestellt? Da draussen turnt irgendwo ein U-Boot rum. Ich werde mich erstmal mit dem hiesigen Hafenaufseher besprechen.]]
+--- ===== Event 173  ======= 
+message = [[Wir haben diesen Kreuzer zerstört. Doch wie geht es nun weiter? Wir werden kein Öl mehr bekommen und ob die angekündigte Materiallieferung hier eintreffen wird, sei in Frage gestellt? Da draußen turnt irgendwo ein U-Boot rum. Ich werde mich erst mal mit dem hiesigen Hafenaufseher besprechen.]]
 asc.setLocalizedEventMessage( map, 173, message )
 

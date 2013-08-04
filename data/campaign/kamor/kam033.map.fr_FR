@@ -1,0 +1,7 @@
+map = asc.getLoadingMap() 
+--- ===== 1  ======= 
+message = [[Félicitations que vous y êtes arrivés jusqu'à ici!
+
+Non, ce n'est pas encore la fin de la campagne. Cela va se poursuivre, mais pas pour le moment.]]
+asc.setLocalizedEventMessage( map, 1, message )
+

@@ -1,0 +1,33 @@
+map = asc.getLoadingMap() 
+--- ===== Event 1  ======= 
+message = [[There were only a few hours after our separation time. Head had prepared the whole platform. Explosive charges were deposited everywhere at the right places to make the super platform disappear forever.
+
+In the harbor the crew could even make a few torpedoes and mines, with the clam was armed. Head then gave the command to the south.
+
+Victory Condition: it Listen to the story.
+
+Note: End Turn]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== Event 165  ======= 
+message = [[With a little distance to the platform head pressed the trigger for the explosion.]]
+asc.setLocalizedEventMessage( map, 165, message )
+
+--- ===== Event 200  ======= 
+message = [[There were other explosions, fuel depot went up in flames and all the buildings collapsed.]]
+asc.setLocalizedEventMessage( map, 200, message )
+
+--- ===== Event 227  ======= 
+message = [[The inferno was a huge fire spotting table.]]
+asc.setLocalizedEventMessage( map, 227, message )
+
+--- ===== Event 375  ======= 
+message = [[Then everything disappeared in smoke, a huge black fog covered the whole area.]]
+asc.setLocalizedEventMessage( map, 375, message )
+
+--- ===== Event 473  ======= 
+message = [[Unfortunately we were a little careless.
+
+While we watched the whole spectacle from the submarine surfaced in the state, something bubbling in the water near us.]]
+asc.setLocalizedEventMessage( map, 473, message )
+

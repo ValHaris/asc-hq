@@ -1,10 +1,10 @@
 map = asc.getLoadingMap() 
---- ===== 200  ======= 
-message = [[Nach langer Diskussion mit dem Hafenaufseher, stand der Entschluss schließlich fest. Es würden weitere Angriffe kommen und gegen Schlachtschiffe sind wir hier hilflos. Also müssen wir weg, ausser Reichweite einer möglichen Seebedrohung.
+--- ===== Event 200  ======= 
+message = [[Nach langer Diskussion mit dem Hafenaufseher, stand der Entschluss schließlich fest. Es würden weitere Angriffe kommen und gegen Schlachtschiffe sind wir hier hilflos. Also müssen wir weg, außer Reichweite einer möglichen Seebedrohung.
 
 Mein Vorschlag sämtliche Gebäude zu demontieren, ließen den Hafenaufseher Tränen in die Augen steigen. Dennoch, zum einen brauchen wir das Material, was wir beim Abriss erhalten, zum anderen wird unser Feind vergeblich einen Hafen suchen und die Welt nicht mehr verstehen. Auch die Pipelines sollten wir demontieren. Die zusammengeschossenen Reste der Biggun haben wir schon per Hand demontiert.
 
-Die Reise sollte dann nach Süden gehen. Dort hat unser Scoutteam eine Ansammlung von kleineren Steinen ausfindig gemacht. Gefundenes Fressen für unseren Steinbeisser. Der Schnee bremst masiv unsere Fahrzeuge. Auch unsere Troopers kommen nur sehr langsam voran. So sind unsere beiden Hovers mal wieder Gold wert.
+Die Reise sollte dann nach Süden gehen. Dort hat unser Scout Team eine Ansammlung von kleineren Steinen ausfindig gemacht. Gefundenes Fressen für unseren Steinbeißer. Der Schnee bremst massiv unsere Fahrzeuge. Auch unsere Troopers kommen nur sehr langsam voran. So sind unsere beiden Hovers mal wieder Gold wert.
 
 
 Siegbedingung: Weiter nach Süden.
@@ -12,37 +12,37 @@ Siegbedingung: Weiter nach Süden.
 Niederlage: Miner, eine der beiden Hovercrafts,  der Bulldozer, Tankwagen oder Vesuvius werden vernichtet.]]
 asc.setLocalizedEventMessage( map, 200, message )
 
---- ===== 213  ======= 
+--- ===== Event 213  ======= 
 message = [[Das öde Land verändert hier seinen Charakter. Eine bescheidene Vegetation wächst hier.]]
 asc.setLocalizedEventMessage( map, 213, message )
 
---- ===== 214  ======= 
+--- ===== Event 214  ======= 
 message = [[Immer dichter wird diese Vegetation, könnte schlecht für unsere Hovers aussehen. Evtl. müssen wir die Hovers wegen diesem Buschwald zurücklassen? Das gefällt mir gar nicht.]]
 asc.setLocalizedEventMessage( map, 214, message )
 
---- ===== 215  ======= 
+--- ===== Event 215  ======= 
 message = [[Jede Menge Berge, wenn wir jetzt auch noch unsere anderen Fahrzeuge zurücklassen müssen, wäre das fatal!]]
 asc.setLocalizedEventMessage( map, 215, message )
 
---- ===== 216  ======= 
-message = [[Dieser Fluss, es wäre ein leichtes, ihn zu überqueren, wenn wir unsere Hovers hätten. Nur das die nicht durch diesen Buschwald kommen. Vielleicht kann unser Steinbeisser helfen?]]
+--- ===== Event 216  ======= 
+message = [[Dieser Fluss, es wäre ein leichtes, ihn zu überqueren, wenn wir unsere Hovers hätten. Nur das die nicht durch diesen Buschwald kommen. Vielleicht kann unser Steinbeißer helfen?]]
 asc.setLocalizedEventMessage( map, 216, message )
 
---- ===== 221  ======= 
-message = [[Ein Steinbruch, wunderbar! Bringen wir hier unseren Steinbeisser hin. (Siegbedingung)]]
+--- ===== Event 221  ======= 
+message = [[Ein Steinbruch, wunderbar! Bringen wir hier unseren Steinbeißer hin. (Siegbedingung)]]
 asc.setLocalizedEventMessage( map, 221, message )
 
---- ===== 222  ======= 
+--- ===== Event 222  ======= 
 message = [[Sehr schön! Wir haben wieder eine Hürde gemeistert. Dieser Steinbruch wartet förmlich darauf, von uns geerntet zu werden.
 
 Nur dieser Pfad nach Süden gibt mir zu bedenken.]]
 asc.setLocalizedEventMessage( map, 222, message )
 
---- ===== 341  ======= 
-message = [[Was ist das? Eine verlassene Rangereinheit hier? Sieht aber etwas angeschlagen aus. Vielleicht bekommen wir den Haufen Schrott zum laufen? ]]
+--- ===== Event 341  ======= 
+message = [[Was ist das? Eine verlassene Rangereinheit hier? Sieht aber etwas angeschlagen aus. Vielleicht bekommen wir den Haufen Schrott zum Laufen? ]]
 asc.setLocalizedEventMessage( map, 341, message )
 
---- ===== 396  ======= 
+--- ===== Event 396  ======= 
 message = [[Diese Soldaten scheinen schon wieder einer neuen Fraktion anzugehören. Super! Für Verhandlungen mit denen ist es wohl jetzt zu spät.]]
 asc.setLocalizedEventMessage( map, 396, message )
 

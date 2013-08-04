@@ -1,0 +1,54 @@
+map = asc.getLoadingMap() 
+--- ===== Event 3  ======= 
+message = [[Ben Hir, telle était la capitale de ce pays désertique. Dans Ben Hir nous porter le coup décisif contre ces guerriers du désert. Ben Hir a été le point focal de l'ensemble de leur économie, les généraux étaient assis ici, tout a été coordonné.
+
+Nous avons dû prendre plus de termites et plane du nouveau pays. Beaucoup de Crazy'S et quelques nouveaux prototypes de robot de combat qui pourrait prendre sur Air Force.
+
+J'ai également eu une commande parachutistes et beaucoup d'hélicoptère de transport.
+
+Nous avions alors même quelques wagons, mais la mobilité sur la piste n'était pas très grande ici. Le vent du désert constant enterrer tout ce qui ne bouge pas immédiatement avec du sable. Tout aussi rapidement que nous pourrions poser des rails, ils étaient partis à nouveau. Cependant, je m'attendais à quelque chose par l'artillerie réassurance de chemin de fer.
+
+Il y avait des rapports de notre reconnaissance aérienne que les deux associations anti-aériennes ennemies, ainsi que des troupes terrestres du sud déplacés vers Ben Hir. Donc, nous devons agir rapidement et Ben Hir bondé plus ou moins avec un orage.
+
+Ce serait une bataille sanglante.
+
+
+Victoire Condition: elle Conquer Ben Hir.
+
+Défaite: Vous perdez Miner commandant ou leur invasion est repoussée.
+
+Note: Vous devez être rapide, sinon vous serez flanqué attaque. Au premier tour, ils ont encore plus de troupes en renfort.]]
+asc.setLocalizedEventMessage( map, 3, message )
+
+--- ===== Event 21  ======= 
+message = [[Miner commandant, c'est le capitaine de l'ampleur. Formations aériennes de l'ennemi approchant du nord-est.]]
+asc.setLocalizedEventMessage( map, 21, message )
+
+--- ===== Event 112  ======= 
+message = [[Nous avions gagné. Ben Hir était maintenant entre nos mains et qui ne serait pas aussi changer. Le désert maintenant nous appartenait.
+
+Mais cette victoire a été chèrement acquise, et parfois je souhaite que je pouvais revenir en arrière dans le temps et faire les choses différemment dans le passé, donc je ne serais pas où je suis maintenant. Pourquoi devons-nous aller à la guerre toujours des gens?
+
+Comme je suis dans l'armée à ce moment-là, je n'ai pas commencé à avoir une idée de la façon dont la guerre sanglante. Je savais que la guerre seulement à partir de films ou de jeux et il n'a jamais vraiment existé. Mais si vous êtes là au milieu, entre et autour de vous mourir vos camarades, vous finirez par fatigués de la guerre.
+
+La mélancolie est votre compagnon. Court n'est que le cri de victoire. La bataille a été gagnée, mais le vrai gagnant était encore la mort.
+
+Nous avons beaucoup à faire ici à Ben Hir maintenant. feux qui brûlent, des bâtiments effondrés, beaucoup de geschossener de ferraille ensemble et tous les morts ont dû être surmontés.
+
+Les gens du désert s'étaient rendus, que pouvaient-ils faire autrement. Prenant leurs Hauptquartieres j'avais maintenant toutes les informations sur les autres matières premières et les règlements finaux dispersés dans le sud.
+
+Mais ce qui est encore plus important que de prendre le siège, l'accès au centre de recherche était ici. Parce que j'avais encore à résoudre une énigme.
+
+Quelle était la Genèse?]]
+asc.setLocalizedEventMessage( map, 112, message )
+
+--- ===== Event 374  ======= 
+message = [["Miner commandant, c'est le capitaine du Corbeau. Je apporter du matériel et du pétrole, ainsi que des véhicules pour le nettoyage. En outre, le professeur cerveau envoie un autre message d'accueil. Il a réussi à recréer un de ces nids de mitrailleuses."]]
+asc.setLocalizedEventMessage( map, 374, message )
+
+--- ===== Event 436  ======= 
+message = [[Ce n'est pas seulement un dépôt ici aussi du matériel à partir du bois de palmier est apparemment fait.
+
+Note: Le Dépositaire 3000 matériau de production de chaque ronde.]]
+asc.setLocalizedEventMessage( map, 436, message )
+

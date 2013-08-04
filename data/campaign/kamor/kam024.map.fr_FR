@@ -16,11 +16,25 @@ message = [[Commandant Miner, c'est le capitaine de la Raven (avion de transport
 asc.setLocalizedEventMessage( map, 168, message )
 
 --- ===== 177  ======= 
-message = [[Livraison de test, 10 k de matériel]]
+message = [[Commandant Miner,
+
+nous avons nourri des ressources matérielles 10K dans leur réseau.]]
 asc.setLocalizedEventMessage( map, 177, message )
 
 --- ===== 214  ======= 
-message = [[Nous y étions arrivés encore une fois.]]
+message = [[Nous y étions arrivés encore une fois.
+
+Une interaction constante entre l'attaque et la défense. Si vous venez de prendre une position, vient aussi la contre-attaque. Idéalement, vous attrapez son adversaire encore, à la suite d'une bataille précédente.
+
+Le temps peut être un allié puissant. Parce que le temps signifie la reconstitution, la récupération, réorganisation, luminaires.
+
+Maintenant, nous étions de retour à la série avec notre attaque. Nous avons dû racler rapidement une nouvelle force d'invasion. La reconstitution et les réparations ont priorité.
+
+Nous nous battons sur deux fronts et c'est un front trop. Les gens du désert en difficulté, sans leurs puissants alliés du nord, ils auraient baissé de long.
+
+Les gens du désert doivent donc tomber, et aussi rapidement que possible. Qui s'appuie sur Blitzkrieg, qui luttent maintenant temps contre le temps.
+
+Mais il ne devait pas être pour l'instant. Un appel radio venant de la Oilcompany.]]
 asc.setLocalizedEventMessage( map, 214, message )
 
 --- ===== 236  ======= 

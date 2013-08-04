@@ -1,0 +1,38 @@
+map = asc.getLoadingMap() 
+--- ===== Event 1  ======= 
+message = [[We have arrived! Just before we arrived here, head has some cards face up and exactly least informed us about the upcoming assignment.
+
+It is a kind of super platform on the sea! Is larger than the world has ever seen! If you later want impregnable and leave their mark on this area. The only weak point is probably that it is not finished yet! Lots of defenses are still under construction.
+
+Our fleet would never be able to arrive here in time, let alone that the enemy fleet would not answer then pulled even here to defend himself. Instead, our generals have designed this crazy plan. A small group of sneaking up, and, well, we'll see?
+
+Continue to lead our fleets diversion attacks to prevent any ships of this platform protection elsewhere. Let's hope that is not somewhere fleet stays here?
+
+...
+
+It has to go quickly, ran as fast and as close as possible! Then show up, get out and take the airport! We really need to get hold of Air Force, otherwise we could be in trouble. Pilots are on board the Ariel to quickly durchzustarten each aircraft landed for us. In addition, some guys have fitted on board here with floor-to-air missiles. Even if they have little idea how to handle it, maybe it will help?
+
+At the airport, a transport plane, and an air tanker to be. This must fall into our hands, they must not be destroyed, this head has stressed several times. I hope he thinks we rise after successful completion of this mission easily on the plane and fly home. But somehow I do not believe it?
+
+
+Victory Condition: she Conquer the platform.
+
+Defeat: The airport is not taken in round 1 or their units are destroyed.]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== Event 5  ======= 
+message = [[The platform should now be under our control. We have won!]]
+asc.setLocalizedEventMessage( map, 5, message )
+
+--- ===== Event 16  ======= 
+message = [[We have the airport under our control!]]
+asc.setLocalizedEventMessage( map, 16, message )
+
+--- ===== Event 17  ======= 
+message = [[All four radar station under our control!]]
+asc.setLocalizedEventMessage( map, 17, message )
+
+--- ===== Event 18  ======= 
+message = [[Looks as if it was the last enemy helicopters!]]
+asc.setLocalizedEventMessage( map, 18, message )
+

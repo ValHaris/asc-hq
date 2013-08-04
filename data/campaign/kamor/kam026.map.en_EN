@@ -1,0 +1,13 @@
+map = asc.getLoadingMap() 
+--- ===== Event 1  ======= 
+message = [[Once it became clear the head I did not want to make my role as Commander in dispute and I had overcome my grief, because he has "then" sent me almost to death, we began to exchange each other at what was the way everything happened by now.
+
+I told him the whole story of our flight into the desert, as we met on the desert people for the first time, of the Vulcan in the desert and our other flight even before the desert people, as I hit the Oilcompany the first time, which led us into the new country.
+
+Head smiled as I told him about the frozen destroyer in the new country, and how we fought against these destroyers with missile infantry. I explained how we had to flee further in the new country, away from the coast inland, and then of the great battle in the mountains, snow everywhere, and even the best sniper with little visibility. I told them how I got to the point where I first had the strength to fight, where we no longer had to flee, where we started to fight back and conquer himself. Our conquest, the rail War and the surrender of our enemy in the new country. My agreement with the Oilcompany, the surprise attack of the local desert people on our research complex, probably because we had stolen a record with their technology from the volcano. Of "Genesis" I told nothing but instead I was speaking of the prototype of the robot fight, who then rescued me and my boys the ass. My decision to counter this encroachment of desert people with a lightning invasion that our risky sea transport, the reconquest of these oil platforms, the invasion of the malicious El counterattack, including this sea battle, where Head himself was there.
+
+Head was amazed that his story was not so long, but no less spectacular.
+
+He began to tell me.]]
+asc.setLocalizedEventMessage( map, 1, message )
+

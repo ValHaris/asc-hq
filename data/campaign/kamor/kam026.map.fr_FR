@@ -1,0 +1,13 @@
+map = asc.getLoadingMap() 
+--- ===== Event 1  ======= 
+message = [[Une fois qu'il est devenu clair la tête, je ne voulais pas faire mon rôle en tant que commandant en litige et j'avais surmonter mon chagrin, parce qu'il a "puis" m'a envoyé presque à mort, nous avons commencé à échanger les uns les autres à ce qui était la façon dont tout s'est passé maintenant.
+
+Je lui ai raconté toute l'histoire de notre vol dans le désert, que nous avons rencontré sur les gens du désert pour la première fois, du Vulcain dans le désert et notre autre vol avant même que les gens du désert, que j'ai touché le Oilcompany la première fois, ce qui nous conduit dans le nouveau pays.
+
+Chef sourit comme je lui ai parlé du destroyer congelé dans le nouveau pays, et comment nous nous sommes battus contre ces destructeurs de l'infanterie de missile. J'ai expliqué comment nous avons dû fuir loin dans le nouveau pays, loin de la côte vers l'intérieur, puis de la grande bataille dans les montagnes, la neige partout, et même le meilleur sniper avec peu de visibilité. Je leur ai dit comment je suis arrivé au point où je devais d'abord la force de lutter, où nous n'avions plus à fuir, où nous avons commencé à battre en retraite et se vaincre. Notre conquête, la guerre du rail et la reddition de l'ennemi dans le nouveau pays. Mon accord avec le Oilcompany, l'attaque surprise des gens du désert locaux sur notre complexe de recherche, sans doute parce que nous avions volé un record avec leur technologie du volcan. De "Genesis" J'ai dit rien mais je parlais du prototype de la lutte de robot, qui moi et mes garçons le cul puis sauvé. Ma décision de lutter contre cet empiètement des gens du désert avec une invasion de foudre que notre transport risqué de la mer, la reconquête de ces plates-formes pétrolières, l'invasion de la contre-attaque malveillante El, y compris cette bataille de la mer, où lui-même avait la tête là-bas.
+
+Head a été étonné que son histoire n'était pas si long, mais pas moins spectaculaire.
+
+Il a commencé à me dire.]]
+asc.setLocalizedEventMessage( map, 1, message )
+

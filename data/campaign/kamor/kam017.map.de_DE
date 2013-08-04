@@ -1,16 +1,16 @@
 map = asc.getLoadingMap() 
---- ===== 200  ======= 
-message = [[Es war die blutigste Schlacht, die ich bisher erlebt hatte. In diesen Bergen sind Snipers einfach nur tödlich. Snipers bekämpft man hier am besten selber mit Snipers oder setzt Luftwaffe ein. Unsere Transporthelikopter als Luftwaffe zu bezeichnen, wäre etwas übertrieben, doch kann der richtige EInsatz unserer Bumblebee das Leben in dieser Region erheblich vereinfachen.
+--- ===== Event 200  ======= 
+message = [[Es war die blutigste Schlacht, die ich bisher erlebt hatte. In diesen Bergen sind Snipers einfach nur tödlich. Snipers bekämpft man hier am besten selber mit Snipers oder setzt Luftwaffe ein. Unsere Transporthelikopter als Luftwaffe zu bezeichnen, wäre etwas übertrieben, doch kann der richtige Einsatz unserer Bumblebee das Leben in dieser Region erheblich vereinfachen.
 
-Das zerstörte Wrack dieser Schienenkanone haben sich unsere Wissenschaftler vor Ort genauer angesehen. Auch diesen Munitiontransporter. Weitere Forschungen müssen sie aber im Labor durchführen. Weiterhin haben wir die Waffen dieses Samtroopers und der Gunner zum Labor geschickt. Sie sollen dort auch untersucht werden. Die Forschung sollte mit dem Samtrooper beginnen! Dann den Gunner?
+Das zerstörte Wrack dieser Schienenkanone haben sich unsere Wissenschaftler vor Ort genauer angesehen. Auch diesen Munitionstransporter. Weitere Forschungen müssen sie aber im Labor durchführen. Weiterhin haben wir die Waffen dieses Samtroopers und der Gunner zum Labor geschickt. Sie sollen dort auch untersucht werden. Die Forschung sollte mit dem Samtrooper beginnen! Dann den Gunner?
 
-Wir muessen schnell sein! Die Strasse und die Schienen, die nach Osten verlaufen, stellen für uns die größte Bedrohung da. Sie zu verminen wäre die eine Sache, aber sie zu blockieren wäre eine andere Sache, von viel größerem Wert. Ein Heli steht bereit, er soll Troopers laden und soweit wie möglich den Schienen und der Strasse folgen. Unser Bulldozer könnte auch mit? Schienen in ausreichender Entfernung demontieren. Am besten soweit entfernt, das feindliche Schienenartillerie uns nicht erreichen kann.
+Wir müssen schnell sein! Die Straße und die Schienen, die nach Osten verlaufen, stellen für uns die größte Bedrohung da. Sie zu verminen wäre die eine Sache, aber sie zu blockieren wäre eine andere Sache, von viel größerem Wert. Ein Heli steht bereit, er soll Troopers laden und soweit wie möglich den Schienen und der Straße folgen. Unser Bulldozer könnte auch mit? Schienen in ausreichender Entfernung demontieren. Am besten so weit entfernt, dass feindliche Schienenartillerie uns nicht erreichen kann.
 
-Dennoch ist es riskant den Bulldozer mitzuschicken! Ein Verlust des Bulldozers würden wir so schnell nicht ersetzen können. Wir könnten alternativ die Gleise auch mit unseren Troopers zerstören? Wiederrum würde der Bulldozer diese Gleise wesentlich schneller demontieren und ausserdem noch Material für uns gewinnen.
+Dennoch ist es riskant den Bulldozer mitzuschicken! Einen Verlust des Bulldozers würden wir so schnell nicht ersetzen können. Wir könnten alternativ die Gleise auch mit unseren Troopers zerstören? Wiederrum würde der Bulldozer diese Gleise wesentlich schneller demontieren und außerdem noch Material für uns gewinnen.
 
-Dies war ein weiteres Problem. Unsere Minen und Oelpumpen  scheinen die meisten der Ressourcen schon gefördert zu haben. Die Erschließung neuer Ressourcen war unumgänglich. Für diese Zwecke haben wir wieder einen voll beladenen Vesuvius. Ausserdem haben wir einen Surveyor gebaut. Der Surveyor würde hoffentlich ein paar neue Ressourcen für uns finden. Material können wir im Notfall auch noch durch die Demontage von nicht mehr gebrauchten Gebäuden gewinnen.
+Dies war ein weiteres Problem. Unsere Minen und Ölpumpen  scheinen die meisten der Ressourcen schon gefördert zu haben. Die Erschließung neuer Ressourcen war unumgänglich. Für diese Zwecke haben wir wieder einen voll beladenen Vesuvius. Außerdem haben wir einen Surveyor gebaut. Der Surveyor würde hoffentlich ein paar neue Ressourcen für uns finden. Material können wir im Notfall auch noch durch die Demontage von nicht mehr gebrauchten Gebäuden gewinnen.
 
-Und mit der Forschung nicht gleich übertreiben, was nützt uns diese Schienenartillerie, wenn wir keine Ressourcen mehr haben. Unser Ranger hat südlich unserer Oelförderung einen Wald ausgemacht. Auch hier können wir Material gewinnen.
+Und mit der Forschung nicht gleich übertreiben, was nützt uns diese Schienenartillerie, wenn wir keine Ressourcen mehr haben. Unser Ranger hat südlich unserer Ölförderung einen Wald ausgemacht. Auch hier können wir Material gewinnen.
 
 Jetzt aber los, das Wichtigste war die Unterbrechung der Schienen in ausreichender Entfernung, vielleicht sogar mehr?
 
@@ -20,51 +20,51 @@ Siegbedingung: Erkunden und erobern sie alles, was sie entdecken.
 Niederlage: Miner fällt.]]
 asc.setLocalizedEventMessage( map, 200, message )
 
---- ===== 549  ======= 
+--- ===== Event 549  ======= 
 message = [[Hier können wir den Feind aufhalten!]]
 asc.setLocalizedEventMessage( map, 549, message )
 
---- ===== 550  ======= 
-message = [[Die Produktion unserer Minen wird immer schlechter, auch das Oel reicht nicht mehr lange.]]
+--- ===== Event 550  ======= 
+message = [[Die Produktion unserer Minen wird immer schlechter, auch das Öl reicht nicht mehr lange.]]
 asc.setLocalizedEventMessage( map, 550, message )
 
---- ===== 570  ======= 
-message = [[Verdammter Bunker. Hart im nehmen, Reichweite und Kampfkraft! Denoch für eine Schienenartellerie kein Problem. Man muss den Bunker nur sehen.
+--- ===== Event 570  ======= 
+message = [[Verdammter Bunker. Hart im Nehmen, Reichweite und Kampfkraft! Dennoch für eine Schienenartillerie kein Problem. Man muss den Bunker nur sehen.
 
 Bei unserem weiteren Vormarsch haben wir auch die Optionen, die Schienen in ausreichender Distanz mit unserer Ari wegzubomben, um dem Gegner so ein evtl. Gegenschlag auf Schiene zu erschweren. Unser Bulldozer kann je nach Bedarf die Schienen wieder reparieren.]]
 asc.setLocalizedEventMessage( map, 570, message )
 
---- ===== 571  ======= 
+--- ===== Event 571  ======= 
 message = [[Das war hart bis hier hin, aber diese beiden Minen versorgen den Feind jetzt nicht mehr mit Material.]]
 asc.setLocalizedEventMessage( map, 571, message )
 
---- ===== 572  ======= 
+--- ===== Event 572  ======= 
 message = [[Depot und die Waffenfabrik sind eingenommen. Wir sind jetzt hier am "Zug".]]
 asc.setLocalizedEventMessage( map, 572, message )
 
---- ===== 573  ======= 
+--- ===== Event 573  ======= 
 message = [[Kleine Waffenfabrik und Depot in unserer Hand. Wir können nun auch leichte Panzer produzieren.]]
 asc.setLocalizedEventMessage( map, 573, message )
 
---- ===== 574  ======= 
+--- ===== Event 574  ======= 
 message = [[Auch diese Minen sind unter unserer Kontrolle.]]
 asc.setLocalizedEventMessage( map, 574, message )
 
---- ===== 575  ======= 
+--- ===== Event 575  ======= 
 message = [[Hafen eingenommen. Hier werden jetzt keine feindlichen Speedboote mehr produziert.]]
 asc.setLocalizedEventMessage( map, 575, message )
 
---- ===== 577  ======= 
+--- ===== Event 577  ======= 
 message = [[Von hier kamen die Terrors, das ist jetzt Geschichte.]]
 asc.setLocalizedEventMessage( map, 577, message )
 
---- ===== 578  ======= 
+--- ===== Event 578  ======= 
 message = [[Dies war die letzte Möglichkeit für den Feind hier vor Ort Troopers zu produzieren.]]
 asc.setLocalizedEventMessage( map, 578, message )
 
---- ===== 579  ======= 
-message = [[Der Feind hat kapituliert. Wir haben gewonnen. Diese Region dürfte uns gehören. Die Strassen und die Gleise nach Süden sind jetzt ein Leichtes für uns zu halten. Aber auch für den Gegner, deshalb sollten wir mit einem Vorstoß weiter nach Süden vorerst abwarten.
+--- ===== Event 579  ======= 
+message = [[Der Feind hat kapituliert. Wir haben gewonnen. Diese Region dürfte uns gehören. Die Straßen und die Gleise nach Süden sind jetzt ein Leichtes für uns zu halten. Aber auch für den Gegner, deshalb sollten wir mit einem Vorstoß weiter nach Süden vorerst abwarten.
 
-Mir wurde klar, das sich die Lage meines Batalions erheblich verbessert hatte. Zum ersten Mal seit Langen, waren wir nicht auf der Flucht. Die Eroberung dieser Region war hart gewesen. Aber sie ist auch ein wichtiger Wendepunkt meiner Geschichte!]]
+Mir wurde klar, das sich die Lage meines Bataillons erheblich verbessert hatte. Zum ersten Mal seit Langen, waren wir nicht auf der Flucht. Die Eroberung dieser Region war hart gewesen. Aber sie ist auch ein wichtiger Wendepunkt meiner Geschichte!]]
 asc.setLocalizedEventMessage( map, 579, message )
 

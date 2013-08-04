@@ -1,0 +1,42 @@
+map = asc.getLoadingMap() 
+--- ===== Event 7  ======= 
+message = [[This really is the rub! Where we are only landed? Besides the Biggun there are no military units for defense. They say they have no enemies here. This is a place of peace. Well, who it believes will be saved.
+
+...
+
+The oil transporter to get back on the path to even more oil. I wish I would have taken the cutter for my purposes in fitting. With a Biggun we were finished. Then we would have caught the cutter and go home. But first, the guys who helped us here, and secondly, we already have more than enough enemies. We do not need a third party who has us on the kicker.
+
+...
+
+So we're stuck here, for how long? At least I was informed that a transport from the northwest is expected with material. I'm just wondering, what should we do here all the time? We will probably play cards and look at this interesting vehicle "Vesuvius" called times closer.
+
+Besides a damn cold wind blows here. The platoon is struggling so quickly would gain in this cold. Right out of the desert in the winter.
+
+
+Victory Condition: unknown
+
+Defeat: Miner, one of the two Hovers or the bulldozer destroyed.]]
+asc.setLocalizedEventMessage( map, 7, message )
+
+--- ===== Event 52  ======= 
+message = [[Soso, this is a peaceful area. The tanker has caught. We can be glad that we were no longer on the cutter.
+
+From the dream of a few peaceful hours.]]
+asc.setLocalizedEventMessage( map, 52, message )
+
+--- ===== Event 106  ======= 
+message = [[What a bummer. Now it begins also to snow.]]
+asc.setLocalizedEventMessage( map, 106, message )
+
+--- ===== Event 107  ======= 
+message = [[More snow and the water seems to freeze, maybe this is our chance against this cruiser?]]
+asc.setLocalizedEventMessage( map, 107, message )
+
+--- ===== Event 108  ======= 
+message = [[Yes, the sea is even more frozen.]]
+asc.setLocalizedEventMessage( map, 108, message )
+
+--- ===== Event 173  ======= 
+message = [[We have destroyed this cruiser. But how do we go from here? We will have no more oil and whether the announced delivery of materials will arrive here, be called into question? Out there somewhere is doing around a submarine. I will discuss first with the local supervisor port.]]
+asc.setLocalizedEventMessage( map, 173, message )
+

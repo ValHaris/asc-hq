@@ -1,0 +1,32 @@
+map = asc.getLoadingMap() 
+--- ===== Event 1  ======= 
+message = [[We're down in the crater of the volcano. The entrance to the caves is located in the south. The sniper rifle from which had watched the Vulcan, I've just snapped times. Let's see how well I can handle it?
+
+
+Win Condition: Explore and conquer the cave complex.
+
+Defeat Captain Miner falls.]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== Event 9  ======= 
+message = [[Does anyone flashlight? Down here it is pitch-dark.]]
+asc.setLocalizedEventMessage( map, 9, message )
+
+--- ===== Event 10  ======= 
+message = [[Right or Left?]]
+asc.setLocalizedEventMessage( map, 10, message )
+
+--- ===== Event 11  ======= 
+message = [[Go to hell!]]
+asc.setLocalizedEventMessage( map, 11, message )
+
+--- ===== Event 13  ======= 
+message = [[Production, laboratory and supply now belong to us. We have expressed interesting documents found in the lab! Even if we can not decipher the text, at least the pictures show something of such size, which you can not imagine. Maybe we should settle here rather than move on to Hama Dalan? The whole seems to be a super hiding place! Only the problem that anyone knows this hiding in the south!
+
+Also, I do not trust the peace. Here, fight the forces of nature. Water and lava! It looks like a draw, but that can change at any time. Nevertheless, I have allowed myself the fun with the platoon and we went swimming. The water temperature is pleasant here. One can not swim out too far towards lava only, unless you're on pot atmosphere.
+
+...
+
+The bathroom did us all good. We should now move quickly but to hover and then on the fastest way to Hama Dalan. We are too few to somewhere a zuschanzen and the river in Hama Dalan leads to the sea and somewhere kuttert maybe even a submarine around? Although I do not believe it. Sometimes ideas come to me, that was our paratroopers attack pointless? Our platoon but had no chance? Or was the point to provoke the counter-attack on us?]]
+asc.setLocalizedEventMessage( map, 13, message )
+

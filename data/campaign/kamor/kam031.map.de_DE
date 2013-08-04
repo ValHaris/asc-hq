@@ -1,0 +1,131 @@
+map = asc.getLoadingMap() 
+--- ===== Event 1  ======= 
+message = [[Das Labor war verschlossen. Auch wenn wir die ganze Basis eingenommen hatten, schien hier noch jemand Widerstand leisten zu wollen.
+
+Ich gab Befehl die Türen zu sprengen.]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== Event 11  ======= 
+message = [[Hm, leider war es nicht nur diese eine Tür, die wir sprengen mussten. Ein Begrüßungskomitee von zwei Crazys war hier zur Sicherung der Laboranlagen stationiert.]]
+asc.setLocalizedEventMessage( map, 11, message )
+
+--- ===== Event 12  ======= 
+message = [["Warnung. Hochsicherheitstrakt Nord. Unbefugte Eindringlinge werden ohne weitere Warnungen exekutiert."
+
+Hm, vielleicht sollten wir erstmal den Bereich Nord meiden?]]
+asc.setLocalizedEventMessage( map, 12, message )
+
+--- ===== Event 22  ======= 
+message = [[Noch eine Verteidigungseinrichtung.]]
+asc.setLocalizedEventMessage( map, 22, message )
+
+--- ===== Event 32  ======= 
+message = [["Bitte nicht schießen, ich ergebe mich."
+
+Ein Wissenschaftler befand sich hier im Raum. Kniend auf dem Boden und beide Hände in die Luft gestreckt, versuchte er uns seine bedingungslose Kapitulation zu signalisieren.
+
+Es könnte von Vorteil sein, ihn am Leben zu lassen. Eventuell hätte er die eine oder andere Information über dieses Gebäude für uns?
+
+Nachdem wir sichergestellt hatten, das er wirklich unbewaffnet war, fing ich an ihn zu befragen.
+
+Er sagte es gebe noch eine Verteidigungsstellung im Osten zu überwinden. Wir sollten aber aufpassen. Dort waren Sprengfallen installiert. Er wüsste aber wo sie liegen und könnte uns dabei helfen, sie zu entschärfen.
+
+Im Osten gab es auch einen Lagerraum mit Material und einer Reparatureinrichtung.]]
+asc.setLocalizedEventMessage( map, 32, message )
+
+--- ===== Event 33  ======= 
+message = [[Sehr schön, hier können wir uns notdürftig wieder etwas zusammenflicken.
+
+Das Depot ist leider ohne Stromversorgung, aber es gibt hier ein Notstromaggregatfahrzeug.
+
+Wir fanden auch einen Vortex. Der Wissenschaftler konnte wohl meine Gedanken lesen. Sie hatten inzwischen die Vortexkonstruktion analysiert und konnten diesen jetzt selber bauen. Die war ihr Prototyp.
+
+"Alles gut und schön, aber wie kommen wir in den Hochsicherheitstrakt?" fragte ich ungeduldig.
+
+"Nur wenige hatten dort Zugang, er selber durfte nur einmal die Verteidigungsanlagen dort sehen, wie er einen Botengang für Professor Badra zu erledigen hatte. Drei tödliche Bigguns waren dort montiert. Aber es gab einen Schalter gleich im Süden der Verteidigungseinrichtung zwischen den beiden Zugangstüren, dort konnte man diese Bigguns deaktivieren. Mit den Vortex sollte es möglich sein, ungesehen dort hinzukommen und dann dort die Bigguns auszuschalten. 
+
+Professor Badra selber muss eine Art Signalgeber dabei haben, wodurch er auch bei aktiviertem Sicherheitssystem dort nicht unter Beschuss genommen wird. Ziemlich heikle Sache, man sieht den Professor auch ständig nervös in seine Jackentasche schauen, ob sein Signalgeber noch aktiv ist."]]
+asc.setLocalizedEventMessage( map, 33, message )
+
+--- ===== Event 67  ======= 
+message = [["Das müsste es gewesen sein. Die Bigguns dürften nun deaktiviert sein."]]
+asc.setLocalizedEventMessage( map, 67, message )
+
+--- ===== Event 81  ======= 
+message = [["Ein Raum und ein bisschen Technik? Sonst nichts? Hier scheint es nicht weiterzugehen?"]]
+asc.setLocalizedEventMessage( map, 81, message )
+
+--- ===== Event 82  ======= 
+message = [[Die beiden Apparaturen im Osten scheinen nur Attrappen gewesen zu sein. Wir sollten die Wände dort genauer untersuchen.]]
+asc.setLocalizedEventMessage( map, 82, message )
+
+--- ===== Event 132  ======= 
+message = [[Hier ist ein Mechanismus um eine geheime Tür zu öffnen.]]
+asc.setLocalizedEventMessage( map, 132, message )
+
+--- ===== Event 186  ======= 
+message = [["Achtung! Unbefugte Eindringlinge. Mobiles Verteidigungssystem wurde aktiviert!"]]
+asc.setLocalizedEventMessage( map, 186, message )
+
+--- ===== Event 226  ======= 
+message = [[Es gab hier viele Apparaturen, aber darunter ein besonders auffälliger Hebel "Wassersperre N".
+
+Glaube das war genau das was wir suchten.]]
+asc.setLocalizedEventMessage( map, 226, message )
+
+--- ===== Event 249  ======= 
+message = [[Ein weiterer Schalter "Wassersperre Z1"]]
+asc.setLocalizedEventMessage( map, 249, message )
+
+--- ===== Event 776  ======= 
+message = [[Noch mehr Wasser! Eine Art Kanalsystem! Es gibt hier jede Menge Vegetation. Die ganze große Halle scheint ein künstliches Biotop zu sein. Überall an der Decke hängen große UV Lichtquellen. Es war überwältigend, aber es gab keine Zeit, hier noch länger zu staunen.
+
+Eine Sirene ertönte und danach eine freundliche Frauenstimme.
+
+"Achtung, Selbstzerstörung in 10 Minuten."
+
+Mir blieb auch nichts erspart.
+
+Rausrennen und den Komplex zerstören lassen, wäre der sichere Weg gewesen, aber ich wollte endlich das Rätsel Genesis knacken.
+ 
+"Wir haben 5 Minuten! Findet den Mechanismus, um die Selbstzerstörung auszuschalten. Wenn wir ihn bis dahin nicht gefunden haben, alles raus hier. Los Los Los."]]
+asc.setLocalizedEventMessage( map, 776, message )
+
+--- ===== Event 777  ======= 
+message = [[Die zentrale Steuereinheit. Es brauchte nur einen Knopf, um den Selbstzerstörungsmechanismus zu beenden. 
+
+Außerdem gab es hier einen Aufzug und eine Art Nottreppe, die zum Dach führten. Aber der Aufzug war irgendwie blockiert. 
+
+Dann also die Treppe hoch.]]
+asc.setLocalizedEventMessage( map, 777, message )
+
+--- ===== Event 1805  ======= 
+message = [["Noch 5 Minuten bis zur Selbstzerstörung"
+
+Verdammt! Das waren keine 5 Minuten. Jemand muss die Systemzeit manipuliert haben.
+
+Jetzt haben wir nur noch eine Option. Wir müssen die Selbstzerstörung deaktivieren.
+
+"Weiter Männer, wir schaffen das!"]]
+asc.setLocalizedEventMessage( map, 1805, message )
+
+--- ===== Event 1864  ======= 
+message = [["Selbstzerstörung in 3 ..."]]
+asc.setLocalizedEventMessage( map, 1864, message )
+
+--- ===== Event 1865  ======= 
+message = [["... 2 ..."]]
+asc.setLocalizedEventMessage( map, 1865, message )
+
+--- ===== Event 1866  ======= 
+message = [["... 1 ..."]]
+asc.setLocalizedEventMessage( map, 1866, message )
+
+--- ===== Event 1867  ======= 
+message = [["... 0 ...
+
+Vielen Dank, für ihre Aufmerksamkeit. Die Selbstzerstörung wird jetzt eingeleitet."
+
+Dies waren die letzten Worte, die ich noch hörte.]]
+asc.setLocalizedEventMessage( map, 1867, message )
+

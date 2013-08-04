@@ -1,0 +1,33 @@
+map = asc.getLoadingMap() 
+--- ===== Event 1  ======= 
+message = [[Il y avait seulement quelques heures après notre temps de séparation. Head avait préparé la plate-forme entière. Charges explosives ont été déposés partout aux bons endroits pour faire la plate-forme superbe disparaître à jamais.
+
+Dans le port, l'équipage pouvait même faire un peu de torpilles et de mines, avec la palourde était armé. Head a ensuite donné la commande vers le sud.
+
+Victoire Condition: il écouter l'histoire.
+
+Note: Fin du tour]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== Event 165  ======= 
+message = [[Avec un peu de distance par rapport à la tête de la plate-forme appuie sur le déclencheur de l'explosion.]]
+asc.setLocalizedEventMessage( map, 165, message )
+
+--- ===== Event 200  ======= 
+message = [[Il ya eu d'autres explosions, dépôt de carburant a pris feu et tous les bâtiments se sont effondrés.]]
+asc.setLocalizedEventMessage( map, 200, message )
+
+--- ===== Event 227  ======= 
+message = [[Le brasier a été un énorme incendie repérer table.]]
+asc.setLocalizedEventMessage( map, 227, message )
+
+--- ===== Event 375  ======= 
+message = [[Puis tout a disparu dans la fumée, un énorme brouillard noir couvert toute la région.]]
+asc.setLocalizedEventMessage( map, 375, message )
+
+--- ===== Event 473  ======= 
+message = [[Malheureusement, nous avons été un peu négligents.
+
+Alors nous avons regardé le spectacle entier du sous-marin refait surface dans l'état, quelque chose bouillonne dans l'eau près de nous.]]
+asc.setLocalizedEventMessage( map, 473, message )
+

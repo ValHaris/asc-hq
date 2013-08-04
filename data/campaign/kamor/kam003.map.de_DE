@@ -1,12 +1,12 @@
 map = asc.getLoadingMap() 
---- ===== 1  ======= 
-message = [[Waldingen liegt hinter uns. Wir schlagen uns immer noch zu Fuss durch den Wald, das Kommandotier nenne ich jetzt Headshot. Den Namen scheint er zu mögen und er passt auch zu ihm.
+--- ===== Event 1  ======= 
+message = [[Waldingen liegt hinter uns. Wir schlagen uns immer noch zu Fuß durch den Wald, das Kommandotier nenne ich jetzt Headshot. Den Namen scheint er zu mögen und er passt auch zu ihm.
 
-Wenn man zusammen kämpft schweisst man zusammen, man wird eins. Alle werden zu einer Truppe, jeder respektiert den Anderen, weil jeder hier den Anderen schon mehr wie einmal den Arsch gerettet hat oder dies noch tun wird.
+Wenn man zusammen kämpft schweißt man zusammen, man wird eins. Alle werden zu einer Truppe, jeder respektiert den Anderen, weil jeder hier den Anderen schon mehr wie einmal den Arsch gerettet hat oder dies noch tun wird.
 
-Nur was Rambo drauf hat weiss ich noch nicht? Aber Headshot zählt große Stücke auf ihn, auch wenn Rambo eher zurückhaltend über seine Taten spricht, scheint er es drauf zu haben. Die vielen Narben in seinem Gesicht zeigen mir, das er mehr wie einmal in der Schlacht war.
+Nur was Rambo drauf hat weiß ich noch nicht? Aber Headshot zählt große Stücke auf ihn, auch wenn Rambo eher zurückhaltend über seine Taten spricht, scheint er es drauf zu haben. Die vielen Narben in seinem Gesicht zeigen mir, das er mehr wie einmal in der Schlacht war.
 
-Im Süden lässt sich schon der alte Schrottplatz sehen, ob wir dort noch irgendwas brauchbares finden?
+Im Süden lässt sich schon der alte Schrottplatz sehen, ob wir dort noch irgendwas Brauchbares finden?
 
 
 Siegbedingung: Versuchen sie weiter nach Süden zu kommen.
@@ -14,44 +14,46 @@ Siegbedingung: Versuchen sie weiter nach Süden zu kommen.
 Niederlage: Einer ihrer Soldaten fällt.]]
 asc.setLocalizedEventMessage( map, 1, message )
 
---- ===== 3  ======= 
+--- ===== Event 3  ======= 
 message = [[MG-Nester!
 
-Für Head und mich ist da kein durchkommen. Rambo könnte die Nester mit seiner Rocket aushebeln, bräuchte aber nach jedem Nest einiges an Verbandsmaterial und Zeit sich zu erholen.
-Wenn wir die Ari einsetzen könnten, wäre das eine sehr elegante Lösung, ohne Gegenwehr die Feindstellung zu eleminieren.
+Für Head und mich ist da kein Durchkommen. Rambo könnte die Nester mit seiner Rocket aushebeln, bräuchte aber nach jedem Nest einiges an Verbandsmaterial und Zeit sich zu erholen.
+Wenn wir die Ari einsetzen könnten, wäre das eine sehr elegante Lösung, ohne Gegenwehr die Feindstellung zu eliminieren.
 
-Vielleicht sollten wir erstmal die anderen Gebäude erkunden, bzw. ich, die beiden sind so dumm und treten evtl. noch auf ne Mine. ;-)]]
+Vielleicht sollten wir erst mal die anderen Gebäude erkunden, bzw. ich, die beiden sind so dumm und treten evtl. noch auf eine Mine. ;-)]]
 asc.setLocalizedEventMessage( map, 3, message )
 
---- ===== 4  ======= 
-message = [[Der alte Schrottplatz, jede Menge Schrott und ne alte ausgediente Artillerie, natürlich auch Schrottreif. Ohne Munition und ohne Sprit. Wenn man die wieder zum laufen bringt, könnte das hilfreich für uns sein. Den ganzen Schrott hier können wir evtl. teilweise als Material verwenden.
+--- ===== Event 4  ======= 
+message = [[Der alte Schrottplatz, jede Menge Schrott und eine alte ausgediente Artillerie, natürlich auch Schrottreif. Ohne Munition und ohne Sprit. Wenn man die wieder zum Laufen bringt, könnte das hilfreich für uns sein. Den ganzen Schrott hier können wir evtl. teilweise als Material verwenden.
 
 Im Süden ist eine Radarstation, aber wir sollten vorsichtig sein. Headshot warnt uns noch vor jeder Menge Minen, die in diesem Gebiet liegen sollen. 
 
 Also sollten Headshot und Rambo keine Gebiete betreten, die ich nicht vorher auf Feindminen abgecheckt habe.]]
 asc.setLocalizedEventMessage( map, 4, message )
 
---- ===== 14  ======= 
+--- ===== Event 14  ======= 
 message = [[Nicht viel zu holen hier, außer ein paar Reservekanister Treibstoff. Außerdem gibt es hier eine unterirdische Pipeline, die nach Süden und Osten führt.]]
 asc.setLocalizedEventMessage( map, 14, message )
 
---- ===== 15  ======= 
+--- ===== Event 15  ======= 
 message = [[Nicht viel zu holen hier, außer ein paar Reservekanister Treibstoff. Eine Pipeline führt von hier nach Westen.]]
 asc.setLocalizedEventMessage( map, 15, message )
 
---- ===== 16  ======= 
-message = [[Volltreffer. Zumindest unser Treibstoffproblem sollte vorübergehend gelöst sein. Das Oeldepot ist über eine Pipeline mit den beiden Tankstellen verbunden. Das Oelkanistertragen und Betanken von Hand brauchen wir dann bald nicht mehr.]]
+--- ===== Event 16  ======= 
+message = [[Volltreffer. Zumindest unser Treibstoffproblem sollte vorübergehend gelöst sein. Das Öldepot ist über eine Pipeline mit den beiden Tankstellen verbunden. Das Ölkanistertragen und Betanken von Hand brauchen wir dann bald nicht mehr.]]
 asc.setLocalizedEventMessage( map, 16, message )
 
---- ===== 17  ======= 
-message = [[Ein Transportfahrzeug, sieht ein wenig abgetackelt aus, aber scheint noch zu fahren. Natürlich, wie immer ist der Tank leer! Wenn wir das Ding wieder in Bewegung bringen können, wäre das purer Luxus für uns alle. Wir können auch das Material vom Schrottplatz abholen und sogar geschrottetete Feindfahrzeuge wiederverwerten.
+--- ===== Event 17  ======= 
+message = [[Ein Transportfahrzeug, sieht ein wenig abgetakelt aus, aber scheint noch zu fahren. Natürlich, wie immer ist der Tank leer! Wenn wir das Ding wieder in Bewegung bringen können, wäre das purer Luxus für uns alle. Wir können auch das Material vom Schrottplatz abholen und sogar geschrottetete Feindfahrzeuge wiederverwerten.
 
 In einer Ecke hier liegt noch ein wenig Munition rum, nicht viel, aber uns hilft im Moment alles.]]
 asc.setLocalizedEventMessage( map, 17, message )
 
---- ===== 18  ======= 
-message = [[Die Gegend hier ist unser! Zumindest für den kurzen Moment. Der Aussenposten gibt nicht viel her. Ein wenig Sprit, ein wenig Material, etwas Munition für uns.
+--- ===== Event 18  ======= 
+message = [[Die Gegend hier ist unser! Zumindest für den kurzen Moment. Der Außenposten gibt nicht viel her. Ein wenig Sprit, ein wenig Material, etwas Munition für uns.
 
 In einer Behelfswerkstatt können wir notdürftig den Transporter und die Ari flicken, aber nicht viel. Was wir brauchen ist eine richtig funktionierende Werkstatt. Vielleicht finden wir eine Werkstatt auf unserem Weg weiter nach Süden?]]
 asc.setLocalizedEventMessage( map, 18, message )
 
+--- ===== Building -1638405  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 5, 25 ), [[Aussenposten]] ) 

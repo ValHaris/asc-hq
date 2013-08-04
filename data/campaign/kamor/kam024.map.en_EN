@@ -1,0 +1,48 @@
+map = asc.getLoadingMap() 
+--- ===== Event 1  ======= 
+message = [[We built the airport immediately. We have also cleaned up the whole area. Everything that we could process material to have we made ??in order to handle the vast amounts of pending repairs.
+
+The fleet was recalled to defend the oil platforms, where a hostile naval force was moving towards it. And not only on the oil rigs moved to something.
+
+Our radar reconnaissance reports heavy armored units of northern and visual contact with desert troops from the southeast.
+
+
+Victory Condition: Defend it El harmful.
+
+Defeat Captain Miner falls or is harmful El recaptured.]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== Event 168  ======= 
+message = [[Miner Commander, this is the Captain of the Raven, we bring a charge termites and Crazys.]]
+asc.setLocalizedEventMessage( map, 168, message )
+
+--- ===== Event 177  ======= 
+message = [[Miner Commander,
+
+we have fed 10K material resources in their network.]]
+asc.setLocalizedEventMessage( map, 177, message )
+
+--- ===== Event 214  ======= 
+message = [[We had done it again.
+
+A constant interplay between attack and defense. If you have just taken a position, also comes the counterattack. Ideally, you catch his opponent yet, in the aftermath of a previous battle.
+
+The time can be a powerful ally. Because time means replenishment, recovery, reorganization, fixtures.
+
+Now we were back at the series with our attack. We had to quickly scrape together a new invasion force. The replenishment and repairs had top priority.
+
+We are fighting on two fronts and that is a front too much. The desert people ailing, without their powerful allies from the north, they would have long fallen.
+
+The desert people must therefore fall, and as quickly as possible. Who relies on Blitzkrieg, now struggling times against the time.
+
+But it was not to be for now. A radio call came in from the Oilcompany.]]
+asc.setLocalizedEventMessage( map, 214, message )
+
+--- ===== Event 236  ======= 
+message = [[Commander Miner eine Raven ist unterwegs zu uns, mit unterstützenden Truppen, aber es wird noch ein bisschen dauern.]]
+asc.setLocalizedEventMessage( map, 236, message )
+
+--- ===== Building -3080199  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 7, 47 ), [[El Schad]] ) 
+--- ===== Building -917520  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 16, 14 ), [[Dana]] ) 

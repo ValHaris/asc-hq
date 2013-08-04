@@ -1,16 +1,16 @@
 map = asc.getLoadingMap() 
---- ===== 1  ======= 
-message = [[Wir warten seit Tagen vergebens auf unser U-Boot! Wir haben hier Energie im Ueberschuss, aber kaum Material und Treibstoff. Die Fallschirme gibt es nicht mehr, hemmen hier unten nur unsere Beweglichkeit.
+--- ===== Event 1  ======= 
+message = [[Wir warten seit Tagen vergebens auf unser U-Boot! Wir haben hier Energie im Überschuss, aber kaum Material und Treibstoff. Die Fallschirme gibt es nicht mehr, hemmen hier unten nur unsere Beweglichkeit.
 
 Wir haben die Zeit genutzt und die Gegend ein "wenig" vermint. Den Zerstörer oder was davon übrig geblieben ist, haben wir anderweitig verwertet. Die lädierten Hovers haben wir geschont.
 
-Die Jungs die Patrolie in der Wüste laufen, maulen, das sie zu Fuss diese Strecken absolvieren müssen. Aber den wenigen Sprit den wir noch haben, dürfen wir nicht unnütz verbrauchen! So haben wir im Notfall die Option, ein paar schnelle Meilen mit den Hovers zurückzulegen! Es sind immer zwei Mann meiner Platoon bei den Hovers, um diese vom störenden Sand zu befreien. Wer sich hier in der Wüste nicht bewegt, wird mit Sand überdeckt!
+Die Jungs die Patrouille in der Wüste laufen, maulen, dass sie zu Fuß diese Strecken absolvieren müssen. Aber den wenigen Sprit den wir noch haben, dürfen wir nicht unnütz verbrauchen! So haben wir im Notfall die Option, ein paar schnelle Meilen mit den Hovers zurückzulegen! Es sind immer zwei Mann meiner Platoon bei den Hovers, um diese vom störenden Sand zu befreien. Wer sich hier in der Wüste nicht bewegt, wird mit Sand überdeckt!
 
 ...
 
-Gerade als ich auf dem Weg zum Dock bin, kommt mir der Wachposten aufgeregt entgegen. "Schiffe! Das ganze Meer voller Schiffe! Und ich glaube nicht, das es unsere sind." Es gab nicht viel zu überlegen. Noch nie habe ich so laut gebrüllt, wie in diesem Moment. "Alarm!" klang es aus meiner Kehle, und das nicht nur einmal. 
+Gerade als ich auf dem Weg zum Dock bin, kommt mir der Wachposten aufgeregt entgegen. "Schiffe! Das ganze Meer voller Schiffe! Und ich glaube nicht, dass es unsere sind." Es gab nicht viel zu überlegen. Noch nie habe ich so laut gebrüllt, wie in diesem Moment. "Alarm!" klang es aus meiner Kehle, und das nicht nur einmal. 
 
-Es dauerte einen kurzen Moment, bis meine Jungs alle einsatzbereit waren, einige hatten noch Schlaf in den Augen. Dann waren die Schiffe auch schon da! Ich habe noch nie soviele gesehen. Und keines dieser Biester war uns wohlgesonnen!
+Es dauerte einen kurzen Moment, bis meine Jungs alle einsatzbereit waren, einige hatten noch Schlaf in den Augen. Dann waren die Schiffe auch schon da! Ich habe noch nie so viele gesehen. Und keines dieser Biester war uns wohlgesonnen!
 
 "Wir fliehen nach Süden!"
 
@@ -20,17 +20,19 @@ Siegbedingung: Erreichen sie den Süden.
 Niederlage: Miner fällt.]]
 asc.setLocalizedEventMessage( map, 1, message )
 
---- ===== 45  ======= 
+--- ===== Event 45  ======= 
 message = [[Eine Stadt mitten in der Wüste? Ich sehe ein Funken Hoffnung in den Augen meiner Platoon.]]
 asc.setLocalizedEventMessage( map, 45, message )
 
---- ===== 46  ======= 
-message = [[Abdul-Dan! Eine Stadt in der Wüste und die Oase hier ist wunderschön. Doch wir können uns hier nicht lange aufhalten, wir müssen weiter. Die Jungs haben einen Tankfahrzeug gefunden, inclusive geladenen Treibstoff. Der Tanker ist zwar nicht voll, doch ist der gefundene Treibstoff ein Vielfaches dessen, was wir noch haben.
+--- ===== Event 46  ======= 
+message = [[Abdul-Dan! Eine Stadt in der Wüste und die Oase hier ist wunderschön. Doch wir können uns hier nicht lange aufhalten, wir müssen weiter. Die Jungs haben ein Tankfahrzeug gefunden, inklusive geladenen Treibstoff. Der Tanker ist zwar nicht voll, doch ist der gefundene Treibstoff ein Vielfaches dessen, was wir noch haben.
 
 Wenn ich nach Süden schaue, sehe ich nur Wüste. Doch was haben wir für eine Wahl? Süden ist der Weg, der uns am weitesten vom Norden wegbringt und das ist gut so. Mit der Armee im Norden können wir es nicht ansatzweise aufnehmen. Ob die Ariel von der Feindflotte versenkt wurde?]]
 asc.setLocalizedEventMessage( map, 46, message )
 
---- ===== 59  ======= 
-message = [[Süden, willkommen im Süden! Hier gibt es alles, was ihr Herz begehrt! Sonne, Sommer und jede Menge Sand! Ihre Freunde werden sie fragen, wo haben sie denn Urlaub gemacht? Und sie werden anworten: "Im Süden, in der Wüste, ...". Ups, ich glaube ich habe einen Sonnenstich abbekommen?]]
+--- ===== Event 59  ======= 
+message = [[Süden, willkommen im Süden! Hier gibt es alles, was ihr Herz begehrt! Sonne, Sommer und jede Menge Sand! Ihre Freunde werden sie fragen, wo haben sie denn Urlaub gemacht? Und sie werden antworten: "Im Süden, in der Wüste, ...". Ups, ich glaube ich habe einen Sonnenstich abbekommen?]]
 asc.setLocalizedEventMessage( map, 59, message )
 
+--- ===== Building -4259846  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 6, 65 ), [[Abdul-Dan]] ) 

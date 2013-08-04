@@ -1,0 +1,112 @@
+map = asc.getLoadingMap() 
+--- ===== Event 1  ======= 
+message = [["Their mission is to bring this letter to our contact man, they just need a little run around the enemy positions and they are already there, should not be so hard and for emergencies so they have still their gun, and the mines. Parole pigeon. "
+
+He has also grinned at me as he gave me the command. I then said goodbye to military and am without batting an eyelash out of the command bunker.
+
+Before I go, I've said goodbye to my old instructor. "You were one of my best recruits, do not forget what I have taught you, a well-defined mine can mean the difference between victory and defeat. Ever since you come through somehow, I believe in you."
+
+...
+
+On the way here I encountered a tank vehicle. Do not even know why, but somehow I had to try my mines. Bum, it was a firework of the tanker is not much left. The must have been full of fuel, so weggekracht how the thing. I now do not hurt the ears of the WUMS, but the fun was worth it.
+
+Even though I now have fewer mines, someone somewhere will now get a new fuel. Could be an advantage for me. However, I should not dwell too much on the road and I prefer to hide in the mountains myself. My small fireworks could attract the curious.
+
+
+Victory Condition: Find the contact man
+
+Defeat: soldier pigeon falls]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== Event 18  ======= 
+message = [[That was easy. Rattle in and let the machine gun, heard the shop to me. Hmm, what did the commander say? "A few positions around, otherwise it will be a walk." When I get out of here alive again I will stick it anywhere else it a mine.
+
+Well, I guess I should further south. Then I will probably have to beat through the swamp. I see myself like a madman against a superior number of mosquitoes fight. But better mosquitoes, such as the machine-gun nest in the east. Mosquitoes prick and then it itches, but a machine-gun nest hurts.]]
+asc.setLocalizedEventMessage( map, 18, message )
+
+--- ===== Event 23  ======= 
+message = [[A jamming station. Jamming can be a blessing when it starts itself and can be a curse when the opponent uses it. At least I have a round of cease-fire with the friendly swamp mosquitoes.
+
+Before I put him in his ass mine, I Stülpe him another large vase over his head filled with these little bloodsuckers. Yes, I'll do if I ever get out of here alive, and the Commander see again.]]
+asc.setLocalizedEventMessage( map, 23, message )
+
+--- ===== Event 24  ======= 
+message = [[Even a radar position. Looks like I now have to take the road to the north. The do not like it.
+
+Furthermore, I ask myself, why not give me quite a few soldiers a hard time? The enemy would have seen me but before I took the two radar sites?
+
+Better not think about it.]]
+asc.setLocalizedEventMessage( map, 24, message )
+
+--- ===== Event 26  ======= 
+message = [[Harhar! Now you're just a pile of scrap. Not even been that hard to disassemble the unit. And from then on they called him "Weaselkiller". :-)
+
+Hmm, somehow I have a feeling I'm just 10 cm. grown, but can also deceive? ;-)]]
+asc.setLocalizedEventMessage( map, 26, message )
+
+--- ===== Event 27  ======= 
+message = [["My Portfolio, all mine. Until the depot, then the whole world. "
+
+Joking aside, the vault is empty. Nothing I could do. But at least it is certain mosquitoes.
+
+Perhaps here is somewhere around a vase?]]
+asc.setLocalizedEventMessage( map, 27, message )
+
+--- ===== Event 28  ======= 
+message = [[And a radar site and an enemy headquarters, and plenty of bunkers, and a BigGun, and barbed wire, and I feel sick. Probably a mosquito allergy, perhaps a little overworked, maybe both?
+
+Regardless, I must continue. To the southeast, the road would be suicidal. I will probably have no choice, as I continue to strike bog downward to the east. Just hope that my body reproduced the blood faster, as the mosquitoes Siphon me.
+
+Grrr ... I'll kill him if I ever get out of here alive again.]]
+asc.setLocalizedEventMessage( map, 28, message )
+
+--- ===== Event 43  ======= 
+message = [[Another jamming station. Maybe that helps me so well against mosquitoes? Antimückenjamming, that would be cool!
+
+Additional property here in a corner of a small canister of fuel. Hmm, maybe I can use?]]
+asc.setLocalizedEventMessage( map, 43, message )
+
+--- ===== Event 44  ======= 
+message = [[Yeah, a riderless weasel, or more precisely, a former Feindweasel. Seems to have no fuel. Both the vehicle, as the whole tank station seems to be without fuel. Knew that someone somewhere is waiting for the tanker. One good I always have a little fuel it. So sometimes I burn myself out even the wounds.
+
+I should decant a little fuel into the weasel. With the help of Jammingstation I could try only once to go to the bridge. I then indeed already within reach of the Biggun, but the jamming hopefully enough?
+
+Then again breathe short and full throttle. The road to the southeast would be my death. But the weasel must bring me only through this barbed wire. And I then into the forest, hopefully out of sight of Biggun?
+
+Two Mg nests Biggun and a bunker where the Weasel must suffer. That would have the horse stand. So crouch and, possibly before praying again, sometimes it will even help?]]
+asc.setLocalizedEventMessage( map, 44, message )
+
+--- ===== Event 46  ======= 
+message = [[Madness! The platform is not ready, but here are some fuel cans around. I should take what I can tow.]]
+asc.setLocalizedEventMessage( map, 46, message )
+
+--- ===== Event 47  ======= 
+message = [[Ahoy! Ne hover! Which I have always dreamed of. The horse I grab me. Unfortunately, the part is also without fuel. But can I change quickly. First of push in my stock there, then pick up the rest of the oil station.
+
+Hover is purely because can not drive. I probably have to manually drag the cans back and forth, but I'm still happy. Maybe then enough fuel to get ahead of the lake?
+
+Should not be so much pointless Burn the few fuel my route and choose wisely. And stay out of the reach of Biggun! On a machine-gun nest I have probably over, but that should not be the problem. The best I take a machine-gun nest, which has not yet injected.
+
+Then just let loshovern. ;-)]]
+asc.setLocalizedEventMessage( map, 47, message )
+
+--- ===== Event 73  ======= 
+message = [[Ah, the water ride was an absolute delight! No swamp! No mosquitoes! I wanted to bugger me with the hover direction wide ocean, but my job and the amount of fuel left me no choice but to land as here in the harbor.
+
+Real question, why I can so easily take each building me? I should not stay still for too long in the port and try the path to the south, maybe I can find what I am looking for?]]
+asc.setLocalizedEventMessage( map, 73, message )
+
+--- ===== Event 87  ======= 
+message = [[A villa in the middle of the forest, what an idyll. Probably lives here something like a rich fuzzy, maybe even a high military rank, would be an idea worth off a handlebar heads of the enemy?
+
+"Shh ... here ... You have to be the messenger. Parole pigeon. We have not much time, did not think that you would ever reach me, had access to the radar station and could be watching you, at least if you're the had taken over radar stations. Whenever you have seen more, I have seen less.
+
+I have also donated a little confusion. The troops are chasing phantoms and somewhere that does not exist. But they will come back soon and then they will clean up here. And you will notice that their old commander foul play the harlot with them. We should waste no time and quickly polish off us in the southern forest.
+
+Hover your wood is not suitable and other vehicles are not eligible because someone here must scrap tankers. ;-) Is probably also better to walk, we are almost impossible to locate in the forest. Also, I'm sitting anyway too long in my comfortable command chair, a small walk'm certainly times quite well. "
+
+Just pull the trigger, simply add only the gun, squeeze the finger on the trigger and. Instead, you händigst this high defector animal from these foolish letter and follow it. Thus, a small walk? You are almost in tears. Well, at least no more marsh mosquitoes, but there are now forest mosquitoes! A high on the variety in life.]]
+asc.setLocalizedEventMessage( map, 87, message )
+
+--- ===== Building -1441807  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 15, 22 ), [[Villa]] ) 

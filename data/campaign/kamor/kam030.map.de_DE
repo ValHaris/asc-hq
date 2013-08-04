@@ -1,0 +1,54 @@
+map = asc.getLoadingMap() 
+--- ===== Event 3  ======= 
+message = [[Ben Hir, so hieß die Hauptstadt dieses Wüstenvolkes. In Ben Hir würden wir den entscheidenden Schlag gegen diese Wüstenkrieger führen. Ben Hir war Dreh- und Angelpunkt ihrer gesamten Ökonomie, hier saßen die Generäle, hier wurde alles koordiniert.
+
+Wir hatten weitere Termiten und Hovers aus dem neuen Land bekommen. Jede Menge Crazys und ein paar neue Prototypen an Kampfroboter, die es mit Luftwaffe aufnehmen konnten.
+
+Weiterhin hatte ich ein Kommando Fallschirmspringer und jede Menge Transporthubschrauber zur Verfügung.
+
+Wir hatten sogar ein paar Schienenfahrzeuge dabei, doch die Mobilität auf Schiene war hier nicht gerade sehr groß. Der ständige Wüstenwind begrub alles, was sich nicht bewegte sofort mit Sand. Genauso schnell, wie wir Schienen verlegen konnten, waren sie auch schon wieder verschwunden. Dennoch erhoffte ich mir durch die Schienenartillerie etwas Rückdeckung.
+
+Es gab Meldung von unserer Luftaufklärung, dass sich sowohl feindliche Luftverbände, wie auch Bodentruppen aus Nordost auf Ben Hir zubewegten. Wir müssten also schnell agieren und Ben Hir mit einem Blitzsturm mehr oder weniger überlaufen.
+
+Es würde eine blutige Schlacht werden.
+
+
+Siegbedingung: Erobern sie Ben Hir.
+
+Niederlage: Sie verlieren Commander Miner oder ihre Invasion wird abgewehrt.
+
+Hinweis: Sie sollten schnell sein, sonst wird ihr Angriff flankiert. In den ersten Runden bekommen sie noch weitere Truppen per Reinforcement.]]
+asc.setLocalizedEventMessage( map, 3, message )
+
+--- ===== Event 21  ======= 
+message = [[Commander Miner, hier spricht der Captain der Scope. Feindliche Fliegerverbände nähern sich aus Nordost.]]
+asc.setLocalizedEventMessage( map, 21, message )
+
+--- ===== Event 112  ======= 
+message = [[Wir hatten gewonnen. Ben Hir war jetzt in unserer Hand und das würde sich auch nicht mehr ändern. Die Wüste gehörte jetzt uns.
+
+Aber dieser Sieg war teuer erkauft und manchmal wünschte ich mir, ich könnte die Zeit zurückdrehen und irgendwas in der Vergangenheit anders machen, so dass ich nicht wäre, wo ich jetzt bin. Warum müssen wir Menschen immer Krieg führen? 
+
+Wie ich damals zur Armee bin, hatte ich nicht ansatzweise eine Vorstellung davon, wie blutig der Krieg ist. Ich kannte Krieg nur aus Filmen oder Spielen und man war nie wirklich dabei. Aber wenn du da mitten zwischen stehst und um dich herum sterben deine Kameraden, wirst du irgendwann des Krieges müde. 
+
+Melancholie wird dein Begleiter. Kurz ist nur der Siegesruf. Die Schlacht war gewonnen, doch der eigentliche Sieger war wieder mal der Tod.
+
+Wir hätten viel zu tun hier in Ben Hir jetzt. brennende Feuer, eingestürzte Gebäude, jede Menge zusammengeschossener Schrott und die ganzen Gefallenen mussten bewältigt werden.
+
+Das Wüstenvolk hatte kapituliert, was blieb ihnen auch anderes übrig. Mit der Einnahme ihres Hauptquartieres hatte ich jetzt sämtliche Informationen über weitere Rohstoffvorkommen und letzte versprengte Siedlungen im Süden.
+
+Aber was noch wichtiger war, wie die Einnahme des Hauptquartiers, war der Zugang zum Forschungscenter hier. Denn ich hatte immer noch ein Rätsel zu lösen.
+
+Was war Genesis?]]
+asc.setLocalizedEventMessage( map, 112, message )
+
+--- ===== Event 374  ======= 
+message = [["Commander Miner, hier spricht der Captain der Raven. Ich bringe Material und Öl, sowie Fahrzeuge für Aufräumarbeiten. Ausserdem schickt Professor Brain noch einen Gruß. Ihm ist es gelungen, eines dieser MG-Nester nachzubauen."]]
+asc.setLocalizedEventMessage( map, 374, message )
+
+--- ===== Event 436  ======= 
+message = [[Das ist nicht nur ein Depot, hier wird anscheinend auch Material aus dem Palmholz hergestellt.
+
+Hinweis: Das Depot produziert 3000 Material jede Runde.]]
+asc.setLocalizedEventMessage( map, 436, message )
+

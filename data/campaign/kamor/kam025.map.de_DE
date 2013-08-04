@@ -1,9 +1,52 @@
 map = asc.getLoadingMap() 
---- ===== 1  ======= 
-message = [[Gratulation, das sie bis hierher gekommen sind.
+--- ===== Event 1  ======= 
+message = [[Man gönnte mir keine Pause. Umgehend nach unserer erfolgreichen Verteidigung von El Schad kam der Hilferuf der Flotte. Die Oilcompany hatte einiges aufgefahren an Flotte, aber es würde nicht reichen. Der Feind war zu stark.
 
-Nein, das ist noch nicht das Ende der Kampagne. Es wird weiter gehen, nur im Moment nicht.
+Ich schickte so gleich alles an Luftwaffe, was ich zu bieten hatte. Mit Transporthubschraubern gegen Flotte, was sollte das helfen? Vielleicht würde der ein oder andere Bumblebee einen Torpedo ins Ziel bringen können? Oder sollten wir die Stellung dort mal wieder aufgeben? Wir würden den Nachschub über See verlieren. Es würde nicht lange dauern und dann würde auch der Nachschub über Luft versiegen. Und das hier geförderte Öl bedeutet auch Reichweite zu Luft, zu Wasser und zu Land.
 
-]]
+Zeitgleich bekam ich eine Meldung dass ein Transport mit Schienenfahrzeugen eingetroffen war. Unsere tödliche Artillerie, leider auf Schiene gebunden? Wenn wir die gegen die Feindflotte irgendwie einsetzen können, würden unsere Chancen steigen.
+
+
+Siegbedingung: Halten sie der Feindflotte stand.
+
+Niederlage: Die feindliche Flotte gewinnt.]]
 asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== Event 634  ======= 
+message = [[Ein U-Boot? Direkt vor unserer Nase? Das konnte nicht sein? Doch es war wahr. Dieses U-Boot habe ich schon mal auftauchen sehen. Es war die Clam, dieselbe Clam, die uns damals transportierte, von der wir die Superplattform gestürmt hatten und die meinem Fallschirmspringerkommando von damals folgen sollte? Rambo? Head? Keine Zeit da jetzt weiter drüber nachzudenken. Wir mussten kämpfen und das mit allen Mitteln.
+
+erweitertes Scenario:
+
+Nutzen sie die Clam um Minen zu legen, aber verlieren sie die Clam nicht.]]
+asc.setLocalizedEventMessage( map, 634, message )
+
+--- ===== Event 636  ======= 
+message = [[Ein Funkspruch traf ein.
+
+Commander Miner. Hier spricht der Captain der Nautilus. Wir würden ihnen gerne helfen. Bitte weisen sie uns Ziele an.
+
+Nautilus? Die Stimme kam mir bekannt vor, aber ich hatte sie lange nicht gehört. Es war die Stimme von Head. In mir drehte sich alles. Auch wenn gerade jede Hilfe willkommen war, hatte ich glaube noch ein Hühnchen mit Head zu rupfen. Aber das Hühnchen rupfen musste warten, wir waren mitten in einer Schlacht.
+
+erweitertes Scenario:
+
+Nutzen sie die zerstörerische Kraft der Nautilus, passen sie aber auf, dass sie nicht zerstört wird.]]
+asc.setLocalizedEventMessage( map, 636, message )
+
+--- ===== Event 659  ======= 
+message = [[Treffer! Versenkt! Leider war das hier keine Schiffe versenken, sondern bittere Realität. Aber wir hatten gewonnen. Mal wieder.
+
+Die Luken der guten alten Ariel öffneten sich und ein grinsender Rambo guckte heraus.
+
+"Na, Weaselkiller, von der Brieftaube zum Commander, ganz schön steile Karriere. Heute schon neue Länder eingenommen? Und wenn du Head siehst, bring ihn bitte nicht gleich um."
+
+Ich grinste zurück, aber mein Grinsen war nur kurz. Das zweite U-Boot, die Nautilus näherte sich und ich wusste nicht, wie ich mich verhalten sollte, wenn ich jenem Mann in die Auge gucken würde, der mich damals fast in den Tod geschickt hat.
+
+Und dann war es soweit. Mein alter Commander, das Überläufertier, Head alias Headshot stand vor mir. Er trug die Uniform meiner Vergangenheit. In dieser Kommandostruktur, wäre ich noch nicht mal Gefreiter und er wäre mein Vorgesetzter. Will er hier jetzt das Kommando übernehmen und mich an meinen alten militärischen Rang erinnern?
+
+Ich bezweifele, dass die Oilcompany auch nur ansatzweise jemanden anderes wie mich, als Commander akzeptieren würde.
+
+"Commander Miner", unterbrach Head meinen Gedankenstrom, dabei salutierte er vor mir. Können wir uns unter 4 Augen besprechen?"
+
+"Ja, das können wir", antwortete ich und grüßte förmlich zurück.]]
+asc.setLocalizedEventMessage( map, 659, message )
 

@@ -1,0 +1,131 @@
+map = asc.getLoadingMap() 
+--- ===== Event 1  ======= 
+message = [[The lab was closed. Even if we had taken the whole base, nor anyone here seemed to want to resist.
+
+I gave the order to blow the doors.]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== Event 11  ======= 
+message = [[Well, unfortunately it was not just this one door that we had to blow up. A welcoming committee of two Crazys was stationed here for the protection of laboratory equipment.]]
+asc.setLocalizedEventMessage( map, 11, message )
+
+--- ===== Event 12  ======= 
+message = [["Warning. Maximum security prison north. Intruders to be executed without further warnings. "
+
+Hm, maybe we should first avoid the northern area?]]
+asc.setLocalizedEventMessage( map, 12, message )
+
+--- ===== Event 22  ======= 
+message = [[Another defense establishment.]]
+asc.setLocalizedEventMessage( map, 22, message )
+
+--- ===== Event 32  ======= 
+message = [["Please do not shoot, I surrender. "
+
+A scientist was here in the room. Kneeling on the floor and stretched both hands in the air, trying to signal us his unconditional surrender.
+
+It might be beneficial to keep him alive. He may have one or the other information about this building for us?
+
+After we had made sure that he really was unarmed, I began to question him.
+
+He said there were still a defensive position in the east to overcome. But we should be careful. There booby traps were installed. But he knew where they are and could help us to defuse it.
+
+In the east, there was also a storage room with equipment and a repair facility.]]
+asc.setLocalizedEventMessage( map, 32, message )
+
+--- ===== Event 33  ======= 
+message = [[Very nice, here we can cobble together a makeshift us something.
+
+The depot is unfortunately no power, but there is an emergency generator vehicle.
+
+We also found a vortex. The scientists could probably read my mind. They had now been analyzed and the vortex structure could now build yourself this. The prototype was her.
+
+"All well and good, but how do we get into the high security prison?" I asked impatiently.
+
+"Few there had access, he himself was only allowed to even see the defenses there, as he had to do an errand for Professor Badra. Three Deadly Bigguns were assembled there. But there was a switch immediately to the south of defense equipment between the two access doors, there you could disable this Bigguns. using the Vortex it should be possible to get there without being seen and then there off the Bigguns.
+
+Professor Badra itself has a kind of signal transmitters have it, so he will not be taken even when security system is activated there under fire. Pretty tricky thing, you can see the professor constantly nervously into his pocket to see if his signal generator is still active."]]
+asc.setLocalizedEventMessage( map, 33, message )
+
+--- ===== Event 67  ======= 
+message = [["That would have been it. Bigguns The should now be disabled."]]
+asc.setLocalizedEventMessage( map, 67, message )
+
+--- ===== Event 81  ======= 
+message = [["A room and a bit of technology? Nothing else? There does not seem to move on?"]]
+asc.setLocalizedEventMessage( map, 81, message )
+
+--- ===== Event 82  ======= 
+message = [[The two apparatuses in the East seem to have been only dummies. We should examine the walls that page.]]
+asc.setLocalizedEventMessage( map, 82, message )
+
+--- ===== Event 132  ======= 
+message = [[Here is to open a secret door, a mechanism.]]
+asc.setLocalizedEventMessage( map, 132, message )
+
+--- ===== Event 186  ======= 
+message = [["Achtung! Unbefugte Eindringlinge. Mobiles Verteidigungssystem wurde aktiviert!"]]
+asc.setLocalizedEventMessage( map, 186, message )
+
+--- ===== Event 226  ======= 
+message = [[There was a lot of equipment, but including a particularly striking lever "water barrier N".
+
+Think that was exactly what we were looking for.]]
+asc.setLocalizedEventMessage( map, 226, message )
+
+--- ===== Event 249  ======= 
+message = [[Another switch "water barrier Z1"]]
+asc.setLocalizedEventMessage( map, 249, message )
+
+--- ===== Event 776  ======= 
+message = [[Even more water! A kind of duct system! There are a lot of vegetation here. The whole great hall seems to be an artificial habitat. Anywhere on the ceiling hang large UV light sources. It was overwhelming, but there was no time to wonder any longer here.
+
+A siren sounded, followed by a friendly female voice.
+
+"Attention, self-destruct in 10 minutes."
+
+I also was not spared.
+
+Leave race out and destroy the complex, would have been the safe way, but I wanted to finally crack the mystery Genesis.
+ 
+"We have 5 minutes! Finds the mechanism to turn off the self-destruction., If we have not found it by then, everything out here. Lot lot lot."]]
+asc.setLocalizedEventMessage( map, 776, message )
+
+--- ===== Event 777  ======= 
+message = [[The central control unit. It just needed a button to stop the self-destruct mechanism.
+
+Then there was a lift and a kind of emergency staircase leading to the roof. But the elevator was somehow blocked.
+
+So then up the stairs.]]
+asc.setLocalizedEventMessage( map, 777, message )
+
+--- ===== Event 1805  ======= 
+message = [["Only 5 minutes to the self-destruction"
+
+Damn! They were not 5 minutes. Someone must have tampered with the system time.
+
+Now we only have one option. We need to disable the self-destruction.
+
+"Next Men, we can!"]]
+asc.setLocalizedEventMessage( map, 1805, message )
+
+--- ===== Event 1864  ======= 
+message = [["Self-destruct in 3 ..."]]
+asc.setLocalizedEventMessage( map, 1864, message )
+
+--- ===== Event 1865  ======= 
+message = [["... 2 ..."]]
+asc.setLocalizedEventMessage( map, 1865, message )
+
+--- ===== Event 1866  ======= 
+message = [["... 1 ..."]]
+asc.setLocalizedEventMessage( map, 1866, message )
+
+--- ===== Event 1867  ======= 
+message = [["... 0 ...
+
+Thank you for your attention. The self-destruction is now initiated. "
+
+These were the last words that I have heard.]]
+asc.setLocalizedEventMessage( map, 1867, message )
+

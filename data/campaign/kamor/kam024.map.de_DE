@@ -1,29 +1,48 @@
 map = asc.getLoadingMap() 
---- ===== 1  ======= 
-message = [[Wir bauten umgehend den Flughafen. Ausserdem haben wir das ganze Gebiet aufgeräumt. Alles, was wir zu Material verarbeiten konnten, haben wir gemacht, um damit die Unmengen an anstehenden Reparaturen zu erledigen.
+--- ===== Event 1  ======= 
+message = [[Wir bauten umgehend den Flughafen. Außerdem haben wir das ganze Gebiet aufgeräumt. Alles, was wir zu Material verarbeiten konnten, haben wir gemacht, um damit die Unmengen an anstehenden Reparaturen zu erledigen.
 
-Die Flotte wurde abberufen zur Verteidigung der Oelplattformen, wo sich ein feindlicher Flottenverband darauf zu bewegt. Und nicht nur auf die Oelplattformen bewegte sich etwas zu.
+Die Flotte wurde abberufen zur Verteidigung der Ölplattformen, wo sich ein feindlicher Flottenverband darauf zu bewegte. Und nicht nur auf die Ölplattformen bewegte sich etwas zu.
 
-Unsere Radaraufklärung meldet schwere Panzerverbände von Nord und Sichtkontakt mit Wüstentruppen aus südöstlicher Richtung
+Unsere Radaraufklärung meldet schwere Panzerverbände von Nord und Sichtkontakt mit Wüstentruppen aus südöstlicher Richtung.
+
 
 Siegbedingung: Verteidigen sie El Schad.
 
 Niederlage: Captain Miner fällt oder El Schad wird zurück erobert.]]
 asc.setLocalizedEventMessage( map, 1, message )
 
---- ===== 168  ======= 
+--- ===== Event 168  ======= 
 message = [[Commander Miner, hier spricht der Captain der Raven, wir bringen eine Ladung Termiten und Crazys.]]
 asc.setLocalizedEventMessage( map, 168, message )
 
---- ===== 177  ======= 
-message = [[Testlieferung 10K Material]]
+--- ===== Event 177  ======= 
+message = [[Commander Miner,
+
+wir haben 10K Material in ihr Ressourcennetzwerk eingespeist.]]
 asc.setLocalizedEventMessage( map, 177, message )
 
---- ===== 214  ======= 
-message = [[Wir hatten es mal wieder geschafft.]]
+--- ===== Event 214  ======= 
+message = [[Wir hatten es mal wieder geschafft.
+
+Ein ständiges Wechselspiel zwischen Angriff und Verteidigung. Hat man eine Stellung gerade eingenommen, kommt auch schon der Konter. Idealerweise erwischt man seinen Gegner noch, während der Nachwehen einer vorherigen Schlacht.
+
+Die Zeit kann ein mächtiger Verbündeter sein. Denn Zeit bedeutet Nachschub, Erholung, Reorganisation, Befestigungen.
+
+Nun waren wir also wieder an der Reihe mit unserem Angriff. Wir mussten zügig eine neue Invasionsstreitmacht zusammenkratzen. Der Nachschub und Reparaturen hatten oberste Priorität.
+
+Wir kämpfen hier an zwei Fronten und das ist eine Front zu viel. Das Wüstenvolk schwächelt, ohne ihren starken Verbündeten aus dem Norden wären sie schon lange gefallen.
+
+Das Wüstenvolk muss also fallen, und das so schnell wie möglich. Wer auf Blitzkrieg setzt, kämpft nun mal auch gegen die Zeit.
+
+Aber es sollte erstmal anders kommen. Ein Funkspruch kam rein, von der Oilcompany.]]
 asc.setLocalizedEventMessage( map, 214, message )
 
---- ===== 236  ======= 
-message = [[Commander Miner eine Raven ist unterwegs zu uns, mit unterstützenden Truppen, aber es wird noch ein bischen dauern.]]
+--- ===== Event 236  ======= 
+message = [[Commander Miner eine Raven ist unterwegs zu uns, mit unterstützenden Truppen, aber es wird noch ein bisschen dauern.]]
 asc.setLocalizedEventMessage( map, 236, message )
 
+--- ===== Building -3080199  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 7, 47 ), [[El Schad]] ) 
+--- ===== Building -917520  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 16, 14 ), [[Dana]] ) 

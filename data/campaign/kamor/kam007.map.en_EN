@@ -1,0 +1,34 @@
+map = asc.getLoadingMap() 
+--- ===== Event 1  ======= 
+message = [[That you need, the captain said, and then has pushed us into the hand of the parachutes? We will find any runway. Who wants to fight must jump before!
+
+Who wants to fight whoever wants to jump in? This can not be true! Only the mosquitoes, then for days in this U-boat, where it was always well ventilated. Then the long flight almost at the water surface to provide no enemy radar, as the captain said. Only once we are up briefly, then ratzfatz perform an aerial refueling maneuvers and as soon as we are high, we are then back down. Again, so far, I sometimes had the feeling right next to me on a whale surfaced. So next parachute jump? That'll be fun!
+
+Unfortunately, our values ??Else had to stay behind, she's back on board the Ariel. Head and Rambo are also retarded. "There is still work to be done, we then follow the submarine."
+
+Great plan! I have all the stress and Head and Rambo chop comfortably behind. Well at least I say that now. Not quite yet, here aufn flyer is still the word of the Captains. But when we're out, it's my command. I do not know if I should be happy about it.
+
+The instructions of head were short and precise. Get out of the plane and attack! Buildings occupy as soon as possible and keep! Speed ??is the victory that surprise our strongest weapon.
+
+There you go. Our tanker aircraft from rotating. Let's see what our plane can withstand that.
+
+
+Victory Condition: capture enemy positions
+
+Defeat: The enemy port is not taken in round 1 of their units or be defeated.
+
+]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== Event 17  ======= 
+message = [[The harbor is ours! Hovercraft 2 and 1 destroyer. I call that fat booty.]]
+asc.setLocalizedEventMessage( map, 17, message )
+
+--- ===== Event 18  ======= 
+message = [[The area south of the port is secured! Lots of energy, but no fuel or material capacity! At least we can in the harbor with the little that we produce munitions. And the guys have first time and I deserve a break too.]]
+asc.setLocalizedEventMessage( map, 18, message )
+
+--- ===== Event 32  ======= 
+message = [[The four solar plants are under our control!]]
+asc.setLocalizedEventMessage( map, 32, message )
+

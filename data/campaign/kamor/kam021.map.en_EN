@@ -1,0 +1,52 @@
+map = asc.getLoadingMap() 
+--- ===== Event 678  ======= 
+message = [[Since the attack on the research laboratory have passed a few days. The new land now belonged to us. It is rich in oil, and we found more material resources in the mountains. Here you could put to rest now. If not for the wallet would be Genesis?
+
+Maybe I should just take the wallet and destroy on camera, then this video I will send by airmail to our desert friends. But you probably would not believe me and they would continue to hunt for this book. Even on the torture chair they would not believe me or only believe if I would be tortured to death.
+
+So I had made the insane decision to go back into the desert. With the Genesis folder I would look for those who are looking for Genesis. Somewhere in the desert there had to be someone who knew about Genesis and this had to be informed about the encryption algorithm.
+
+Our oily allies have provided me a transport ship and two cruisers available. Not much, but I also do not want to win sea war. The last few days we have almost only produced Hovers. They are perfect. Perfect in the desert for a quick progress, perfect to land in shallow coastal areas, perfect to traverse to also swamps or river basins, perfect for more units to be transported quickly and perfect to transport material and fuel. Our transport ship is fully loaded with Hovers and the volume capacity of the Hovers we have not left unused. On board the crab it will be quite narrow and the Depth of the Crab will attract every enemy submarine like a magnet. The captain who sunk our Crab will go down in the annals of history.
+
+I hate being unable to move on an unarmed transport ship to UCC. Maybe I should prefer to move to the helicopter, but what does that mean for my troops? They all sit on a platter and I'm hiding in the helicopter. In addition, the Bumblebee should have as little extra weight as needed, then the two of you can always end up there to refuel on the Cruisers, to be repaired and new ammunition.
+
+I had a brief conversation with the harbor master, for I have now promoted to deputy base commander here. His Oilcompany and I, we have a similar goal. The oil platforms, where we met at that time, should be recaptured. It ships are already headed that way, we should come to you and then push forward the country further. The Oilcompany wants the inland port, and I will retake the position there.
+
+We have taken El malicious return, we build there as a first landing place for flying, so that we can transport material supply to the air and our carriers can not be sunk by enemy submarines.
+
+Besides the snow disappears around here. It has become much warmer, almost like a character. Only a sign of what? For the heat of the desert or coming as an incentive to stay here instead? No, my mind was fixed.
+
+But now going on. The course is northeast. The sooner we get there and get our "little" back from the Army transport ship, the better. The helicopters are to listen for enemy submarines and off when going. In an emergency, the Cruiser can also fight, but we can not repair the ships at sea.
+
+
+Victory Condition: The Crab and Commander Miner reach the northeastern ocean position.
+
+Defeat: The Crab is sunk or Captain Miner falls.]]
+asc.setLocalizedEventMessage( map, 678, message )
+
+--- ===== Event 967  ======= 
+message = [[Someone needs a repair ship here? The first ships of the Allied fleet were seen. We had made it, at least we had reached the rendezvous.
+
+When the Zeppelins had previously hesitated to attack the Allied fleet, hoping to intercept us before, that should change now.]]
+asc.setLocalizedEventMessage( map, 967, message )
+
+--- ===== Event 1131  ======= 
+message = [[Miner Commander, this is the Captain of the scope. We have identified a large contingent Zeppelins. The Zeppelins try to circumvent our fleet to prevent the transport of the invading army. Our fleet trying the best to come to You. Maybe they should not perform these daring sea transportation or wait until the fleet can safely escort?
+
+No, we can not afford any more time to lose if we wait until our fleet as escort is here, the opponent can strengthen its defenses to water even more. We need to get our fighting for land units to the enemy. We have a chance to reach our fleet before the enemy zeppelins can prevent the breakthrough?
+
+Yes, that should work, but the crab must go to full power and stop under any circumstances.
+
+additional victory condition: The Crab reached in time for the Round 13 Rendezvousposition northeast.
+
+supplementary Defeat: The Crab fails timely and zeppelins prevent the rendezvous.]]
+asc.setLocalizedEventMessage( map, 1131, message )
+
+--- ===== Event 1230  ======= 
+message = [[We were not fast enough. The Zeppelins came from everywhere. Although the cruiser and our helicopters have all tried, they could not prevent the concentrated fire on the freighter.
+
+"We're sinking!"
+
+Then everything went black ..]]
+asc.setLocalizedEventMessage( map, 1230, message )
+

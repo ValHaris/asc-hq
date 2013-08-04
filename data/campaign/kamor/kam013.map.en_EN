@@ -1,0 +1,50 @@
+map = asc.getLoadingMap() 
+--- ===== Event 1  ======= 
+message = [[Hama Dalan we have given up long ago. Even if there are resources and troops manufacturing facility, but it is strategically unwise to keep this place. We have become stronger, probably was. But an area of this size from Hama Dalan up to us here in El pests, defend with our contingent of troops to try is madness! Including Dana would we have three surfaces for our enemies and those can come from anywhere.
+
+The great pipeline to the southeast is kind of dry. I think at the other end of the pipeline has someone turned off the tap. Of all the three places that we occupy is the most important El harmful and that will also see our enemy like that. I expect a large invasion of our position here. But as an invasion must be prepared, which takes time.
+
+This time we have used new and upgraded us. The platoon is full on munitioniert, yes we have even done the impossible and created two speed boats in the yard. We're just waiting for the second hover with another material supply from Dana, then we will give up this position and continue to follow the river.
+
+
+Victory Condition: Follow the river to the west.
+
+Defeat Captain Miner, one of the two Hoover or the construction vehicle to be destroyed.]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== Event 92  ======= 
+message = [[Damn bombers. But now he's history.]]
+asc.setLocalizedEventMessage( map, 92, message )
+
+--- ===== Event 93  ======= 
+message = [[Managed. These three Zeppelins can not harm us now.]]
+asc.setLocalizedEventMessage( map, 93, message )
+
+--- ===== Event 94  ======= 
+message = [[The river is transformed here into a swampy river delta. Never thought I'd ever pleased once again to cross a swamp.]]
+asc.setLocalizedEventMessage( map, 94, message )
+
+--- ===== Event 131  ======= 
+message = [[Oil pumping stations here? We should examine this in more detail.]]
+asc.setLocalizedEventMessage( map, 131, message )
+
+--- ===== Event 133  ======= 
+message = [[Here the extracted oil is loaded, the platforms and the ships belong to a previously unknown company to me. Fortunately, our encounter was peaceful. The two warships stationed here could make a brief trial with us. You have probably viewed us as we are finished.
+
+...
+
+I had a conversation with the executives stationed here. They were very interested in what I had to say. I gave him all the information that I had experienced on our flight over this desert people. Only the volcano and the secret research documents I have concealed.
+
+She herself informed me that they have some border disputes with the desert sons, but otherwise avoid each other. The ship production facility in El malicious she had worried the most. They would report it to their headquarters. All other tactical information that I have given them.
+
+In return they could offer me to load my platoon on the freighter. The ship will carry the oil pumped here for a port in the new country. There would urgently needed. What I had for a different choice?]]
+asc.setLocalizedEventMessage( map, 133, message )
+
+--- ===== Event 203  ======= 
+message = [[Feindliche Radarstation in Sicht!]]
+asc.setLocalizedEventMessage( map, 203, message )
+
+--- ===== Building -1114147  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 35, 17 ), [[El Schad]] ) 
+--- ===== Building -59  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 59, 0 ), [[temp. bugfix]] ) 

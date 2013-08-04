@@ -1,0 +1,59 @@
+map = asc.getLoadingMap() 
+--- ===== Event 1  ======= 
+message = [[Forest Ingen is behind us. We still beat walking through the forest, the command animal I call now Headshot. He seems to like the name and it suits him well.
+
+When fighting together welded together you, you become one. All turning into a force, everyone respects the others, because everyone here the others already more than once that saved or will do so yet.
+
+Only what Rambo on it I do not know? But Headshot counts highly of him, even if Rambo speaks rather reticent about his actions, he seems to have what it takes. The many scars on his face to show me that he was more than once in battle.
+
+In the south can already see if we still found something usable, the old junkyard?
+
+
+Victory Condition: Try to get further south.
+
+Defeat: one of their soldiers fall.]]
+asc.setLocalizedEventMessage( map, 1, message )
+
+--- ===== Event 3  ======= 
+message = [[MG nests!
+
+Head for me, and there is no way through. Rambo could overturn the nests with his rocket, but would need a lot of dressing material and time to recover after each nest.
+If we could use the Ari, that would be a very elegant solution to eliminate the enemy position without opposition.
+
+Perhaps we should first know about the other buildings, and I, the two are so stupid and possibly still occur on a mine. ;-)]]
+asc.setLocalizedEventMessage( map, 3, message )
+
+--- ===== Event 4  ======= 
+message = [[The old scrap yard, lots of scrap and an old disused artillery, of course Schrottreif. Without ammunition, and without fuel. If one brings back up and running, that might be helpful for us. All scrap here we can use as a material possibly partially.
+
+In the south is a radar station, but we should be careful. Headshot still warns us lots of mines, which are located in this area.
+
+So should Headshot and Rambo enter any areas that I have not previously abgecheckt on enemy mines.]]
+asc.setLocalizedEventMessage( map, 4, message )
+
+--- ===== Event 14  ======= 
+message = [[Not much to get here, except a few spare cans of fuel. Moreover, there is an underground pipeline that leads to the south and east.]]
+asc.setLocalizedEventMessage( map, 14, message )
+
+--- ===== Event 15  ======= 
+message = [[Not much to get here, except a few spare cans of fuel. A pipeline runs from here to the west.]]
+asc.setLocalizedEventMessage( map, 15, message )
+
+--- ===== Event 16  ======= 
+message = [[Hit. At least our fuel problem should be solved temporarily. The oil depot is connected via a pipeline to the two stations. The oil canister carrying and filling by hand, we do not need more then soon.]]
+asc.setLocalizedEventMessage( map, 16, message )
+
+--- ===== Event 17  ======= 
+message = [[A transport vehicle that looks a little tired in places but still seems to drive. Of course, as always, the tank is empty! If we can get this thing moving again, that would be pure luxury for all of us. We can also pick up the material from the scrap yard and even geschrottetete enemy vehicles recycled.
+
+In one corner, here is a little ammo around, not much, but helps us all for the moment.]]
+asc.setLocalizedEventMessage( map, 17, message )
+
+--- ===== Event 18  ======= 
+message = [[The area here is ours! At least for the moment. The outpost is not much here. A little fuel, a little material, some ammunition for us.
+
+In a makeshift Behelfswerkstatt we can mend the transporter and the Ari, but not much. What we need is a properly functioning workshop. Maybe we can find a repair shop on our way further south?]]
+asc.setLocalizedEventMessage( map, 18, message )
+
+--- ===== Building -1638405  ======= 
+asc.setLocalizedContainerName( map, asc.MapCoordinate( 5, 25 ), [[outposts]] ) 
