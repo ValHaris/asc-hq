@@ -185,7 +185,7 @@ AStar3D::DistanceType AStar3D::dist( const MapCoordinate3D& a, const MapCoordina
 {
    int heightDiff;
    if ( b.getNumericalHeight() >= 0 && a.getNumericalHeight() >= 0 )
-      heightDiff = abs ( b.getNumericalHeight() - a.getNumericalHeight() ) * minmalq;
+      heightDiff = abs ( b.getNumericalHeight() - a.getNumericalHeight() ) * minmalq/2;
    else
       heightDiff = 0;
 
@@ -206,13 +206,15 @@ AStar3D::DistanceType AStar3D::dist ( const MapCoordinate3D& a, const vector<Map
 {
    if (b.empty())
       return 0;
-   DistanceType e;
+
+   DistanceType e2 = longestPath;
    for ( vector<MapCoordinate3D>::const_iterator i = b.begin(); i != b.end(); ++i ) {
-      e = dist(a,*i);
-      if ( maxVehicleSpeedFactor )
-         e /= maxVehicleSpeedFactor;
-   }
-   return min(e, longestPath);
+       DistanceType e = dist(a,*i);
+       if ( maxVehicleSpeedFactor )
+          e /= maxVehicleSpeedFactor;
+       e2 = min( e2,e );
+    }
+   return min(e2, longestPath);
 }
 
 
