@@ -5,7 +5,7 @@ VehicleType {
 
    Description = space fighter
    Infotext = []
-   Picture = pua_chewie_ddxxl.png
+   Picture = pu_ddxxl.png
 
    Armor = 420
    Jamming = 25
@@ -27,7 +27,6 @@ VehicleType {
    Transportation.EntranceSystem2 ->* VehicleType.OrbIO
 
    Weapons { 
-      Initiative = 0
       Number = 3
       Weapon0 ->* VehicleType.Air_MG 
       Weapon0.targets = floating ground_level low_level_flight medium_level_flight high_level_flight orbit 

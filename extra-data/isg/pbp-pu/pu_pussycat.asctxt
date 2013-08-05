@@ -1,0 +1,24 @@
+VehicleType { 
+    Name = PUSSYCAT
+    parent = 564
+    ID = 12529
+
+    Description = Radarstoerer
+    Infotext = [Terranische Spezialtechnologie.]
+    Picture = pu_pussycat.png
+    InfoImage = pu_pussycat.jpg
+    InfoImageSmall = pu_pussycat_k.png
+
+    Armor -= 10
+    View = 20
+    Jamming = 65
+    Features = 
+
+    Movement += 0 0 0 0 -10 -10 -10 0 
+    Tank.Fuel += -500
+   
+    Weapons { 
+        Number = 0
+    } Weapons
+
+} VehicleType

@@ -4,12 +4,12 @@ VehicleType {
    ID = 12594
 
    Description = Drohnenträger
+   Picture = pu_vdt.png
    Infotext = [Da die bereits vorhandenen DA Einheiten als reine Offensiv-Varianten konzipiert waren und so eine Versorgung von bereits ausgesetzten Drohnen sich als äußerst kompliziert erwies rief der Rat der Lords unter der Führung von Lord boraas Ende des Zyklus 104 dazu auf eine neue Variante des VDA zu entwickeln. Die neue Einheit sollte nicht nur der Aussetzung von Drohnen sondern auch zu ihrer Wartung dienen.
 Um der gestiegenen Anforderung an die Triebwerke entgegen treten zu können, wurden die im VDA verbauten Turbinen durch Thunderbolt VSZ Turbinen der neusten Generation ausgetauscht. Auch wurde die Anordnung der Triebwerke komplett in die Flügel verlagert und ein zusätzliches sechtes Triebwerk integriert.
 Der so gewonnene Platz im Rumpf des VDA's konnte zur Unterbringung von Wartungs- und Betankungs- und Munitionierungseinrichtungen verwendet werden. Außerdem wurde der Hangar erweitert und zusätzlich mit einem Auffangseil zum Einfangen von Drohnen im Flug ausgerüstet.
 Um trotz der Vergrößerung der Rumpfpartie einen Waffeneinsatz wie gewohnt zu gewährleisten, musste zusätzlich zur Kanone an der Unterseite der VDA's eine weitere an der Oberseite installiert werden. Diese kann feindliche Flugzeuge auf normalem Höhenlevel und hoch fliegende Einheiten im 360° Radius auf 4 Felder Entfernung bekämpfen. Durch die so mögliche Konzentration der Waffe an der Unterseite auf Ziele an der Wasseroberfläche, auf dem Boden und auf niedrig fliegend Flugzeuge konnte die Reichweite ebenfalls auf 4 Felder erweitert werden.
 Eine deutlich erhöhte Panzerung und der Einbau von zwei von Radarstörsenkrechtstartern übernommenen Störgeneratoren bieten dem Vertikal Drohnenträger (VDT) einen sicheren Schutz vor feindlichen Angriffen.]
-   Picture = pu_vdt.png
 
    Armor += 150
    Features = MoveDuringReactionFire Repair_Facility

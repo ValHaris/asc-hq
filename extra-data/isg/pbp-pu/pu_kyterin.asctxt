@@ -6,6 +6,7 @@ VehicleType {
    Description = Jagd-Buggy
    Picture = pu_kyterin.png
    InfoImage = mk5v_fav4x4t7.jpg
+   InfoImageSmall = mk5v_fav4x4t7_k.png
    WreckageObject = 1404
    Infotext = [Spezial Luft-Jagd-Kampf-Buggy]
    
@@ -19,7 +20,7 @@ VehicleType {
       Weapon0 ->* vehicleType.MG30low 
       Weapon0.ReactionFireShots = 1
       Weapon1 ->* VehicleType.SAMH
-      Weapon1.MinRange = 50
+      Weapon1.MaxRange = 50
       Weapon1.Ammo = 2
       Weapon1.ReactionFireShots = 0
       Weapon2 ->* VehicleType.SAMH
