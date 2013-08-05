@@ -1,0 +1,29 @@
+VehicleType { 
+    Name = PAK FA
+    ID = 12533
+    parent = 327
+
+    Picture = pu_pakfa.png
+    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+    Infotext = [#fontsize=16#Sukhoi Perspektivnyi Aviatsionnii Kompleks Frontovoi Aviatsyi
+
+    #fontsize=14#Das Flugzeug schreibt die bekannten Stärken russischer Konstruktionen fort und entspricht in allen Technikbereichen des russischen Flugzeugbaus dem höchsten Entwicklungsstand. Das bedeutet höchste Wendigkeit inkl. Vektorschub, ein Sensor- und Waffenleitkomplex mit ähnlicher Funktion wie schon in Mig-29&Su-27 kombiniert mit neuerster Sensortechnologie bei Radar (elektronische Strahlschwenkung) sowie Infrarot (bilddarstellend), höherer Anteil an Verbundwerkstoffen und ein modernes Cockpitkonzept.]
+
+    Armor += 50
+    Movement += 0 0 0 0 20 20 200 0
+    Height = ground_level low_level_flight medium_level_flight high_level_flight
+
+    Weapons { 
+        Weapon0.Punch@MaxRange += 10
+        Weapon0.Punch@MinRange += 10
+        Weapon0.Targets = low_level_flight medium_level_flight high_level_flight orbit
+        Weapon0.MaxRange += 10
+	    Weapon0.ReactionFireShots = 3
+
+        Weapon1.Punch@MaxRange += 10
+        Weapon1.Punch@MinRange += 10
+        Weapon1.Targets = low_level_flight medium_level_flight high_level_flight
+        Weapon1.MaxRange += 10
+  	    Weapon1.ReactionFireShots = 2
+   } Weapons
+} VehicleType

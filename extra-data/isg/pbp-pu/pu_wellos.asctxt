@@ -1,0 +1,65 @@
+VehicleType { 
+    Name = WELLOS
+    ID = 12568
+    parent = 400 401 402 493
+
+    Description = Torpedolauncher
+    Picture = pu_wellos.png
+    Infotext = [Der Wellos Torpedolauncher ist in der Lage Torpedos auf mittlere Distanz abzufeuern und auf geringer Reichweite anrückende Flieger zu bekämpfen.
+Aufgrund des geringen Munitionsvorrates sollte ständig für Nachschub gesorgt sein.]
+
+    Armor = 600
+    View = 80
+    Height = deep_submerged submerged floating 
+    Jamming = 0
+    Category = building|turret|object
+    MaxSurvivableStorm = 150
+    ResourceDrillingRange = 0
+    SelfRepairRate = 0
+    Weight = 190
+    Features = sonar MoveDuringReactionFire
+
+    Tank { 
+        Energy = 0
+        Material = 500
+        fuel = 2000
+    } Tank
+    FuelConsumption = 20
+    Movement = 11 11 17 0 0 0 0 0 
+    TerrainAccess { 
+        terrain_any = Shallow_water Water Deep_water Very_shallow_water River 
+        terrain_all = 
+        terrain_not = Frozen_water installation small_rocks large_rocks
+        terrain_kill = Lowland High_mountains Runway Hard_sand Soft_sand Small_rocks Mountains Large_rocks Lava Ditch Hillside Turret_foundation Installation 
+    } TerrainAccess
+
+    Construction { 
+        Buildings = 
+        Vehicles = 
+        Objects = 
+    } Construction
+
+    WaitForAttack = true
+    Weapons { 
+        Number = 3
+        Weapon0 ->* VehicleType.UTorp 
+        Weapon0.MaxRange = 60
+        Weapon0.Ammo = 6
+        Weapon0.ReactionFireShots = 2
+        Weapon0.Punch@MaxRange = 140
+        Weapon0.Punch@MinRange = 140
+        
+		Weapon1 ->* VehicleType.SAM 
+        Weapon1.ShotFrom = submerged floating
+        Weapon1.Punch@MaxRange = 85
+        Weapon1.Punch@MinRange = 85
+        Weapon1.ReactionFireShots = 2
+        
+		Weapon2 ->* VehicleType.EMP
+        Weapon2.Targets = deep_submerged submerged floating ground_level low_level_flight
+        Weapon2.ShotFrom = submerged floating
+        Weapon2.ReactionFireShots = 1
+        Weapon2.Punch@MaxRange = 150
+        Weapon2.Punch@MinRange = 160
+    } Weapons
+} VehicleType

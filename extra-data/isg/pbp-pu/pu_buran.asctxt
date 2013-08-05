@@ -6,7 +6,7 @@ VehicleType {
    Description = Zünder
    Picture = pu_buran.png
    wreckageobject = 12545 12546
-   Infotext = [Spezialeinheit der NeuHallwarianer. Buran ist ein SPrengkopf mit besonderer Wirkung. Anstatt einer Explosion, verursachen die Detonation eine unbekannte sich langsam ausdehnende Strahlung. Zusammenhängende Wasserflächen gefrieren daruch. ]
+   Infotext = [Buran ist ein Sprengkopf mit besonderer Wirkung. Anstatt einer Explosion, verursachen die Detonation eine unbekannte sich langsam ausdehnende Strahlung. Zusammenhängende Wasserflächen gefrieren daruch. ]
 
    ConstructionCost { 
       CalculationMethod = manual
