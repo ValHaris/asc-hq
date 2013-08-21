@@ -79,10 +79,10 @@ class VehiclePropertyEditor : public ASC_PG_Dialog {
                 veh->setExperience_defensive( experienceDefensive );
 
             if ( tank.material != veh->getTank().material )
-                veh->putResource( tank.material-veh->getTank().material, 1, false );
+                veh->putResource( tank.material-veh->getTank().material, 1, false, 1, veh->getOwner() );
 
             if ( tank.fuel != veh->getTank().fuel )
-                veh->putResource( tank.fuel-veh->getTank().fuel, 2, false );
+                veh->putResource( tank.fuel-veh->getTank().fuel, 2, false, 1, veh->getOwner() );
 
             quitModalLoop(0);
 
