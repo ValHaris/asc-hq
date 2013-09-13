@@ -182,7 +182,7 @@ int         fieldAccessible( const MapField*        field,
         if ((field->bdt & getTerrainBitType(cbbuildingentry) ).any() && field->building->vehicleLoadable ( vehicle, uheight, attacked ))
            return 2;
         else
-           if (uheight >= chtieffliegend || (field->building->typ->height <= chgetaucht && uheight >=  chschwimmend ))
+           if (uheight >= chtieffliegend || (field->building->typ->height <= chgetaucht && uheight >=  chschwimmend && terrainaccessible ( field, vehicle, uheight )))
               return 1;
            else
               return 0;
