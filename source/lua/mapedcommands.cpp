@@ -52,7 +52,7 @@ Building* placeBuilding( GameMap* map, const MapCoordinate& pos, const BuildingT
       MapField* fld = map->getField(pos);
       if ( fld ) {
          putbuilding( map, pos, owner*8, bld, bld->construction_steps );
-         if ( fld->building->typ == bld )
+         if ( fld->building && (fld->building->typ == bld ))
             return fld->building;
       }
    }
