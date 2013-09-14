@@ -2604,4 +2604,27 @@
          } LaserRechargeCost
       } type_animal
 
+; ----------------------------------------------------------------
+; --- CONSTRUCTION PARENTS ---------------------------------------
+; ----------------------------------------------------------------
+	  
+	constr_building {
+        Buildings = 1-2 5-7 10-23 26 29-32 35-37 39-41 50 1200 1212 1400 1401
+        Vehicles = 1276 1295 1472 1478 1486 1494
+        Objects = 
+        ObjectsRemovable = 988
+        ObjectGroupsRemovable = 1-8 10-14 21
+        UnitConstructionMoveCostPercentage = 90
+	} constr_building
+      Objects = 9 10 181 998 1489 2093 2097 2099
+      ObjectsRemovable = 1400
+      ObjectGroupsRemovable = 1 2 3 4 5 6 7 8 10 11 12 13 14 21
+	
+	constr_building_weapons { 
+        Number = 2
+        Weapon0 ->* VehicleType.ServiceTurret
+        Weapon1 ->* VehicleType.AmmoLM
+    } constr_building_weapons
+
+
 } VehicleType

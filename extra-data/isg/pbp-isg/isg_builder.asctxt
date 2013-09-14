@@ -27,8 +27,8 @@ VehicleType {
 
     Transportation ->* VehicleType.TransTurretBig
     Transportation.MaxLoadableUnits = 1
-    Transportation.MaxLoadableUnitSize = 20000
-    Transportation.MaxLoadableMass = 20000
+    Transportation.MaxLoadableUnitSize = 25000
+    Transportation.MaxLoadableMass = 25000
     Transportation.EntranceSystem0.MoveCost = 10 
 
     JumpDrive {

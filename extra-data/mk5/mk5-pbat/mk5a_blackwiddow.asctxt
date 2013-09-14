@@ -1,32 +1,35 @@
 VehicleType { 
-   Name = BLACKWIDDOW
-   parent = 280
-   ID = 1451
+    Name = BLACKWIDDOW
+    parent = 280
+    ID = 1451
    
-   Picture = MK5a_Blackwiddow.pcx
-   InfoImage = mk5a_blackwidow.jpg
-   MovementSound = aircraft_m_g.ogg
+    Picture = MK5a_Blackwiddow.pcx
+    InfoImage = mk5a_blackwidow.jpg
+    MovementSound = aircraft_m_g.ogg
 
-   Transportation ->* VehicleType.TransWeaponPlane
-   Transportation.MaxLoadableUnits = 1
-   Transportation.MaxLoadableMass = 10
+    Transportation ->* VehicleType.TransWeaponPlane
+    Transportation.MaxLoadableUnits = 1
+    Transportation.MaxLoadableMass = 10
+    Transportation.EntranceSystem1.UnitHeightAbs = low_level_flight medium_level_flight
+    Transportation.EntranceSystem1.ContainerHeight = low_level_flight medium_level_flight
 
-   Movement -= 0 0 0 0 10 10 0 0 
 
-   Weapons { 
-      Weapon0.Punch@MaxRange += 10
-      Weapon0.Punch@MinRange += 10
-      Weapon0.WeaponEffectiveness.trooper = 150
-      Weapon0.HitAccuracy.d1 = 100      
-      Weapon0.HitAccuracy.u1 = 0      
+    Movement -= 0 0 0 0 10 10 0 0 
+
+    Weapons { 
+        Weapon0.Punch@MaxRange += 10
+        Weapon0.Punch@MinRange += 10
+        Weapon0.WeaponEffectiveness.trooper = 150
+        Weapon0.HitAccuracy.d1 = 100      
+        Weapon0.HitAccuracy.u1 = 0      
       
-      Weapon1.Punch@MaxRange -= 5
-      Weapon1.Punch@MinRange -= 5
+        Weapon1.Punch@MaxRange -= 5
+        Weapon1.Punch@MinRange -= 5
 
-      Weapon2 ->* VehicleType.AA_Gun 
+        Weapon2 ->* VehicleType.AA_Gun 
 
-      Weapon3 ->* VehicleType.AU_Gun 
+        Weapon3 ->* VehicleType.AU_Gun 
 
-   } Weapons
+    } Weapons
    
 } VehicleType

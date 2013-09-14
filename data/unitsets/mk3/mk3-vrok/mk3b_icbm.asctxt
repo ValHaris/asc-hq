@@ -1,18 +1,18 @@
 VehicleType { 
-   Name = ICBM
-   ID = 574
-   WreckageObject = 15574
-   parent = 304
+    Name = ICBM
+    ID = 574
+    WreckageObject = 15574
+    parent = 304
 
-   Description = Raketensilo
-   Infotext = [Atlas ICBM Silo]
-   Picture = mk3b_icbm.png
-   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+    Description = Raketensilo
+    Infotext = [Atlas ICBM Silo]
+    Picture = mk3b_icbm.png
+    GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
-   Armor -= 100
-   Jamming = 80
-   Features += no_reactionfire jam_only_own_field ManualSelfDestruct
+    Armor -= 100
+    Jamming = 80
+    Features += no_reactionfire jam_only_own_field ManualSelfDestruct
 
-   TerrainAccess.terrain_any = hard_sand soft_sand lowland hillside mountains 
+    TerrainAccess.terrain_any = hard_sand soft_sand lowland hillside mountains 
 
 } VehicleType

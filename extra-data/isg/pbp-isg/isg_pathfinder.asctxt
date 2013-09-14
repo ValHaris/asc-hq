@@ -21,11 +21,13 @@ VehicleType {
       MaxLoadableUnitSize = 10000
       MaxLoadableMass = 20000
       CargoMovementDivisor = 1.5
-      EntranceSystemNum = 2
+      EntranceSystemNum = 3
       EntranceSystem0 ->* VehicleType.GrIO
       EntranceSystem0.DisableAttack = true
+	  EntranceSystem0.CategoriesNOT = building|turret|object default
       EntranceSystem1 ->* VehicleType.OrbIO
       EntranceSystem1.DisableAttack = true
+	  EntranceSystem2 ->* VehicleType.TurretOut
    } transportation
 
    Features = self_repairing no_midair_refuel jam_only_own_field

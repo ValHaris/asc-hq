@@ -106,7 +106,7 @@ VehicleType {
             Type = laser shootable 
             targets = low_level_flight floating ground_level 
             shotFrom = orbit 
-            MaxRange = 300
+            MaxRange = 250
             MinRange = 10
             Ammo = 100
 	        ReactionFireShots = 0

@@ -8,7 +8,10 @@ VehicleType {
    Picture = isg_defender.png
 
    ConstructionCost { 
-      CalculationMethod = auto
+      CalculationMethod = manual
+      Energy = 30000
+      Material = 60000
+      fuel = 0
    } ConstructionCost
 
    Features = onlyTransMove ManualSelfDestruct

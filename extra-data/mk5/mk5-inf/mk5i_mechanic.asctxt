@@ -24,11 +24,8 @@ VehicleType {
    Movement = 0 0 0 60 0 0 0 0 
 
    Construction { 
-      Buildings = 1 2 4 6 7 10-23 30-32 39 40 41
-      Vehicles = 1472 1478 1486 1494
       Objects = 9 10 181 998 1489 2093 2097 2099
       ObjectsRemovable = 1400
-      ObjectGroupsRemovable = 1 2 3 4 5 6 7 8 10 11 12 13 14 21
       UnitConstructionMoveCostPercentage = 85
    } Construction
 

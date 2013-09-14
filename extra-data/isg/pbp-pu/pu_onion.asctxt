@@ -4,14 +4,14 @@ VehicleType {
    parent = 340 15000
 
    Description = Verteidigungsschweber
-   Picture = pu_setupman_onion.png
-;   InfoImage = pu_setupman_onion.jpg
-;   InfoImageSmall = mk6a_defkind_k.png
+   Picture = pu_onion.png
+;   InfoImage = pu_onion.jpg
+;   InfoImageSmall = 
 ;   GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
    Infotext = []
    
    Features = MoveDuringReactionFire
-   Category = Hoovercraft
+   Category = heavy_aircraft
    Weight = 150
    Armor = 800
    View = 70
@@ -37,30 +37,30 @@ VehicleType {
       Weapon0.HitAccuracy.u2 = 90
       Weapon0.MaxRange = 60
       Weapon0.MinRange = 20
-      Weapon0.Punch@MaxRange = 85
-      Weapon0.Punch@MinRange = 100
+      Weapon0.Punch@MaxRange = 90
+      Weapon0.Punch@MinRange = 105
       Weapon0.ReactionFireShots = 1
-      Weapon0.WeaponEffectiveness.light_aircraft = 85
-      Weapon0.WeaponEffectiveness.medium_aircraft  = 85
-      Weapon0.WeaponEffectiveness.heavy_aircraft = 85
+      Weapon0.WeaponEffectiveness.light_aircraft = 90
+      Weapon0.WeaponEffectiveness.medium_aircraft  = 90
+      Weapon0.WeaponEffectiveness.heavy_aircraft = 90
 
       Weapon1 ->* VehicleType.Weapons.Weapon0
       Weapon1.MaxRange = 50
-      Weapon1.Punch@MaxRange = 90
+      Weapon1.Punch@MaxRange = 95
 
       Weapon2 ->* VehicleType.Weapons.Weapon0
       Weapon2.MaxRange = 40
-      Weapon2.Punch@MaxRange = 95
+      Weapon2.Punch@MaxRange = 100
 
       Weapon3 ->* VehicleType.Weapons.Weapon0
       Weapon3.MaxRange = 30
-      Weapon3.Punch@MaxRange = 100
+      Weapon3.Punch@MaxRange = 105
 
       Weapon4 ->* VehicleType.Weapons.Weapon0
       Weapon4.MaxRange = 20
       Weapon4.MaxRange = 10
-      Weapon4.Punch@MaxRange = 100
-      Weapon4.Punch@MinRange = 110
+      Weapon4.Punch@MaxRange = 110
+      Weapon4.Punch@MinRange = 120
 
       Weapon5 ->* VehicleType.TDW
       Weapon5.MaxRange = 40

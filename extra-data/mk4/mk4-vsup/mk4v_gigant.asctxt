@@ -3,7 +3,7 @@ VehicleType {
    ID = 14005
    parent = 336
    
-   Description = Construction Vehicle
+   Description = Baufahrzeug
    Infotext = [
 Der Gigant ist nicht nur das Baufahrzeug des cromonischen Heeres für spezielle Gebäude, sondern auch auf anderen Gebieten ein echtes Multitalent. Seine Hauptaufgabengebiete liegen selbstverständlich in der Errichtung von Spezialgebäuden, jedoch auch in Bau, Transport und Support der cromonischen Turrets.
 
@@ -30,21 +30,13 @@ Von der Panzerung her entspricht der Gigant in etwa dem normalen Baufahrzeug-Sta
    Transportation.MaxLoadableUnits = 2
 
    Features += construct_specific_buildings construct_vehicles ExternalRepair ExternalAmmoTransfer ExternalFuelTransfer ExternalMaterialTransfer
-   TerrainAccess ->* VehicleType.offroad 
 
    Tank { 
-      Material = 60000
+      Material = 70000
       fuel = 70000
    } Tank
 
-   Construction { 
-      Buildings = 26 29 35-37 50 1200
-      Vehicles = 1276 1295
-      Objects = 
-      ObjectsRemovable = 988
-      ObjectGroupsRemovable = 14
-      UnitConstructionMoveCostPercentage = 90
-   } Construction
+   Construction ->* VehicleType.constr_building 
    CategoriesProduceable = building|turret|object
 
    Weapons { 

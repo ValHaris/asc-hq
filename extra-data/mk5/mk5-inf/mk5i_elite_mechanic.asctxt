@@ -22,7 +22,7 @@ VehicleType {
 
    Tank { 
       Energy = 0
-      Material = 60000
+      Material = 70000
       fuel = 70000
    } Tank
    Movement = 0 44 0 55 0 0 0 0 
@@ -30,12 +30,9 @@ VehicleType {
    
    TerrainAccess.terrain_kill = lava
 
-   Construction { 
-      Buildings = 26 35-37 1400 1401
-      Vehicles = 1472 1478 1486 1494
-      Objects = 9 10 44 2093 2096 2098 2099 16901
-      ObjectsRemovable = 988
-      ObjectGroupsRemovable = 1 2 3 4 5 6 7 8 10 11 12 13 14 21
+   Construction {
+      Objects = 9 10 181 998 1489 2093 2097 2099
+      ObjectsRemovable = 1400
       UnitConstructionMoveCostPercentage = 85
    } Construction
 

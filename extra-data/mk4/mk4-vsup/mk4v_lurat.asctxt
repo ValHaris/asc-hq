@@ -3,7 +3,7 @@ VehicleType {
    ID = 1240
    parent = 336
    
-   Description = Baufzg.Abwehranlagen
+   Description = Baufahrzeug
    picture = mk4v_lurat.png
    wreckageobject = 14240
    Infotext = [ Das Lurat-System ist ein Spezialfahrzeug für die Bunker und Geschützturmversorgung. Es ist in der Lage mittlere Geschütztürme

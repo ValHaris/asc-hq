@@ -1,46 +1,48 @@
 VehicleType { 
-   Name = VZT
-   parent = 340
-   ID = 22512
+    Name = VZT
+    parent = 340
+    ID = 22512
 
-   Description = VTO Zugtransporter
-   Infotext = []
-   Picture = maa_vzt.pcx
+    Description = VTO Zugtransporter
+    Infotext = []
+    Picture = maa_vzt.pcx
 
-   Armor = 500
-   View = 40
+    Armor = 500
+    View = 40
 
-   Transportation { 
-      MaxLoadableUnits = 2
-      MaxLoadableUnitSize = 500
-      MaxLoadableMass = 500
-      CategoriesNOT = default hoovercraft Trooper Light_tracked_vehicle Medium_tracked_vehicle Heavy_tracked_vehicle Light_wheeled_vehicle Medium_wheeled_vehicle Heavy_wheeled_vehicle light_aircraft Medium_aircraft Heavy_aircraft Helicopter Medium_ship Heavy_Ship Building|turret|object
-      EntranceSystemNum = 1
-      EntranceSystem0 ->* VehicleType.GrIO
-      EntranceSystem0.DisableAttack = true
-   } Transportation
+    Transportation { 
+        MaxLoadableUnits = 2
+        MaxLoadableUnitSize = 500
+        MaxLoadableMass = 500
+        CategoriesNOT = default hoovercraft Trooper Light_tracked_vehicle Medium_tracked_vehicle Heavy_tracked_vehicle Light_wheeled_vehicle Medium_wheeled_vehicle Heavy_wheeled_vehicle light_aircraft Medium_aircraft Heavy_aircraft Helicopter Medium_ship Heavy_Ship Building|turret|object
+        EntranceSystemNum = 1
+        EntranceSystem0 ->* VehicleType.GrIO
+        EntranceSystem0.DisableAttack = true
+    } Transportation
 
-   Height = ground_level low_level_flight medium_level_flight 
-   Tank { 
-      Energy = 0
-      Material = 0
-      fuel = 12000
-   } Tank
-   FuelConsumption = 50
-   Movement = 0 0 0 40 140 140 0 0 
+    Height = ground_level low_level_flight medium_level_flight 
+    Tank { 
+        Energy = 0
+        Material = 0
+        fuel = 12000
+    } Tank
+    FuelConsumption = 50
+    Movement = 0 0 0 40 140 140 0 0
+    TerrainAccess.terrain_any = Road Runway Spaceport Hard_sand soft_sand lowland
+    TerrainAccess.terrain_not = hillside forest turret_foundation Installation large_rocks bridge
 
-   WaitForAttack = true
-   Weapons { 
-      Number = 1
-      Weapon0 ->* VehicleType.AU_Gun 
-      Weapon0.MaxRange = 30
-      Weapon0.MinRange = 10
-      Weapon0.Ammo = 10
-      Weapon0.ReactionFireShots = 2
-      Weapon0.Punch@MaxRange = 80
-      Weapon0.Punch@MinRange = 80
-      Weapon0.HitAccuracy.d1 = 80
-      Weapon0.HitAccuracy.0 = 100
-      Weapon0.HitAccuracy.u1 = 80
-   } Weapons
+    WaitForAttack = true
+    Weapons { 
+        Number = 1
+        Weapon0 ->* VehicleType.AU_Gun 
+        Weapon0.MaxRange = 30
+        Weapon0.MinRange = 10
+        Weapon0.Ammo = 10
+        Weapon0.ReactionFireShots = 2
+        Weapon0.Punch@MaxRange = 80
+        Weapon0.Punch@MinRange = 80
+        Weapon0.HitAccuracy.d1 = 80
+        Weapon0.HitAccuracy.0 = 100
+        Weapon0.HitAccuracy.u1 = 80
+    } Weapons
 } VehicleType

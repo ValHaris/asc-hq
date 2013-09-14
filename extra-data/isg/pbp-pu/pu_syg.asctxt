@@ -4,7 +4,7 @@ VehicleType {
    parent = 1395 202
 
    Description = special trooper
-   Picture = pui_gamer_syg.png
+   Picture = pu_syg.png
    InfoImage = syi_sy.jpg
    InfoImageSmall = syi_sy_k.png
    Infotext = [Stealth Trooper]

@@ -1,0 +1,59 @@
+BuildingType {
+    Name = Dark HQ
+    ID = 1010
+    parent = 499
+
+    ConstructionStages = 1
+    Weather = dry 
+    Fields = A2 A4 B1 B2 B3 B4 
+    UseGFXpics = false
+    Pictures { 
+        dry = bld_dark_hq.png
+    } Pictures
+    RubbleObjects = false
+    Entry = B3
+    ConstructionCost { 
+        Energy = 0
+        Material = 100000
+        fuel = 0
+    } ConstructionCost
+    Height = ground_level 
+   
+   Armor = 100000
+   View = 100
+   Jamming = 40
+   Features = Training_Facility Repair_Facility Recycling ammo_production matter_converter externalmaterialtransfer externalFueltransfer externalAmmoTransfer 
+   ExternalLoading = ground_level floating 
+
+   Transportation { 
+      MaxLoadableUnits = 10
+      MaxLoadableUnitSize = 1000
+      MaxLoadableMass = 10000
+      CategoriesNOT = 
+   } Transportation
+
+   Techlevel = 0
+   MaxResearch = 0
+   MaxResourceProduction { 
+      Energy = 1000
+      Material = 1000
+      fuel = 1000
+   } MaxResourceProduction
+   defaultProduction {
+      energy = 1000
+      material = 1000
+      fuel = 1000
+   } defaultProduction
+   StorageCapacity { 
+      BImode { 
+         Energy = 1000000000
+         Material = 1000000000
+         fuel = 1000000000
+      } BImode
+      ASCmode { 
+         Energy = 2500
+         Material = 10000
+         fuel = 10000
+      } ASCmode
+   } StorageCapacity
+} BuildingType

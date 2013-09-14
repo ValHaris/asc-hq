@@ -1,20 +1,21 @@
 VehicleType { 
-   Name = CARGO MX
-   ID = 15102
-   parent = 340 15000
+    Name = CARGO MX
+    ID = 15102
+    parent = 340 15000
 
-   Picture = mk6a_cargomx.pcx
-   GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
+    Picture = mk6a_cargomx.pcx
+    GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
 
-   Transportation ->* VehicleType.TransPlane
+    Transportation ->* VehicleType.TransPlane
 
-   Weight = 250
-   View = 40
-   Features = ExternalMaterialTransfer ExternalFuelTransfer ExternalAmmoTransfer
+    Weight = 250
+    View = 40
+    Features = ExternalMaterialTransfer ExternalFuelTransfer ExternalAmmoTransfer
 
-   Tank.Material = 10000
-   Tank.Fuel = 30000
-   movement += 0 0 0 20 40 40 40 0
+    Tank.Material = 10000
+    Tank.Fuel = 30000
+    movement += 0 0 0 20 40 40 40 0
+    TerrainAccess.terrain_any = Road Runway Spaceport Hard_sand soft_sand lowland
 
    Weapons { 
       Number = 7

@@ -11,7 +11,7 @@
     Features = onlyTransMove
     Category = building|turret|object
     Armor = 1100
-    Weight = 20000
+    Weight = 25000
     View = 40
     Jamming = 0
     MaxSurvivableStorm = 255

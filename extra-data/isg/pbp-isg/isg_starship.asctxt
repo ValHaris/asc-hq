@@ -22,7 +22,7 @@ VehicleType {
       MaxLoadableUnitSize = 20000
       MaxLoadableMass = 50000
       CargoMovementDivisor = 1.5
-      EntranceSystemNum = 2
+      EntranceSystemNum = 3
       EntranceSystem0 ->* VehicleType.GrIO
       EntranceSystem0.DisableAttack = true
 	  EntranceSystem0.CategoriesNOT = building|turret|object default

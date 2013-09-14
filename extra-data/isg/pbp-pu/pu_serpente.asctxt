@@ -1,0 +1,56 @@
+VehicleType { 
+    Name = SERPENTE
+    parent = 365
+    ID = 12570
+;   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+   
+    Description = Kommando Schlachtuboot
+    Infotext = [Unterseeboot mit Seeüberwachungssystemen. Dieses auf dem Pluto basierende U-Boot dient als 
+   	       seegestützte Anti-Air Kommandoeinheit. Neben dem großräumigen Überwachen gegnerischer Schiffs und 
+   	       U-Boot Bewegungen bietet es auch effektiven Schutz gegen U-Boote. ]
+    picture = pu_serpente.png
+    wreckageobject = 14027
+
+    Armor = 1300
+    View = 80
+    Features += self_repairing moveduringreactionfire move_after_attack
+    Category = heavy_ship
+    SelfRepairRate = 5
+    Weight = 3500
+
+    transportation ->* VehicleType.TransSubTrooper
+
+    Tank { 
+       Energy = 0
+       Material = 6000
+       fuel = 20000
+    } Tank
+    FuelConsumption = 50
+    TerrainAccess ->* VehicleType.very_bigship_terrain 
+    Movement = 55 55 52 0 0 0 0 0 
+
+    waitforattack = true
+    Weapons { 
+        Number = 3
+        Weapon0 ->* VehicleType.UTorp 
+        Weapon0.MaxRange = 30
+		Weapon0.Punch@MinRange = 120
+		Weapon0.Punch@MaxRange = 120
+        Weapon0.Ammo = 10
+        Weapon0.ReactionFireShots = 2
+
+        Weapon1 ->* VehicleType.SAMH 
+        Weapon1.shotFrom = submerged floating 
+        Weapon1.Punch@MaxRange = 90
+        Weapon1.Punch@MinRange = 90
+        Weapon1.MaxRange = 70
+        Weapon1.Ammo = 20
+        Weapon1.ReactionfireShots = 2
+        Weapon1.HitAccuracy.u4 = 100
+
+        Weapon2 ->* VehicleType.SOM
+        Weapon2.Ammo = 10
+        Weapon2.MaxRange = 70
+      
+    } Weapons
+} VehicleType

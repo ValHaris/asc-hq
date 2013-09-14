@@ -31,7 +31,7 @@ BuildingType {
 
    transportation { 
       MaxLoadableUnits = 70
-      MaxLoadableUnitSize = 30000
+      MaxLoadableUnitSize = 24000
       MaxLoadableMass = 80000
       EntranceSystemNum = 1
       EntranceSystem0 {

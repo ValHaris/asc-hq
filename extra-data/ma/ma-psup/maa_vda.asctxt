@@ -1,24 +1,24 @@
 VehicleType { 
-   Name = VDA
-   parent = 340
-   ID = 22511
+    Name = VDA
+    parent = 340
+    ID = 22511
 
-   Description = VTO Drohnenaussetzer
-   Infotext = [Die DA Einheiten sind für den Drohnenabwurf ausgeruestet, diese kleinere Version kann auf schweren Traeger-U-Booten landen und bis zu 3 Drohnen laden.]
-   Picture = maa_vda.pcx
+    Description = VTO Drohnenaussetzer
+    Infotext = [Die DA Einheiten sind für den Drohnenabwurf ausgeruestet, diese kleinere Version kann auf schweren Traeger-U-Booten landen und bis zu 3 Drohnen laden.]
+    Picture = maa_vda.pcx
 
-   Armor = 500
-   View = 40
-   Transportation ->* VehicleType.TransDronePlane 
-   Transportation.MaxLoadableUnits = 4
-   Transportation.MaxLoadableUnitSize = 5
-   Transportation.MaxLoadableMass = 25
+    Armor = 500
+    View = 40
+    Transportation ->* VehicleType.TransDronePlane 
+    Transportation.MaxLoadableUnits = 4
+    Transportation.MaxLoadableUnitSize = 5
+    Transportation.MaxLoadableMass = 25
 
-   Tank.fuel = 10000
-   tank.material = 0
-   FuelConsumption = 40
-   Movement = 0 0 0 40 140 140 0 0 
-   height = ground_level low_level_flight medium_level_flight
+    Tank.fuel = 10000
+    tank.material = 0
+    FuelConsumption = 40
+    Movement = 0 0 0 40 140 140 0 0 
+    height = ground_level low_level_flight medium_level_flight
 
     WaitForAttack = true
     Weapons { 
