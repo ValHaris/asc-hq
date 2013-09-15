@@ -170,7 +170,7 @@ pair<int,int> calcMoveMalus( const MapCoordinate3D& start,
     /*******************************/
     /*    Wind calculation         */
     /*******************************/
-   if ( wm && checkWind && direc >= 0 && direc < 5 )
+   if ( wm && checkWind && direc >= 0 && direc <= 5 )
       if (dest.getNumericalHeight() >= 4 && dest.getNumericalHeight() <= 6 &&
           start.getNumericalHeight() >= 4 && start.getNumericalHeight() <= 6 &&
           vehicle->getMap()->weather.windSpeed  ) {
