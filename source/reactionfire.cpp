@@ -41,15 +41,17 @@
                         punitlist next;
                      };
 
-                punitlist unitlist[8];
+const int rfPlayerCount = playerNum-1;
+
+                punitlist unitlist[rfPlayerCount];
 
 
-int tsearchreactionfireingunits :: maxshootdist[8] = { -1, -1, -1, -1, -1, -1, -1, -1 };
+int tsearchreactionfireingunits :: maxshootdist[rfPlayerCount] = { -1, -1, -1, -1, -1, -1, -1, -1 };
 
 tsearchreactionfireingunits :: tsearchreactionfireingunits ( GameMap* gamemap )
 {
    this->gamemap = gamemap;
-   for ( int i = 0; i < 8; i++ )
+   for ( int i = 0; i < rfPlayerCount; i++ )
       unitlist[i] = NULL;
 }
 
@@ -63,7 +65,7 @@ void tsearchreactionfireingunits :: init ( Vehicle* eht, const MapCoordinate3D& 
 void tsearchreactionfireingunits :: initLimits()
 {
    if ( maxshootdist[0] == -1 ) {
-      for (int i = 0; i < 8; i++ )
+      for (int i = 0; i < rfPlayerCount; i++ )
          maxshootdist[i] = 0;
 
       for (int i = 0; i < vehicleTypeRepository.getNum(); i++ ) {
@@ -71,7 +73,7 @@ void tsearchreactionfireingunits :: initLimits()
          if ( fzt )
             for (int j = 0; j < fzt->weapons.count; j++ )
                if ( fzt->weapons.weapon[j].shootable() )
-                  for (int h = 0; h < 8; h++ )
+                  for (int h = 0; h < choehenstufennum; h++ )
                      if ( fzt->weapons.weapon[j].targ & ( 1 << h ) )
                         if ( fzt->weapons.weapon[j].maxdistance > maxshootdist[h] )
                            maxshootdist[h] = fzt->weapons.weapon[j].maxdistance;
@@ -110,7 +112,7 @@ void tsearchreactionfireingunits :: findOffensiveUnits( Vehicle* vehicle, int he
 
       }
       if ( gamemap->getField(vehicle->xpos, vehicle->ypos)->vehicle == vehicle )
-         for ( int i = 0; i < 8; i++ )
+         for ( int i = 0; i < rfPlayerCount; i++ )
             if ( fieldvisiblenow ( gamemap->getField ( vehicle->xpos, vehicle->ypos ), i )) {
             punitlist ul  = unitlist[i];
             while ( ul ) {
@@ -171,7 +173,10 @@ void tsearchreactionfireingunits :: init ( Vehicle* vehicle, const AStar3D::Path
 
 void  tsearchreactionfireingunits :: addunit ( Vehicle* eht )
 {
-   int c = eht->color / 8;
+   int c = eht->getOwner();
+   if ( c < 0 || c >= rfPlayerCount )
+       return;
+
    punitlist ul = new tunitlist;
    ul->eht = eht;
    ul->next= unitlist[c];
@@ -181,7 +186,10 @@ void  tsearchreactionfireingunits :: addunit ( Vehicle* eht )
 
 void tsearchreactionfireingunits :: removeunit ( Vehicle* vehicle )
 {
-   int c = vehicle->color / 8;
+   int c = vehicle->getOwner();
+   if ( c < 0 || c >= rfPlayerCount )
+       return;
+
    punitlist ul = unitlist[c];
    punitlist last = NULL;
    while ( ul  &&  ul->eht != vehicle ) {
@@ -274,7 +282,7 @@ int  tsearchreactionfireingunits :: checkfield ( const MapCoordinate3D& pos, Veh
 
    MapField* fld = gamemap->getField( pos.x, pos.y );
 
-   for ( int i = 0; i < 8; i++ ) {
+   for ( int i = 0; i < rfPlayerCount; i++ ) {
       if ( fieldvisiblenow ( fld, i )) {
          punitlist ul  = unitlist[i];
          while ( ul  &&  !result ) {
@@ -341,7 +349,7 @@ int  tsearchreactionfireingunits :: finalCheck ( int currentPlayer, const Contex
 
 tsearchreactionfireingunits :: ~tsearchreactionfireingunits()
 {
-   for ( int i = 0; i < 8; i++ ) {
+   for ( int i = 0; i < rfPlayerCount; i++ ) {
       punitlist ul = unitlist[i];
       while ( ul ) {
          punitlist ul2 = ul->next;
