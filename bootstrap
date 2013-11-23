@@ -7,7 +7,7 @@ if test "X$1" = X--force; then
    
    # if there are no changes, copy the original file back so that the timestamp stays the same
    # diff configure.in configure.in~ || cp -p configure.in~ configure.in
-   autoreconf 
+   autoreconf -fi
    #-I /usr/local/share/aclocal/ 
 else
    echo "You don't need to run bootstrap. Just run \"configure ; make\" "
