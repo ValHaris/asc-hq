@@ -12,8 +12,8 @@ VehicleType {
    View = 40
    Transportation ->* VehicleType.TransHeli
    Transportation.MaxLoadableUnits = 6
-   Transportation.EntranceSystemNum = 4
-   Transportation.EntranceSystem3 ->* VehicleType.ParaDevice
+   Transportation.EntranceSystemNum = 5
+   Transportation.EntranceSystem4 ->* VehicleType.ParaDevice
 
 
    Tank { 

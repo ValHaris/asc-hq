@@ -29,7 +29,6 @@ VehicleType {
     FuelConsumption = 50
     Movement = 0 0 0 40 140 140 0 0
     TerrainAccess.terrain_any = Road Runway Spaceport Hard_sand soft_sand lowland
-    TerrainAccess.terrain_not = hillside forest turret_foundation Installation large_rocks bridge
 
     WaitForAttack = true
     Weapons { 

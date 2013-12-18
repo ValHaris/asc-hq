@@ -6,6 +6,12 @@ ObjectType {
 
    MaxChildSpawnNumber = 10
    Lifetime = 15
-   growthRate = 2.00
+   growthRate = 3.00
+   ConstructionCost { 
+      Energy = 0
+      Material = 60000
+      fuel = 0
+      Movement = 30
+   } ConstructionCost
 
 } ObjectType

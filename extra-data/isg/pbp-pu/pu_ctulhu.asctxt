@@ -1,0 +1,57 @@
+VehicleType { 
+	Name = Ctulhu
+	parent = 14026
+	ID = 12595
+
+	Description = Drohnentransporter
+	Infotext = [Die Ctulhu ist ein schwerer Drohnentransporter mit Servicefunktion, der in Gegensatz zu den Konstruktionen anderer Cromonervölker nicht auf dem Orbiter, sondern auf der schwerer gepanzerten DTerano basiert. Dies führte es zunächst einmal mit sich, dass die Ctulhu den Orbit nicht erreichen kann und nur mit einiger Mühe in die obersten Schichten der Atmosphäre gelangt. Dass dies überhaupt möglich ist, ist einem gegenüber der PTerano verbesserten Antriebssystem zu verdanken. Allerdings stieg auch der Treibstoffverbrauch noch einmal, so dass die Ctulhu als wahrer Spritfresser gelten kann. Das Herzstück der Ctulhu ist der Hangar, der durch die Verbreiterung des Rumpfes nun 8 Drohnen anstatt von zwei bei der PTerano aufnehmen kann. Dort können alle Drohnen der Thunder-Reihe betankt, aufmunitioniert und sogar repariert werden. Die größte Ingenieursleistung besteht aber in der Ansaugvorrichtung, die es erlaubt, Drohnen in den Hangar einzusaugen. Dazu wird ein Teil der Triebwerksleistung für die Erzeugung eines Hochvakuums verwendet. Nach den ersten Testflügen wurde schnell klar, dass ein Verbleib von Technikern im Hangarraum während der Aufnahme von Drohnen zu vermeiden ist. Leider funktioniert die Ansaugvorrichtung nur in mittleren Flughöhen, da die Atmosphäre weiter oben zu dünn wird. Das bedeutet, dass die Ctulhu Drohnen zwar in den obersten Flughöhen absetzen, zur Aufnahme derselbigen jedoch eine Höhenstufe absteigen muss. Um bei der Größe des Flugzeuges noch annehmbare Flugeigenschaften erzielen zu können, wurde auf eine Raketenbewaffnung vollständig verzichtet. Die einzige Bewaffnung der Ctulhu ist eine Maschinenkanone, die auf kurze Distanz aus mehreren Luken abgefeuert werden kann. Da die Kanone immer erst zur richtigen Luke bewegt werden muss, sind schnelle, überfallartige Angriffe nicht möglich, genauso wenig wie eine schnelle Reaktion auf anfliegende Feinde. Die Abschaffung der Raketenbewaffnung hatte aber auch einen Vorteil: Durch das Wegfallen der Reflektionsflächen wurde der Radarquerschnitt sehr viel kleiner, so dass die Ctulhu hervorragende Stealth-Eigenschaften besitzt, wozu auch die komplett neue Konzeption des Hecks beitrug.]
+	Picture = pu_ctulhu.png
+
+	Features += jam_only_own_field Repair_Facility
+	Armor = 550
+	View = 40
+	Jamming = 55   
+;	SelfRepairRate = 10
+	Weight = 350     
+
+	transportation { 
+		MaxLoadableUnits = 8
+		MaxLoadableUnitSize = 40
+		MaxLoadableMass = 220
+		EntranceSystemNum = 3
+		EntranceSystem2 ->* VehicleType.carrier_air_high
+		EntranceSystem2.Mode = In
+        EntranceSystem2.RequireUnitFunction = PARATROOPER
+	} transportation 
+
+	movement = 0 0 0 65 100 150 140 0
+	FuelConsumption = 38
+	height = ground_level low_level_flight medium_level_flight high_level_flight
+	Tank { 
+		Energy = 0
+		Material = 15000
+		fuel = 35000
+	} Tank
+
+	WaitForAttack = false
+	Weapons { 
+		Number = 4
+		Weapon0 ->* VehicleType.AA_Gun
+		Weapon0.Ammo = 30
+		Weapon0.HitAccuracy.d1 = 90
+		Weapon0.HitAccuracy.u1 = 90
+		Weapon0.Punch@MaxRange = 67
+		Weapon0.Punch@MinRange = 80
+		Weapon0.ReactionFireShots = 2
+      
+		Weapon1 ->* VehicleType.AmmoLM 
+		Weapon1.Ammo = 50
+
+		Weapon2 ->* VehicleType.AmmoBomb 
+		Weapon2.Ammo = 30
+
+		Weapon3 ->* VehicleType.AmmoTorp 
+		Weapon3.Ammo = 20
+
+	} Weapons
+} VehicleType

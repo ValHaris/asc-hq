@@ -208,8 +208,9 @@ ID 12202 AXU Hanni
  12587 cushman          Drop Pod (Blood of Vengeance)
  12588 frei             Nemesis        Ghost
  12589 AlanTuring	F.P.1          Inselträger
- 12590 Todwart		Pussy Galore   Abfangjäger
+ 12590 Todwart			Pussy Galore	Abfangjäger
  12591 Idrin            Destiny        Luftabwehr
  12592 Excalibur        Prometheus     Zeppelinträger
  12593 IceQueen         Kyterin        Luftangriffbuggy
  12594 Boras            VDT            Drohnenträger
+ 12595 Schukow			ctulhu			Drohnenträger				grafik by schukow/GAMER

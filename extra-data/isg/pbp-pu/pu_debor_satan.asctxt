@@ -1,10 +1,11 @@
 VehicleType { 
    Name = Satan
    ID = 12547
+   SecondaryIDs = 12564
    parent = 400 402 414 498
 
    Description = air service unit
-   Picture = pua_debor_satan.png
+   Picture = pu_debor_satan.png
    WreckageObject = 1302
    Infotext = [Spezial Flugzeug der Debor Sekte, ehemals ein abgestuerztes Alienraumschiff. Zerstoerte Komponenten wurden durch eigene Technologien ersetzt und erweitert.]
 

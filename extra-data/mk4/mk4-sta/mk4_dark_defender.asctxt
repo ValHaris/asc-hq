@@ -1,0 +1,33 @@
+VehicleType { 
+   Name = Dark Defender
+   parent = 12006
+   ID = 14035
+
+   Description = Verteidiger
+   Infotext = [Waechter des HQ]
+   Picture = mk4_defender.png
+
+   ConstructionCost { 
+      CalculationMethod = manual
+      Energy = 30000
+      Material = 60000
+      fuel = 0
+   } ConstructionCost
+
+   Features = satelliteview
+   Armor = 2000
+   Weight = 6000
+   View = 130
+   Jamming = 46
+   
+   Movement = 0 0 0 0 0 0 0 0
+
+
+   TerrainAccess { 
+      terrain_any = runway road hard_sand soft_sand lowland
+      terrain_all = 
+      terrain_not = 
+      terrain_kill = 
+   } TerrainAccess
+
+} VehicleType

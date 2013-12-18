@@ -45,6 +45,7 @@ ID 38 ASC DeepCore
 ID 39 ASC Windrad
 ID 40 ASC Hafen groß Nordwest  -> 16
 ID 41 ASC Hafen groß Südost    -> 16
+ID 42 ASC DeepCity 				-> 24
 
 MK4
 ID 61 Subbase

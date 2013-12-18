@@ -1,0 +1,46 @@
+ObjectType { 
+   ID = 14035
+   parent = 500
+   Weather = dry 
+   Name = destroyed HQ entrance 
+   GroupID = 
+   Height = 101
+
+   LinkableObjects = 
+   NetBehaviour = 
+   TerrainAccess.terrain_any = runway road Lowland Hard_sand Soft_sand Very_shallow_water shallow_water
+   TerrainAccess.terrain_not =  
+   TerrainAccess.terrain_kill =  
+   TerrainProperties_Filter = Road Hard_sand Soft_sand Lowland Ditch Hillside Mountains High_mountains Installation Small_rocks Large_rocks Forest Swamp morass mud Very_shallow_water Shallow_water river water deep_water Snow Deep_snow Frozen_water lava 
+   TerrainProperties_Add = runway railroad lava_barrier pipeline
+   Jamming_abs = 0
+   canExistBeneathBuildings = true
+
+   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+   Movemalus_abs = 20  20  20  20  20  20  20  20  20  20  20  20  20  20  20  20  20  20
+
+   ConstructionCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+      Movement = 0
+   } ConstructionCost
+   RemovalCost { 
+      Energy = 0
+      Material = 0
+      fuel = 0
+      Movement = 0
+   } RemovalCost
+
+   dry { 
+      UseGFXpics = false
+      picture = isg_beton.png 65
+   ;                  def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
+      Movemalus_abs = 20  20  20  20  20  20  20  20  20  20  20  20  20  20  20  20  20  20
+      TerrainProperties_Add = runway railroad lava_barrier pipeline turret_foundation
+      UseGFXpics = false
+      picture = mk4_dark_hq_entrance.png 1
+      ImageReference =  -1
+      FlipPictures   =  0
+    } dry
+} ObjectType

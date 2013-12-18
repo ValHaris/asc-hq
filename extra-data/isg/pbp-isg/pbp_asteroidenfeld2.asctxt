@@ -102,7 +102,7 @@ VehicleType {
         } Weapon0
         Weapon1 { 
             Name = Asteroiden
-            Sound = pbp_kollisionswarnung.ogg
+            Sound = 
             Type = laser shootable 
             targets = low_level_flight floating ground_level 
             shotFrom = orbit 
@@ -116,8 +116,8 @@ VehicleType {
                 material = 0
                 fuel = 0
             } LaserRechargeCost
-            Punch@MaxRange = 20
-            Punch@MinRange = 20
+            Punch@MaxRange = 15
+            Punch@MinRange = 15
             HitAccuracy { 
                 d6 = 100
                 d5 = 100

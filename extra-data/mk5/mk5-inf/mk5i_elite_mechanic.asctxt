@@ -30,11 +30,9 @@ VehicleType {
    
    TerrainAccess.terrain_kill = lava
 
-   Construction {
-      Objects = 9 10 181 998 1489 2093 2097 2099
-      ObjectsRemovable = 1400
-      UnitConstructionMoveCostPercentage = 85
-   } Construction
+   Construction ->* VehicleType.constr_building 
+   Construction.Objects = 9 10 181 998 1489 2093 2097 2099
+   Construction.UnitConstructionMoveCostPercentage = 85
 
    WaitForAttack = true
    Weapons { 

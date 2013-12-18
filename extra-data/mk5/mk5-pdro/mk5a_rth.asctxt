@@ -1,92 +1,96 @@
 VehicleType { 
-   Name = RTH 302
-   parent = 424
-   ID = 1417
-   Description = Mittelstreckenrakete
-   Infotext = [Diese zielsuchende Rakete ist in der Lage jede Art von sichtbaren Einheiten 
-   anzugreifen. Der Treibstoffvorrat ist nicht besonders gross, was die Gesamtreichweite stark 
-   einschraenkt. ]
-   Picture = mk5a_rth.pcx
+	Name = RTH 302
+	parent = 424
+	ID = 1417
 
-   Movement = 0 0 0 0 140 140 140 0 
-   Weight = 20
+	Description = Mittelstreckenrakete
+	Picture = mk5a_rth.png
+	Infotext = [Diese zielsuchende Rakete ist in der Lage jede Art von sichtbaren Einheiten 
+	anzugreifen. Der Treibstoffvorrat ist nicht besonders gross, was die Gesamtreichweite stark 
+	einschraenkt. ]
 
-   Weapons {
-      Number = 3 
-      Weapon0 { 
-         targets = low_level_flight medium_level_flight high_level_flight 
-         shotFrom = low_level_flight medium_level_flight high_level_flight
-         Punch@MaxRange = 85
-         Punch@MinRange = 85
-      } Weapon0
-      Weapon1 { 
-         Type = laser shootable 
-         targets = orbit 
-         shotFrom = high_level_flight
-         Punch@MaxRange = 85
-         Punch@MinRange = 85
-         LaserRechargeRate = 1
-         LaserRechargeCost {
-            energy = 0
-            material = 0
-            fuel = 0
-         } LaserRechargeCost
-         MaxRange = 10
-         MinRange = 10
-         Ammo = 1
-         HitAccuracy { 
-            d6 = 0
-            d5 = 0
-            d4 = 0
-            d3 = 0
-            d2 = 0
-            d1 = 0
-            0 = 0
-            u1 = 100
-            u2 = 0
-            u3 = 0 
-            u4 = 0
-            u5 = 0
-            u6 = 0
-         } HitAccuracy
-	 WeaponEffectiveness {
- 	 } WeaponEffectiveness
-      } Weapon1
-      Weapon2 { 
-         Type = laser shootable 
-         targets = ground_level floating
-         shotFrom = low_level_flight
-         Punch@MaxRange = 105
-         Punch@MinRange = 105
-         LaserRechargeRate = 1
-         LaserRechargeCost {
-            energy = 0
-            material = 0
-            fuel = 0
-         } LaserRechargeCost
-         MaxRange = 10
-         MinRange = 10
-         Ammo = 1
-         HitAccuracy { 
-            d6 = 0
-            d5 = 0
-            d4 = 0
-            d3 = 0
-            d2 = 0
-            d1 = 100
-            0 = 0
-            u1 = 0
-            u2 = 0
-            u3 = 0 
-            u4 = 0
-            u5 = 0
-            u6 = 0
-         } HitAccuracy
-	 WeaponEffectiveness {
-	 trooper = 0
-	 default = 0
-	 device = 0
- 	 } WeaponEffectiveness
-      } Weapon2
-   } Weapons
+	Movement = 0 0 0 0 140 140 140 0 
+	Weight = 20
+
+	Weapons {
+		Number = 3 
+		Weapon0 {
+			sound = weapon01_s.oog
+			targets = low_level_flight medium_level_flight high_level_flight 
+			shotFrom = low_level_flight medium_level_flight high_level_flight
+			Punch@MaxRange = 90
+			Punch@MinRange = 90
+		} Weapon0
+		Weapon1 { 
+			Type = laser shootable 
+			sound = weapon01_s.oog
+			targets = orbit 
+			shotFrom = high_level_flight
+			Punch@MaxRange = 95
+			Punch@MinRange = 95
+			LaserRechargeRate = 1
+			LaserRechargeCost {
+				energy = 0
+				material = 0
+				fuel = 0
+			} LaserRechargeCost
+			MaxRange = 10
+			MinRange = 10
+			Ammo = 1
+			HitAccuracy { 
+				d6 = 0
+				d5 = 0
+				d4 = 0
+				d3 = 0
+				d2 = 0
+				d1 = 0
+				0 = 0
+				u1 = 100
+				u2 = 0
+				u3 = 0 
+				u4 = 0
+				u5 = 0
+				u6 = 0
+			} HitAccuracy
+			WeaponEffectiveness {
+			} WeaponEffectiveness
+		} Weapon1
+		Weapon2 { 
+			Type = laser shootable 
+			sound = weapon01_s.oog
+			targets = ground_level floating
+			shotFrom = low_level_flight
+			Punch@MaxRange = 120
+			Punch@MinRange = 120
+			LaserRechargeRate = 1
+			LaserRechargeCost {
+				energy = 0
+				material = 0
+				fuel = 0
+			} LaserRechargeCost
+			MaxRange = 10
+			MinRange = 10
+			Ammo = 1
+			HitAccuracy { 
+				d6 = 0
+				d5 = 0
+				d4 = 0
+				d3 = 0
+				d2 = 0
+				d1 = 100
+				0 = 0
+				u1 = 0
+				u2 = 0
+				u3 = 0 
+				u4 = 0
+				u5 = 0
+				u6 = 0
+			} HitAccuracy
+			WeaponEffectiveness {
+				trooper = 0
+				default = 0
+				device = 0
+			} WeaponEffectiveness
+		} Weapon2
+	} Weapons
 } VehicleType

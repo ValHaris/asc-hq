@@ -1,21 +1,24 @@
 VehicleType { 
-   Name = PLUGIN
-   ID = 16003
-   parent = 497 325
+	Name = PLUGIN
+	ID = 16003
+	parent = 497 325
 
-   picture = mk5a_plugin.png
-   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+	picture = mk5a_plugin.png
+	GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
 
-   Features = ExternalFuelTransfer MoveDuringReactionFire 
+	Features = ExternalFuelTransfer MoveDuringReactionFire 
 
-   TerrainAccess ->* VehicleType.heli_terrain 
-   Movement = 0 0 0 65 90 90 0 0 
+	TerrainAccess ->* VehicleType.heli_terrain 
+	Movement = 0 0 0 65 90 90 0 0 
 
-   Weapons { 
-      Number = 2
-      Weapon1 ->* VehicleType.AAMH
-      Weapon1.MaxRange = 40
-      Weapon1.ReactionFireShots = 2 
+	Weapons { 
+		Number = 2
+		Weapon0.targets = floating ground_level low_level_flight medium_level_flight
+		Weapon0.shotFrom = ground_level low_level_flight medium_level_flight
+
+		Weapon1 ->* VehicleType.AAMH
+		Weapon1.MaxRange = 40
+		Weapon1.ReactionFireShots = 2 
    } Weapons
 
 } VehicleType

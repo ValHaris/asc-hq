@@ -1,5 +1,5 @@
 MK4 Set
-Grafiken: GAMER & Dr.Snuggels
+Grafiken: GAMER & Dr.Snuggels & Keyfinder
 Spezifikationen: GAMER
 
 **************************
@@ -160,6 +160,7 @@ ID 14027/365 KOLOSS         command submarine /Prätorianer
 
 Ground Units
 ID  1277 Aldinium
+ID 14035 Dark Defender
 
 Aircraft
 ID  1242 Ghost

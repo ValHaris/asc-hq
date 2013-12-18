@@ -1,38 +1,36 @@
 VehicleType { 
-   Name = ZS RAEU
-   parent = 400 401 402 412
-   ID = 22817
+	Name = ZS RAEU
+	parent = 400 401 402 412
+	ID = 22817
 
-   Description = Universalraeumzug
-   Infotext = [ Der ZS RAEU ist ein Spezialzug der malanischen Pioniere, welcher Minen auch auf größere Distanzen zur Explosion bringen kann. Er ist ebenso in der Lage, Panzersperren zu beseitigen und damit unverzichtbar für offensive Landoperationen.
+	Description = Universalraeumzug
+	Infotext = [ Der ZS RAEU ist ein Spezialzug der malanischen Pioniere, welcher Minen auch auf größere Distanzen zur Explosion bringen kann. Er ist ebenso in der Lage, Panzersperren zu beseitigen und damit unverzichtbar für offensive Landoperationen.
 Ausgestattet mit den verschiedensten teilweise autonom verwendbaren Werkzeuggruppen ist es der Besatzung dieses Zuges weiterhin möglich, so ziemlich alles abzureißen und einzuebnen, was Menschen errichtet haben. Dazu zählen Gebäude, Brücken, Panzerschienen, Pipelines, Geschützsockel ebenso wie Schrott oder Schützengräben.
 Weiterhin kann er Vegetation roden, sogar das jetzt verschiedenorts aufgetauchte mysteriöse Stachelgras und schließlich auch Lava abbauen.
-
 
 Sein Aufgabenbereich schließt stets auch Einsätze im Frontgebiet mit ein. Aus diesem Grund verfügt der ZS RAEU über eine mittlere Panzerung und ein leichtes MG. Auf dem Triebwagen ist sogar noch genug Platz, eine Infanterieeinheit zu transportieren, welche dem Zug bei Bedarf etwas Deckung geben kann.
 Die Besatzungen werden darüber hinaus in Trainingslagern auf ihre Einsätze vorbereitet. Trotzdem ist die Verlustrate im Kampfgebiet meist recht hoch. Verantwortungsvolle Truppenführer versuchen daher, diesen Einheiten, soweit möglich, zusätzlichen Schutz angedeihen zu lassen.
 
-
 Aufgrund seines Aufgabengebietes und seiner vielfältigen Einsatzmöglichkeiten sind von den Zugbataillonen bei ihren Einsätzen immer ausreichend ZS RAEU mitzuführen.]
-   Picture = mat_zs_raeu.pcx
+	Picture = mat_zs_raeu.pcx
 
-   Transportation ->* VehicleType.TransLowTrooper2
+	Transportation ->* VehicleType.TransLowTrooper2
 
-   Armor -= 50
-   Weight = 150
-   Features += construct_specific_buildings mineview mine_layer
-   View = 30
+	Armor -= 50
+	Weight = 150
+	Features += construct_specific_buildings mineview mine_layer
+	View = 30
 
-   Tank.Material = 9000
-   Tank.Fuel = 10000
+	Tank.Material = 9000
+	Tank.Fuel = 10000
 
-   Construction.ObjectGroupsRemovable = 2 3 4 5 6 7 8 10 11 13 21
-   Construction.ObjectsRemovable = 992 988
+	Construction.ObjectGroupsRemovable = 1 2 3 4 5 6 7 8 10 11 13 21
+	Construction.ObjectsRemovable = 992 988
 
-   Weapons { 
-      Number = 2
-      Weapon0 ->* VehicleType.Def_MG
-      Weapon1 ->* VehicleType.AntiMine
-      Weapon1.MaxRange = 20
-   } Weapons
+	Weapons { 
+		Number = 2
+		Weapon0 ->* VehicleType.Def_MG
+		Weapon1 ->* VehicleType.AntiMine
+		Weapon1.MaxRange = 20
+	} Weapons
 } VehicleType

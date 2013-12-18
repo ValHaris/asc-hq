@@ -1,0 +1,70 @@
+VehicleType { 
+	Name = AQUILA
+	parent = 1254
+	ID = 12508
+
+	Description = Orbitales Drohnenmutterschiff
+	Infotext = []
+	Picture = pu_aquila.png
+
+	Features += jam_only_own_field self_repairing Repair_Facility
+	Armor += 100
+	View += 10
+	Jamming = 39   
+	SelfRepairRate = 10
+	Weight = 350     
+
+	ConstructionCost { 
+		CalculationMethod = add
+		Energy = 6000
+		Material = 6000
+		fuel = 0
+	} ConstructionCost
+
+	transportation { 
+		MaxLoadableUnits = 10
+		MaxLoadableUnitSize = 70
+		MaxLoadableMass = 420
+		CategoriesNOT = medium_wheeled_vehicle heavy_wheeled_vehicle light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship building|turret|object helicopter hoovercraft
+		EntranceSystemNum = 5
+		Entrancesystem1.Mode = in out
+		EntranceSystem2.Mode = In out
+		EntranceSystem3 ->* VehicleType.ParaDevice
+		EntranceSystem4 {
+			Mode = Out
+			ContainerHeight = orbit
+			UnitHeightAbs = high_level_flight
+			RequireUnitFunction = paratrooper
+			CategoriesNOT = 
+			DisableAttack = false
+			RequireUnitFunction = paratrooper
+			MoveCost = 30         
+		} EntranceSystem4
+	} transportation 
+
+	Tank { 
+		Energy = 0
+		Material = 20000
+		fuel = 35000
+	} Tank
+
+	WaitForAttack = false
+	Weapons { 
+		Number = 6
+		Weapon0.Ammo = 30
+		Weapon0.MaxRange = 20
+      
+		Weapon2 ->* VehicleType.AmmoSM 
+		Weapon2.Ammo = 30
+
+		Weapon3 ->* VehicleType.AmmoCannon
+		Weapon3.Ammo = 40
+
+		Weapon4 ->* VehicleType.AmmoBomb 
+		Weapon4.Ammo = 30
+
+		Weapon5 ->* VehicleType.AmmoTorp 
+		Weapon5.Ammo = 20
+
+	} Weapons
+} VehicleType

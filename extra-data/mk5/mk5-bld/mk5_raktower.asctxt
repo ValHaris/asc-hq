@@ -24,7 +24,7 @@ BuildingType {
       EntranceSystemNum = 1
       EntranceSystem0 {
         Mode = out
-        UnitHeightAbs = medium_level_flight 
+        UnitHeightAbs = low_level_flight 
         UnitHeightRel = -100
         ContainerHeight = ground_level
         CategoriesNOT = trooper

@@ -5,9 +5,9 @@ VehicleType {
 
    Description = Devl Hulk
    Infotext = [Der Devl Hulk ist in Wut versetzt eine Kampfmaschine. Sein Faustschlag ist tödlich gegen jeden Infanteristen. Er sammelt alles ein, mit dem er in Rage umsichwerfen kann. Schleudert er ein Panzerwrack gegen große und langsame Einheiten, so nehmen diese schweren Schaden. Der Hulk springt bis in mittlere Luftschichten. Diese Fortbewegung ermöglicht ihm eine große Reichweite. In Friedenszeiten pflanzt er Bäume und Palmen.]
-   Picture = pui_hulk.png
-   InfoImage = pui_hulk.jpg
-   InfoImageSmall = pui_hulk_k.png
+   Picture = pu_hulk.png
+   InfoImage = pu_hulk.jpg
+   InfoImageSmall = pu_hulk_k.png
    WreckageObject = 12583
    
    Tank.Material = 12000

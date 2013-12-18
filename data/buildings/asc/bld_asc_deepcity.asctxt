@@ -1,0 +1,72 @@
+BuildingType { 
+	Name = Town
+	ID = 42
+	parent = 24
+
+	Desctipion = deep sea town
+	Armor = 100000
+	View = 50
+	Features = matter_converter sonar ammo_production externalfueltransfer externalmaterialtransfer
+	notRemovable = true
+	MaxResearch = 10
+	NominalResearch = 10
+
+	ConstructionStages = 1
+	Weather = dry 
+	Fields = A1 
+	UseGFXpics = false
+	Pictures { 
+		dry = bld_asc_deepcity.png
+	} Pictures
+	RubbleObjects = false
+;   rubble {
+;      A1 = 78
+;   } rubble
+	Entry = A1
+
+	Transportation { 
+      MaxLoadableUnits = 4
+      MaxLoadableUnitSize = 1000
+      MaxLoadableMass = 1000
+      CategoriesNOT = heavy_ship light_aircraft medium_aircraft heavy_aircraft
+      EntranceSystemNum = 1
+      EntranceSystem0 {
+        Mode = In out docking
+        UnitHeightAbs = submerged deep_submerged 
+        UnitHeightRel = 0
+        ContainerHeight = submerged deep_submerged
+        CategoriesNOT = 
+        DockingHeightAbs = submerged deep_submerged 
+        DockingHeightRel = 0 
+        DisableAttack = false
+      } EntranceSystem0
+   } Transportation
+	
+
+	Height = submerged deep_submerged
+	TerrainAccess {
+		terrain_any = water deep_water
+		terrain_kill = 
+	} TerrainAccess
+
+	MaxResourceProduction { 
+		Energy = 400
+		Material = 400
+		fuel = 400
+	} MaxResourceProduction
+
+	defaultProduction {
+		energy = 400
+		material = 400
+		fuel = 400
+	} defaultProduction
+
+	StorageCapacity { 
+		ASCmode { 
+			Energy = 2000
+			Material = 4000
+			fuel = 4000
+		} ASCmode
+	} StorageCapacity
+
+} BuildingType

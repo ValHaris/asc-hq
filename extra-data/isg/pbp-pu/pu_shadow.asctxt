@@ -4,7 +4,7 @@ VehicleType {
     parent = 400 401 402 422
 
     Description = mobile rocket laucher
-    Picture = pu_shadow.pcx
+    Picture = pu_shadow.png
     InfoImage = pu_shadow.jpg
     InfoImageSmall = pu_shadow_k.png
     GuideSortHelp = 509 600 0 0 101 0 0 0 0 0
