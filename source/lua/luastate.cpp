@@ -22,7 +22,7 @@ class LuaStatePrivate {
 
 LuaState::LuaState()
 {
-   myLuaState = lua_open();
+   myLuaState = luaL_newstate();
    
    luaopen_asc(myLuaState); // declare the wrapped module   
    luaL_openlibs(myLuaState); 

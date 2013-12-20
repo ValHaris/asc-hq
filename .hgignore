@@ -8,7 +8,6 @@ glob:*.la
 glob:Makefile
 glob:autom4te.cache/*
 glob:Doxyfile
-glob:aclocal.m4
 glob:asc.spec
 glob:config.h
 glob:config.log
@@ -42,3 +41,4 @@ glob:*.intermediate.manifest
 glob:*.user
 glob:source/win32/msvc/**/*.dep
 glob:*.exe.embed.manifest
+glob:source/libs/loki-0.1.6/**/*.dep

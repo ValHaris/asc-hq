@@ -109,14 +109,14 @@ ActionResult TrainUnitCommand::go ( const Context& context )
    if ( newexp_d > maxexp )
       newexp_d = maxexp;
    
-   if ( newexp_o != unit->getExperience_offensive() ) {
+   if ( newexp_o >= unit->getExperience_offensive() ) {
       auto_ptr<ChangeUnitProperty> train ( new ChangeUnitProperty( unit, ChangeUnitProperty::ExperienceOffensive, newexp_o ));
       ActionResult res = train->execute( context );
       if ( res.successful() )
          train.release();
    }
          
-   if ( newexp_d != unit->getExperience_defensive() ) {
+   if ( newexp_d >= unit->getExperience_defensive() ) {
       auto_ptr<ChangeUnitProperty> train ( new ChangeUnitProperty( unit, ChangeUnitProperty::ExperienceDefensive, newexp_d ));
       ActionResult res = train->execute( context );
       if ( res.successful() )

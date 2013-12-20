@@ -33,7 +33,6 @@ isg/pu-air/*.*
 isg/pu-ground/*.*
 isg/pu-inaktiv/*.*
 isg/pu-sea/*.*
-isg/pu-mixed/*.*
 isg/pu-infoimages/*.*
 isg/pbp-parent/*.*
 mk5/mk5-bld/*.*

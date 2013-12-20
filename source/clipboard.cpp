@@ -134,6 +134,12 @@ void ClipBoardBase::place ( const MapCoordinate& pos )
      MapField* fld = actmap->getField ( pos );
      Vehicle* veh = pasteUnit ( stream );
 
+     if ( veh->getOwner() == playerNum-1) {
+         warningMessage("pasting neutral units on the map is not allowed");
+         delete veh;
+         return;
+      }
+
      if ( !fieldAccessible ( fld, veh, -2, NULL, true ) && !actmap->getgameparameter( cgp_movefrominvalidfields) ) {
         delete veh;
         return;

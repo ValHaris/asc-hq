@@ -74,8 +74,8 @@ sub randomString {
 }
 
 
-system("cmd /c copy $zipname z:");
-die "error uploading file" if $?;
+#system("cmd /c copy $zipname z:");
+# die "error uploading file" if $?;
 
 if ( $cvsUpload ) {
     system("Upload.cmd  $version");
@@ -86,7 +86,7 @@ if ( $pbpEditor ) {
     my $pbpzip = "pbpeditor-$id.zip";
     unlink($pbpzip) if -e $pbpzip;
     system("zip $pbpzip pbpeditor2.exe");
-    system("cmd /c copy $zipname z:");
+    system("cmd /c copy $pbpzip z:");
     die "error uploading file $pbpzip " if $?;
- 
+    print ("PBPEditor is $pbpzip \n");
 }

@@ -145,13 +145,13 @@ int mapeditorMainThread ( void* _mapname )
       mapSwitcher.toggle();
 
    } /* end try */
-   catch ( ParsingError err ) {
+   catch ( ParsingError& err ) {
       fatalError ( "Error parsing text file " + err.getMessage() );
    }
-   catch ( tfileerror err ) {
+   catch ( tfileerror& err ) {
       fatalError ( "Error loading file " + err.getFileName() );
    } /* end catch */
-   catch ( ASCmsgException err ) {
+   catch ( ASCmsgException& err ) {
       fatalError( "Error loading file " + err.getMessage() );
    }
 
@@ -201,7 +201,7 @@ int main(int argc, char *argv[] )
    try {
       cl = new Cmdline ( argc, argv );
    }
-   catch ( string s ) {
+   catch ( string& s ) {
       cerr << s;
       exit(1);
    }
