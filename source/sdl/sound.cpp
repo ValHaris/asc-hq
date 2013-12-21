@@ -174,6 +174,14 @@ ASCString SoundSystem :: getDiagnosticText()
    else
       text += "No play list active!";
 
+   SDL_version mixCompiled;
+   MIX_VERSION( &mixCompiled );
+   text += "SDL_mixer compiled version: " + ASCString::toString( (int) mixCompiled.major ) + "." + ASCString::toString( (int) mixCompiled.minor ) + "." + ASCString::toString( (int) mixCompiled.patch ) + "\n";
+
+   const SDL_version *mixVersion = Mix_Linked_Version();
+   text += "SDL_mixer linked version: " + ASCString::toString( (int) mixVersion->major ) + "." + ASCString::toString( (int) mixVersion->minor ) + "." + ASCString::toString( (int) mixVersion->patch )+ "\n";
+
+
    return text;
 }
 
