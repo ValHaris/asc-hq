@@ -6,6 +6,7 @@ glob:*.Po
 glob:*.Plo
 glob:*.la
 glob:Makefile
+glob:asc.appdata.xml
 glob:autom4te.cache/*
 glob:Doxyfile
 glob:asc.spec
