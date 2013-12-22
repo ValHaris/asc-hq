@@ -706,6 +706,7 @@ AC_SUBST(extradatadir)
 AC_CONFIG_FILES( [ Makefile \
        asc.spec \
        asc.suse.spec \
+       asc.appdata.xml \
        getmusic \
        doc/Makefile \
        doc/manpages/Makefile \

@@ -105,7 +105,7 @@ void         tmapgenerator::init(void)
 
    barsize = maxbarsize;
 
-   constructionlayer = new ( Uint8[plasma.maxx * plasma.maxy ]); // =blockcount
+   constructionlayer = new Uint8[plasma.maxx * plasma.maxy ]; // =blockcount
 
    addbutton("",480,80,510,100,0,1,7,true);
    addkey(7,ct_down);

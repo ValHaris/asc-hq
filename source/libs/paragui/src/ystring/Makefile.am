@@ -6,7 +6,7 @@ libystring_la_SOURCES = \
 
 EXTRA_DIST =
 
-INCLUDES = \
+AM_CPPFLAGS = \
 	$(SDL_CFLAGS) \
 	-I$(top_srcdir)/source/libs/paragui/include
 

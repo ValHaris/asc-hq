@@ -85,7 +85,7 @@ ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/libtool.m4 \
 	$(top_srcdir)/m4/ltoptions.m4 $(top_srcdir)/m4/ltsugar.m4 \
 	$(top_srcdir)/m4/ltversion.m4 $(top_srcdir)/m4/lt~obsolete.m4 \
-	$(top_srcdir)/acinclude.m4 $(top_srcdir)/configure.in
+	$(top_srcdir)/acinclude.m4 $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
@@ -370,8 +370,7 @@ zipfound = @zipfound@
 noinst_LTLIBRARIES = librevel.la
 librevel_la_SOURCES = avilib.c avilib.h BaseEncoder.cpp BaseEncoder.h revelcore.cpp XvidEncoder.cpp XvidEncoder.h
 EXTRA_DIST = $(srcdir)/*.h
-AM_CFLAGS := $(AM_CFLAGS) 
-INCLUDES = $(AM_CFLAGS)
+AM_CPPFLAGS = $(AM_CFLAGS)
 all: all-am
 
 .SUFFIXES:

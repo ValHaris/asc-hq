@@ -4,7 +4,7 @@ libtheme_la_SOURCES = \
 	themeloader.cpp \
 	theme_priv.cpp
 
-INCLUDES = \
+AM_CPPFLAGS = \
 	$(SIGC_CFLAGS) \
 	$(EXPAT_INCLUDE) \
 	$(SDL_CFLAGS) \

@@ -1,7 +1,7 @@
 
 MAINTAINERCLEANFILES	= Makefile.in
 
-INCLUDES		= -I$(top_builddir) -I$(abs_top_srcdir)/source
+AM_CPPFLAGS		= -I$(top_builddir) -I$(abs_top_srcdir)/source
 
 noinst_LTLIBRARIES	= libasc_cmd.la
 

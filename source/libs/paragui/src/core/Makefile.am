@@ -27,7 +27,7 @@ libpgcore_la_LIBADD = \
 EXTRA_DIST = \
 	physfsrwops.h
 
-INCLUDES = \
+AM_CPPFLAGS = \
 	$(SIGC_CFLAGS) \
 	$(SDL_CFLAGS) \
 	$(PHYSFS_INCLUDE) \
