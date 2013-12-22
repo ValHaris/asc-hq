@@ -4,6 +4,6 @@ librevel_la_SOURCES = avilib.c avilib.h BaseEncoder.cpp BaseEncoder.h revelcore.
 
 EXTRA_DIST=$(srcdir)/*.h
 
-AM_CFLAGS := $(AM_CFLAGS) 
-INCLUDES = $(AM_CFLAGS)
+## AM_CFLAGS := $(AM_CFLAGS) 
+AM_CPPFLAGS = $(AM_CFLAGS)
 

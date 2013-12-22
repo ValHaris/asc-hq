@@ -17,7 +17,7 @@ libparagui_la_LIBADD = \
 	./ystring/libystring.la \
 	$(LIBSTDCPP)
 
-INCLUDES = \
+AM_CPPFLAGS = \
 	$(SIGC_CFLAGS) \
 	$(SDL_CFLAGS) \
 	-I$(top_srcdir)/source/libs/paragui/include 

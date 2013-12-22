@@ -7,7 +7,7 @@ libpgfont_la_SOURCES = \
 EXTRA_DIST = \
 	facecache.h
 
-INCLUDES = \
+AM_CPPFLAGS = \
 	$(SIGC_CFLAGS) \
 	$(SDL_CFLAGS) \
 	-I$(top_srcdir)/source/libs/paragui/include

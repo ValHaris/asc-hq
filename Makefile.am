@@ -6,6 +6,10 @@ AUTOMAKE_OPTIONS 	= foreign
 
 .PHONY: htmldoc installer tarball pbpinstaller unitguide cvstag SWIG
 
+pkgdata_DATA 		= @PACKAGE@.appdata.xml
+pkgdatadir 		= $(datadir)/appdata/
+
+
 htmldoc:
 	cd source && make htmldoc
 

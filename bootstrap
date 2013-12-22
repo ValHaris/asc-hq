@@ -3,7 +3,7 @@
 if test "X$1" = X--force; then
    set -x
    set -e
-   scripts/bootstrap.versionmerge configure.in
+   scripts/bootstrap.versionmerge configure.ac
    
    # if there are no changes, copy the original file back so that the timestamp stays the same
    # diff configure.in configure.in~ || cp -p configure.in~ configure.in

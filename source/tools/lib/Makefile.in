@@ -85,7 +85,7 @@ ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/libtool.m4 \
 	$(top_srcdir)/m4/ltoptions.m4 $(top_srcdir)/m4/ltsugar.m4 \
 	$(top_srcdir)/m4/ltversion.m4 $(top_srcdir)/m4/lt~obsolete.m4 \
-	$(top_srcdir)/acinclude.m4 $(top_srcdir)/configure.in
+	$(top_srcdir)/acinclude.m4 $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
@@ -349,7 +349,7 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 zipfound = @zipfound@
 MAINTAINERCLEANFILES = Makefile.in
-INCLUDES = -I$(top_builddir) -I$(abs_top_srcdir)/source
+AM_CPPFLAGS = -I$(top_builddir) -I$(abs_top_srcdir)/source
 noinst_LTLIBRARIES = libasc_cmd.la
 libasc_cmd_la_SOURCES = errorout.cpp
 all: all-am

@@ -5,7 +5,7 @@ vpath %.cpp $(srcdir)/..:$(srcdir)/../..
 
 MAINTAINERCLEANFILES	= Makefile.in
 
-INCLUDES		= -I $(top_builddir) -I$(top_src_dir)/source
+AM_CPPFLAGS		= -I $(top_builddir) -I$(top_src_dir)/source
 
 AM_CXXFLAGS 		= $(SDL_CFLAGS) -Dconverter $(SIGC_CFLAGS)  @LokiInclude@
 

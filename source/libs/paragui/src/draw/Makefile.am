@@ -13,7 +13,7 @@ libpgdraw_la_SOURCES = \
 
 EXTRA_DIST =
 
-INCLUDES = \
+AM_CPPFLAGS = \
 	$(SDL_CFLAGS) \
 	$(SIGC_CFLAGS) \
 	-I$(top_srcdir)/source/libs/paragui/include

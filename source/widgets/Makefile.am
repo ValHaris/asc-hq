@@ -9,6 +9,6 @@ libwidgets_la_SOURCES   = textrenderer.cpp bargraphwidget.cpp dropdownselector.c
                           targetcoordinatelocator.cpp textrenderer-addons.cpp vehicletypeimage.cpp
 libwidgets_la_LIBADD    = @SDL_LIBS@
 
-INCLUDES = -I$(top_srcdir)/source/libs/paragui/include 
+AM_CPPFLAGS = -I$(top_srcdir)/source/libs/paragui/include 
 
 EXTRA_DIST=$(srcdir)/*.h

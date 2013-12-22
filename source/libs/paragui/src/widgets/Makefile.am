@@ -14,7 +14,7 @@ libpgwidgets_la_LIBADD = \
 
 EXTRA_DIST =
 
-INCLUDES = \
+AM_CPPFLAGS = \
 	$(SIGC_CFLAGS) \
 	$(EXPAT_INCLUDE) \
 	$(SDL_CFLAGS) \
