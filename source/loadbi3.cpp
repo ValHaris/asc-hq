@@ -1508,7 +1508,8 @@ void tloadBImap :: LoadTXTFile ( char* filename )
          Uint8 bitsset=((code>>7)&1)+((code>>6)&1)+((code>>5)&1)+((code>>4)&1)+((code>>3)&1)+((code>>2)&1)+((code>>1)&1)+((code>>0)&1);
          
          int toread = min(8+bitsset, int(txtsize-outptr));
-         fread(&inbuf, toread, 1, fp);
+         if ( fread(&inbuf, toread, 1, fp) != 1 )
+            throw treadafterend( filename );
    
          for (int i=0; (i<8)&&(outptr<txtsize); i++)
          {
