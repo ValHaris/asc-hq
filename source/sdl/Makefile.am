@@ -9,7 +9,7 @@ AM_CPPFLAGS      = -I$(src_dir) -I$(top_builddir)
 noinst_LTLIBRARIES	= libsdl.la libsdlsnd.la
 
 libsdl_la_SOURCES 	= graphics.cpp events.cpp 
-libsdl_la_LIBADD	= @SDL_LIBS@ -lSDL_image -ljpeg 
+libsdl_la_LIBADD	= @SDL_LIBS@ -lSDL_image 
 
 libsdlsnd_la_SOURCES 	= sound.cpp  
 libsdlsnd_la_LIBADD	= @SDL_LIBS@ -lSDL_mixer @SDL_SOUND_LIB@ 
