@@ -251,7 +251,6 @@ void SelectionHolder::pickup ( MapField* fld )
 int infomessage( char* formatstring, ... )
 {
    char stringtooutput[200];
-   char* c = new char[200];
    // int linenum = 0;
 
    memset (stringtooutput, 0, sizeof ( stringtooutput ));
@@ -280,9 +279,6 @@ int infomessage( char* formatstring, ... )
       lastdisplayedmessageticker = 0xffffff;
    else
       lastdisplayedmessageticker = ticker;
-
-
-   delete ( c );
 
    return ++actdisplayedmessage;
 }

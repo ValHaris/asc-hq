@@ -12,6 +12,8 @@
 #include <stdio.h>
 #include <ctype.h>
 
+#include <boost/scoped_array.hpp>
+
 using std::auto_ptr;
 using std::string;
 
@@ -362,8 +364,8 @@ inline int ASCStringHelpers::_Stricmp ( const charT* pS1, const charT* pS2 )
 
     #ifdef ASC_UNICODE
         // auto_ptr will release the memorey if an exception is raised
-        auto_ptr< charT > l_autopS1 ( new charT [ _Strlen ( pS1 ) + sizeof ( charT ) ] );
-        auto_ptr< charT > l_autopS2 ( new charT [ _Strlen ( pS2 ) + sizeof ( charT ) ] );
+        boost::scoped_array< charT > l_autopS1 ( new charT [ _Strlen ( pS1 ) + sizeof ( charT ) ] );
+        boost::scoped_array< charT > l_autopS2 ( new charT [ _Strlen ( pS2 ) + sizeof ( charT ) ] );
 
         charT* l_pS1 = l_autopS1.get();
         charT* l_pS2 = l_autopS2.get();

@@ -21,4 +21,4 @@ if test "X$1" = X--coverage; then
    export CFLAGS="$CFLAGS   -fprofile-arcs -ftest-coverage "
    export PARAM=
 fi
-./configure --enable-unittestcoverage --enable-extradata $PARAM
+./configure --enable-unittestcoverage --enable-extradata --prefix=/home/martin/.asc/ $PARAM

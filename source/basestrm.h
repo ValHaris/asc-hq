@@ -262,7 +262,7 @@ class tlzwstreamcompression {
 
 
               /* decode buffer */
-              unsigned char *DecodeBuffer;
+              unsigned char *decodeBuffer;
               unsigned DecodeBufferSize ;
               
               unsigned int inchar;

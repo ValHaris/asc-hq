@@ -1521,8 +1521,8 @@ void tloadBImap :: LoadTXTFile ( char* filename )
             } else {
                // repeat
                Uint8 d0,d1;
-	       d0=inbuf[inptr]; inptr++;
-	       d1=inbuf[inptr]; inptr++;
+               d0=inbuf[inptr]; inptr++;
+               d1=inbuf[inptr]; inptr++;
                int blklen=(d0&0xf)+3;
                int blkofs=((d0&0xf0)<<4)+d1;
                for (int j=0; (j<blklen)&&(outptr<txtsize); j++)
@@ -1537,6 +1537,7 @@ void tloadBImap :: LoadTXTFile ( char* filename )
       // The file is uncompressed.
       if ( fread(txtbuffer, txtsize, 1, fp) != 1 )
          throw treadafterend( filename );
+
    }
 
     txtbuffer[txtsize]=0;
@@ -1613,8 +1614,9 @@ void tloadBImap :: LoadFromFile( const char* path, const char* AFileName, Terrai
        UnPackDF(AktDFNum);
        */
 
-       if ( GetStr ( 1, 24 ) )
-          actmap->maptitle = GetStr ( 1, 24 );
+       char* str = GetStr ( 1, 24 );
+       if ( str )
+          actmap->maptitle = str;
        else
           actmap->maptitle.erase();
 

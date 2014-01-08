@@ -136,7 +136,6 @@ int  crc32buf(const void *vbuf, int len)
 {
       const char* buf = (const char*) vbuf;
 
-      unsigned int crc;
       unsigned int oldcrc32;
 
       oldcrc32 = 0xFFFFFFFF;
@@ -146,8 +145,7 @@ int  crc32buf(const void *vbuf, int len)
             oldcrc32 = UPDC32(*buf, oldcrc32);
       }
 
-      return crc = oldcrc32 = ~oldcrc32;
-
+      return ~oldcrc32;
 }
 
 

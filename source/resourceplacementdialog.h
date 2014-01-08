@@ -33,11 +33,6 @@ protected:
   static const int ysize;
   static const int xOffSet;
   static const int yOffSet;
-  static const char* int2String(int i) {
-    stringstream s;
-    s << i;
-    return s.str().c_str();
-  }
 
   static const int leftIndent;
 
