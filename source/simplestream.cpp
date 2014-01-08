@@ -268,10 +268,7 @@ tn_file_buf_stream::~tn_file_buf_stream()
    if (_mode == writing)
       writebuffer();
 
-   int res = fclose( fp );
-   if ( res != 0 ) 
-      throw  tfileerror ( getDeviceName() + " : " + strerror(errno));
-      
+   fclose( fp );
    _mode = uninitialized;
 
 }

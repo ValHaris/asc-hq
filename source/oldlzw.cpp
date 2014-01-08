@@ -37,7 +37,7 @@ tlzwstreamcompression  :: tlzwstreamcompression ( void )
     initread = 0;
     initwrite = 0;
     DecodeBufferSize = 0;    
-    DecodeBuffer = NULL;
+    decodeBuffer = NULL;
     rdictionary = NULL;
     readcnt = 0;
     wdictionary = NULL;
@@ -290,19 +290,22 @@ void tlzwstreamcompression  :: LZWOut ( CodeType code )
                    
     while ( code >= PRESET_CODE_MAX )
     {
-        DecodeBuffer[ count++ ] = rdictionary[ code ].c;
+        decodeBuffer[ count++ ] = rdictionary[ code ].c;
         if ( count == DecodeBufferSize )
         {
-            DecodeBuffer = (unsigned char *) realloc ( DecodeBuffer, DecodeBufferSize + 1000 );
+            unsigned char* newBuffer = (unsigned char *) realloc ( decodeBuffer, DecodeBufferSize + 1000 );
 
-            if ( ! DecodeBuffer )
+            if ( ! newBuffer ) {
+                free ( decodeBuffer );
                 throw OutOfMemoryError ( DecodeBufferSize + 1000 );
-            else      
+            } else {
+                decodeBuffer = newBuffer;
                 DecodeBufferSize += 1000;
+            }
         }
         code = rdictionary[ code ].parent;
     }
-    DecodeBuffer[ count++ ] = code;
+    decodeBuffer[ count++ ] = code;
     return ( count );
 }
 
@@ -372,8 +375,8 @@ int tlzwstreamcompression  :: readdata ( void* buf, int size, bool excpt  )
           if (!DecodeBufferSize)
           {
               DecodeBufferSize = 1000;
-              DecodeBuffer =  (unsigned char * ) new char [ DecodeBufferSize ];
-              if ( DecodeBuffer == NULL )
+              decodeBuffer =  (unsigned char * ) new char [ DecodeBufferSize ];
+              if ( decodeBuffer == NULL )
                   throw OutOfMemoryError ( DecodeBufferSize );
           }
       
@@ -414,7 +417,7 @@ int tlzwstreamcompression  :: readdata ( void* buf, int size, bool excpt  )
                   /* Make last char same as first. Can use either */
                   /* inchar or the DecodeBuffer[count-1] */
       
-                  DecodeBuffer[ 0 ] = inchar;
+                  decodeBuffer[ 0 ] = inchar;
               }
               else
                   count = LZWLoadBuffer ( 0, incode );
@@ -422,13 +425,13 @@ int tlzwstreamcompression  :: readdata ( void* buf, int size, bool excpt  )
               if ( count == 0 )
                  throw ASCexception();
                              
-              inchar = DecodeBuffer[ count - 1 ];
+              inchar = decodeBuffer[ count - 1 ];
               while ( count )
               {
                  if ( pos < size )
-                    buf2 [pos++] = DecodeBuffer[--count];
+                    buf2 [pos++] = decodeBuffer[--count];
                  else 
-                    tempbuf.push ( DecodeBuffer[--count] );
+                    tempbuf.push ( decodeBuffer[--count] );
               }
       
               /* now, update the rdictionary */
@@ -464,8 +467,6 @@ int tlzwstreamcompression  :: readdata ( void* buf, int size, bool excpt  )
 
  tlzwstreamcompression  :: ~tlzwstreamcompression ( )
 {
-   if ( mode == writing )
-      close();
 
     if ( rdictionary ) {
        delete[] rdictionary;
@@ -476,9 +477,9 @@ int tlzwstreamcompression  :: readdata ( void* buf, int size, bool excpt  )
        wdictionary = NULL;
     }
 
-    if ( DecodeBuffer ) {
-       delete[] DecodeBuffer;
-       DecodeBuffer = NULL;
+    if ( decodeBuffer ) {
+       delete[] decodeBuffer;
+       decodeBuffer = NULL;
     }
 
 }

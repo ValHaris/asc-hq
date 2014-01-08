@@ -1528,6 +1528,9 @@ void tanycompression :: close_compression ( void )
 
 tanycompression :: ~tanycompression ( )
 {
+   if ( tlzwstreamcompression::mode == tlzwstreamcompression::writing)
+       tlzwstreamcompression::close();
+
    if ( bzip_decompress ) {
       delete bzip_decompress;
       bzip_decompress = NULL;
@@ -1728,7 +1731,6 @@ tn_c_lzw_filestream :: ~tn_c_lzw_filestream()
       }
    } catch ( ... ) {
       displayLogMessage( 9, ASCString("~tn_c_lzw_filestream : caught exception") );
-      throw;
    }
 }
 

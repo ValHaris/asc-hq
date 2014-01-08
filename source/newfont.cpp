@@ -117,8 +117,10 @@ pfont        loadfont( tnstream* stream )
 
    font1->id[47] = 0;
 
-   if ( strncmp(font1->id,fontid, 46) )
+   if ( strncmp(font1->id,fontid, 46) ) {
+      delete font1;
       return (NULL);
+   }
 
    font1->useems = false;
    font1->palette = NULL;

@@ -6,6 +6,7 @@
 #include "ASCStringHelpers.h"
 #include <stdexcept>      // for range_error
 #include <stdarg.h>
+#include <boost/scoped_array.hpp>
 
 using std::range_error;
 
@@ -197,7 +198,7 @@ inline ASCString::ASCString ( const ASCAdaptatorString& s )
 : ASCCharTString ()
 {
     // auto_ptr will release memory if an exception is raised
-    auto_ptr< charT > pE ( new charT [ s.length () + sizeof ( charT ) ] );
+    boost::scoped_array< charT > pE ( new charT [ s.length () + sizeof ( charT ) ] );
 
     size_t stNumCharConverted = ASCStringHelpers::_ConvertToCharT ( pE.get (), s.c_str(), s.length() );
     if ( stNumCharConverted != s.length() )
@@ -227,7 +228,7 @@ inline ASCString::ASCString ( const ASCAdaptatorString& s, size_type pos, size_t
     size_t stLen = n - pos;
 
     // auto_ptr will release memory if an exception is raised
-    auto_ptr< charT > pE ( new charT [ stLen + sizeof ( charT ) ] );
+    boost::scoped_array< charT > pE ( new charT [ stLen + sizeof ( charT ) ] );
 
     const NoncharT* pCE = s.c_str ();
     size_t stNumCharConverted = ASCStringHelpers::_ConvertToCharT ( pE.get (), &pCE[ pos ], stLen );

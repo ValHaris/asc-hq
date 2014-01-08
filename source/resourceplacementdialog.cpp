@@ -86,7 +86,7 @@ ResourcePlacementDialog::ResourcePlacementDialog( ) :
 
   int xFuelOffSetValue = xFuelWidgetPos + fuelOffSetLabel->Width();
   fuelOffSetValue = new PG_LineEdit(this, PG_Rect(xFuelOffSetValue, yFuelOffSetLabelPos, 40, hFuelWidget));
-  fuelOffSetValue->SetText(int2String(ResourcePlacement::MAXFUELVALUE));
+  fuelOffSetValue->SetText(ASCString::toString(ResourcePlacement::MAXFUELVALUE));
   fuelOffSetValue->SetValidKeys("1234567890");
   fuelOffSetValue->SetEditable(false);
 
@@ -104,7 +104,7 @@ ResourcePlacementDialog::ResourcePlacementDialog( ) :
 
   int xMaterialOffSetValue = xFuelWidgetPos + materialOffSetLabel->Width();
   materialOffSetValue = new PG_LineEdit(this, PG_Rect(xMaterialOffSetValue, yMaterialOffSetLabelPos, 40, hFuelWidget));
-  materialOffSetValue->SetText(int2String(ResourcePlacement::MAXMATERIALVALUE));
+  materialOffSetValue->SetText(ASCString::toString(ResourcePlacement::MAXMATERIALVALUE));
   materialOffSetValue->SetValidKeys("1234567890");
   materialOffSetValue->SetEditable(false);
 
@@ -121,7 +121,7 @@ ResourcePlacementDialog::ResourcePlacementDialog( ) :
   
   int xFuelFreeRatioValue = xFuelWidgetPos + fuelFreeRatioLabel->Width();
   fuelFreeRatioValue = new PG_LineEdit(this, PG_Rect(xFuelFreeRatioValue, yFuelFreeRatioLabelPos, 40, hFuelWidget));
-  fuelFreeRatioValue->SetText(int2String(0));
+  fuelFreeRatioValue->SetText(ASCString::toString(0));
   fuelFreeRatioValue->SetValidKeys("1234567890");
   fuelFreeRatioValue->SetEditable(false);
   
@@ -138,7 +138,7 @@ ResourcePlacementDialog::ResourcePlacementDialog( ) :
   
   int xMaterialFreeRatioValue = xFuelWidgetPos + materialFreeRatioLabel->Width();
   materialFreeRatioValue = new PG_LineEdit(this, PG_Rect(xMaterialFreeRatioValue, yMaterialFreeRatioLabelPos, 40, hFuelWidget));
-  materialFreeRatioValue->SetText(int2String(0));
+  materialFreeRatioValue->SetText(ASCString::toString(0));
   materialFreeRatioValue->SetValidKeys("1234567890");
   materialFreeRatioValue->SetEditable(false);
   
@@ -183,26 +183,24 @@ bool ResourcePlacementDialog::buttonEvent( PG_Button* button ) {
 
 
 bool ResourcePlacementDialog::scrollTrackEventMaterial(long data) {
-  materialOffSetValue->SetText( int2String(data));
+  materialOffSetValue->SetText( ASCString::toString( (int) data));
   return true;
 }
 
 bool ResourcePlacementDialog::scrollTrackEventFuel(long data) {
-  stringstream s;
-  s << data;
-  fuelOffSetValue->SetText( s.str().c_str());
+  fuelOffSetValue->SetText( ASCString::toString( (int) data ));
   return true;
 }
 
 
 bool ResourcePlacementDialog::scrollTrackEventMaterialFreeRatio(long data){
-   materialFreeRatioValue->SetText( int2String(data));
+   materialFreeRatioValue->SetText( ASCString::toString((int)data));
   return true;
 }
 
 
 bool ResourcePlacementDialog::scrollTrackEventFuelFreeRatio(long data){
-  fuelFreeRatioValue->SetText(int2String(data));
+  fuelFreeRatioValue->SetText(ASCString::toString((int)data));
   return true;
 }
 
