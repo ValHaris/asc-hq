@@ -684,6 +684,8 @@ void tspfldloaders::readfields ( void )
          if (b1 & csm_vehicle ) {
             fld2->vehicle = Vehicle::newFromStream ( spfld, *stream );
             fld2->vehicle->setnewposition ( l%spfld->xsize, l/spfld->xsize );
+            if ( fld2->vehicle->getOwner() == 8 ) // neutral units are not allowed, it was a bug that they could be placed on some maps
+                delete fld2->vehicle;
          }
 
          if (b1 & csm_building ) {
