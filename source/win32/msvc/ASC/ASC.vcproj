@@ -196,6 +196,96 @@
 				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
+		<Configuration
+			Name="NonOptRel|Win32"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="1"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
+			CharacterSet="2"
+			WholeProgramOptimization="1"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+				CommandLine="echo Visual Studio sucks: see https://connect.microsoft.com/VisualStudio/feedback/ViewFeedback.aspx?FeedbackID=309462&#x0D;&#x0A;"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				AdditionalOptions="/MP"
+				Optimization="0"
+				InlineFunctionExpansion="0"
+				EnableIntrinsicFunctions="false"
+				FavorSizeOrSpeed="1"
+				AdditionalIncludeDirectories="../.;&quot;$(SDL)/include&quot;;../../../libs/sdlmm/src;../../../libs/getopt;&quot;$(libsigcpp)&quot;;../../../libs/paragui/include;&quot;../../../libs/loki-0.1.6/include&quot;;../../../libs/bzlib"
+				PreprocessorDefinitions="WIN32;NDEBUG;sgmain;FREEMAPZOOM;_WIN32_;NEWKEYB;LUAINTERFACE;_SDL_;NOMINMAX;XVIDEXPORT"
+				RuntimeLibrary="2"
+				ForceConformanceInForLoopScope="true"
+				RuntimeTypeInfo="true"
+				UsePrecompiledHeader="0"
+				BrowseInformation="0"
+				WarningLevel="3"
+				DebugInformationFormat="3"
+				DisableSpecificWarnings="4800;4244;4355;4305;4786;4290;4267;4996;4018"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies="triangulate.lib libbzip2.lib SDLmm.lib SDL.lib SDL_image.lib SDL_mixer.lib SDLmain.lib sigc-1.2.lib paragui_static.lib physfs.lib freetype.lib libexpat.lib sdl_sound.lib libpng13.lib libcurl_imp.lib revel.lib lua.lib"
+				OutputFile="$(OutDir)/bin/ASC2.exe"
+				LinkIncremental="2"
+				AdditionalLibraryDirectories="&quot;$(OutDir)/lib&quot;;&quot;../../../libs/SDLmm/SDLmm/$(ConfigurationName)&quot;;&quot;$(SDL)/VisualC/SDLmain/Release_NOSTDIO&quot;;&quot;$(SDL)/VisualC/SDL/Release&quot;;&quot;$(libsigcpp)\MSVC_Net2003\Release\&quot;;&quot;../../../$(ConfigurationName)/lib&quot;;&quot;../../../libs/paragui/VisualC/$(ConfigurationName)&quot;;&quot;$(physfs)/Release&quot;;&quot;$(libpng)\projects\visualc71\Win32_DLL_Release&quot;"
+				ManifestFile="$(OutDir)\bin\$(TargetFileName).intermediate.manifest"
+				GenerateDebugInformation="true"
+				ProgramDatabaseFile="$(OutDir)/bin/ASC.pdb"
+				SubSystem="2"
+				OptimizeReferences="2"
+				EnableCOMDATFolding="2"
+				RandomizedBaseAddress="1"
+				DataExecutionPrevention="0"
+				TargetMachine="1"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
 	</Configurations>
 	<References>
 	</References>
@@ -708,6 +798,14 @@
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(InputName)1.obj"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="NonOptRel|Win32"
 						>
 						<Tool
 							Name="VCCLCompilerTool"

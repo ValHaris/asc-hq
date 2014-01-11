@@ -185,6 +185,91 @@
 				ExcludedFromBuild="true"
 			/>
 		</Configuration>
+		<Configuration
+			Name="NonOptRel|Win32"
+			OutputDirectory="$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="4"
+			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
+			UseOfMFC="0"
+			ATLMinimizesCRunTimeLibraryUsage="false"
+			CharacterSet="2"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+				PreprocessorDefinitions="NDEBUG"
+				MkTypLibCompatible="true"
+				SuppressStartupBanner="true"
+				TargetEnvironment="1"
+				TypeLibraryName=".\Release/paragui_dynamic.tlb"
+				HeaderFileName=""
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				AdditionalOptions="/vmg /MP"
+				Optimization="1"
+				InlineFunctionExpansion="1"
+				AdditionalIncludeDirectories="&quot;$(physfs)&quot;;../src/core;../include;../src/themes;&quot;$(libsigcpp)&quot;"
+				PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP"
+				StringPooling="true"
+				RuntimeLibrary="2"
+				EnableFunctionLevelLinking="true"
+				ForceConformanceInForLoopScope="true"
+				RuntimeTypeInfo="true"
+				PrecompiledHeaderFile=".\Release/paragui_dynamic.pch"
+				AssemblerListingLocation=".\Release/"
+				ObjectFile=".\Release/"
+				ProgramDataBaseFileName=".\Release/"
+				WarningLevel="3"
+				SuppressStartupBanner="true"
+				CompileAs="0"
+				DisableSpecificWarnings="4996"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+				PreprocessorDefinitions="NDEBUG"
+				Culture="1029"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLibrarianTool"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+				Description="Copying PhysFS DLL ..."
+				CommandLine="copy ..\src\physfs\Release\physfs.dll ..\..\bin"
+				ExcludedFromBuild="true"
+			/>
+		</Configuration>
 	</Configurations>
 	<References>
 	</References>
@@ -217,6 +302,16 @@
 						PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
 					/>
 				</FileConfiguration>
+				<FileConfiguration
+					Name="NonOptRel|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						Optimization="1"
+						AdditionalIncludeDirectories=""
+						PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
+					/>
+				</FileConfiguration>
 			</File>
 			<Filter
 				Name="themes"
@@ -237,6 +332,16 @@
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="1"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="NonOptRel|Win32"
 						>
 						<Tool
 							Name="VCCLCompilerTool"
@@ -274,6 +379,16 @@
 							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
 						/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="NonOptRel|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="1"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
+						/>
+					</FileConfiguration>
 				</File>
 			</Filter>
 			<Filter
@@ -295,6 +410,16 @@
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="1"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="NonOptRel|Win32"
 						>
 						<Tool
 							Name="VCCLCompilerTool"
@@ -328,6 +453,16 @@
 							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
 						/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="NonOptRel|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="1"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\src\draw\gradient.cpp"
@@ -345,6 +480,16 @@
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="1"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="NonOptRel|Win32"
 						>
 						<Tool
 							Name="VCCLCompilerTool"
@@ -382,6 +527,16 @@
 							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
 						/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="NonOptRel|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="1"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\src\draw\rotozoom.cpp"
@@ -399,6 +554,16 @@
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="1"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="NonOptRel|Win32"
 						>
 						<Tool
 							Name="VCCLCompilerTool"
@@ -432,6 +597,16 @@
 							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
 						/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="NonOptRel|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="1"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\src\draw\stretch.cpp"
@@ -457,6 +632,16 @@
 							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
 						/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="NonOptRel|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="1"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\src\draw\surface.cpp"
@@ -474,6 +659,16 @@
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="1"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="NonOptRel|Win32"
 						>
 						<Tool
 							Name="VCCLCompilerTool"
@@ -511,6 +706,16 @@
 							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
 						/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="NonOptRel|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="1"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\src\core\pgapplication.cpp"
@@ -528,6 +733,16 @@
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="1"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="NonOptRel|Win32"
 						>
 						<Tool
 							Name="VCCLCompilerTool"
@@ -561,6 +776,16 @@
 							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
 						/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="NonOptRel|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="1"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\src\core\pgcolors.cpp"
@@ -578,6 +803,16 @@
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="1"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="NonOptRel|Win32"
 						>
 						<Tool
 							Name="VCCLCompilerTool"
@@ -611,6 +846,16 @@
 							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
 						/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="NonOptRel|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="1"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\src\core\pgfile.cpp"
@@ -628,6 +873,16 @@
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="1"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="NonOptRel|Win32"
 						>
 						<Tool
 							Name="VCCLCompilerTool"
@@ -661,6 +916,16 @@
 							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
 						/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="NonOptRel|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="1"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\src\core\pglog.cpp"
@@ -678,6 +943,16 @@
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="1"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="NonOptRel|Win32"
 						>
 						<Tool
 							Name="VCCLCompilerTool"
@@ -711,6 +986,16 @@
 							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
 						/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="NonOptRel|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="1"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\src\core\pgmessageobject.cpp"
@@ -736,6 +1021,16 @@
 							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
 						/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="NonOptRel|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="1"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\src\core\pgnavigator.cpp"
@@ -753,6 +1048,16 @@
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="1"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="NonOptRel|Win32"
 						>
 						<Tool
 							Name="VCCLCompilerTool"
@@ -794,6 +1099,16 @@
 							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
 						/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="NonOptRel|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="1"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\src\core\pgsurfacecache.cpp"
@@ -811,6 +1126,16 @@
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="1"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="NonOptRel|Win32"
 						>
 						<Tool
 							Name="VCCLCompilerTool"
@@ -844,6 +1169,16 @@
 							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
 						/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="NonOptRel|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="1"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\src\core\physfsrwops.cpp"
@@ -861,6 +1196,16 @@
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="1"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="NonOptRel|Win32"
 						>
 						<Tool
 							Name="VCCLCompilerTool"
@@ -906,6 +1251,16 @@
 							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
 						/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="NonOptRel|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="1"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\src\font\pgfont_impl.cpp"
@@ -923,6 +1278,16 @@
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="1"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="NonOptRel|Win32"
 						>
 						<Tool
 							Name="VCCLCompilerTool"
@@ -960,6 +1325,16 @@
 							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
 						/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="NonOptRel|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="1"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\src\widgets\pgcheckbutton.cpp"
@@ -977,6 +1352,16 @@
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="1"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="NonOptRel|Win32"
 						>
 						<Tool
 							Name="VCCLCompilerTool"
@@ -1010,6 +1395,16 @@
 							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
 						/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="NonOptRel|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="1"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\src\widgets\pgdropdown.cpp"
@@ -1027,6 +1422,16 @@
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="1"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="NonOptRel|Win32"
 						>
 						<Tool
 							Name="VCCLCompilerTool"
@@ -1060,6 +1465,16 @@
 							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
 						/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="NonOptRel|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="1"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\src\widgets\pglabel.cpp"
@@ -1077,6 +1492,16 @@
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="1"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="NonOptRel|Win32"
 						>
 						<Tool
 							Name="VCCLCompilerTool"
@@ -1110,6 +1535,16 @@
 							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
 						/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="NonOptRel|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="1"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\src\widgets\pglineedit.cpp"
@@ -1127,6 +1562,16 @@
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="1"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="NonOptRel|Win32"
 						>
 						<Tool
 							Name="VCCLCompilerTool"
@@ -1160,6 +1605,16 @@
 							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
 						/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="NonOptRel|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="1"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\src\widgets\pglistboxbaseitem.cpp"
@@ -1177,6 +1632,16 @@
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="1"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="NonOptRel|Win32"
 						>
 						<Tool
 							Name="VCCLCompilerTool"
@@ -1210,6 +1675,16 @@
 							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
 						/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="NonOptRel|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="1"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\src\widgets\pgmaskedit.cpp"
@@ -1227,6 +1702,16 @@
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="1"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="NonOptRel|Win32"
 						>
 						<Tool
 							Name="VCCLCompilerTool"
@@ -1260,6 +1745,16 @@
 							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
 						/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="NonOptRel|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="1"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\src\widgets\pgmessagebox.cpp"
@@ -1277,6 +1772,16 @@
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="1"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="NonOptRel|Win32"
 						>
 						<Tool
 							Name="VCCLCompilerTool"
@@ -1314,6 +1819,16 @@
 							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
 						/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="NonOptRel|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="1"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\src\widgets\pgprogressbar.cpp"
@@ -1331,6 +1846,16 @@
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="1"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="NonOptRel|Win32"
 						>
 						<Tool
 							Name="VCCLCompilerTool"
@@ -1368,6 +1893,16 @@
 							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
 						/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="NonOptRel|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="1"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\src\core\pgrectlist.cpp"
@@ -1393,6 +1928,16 @@
 							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
 						/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="NonOptRel|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="1"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\src\widgets\pgrichedit.cpp"
@@ -1410,6 +1955,16 @@
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="1"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="NonOptRel|Win32"
 						>
 						<Tool
 							Name="VCCLCompilerTool"
@@ -1447,6 +2002,16 @@
 							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
 						/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="NonOptRel|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="1"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\src\widgets\pgscrollwidget.cpp"
@@ -1468,6 +2033,16 @@
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="1"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="NonOptRel|Win32"
 						>
 						<Tool
 							Name="VCCLCompilerTool"
@@ -1501,6 +2076,16 @@
 							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
 						/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="NonOptRel|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="1"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\src\widgets\pgthemewidget.cpp"
@@ -1518,6 +2103,16 @@
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="1"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="NonOptRel|Win32"
 						>
 						<Tool
 							Name="VCCLCompilerTool"
@@ -1555,6 +2150,16 @@
 							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
 						/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="NonOptRel|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="1"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\src\widgets\pgwidgetdnd.cpp"
@@ -1572,6 +2177,16 @@
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="1"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="NonOptRel|Win32"
 						>
 						<Tool
 							Name="VCCLCompilerTool"
@@ -1605,6 +2220,16 @@
 							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
 						/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="NonOptRel|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="1"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\src\widgets\pgwindow.cpp"
@@ -1622,6 +2247,16 @@
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="1"
+							AdditionalIncludeDirectories=""
+							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="NonOptRel|Win32"
 						>
 						<Tool
 							Name="VCCLCompilerTool"
