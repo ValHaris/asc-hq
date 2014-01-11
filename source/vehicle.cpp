@@ -126,6 +126,10 @@ Vehicle :: ~Vehicle (  )
    MapField* fld = gamemap->getField( xpos, ypos);
    if ( fld && fld->vehicle  == this )
        fld->vehicle = NULL;
+
+   if ( fld && fld->secondvehicle  == this )
+       fld->secondvehicle = NULL;
+
    
    if ( getCarrier() )
       getCarrier()->removeUnitFromCargo( this, true );

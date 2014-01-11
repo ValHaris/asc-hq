@@ -249,7 +249,7 @@ int tsearchreactionfireingunits :: attack( Vehicle* attacker, Vehicle* target, c
                      }
                   }
 
-                  tunitattacksunit battle ( attacker, target, 0, atw->num[num], true );
+                  tunitattacksunit battle ( attacker, target, false, atw->num[num], true );
                   // int nwid = target->networkid;
 
                   if ( context.display && visibility)
@@ -288,12 +288,16 @@ int  tsearchreactionfireingunits :: checkfield ( const MapCoordinate3D& pos, Veh
          while ( ul  &&  !result ) {
             punitlist next = ul->next;
             
-            int r = attack( ul->eht, vehicle, context );
-            if ( r > 0 )
-               ++attacks;
-            
-            if ( r > 1 )
-               result = 1;
+            if ( ul->eht ) { // the unit
+                int nwid = ul->eht->networkid;
+                int r = attack( ul->eht, vehicle, context );
+                ul->eht = gamemap->getUnit(nwid); // could have been destroyed and be null now
+                if ( r > 0 )
+                   ++attacks;
+
+                if ( r > 1 )
+                   result = 1;
+            }
             
             ul = next;
          } /* endwhile */
