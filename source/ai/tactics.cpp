@@ -273,6 +273,8 @@ AI::AiResult AI::executeMoveAttack ( Vehicle* veh, TargetVector& tv )
 
    MoveVariant* mv = *max_element( tv.begin(), tv.end(), moveVariantComp );
 
+   int targetID = mv->enemy->networkid;
+
    if ( mv->movePos != veh->getPosition3D() ) {
       VisibilityStates org_vision =  getVision() ;
       setVision(visible_now);
@@ -299,6 +301,12 @@ AI::AiResult AI::executeMoveAttack ( Vehicle* veh, TargetVector& tv )
 
    if ( veh->attacked )
       return result;
+
+   if ( !getMap()->getUnit( targetID )) {
+       // can happen if the unit that was selected for being attacked
+       // had reactionfire enabled and Kamikaze, which destroyed it.
+       return result;
+   }
 
    auto_ptr<AttackCommand> va (new AttackCommand( veh ));
    ActionResult res = va->searchTargets();
