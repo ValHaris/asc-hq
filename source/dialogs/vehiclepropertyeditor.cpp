@@ -27,6 +27,7 @@
 
 #include "../gamemap.h"
 #include "../paradialog.h"
+#include "../edmisc.h"
 
 #include "vehiclepropertyeditor.h"
 
@@ -62,27 +63,39 @@ class VehiclePropertyEditor : public ASC_PG_Dialog {
                     veh->reactionfire.enable();
                 else
                     veh->reactionfire.disable();
+                mapsaved = false;
             }
 
-            if ( owner != veh->getOwner() )
+            if ( owner != veh->getOwner() ) {
                 veh->convert(owner, true);
+                mapsaved = false;
+            }
 
             if ( heightMapping[unitHeight] != getFirstBit( veh->height )) {
                 veh->height = 1 << heightMapping[unitHeight];
                 veh->resetMovement();
+                mapsaved = false;
             }
 
-            if ( experienceOffensive != veh->getExperience_offensive() )
+            if ( experienceOffensive != veh->getExperience_offensive() ) {
                 veh->setExperience_offensive( experienceOffensive );
+                mapsaved = false;
+            }
 
-            if ( experienceDefensive != veh->getExperience_defensive() )
+            if ( experienceDefensive != veh->getExperience_defensive() ) {
                 veh->setExperience_defensive( experienceDefensive );
+                mapsaved = false;
+            }
 
-            if ( tank.material != veh->getTank().material )
+            if ( tank.material != veh->getTank().material ) {
                 veh->putResource( tank.material-veh->getTank().material, 1, false, 1, veh->getOwner() );
+                mapsaved = false;
+            }
 
-            if ( tank.fuel != veh->getTank().fuel )
+            if ( tank.fuel != veh->getTank().fuel ) {
                 veh->putResource( tank.fuel-veh->getTank().fuel, 2, false, 1, veh->getOwner() );
+                mapsaved = false;
+            }
 
             quitModalLoop(0);
 
