@@ -389,7 +389,7 @@ AI::AiResult  AI :: container ( ContainerBase* cb )
             AStar3D ast ( getMap(), *i, false, (*i)->getMovement() );
             ast.findAllAccessibleFields ();
 
-            getAttacks ( ast, *i, tv, 0 );
+            getAttacks ( ast, *i, tv, 0, false, false );
 
             if ( tv.size() ) {
                AiResult res = executeMoveAttack ( *i, tv );
@@ -402,7 +402,7 @@ AI::AiResult  AI :: container ( ContainerBase* cb )
                AStar3D ast ( getMap(), *i, false, (*i)->maxMovement()*3 );
                ast.findAllAccessibleFields ();
 
-               getAttacks ( ast, *i, tv, 0 );
+               getAttacks ( ast, *i, tv, 0, false, false );
 
                if ( tv.size() ) {
                   MoveVariant* mv = *max_element( tv.begin(), tv.end(), moveVariantComp );
