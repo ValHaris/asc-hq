@@ -340,7 +340,7 @@ bool AStar3D::findPath( const MapCoordinate3D& B ) {
 
 bool AStar3D::findPath( const vector<MapCoordinate3D>& B ) {
 
-   MapCoordinate3D A = veh->getPosition3D();
+    MapCoordinate3D A = veh->getPosition3D();
 
     OpenContainer open;
 
@@ -456,36 +456,41 @@ bool AStar3D::findPath( const vector<MapCoordinate3D>& B ) {
               directions = d;
            }
 
-           if ( !operationLimiter || operationLimiter->allowMovement() )
-              for( int dci = 0; dci < 6; dci++ ) {
+           if ( !operationLimiter || operationLimiter->allowMovement() ) {
 
-                 HexDirection dir = HexDirection(directions[dci]);
-                 Node N2 = Node();
-                 if ( !initNode(N2, N_ptr, getNeighbouringFieldCoordinate(N_ptr->h, dir), B) )
-                    continue;
-                 if ( N2.canStop && actmap->getField(N2.h)->getContainer() && actmap->getField(N2.h)->vehicle != veh) {
-                     // there's an container on the field that can be entered. This means, the unit can't stop 'over' the container...
-                     if ( !veh->typ->hasFunction( ContainerBaseType::OnlyMoveToAndFromTransports  ) ) {
-                        N2.canStop = false;
-                        open.pushOrUpdate ( N2 );
-                     }
+              // this check is actually only necessary for the very first field in which the unit starts.
+              // The unit may not be able to leave it, for example if a ship is frozen in ice
+              if ( terrainaccessible ( oldFld, veh) || veh->getMap()->getgameparameter(cgp_movefrominvalidfields)) {
 
-                     // ... only inside it
-                     N2.canStop = true;
-                     N2.enterHeight = N2.h.getNumericalHeight() ;
-                     N2.h.setNumericalHeight (-1);
-                     // N2.hasAttacked = true;
-                     if (!visited.find(N2.h))
-                        open.pushOrUpdate ( N2 );
-                  } else
-                     if ( !veh->typ->hasFunction( ContainerBaseType::OnlyMoveToAndFromTransports  ) )
-                        open.pushOrUpdate ( N2 );
+                 for( int dci = 0; dci < 6; dci++ ) {
+                    HexDirection dir = HexDirection(directions[dci]);
+                    Node N2 = Node();
+                    if ( !initNode(N2, N_ptr, getNeighbouringFieldCoordinate(N_ptr->h, dir), B) )
+                       continue;
+                    if ( N2.canStop && actmap->getField(N2.h)->getContainer() && actmap->getField(N2.h)->vehicle != veh) {
+                        // there's an container on the field that can be entered. This means, the unit can't stop 'over' the container...
+                        if ( !veh->typ->hasFunction( ContainerBaseType::OnlyMoveToAndFromTransports  ) ) {
+                           N2.canStop = false;
+                           open.pushOrUpdate ( N2 );
+                        }
+
+                        // ... only inside it
+                        N2.canStop = true;
+                        N2.enterHeight = N2.h.getNumericalHeight() ;
+                        N2.h.setNumericalHeight (-1);
+                        // N2.hasAttacked = true;
+                        if (!visited.find(N2.h))
+                           open.pushOrUpdate ( N2 );
+                     } else
+                        if ( !veh->typ->hasFunction( ContainerBaseType::OnlyMoveToAndFromTransports  ) )
+                           open.pushOrUpdate ( N2 );
+                  }
               }
-
+           }
            // and now change the units' height. That's only possible on fields where the unit can stop it's movement
 
 
-              if ( (!operationLimiter || operationLimiter->allowHeightChange()) && !(veh->typ->hasFunction( ContainerBaseType::OnlyMoveToAndFromTransports  )) )
+           if ( (!operationLimiter || operationLimiter->allowHeightChange()) && !(veh->typ->hasFunction( ContainerBaseType::OnlyMoveToAndFromTransports  )) )
               if ( (fieldAccessible ( oldFld, veh, N_ptr->h.getBitmappedHeight() ) == 2 ) || actmap->getgameparameter( cgp_movefrominvalidfields) )
                  for ( int heightDelta = -1; heightDelta <= 1; heightDelta += 2 ) {
                     const VehicleType::HeightChangeMethod* hcm = veh->getHeightChange( heightDelta, N_ptr->h.getBitmappedHeight());

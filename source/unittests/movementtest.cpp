@@ -420,6 +420,31 @@ void testPathFinding()
    }
 }
 
+void testPathFinding2()
+{
+   auto_ptr<GameMap> game ( startMap("unittest-pathfinding.map"));
+
+   {
+       Vehicle* sub = game->getField(3,4)->vehicle;
+       assertOrThrow( sub );
+
+       assertOrThrow( game->getgameparameter(cgp_movefrominvalidfields) == 1);
+
+       {
+           AStar3D ast( game.get(), sub, false, sub->getMovement());
+           ast.findAllAccessibleFields( );
+           assertOrThrow( ast.visited.size() == 121 );
+       }
+
+       game->setgameparameter(cgp_movefrominvalidfields,0);
+       {
+           AStar3D ast( game.get(), sub, false, sub->getMovement());
+           ast.findAllAccessibleFields( );
+           assertOrThrow( ast.visited.size() == 1 );
+           assertOrThrow ( ast.visited.find( MapCoordinate3D(3,4,4)) != NULL );
+       }
+   }
+}
 
 
 void testMovement() 
@@ -433,4 +458,5 @@ void testMovement()
    testHeightChangeAI();
    testHeightChangeGUI();
    testPathFinding();
+   testPathFinding2();
 }
