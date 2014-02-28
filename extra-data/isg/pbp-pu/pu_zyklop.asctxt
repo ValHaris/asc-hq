@@ -1,33 +1,35 @@
 VehicleType { 
    Name = ZYKLOP
    ID = 12522
-   parent = 241
+   parent = 400 241
 
    Description = Schwerer Supportroboter
-   Infotext = [Spezialeinheit der Imperialen Garde]
-   Picture = PUm_Xypha_Zyklop.png
+   Infotext = [Spezialeinheit]
+   Picture = pu_zyklop.png
 
-   Armor += 200
+   Armor += 300
    Weight = 40
    Transportation ->* VehicleType.TransLowTrooper 
-   Features = satelliteview ExternalRepair ExternalFuelTransfer ExternalMaterialTransfer mineview
+   Features = satelliteview ExternalRepair ExternalFuelTransfer construct_specific_buildings ExternalMaterialTransfer ExternalAmmoTransfer mineview mine_layer
 
-   Movement = 0 0 0 60 0 0 0 0 
+   Movement = 0 0 0 70 0 0 0 0 
    TerrainAccess.terrain_any = Road Runway Hard_sand Lowland Soft_sand Hillside mountains Ditch Turret_foundation Frozen_water very_shallow_water shallow_water
    Tank { 
       Energy = 0
-      Material = 6000
-      fuel = 4000
+      Material = 20000
+      fuel = 20000
    } Tank
+   FuelConsumption = 30
 
    Construction { 
-      Objects = 10
+      Objects = 2 3 9 10 44 991 992 2093 2097 2098 2099 2658 15002 15003
+	  ObjectsRemovable = 992 2658
       ObjectGroupsRemovable = 1 2 3 4 5 6 7 8 10 11 12 13 14 21
    } Construction
 
    Weapons { 
-      Initiative = 0
-      Number = 7
+      Number = 8
+	  Weapon0 ->* VehicleType.Walker_Foot
 
       Weapon1 ->* VehicleType.ServiceGround
 
@@ -45,6 +47,8 @@ VehicleType {
 
       Weapon6 ->* VehicleType.AmmoMine
       Weapon6.Ammo = 30
+	  
+	  Weapon7 ->* VehicleType.AntiMine
 
    } Weapons
 } VehicleType

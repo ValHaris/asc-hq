@@ -1,0 +1,30 @@
+Infrastructur System
+Advanced Strategic Command
+Specifications by GAMER
+Grafics by GAMER, Snuggels, ValHaris, Xyphagoroszh, Havanna Club and Grom
+
+road
+path			9		p--		g1		lt--
+
+pipelines
+normal pipeline	3		p--		g6		lt--
+buried pipeline	30		p--		g9		lt--
+
+ditch
+normal			10		p--		g5		lt--
+
+Lava
+Name 			ID 		parent group livetime growthrate childspan
+Floating		988		p519	g14		lt--	gr0.11	cs--
+Spawn200		987		p519	g14		lt100	gr0.30	cs200
+Spawn100		986		p519	g14		lt--	gr0.30	cs100
+Spawn50			985		p519	g14		lt--	gr0.30	cs50
+Spawn25			984		p519	g14		lt--	gr0.30	cs25
+Hitzewelle		983		p519	g14		lt15	gr3.00	cs10
+Atombrand		982		p519	g14		lt8		gr10.0	cs200
+
+fixed (not rebuildable)
+fixRunway		884		p45		--		--		--		--
+
+----
+track			7		--		--		lt3		--		--

@@ -8,8 +8,8 @@ VehicleType {
    Infotext = [Der Infanterist ist die einfachste militärische Einheit der Malaner. Es handelt sich um Wehrpflichtige, welche nach intensivem und harten militärischem Training ins Feld geschickt werden. Sie sind lediglich mit einem Gewehr bewaffnet. Da die Malaner aus ethischen Gründen auf den Einsatz von Minen verzichten, erhalten die Infanteristen zwar eine Ausbildung im Minenräumen, verlegen aber selbst keine. Dafür sind die Soldaten mit dünnen, flexiblen Rüstungen ausgestattet, was sie unempfindlicher gegen Granatsplitter und leichtes gegnerisches Feuer macht als vergleichbare Infanterieinheiten fremder Völker. Außerdem sind sie besonders geschult im Tarnen, was ihre Entdeckung erschwert. So schneiden Sie im direkten Duell mit vielen anderen Infanteristen recht gut ab. Sie sind allerdings nicht für schwere Kämpfe gerüstet und lassen sich lediglich zum Minenräumen und Besetzen gegnerischer Gebäude sinnvoll einsetzen. Weiterhin sind sie eine der wenigen Einheiten, welche von den leichten malanischen Transportern befördert werden können, was Ihnen die Möglichkeit gibt, feindliche Einheiten zu umzingeln und so die Wirksamkeit der eigenen schwereren Angriffseinheiten zu erhöhen. Erwähnenswert ist noch, daß alle Infanteristen eine Ausbildung als Fallschirmspringer absolvieren, da sie sehr oft von Senkrechtstartern im Kampfgebiet abgesetzt werden. Hier erspart der Fallschirm den Transportern eine gefährliche Landung im unmittelbaren Kampfgebiet.
    ]
 
-   Armor += 20  
-   Features += paratrooper
+   Armor += 30  
+;   Features += paratrooper
    Weapons { 
       Weapon1 ->* VehicleType.AntiMine
       Weapon1.name = Minenraeumer 

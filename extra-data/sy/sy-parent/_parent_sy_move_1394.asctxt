@@ -82,7 +82,7 @@ VehicleType {
       MaxLoadableUnitSize = 10
       MaxLoadableMass = 10
       CategoriesNOT = trooper light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship building|turret|object hoovercraft default helicopter
-      EntranceSystemNum = 0
+      EntranceSystemNum = 1
       EntranceSystem0 {
         Mode = in out docking
         UnitHeightAbs = medium_level_flight high_level_flight orbit

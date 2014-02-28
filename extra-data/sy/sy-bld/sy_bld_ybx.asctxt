@@ -18,7 +18,7 @@ BuildingType {
       A1 = 1302
    } Rubble
    Entry = A1
-   Features = Vehicle_Production Recycling Selfdestruct_at_conquer
+   Functions = Vehicle_Production Recycling Selfdestruct_at_conquer NoObjectChaining
    Techlevel = 0
    Transportation { 
       MaxLoadableUnits = 2

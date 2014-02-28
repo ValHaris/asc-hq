@@ -2446,7 +2446,7 @@
          Punch@MinRange = 110
          Ammo = 4
          ReactionFireShots = 3
-	      LaserRechargeRate = 1
+	      LaserRechargeRate = 3
          LaserRechargeCost {
             energy = 0
             material = 0
@@ -2467,18 +2467,19 @@
             u5 = 0
             u6 = 0
          } HitAccuracy
-      WeaponEffectiveness {      
-         trooper = 200
-         rail_vehicle = 0
+      WeaponEffectiveness {
+		default = 200
+		trooper = 200
+		rail_vehicle = 0
          building|turret|object = 0
          hoovercraft = 0
-         helicopter = 0
+         helicopter = 50
 
-         light_tracked_vehicle = 0
+         light_tracked_vehicle = 50
          medium_tracked_vehicle = 0
          heavy_tracked_vehicle = 0
 
-         light_wheeled_vehicle = 0
+         light_wheeled_vehicle = 50
          medium_wheeled_vehicle = 0
          heavy_wheeled_vehicle = 0
          
@@ -2486,9 +2487,9 @@
          medium_ship  = 0
          heavy_ship = 0
 
-         light_aircraft = 0
-         medium_aircraft  = 0
-         heavy_aircraft = 0
+         light_aircraft = 50
+         medium_aircraft  = 50
+         heavy_aircraft = 50
       } WeaponEffectiveness
    } Walker_Foot
 
@@ -2612,28 +2613,30 @@
         Buildings = 1-2 4-7 10-23 26 29-32 35-37 39-41 50 1200 1212 1400 1401 15001-15015 15033
         Vehicles = 1276 1295 1472 1478 1486 1494 15304 15224 15238 15318 15322
         UnitConstructionMoveCostPercentage = 90
-	} constr_building
 ;        Objects = 
 ;        ObjectsRemovable = 988
-;        ObjectGroupsRemovable = 1-8 10-14 21
-		; Groups
-		; 1 road, runway, path
-		; 2 road-bridge
-		; 3 railroad
-		; 4 railroad-bridge
-		; 5 ditch
-		; 6 pipeline
-		; 7 turretfoundation
-		; 8 tankblocker
-		; 9 subpipeline
-		; 10 forrest
-		; 11 minerals (Crystal,stones)
-		; 12 Schmutz
-		; 13 Wreakage
-		; 14 lava
-		; 15 submerged wreakage
-		; 21 plants
-		; 22 deepsee-pipeline
+; road:		path=9, road, bridge, big-bridge
+; railroad:	small, normal, armor, bridge, big-bridge
+		ObjectGroupsRemovable = 1-14 21
+; Groups
+; 1 road, runway, path
+; 2 road-bridge
+; 3 railroad
+; 4 railroad-bridge
+; 5 ditch
+; 6 pipeline
+; 7 turretfoundation
+; 8 tankblocker
+; 9 subpipeline
+; 10 forrest
+; 11 minerals (Crystal,stones)
+; 12 Schmutz
+; 13 Wreakage
+; 14 lava
+; 15 submerged wreakage
+; 21 plants
+; 22 deepsee-pipeline
+	} constr_building
 	
 	constr_building_weapons { 
         Number = 2

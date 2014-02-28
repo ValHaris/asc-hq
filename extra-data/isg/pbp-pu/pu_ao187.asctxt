@@ -4,10 +4,10 @@ VehicleType {
    ID = 12562
    
    Description = AO Panzerzug
-   picture = put_ch187_ao187.png
+   picture = pu_ao187.png
    WreckageObject = 457
 ;   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
-   Infotext = [Die AO187 ist eine technische Glanzleistung der Terraner.
+   Infotext = [Die AO187 ist eine technische Glanzleistung.
 Um die wachsenden Aufgaben der Bodenstreitkräfte zu unterstützen, ist auf Basis des Panzerzuges ein Luft- und Orbitalbwehrzug entstanden.
 
 Dafür wurde eine modifizierte Version der Patriot Abschussanlage entwickelt, die mit 4 scharfen Raketen alle Höhenstufen absichert.

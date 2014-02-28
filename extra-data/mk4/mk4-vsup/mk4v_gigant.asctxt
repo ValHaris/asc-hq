@@ -36,7 +36,7 @@ Von der Panzerung her entspricht der Gigant in etwa dem normalen Baufahrzeug-Sta
       fuel = 70000
    } Tank
 
-   Construction ->* VehicleType.constr_building 
+   Construction ->* VehicleType.constr_building
    CategoriesProduceable = building|turret|object
 
    Weapons { 
