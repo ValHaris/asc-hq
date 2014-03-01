@@ -20,6 +20,7 @@
 
     Height = ground_level 
     Movement = 0 0 0 10 0 0 0 0 
+	MovementSound = move_ground_heavy_s.ogg
     Tank { 
         Energy = 0
         Material = 0

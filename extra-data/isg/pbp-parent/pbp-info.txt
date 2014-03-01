@@ -213,4 +213,5 @@ ID 12202 AXU Hanni
  12592 Excalibur        Prometheus     Zeppelinträger
  12593 IceQueen         Kyterin        Luftangriffbuggy
  12594 Boras            VDT            Drohnenträger
- 12595 Schukow			ctulhu			Drohnenträger				grafik by schukow/GAMER
+ 12595 Schukow		ctulhu		Drohnenträger				grafic by schukow/GAMER
+ 12596 Prinzipal	Exol Lucius	SuperJellyfish				grafic by GAMER

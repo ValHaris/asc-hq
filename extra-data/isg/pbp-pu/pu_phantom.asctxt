@@ -2,12 +2,14 @@ VehicleType {
    Name = PHANTOM
    parent = 400 401 402 418
    ID = 12525
-   Description = Multi Attack Cruiser
+ 
+	Description = Multi Attack Cruiser
+	Picture = pu_phantom.png
    Infotext = [Spezialeinheit der Rehaner]
+
    Armor = 1500
    View = 50
    jamming = 41
-   Picture = PUs_greg_phantom.pcx
    Transportation { 
       MaxLoadableUnits = 2
       MaxLoadableUnitSize = 100
@@ -26,7 +28,6 @@ VehicleType {
    Movement = 0 0 60 0 0 0 0 0
    Features += Repair_Facility
    Weapons { 
-      Initiative = 0
       Number = 10
       Weapon0 ->* VehicleType.Artillery 
       Weapon0.Ammo = 10

@@ -1,0 +1,61 @@
+VehicleType { 
+   Name = Exol Lucius
+   ID = 12596
+   parent = 27
+
+   Description = FullBattleDestroyer
+   picture = pu_exol_lucius.png
+   InfoImage = pu_exol_lucius.jpg
+   InfoImageSmall = pu_exol_lucius_k.png
+   WreckageObject = 427
+;   GuideSortHelp += 0 0 0 0 1 601 0 0 0 0
+   Infotext = [Als Grundlange für die Planung des neuen Flaggschiffes des Seefahrervolkes der Skylla wurden die alten Konstruktionspläne des Jellyfish herangezogen.
+Allerdings wurde diesem eine zusätzliche Aussenhaut aus starken Verbundspezialstahl verpasst. Im Zwischenraum dieser zwei Stahlhüllen wurden große Sprengstoffkapseln angebracht, die bei einem feindlichen Treffen durch Sensoren gesteuert, zeitgleich nach aussen computergesteuert explodieren und so den Schuss durch eine gezielte gesteuerte Gegendruckwelle abmildern bzw. neutralisieren. 
+Diese modernste Computertechnik macht den an sich schon sehr robusten und stabilen Schiffsrumpf nahezu undurchdringlich. Dieser extrem stabile Rumpf eignet sich sowohl als Rammsporn wie auch als Eisbrecher. 
+Der Antrieb erfolgt durch zwölf unabhängige Dieselmotoren, die auch einzeln gesteuert werden können. Da diese an verschiedenen Positionen am Schiffsbauch montiert wurden, ist das Schiff sogleich schnell, hat gehörige Schubkraft und vor allem sehr wendig. 
+Dieser Motorenluxus, verbraucht allerdings viel Treibstoff und somit ist dieses Schiff auf Begleit- bzw. Serviceboote angewiesen. Durch die starken Motoren und durch die verstärkte Aussendoppelhaut wurde soviel Platz benötigt, so das bei den Waffensystemen und beim Munitionsvorrat entsprechend abgespeckt werden musste. Ausserdem wurden sämtliche Transportkapazitäten entfernt bzw. verbaut. 
+Aber wehrlos ist das stark gepanzerte Schiff wahrlich nicht. Es ist trotz der dicken Panzerung keine Defensiv-Einheit, sondern eine ausgesprochene Offensiv-Einheit. Neben Torpedos und den klassischen Wasserbomben, verfügt das Schiff über mehrere modernste Raketen gegen Luft- und Bodenziele. Die Raketen sind in Vertikalstartern mit einer runden Abdeckplatte mit einem Durchmesser von sechs Fuß untergebracht. Die Schiffe verfügen über modernste elektronische Anlagen. Ein leistungsfähiges Sonarradar rundet die Fähigkeiten dieses Nahkampf-Flaggschiffes ab. Da dieses Nahkampfschiff stets vorne wegfährt alles  freiräumt, andauernd Tuchfühlung mit Feindverbänden hat und keinen Kampf ausweicht, erhalten die Mannschaften fünffachen Sold. Die Überlebungschancen der Mannschaft in einem Konfliktfall werden selbst von Fachleuten als äusserst gering eingeschätzt. Bei dieser Sturm-Nahkampf-Marineeinheit dürfen nur Freiwillige dienen, die über ein langwieriges Auswahlverfahren bestimmt werden.  Die Einheit verfügt über eine eigene Uniformen und hat als Eliteeinheit schon nach kurzer Zeit Berühmtheit erlangt.
+    
+Die Einheit ist aggressiv wie ein Hecht im Karpfenteich und trägt daher auch den stolzen Namen:
+Esox lucius ! 
+Die einfache Schiffbesatzung nennt dieses Schiff liebevoll, schlicht und einfach: „Gassenhauer“]
+
+   Armor = 1800
+   FuelConsumption += 5
+
+   Weapons { 
+      Number = 5
+	  ; Rammsporn
+      Weapon0 ->* VehicleType.Rampart 
+      Weapon0.Punch@MaxRange = 170
+      Weapon0.Punch@MinRange = 170
+      Weapon0.targets = submerged floating ground_level 
+      Weapon0.HitAccuracy.d1 = 80
+	  
+	  ; Rakete Boden
+      Weapon1 ->* VehicleType.SSM 
+      Weapon1.MaxRange = 40
+      Weapon1.MinRange = 20
+      Weapon1.Ammo = 10
+      Weapon1.Punch@MaxRange = 120
+      Weapon1.Punch@MinRange = 120
+
+	  ; Rakete Luft
+      Weapon2 ->* VehicleType.SAMH 
+      Weapon2.MaxRange = 40
+      Weapon2.Ammo = 10
+      Weapon2.ReactionFireShots = 1
+
+      Weapon3 ->* VehicleType.DCS 
+      Weapon3.Ammo = 10
+      Weapon3.Punch@MaxRange = 150
+      Weapon3.Punch@MinRange = 150
+
+      Weapon4 ->* VehicleType.SUTorp 
+      Weapon4.MaxRange = 30
+      Weapon4.MinRange = 20
+      Weapon4.Ammo = 10
+      Weapon4.Punch@MaxRange = 130
+      Weapon4.Punch@MinRange = 130
+   } Weapons
+} VehicleType

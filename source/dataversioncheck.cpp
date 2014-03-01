@@ -34,7 +34,7 @@ void checkDataFileVersion()
       throw ASCmsgException("Package ASCmain is outdated.\nYou need at least version " + mainRequired.toString() + "\n" + main->location + "\n\n" + main->description) ;
       
    const Package* pbp = packageRepository.getPackage("pbp");
-   ASCString pbpversion = "120";
+   ASCString pbpversion = "122";
    if ( pbp && pbp->version < VersionIdentifier(pbpversion) )
       throw ASCmsgException("Package PBP is outdated. You need at least version " +  pbpversion + "\n" + main->location +  "\n\n" + pbp->description) ;
    

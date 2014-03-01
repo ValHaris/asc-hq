@@ -27,7 +27,7 @@ Beim Einsatz von Defkind sind aber zwei wichtige Punkte zu beachten: Die massive
    TerrainAccess {
       terrain_any = Road Runway Spaceport Hard_sand
       terrain_all =
-      terrain_not = hillside forest turret_foundation Installation large_rocks railroad bridge
+      terrain_not = hillside forest Installation large_rocks bridge
       terrain_kill = Shallow_water Water Deep_water River lava
    } TerrainAccess   
    MovementSound = jet_pass.ogg

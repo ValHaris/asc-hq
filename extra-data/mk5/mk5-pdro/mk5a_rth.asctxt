@@ -9,7 +9,8 @@ VehicleType {
 	anzugreifen. Der Treibstoffvorrat ist nicht besonders gross, was die Gesamtreichweite stark 
 	einschraenkt. ]
 
-	Movement = 0 0 0 0 140 140 140 0 
+	Movement = 0 0 0 0 140 140 140 0
+	MovementSound = aircraft_l_g.ogg
 	Weight = 20
 
 	Weapons {

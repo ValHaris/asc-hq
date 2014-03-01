@@ -9,13 +9,13 @@ ObjectType {
    ;                def lTr mTr hvT lWh mWh hWh tro rlv mAC mSh BTO lAC hAC lSh hSh Hli hov
    Movemalus_plus = 
    Movemalus_abs =  200
-   AttackBonus_abs = -1
+   AttackBonus_abs = 2
    AttackBonus_plus = 0
-   DefenseBonus_abs = 0
+   DefenseBonus_abs = 2
    DefenseBonus_plus = 0
-   ViewBonus_plus = 10
+   ViewBonus_plus = 30
    Jamming_abs = -1
-   Jamming_plus = 5
+   Jamming_plus = 0
    Height = 118
    ConstructionCost { 
       Energy = 0

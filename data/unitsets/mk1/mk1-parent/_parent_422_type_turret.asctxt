@@ -7,11 +7,16 @@
 ; ----------------------------------------------------------------------------------------------------------------
 
    WreckageObject = 497 496
+
+   Features = onlyTransMove
+   Category = building|turret|object
    Armor = 800
+   Weight = 190
    View = 40
    Jamming = 0
-   WaitForAttack = true
-   Features = onlyTransMove
+   MaxSurvivableStorm = 255
+   ResourceDrillingRange = 0
+   SelfRepairRate = 0
 
    Height = ground_level 
    Tank { 
@@ -20,15 +25,14 @@
       fuel = 0
    } Tank
    FuelConsumption = 0
-   Movement = 0 0 0 17 0 0 0 0 
-   Category = building|turret|object
-   MaxSurvivableStorm = 255
-   ResourceDrillingRange = 0
-   SelfRepairRate = 0
-   Weight = 190
+   Movement = 0 0 0 17 0 0 0 0
+   MovementSound = move_ground_heavy_s.ogg
+
    Construction { 
       Buildings = 
       Vehicles = 
       Objects = 
    } Construction
+
+   WaitForAttack = true
 } VehicleType

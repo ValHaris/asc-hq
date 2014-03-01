@@ -18,7 +18,7 @@ VehicleType {
 
 		Weapon1 ->* VehicleType.AAMH
 		Weapon1.MaxRange = 40
-		Weapon1.ReactionFireShots = 2 
+		Weapon1.ReactionFireShots = 1 
    } Weapons
 
 } VehicleType

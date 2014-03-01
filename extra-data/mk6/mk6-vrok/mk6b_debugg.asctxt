@@ -4,7 +4,7 @@ VehicleType {
    parent = 304 15000
 
    Description = main rocket bunker
-;   Infotext = []
+   Infotext = []
    Picture = mk6b_debugg.png
 ;   InfoImage = mk1b_silo.jpg
    GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
@@ -14,7 +14,6 @@ VehicleType {
    Tank.Material = 5000
    Features += ManualSelfDestruct
    Jumpdrive ->* VehicleType.TeccnolsJump3
-   Movement = 0 0 0 1 0 0 0 0
 
    Weapons {
       Weapon0.MaxRange = 180
