@@ -98,7 +98,7 @@ AC_LANG_RESTORE
 
 
 CFLAGS="$CFLAGS -D_UNIX_ -D_SDL_ "
-CXXFLAGS="$CXXFLAGS -Wno-sign-compare -D_UNIX_ -D_SDL_"
+CXXFLAGS="$CXXFLAGS -Wno-sign-compare -D_UNIX_ -D_SDL_ -std=c++0x"
 
 
 AC_DEFUN([AC_LIB_MISSING], [
