@@ -1823,7 +1823,7 @@ void showtext ( const char* text, int x, int y, int textcol )
       } else 
          fontheight = activefontsettings.height;
 
-    const char* t = text;
+    const Uint8* t = (Uint8*) text;
     int length = 0;
 
     Uint8* characterpointer[1024];
