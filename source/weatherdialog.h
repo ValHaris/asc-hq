@@ -115,7 +115,7 @@ bool closeWindow();
 private:
   static const int xSize;
   static const int ySize;
-  static const string SEPERATOR;
+  static const string SEPARATOR;
   list<WeatherAreaInformation*> currentList;
   list<WeatherAreaInformation*> removeList;
   list<WeatherAreaInformation*> addList;
@@ -159,7 +159,7 @@ bool closeWindow();
 private:
   static const int xSize;
   static const int ySize;
-  static const string SEPERATOR;
+  static const string SEPARATOR;
   list<WindInformation*> currentList;  
   list<WindInformation*> addList;
   

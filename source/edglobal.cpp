@@ -122,7 +122,7 @@
         "End PolygonMode",
         "Smooth coasts",
         "Import BI-Map",
-        "SEPERATOR",
+        "SEPARATOR",
         "BI-Resource Mode",
         "Resize map",
         "Insert BI map",

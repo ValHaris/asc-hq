@@ -480,7 +480,7 @@ PG_Theme* PG_Theme::Load(const std::string& xmltheme) {
 	delete file;
 	delete[] buff;
 
-	PG_LogMSG("theme '%s' loaded sucessfully", filename.c_str());
+	PG_LogMSG("theme '%s' loaded successfully", filename.c_str());
 
 	return info.theme;
 }

@@ -133,8 +133,8 @@ void Menu::setup()
    addbutton ( "Resi~z~e map\tR",             act_resizemap );
    addbutton ( "set global uniform ~w~eather\tctrl-W", act_setactweatherglobal );
    // addbutton ( "configure weather generator", act_setactnewweather );
-   addbutton ( "~C~reate regional ressources", act_createresources );
-   addbutton ( "Create global ressources\tctrl+F", act_createresources2 );
+   addbutton ( "~C~reate regional resources", act_createresources );
+   addbutton ( "Create global resources\tctrl+F", act_createresources2 );
    addbutton ( "Clear all mineral resources", act_clearresources );
    currentMenu->addSeparator();
    addbutton ( "~S~et turn number",        act_setTurnNumber );

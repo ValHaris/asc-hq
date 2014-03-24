@@ -478,8 +478,8 @@ public:
 };
 
 /**
-@brief  Representation of one the building information page containing the information which ressources
-        the building can provide. Research points are treated as one ressource a building can provide
+@brief  Representation of one the building information page containing the information which resources
+        the building can provide. Research points are treated as one resource a building can provide
 *@author Kevin Hirschmann
 */
 class BuildingResourcePage: public BuildingInfoPage {

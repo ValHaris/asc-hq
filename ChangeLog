@@ -28501,7 +28501,7 @@ The old Changelogs were automatically created from CVS history:
 	* source/: artint.cpp, artint.h, building.cpp, building.h,
 	  controls.cpp, mousehnd.cpp, sg.cpp, sg.wpj, strtmesg.cpp,
 	  dos/mousehnd.cpp, hexagon/asc.tgt, hexagon/mapedit/edhex.tgt,
-	  tools/asctool.tgt, tools/tools.wpj:  Fixed crash when transfering
+	  tools/asctool.tgt, tools/tools.wpj:  Fixed crash when transferring
 	  ammo to vehicle with > 8 weapons
 
 2000-06-09 17:13  mbickel
