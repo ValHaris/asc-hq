@@ -43,7 +43,7 @@
    available. They are not modified during runtime in any way and are referenced
    by the indiividual instances of Vehicle and Building. 
    The Vehicletype has information that are shared  by all vehicles of this 'type', like speed, 
-   weapon systems, accessable terrain etc, while the vehicle stores things like remaining movement for this
+   weapon systems, accessible terrain etc, while the vehicle stores things like remaining movement for this
    turn, ammo, fuel and cargo.
    
    The primary contents of a GameMap are its fields ( #tfield ). Each field has again a pointer 

@@ -411,7 +411,7 @@ void EventWindChangesDialog::addNewWindInformation(WindInformation* wi) {
 const int AddWindChangeDialog::xSize = 400;
 const int AddWindChangeDialog::ySize = 400;
 
-const string SEPERATOR = ";";
+const string SEPARATOR = ";";
 
 AddWindChangeDialog::AddWindChangeDialog(EventWindChangesDialog* ewcd):  ASC_PG_Dialog(ewcd, PG_Rect( 0, 0, xSize, ySize ), "Add Weather Area", SHOW_CLOSE ) {
     int valueXPos = static_cast<int>(xSize * 0.75);

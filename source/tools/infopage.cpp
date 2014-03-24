@@ -506,7 +506,7 @@ void BuildingCargoPage::buildContent() {
         type = addTREntryln(type, cmovemalitypes[h]);
       }
     }
-    addTREntry("Building accessable to", type);
+    addTREntry("Building accessible to", type);
     endTable();
     if ( !cbt.entranceSystems.empty() ) {
       addHeadline("Entrance System", 4);
@@ -734,7 +734,7 @@ void UnitCargoPage::buildContent() {
         type = addTREntryln(type, cmovemalitypes[h]);
       }
     }
-    addTREntry("Unit accessable for", type);
+    addTREntry("Unit accessible for", type);
     endTable();
     if ( !cbt.entranceSystems.empty() ) {
       addHeadline("Entrance System", 4);
