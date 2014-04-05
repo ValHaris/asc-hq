@@ -4,8 +4,8 @@ VehicleType {
    parent = 364
 
    Description = future attack submarine
-   Picture = pus_keyfinder_fasm.png
-   InfoImage = pus_keyfinder_fasm.jpg
+   Picture = pu_fasm.png
+   InfoImage = pu_fasm.jpg
    Infotext = [Dieses U-Boot ist ein Prototyp einer neuen Angriffklasse. Im getauchten
 Zustand kann es auf feindliche Flieger und Orbitale Einheiten schießen und
 sich danach in den Tiefen der See verstecken. Ein neuartiger Antriebstyp
@@ -29,20 +29,20 @@ InfoImage = http://navy-matters.beedall.com/]
 
       Weapon0 ->* VehicleType.UTorp
       Weapon0.Ammo = 6
-      Weapon0.Punch@MaxRange = 110
-      Weapon0.Punch@MinRange = 110
+      Weapon0.Punch@MaxRange = 115
+      Weapon0.Punch@MinRange = 115
 
       Weapon1 ->* VehicleType.SOM 
       Weapon1.Ammo = 6
       Weapon1.MaxRange = 90
-      Weapon1.Punch@MaxRange = 90
-      Weapon1.Punch@MinRange = 90
+      Weapon1.Punch@MaxRange = 95
+      Weapon1.Punch@MinRange = 95
 
       Weapon2 ->* VehicleType.SAMH
       Weapon2.shotFrom = submerged floating
       Weapon2.Ammo = 6
       Weapon2.MaxRange = 70
-      Weapon2.Punch@MaxRange = 70
-      Weapon2.Punch@MinRange = 70
+      Weapon2.Punch@MaxRange = 75
+      Weapon2.Punch@MinRange = 75
    } Weapons
 } VehicleType

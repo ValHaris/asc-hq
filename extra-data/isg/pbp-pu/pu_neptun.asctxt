@@ -4,8 +4,8 @@ VehicleType {
    ID = 12535
 
    Description = Raketen AA-U-Boot
-   Infotext = [Eine auf Luftabwehr spezialiserte Modifikation des Pluto]
-   picture = pus_lucius_neptun.png
+   Infotext = [Eine auf Luftabwehr spezialiserte Modifikation des Pluto.]
+   picture = pu_neptun.png
    wreckageobject = 14267
   
    Armor += 200
@@ -30,7 +30,6 @@ VehicleType {
    
   WaitForAttack = true
   Weapons { 
-      Initiative = 0
       Number = 4
       Weapon0 ->* VehicleType.UTorp 
       Weapon0.Ammo = 6

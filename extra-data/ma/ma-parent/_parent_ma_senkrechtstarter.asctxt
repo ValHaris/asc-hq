@@ -12,6 +12,7 @@
    TerrainAccess ->* VehicleType.heli_terrain 
    MovementSound = jet_pass.ogg
    Height = ground_level low_level_flight medium_level_flight
+   minFieldRepairDamage = 10
 
    HeightChangeMethodNum = 4
    HeightChangeMethod0 {

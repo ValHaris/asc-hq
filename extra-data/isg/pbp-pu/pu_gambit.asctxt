@@ -5,7 +5,7 @@ VehicleType {
    
    Description = Munitionstransportflieger
    Infotext = [Spezialserviceeinheit]
-   Picture = pua_gambit.pcx
+   Picture = pu_gambit.png
 
    Armor = 400
    View = 40
@@ -30,7 +30,6 @@ VehicleType {
 
    Weight = 130
    Weapons { 
-      Initiative = 0
       Number = 9
       Weapon0 ->* VehicleType.Air_MG
       Weapon0.Ammo = 10
