@@ -6,11 +6,11 @@ package {
    DependencyCount = 3 
    Dependency0 {
       package = ASC 
-      version = 2.7.122.0 
+      version = 2.7.123.0 
    } Dependency0 
    Dependency1 { 
       package = ASCdata
-      version = 2.7.122.0
+      version = 2.7.123.0
    } Dependency1
    Dependency2 { 
       package = PBPdata
