@@ -9,6 +9,7 @@ VehicleType {
    MaxSurvivableStorm = 250
    Features = sonar MoveDuringReactionFire
    Height = deep_submerged submerged floating 
+   minFieldRepairDamage = 10
 
    HeightChangeMethod1 {
       movecost = 20

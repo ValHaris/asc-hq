@@ -20,8 +20,10 @@ Die Einheit ist aggressiv wie ein Hecht im Karpfenteich und trägt daher auch den
 Esox lucius ! 
 Die einfache Schiffbesatzung nennt dieses Schiff liebevoll, schlicht und einfach: „Gassenhauer“]
 
+   Features += icebreaker
    Armor = 1800
    FuelConsumption += 5
+   Transportation ->* VehicleType.noTrans
 
    Weapons { 
       Number = 5
