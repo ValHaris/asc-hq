@@ -4,14 +4,13 @@ VehicleType {
    ID = 12591
    
    Description = DrohnenServiceZug
-   picture = put_destiny.png
-;   infoimage = mk4t_dolmen.jpg
+   picture = pu_destiny.png
    wreckageobject = 14224
-;   GuideSortHelp = 550 556 0 0 4 0 0 0 0 0
+   GuideSortHelp = 0 0 0 0 0 0 0 0 0 0
    Infotext = []
   
    Features = Repair_Facility
-   Armor = 400
+   Armor = 500
    Transportation ->* VehicleType.TransDroneCruiser
    Transportation.MaxLoadableUnits = 20
    Transportation.MaxLoadableUnitSize = 50
