@@ -113,7 +113,7 @@ am_libgamedialogs_la_OBJECTS = cargodialog.lo unitcounting.lo \
 	internalAmmoTransferDialog.lo replayrecorder.lo \
 	mailoptionseditor.lo vehicleproductionselection.lo \
 	infodialogs.lo actionmanager.lo gotoposition.lo taskmanager.lo \
-	actionwidget.lo unitnaming.lo
+	actionwidget.lo unitnaming.lo eventinfo.lo
 libgamedialogs_la_OBJECTS = $(am_libgamedialogs_la_OBJECTS)
 libmapeddialogs_la_DEPENDENCIES =
 am_libmapeddialogs_la_OBJECTS = cargoeditor.lo cargowidget.lo \
@@ -382,7 +382,7 @@ libdialogs_la_LIBADD = @SDL_LIBS@
 libgamedialogs_la_SOURCES = cargodialog.cpp unitcounting.cpp cargowidget.cpp ammotransferdialog.cpp attackpanel.cpp vehicletypeselector.cpp nextcampaignmap.cpp \
                               editplayerdata.cpp buildingtypeselector.cpp choosetech.cpp productionanalysis.cpp internalAmmoTransferDialog.cpp replayrecorder.cpp \
                               mailoptionseditor.cpp vehicleproductionselection.cpp infodialogs.cpp actionmanager.cpp gotoposition.cpp taskmanager.cpp \
-                              actionwidget.cpp unitnaming.cpp
+                              actionwidget.cpp unitnaming.cpp eventinfo.cpp
 
 libgamedialogs_la_LIBADD = @SDL_LIBS@ 
 libmapeddialogs_la_SOURCES = cargoeditor.cpp cargowidget.cpp eventeditor.cpp newmap.cpp exchangegraphics.cpp importbi3map.cpp edittechadapter.cpp \
@@ -468,6 +468,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/edittechadapter.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/emailsetup.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/eventeditor.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/eventinfo.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/exchangegraphics.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/fieldmarker.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/fileselector.Plo@am__quote@

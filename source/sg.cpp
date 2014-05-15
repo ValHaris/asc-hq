@@ -176,6 +176,7 @@
 #include "dialogs/taskmanager.h"
 #include "autotraining.h"
 #include "spfst-legacy.h"
+#include "dialogs/eventinfo.h"
 
 #include "lua/luarunner.h"
 #include "lua/luastate.h"
@@ -1275,6 +1276,9 @@ void executeUserAction ( tuseractions action )
       case ua_createUnitCostList: createUnitCostList();
          break;
          
+      case ua_eventInfo: viewEventInfo( actmap );
+         break;
+
       default:
     	 break;
       };
