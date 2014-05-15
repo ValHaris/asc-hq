@@ -318,6 +318,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\..\dialogs\eventinfo.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\..\explosivemines.cpp"
 				>
 			</File>
