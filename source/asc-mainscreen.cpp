@@ -248,6 +248,7 @@ void Menu::setup()
    addbutton ( "test messages", ua_testMessages );
    addbutton ( "view font", ua_viewfont );
    addbutton ( "memory footprint", ua_getMemoryFootprint );
+   addbutton ( "show event status", ua_eventInfo );
    currentMenu->addSeparator();
    addbutton ( "clear image cache", ua_clearImageCache );
    addbutton ( "reload dialog theme", ua_reloadDlgTheme );
