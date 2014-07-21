@@ -307,12 +307,15 @@ extern const char*  cvehiclefunctions[];
         }
 
         struct JumpDrive {
-           JumpDrive() : height(0), maxDistance(maxint) {};
+           JumpDrive() : height(0), maxDistance(maxint), attackAfterJump(false), jumpAfterAttack(false), movementConsumptionPercentage(100) {};
            //! bitmapped: on these levels of height the jump drive can be activated
            int height; 
            Resources consumption;
            TerrainAccess targetterrain;
            int maxDistance;
+           bool attackAfterJump;
+           bool jumpAfterAttack;
+           int movementConsumptionPercentage;
         } jumpDrive;
            
         

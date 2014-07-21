@@ -138,7 +138,7 @@ int VehicleType::maxsize ( void ) const
 }
 
 
-const int vehicle_version = 33;
+const int vehicle_version = 34;
 
 
 
@@ -578,6 +578,13 @@ void VehicleType :: read ( tnstream& stream )
 
    if ( version >= 33 )
       costCalculator = stream.readString();
+
+   if ( version >= 34 ) {
+      jumpDrive.attackAfterJump = stream.readInt();
+      jumpDrive.jumpAfterAttack = stream.readInt();
+      jumpDrive.movementConsumptionPercentage = stream.readInt();
+   }
+
 }
 
 
@@ -759,6 +766,11 @@ void VehicleType:: write ( tnstream& stream ) const
    stream.writeInt( recommendedAIJob );
    
    stream.writeString( costCalculator );
+
+   stream.writeInt( jumpDrive.attackAfterJump );
+   stream.writeInt( jumpDrive.jumpAfterAttack );
+   stream.writeInt( jumpDrive.movementConsumptionPercentage );
+
 }
 
 
@@ -1129,6 +1141,9 @@ void VehicleType::runTextIO ( PropertyContainer& pc )
    if ( jumpDrive.height || !pc.isReading() )
       jumpDrive.targetterrain.runTextIO ( pc );
    pc.addInteger( "MaxDistance", jumpDrive.maxDistance, maxint );
+   pc.addBool( "AttackAfterJump", jumpDrive.attackAfterJump, false );
+   pc.addBool( "JumpAfterAttack", jumpDrive.jumpAfterAttack, false );
+   pc.addInteger( "MovementConsumptionPercentage", jumpDrive.movementConsumptionPercentage, 100 );
    pc.closeBracket();
 
    if ( jumpDrive.height && view )

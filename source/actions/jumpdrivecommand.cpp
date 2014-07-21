@@ -45,10 +45,16 @@ ActionAvailability JumpDriveCommand :: available( const Vehicle* unit )
    if ( !unit->typ->jumpDrive.height )
       return avail.set( ActionAvailability::notAtAll, "Unit has no jump drive");
    
-   if ( unit->hasMoved() )
-      avail.set( ActionAvailability::partially, "Unit has already moved" );
+   if ( unit->typ->jumpDrive.movementConsumptionPercentage == 100 ) {
+      if ( unit->hasMoved() )
+         avail.set( ActionAvailability::partially, "Unit has already moved" );
+   } else {
+       int needed = unit-> maxMovement() * unit->typ->jumpDrive.movementConsumptionPercentage / 100;
+       if ( needed > unit->getMovement(false)  )
+          avail.set( ActionAvailability::partially, "Unit has not enough movement left, need " + ASCString::toString(needed) + " points" );
+   }
    
-   if ( unit->attacked )
+   if ( unit->attacked && !unit->typ->jumpDrive.jumpAfterAttack )
       avail.set( ActionAvailability::partially, "Unit has already attacked" );
    
    if ( (unit->reactionfire.getStatus() != Vehicle::ReactionFire::off) && !unit->typ->hasFunction(VehicleType::MoveWithReactionFire ) )
@@ -171,19 +177,27 @@ ActionResult JumpDriveCommand::go ( const Context& context )
    if ( context.display )
       context.display->playPositionalSound( dest3D, SoundList::getInstance().getSound( SoundList::jumpdrive ));
 
-   auto_ptr<ChangeUnitMovement> cum ( new ChangeUnitMovement( unit, 0, false, ChangeUnitMovement::ALLFULL ));
+   int newmovement;
+   if ( unit->typ->jumpDrive.movementConsumptionPercentage >= 100 )
+      newmovement = 0;
+   else
+      newmovement = unit->getMovement(false,false) - unit->maxMovement() * unit->typ->jumpDrive.movementConsumptionPercentage / 100 ;
+
+   auto_ptr<ChangeUnitMovement> cum ( new ChangeUnitMovement( unit, newmovement, false, ChangeUnitMovement::ALLFULL ));
    res = cum->execute( context );
    if ( !res.successful() )
       return res;
    else
       cum.release();
       
-   auto_ptr<ChangeUnitProperty> cup ( new ChangeUnitProperty( unit, ChangeUnitProperty::AttackedFlag, 1 ));
-   res = cup->execute( context );
-   if ( !res.successful() )
-      return res;
-   else
-      cup.release();
+   if ( !unit->typ->jumpDrive.attackAfterJump ) {
+      auto_ptr<ChangeUnitProperty> cup ( new ChangeUnitProperty( unit, ChangeUnitProperty::AttackedFlag, 1 ));
+      res = cup->execute( context );
+      if ( !res.successful() )
+         return res;
+      else
+         cup.release();
+   }
       
       
    auto_ptr<UnitFieldRegistration> ufr5( new UnitFieldRegistration( unit, dest3D, UnitFieldRegistration::AddView ));
