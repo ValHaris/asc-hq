@@ -1322,6 +1322,13 @@ void GameMap::endTurn()
          }
       }
 
+      if ( actvehicle->typ->autorepairrate < 0 ) {
+          if ( actvehicle->damage - actvehicle->typ->autorepairrate > 100 )
+              toRemove.push_back( *v );
+          else
+              actvehicle->damage -= actvehicle->typ->autorepairrate;
+      }
+
       if ( actvehicle )
          actvehicle->endOwnTurn();
 

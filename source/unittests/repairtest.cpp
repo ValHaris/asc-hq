@@ -98,8 +98,30 @@ void testManualRepair()
 
 }
 
+void testSelfDamage() {
+    MapHolder game ( startMap("unittest-selfdamage.map"));
+    Vehicle* u1 = game->getField(4,7)->vehicle;
+    Vehicle* u2 = game->getField(5,6)->vehicle;
+
+    assertOrThrow( u1->damage == 0 );
+    assertOrThrow ( u2->damage == 79 );
+
+    next_turn( game.get(), NextTurnStrategy_Abort(), NULL, -1 );
+
+    assertOrThrow( u1->damage == 10 );
+    assertOrThrow ( u2->damage == 89 );
+
+    next_turn( game.get(), NextTurnStrategy_Abort(), NULL, -1 );
+    next_turn( game.get(), NextTurnStrategy_Abort(), NULL, -1 );
+
+    u2 = game->getField(5,6)->vehicle;
+    assertOrThrow( u2 == NULL );
+
+
+}
 
 void testUnitRepair() {
 	testAutoRepair();
 	testManualRepair();
+	testSelfDamage();
 }
