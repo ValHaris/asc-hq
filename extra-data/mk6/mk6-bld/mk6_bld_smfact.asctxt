@@ -1,15 +1,20 @@
 BuildingType { 
-   Name = small vehicle plant
-   ID = 15001
-   InfoText = [Produktionsanlage für Roboter und leichte Fahrzeuge, incl. Munition, Reparatur und Wiederverwertung.]
-   parent = 12
-   ConstructionStages = 1
-   Weather = dry
-   Fields = A1 A3 
-   UseGFXpics = false
-   Pictures { 
-      dry = mk6_bld_smfact.png
-   } Pictures
-   RubbleObjects = false
-   Entry = A3
+	Name = MECH Fabrik
+	ID = 15001
+	parent = 12
+
+	InfoText = [Produktionsanlage für Roboter und Kleingeraet incl. Munition, Reparatur und Wiederverwertung.]
+
+	CategoriesProduceable = default light_tracked_vehicle
+	Transportation.MaxLoadableUnitSize = 10
+
+	ConstructionStages = 1
+	Weather = dry
+	Fields = A1 
+	Entry = A1
+	UseGFXpics = false
+	Pictures { 
+		dry = mk6_bld_smfact.png
+	} Pictures
+	RubbleObjects = false
 } BuildingType

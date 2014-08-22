@@ -10,7 +10,7 @@ VehicleType {
    Category = light_aircraft
    MaxSurvivableStorm = 255
    ResourceDrillingRange = 0
-   SelfRepairRate = 15
+   SelfRepairRate = 10
    Weight = 200
 
    ConstructionCost { 

@@ -1,21 +1,21 @@
 VehicleType { 
-   Name = Rapier 2
-   ID = 617
-   WreckageObject = 15617
-   parent = 223
+	Name = Rapier 2
+	ID = 617
+	parent = 223
 
-   Description = air-defence turret
-   Infotext = []
-   Picture = mk3b_rapier2.png
-   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
-  
-   Armor -= 100
-   Jamming = 21
-   Features += jam_only_own_field
+	Description = air-defence turret
+	Picture = mk3b_rapier2.png
+	WreckageObject = 15617
+	GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+ 	Infotext = []
+ 
+	Armor -= 100
+	Jamming = 21
+	Features += jam_only_own_field
 
 
-   Weapons { 
-      Weapon0.Punch@MaxRange += 4
-      Weapon0.Punch@MinRange += 4
-   } Weapons
+	Weapons { 
+		Weapon0.Punch@MaxRange += 5
+		Weapon0.Punch@MinRange += 5
+	} Weapons
 } VehicleType

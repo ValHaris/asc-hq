@@ -1,35 +1,36 @@
 VehicleType { 
-   Name = ENEG
-   ID = 15208
-   parent = 208
+	Name = ENEG
+	ID = 15208
+	parent = 208
 
-   Description = schneller Kampfroboter
-   Picture = mk6m_eneg.pcx
-   InfoImage = mk6m_eneg.jpg
-   InfoImageSmall = mk6m_eneg_k.png
-   GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
-   Infotext = [Der ENEG war als schnelle Aufklärungseinheit gedacht und basiert auf dem INTRUDER. Schon früh merkte man, daß man sehr schnell Verstärkung schicken muss, sobald der ENEG Feindkontakt hat. Dazu wurde ihm die Möglichkeit gegeben, Signalpunkte zu setzen. Damit können verschiedene Boxen schnell als Verstärkung "einspringen".
+	Description = schneller Kampfroboter
+	Picture = mk6m_eneg.pcx
+	InfoImage = mk6m_eneg.jpg
+	InfoImageSmall = mk6m_eneg_k.png
+	GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
+	Infotext = [Der ENEG war als schnelle Aufklärungseinheit gedacht und basiert auf dem INTRUDER. Schon früh merkte man, daß man sehr schnell Verstärkung schicken muss, sobald der ENEG Feindkontakt hat. Dazu wurde ihm die Möglichkeit gegeben, Signalpunkte zu setzen. Damit können verschiedene Boxen schnell als Verstärkung "einspringen".
 Diese Taktik erweist sich als so effektiv, daß das Setzen dieser Signalpunkte zu seiner Primäraufgabe geworden ist.
 Als Waffe verfügt der ENEG über eine Laserminigun, die aus schnelladenden Kondensatoren gespeist wird. Dies ermöglicht eine enorm hohe Feuerrate. Zusammen mit der Präzision der A.T. Zielerfassung sorgt dies für eine hohe Effektivität gegen Infantrie und leicht gepanzerte Fahrzeuge.
 Auch gegen leichte Flugzeuge lässt sich die Minigun, dank der Zielerfassung und der Schwenkbarkeit des Waffenarms, effektiv einsetzen.
 Allerdings sollte sich der ENEG aus aktiven Kampfhandlungen heraushalten, da er nur über eine schwache Panzerung verfügt und seine Akkus im Kampf schnell entladen werden. ]
 
-   Features += mineview automatic_resource_searching
-   View = 45
-   ResourceDrillingRange = 3
+	Features += mineview automatic_resource_searching
+	View += 29
+	ResourceDrillingRange = 3
    
-   Construction { 
-      Objects = 15002
-      ObjectGroupsRemovable = 10 11 13 21
-   } Construction
+	Construction { 
+		Objects = 15002
+		ObjectGroupsRemovable = 10 11 13 21
+	} Construction
    
-   Tank.Fuel = 5000
-   Tank.Material = 5000
+	Tank.Fuel = 5000
+	Tank.Material = 5000
+	movement += 0 0 0 10 0 0 0 0
    
-   Weapons {
-      Weapon0 ->* VehicleType.type_Laser
-      Weapon0.Ammo = 2
-      Weapon0.LaserRechargeCost.Fuel = 50
-      Weapon0.LaserRechargeCost.Material = 10
-   } Weapons
+	Weapons {
+		Weapon0 ->* VehicleType.type_Laser
+		Weapon0.Ammo = 2
+		Weapon0.LaserRechargeCost.Fuel = 50
+		Weapon0.LaserRechargeCost.Material = 10
+	} Weapons
 } VehicleType

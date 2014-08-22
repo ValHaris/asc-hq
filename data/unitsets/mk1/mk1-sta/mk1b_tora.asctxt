@@ -7,11 +7,21 @@ VehicleType {
    InfoImage = mk1b_tora.jpg
    InfoImageSmall = mk1b_tora_k.png
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
-   Features += ManualSelfDestruct
-   InfoText = [Das vollstationäre Verteidigungssystem TORA bildet mit seinen weitreichenden Geschützen das Rückgrat der rehanischen Küsten- und Basisverteidigung.
+  InfoText = [Das vollstationäre Verteidigungssystem TORA bildet mit seinen weitreichenden Geschützen das Rückgrat der rehanischen Küsten- und Basisverteidigung.
 Um die Entwicklungskosten möglichst niedrig zu halten, wurde auf bewährte und im Kampf erprobte Technik gesetzt. Die Ingenieure integrierten 3 Rohre des Eisenbahngeschützes ROTOS in einem extra verstärkten Geschützturm eines Schlachtschiffes vom Typ APOGEE und setzten diese mächtige Waffe auf ein standardisiertes Bunkersystem. Durch den Einbau eines automatischen Ladesystems konnte die Feuergeschwindigkeit stark erhöht und gleichzeitig die Bedienungsmannschaft auf ein Minimum reduziert werden.
 Da durch den enormen Platzbedarf des mächtigen Geschützturms die Integration von größeren Luftabwehrwaffen unmöglich war, wurden in die seitlichen Schießscharten MG´s vom Kaliber 12,5 mm eingebaut, um es der Besatzung zu ermöglichen, sich gegen durchgebrochene Infanterie oder Tiefflieger zur Wehr zusetzen.
 Die Kombination aus Panzerung, Reichweite und Feuergeschwindigkeit machen somit dieses Bunkersystem zur ultimativen Waffe, um Angriffe am Boden und von der See her schon auf große Entfernung zu stoppen.
 ]
+
+	Armor += 100
+	
+	Weapons {
+
+		Weapon0.Punch@MinRange += 5
+		Weapon0.Punch@MaxRange += 5
+		
+		Weapon1 ->* VehicleType.BigMiniGun
+	
+	} Weapons
    
 } VehicleType

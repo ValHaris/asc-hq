@@ -1,5 +1,0 @@
-Techadapter {
-   Name = B30
-   ;Bezeichnung der verknüpften Technologie: Hangar
-   TechnologiesRequired = 15000
-} TechAdapter

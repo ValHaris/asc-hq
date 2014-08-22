@@ -1,13 +1,25 @@
 VehicleType { 
-   Name = Stonewall
-   parent = 319
-   ID = 94
+	Name = Stonewall
+	parent = 319
+	ID = 94
 
-   Description = heavy bunker
-   Infotext = [ Schwer gepanzerte stationaere Festungsanlage. Ideal um Engpaesse zu verteidigen.]
-   picture = mk1b_stonewall.pcx
-   InfoImage = mk1b_stonewall.jpg
-   InfoImageSmall = mk1b_stonewall_k.png
-   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+	Description = heavy bunker
+	Infotext = [ Schwer gepanzerte stationaere Festungsanlage. Ideal um Engpaesse zu verteidigen.]
+	picture = mk1b_stonewall.pcx
+	InfoImage = mk1b_stonewall.jpg
+	InfoImageSmall = mk1b_stonewall_k.png
+	GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+	
+	Armor += 100
+	
+	Weapons {
+		Weapon0.Punch@MinRange += 5
+		Weapon0.Punch@MaxRange -= 5
+		Weapon1.Punch@MinRange += 5
+		Weapon1.Punch@MaxRange -= 5
+		Weapon2.Punch@MinRange -= 5
+		Weapon2.Punch@MaxRange -= 5
+	
+	} Weapons
    
 } VehicleType

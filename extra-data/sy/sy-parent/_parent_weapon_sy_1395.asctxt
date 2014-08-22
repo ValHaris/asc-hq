@@ -5,59 +5,60 @@ VehicleType {
 
 ;         Weapon0.ReactionFireShots = 2
 
-   ; SYR , SY , SLY , MYX
-   SY_Trooper { 
-         Type = laser shootable
-         Sound = laser.ogg 
-         targets = floating ground_level low_level_flight
-         shotFrom = ground_level 
-         MinRange = 10
-         Ammo = 3
-       	LaserRechargeRate = 2
-         LaserRechargeCost {
-            energy = 0
-            material = 30
-            fuel = 70
-         } LaserRechargeCost
-         HitAccuracy { 
-            d6 = 
-            d5 = 
-            d4 = 
-            d3 = 
-            d2 = 
-            d1 = 
-            0 = 100
-            u1 = 90
-            u2 = 60
-            u3 = 
-            u4 = 
-            u5 = 
-            u6 = 
-         } HitAccuracy
-      WeaponEffectiveness {      
-         trooper = 100
-         rail_vehicle = 70
-         building|turret|object = 70
-         hoovercraft = 100
-         helicopter = 100
+	; SYR , SY , SLY , MYX, IMP
+	SY_Trooper { 
+		Name = Stabwaffe
+		Type = laser shootable
+		Sound = laser.ogg 
+		targets = floating ground_level low_level_flight
+		shotFrom = ground_level 
+		MinRange = 10
+		Ammo = 3
+		LaserRechargeRate = 2
+		LaserRechargeCost {
+			energy = 0
+			material = 30
+			fuel = 70
+		} LaserRechargeCost
+		HitAccuracy { 
+			d6 = 
+			d5 = 
+			d4 = 
+			d3 = 
+			d2 = 
+			d1 = 
+			0 = 100
+			u1 = 90
+			u2 = 60
+			u3 = 
+			u4 = 
+			u5 = 
+			u6 = 
+		} HitAccuracy
+		WeaponEffectiveness {      
+			trooper = 100
+			rail_vehicle = 70
+			building|turret|object = 70
+			hoovercraft = 100
+			helicopter = 100
 
-         light_tracked_vehicle = 100
-         medium_tracked_vehicle = 90
-         heavy_tracked_vehicle = 80
+			light_tracked_vehicle = 100
+			medium_tracked_vehicle = 90
+			heavy_tracked_vehicle = 80
 
-         light_wheeled_vehicle = 100
-         medium_wheeled_vehicle = 95
-         heavy_wheeled_vehicle = 90
-         
-         light_ship = 80
-         medium_ship  = 60
-         heavy_ship = 40
+			light_wheeled_vehicle = 100
+			medium_wheeled_vehicle = 95
+			heavy_wheeled_vehicle = 90
 
-         light_aircraft = 100
-         medium_aircraft  = 100
-         heavy_aircraft = 100
-      } WeaponEffectiveness
-   } SY_Trooper
+			light_ship = 80
+			medium_ship  = 60
+			heavy_ship = 40
+
+			light_aircraft = 100
+			medium_aircraft  = 100
+			heavy_aircraft = 100
+		} WeaponEffectiveness
+	} SY_Trooper
 
    ; SX , PUL
    SY_Animal { 
@@ -139,101 +140,101 @@ VehicleType {
          heavy_aircraft = 120
       } Sy_Animal2Effectiveness
 
-   ; MORR , ZEO , AX , TOLG , NOG , IOX , XYX
-   SY_TankL { 
-         Type = laser shootable 
-         sound = laser.ogg
-         targets = floating ground_level low_level_flight
-         shotFrom = ground_level 
-         MaxRange = 10
-         MinRange = 10
-         Ammo = 4
-       	 LaserRechargeRate = 2
-         LaserRechargeCost {
-            energy = 0
-            material = 70
-            fuel = 140
-         } LaserRechargeCost
-         Punch@MaxRange = 70
-         Punch@MinRange = 70
-         HitAccuracy { 
-            d6 = 
-            d5 = 
-            d4 = 
-            d3 = 
-            d2 = 
-            d1 = 
-            0 = 100
-            u1 = 70
-            u2 = 
-            u3 = 
-            u4 = 
-            u5 = 
-            u6 = 
-         } HitAccuracy
-      WeaponEffectiveness {      
-         trooper = 80
-         rail_vehicle = 100
-         building|turret|object = 80
-         hoovercraft = 100
-         helicopter = 100
+	; MORR , ZEO , AX , TOLG , NOG , IOX , XYX
+	SY_TankL { 
+		Type = laser shootable 
+		sound = laser.ogg
+		targets = floating ground_level low_level_flight
+		shotFrom = ground_level 
+		MaxRange = 10
+		MinRange = 10
+		Ammo = 4
+		LaserRechargeRate = 2
+		LaserRechargeCost {
+			energy = 0
+			material = 35
+			fuel = 210
+		} LaserRechargeCost
+		Punch@MaxRange = 70
+		Punch@MinRange = 70
+		HitAccuracy { 
+			d6 = 
+			d5 = 
+			d4 = 
+			d3 = 
+			d2 = 
+			d1 = 
+			0 = 100
+			u1 = 60
+			u2 = 
+			u3 = 
+			u4 = 
+			u5 = 
+			u6 = 
+		} HitAccuracy
+		WeaponEffectiveness {      
+			trooper = 60
+			rail_vehicle = 100
+			building|turret|object = 80
+			hoovercraft = 100
+			helicopter = 100
 
-         light_tracked_vehicle = 100
-         medium_tracked_vehicle = 100
-         heavy_tracked_vehicle = 100
+			light_tracked_vehicle = 100
+			medium_tracked_vehicle = 100
+			heavy_tracked_vehicle = 100
 
-         light_wheeled_vehicle = 100
-         medium_wheeled_vehicle = 100
-         heavy_wheeled_vehicle = 100
-         
-         light_ship = 100
-         medium_ship  = 100
-         heavy_ship = 100
+			light_wheeled_vehicle = 100
+			medium_wheeled_vehicle = 100
+			heavy_wheeled_vehicle = 100
+			 
+			light_ship = 100
+			medium_ship = 100
+			heavy_ship = 100
 
-         light_aircraft = 100
-         medium_aircraft  = 100
-         heavy_aircraft = 100
-      } WeaponEffectiveness
-   } SY_TankL
+			light_aircraft = 100
+			medium_aircraft  = 100
+			heavy_aircraft = 100
+		} WeaponEffectiveness
+	} SY_TankL
 
-   ; unbenutzt
-   SY_TankL_Air ->* VehicleType.SY_TankL
-   SY_TankL_Air {
-      targets = low_level_flight medium_level_flight
-      MaxRange = 30
-      Punch@MaxRange = 80
-      Punch@MinRange = 85
-      HitAccuracy.0 = 0
-      HitAccuracy.u1 = 100
-      HitAccuracy.u2 = 95
-      ReactionFireShots = 2
-      WeaponEffectiveness {      
-         trooper = 100
-         rail_vehicle = 250
-         building|turret|object = 250
-         hoovercraft = 250
-         helicopter = 100
+	; Tolg
+	SY_TankL_Air ->* VehicleType.SY_TankL
+	SY_TankL_Air {
+		targets = low_level_flight medium_level_flight
+		MaxRange = 30
+		Punch@MaxRange = 80
+		Punch@MinRange = 85
+		HitAccuracy.0 = 0
+		HitAccuracy.u1 = 100
+		HitAccuracy.u2 = 95
+		ReactionFireShots = 2
+		WeaponEffectiveness {      
+			trooper = 100
+			rail_vehicle = 250
+			building|turret|object = 250
+			hoovercraft = 250
+			helicopter = 100
 
-         light_tracked_vehicle = 200
-         medium_tracked_vehicle = 250
-         heavy_tracked_vehicle = 300
+			light_tracked_vehicle = 200
+			medium_tracked_vehicle = 250
+			heavy_tracked_vehicle = 300
 
-         light_wheeled_vehicle = 200
-         medium_wheeled_vehicle = 250
-         heavy_wheeled_vehicle = 300
-         
-         light_ship = 200
-         medium_ship  = 250
-         heavy_ship = 300
+			light_wheeled_vehicle = 200
+			medium_wheeled_vehicle = 250
+			heavy_wheeled_vehicle = 300
 
-         light_aircraft = 100
-         medium_aircraft  = 100
-         heavy_aircraft = 100
-      } WeaponEffectiveness
+			light_ship = 200
+			medium_ship  = 250
+			heavy_ship = 300
+
+			light_aircraft = 100
+			medium_aircraft  = 100
+			heavy_aircraft = 100
+		} WeaponEffectiveness
    } SY_TankL_Air
 
    
-   ; MORR , NOG
+   ; MORR , NOG , Neks
    SY_TankL_AirH ->* VehicleType.SY_TankL_Air
    SY_TankL_AirH.targets = low_level_flight medium_level_flight high_level_flight
    SY_TankL_AirH.HitAccuracy.u3 = 90
@@ -296,176 +297,176 @@ VehicleType {
       } WeaponEffectiveness
    } SY_Fighter_Gun
 
-   ; LAAK , XOR , DRUK , DRUS
-   SY_Fighter_AD {
-         Type = Laser shootable 
-         sound = laser.ogg
-         targets =  low_level_flight medium_level_flight high_level_flight orbit
-         shotFrom = low_level_flight medium_level_flight high_level_flight orbit
-         Ammo = 4
-         MinRange = 10
-         MaxRange = 30
-         Punch@MaxRange = 80
-         Punch@MinRange = 85
-         LaserRechargeCost.fuel = 150
-         LaserRechargeCost.material = 75
-	 LaserRechargeRate = 2
-         ReactionFireShots = 2
-         HitAccuracy { 
-            d6 = 0
-            d5 = 0
-            d4 = 0
-            d3 = 0
-            d2 = 90
-            d1 = 95
-            0 = 100
-            u1 = 95
-            u2 = 90
-            u3 = 0
-            u4 = 0
-            u5 = 0
-            u6 = 0
-         } HitAccuracy
-         WeaponEffectiveness {      
-            trooper = 200
-            rail_vehicle = 250
-            building|turret|object = 300
-            hoovercraft = 250
-            helicopter = 100
-   
-            light_tracked_vehicle = 200
-            medium_tracked_vehicle = 250
-            heavy_tracked_vehicle = 300
-   
-            light_wheeled_vehicle = 200
-            medium_wheeled_vehicle = 250
-            heavy_wheeled_vehicle = 300
-            
-            light_ship = 200
-            medium_ship  = 250
-            heavy_ship = 300
-   
-            light_aircraft = 100
-            medium_aircraft  = 100
-            heavy_aircraft = 100
-         } WeaponEffectiveness
-   } SY_Fighter_AD
+	; LAAK , XOR , DRUK , DRUS, YSOL
+	SY_Fighter_AD {
+		Type = Laser shootable 
+		sound = laser.ogg
+		targets =  low_level_flight medium_level_flight high_level_flight orbit
+		shotFrom = low_level_flight medium_level_flight high_level_flight orbit
+		Ammo = 4
+		MinRange = 10
+		MaxRange = 30
+		Punch@MaxRange = 80
+		Punch@MinRange = 85
+		LaserRechargeCost.fuel = 250
+		LaserRechargeCost.material = 50
+		LaserRechargeRate = 2
+		ReactionFireShots = 2
+		HitAccuracy { 
+			d6 = 0
+			d5 = 0
+			d4 = 0
+			d3 = 0
+			d2 = 90
+			d1 = 95
+			0 = 100
+			u1 = 95
+			u2 = 90
+			u3 = 0
+			u4 = 0
+			u5 = 0
+			u6 = 0
+		} HitAccuracy
+		WeaponEffectiveness {      
+			trooper = 200
+			rail_vehicle = 250
+			building|turret|object = 300
+			hoovercraft = 250
+			helicopter = 100
+
+			light_tracked_vehicle = 200
+			medium_tracked_vehicle = 250
+			heavy_tracked_vehicle = 300
+
+			light_wheeled_vehicle = 200
+			medium_wheeled_vehicle = 250
+			heavy_wheeled_vehicle = 300
+
+			light_ship = 200
+			medium_ship  = 250
+			heavy_ship = 300
+
+			light_aircraft = 100
+			medium_aircraft  = 100
+			heavy_aircraft = 100
+		} WeaponEffectiveness
+	} SY_Fighter_AD
 
    
-   ; KERG , MES , XENTOR , HYTER , JHAK , YB , KRAH
-   SY_Fighter_Big { 
-         Type = Laser shootable 
-         sound = laser.ogg
-         targets =  low_level_flight medium_level_flight high_level_flight
-         shotFrom = low_level_flight medium_level_flight high_level_flight
-         MaxRange = 20
-         MinRange = 10
-         Ammo = 6
-         Punch@MaxRange = 85
-         Punch@MinRange = 85
-	 LaserRechargeRate = 1
-         LaserRechargeCost {
-            energy = 0
-            material = 80
-            fuel = 160
-         } LaserRechargeCost
-         HitAccuracy { 
-            d6 = 0
-            d5 = 0
-            d4 = 0
-            d3 = 0
-            d2 = 65
-            d1 = 95
-            0 = 100
-            u1 = 90
-            u2 = 60
-            u3 = 0
-            u4 = 0
-            u5 = 0
-            u6 = 0
-         } HitAccuracy
-      WeaponEffectiveness {      
-         trooper = 100
-         rail_vehicle = 250
-         building|turret|object = 300
-         hoovercraft = 250
-         helicopter = 100
+	; KERG , MES , XENTOR , HYTER , JHAK , YB , KRAH
+	SY_Fighter_Big { 
+		Type = Laser shootable 
+		sound = laser.ogg
+		targets =  low_level_flight medium_level_flight high_level_flight
+		shotFrom = low_level_flight medium_level_flight high_level_flight
+		MaxRange = 20
+		MinRange = 10
+		Ammo = 6
+		Punch@MaxRange = 85
+		Punch@MinRange = 85
+		LaserRechargeRate = 1
+		LaserRechargeCost {
+			energy = 0
+			material = 80
+			fuel = 250
+		} LaserRechargeCost
+		HitAccuracy { 
+			d6 = 0
+			d5 = 0
+			d4 = 0
+			d3 = 0
+			d2 = 65
+			d1 = 95
+			0 = 100
+			u1 = 90
+			u2 = 60
+			u3 = 0
+			u4 = 0
+			u5 = 0
+			u6 = 0
+		} HitAccuracy
+		WeaponEffectiveness {      
+			trooper = 100
+			rail_vehicle = 250
+			building|turret|object = 300
+			hoovercraft = 250
+			helicopter = 100
 
-         light_tracked_vehicle = 200
-         medium_tracked_vehicle = 250
-         heavy_tracked_vehicle = 300
+			light_tracked_vehicle = 200
+			medium_tracked_vehicle = 250
+			heavy_tracked_vehicle = 300
 
-         light_wheeled_vehicle = 200
-         medium_wheeled_vehicle = 250
-         heavy_wheeled_vehicle = 300
-         
-         light_ship = 200
-         medium_ship  = 250
-         heavy_ship = 300
+			light_wheeled_vehicle = 200
+			medium_wheeled_vehicle = 250
+			heavy_wheeled_vehicle = 300
 
-         light_aircraft = 100
-         medium_aircraft  = 100
-         heavy_aircraft = 100
-      } WeaponEffectiveness
-   } SY_Fighter_Big
+			light_ship = 200
+			medium_ship  = 250
+			heavy_ship = 300
+
+			light_aircraft = 100
+			medium_aircraft  = 100
+			heavy_aircraft = 100
+		} WeaponEffectiveness
+	} SY_Fighter_Big
 
    
-   ; MES , HYTAK , HYAS , ZAH , IMS , SIS , KRAH
-   SY_Fighter_Small { 
-         Type = Laser shootable 
-         sound = laser.ogg
-         targets =  submerged floating ground_level low_level_flight medium_level_flight high_level_flight orbit
-         shotFrom = submerged floating ground_level low_level_flight medium_level_flight high_level_flight orbit
-         MaxRange = 10
-         MinRange = 10
-         Ammo = 6
-         Punch@MaxRange = 60
-         Punch@MinRange = 60
-	 LaserRechargeRate = 2
-         LaserRechargeCost {
-            energy = 0
-            material = 60
-            fuel = 120
-         } LaserRechargeCost
-         HitAccuracy { 
-            d6 = 0
-            d5 = 0
-            d4 = 0
-            d3 = 0
-            d2 = 0
-            d1 = 90
-            0 = 100
-            u1 = 90
-            u2 = 0
-            u3 = 0
-            u4 = 0
-            u5 = 0
-            u6 = 0
-         } HitAccuracy
-      WeaponEffectiveness {      
-         trooper = 80
-         rail_vehicle = 50
-         building|turret|object = 50
-         hoovercraft = 100
-         helicopter = 100
+	; MES , HYTAK , HYAS , ZAH , IMS , SIS , KRAH
+	SY_Fighter_Small { 
+		Type = Laser shootable 
+		sound = laser.ogg
+		targets =  submerged floating ground_level low_level_flight medium_level_flight high_level_flight orbit
+		shotFrom = submerged floating ground_level low_level_flight medium_level_flight high_level_flight orbit
+		MaxRange = 10
+		MinRange = 10
+		Ammo = 6
+		Punch@MaxRange = 60
+		Punch@MinRange = 60
+		LaserRechargeRate = 2
+		LaserRechargeCost {
+			energy = 0
+			material = 30
+			fuel = 180
+		} LaserRechargeCost
+		HitAccuracy { 
+			d6 = 0
+			d5 = 0
+			d4 = 0
+			d3 = 0
+			d2 = 0
+			d1 = 90
+			0 = 100
+			u1 = 90
+			u2 = 0
+			u3 = 0
+			u4 = 0
+			u5 = 0
+			u6 = 0
+		} HitAccuracy
+		WeaponEffectiveness {      
+			trooper = 80
+			rail_vehicle = 50
+			building|turret|object = 50
+			hoovercraft = 100
+			helicopter = 100
 
-         light_tracked_vehicle = 90
-         medium_tracked_vehicle = 70
-         heavy_tracked_vehicle = 50
+			light_tracked_vehicle = 90
+			medium_tracked_vehicle = 70
+			heavy_tracked_vehicle = 50
 
-         light_wheeled_vehicle = 100
-         medium_wheeled_vehicle = 80
-         heavy_wheeled_vehicle = 70
-         
-         light_ship = 80
-         medium_ship  = 60
-         heavy_ship = 40
+			light_wheeled_vehicle = 100
+			medium_wheeled_vehicle = 80
+			heavy_wheeled_vehicle = 70
 
-         light_aircraft = 100
-         medium_aircraft  = 100
-         heavy_aircraft = 100
-      } WeaponEffectiveness
-   } SY_Fighter_Small
+			light_ship = 80
+			medium_ship  = 60
+			heavy_ship = 40
+
+			light_aircraft = 100
+			medium_aircraft  = 100
+			heavy_aircraft = 100
+		} WeaponEffectiveness
+	} SY_Fighter_Small
    
    
    ; XEBU , XENOS , HYLO , HYTER , JHAL
@@ -526,62 +527,62 @@ VehicleType {
    } SY_Fighter_Def
 
    
-   ; LAAK , XOR , XEBU , XENOS , DRUK , JHAL
-   SY_Bomber_Big { 
-         Type = Laser shootable 
-         targets =  floating ground_level 
-         shotFrom = low_level_flight medium_level_flight high_level_flight
-         MaxRange = 20
-         MinRange = 10
-         Ammo = 6
-         Punch@MaxRange = 90
-         Punch@MinRange = 100
-	      LaserRechargeRate = 1
-         LaserRechargeCost {
-            energy = 0
-            material = 100
-            fuel = 200
-         } LaserRechargeCost
-         HitAccuracy {
-            d6 = 0
-            d5 = 0
-            d4 = 0
-            d3 = 85
-            d2 = 95
-            d1 = 100
-            0 = 0
-            u1 = 0
-            u2 = 0
-            u3 = 0
-            u4 = 0
-            u5 = 0
-            u6 = 0
-         } HitAccuracy
-      WeaponEffectiveness {      
-         default = 0
-         trooper = 25
-         rail_vehicle = 100
-         building|turret|object = 110
-         hoovercraft = 100
-         helicopter = 120
+	; LAAK , XOR , XEBU , XENOS , DRUK , JHAL, YSOL
+	SY_Bomber_Big { 
+		Type = Laser shootable 
+		targets =  floating ground_level 
+		shotFrom = low_level_flight medium_level_flight high_level_flight
+		MaxRange = 20
+		MinRange = 10
+		Ammo = 6
+		Punch@MaxRange = 90
+		Punch@MinRange = 100
+		LaserRechargeRate = 1
+		LaserRechargeCost {
+			energy = 0
+			material = 100
+			fuel = 300
+		} LaserRechargeCost
+		HitAccuracy {
+			d6 = 0
+			d5 = 0
+			d4 = 0
+			d3 = 85
+			d2 = 95
+			d1 = 100
+			0 = 0
+			u1 = 0
+			u2 = 0
+			u3 = 0
+			u4 = 0
+			u5 = 0
+			u6 = 0
+		} HitAccuracy
+		WeaponEffectiveness {      
+			default = 0
+			trooper = 25
+			rail_vehicle = 100
+			building|turret|object = 110
+			hoovercraft = 100
+			helicopter = 120
 
-         light_tracked_vehicle = 80
-         medium_tracked_vehicle = 100
-         heavy_tracked_vehicle = 100
+			light_tracked_vehicle = 80
+			medium_tracked_vehicle = 100
+			heavy_tracked_vehicle = 100
 
-         light_wheeled_vehicle = 80
-         medium_wheeled_vehicle = 100
-         heavy_wheeled_vehicle = 100
-         
-         light_ship = 80
-         medium_ship  = 100
-         heavy_ship = 100
+			light_wheeled_vehicle = 80
+			medium_wheeled_vehicle = 100
+			heavy_wheeled_vehicle = 100
 
-         light_aircraft = 120
-         medium_aircraft  = 120
-         heavy_aircraft = 120
-      } WeaponEffectiveness
-   } SY_Bomber_Big
+			light_ship = 80
+			medium_ship  = 100
+			heavy_ship = 100
+
+			light_aircraft = 120
+			medium_aircraft  = 120
+			heavy_aircraft = 120
+		} WeaponEffectiveness
+	} SY_Bomber_Big
 
    
    ; HYLO , SIS
@@ -798,4 +799,61 @@ VehicleType {
       } WeaponEffectiveness
    } SY_OrbGL
 
+	SY_WormMD { 
+		Type = laser shootable
+		name = Drohnenschacht		
+		Sound = canon_s.ogg
+		targets = floating ground_level low_level_flight medium_level_flight high_level_flight
+		shotFrom = ground_level 
+		MaxRange = 30
+		MinRange = 10
+		Punch@MaxRange = 110
+		Punch@MinRange = 110
+		Ammo = 4
+		LaserRechargeRate = 1
+		LaserRechargeCost {
+			energy = 0
+			material = 60
+			fuel = 350
+		} LaserRechargeCost
+		HitAccuracy { 
+			d6 = 
+            d5 = 
+            d4 = 
+            d3 = 
+            d2 = 
+            d1 = 
+            0 = 100
+            u1 = 70
+            u2 = 70
+            u3 = 70
+            u4 = 
+            u5 = 
+            u6 = 
+		} HitAccuracy
+		WeaponEffectiveness {      
+			trooper = 70
+			rail_vehicle = 100
+			building|turret|object = 100
+			hoovercraft = 100
+			helicopter = 100
+
+			light_tracked_vehicle = 80
+			medium_tracked_vehicle = 90
+			heavy_tracked_vehicle = 100
+
+			light_wheeled_vehicle = 70
+			medium_wheeled_vehicle = 90
+			heavy_wheeled_vehicle = 100
+         
+			light_ship = 100
+			medium_ship  = 100
+			heavy_ship = 100
+
+			light_aircraft = 100
+			medium_aircraft  = 100
+			heavy_aircraft = 100
+		} WeaponEffectiveness
+	} SY_WormMD
+   
 } VehicleType

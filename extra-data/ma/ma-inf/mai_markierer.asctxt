@@ -7,7 +7,7 @@ VehicleType {
    Infotext = []
    picture = mai_markierer.png
 
-   Features += paratrooper
+   Features += paratrooper mine_layer mineview
    Tank { 
       Material = 5000
       fuel = 3000
@@ -18,8 +18,9 @@ VehicleType {
       ObjectsRemovable = 22152
    } Construction
 
-   Weapons { 
-      Number = 1
-   } Weapons
+	Weapons { 
+		Number = 2
+		Weapon1 ->* VehicleType.AntiMine
+	} Weapons
 } VehicleType
 

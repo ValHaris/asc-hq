@@ -1,59 +1,56 @@
 BuildingType { 
-   Name = Farm
-   ID = 36
-   parent = 35
+	Name = Farm
+	ID = 36
+	parent = 35
+	Infotext = []
 
-   Infotext = []
-   Armor = 2500
+	Features = AutoHarvestObjects 
+	Armor = 500
+	AutoHarvestObjects {
+		Objects = 
+		ObjectGroups = 21
+		Range = 15
+		MaxFieldsPerTurn = 15
+	} AutoHarvestObjects
 
-   Weather = dry
-   Fields = A1 A2 A3
-   UseGFXpics = false
-   Pictures { 
-      dry = bld_asc_farm.png
-   } Pictures
-   Entry = A3
-   RubbleObjects = false
+	ConstructionCost { 
+		Energy = 0
+		Material = 10000
+		fuel = 1000
+	} ConstructionCost
+	Weather = dry
+	Fields = A1 A2 A3
+	UseGFXpics = false
+	Pictures { 
+		dry = bld_asc_farm.png
+	} Pictures
+	Entry = A3
+	RubbleObjects = false
 
-   ConstructionCost { 
-      Energy = 0
-      Material = 12000
-      fuel = 12000
-   } ConstructionCost
+	Transportation { 
+		MaxLoadableUnits = 1
+		MaxLoadableUnitSize = 15
+		MaxLoadableMass = 15
+		CategoriesNOT = 
+		EntranceSystemNum = 1
+	} Transportation
 
-   Features = AutoHarvestObjects 
-   
-   AutoHarvestObjects {
-      Objects = 
-      ObjectGroups = 21
-      Range = 15
-      MaxFieldsPerTurn = 15
-   } AutoHarvestObjects
+	MaxResourceProduction { 
+		Energy = -200
+		Material = 0
+		fuel = 0
+	} MaxResourceProduction
+	defaultProduction {
+		energy = -200
+		material = 0
+		fuel = 0
+	} defaultProduction
 
-   Transportation { 
-      MaxLoadableUnits = 1
-      MaxLoadableUnitSize = 15
-      MaxLoadableMass = 15
-      CategoriesNOT = 
-      EntranceSystemNum = 1
-   } Transportation
-
-   MaxResourceProduction { 
-      Energy = -200
-      Material = 0
-      fuel = 0
-   } MaxResourceProduction
-   defaultProduction {
-      energy = -200
-      material = 0
-      fuel = 0
-   } defaultProduction
-
-   StorageCapacity { 
-      ASCmode { 
-         Energy = 0
-         Material = 0
-         fuel = 10000
-      } ASCmode
-   } StorageCapacity
+	StorageCapacity { 
+		ASCmode { 
+			Energy = 0
+			Material = 0
+			fuel = 10000
+		} ASCmode
+	} StorageCapacity
 } BuildingType

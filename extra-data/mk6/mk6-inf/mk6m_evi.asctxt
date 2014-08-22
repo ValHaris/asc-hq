@@ -1,23 +1,24 @@
 VehicleType { 
-   Name = EVI
-   ID = 15241
-   parent = 241 15000
+	Name = EVI
+	ID = 15241
+	parent = 241 15000
 
 ;   Description = radar mechwarrior
 ;   Infotext = [Auf Basis des Golem wurde dieser Radar-Golem entwickelt. Der Vorteil gegenüber herkömmlichen Radarfahrzeugen liegt in der Beweglichkeit im Gebirge.]
-   Picture = mk6m_evi.pcx
-   GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
+	Picture = mk6m_evi.pcx
+	GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
 
-   View += 10
-   Tank.material = 500
-   Tank.fuel = 1100
+	View += 29
+	Tank.material = 500
+	Tank.fuel = 1100
+	movement += 0 0 0 9 0 0 0 0
 
-   Weapons {
-      Number = 1
-      Weapon0 ->* VehicleType.TeccEMP
-      Weapon0.Punch@MaxRange = 80
-      Weapon0.Punch@MinRange = 80
-      Weapon0.LaserRechargeCost.Fuel = 580
-      Weapon0.LaserRechargeCost.Material = 80
-   } Weapons
+	Weapons {
+		Number = 1
+		Weapon0 ->* VehicleType.TeccEMP
+		Weapon0.Punch@MaxRange = 80
+		Weapon0.Punch@MinRange = 80
+		Weapon0.LaserRechargeCost.Fuel = 580
+		Weapon0.LaserRechargeCost.Material = 80
+	} Weapons
 } VehicleType

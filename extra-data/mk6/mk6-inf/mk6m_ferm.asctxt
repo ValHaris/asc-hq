@@ -1,0 +1,69 @@
+VehicleType { 
+	Name = F.E.R.M
+	ID = 15114
+	parent = 209 15000 497 
+
+	Description = Experimentalroboter
+	Picture = mk6m_ferm.png
+	GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
+	Infotext = [Dieses Waffensystem ist eine beeindruckende Zusammenstellung von höchst Experimenteller Technologie. Neben dem Teccnols-VTO Triebwerk ist ein Kurzstrecken-Sprungantrieb, ein Laser-Defence-System und die neuartige EXR Technologie verbaut.]
+
+	Features += MoveDuringReactionFire construct_vehicles vehicle_production
+	Armor += 100
+	Tank.material = 4500
+	Tank.fuel = 6000
+	View = 0
+	
+	Height = ground_level low_level_flight medium_level_flight
+	movement += 0 0 0 9 70 70 70 0
+	FuelConsumption = 20
+
+	Jumpdrive ->* VehicleType.jump_flat_all
+
+	Construction {
+		Vehicles = 15112
+		UnitConstructionMoveCostPercentage = 50
+		UnitConstructionMinDistance = 1
+		UnitConstructionMaxDistance = 6
+		VehiclesInternally = 15115
+		ProductionEfficiency = [0.000000 0.000000 0.100000
+								0.000000 1.000000 0.000000
+								0.000000 0.000000 0.100000]
+	} Construction
+
+	Transportation {
+		MaxLoadableUnits = 1
+		MaxLoadableUnitSize = 1
+		MaxLoadableMass = 1
+		CargoMovementDivisor = 5
+		CategoriesNOT = light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle light_aircraft medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship building|turret|object helicopter hoovercraft
+		EntranceSystemNum = 2
+		EntranceSystem0 {
+			Mode = in out docking
+			UnitHeightAbs = ground_level low_level_flight medium_level_flight high_level_flight
+			UnitHeightRel = 0
+			ContainerHeight = ground_level low_level_flight medium_level_flight high_level_flight
+			CategoriesNOT = light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle light_aircraft medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship building|turret|object helicopter hoovercraft
+			DockingHeightAbs = ground_level
+			DockingHeightRel = 0
+		} EntranceSystem0
+		EntranceSystem1 {
+			Mode = in out docking
+			UnitHeightAbs = ground_level
+			UnitHeightRel = 0
+			ContainerHeight = low_level_flight
+			CategoriesNOT = light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle light_aircraft medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship building|turret|object helicopter hoovercraft
+			DockingHeightAbs = low_level_flight
+			DockingHeightRel = 0
+			RequireUnitFunction = paratrooper
+		} EntranceSystem1
+	} Transportation
+
+	Weapons {
+		Number = 1
+		Weapon0 ->* VehicleType.DLS
+	} Weapons
+	
+	HeightChangeMethod0.Movecost = 10
+	HeightChangeMethod5.Movecost = 15
+} VehicleType

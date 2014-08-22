@@ -1,28 +1,43 @@
 BuildingType { 
-   Name = Rocket Tower
-   ID = 1400
+	Name = Rocket Tower
+	ID = 1400
 
-   ConstructionStages = 1
-   Weather = dry 
-   Fields = A1 
-   UseGFXpics = false
-   Pictures { 
-      dry = MK5_raktower_dry.pcx
-   } Pictures
-   RubbleObjects = false
-   Entry = A1
+	Features = Vehicle_Production Ammo_Production selfdestruct_at_conquer NoObjectChaining Recycling
+	Armor = 600
+	View = 51
+	Jamming = 0
+	MaxResearch = 0
+	ExternalLoading = 
 
-   Armor = 600
-   View = 51
-   Jamming = 0
+	ConstructionStages = 1
+	ConstructionCost { 
+		Energy = 0
+		Material = 15000
+		fuel = 1500
+	} ConstructionCost
+	Weather = dry 
+	Fields = A1 
+	UseGFXpics = false
+	Pictures { 
+		dry = MK5_raktower_dry.pcx
+	} Pictures
+	RubbleObjects = false
+	Entry = A1
+	Height = ground_level 
+	TerrainAccess { 
+		terrain_any = lowland hard_sand soft_sand 
+		terrain_all = 
+		terrain_not = 
+		terrain_kill = Water Deep_water Lava 
+	} TerrainAccess
 
-   transportation { 
-      MaxLoadableUnits = 3
-      MaxLoadableUnitSize = 20
-      MaxLoadableMass = 60
-      CategoriesNOT = trooper light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle trooper rail_vehicle medium_aircraft medium_ship building|turret|object heavy_aircraft light_ship heavy_ship helicopter 
-      EntranceSystemNum = 1
-      EntranceSystem0 {
+	transportation { 
+		MaxLoadableUnits = 3
+		MaxLoadableUnitSize = 20
+		MaxLoadableMass = 60
+		CategoriesNOT = trooper light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle trooper rail_vehicle medium_aircraft medium_ship building|turret|object heavy_aircraft light_ship heavy_ship helicopter 
+		EntranceSystemNum = 1
+		EntranceSystem0 {
         Mode = out
         UnitHeightAbs = low_level_flight 
         UnitHeightRel = -100
@@ -30,39 +45,26 @@ BuildingType {
         CategoriesNOT = trooper
         DockingHeightAbs = ground_level 
         DockingHeightRel = -100 
-      } EntranceSystem0
-   } transportation
-   Features = Vehicle_Production Ammo_Production selfdestruct_at_conquer NoObjectChaining Recycling
-   Techlevel = 0
-   TerrainAccess { 
-      terrain_any = lowland hard_sand soft_sand 
-      terrain_all = 
-      terrain_not = 
-      terrain_kill = Water Deep_water Lava 
-   } TerrainAccess
-   MaxResearch = 0
-   ConstructionCost { 
-      Energy = 0
-      Material = 8000
-      fuel = 8000
-   } ConstructionCost
-   MaxResourceProduction { 
-      Energy = 0
-      Material = 0
-      fuel = 0
-   } MaxResourceProduction
-   StorageCapacity { 
-      BImode { 
-         Energy = 3000
-         Material = 3000
-         fuel = 3000
-      } BImode
-      ASCmode { 
-         Energy = 100
-         Material = 100
-         fuel = 100
-      } ASCmode
-   } StorageCapacity
-   Height = ground_level 
-   ExternalLoading = 
+		} EntranceSystem0
+	} transportation
+
+	MaxResourceProduction { 
+		Energy = 0
+		Material = 0
+		fuel = 0
+	} MaxResourceProduction
+
+	StorageCapacity { 
+		BImode { 
+			Energy = 3000
+			Material = 3000
+			fuel = 3000
+		} BImode
+		ASCmode { 
+			Energy = 100
+			Material = 100
+			fuel = 100
+		} ASCmode
+	} StorageCapacity
+	Techlevel = 3
 } BuildingType

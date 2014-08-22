@@ -23,12 +23,14 @@ VehicleType {
 		terrain_kill = lava
 	} TerrainAccess
 	MovementSound = jet_pass.ogg
-	Movement -= 0 0 0 10 50 50 0 0 
+	Movement -= 0 0 0 10 40 40 0 0 
       
 	Construction ->* VehicleType.constr_building 
 	Construction.Objects = 44 2098 2096 2097 996 997 1000
 	Construction.ObjectsRemovable = 
 	Construction.ObjectGroupsRemovable = 2 3 4 6 7 8 13 22
+	Construction.UnitConstructionMinDistance = 1
+	Construction.UnitConstructionMaxDistance = 2
 
 	WaitForAttack = false
 	Weapons { 

@@ -1,0 +1,34 @@
+VehicleType { 
+   Name = No5
+   parent = 400 401 497 415 15000
+   ID = 12584
+
+   Description = Specialhovercraft 
+   Infotext = [Das No5 ist eine Weiterentwicklung des MRF. Durch eine Kombination mit Luftkissentechnologie wurde es hochseetauglich gemacht. Zudem ist es dem No5 möglich störende Hindernisse zu entfernen. Für den besseren Selbstschutz wurde die Panzerung erheblich verstärkt. Das darausresultierende hohe Gewicht hat aber seine Auswirkungen auf den Tecc-Schwebeantrieb.]
+   Picture = pu_no5.png
+
+   Armor += 500
+   Height = ground_level low_level_flight
+   Features = ExternalRepair self_repairing 
+   Category = hoovercraft
+   SelfRepairRate = 20
+   Weight = 400
+
+   Tank.Fuel = 50000
+   Tank.Material = 40000
+   TerrainAccess ->* VehicleType.hooverfull_terrain
+   MovementSound = jet_pass.ogg
+   Movement = 0 0 0 80 120 0 0 0 
+      
+   Weapons { 
+      Number = 1        
+      Weapon0 ->* VehicleType.ServiceGround
+   } Weapons
+   
+   Construction { 
+      Objects = 181 2106
+      ObjectsRemovable = 1205
+      ObjectGroupsRemovable = 10 11 13
+   } Construction
+
+} VehicleType

@@ -1,39 +1,39 @@
 VehicleType { 
-   Name = Heavy Tank
-   abstract = true
-   ID = 406
-   parent = 402
+	Name = Heavy Tank
+	abstract = true
+	ID = 406
+	parent = 402
 
-   Description = medium tank
-   WreckageObject = 497 496
-   Infotext = 
+	Description = heavy tank
+	WreckageObject = 497 496
+	Infotext = 
 
-   Features = leaves_tracks 
-   Category = heavy_tracked_vehicle
-   Armor = 900
-   Weight = 90
-   View = 30
-   Jamming = 0
-   MaxSurvivableStorm = 255
-   ResourceDrillingRange = 0
-   SelfRepairRate = 0
-   minFieldRepairDamage = 20
+	Features = leaves_tracks 
+	Category = heavy_tracked_vehicle
+	Armor = 1000
+	Weight = 100
+	View = 30
+	Jamming = 0
+	MaxSurvivableStorm = 255
+	ResourceDrillingRange = 0
+	SelfRepairRate = 0
+	minFieldRepairDamage = 20
 
-   Height = ground_level 
-   Tank { 
-      Energy = 0
-      Material = 0
-      fuel = 1200
-   } Tank
-   FuelConsumption = 16
-   Movement = 0 0 0 50 0 0 0 0 
-   TerrainAccess ->* VehicleType.hvy_terrain 
+	Height = ground_level 
+	Tank { 
+		Energy = 0
+		Material = 0
+		fuel = 1200
+	} Tank
+	FuelConsumption = 16
+	Movement = 0 0 0 66 0 0 0 0 
+	TerrainAccess ->* VehicleType.hvy_terrain 
 
-   Construction { 
-      Buildings = 
-      Vehicles = 
-      Objects = 
-   } Construction
+	Construction { 
+		Buildings = 
+		Vehicles = 
+		Objects = 
+	} Construction
 
    WaitForAttack = false
    Weapons { 

@@ -1,12 +1,12 @@
 VehicleType { 
-   Name = PHENOM AKI
-   parent = 340 15000
-   ID = 12543
+	Name = PHENOM AKI
+	parent = 340 15000
+	ID = 12543
    
-   Description = Schlachtkreuzer
-   picture = pua_phenom.png
+	Description = Schlachtkreuzer
+	picture = pua_phenom.png
 ;   wreckageobject = 14016 14816
-   Infotext = [AKI ist die erste autark handelnde Schlachtfeld-KI des Teccnol Networks. Schon fruehzeitig wurde der KI die Aufgabe gestellt gegnerische Taktiken und Technik 
+	Infotext = [AKI ist die erste autark handelnde Schlachtfeld-KI des Teccnol Networks. Schon fruehzeitig wurde der KI die Aufgabe gestellt gegnerische Taktiken und Technik 
                zu studieren und Analysen zur eigenen technologischen Weiterentwicklung zu erstellen. Nach dem Tod ihres Schöpfers, Wilhelm Claudius Adamski, verlor das 
                Teccnol-Network die direkte Kontrolle über AKI, da Adamski die Zugriffscodes mit ins Grab nahm. AKI verbündete sich daraufhin mit der Zenn-KI und schickte 
                keinerlei technologische Auswertungen mehr ins TN zurück. Noch vor seinem Tod sendete Adamski einen letzten Auftrag an die KI: Die Entwicklung eines weiteren 
@@ -16,56 +16,77 @@ VehicleType {
                zu bauen, beleibt die Anzahl auf einige wenige Modelle beschränkt. 
                ]
 
-   Features += mine_layer mineview self_repairing
-   Armor = 1400
-   View = 80
-   SelfRepairRate = 5
+	Features += mine_layer mineview self_repairing
+	Armor = 1600
+	View = 99
+	SelfRepairRate = 5
 
-   Transportation ->* VehicleType.noTrans
+	Transportation ->* VehicleType.noTrans
 
-   Tank.Material = 10000
-   Tank.Fuel = 50000
-   FuelConsumption = 50
-   Movement = 0 0 0 30 70 110 130 0 
-   TerrainAccess ->* VehicleType.aircraft_terrain 
+	Tank.Material = 20000
+	Tank.Fuel = 60000
+	FuelConsumption = 50
+	Movement = 0 0 0 30 100 140 160 0 
+	TerrainAccess ->* VehicleType.aircraft_terrain
+	
+	Construction {
+		Vehicles = 15112 15113
+		UnitConstructionMoveCostPercentage = 10
+		UnitConstructionMinDistance = 1
+		UnitConstructionMaxDistance = 10
+	} Construction
 
-   WaitforAttack = false
-   Weapons { 
-      Number = 6
+	WaitforAttack = false
+	Weapons { 
+		Number = 7
 
-      Weapon0 ->* VehicleType.AntiMine
-      Weapon0.Shotfrom = low_level_flight
-      Weapon0.MaxRange = 20
-      Weapon0.Ammo = 0
+		Weapon0 ->* VehicleType.AntiMine
+		Weapon0.Shotfrom = low_level_flight
+		Weapon0.MaxRange = 20
+		Weapon0.Ammo = 0
 
-      Weapon1 ->* VehicleType.TeccEMPAir
-      Weapon1.Punch@MaxRange = 160
-      Weapon1.Punch@MinRange = 160
-      Weapon1.ReactionFireShots = 0
-      Weapon1.LaserRechargeCost.Material = 160
+		Weapon1 ->* VehicleType.TeccEMPAir
+		Weapon1.Punch@MaxRange = 180
+		Weapon1.Punch@MinRange = 180
+		Weapon1.ReactionFireShots = 1
+		Weapon1.MaxRange = 20
+		Weapon1.LaserRechargeCost.Fuel = 180
+		Weapon1.LaserRechargeCost.Material = 180
 
-      Weapon2 ->* VehicleType.AGLS
-      Weapon2.MaxRange = 60
-      Weapon2.Punch@MaxRange = 85
-      Weapon2.Punch@MinRange = 100
-      Weapon2.ReactionFireShots = 0
+		Weapon2 ->* VehicleType.AGLS
+		Weapon2.MaxRange = 60
+		Weapon2.MinRange = 30
+		Weapon2.Punch@MaxRange = 100
+		Weapon2.Punch@MinRange = 115
+		Weapon2.ReactionFireShots = 0
 
-      Weapon3 ->* VehicleType.AGLS
-      Weapon3.MaxRange = 40
-      Weapon3.Punch@MaxRange = 125
-      Weapon3.Punch@MinRange = 145
-      Weapon3.ReactionFireShots = 1
+		Weapon3 ->* VehicleType.AGLS
+		Weapon3.MaxRange = 40
+		Weapon3.Punch@MaxRange = 125
+		Weapon3.Punch@MinRange = 145
+		Weapon3.ReactionFireShots = 1
 
-      Weapon4 ->* VehicleType.TDW
-	  Weapon4.MaxRange = 40
-      Weapon4.ReactionFireShots = 1
+		Weapon4 ->* VehicleType.TDW
+		Weapon4.MaxRange = 40
+		Weapon4.ReactionFireShots = 1
 
-      Weapon5 ->* VehicleType.ADLS
-      Weapon5.targets = low_level_flight medium_level_flight high_level_flight orbit
-	  Weapon5.MaxRange = 30
-      Weapon5.Punch@MaxRange = 75
-      Weapon5.Punch@MinRange = 80
-      Weapon5.ReactionFireShots = 2
+		Weapon5 ->* VehicleType.ADLS
+		Weapon5.targets = low_level_flight medium_level_flight high_level_flight orbit
+		Weapon5.MaxRange = 40
+		Weapon5.Punch@MaxRange = 85
+		Weapon5.Punch@MinRange = 90
+		Weapon5.ReactionFireShots = 2
 
-   } Weapons
+		Weapon6 ->* VehicleType.TeccEMPAir
+		Weapon6.name = Experimental EMP
+		Weapon6.Ammo = 1
+		Weapon6.MaxRange = 70
+		Weapon6.Punch@MaxRange = 100
+		Weapon6.Punch@MinRange = 100
+		Weapon6.ReactionFireShots = 0
+		Weapon6.LaserRechargeCost.Fuel = 5000
+		Weapon6.LaserRechargeCost.Material = 5000
+		Weapon6.WeaponEffectiveness ->* VehicleType.EXEMP
+
+	} Weapons
 } VehicleType

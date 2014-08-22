@@ -1,15 +1,14 @@
 VehicleType { 
-   Name = Loewe
-   parent = 292
-   ID = 22752
+	Name = Loewe
+	parent = 292
+	ID = 22752
 
-   Description = mittlerer Kampfpanzer
-   Picture = mav_mp.png
-   Infotext = [eine verbesserte Version des Panther ist die schwerste Landkampfeinheit der Malaner, die keine Schienen benoetigt]
+	Description = mittlerer Kampfpanzer
+	Picture = mav_mp.png
+	Infotext = [eine verbesserte Version des Panther ist die schwerste Landkampfeinheit der Malaner, die keine Schienen benoetigt]
 
-   Movement -= 0 0 0 11 0 0 0 0
+	Category = heavy_wheeled_vehicle
 
+	Movement -= 0 0 0 11 0 0 0 0
 
-   Weapons { 
-   } Weapons
 } VehicleType

@@ -1,20 +1,21 @@
 VehicleType { 
-   Name = DELTASEARCHER
-   parent = 15001 276 
-   ID = 15305
+	Name = DELTASEARCHER
+	parent = 15001 276 
+	ID = 15305
    
-   Description = Sucher
-   Infotext = []
-   Picture = mk6a_deltasearcher.pcx
-   InfoImage = mk6a_deltasearcher.jpg
-   InfoImageSmall = mk6a_deltasearcher_k.png
-   GuideSortHelp = 0 0 0 0 6 0 0 0 0 0
+	Description = Sucher
+	Infotext = []
+	Picture = mk6a_deltasearcher.pcx
+	InfoImage = mk6a_deltasearcher.jpg
+	InfoImageSmall = mk6a_deltasearcher_k.png
+	GuideSortHelp = 0 0 0 0 6 0 0 0 0 0
 
-   Features += sonar satelliteview mineview automatic_resource_searching
-   ResourceDrillingRange = 4
-   View = 60
+	Features += sonar satelliteview mineview automatic_resource_searching
+	ResourceDrillingRange = 4
+	View = 89
+	Weight = 50
    
-   Weapons {
-      Number = 0
-   } Weapons
+	Weapons {
+		Number = 0
+	} Weapons
 } VehicleType

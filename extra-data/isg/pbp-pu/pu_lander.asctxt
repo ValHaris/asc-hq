@@ -1,0 +1,93 @@
+VehicleType {
+	Name = ADAMSKI LANDER
+	ID = 12540
+	parent = 340 15000
+
+	Description = gepanzerter Transporter
+	Picture = pu_lander.png
+	InfoImage = pu_lander.jpg
+	InfoImageSmall = pu_lander_k.png
+	GuideSortHelp = 0 0 0 0 0 0 0 0 0 0
+
+	Transportation {
+		MaxLoadableUnits = 8
+		MaxLoadableUnitSize = 6
+		MaxLoadableMass = 48
+		CargoMovementDivisor = 5
+		CategoriesNOT = light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle light_aircraft medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship building|turret|object helicopter hoovercraft
+		EntranceSystemNum = 4
+		EntranceSystem0 ->* VehicleType.GrIO
+		EntranceSystem1 {
+			Mode = in out
+			UnitHeightAbs = ground_level
+			UnitHeightRel = -100
+			ContainerHeight = low_level_flight
+			CategoriesNOT = light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle light_aircraft medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship building|turret|object helicopter hoovercraft
+			DockingHeightAbs = 
+			DockingHeightRel =
+			MoveCost = 10
+		} EntranceSystem1
+		EntranceSystem2 {
+			Mode = out
+			UnitHeightAbs = submerged
+			UnitHeightRel = -100
+			ContainerHeight = low_level_flight
+			CategoriesNOT = default trooper light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle light_aircraft medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship building|turret|object helicopter hoovercraft
+			DockingHeightAbs = 
+			DockingHeightRel = -100
+			MoveCost = 10
+		} EntranceSystem2
+		EntranceSystem3 {
+			Mode = in out docking
+			UnitHeightAbs = ground_level low_level_flight
+			UnitHeightRel = -1
+			ContainerHeight = low_level_flight medium_level_flight
+			CategoriesNOT = light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle light_aircraft medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship building|turret|object helicopter hoovercraft
+			DockingHeightAbs = low_level_flight
+			DockingHeightRel = -1
+			RequireUnitFunction = paratrooper
+		} EntranceSystem3
+	} Transportation
+	
+	Armor = 1800
+	Weight = 300
+	View = 40
+	Features = MoveDuringReactionFire Vehicle_Production Repair_Facility Recycling Training_Facility immune_to_mines
+; NoProductionCustomization
+	Tank.Material = 20000
+	Tank.Fuel = 40000
+	movement += 0 0 0 40 100 80 60 0
+	MovementSound = aircraft_l_g.ogg
+	TerrainAccess {
+		terrain_any = Spaceport Road Runway Lowland hard_sand soft_sand frozen_water very_shallow_water
+		terrain_all =
+		terrain_not = forest large_rocks swamp 
+		terrain_kill = shallow_water Water Deep_water lava river
+	} TerrainAccess
+
+	Construction {
+		Vehicles = 15112 15113
+		UnitConstructionMoveCostPercentage = 10
+		UnitConstructionMinDistance = 1
+		UnitConstructionMaxDistance = 10
+		VehiclesInternally = 15114 15115
+		ProductionEfficiency = [0.000000 0.000000 0.010000
+								0.000000 0.000000 0.010000
+								0.000000 0.000000 0.010000] 
+	} Construction
+
+	WaitForAttack = false
+	Weapons { 
+		Number = 4
+		Weapon0 ->* VehicleType.ADLS
+		Weapon0.MaxRange = 30
+		Weapon1 ->* VehicleType.SSM
+		Weapon1.MaxRange = 50
+		Weapon1.Ammo = 4
+		Weapon2 ->* VehicleType.DLS
+		Weapon2.MaxRange = 50
+		Weapon2.targets = low_level_flight medium_level_flight
+		Weapon3 ->* VehicleType.DLS
+	} Weapons
+   
+} VehicleType

@@ -1,18 +1,20 @@
 VehicleType { 
-   Name = SDB
-   ID = 93
-   parent = 238
+	Name = SDB
+	ID = 93
+	parent = 238
 
-   Description = SpaceDefenceBunker
-   Picture = mk1b_SDB.pcx
-   InfoImage = mk1b_sdb.jpg
-   InfoImageSmall = mk1b_sdb_k.png
-   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
-   Infotext = [Main space defence system - long range rockets to fight against enemy satellites, 
+	Description = SpaceDefenceBunker
+	Picture = mk1b_SDB.pcx
+	InfoImage = mk1b_sdb.jpg
+	InfoImageSmall = mk1b_sdb_k.png
+	GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+	Infotext = [Main space defence system - long range rockets to fight against enemy satellites, 
    spaceships and spacestations.]
    
-   Weapons { 
-      Weapon0.Punch@MaxRange -= 5
-      Weapon0.Punch@MinRange -= 5
-   } Weapons
+	Armor += 100
+   
+	Weapons { 
+		Weapon0.Punch@MaxRange -= 5
+		Weapon0.Punch@MinRange -= 5
+	} Weapons
 } VehicleType

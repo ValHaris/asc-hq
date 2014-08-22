@@ -1,29 +1,33 @@
 BuildingType { 
-   Name = Small Vehicle Plant
-   ID = 12
-   InfoText = [Produktionsanlage für Trooper und leichte Fahrzeuge, incl. Munition, Reparatur und Wiederverwertung.]
-   Armor = 1500
-   parent = 499
-   ConstructionStages = 1
-   Weather = dry
-   Fields = B1 B3 
-   UseGFXpics = false
-   Pictures { 
-      dry = bld_ASC_smvehicle.png
-   } Pictures
-   RubbleObjects = false
-   Entry = B3
-   Transportation { 
-      MaxLoadableUnits = 10
-      MaxLoadableUnitSize = 200
-      MaxLoadableMass = 1000
-      CategoriesNOT = hoovercraft heavy_tracked_vehicle heavy_wheeled_vehicle light_aircraft medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship helicopter building|turret|object rail_vehicle
-   } Transportation
-   Functions = Vehicle_Production Ammo_Production Repair_Facility Recycling
-   CategoriesProduceable = trooper default medium_wheeled_vehicle light_wheeled_vehicle medium_tracked_vehicle light_tracked_vehicle
-   ConstructionCost { 
-      Energy = 0
-      Material = 5000
-      fuel = 4000
-   } ConstructionCost
+	Name = Small Vehicle Plant
+	ID = 12
+	InfoText = [Produktionsanlage für Trooper und leichte Fahrzeuge, incl. Munition, Reparatur und Wiederverwertung.]
+	parent = 499
+
+	Features = Vehicle_Production Ammo_Production Repair_Facility Recycling
+	Armor = 500
+	CategoriesProduceable = trooper default medium_wheeled_vehicle light_wheeled_vehicle medium_tracked_vehicle light_tracked_vehicle
+
+	ConstructionStages = 1
+	ConstructionCost { 
+		Energy = 0
+		Material = 10000
+		fuel = 1000
+	} ConstructionCost
+	Weather = dry
+	Fields = B1 B3 
+	UseGFXpics = false
+	Pictures { 
+		dry = bld_ASC_smvehicle.png
+	} Pictures
+	RubbleObjects = false
+	Entry = B3
+
+	Transportation { 
+		MaxLoadableUnits = 10
+		MaxLoadableUnitSize = 200
+		MaxLoadableMass = 1000
+		CategoriesNOT = hoovercraft heavy_tracked_vehicle heavy_wheeled_vehicle light_aircraft medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship helicopter building|turret|object rail_vehicle
+	} Transportation
+
 } BuildingType

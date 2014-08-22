@@ -1,0 +1,59 @@
+VehicleType { 
+	Name = JOGI
+	ID = 12519
+	parent = 400 401 402 411
+
+	Description = Offroad Service
+	Infotext = []
+	Picture = pu_jogi.pcx
+	WreckageObject = 1404
+
+	Armor = 300
+	Transportation ->* VehicleType.TranslowTrooper 
+	Features += ExternalFuelTransfer ExternalMaterialTransfer self_repairing ExternalRepair automatic_resource_searching construct_vehicles construct_specific_buildings paratrooper
+	Category = medium_wheeled_vehicle
+	ResourceDrillingRange = 1
+	SelfRepairRate = 20
+	Weight = 29
+
+	Construction ->* VehicleType.constr_building
+	Construction.Objects = 1 2 3 9 10 30 44 45 1000 999 998 997 996 995
+	Construction.ObjectsRemovable = 988
+
+	Tank { 
+		Energy = 0
+		Material = 25000
+		fuel = 25000
+	} Tank
+	FuelConsumption = 16
+	Movement = 0 0 0 99 0 0 0 0 
+	TerrainAccess ->* VehicleType.Offroad 
+
+	Weapons { 
+		Number = 8
+		Weapon0 ->* VehicleType.MG30low 
+		Weapon0.Ammo = 100
+		Weapon0.Punch@MaxRange = 40
+		Weapon0.Punch@MinRange = 40
+
+		Weapon1 ->* VehicleType.ServiceGround 
+
+		Weapon2 ->* VehicleType.AmmoTorp 
+		Weapon2.Ammo = 20
+
+		Weapon3 ->* VehicleType.AmmoCannon 
+		Weapon3.Ammo = 50
+
+		Weapon4 ->* VehicleType.AmmoMine 
+		Weapon4.Ammo = 50
+
+		Weapon5 ->* VehicleType.AmmoBomb 
+		Weapon5.Ammo = 50
+
+		Weapon6 ->* VehicleType.AmmoLM 
+		Weapon6.Ammo = 30
+
+		Weapon7 ->* VehicleType.AmmoSM 
+		Weapon7.Ammo = 40
+   } Weapons
+} VehicleType

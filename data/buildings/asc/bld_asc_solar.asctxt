@@ -1,44 +1,44 @@
 BuildingType { 
-   Name = Solar Power Plant
-   ID = 15
-   parent = 499
+	Name = Solar Power Plant
+	ID = 15
+	parent = 499
+	Infotext = [Sonnenenergiekraftwerk]
 
-   Infotext = [Sonnenenergiekraftwerk]
+	Armor = 600
+	Features = Solar_Power_Plant 
 
-   Armor = 1000
-   Functions = Solar_Power_Plant 
-   MaxResourceProduction { 
-      Energy = 4000
-   } MaxResourceProduction
-   defaultProduction {
-      energy = 4000
-   } defaultProduction
+	MaxResourceProduction {
+		Energy = 4000
+	} MaxResourceProduction
+	defaultProduction {
+		energy = 4000
+	} defaultProduction
 
-   ConstructionStages = 1
-   Weather = dry 
-   Fields = A2 B1 B3 B2 
-   UseGFXpics = false
-   Pictures { 
-      dry = bld_asc_solar.png
-   } Pictures
-   RubbleObjects = false
-   Entry = B3
-   ConstructionCost { 
-      Energy = 0
-      Material = 13000
-      fuel = 13000
-   } ConstructionCost
+	ConstructionStages = 1
+	ConstructionCost { 
+		Energy = 0
+		Material = 15000
+		fuel = 1500
+	} ConstructionCost
+	Weather = dry 
+	Fields = A2 B1 B3 B2 
+	UseGFXpics = false
+	Pictures { 
+		dry = bld_asc_solar.png
+	} Pictures
+	RubbleObjects = false
+	Entry = B3
 
-   Transportation { 
-      MaxLoadableUnits = 2
-      MaxLoadableUnitSize = 15
-      MaxLoadableMass = 30
-      CategoriesNOT = Default hoovercraft Medium_tracked_vehicle Heavy_tracked_vehicle Medium_wheeled_vehicle Heavy_wheeled_vehicle Light_aircraft Medium_aircraft Heavy_aircraft Helicopter Light_ship Medium_ship Heavy_Ship Building|turret|object Rail_vehicle
-   } Transportation
+	Transportation { 
+		MaxLoadableUnits = 2
+		MaxLoadableUnitSize = 15
+		MaxLoadableMass = 30
+		CategoriesNOT = Default hoovercraft Medium_tracked_vehicle Heavy_tracked_vehicle Medium_wheeled_vehicle Heavy_wheeled_vehicle Light_aircraft Medium_aircraft Heavy_aircraft Helicopter Light_ship Medium_ship Heavy_Ship Building|turret|object Rail_vehicle
+	} Transportation
 
-   StorageCapacity { 
-      ASCmode { 
-         Energy = 3000
-      } ASCmode
-   } StorageCapacity
+	StorageCapacity { 
+		ASCmode { 
+			Energy = 3000
+		} ASCmode
+	} StorageCapacity
 } BuildingType

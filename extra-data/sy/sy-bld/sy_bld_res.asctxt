@@ -1,39 +1,43 @@
 BuildingType { 
-   Name = research center
-   ID = 1316
-   parent = 499 498
+	Name = RECX
+	ID = 1316
+	parent = 499 498
 
-   Infotext = [Forschungszentrum]
-   Transportation ->* BuildingType.Ellf
-   Transportation.MaxLoadableUnitSize = 190
-   ConstructionStages = 1
-   Weather = dry
-   Fields = A1 
-   UseGFXpics = false
-   Pictures { 
-      dry = sy_bld_res.png
-   } Pictures
-   RubbleObjects = false
-   Entry = A1
-   Armor = 1500
-   Functions = Research
-   MaxResearch = 60
-   NominalResearch = 30
-   ConstructionCost { 
-      Energy = 0
-      Material = 15000
-      fuel = 15000
+	Infotext = [Forschungszentrum]
+
+	Armor = 350
+	Features = Research
+	ExternalLoading =  
+	MaxResearch = 60
+	NominalResearch = 30
+
+	Transportation ->* BuildingType.Esmall
+	Transportation.MaxLoadableUnitSize = 190
+	ConstructionStages = 1
+	Height = ground_level
+	TerrainAccess.terrain_kill =
+	Weather = dry
+	Fields = A1 
+	UseGFXpics = false
+	Pictures { 
+		dry = sy_bld_res.png
+	} Pictures
+	RubbleObjects = false
+	Entry = A1
+	ConstructionCost { 
+		Energy = 0
+		Material = 20000
+		fuel = 2000
    } ConstructionCost
-   MaxResourceProduction { 
-      Energy = -800
-      Material = -800
-      fuel = -800
-   } MaxResourceProduction
-   defaultProduction {
-      energy = -800
-      material = -800
-      fuel = -800
-   } defaultProduction
-   Height = low_level_flight
-   ExternalLoading =  
+
+	MaxResourceProduction { 
+		Energy = -800
+		Material = -800
+		fuel = -800
+	} MaxResourceProduction
+	defaultProduction {
+		energy = -800
+		material = -800
+		fuel = -800
+	} defaultProduction
 } BuildingType

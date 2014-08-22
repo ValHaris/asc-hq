@@ -1,0 +1,80 @@
+VehicleType { 
+	Name = RISS
+	parent = 400 401 402 403 15000
+	ID = 15112
+
+	Description = Instabilitaet
+	Picture = mk6_strukturriss.png
+	wreckageobject = 
+	Infotext = [Bei einem Test spezieller Strahlenwaffen, wurde ein besonderes Phänomen beobachtet. Am Zielort bildete sich ein optisch sichtbarer Riss, aus dem über längere Zeit heftige Strahlung hervorschoss. Die Teccs testeten diverse Varianten aus und erschufen so die ERT (Experimentelle Radartechnologie). Sie können nun geziehlt Strukturrisse erzeugen und das umliegende Gebiet so mit, einem Strahlenschauer überziehen, der Rückwurf der Strahlung kann von normalen Aufklärungseinheiten erfasst und ausgewertet werden. Der Riss selbst ist instabil. Bei Annäherung entläd sich die Energie in einem gewaltigen Überschlagsblitz und der Riss verschliesst sich. Alternativ kann der Riss mit massivem Beschuss geschlossen werden.]
+
+	ConstructionCost { 
+		CalculationMethod = manual
+		Energy = 0
+		Material = 1000
+		fuel = 0
+	} ConstructionCost
+
+	Features = MoveDuringReactionFire satelliteview sonar Kamikaze_only onlyTransMove
+	Category = default
+	Armor = 1000
+	View = 100
+	Jamming = 39
+	Weight = 1000000
+	SelfRepairRate = -20
+	MaxSurvivableStorm = 255
+
+	Tank { 
+		Energy = 0
+		Material = 0
+		fuel = 0
+	} Tank
+
+	Height = deep_submerged submerged floating ground_level low_level_flight medium_level_flight high_level_flight orbit
+	movement = 0 0 300 0 300 300 300 0
+	FuelConsumption = 0
+	TerrainAccess ->* Vehicletype.all_terrain
+	TerrainAccess.terrain_not = Spaceport
+
+	WaitForAttack = false
+	Weapons {
+		Number = 1
+		Weapon0 {
+			Name = Flash
+			Type = Laser shootable 
+			Sound = thunder.ogg
+			targets =  submerged floating ground_level low_level_flight medium_level_flight high_level_flight orbit
+			shotFrom = submerged floating ground_level low_level_flight medium_level_flight high_level_flight orbit
+			MaxRange = 30
+			MinRange = 10
+			Punch@MinRange = 100
+			Punch@MaxRange = 100
+			Ammo = 3
+			ReactionFireShots = 2
+			LaserRechargeRate = 2
+			LaserRechargeCost {
+				energy = 0
+				material = 0
+				fuel = 0
+			} LaserRechargeCost
+			HitAccuracy { 
+				d6 = 0
+				d5 = 0
+				d4 = 0
+				d3 = 0
+				d2 = 90
+				d1 = 95
+				0 = 100
+				u1 = 95
+				u2 = 90
+				u3 = 0
+				u4 = 0
+				u5 = 0
+				u6 = 0
+			} HitAccuracy
+			WeaponEffectiveness ->* VehicleType.EXEMP
+			WeaponEffectiveness.trooper = 200
+
+		} Weapon0
+	} Weapons
+} VehicleType

@@ -1,40 +1,41 @@
 VehicleType {
-   Name = heavy tank
-   ID = 293
-   parent = 400 401 402 406
-   abstract = true
+	Name = heavy tank
+	ID = 293
+	parent = 400 401 402 406
+	abstract = true
 
-   Description = heavy combat tank
-   Infotext = [Heavy Combat Tanks are the heavy guns on the battlefield. A Combat
+	Description = heavy combat tank
+	WreckageObject = 404
+	GuideSortHelp = 503 293 0 0 0 0 0 0 0 0
+	Infotext = [Heavy Combat Tanks are the heavy guns on the battlefield. A Combat
               Tank has it all: mobility, power, toughness. While not a large
               threat on its own, a group of three or four Combat Tanks is
               a force to be reckoned with.]
-   WreckageObject = 404
-   GuideSortHelp = 503 293 0 0 0 0 0 0 0 0
 
-   Armor = 1100
-   Weight = 100
+	Armor = 1100
+	Weight = 110
 
-   Tank {
-      Energy = 0
-      Material = 0
-      fuel = 1200
-   } Tank
-   FuelConsumption = 18
-   Movement = 0 0 0 66 0 0 0 0
+	Tank {
+		Energy = 0
+		Material = 0
+		fuel = 1200
+	} Tank
+	FuelConsumption = 18
+	Movement = 0 0 0 66 0 0 0 0
 
-   Weapons {
-      Initiative = 0
-      Number = 2
-      Weapon0 ->* VehicleTYpe.Tank_Gun
-      Weapon0.Ammo = 10
-      Weapon0.Punch@MaxRange = 105
-      Weapon0.Punch@MinRange = 105
-      Weapon0.Name = Kanone
+	Weapons {
+		Number = 2
+		Weapon0 ->* VehicleTYpe.Tank_Gun
+		Weapon0.Ammo = 10
+		Weapon0.Punch@MaxRange = 105
+		Weapon0.Punch@MinRange = 105
+		Weapon0.Name = Kanone
 
-      Weapon1 ->* VehicleType.MG35low
-      Weapon1.Ammo = 16
-      Weapon1.Name = Maschinengewehr
+		Weapon1 ->* VehicleType.MGlow
+		Weapon1.Name = machine gun
+		Weapon1.Punch@MaxRange = 35
+		Weapon1.Punch@MinRange = 35
+		Weapon1.Ammo = 16
 
-   } Weapons
+	} Weapons
 } VehicleType

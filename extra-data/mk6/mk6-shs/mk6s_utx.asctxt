@@ -11,7 +11,9 @@ VehicleType {
 
    Features += mine_layer mineview ExternalFuelTransfer
 
-   Transportation ->* VehicleType.TransSubmarine 
+   Transportation ->* VehicleType.TransSubmarine
+   Transportation.EntranceSystem1.MoveCost = 10
+
 
    Tank.Material = 25000
    Tank.Fuel = 50000

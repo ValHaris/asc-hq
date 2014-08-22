@@ -1,0 +1,78 @@
+VehicleType {
+	Name = Venenum Volaticum
+	ID = 12563
+	parent = 400 401 340
+
+	Description = Flugkreuzer-Carrier 
+	Infotext = [ ]
+;	WreckageObject					= 13204
+	picture = pu_vv.png
+
+	Features = move_after_attack self_repairing MoveDuringReactionFire Repair_Facility no_midair_refuel
+	Armor = 900
+	View = 0
+	Weight = 1000
+	SelfRepairRate = 10
+	MaxSurvivableStorm = 160
+	
+	JumpDrive {
+		Height = medium_level_flight
+		MaxDistance = 300
+		consumption {
+			Energie = 0
+			Material = 2000
+			Fuel = 5000
+		} consumption
+		terrain_any = lowland hard_sand soft_sand runway Spaceport turret_foundation ditch very_shallow_water shallow_water water deep_water river mountains high_mountains installation
+		terrain_all = 
+		terrain_not = 
+		terrain_kill = 
+	} JumpDrive
+
+	Transportation ->* VehicleType.TransMedCarrier
+	Transportation.MaxLoadableUnits = 10
+	Transportation.MaxLoadableUnitSize = 115
+	Transportation.EntranceSystem0 ->* VehicleType.GrIO
+	Transportation.EntranceSystem1 ->* VehicleType.Carrier_Air_high 
+
+	Height = ground_level low_level_flight medium_level_flight high_level_flight
+	FuelConsumption = 50
+	Tank { 
+		Material = 30000
+		fuel = 70000
+	} Tank
+	Movement = 0 0 0 65 70 80 70 0
+
+	WaitForAttack = false
+	Weapons {
+		Number = 5
+
+		Weapon0 ->* VehicleType.AAMH
+		Weapon0.Ammo = 50
+		Weapon0.ReactionFireShots = 2
+		Weapon0.MinRange = 10
+		Weapon0.MaxRange = 40
+
+		Weapon1 ->* VehicleType.smASM
+		Weapon1.Punch@MaxRange = 70
+		Weapon1.Punch@MinRange = 85
+		Weapon1.Ammo = 50
+		Weapon1.ReactionFireShots = 2
+		Weapon1.MinRange = 10
+		Weapon1.MaxRange = 50
+
+		Weapon2 ->* VehicleType.Air_MG
+		Weapon2.Punch@MaxRange = 80
+		Weapon2.Punch@MinRange = 85
+		Weapon2.Ammo = 100
+		Weapon2.ReactionFireShots = 2
+		Weapon2.MinRange = 10
+		Weapon2.MaxRange = 20	
+
+		Weapon3	->* VehicleType.AmmoBomb
+		Weapon3.Ammo = 50	
+		Weapon4	->* VehicleType.AmmoTorp
+		Weapon4.Ammo = 50
+	} Weapons
+
+} VehicleType

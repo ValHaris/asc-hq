@@ -20,6 +20,14 @@
 ; -----   T R O O P E R   ----------------------------------------------------------------------------------------
 ; ----------------------------------------------------------------------------------------------------------------
 
+	all_terrain {
+		terrain_any = Road Runway Hard_sand Lowland Soft_sand Mountains High_mountains Ditch Turret_foundation Installation very_shallow_water shallow_water river water deep_water lava
+		terrain_all =
+		terrain_not = 
+		terrain_kill = 
+	} all_terrain
+
+
    trooper_terrain {
       terrain_any = very_shallow_water Road Runway Hard_sand Lowland Soft_sand Hillside Mountains High_mountains Ditch Turret_foundation Installation small_rocks Large_rocks Railroad Frozen_water Forest
       terrain_all =

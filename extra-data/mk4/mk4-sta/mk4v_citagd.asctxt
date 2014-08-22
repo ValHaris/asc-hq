@@ -1,41 +1,42 @@
 VehicleType { 
-   Name = Cita GD
-   parent = 337 322
-   ID = 14028
-   Description = ground defence bunker
-   WreckageObject = 14028
-   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
-   Infotext = [Die Einheiten der Cita-Reihe sind eine Spezialität der Cromonischen Streitkräfte. Es handelt sich dabei um fahrende Bunkerstellungen. Entsprechend stark ist die Panzerung. Es handelt sich um eine sogenannte kombinierte Panzerung, die speziell gegen Antitankgeschosse entwickelt worden ist. Sie besteht aus mehreren Schichten, die solchen Geschossen viel von ihrer Wirkung nehmen und ist darüberhinaus von einer solchen Stärke, daß sie normalen Gefechtsbeschuß ohne Probleme abwehrt. Problematisch ist allerdings, daß die Citas aufgrund der Größe trotzdem prinzipiell ein gutes Ziel für schwere Waffen darstellen. Auch die Geschwindigkeit ist durch das riesige Gewicht sehr gering. Das größte Problem bei den mobilen Bunkern stellt deshalb der schnelle Transport dar. Hierfür kommt nur eine spezielle Landeinheit infrage, der Dolter. Er kann diese Einheiten optimal verschieben. Wichtig für einen effizienten Einsatz der Bunker ist deshalb, so unwahrscheinlich es auch klingt, ein gut ausgebautes Schienennetz.
+	Name = Cita GD
+	parent = 337 322
+	ID = 14028
+
+	Description = ground defence bunker
+	picture = mk4v_citagd.png
+	WreckageObject = 14028
+	GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+	Infotext = [Die Einheiten der Cita-Reihe sind eine Spezialität der Cromonischen Streitkräfte. Es handelt sich dabei um fahrende Bunkerstellungen. Entsprechend stark ist die Panzerung. Es handelt sich um eine sogenannte kombinierte Panzerung, die speziell gegen Antitankgeschosse entwickelt worden ist. Sie besteht aus mehreren Schichten, die solchen Geschossen viel von ihrer Wirkung nehmen und ist darüberhinaus von einer solchen Stärke, daß sie normalen Gefechtsbeschuß ohne Probleme abwehrt. Problematisch ist allerdings, daß die Citas aufgrund der Größe trotzdem prinzipiell ein gutes Ziel für schwere Waffen darstellen. Auch die Geschwindigkeit ist durch das riesige Gewicht sehr gering. Das größte Problem bei den mobilen Bunkern stellt deshalb der schnelle Transport dar. Hierfür kommt nur eine spezielle Landeinheit infrage, der Dolter. Er kann diese Einheiten optimal verschieben. Wichtig für einen effizienten Einsatz der Bunker ist deshalb, so unwahrscheinlich es auch klingt, ein gut ausgebautes Schienennetz.
 Bei der Cita GD handelt es sich um eine Spezialausführung für den Bodenkampf. Die Artilleriekanone der Citadelle wurde ersetzt durch ein revolutionäres Boden-Boden Raketensystem. Die Abschußrampe ist intern eingebaut, was die Cita GD fast genauso robust macht wie die Citadelle. Es sind lediglich oben und unten Luken für Abschuß und Abgasstrahl vorhanden. Der Abschuß dieser Waffe ist allerdings systembedingt nur im Stand möglich. Die Konstruktion verbietet darüberhinaus den Angriff auf Einheiten in direkter Nachbarschaft. Aufgrund des abzuleitenden Abgasstrahls besitzt die Cita GD an der Unterseite auch einige kleinere Schwachstellen in der Panzerung. Wenn sie aber gefechtsbereit gemacht wurde, ermöglichen ihr das ausgereifte Feuerleitsystem und die neuartige Ladeautomatik den Abschuß von 2 Geschossen kurz nacheinander. Es handelt sich dabei nicht um Lenkwaffen. Sie fliegen größtenteils ballistisch und treffen ihr Ziel auch in großer Entfernung mit hoher Präzision. Eventuelle kleinere Abweichungen werden durch die enorme Sprengkraft wettgemacht. Sie sind dadurch im Gegensatz zu normalen Raketen nicht nur für gepanzerte Fahrzeuge, sondern auch für Infanterieeinheiten eine große Gefahr. Der mitgeführte große Munitionsvorrat ermöglicht den Verbleib im Feld für längere Zeit. Die Sekundärbewaffnung besteht aus Panzerabwehrkanonen, sowie Maschinenkanonen für den Nahkampf und leichten Luftabwehrraketen. Der Laderaum wurde etwas verkleinert, ermöglicht aber immer noch das Mitführen eines Golems oder von Demoneinheiten. Die Produktionskosten sind leider ebenso enorm wie ihre Gefechtsleistung. Dies ist jedoch ein Problem aller Citadellen. Sie eignet sich deshalb aufgrund ihrer Parameter besonders für die Sicherung neuralgischer Punkte gegen massive Bodenangriffe und Küstenbombardements. ]
 
-   View += 10
-   picture = mk4v_citagd.png
-   Transportation ->* VehicleType.TransLowTrooper3
+	View += 10
+	Transportation ->* VehicleType.TransLowTrooper3
 
-   WaitForAttack = true
-   Weapons { 
-      Number = 4
-      Weapon0 ->* VehicleType.type_large_missile 
-      Weapon0.Punch@MinRange -= 10
-      Weapon0.Punch@MaxRange -> VehicleType.Weapons.Weapon0.Punch@MinRange
-      Weapon0.ReactionFireShots = 2
+	WaitForAttack = true
+	Weapons { 
+		Number = 4
+		Weapon0 ->* VehicleType.type_large_missile 
+		Weapon0.Punch@MinRange -= 10
+		Weapon0.Punch@MaxRange -> VehicleType.Weapons.Weapon0.Punch@MinRange
+		Weapon0.ReactionFireShots = 2
 
-      Weapon1 ->* VehicleType.Tank_Gun 
-      Weapon1.MaxRange = 20
-      Weapon1.Ammo = 12
-      Weapon1.Punch@MaxRange = 90
-      Weapon1.Punch@MinRange = 95
+		Weapon1 ->* VehicleType.Tank_Gun 
+		Weapon1.MaxRange = 20
+		Weapon1.Ammo = 12
+		Weapon1.Punch@MaxRange = 90
+		Weapon1.Punch@MinRange = 95
 
-      Weapon2 ->* VehicleType.SAMH 
-      Weapon2.Punch@MaxRange = 80
-      Weapon2.Punch@MinRange = 80
-      Weapon2.MaxRange = 30
-      Weapon2.Ammo = 8
-      Weapon2.ReactionFireShots = 1
+		Weapon2 ->* VehicleType.SAMH 
+		Weapon2.Punch@MaxRange = 80
+		Weapon2.Punch@MinRange = 80
+		Weapon2.MaxRange = 30
+		Weapon2.Ammo = 8
+		Weapon2.ReactionFireShots = 1
 
-      Weapon3 ->* VehicleType.BigMiniGun
-      Weapon3.Ammo = 20
-      Weapon3.ReactionFireShots = 1
+		Weapon3 ->* VehicleType.BigMiniGun
+		Weapon3.Ammo = 20
+		Weapon3.ReactionFireShots = 1
 
-   } Weapons
+	} Weapons
 } VehicleType

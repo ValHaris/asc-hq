@@ -1,27 +1,23 @@
 VehicleType { 
-   Name = META
-   ID = 15293
-   parent = 293 15000
+	Name = META TE
+	ID = 15293
+	parent = 15002 293
 
 ;   Description = heavy combat tank
-   Picture = mk6v_metaTE.pcx
+	Picture = mk6v_metaTE.pcx
 ;   WreckageObject = 404
-   GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
 
-   Armor -= 50
-   Tank.Material = 500
+	Weapons { 
+		Number = 3
+		Weapon0.Punch@MaxRange -= 10
+		Weapon0.Punch@MinRange -= 10
+		Weapon1 ->* VehicleType.NLS
 
-   Weapons { 
-      Number = 3
-      Weapon0.Punch@MaxRange -= 10
-      Weapon0.Punch@MinRange -= 10
-      Weapon1 ->* VehicleType.NLS
-
-      Weapon2 ->* VehicleType.TeccEMP
-      Weapon2.Punch@MinRange = 130
-      Weapon2.Punch@MaxRange = 130
-      Weapon2.LaserRechargeCost.Fuel = 630
-      Weapon2.LaserRechargeCost.Material = 130
+		Weapon2 ->* VehicleType.TeccEMP
+		Weapon2.Punch@MinRange = 130
+		Weapon2.Punch@MaxRange = 130
+		Weapon2.LaserRechargeCost.Fuel = 630
+		Weapon2.LaserRechargeCost.Material = 130
 
    } Weapons
 } VehicleType

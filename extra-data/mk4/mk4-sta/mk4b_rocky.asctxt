@@ -2,12 +2,12 @@ VehicleType {
     Name = Rocky
     parent = 315
     ID = 1295
-    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
-    wreckageobject = 14295
 
     Description = Geschützkuppel
-    Infotext = [Diese Geschützkuppel dient dazu eigene Stellungen zu festigen und einen Angriff des Gegners zu erschweren bis eigene Verstärkung herangezogen werden kann. Sie ist so konstruiert, dass ein Eindringen des Feindes möglichst erschwert, aber die Verteidigung einfach ist. Der um 360° frei drehbare Geschützaufbau ist mit einer extrem harter Pilzhaube versehen, sodass senkrecht fallende Bomben an diesem abgleiten und so die Trefferwirkung verringert wird. Allerdings sind diese Bunkeranlagen gegenüber Hoehenbomber aufgrund Ihrer preiswerten Kanonen-Bewaffnung wehrlos. ]
     picture = mk4b_rocky.png
+    wreckageobject = 14295
+    GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+    Infotext = [Diese Geschützkuppel dient dazu eigene Stellungen zu festigen und einen Angriff des Gegners zu erschweren bis eigene Verstärkung herangezogen werden kann. Sie ist so konstruiert, dass ein Eindringen des Feindes möglichst erschwert, aber die Verteidigung einfach ist. Der um 360° frei drehbare Geschützaufbau ist mit einer extrem harter Pilzhaube versehen, sodass senkrecht fallende Bomben an diesem abgleiten und so die Trefferwirkung verringert wird. Allerdings sind diese Bunkeranlagen gegenüber Hoehenbomber aufgrund Ihrer preiswerten Kanonen-Bewaffnung wehrlos. ]
 
 	TerrainAccess.terrain_any = lowland hard_sand soft_sand mountains
 	TerrainAccess.terrain_not = installation bridge forest

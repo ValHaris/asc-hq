@@ -1,26 +1,28 @@
 VehicleType { 
-   Name = CPS 7
-   parent = 351 493 15000
-   ID = 15351
+	Name = CPS 7
+	parent = 351 493 15000
+	ID = 15351
    
-   Description = coast patrol ship
-   picture = mk6s_cps7.png
+	Description = coast patrol ship
+	picture = mk6s_cps7.png
 ;   InfoImage = mk6s_cps7.jpg
-   GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
-   InfoText = [ Das Coast Patrol Ship Serie 7 ist eine weitere technische Meisterleistung der Teccnol Wissenschaft. In konsequenter Leichtbauweise gefertigt wurde Tiefgang des Schiffes soweit reduziert, dass es nun auch in flachsten Gewaessern fahren kann. Die Bewaffnung ist gegenüber den Raketenkreuzern deutlich reduziert, kann sich aber für ein Schiff der Kuestenwache mehr als nur verteidigen. Ein spezielles Highlight ist der neu entwickelte Abwehrlaser vom Typ 2. Er ist jetzt in der Lage kleinere Ziele besser und eher zu bekämpfen und verhindert einen unsinnigen Schuss auf stark gepanzerte Ziele.]
+	GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
+	InfoText = [ Das Coast Patrol Ship Serie 7 ist eine weitere technische Meisterleistung der Teccnol Wissenschaft. In konsequenter Leichtbauweise gefertigt wurde Tiefgang des Schiffes soweit reduziert, dass es nun auch in flachsten Gewaessern fahren kann. Die Bewaffnung ist gegenüber den Raketenkreuzern deutlich reduziert, kann sich aber für ein Schiff der Kuestenwache mehr als nur verteidigen. Ein spezielles Highlight ist der neu entwickelte Abwehrlaser vom Typ 2. Er ist jetzt in der Lage kleinere Ziele besser und eher zu bekämpfen und verhindert einen unsinnigen Schuss auf stark gepanzerte Ziele.]
 
-   Features = MoveDuringReactionFire sonar jam_only_own_field 
-   Height = floating submerged
-   Movement += 0 37 0 0 0 0 0 0 
-   Jamming = 70
+	Features = MoveDuringReactionFire sonar jam_only_own_field 
+	Height = floating submerged
+	Movement += 0 37 0 0 0 0 0 0 
+	Jamming = 19
+	View += 19
+	Armor += 100
 
-   Transportation ->* VehicleType.notrans
+	Transportation ->* VehicleType.notrans
    
-   Tank { 
-      Energy = 0
-      Material = 500
-      fuel = 4000
-   } Tank
+	Tank { 
+		Energy = 0
+		Material = 500
+		fuel = 4000
+	} Tank
     HeightChangeMethodNum = 2
     HeightChangeMethod0 {
         movecost = 5
@@ -37,35 +39,35 @@ VehicleType {
         canattack = true
     } HeightChangeMethod1
 
-   Weapons { 
-      Number = 4
-      Weapon0 ->* VehicleType.UTorp 
-      Weapon0.Ammo = 2
-      Weapon0.ReactionFireShots = 0
+	Weapons { 
+		Number = 4
+		Weapon0 ->* VehicleType.UTorp 
+		Weapon0.Ammo = 2
+		Weapon0.ReactionFireShots = 0
 
-      Weapon1 ->* VehicleType.SSM
-      Weapon1.Ammo = 10
-      Weapon1.MaxRange = 40
-      Weapon1.MinRange = 20
-      Weapon1.Punch@MaxRange = 100
-      Weapon1.Punch@MinRange = 100
-      Weapon1.ReactionFireShots = 1
-      Weapon1.WeaponEffectiveness.trooper = 0
+		Weapon1 ->* VehicleType.SSM
+		Weapon1.Ammo = 10
+		Weapon1.MaxRange = 40
+		Weapon1.MinRange = 20
+		Weapon1.Punch@MaxRange = 100
+		Weapon1.Punch@MinRange = 100
+		Weapon1.ReactionFireShots = 1
+		Weapon1.WeaponEffectiveness.trooper = 0
       
-      Weapon2 ->* VehicleType.SAMH
-      Weapon2.shotFrom = floating
-      Weapon2.Ammo = 8
-	  Weapon2.ReactionFireShots = 1
-      Weapon2.WeaponEffectiveness.trooper = 0
+		Weapon2 ->* VehicleType.SAMH
+		Weapon2.shotFrom = submerged floating
+		Weapon2.Ammo = 8
+		Weapon2.ReactionFireShots = 1
+		Weapon2.WeaponEffectiveness.trooper = 0
 
-      Weapon3 ->* VehicleType.DLS
-	  Weapon3.name = DLS TYP2
-      Weapon3.Ammo = 8
-      Weapon3.MaxRange = 30
-      Weapon3.WeaponEffectiveness.trooper = 150
-      Weapon3.WeaponEffectiveness.heavy_ship = 0
-      Weapon3.WeaponEffectiveness.medium_ship = 0
-	  Weapon3.HitAccuracy.d1 = 90
+		Weapon3 ->* VehicleType.DLS
+		Weapon3.name = DLS TYP2
+		Weapon3.Ammo = 8
+		Weapon3.MaxRange = 30
+		Weapon3.WeaponEffectiveness.trooper = 150
+		Weapon3.WeaponEffectiveness.heavy_ship = 0
+		Weapon3.WeaponEffectiveness.medium_ship = 0
+		Weapon3.HitAccuracy.d1 = 90
 
-   } Weapons
+	} Weapons
 } VehicleType

@@ -11,13 +11,8 @@ VehicleType {
       Material = 20000
       fuel = 30000
    } Tank
-   Features += construct_specific_buildings 
    Movement -= 0 0 0 0 30 20 20 10 
   
-   Construction { 
-      Buildings = 22941
-   } Construction
-   
    Weapons { 
       Number = 3
       Weapon0 ->* VehicleType.Orbit_Cannon 

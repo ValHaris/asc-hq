@@ -1,34 +1,38 @@
 BuildingType {
-   Name = Airport South
-   ID = 10
-   parent = 499
-   Infotext = [Produktionsanlage für Flugzeuge incl. Munitionsproduktion, Reparatur und Wiederverwertung.]
-   Armor = 2000
-   ConstructionStages = 1
-   Weather = dry 
-   Fields = A2 A3 A4 B3 
-   UseGFXpics = false
-   Pictures { 
-      dry = bld_ASC_airport.png
-      few_snow = bld_asc_airport.png
-      much_snow = bld_asc_airport.png
-      snow_and_ice = bld_asc_airport.png
-   } Pictures
-   RubbleObjects = false
-   Entry = A4
-   Transportation { 
-      MaxLoadableUnits = 6
-      MaxLoadableUnitSize = 2000
-      MaxLoadableMass = 1000000
-      CategoriesNOT = hoovercraft Medium_tracked_vehicle Heavy_tracked_vehicle light_wheeled_vehicle Medium_wheeled_vehicle Heavy_wheeled_vehicle Light_ship Medium_ship Heavy_Ship Rail_vehicle building|turret|object
-   } Transportation
-   Functions = Vehicle_Production Ammo_Production Repair_Facility Recycling
-   CategoriesProduceable = default light_Aircraft medium_Aircraft heavy_aircraft helicopter
-   ConstructionCost { 
-      Energy = 0
-      Material = 9000
-      fuel = 9000
-   } ConstructionCost
-   Height = ground_level 
-   ExternalLoading =  
+	Name = Airport South
+	ID = 10
+	parent = 499
+	Infotext = [Produktionsanlage für Flugzeuge incl. Munitionsproduktion, Reparatur und Wiederverwertung.]
+
+	Features = Vehicle_Production Ammo_Production Repair_Facility Recycling
+	ExternalLoading =  
+	Armor = 600
+
+	ConstructionStages = 1
+	ConstructionCost { 
+		Energy = 0
+		Material = 15000
+		fuel = 1500
+	} ConstructionCost
+	Height = ground_level 
+	Weather = dry 
+	Fields = A2 A3 A4 B3 
+	UseGFXpics = false
+	Pictures { 
+		dry = bld_ASC_airport.png
+		few_snow = bld_asc_airport.png
+		much_snow = bld_asc_airport.png
+		snow_and_ice = bld_asc_airport.png
+	} Pictures
+	RubbleObjects = false
+	Entry = A4
+
+	Transportation { 
+		MaxLoadableUnits = 6
+		MaxLoadableUnitSize = 2000
+		MaxLoadableMass = 1000000
+		CategoriesNOT = hoovercraft Medium_tracked_vehicle Heavy_tracked_vehicle light_wheeled_vehicle Medium_wheeled_vehicle Heavy_wheeled_vehicle Light_ship Medium_ship Heavy_Ship Rail_vehicle building|turret|object
+	} Transportation
+	CategoriesProduceable = default light_Aircraft medium_Aircraft heavy_aircraft helicopter
+
 } BuildingType

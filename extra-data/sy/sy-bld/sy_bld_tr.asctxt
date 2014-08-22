@@ -5,12 +5,13 @@ BuildingType {
    Name = TR
    Description = schwebender Sensor
 
-   Armor = 1200
+   Armor = 750
    View = 130
    Jamming = 0
-   Transportation ->* BuildingType.Ellf
+   Transportation ->* BuildingType.Esmall
 
    ConstructionStages = 1
+	TerrainAccess.terrain_kill =
    Weather = dry 
    Fields = A1 
    UseGFXpics = false
@@ -33,8 +34,8 @@ BuildingType {
    MaxResearch = 0
    ConstructionCost { 
       Energy = 0
-      Material = 12000
-      fuel = 15000
+      Material = 15000
+      fuel = 1500
    } ConstructionCost
    MaxResourceProduction { 
       Energy = 0
@@ -58,6 +59,6 @@ BuildingType {
          fuel = 100
       } ASCmode
    } StorageCapacity
-   Height = low_level_flight
+   Height = ground_level
    ExternalLoading =  
 } BuildingType

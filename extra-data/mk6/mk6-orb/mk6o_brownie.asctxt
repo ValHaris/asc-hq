@@ -13,8 +13,8 @@ VehicleType {
    View = 0
 
    Movement = 0 0 0 20 0 0 0 50
-   Tank.Material += 10000
-   Tank.Fuel += 10000
+   Tank.Material += 30000
+   Tank.Fuel += 50000
    Height = ground_level orbit 
    TerrainAccess.Terrain_any = runway spaceport turret_foundation
    TerrainAccess.Terrain_all = beacon

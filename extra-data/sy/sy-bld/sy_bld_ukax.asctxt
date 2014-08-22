@@ -3,9 +3,9 @@ BuildingType {
    ID = 1311
    parent = 498
    
-   Features = Mining_Station ExternalMaterialTransfer ExternalFuelTransfer NoObjectChaining
-   ExternalLoading = floating ground_level low_level_flight 
-   Armor = 600
+   Features = Mining_Station ExternalFuelTransfer NoObjectChaining
+   ExternalLoading = floating ground_level 
+   Armor = 350
    View = 25
    Jamming = 20
    Techlevel = 0
@@ -38,8 +38,8 @@ BuildingType {
    Entry = A1
    ConstructionCost { 
       Energy = 0
-      Material = 6500
-      fuel = 7500
+      Material = 15000
+      fuel = 1500
    } ConstructionCost
 
    TerrainAccess { 

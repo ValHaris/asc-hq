@@ -1,14 +1,15 @@
 VehicleType { 
-   Name = Panter
-   parent = 290
-   ID = 22751
+	Name = Panter
+	parent = 290
+	ID = 22751
 
-   Infotext = [Light Tanks are economic tanks. While not being very heavily
+	Infotext = [Light Tanks are economic tanks. While not being very heavily
               armed, they make a decent pace and aren't as expensive to build
               as Combat Tanks. Light tanks are well suited for strike force
               support.]
-   Picture = mav_lp.png
+	Picture = mav_lp.png
 
-   Movement -= 0 0 0 11 0 0 0 0
-    
+	Category = heavy_wheeled_vehicle
+	Movement -= 0 0 0 11 0 0 0 0
+
 } VehicleType

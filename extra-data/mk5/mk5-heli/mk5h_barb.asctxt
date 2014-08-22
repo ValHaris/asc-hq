@@ -1,47 +1,47 @@
 VehicleType { 
-   Name = BARB
-   parent = 1449
-   ID = 16004
+	Name = BARB
+	parent = 1449
+	ID = 16004
 
-   Description = defence helicopter
-   picture = mk5h_barb.png
-   InfoImage = mk5h_stachel.jpg
-   Infotext = [
-   InfoImage = Wikipedia Bell-Boeing V-22]
+	Description = defence helicopter
+	picture = mk5h_barb.png
+	InfoImage = mk5h_stachel.jpg
+	Infotext = []
 
-   Features = MoveDuringReactionFire cruiserlanding no_midair_refuel
-   Armor += 100
-   View += 10
+	Features = MoveDuringReactionFire cruiserlanding no_midair_refuel
+	Armor += 100
+	View += 30
 
-   WaitForAttack = false
-   Weapons { 
-      Number = 2
-      Weapon0 {
-         Type = air_missile shootable 
-         targets = floating ground_level low_level_flight medium_level_flight high_level_flight
-         shotFrom = low_level_flight medium_level_flight
-         MaxRange = 30
-         MinRange = 10
-         Ammo = 20
-         Punch@MaxRange = 100
-         Punch@MinRange = 100
-         ReactionFireShots = 2
-         HitAccuracy { 
-            d6 = 
-            d5 = 
-            d4 = 
-            d3 = 
-            d2 = 
-            d1 = 100
-            0 = 100
-            u1 = 100
-            u2 = 
-            u3 = 
-            u4 = 
-            u5 = 
-            u6 = 
-         } HitAccuracy
-     	 WeaponEffectiveness {
+	WaitForAttack = false
+	Weapons { 
+		Number = 2
+		Weapon0 {
+			Type = air_missile shootable 
+			name = RAK UNI ht3
+			targets = floating ground_level low_level_flight medium_level_flight high_level_flight
+			shotFrom = low_level_flight medium_level_flight
+			MaxRange = 30
+			MinRange = 10
+			Ammo = 20
+			Punch@MaxRange = 100
+			Punch@MinRange = 100
+			ReactionFireShots = 2
+			HitAccuracy { 
+				d6 = 
+				d5 = 
+				d4 = 
+				d3 = 
+				d2 = 
+				d1 = 100
+				0 = 100
+				u1 = 100
+				u2 = 
+				u3 = 
+				u4 = 
+				u5 = 
+				u6 = 
+			} HitAccuracy
+			WeaponEffectiveness {
      	    default = 0
      	    device = 0
 	        trooper = 0
@@ -66,12 +66,13 @@ VehicleType {
             medium_aircraft  = 70
             heavy_aircraft = 70
             helicopter = 70
-         } WeaponEffectiveness
-      } Weapon0
+			} WeaponEffectiveness
+		} Weapon0
 
-      Weapon1 ->* VehicleType.Sniper
-      Weapon1.shotFrom = low_level_flight
-      Weapon1.HitAccuracy.d1 = 100
-      
-   } Weapons
+		Weapon1 ->* VehicleType.Sniper
+		Weapon1.shotFrom = low_level_flight
+		Weapon1.HitAccuracy.d1 = 100
+		Weapon1.ReactionFireShots = 2
+
+	} Weapons
 } VehicleType

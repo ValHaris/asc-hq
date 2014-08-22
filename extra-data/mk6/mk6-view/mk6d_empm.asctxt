@@ -1,32 +1,35 @@
 VehicleType { 
-   Name = EMPM
-   parent = 249 15000
-   ID = 15249
+	Name = EMPM
+	parent = 249 15000
+	ID = 15249
 
-   Description = EMP Mine
-   Picture = mk6d_empm.png
-   GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
-   InfoText = [Informationen sind als Geheim eingestuft.]
+	Description = EMP Mine
+	Picture = mk6d_empm.png
+	GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
+	InfoText = [Informationen sind als Geheim eingestuft.]
 
-   Features += MoveDuringReactionFire onlyTransMove
+	Features += MoveDuringReactionFire onlyTransMove
+	View += 19
+	
+	Height = deep_submerged submerged
+	Movement = 19 19 19 0 0 0 0 0
+	Tank.Fuel = 4500
+	Tank.Material = 900
    
-   Height = deep_submerged submerged
-   Movement = 19 19 19 0 0 0 0 0
-   Tank.Fuel = 4500
-   Tank.Material = 900
-   
-   Weapons {
-      Number = 1
-	  Weapon0 ->* VehicleType.TeccEMP
-      Weapon0.Punch@MinRange = 160
-      Weapon0.Punch@MaxRange = 160
-      Weapon0.MaxRange = 20
-      Weapon0.LaserRechargeCost.fuel = 0
-      Weapon0.LaserRechargeCost.material = 0
-	  Weapon0.HitAccuracy.d2 = 50
-      Weapon0.HitAccuracy.d1 = 100
-      Weapon0.HitAccuracy.u1 = 100
-      Weapon0.HitAccuracy.u2 = 50
-   } Weapons
+	Weapons {
+		Number = 1
+		Weapon0 ->* VehicleType.TeccEMP
+		Weapon0.Punch@MinRange = 160
+		Weapon0.Punch@MaxRange = 160
+		Weapon0.MaxRange = 20
+		Weapon0.ReactionFireShots = 2
+		Weapon0.Ammo = 2
+		Weapon0.LaserRechargeCost.fuel = 0
+		Weapon0.LaserRechargeCost.material = 0
+		Weapon0.HitAccuracy.d2 = 50
+		Weapon0.HitAccuracy.d1 = 100
+		Weapon0.HitAccuracy.u1 = 100
+		Weapon0.HitAccuracy.u2 = 50
+	} Weapons
 
 } VehicleType

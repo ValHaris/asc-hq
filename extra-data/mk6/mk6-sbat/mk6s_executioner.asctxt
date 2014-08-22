@@ -1,26 +1,27 @@
 VehicleType { 
-   Name = Executioner
-   ID = 15367
-   parent = 367 15000
+	Name = Executioner
+	ID = 15367
+	parent = 367 15000
 
-    Picture = mk6s_executioner.png
-    InfoImage = 
-    Description = SubHunter
+	Picture = mk6s_executioner.png
+	InfoImage = 
+	Description = SubHunter
    
-    Infotext = [
-Die Executioner-Klasse ist ausgelegt für den Unterwasserkampf. Dazu verfügt es über einen neuartigen V-EMP, dieser lässt sich Vertikal nach Unten abfeuern und trifft so die elektrischen Systeme von Uboote.
-Zum schutz vor Uboot angriffen hebt sich die executioner, dank der spezielen Form des Rumpfes, leicht aus dem Wasser. So ist es hoch genug um den Sonar zu entgehen und tief genug um unter dem Radar zu bleiben. Im Notfall kann es auch tauchen um so Schiffen aus dem weg zu gehen.
-Die weitere Bewaffnung sind weitreichende Unterwassertorpedos und ein Defence-Laser-System.]
+	Infotext = [
+		Die Executioner-Klasse ist ausgelegt für den Unterwasserkampf. Dazu verfügt es über einen neuartigen V-EMP, dieser lässt sich Vertikal nach Unten abfeuern und trifft so die elektrischen Systeme von Uboote.
+		Zum schutz vor Uboot angriffen hebt sich die executioner, dank der spezielen Form des Rumpfes, leicht aus dem Wasser. So ist es hoch genug um den Sonar zu entgehen und tief genug um unter dem Radar zu bleiben. Im Notfall kann es auch tauchen um so Schiffen aus dem weg zu gehen.
+		Die weitere Bewaffnung sind weitreichende Unterwassertorpedos und ein Defence-Laser-System.]
    
-    Features += Sonar MoveDuringReactionFire
-    Jamming = 36
-    View = 30
+	Features += Sonar MoveDuringReactionFire
+	Jamming = 29
+	View = 49
    
-    Transportation ->* VehicleType.notrans
-   
-    Movement += 0 38 -10 -10 0 0 0 0
-    Height = submerged floating ground_level 
-    Tank.Material = 500  
+	Transportation ->* VehicleType.notrans
+
+    Movement += 0 38 0 0 0 0 0 0
+	Height = submerged floating ground_level 
+	Tank.Material = 600  
+	Tank.Fuel += 100  
     HeightChangeMethodNum = 2
     HeightChangeMethod0 {
         movecost = 5
@@ -37,26 +38,30 @@ Die weitere Bewaffnung sind weitreichende Unterwassertorpedos und ein Defence-La
         canattack = true
     } HeightChangeMethod1
 
-    Weapons {
-        Number = 3
-        Weapon0 ->* VehicleType.SUSTorp
+	Weapons {
+		Number = 3
+		Weapon0 ->* VehicleType.SUSTorp
         Weapon0.shotFrom = submerged floating ground_level
-        Weapon0.MaxRange = 30
-	    Weapon0.Punch@MaxRange = 115
-        Weapon0.Punch@MinRange = 130
-	    Weapon0.HitAccuracy.d1 = 100
-	    Weapon0.HitAccuracy.u1 = 100
-	    Weapon0.Ammo = 4
-	    Weapon0.ReactionFireShots = 0
-        Weapon1 ->* VehicleType.DLS
-        Weapon2 ->* VehicleType.EMP
-	    Weapon2.targets = deep_submerged submerged
-	    Weapon2.Punch@MaxRange = 150
-        Weapon2.Punch@MinRange = 150
-	    Weapon2.HitAccuracy.d1 = 100
-	    Weapon2.HitAccuracy.d2 = 80
-	    Weapon2.ReactionFireShots = 0
-        Weapon2.MaxRange = 10
-    } Weapons
+		Weapon0.MaxRange = 30
+		Weapon0.Punch@MaxRange = 125
+		Weapon0.Punch@MinRange = 125
+		Weapon0.HitAccuracy.d1 = 100
+		Weapon0.HitAccuracy.u1 = 100
+		Weapon0.Ammo = 4
+		Weapon0.ReactionFireShots = 0
+
+		Weapon1 ->* VehicleType.DLS
+		Weapon1.Punch@MaxRange = 90
+		Weapon1.Punch@MinRange = 95
+		
+		Weapon2 ->* VehicleType.EMP
+		Weapon2.targets = deep_submerged submerged
+		Weapon2.Punch@MaxRange = 160
+		Weapon2.Punch@MinRange = 160
+		Weapon2.HitAccuracy.d1 = 100
+		Weapon2.HitAccuracy.d2 = 80
+		Weapon2.ReactionFireShots = 0
+		Weapon2.MaxRange = 10
+	} Weapons
 
 } VehicleType

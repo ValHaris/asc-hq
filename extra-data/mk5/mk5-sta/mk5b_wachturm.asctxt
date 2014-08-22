@@ -1,39 +1,40 @@
 VehicleType { 
-   Name = WACHTURM
-   parent = 318
-   ID = 1486
+	Name = WACHPOSTEN
+	parent = 318
+	ID = 1486
 
-   Description = Verteidigungsturm
-   Infotext = [ Gepanzerter Verteidigungsturm mit Raketen und EMP / Tarnanstrich.]
-   picture = mk5b_wachturm.pcx
-   GuideSortHelp += 0 0 0 0 5 0 0 0 0 0
+	Description = Alamierungsturm
+	Infotext = [ Verteidigungsturm mit Raketen und EMP / Tarnanstrich.]
+	picture = mk5b_wachturm.pcx
+	GuideSortHelp += 0 0 0 0 5 0 0 0 0 0
    
-   Features += ManualSelfDestruct jam_only_own_field
-   Weight = 6000
-   Transportation ->* VehicleType.TransBunkersmall
-   Jamming = 22
+	Features += jam_only_own_field
+	View += 10
+	Weight = 6000
+	Transportation ->* VehicleType.TransBunkersmall
+	Jamming = 22
 
-   Weapons {
-      Weapon0 ->* VehicleType.EMP
-      Weapon0.Ammo = 2
-      Weapon0.Punch@MaxRange = 110
-      Weapon0.Punch@MinRange = 150
-      Weapon0.WeaponEffectiveness.trooper = 0
-      Weapon0.LaserRechargeCost.material = 300
-      Weapon0.LaserRechargeCost.fuel = 300
-      Weapon0.ReactionFireShots = 1
+	Weapons {
+		Weapon0 ->* VehicleType.EMP
+		Weapon0.Ammo = 2
+		Weapon0.Punch@MaxRange = 110
+		Weapon0.Punch@MinRange = 150
+		Weapon0.WeaponEffectiveness.trooper = 0
+		Weapon0.LaserRechargeCost.material = 300
+		Weapon0.LaserRechargeCost.fuel = 300
+		Weapon0.ReactionFireShots = 1
             
-      Weapon1.Type = ground_missile shootable
-      Weapon1.Punch@MaxRange -= 5
-      Weapon1.Punch@MinRange -= 5
+		Weapon1.Type = ground_missile shootable
+		Weapon1.Punch@MaxRange -= 5
+		Weapon1.Punch@MinRange -= 5
       
-      Weapon2 ->* VehicleType.smMSM
-      Weapon2.maxRange = 40
-      Weapon2.Punch@MaxRange = 85
-      Weapon2.Punch@MinRange = 85
-      Weapon2.Ammo = 8
-      Weapon2.ReactionFireShots = 2
-      Weapon2.WeaponEffectiveness.trooper = 0
-   } Weapons
+		Weapon2 ->* VehicleType.smMSM
+		Weapon2.maxRange = 40
+		Weapon2.Punch@MaxRange = 85
+		Weapon2.Punch@MinRange = 85
+		Weapon2.Ammo = 8
+		Weapon2.ReactionFireShots = 2
+		Weapon2.WeaponEffectiveness.trooper = 0
+	} Weapons
 
 } VehicleType

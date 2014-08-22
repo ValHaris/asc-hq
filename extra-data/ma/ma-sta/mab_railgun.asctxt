@@ -1,51 +1,49 @@
 VehicleType { 
-   Name = RAILGUN
-   ID = 22618
-   parent = 400 402 403
+	Name = RAILGUN
+	ID = 22618
+	parent = 304
 
-   Description = railgun artillerie
-   Infotext = [Neuste HighTech Artillerie der Malaner. Die Anlage benötigt gigantische Menge an Energie. Deshalb wurde ein eigenes BioMasseKraftwerk mit KraftWärmeKopplung unter das Geschütz gebaut.]
-   Picture = mab_railgun.pcx
+	Description = railgun artillery
+	Infotext = [Neuste HighTech Artillerie der Malaner. Die Anlage benötigt gigantische Menge an Energie. Deshalb wurde ein eigenes BioMasseKraftwerk mit KraftWärmeKopplung unter das Geschütz gebaut.]
+	Picture = mab_railgun.pcx
 
-   TerrainAccess ->* VehicleType.Turret_lowland
-   Tank.Fuel = 6000
-   Tank.material= 1000
-   Features += ManualSelfDestruct
+	TerrainAccess ->* VehicleType.Turret_lowland
+	Tank.Fuel = 6000
+	Tank.material= 1000
    
-   Weapons { 
-      Number = 1
-      Weapon0 ->* VehicleType.Artillery
-	  Weapon0.name = Railgun
-      Weapon0.Type = laser shootable
-      Weapon0.Sound = cannon_very_big_s.ogg
-      Weapon0.targets = submerged floating ground_level
-      Weapon0.HitAccuracy.d1 = 60
-      Weapon0.ReactionFireShots = 0
-      Weapon0.LaserRechargeRate = 1
-      Weapon0.LaserRechargeCost.energy = 0
-      Weapon0.LaserRechargeCost.material = 500
-      Weapon0.LaserRechargeCost.fuel = 3000
-      Weapon0.MaxRange = 180
-      Weapon0.MinRange = 90
-      Weapon0.Punch@MaxRange = 110
-      Weapon0.Punch@MinRange = 140
-      Weapon0.WeaponEffectiveness.default = 0      
-      Weapon0.WeaponEffectiveness.trooper = 20
-      Weapon0.WeaponEffectiveness.rail_vehicle = 90
-      Weapon0.WeaponEffectiveness.building|turret|object = 100
-      Weapon0.WeaponEffectiveness.hoovercraft = 80
-      Weapon0.WeaponEffectiveness.helicopter = 100
-      Weapon0.WeaponEffectiveness.light_tracked_vehicle = 50
-      Weapon0.WeaponEffectiveness.medium_tracked_vehicle = 70
-      Weapon0.WeaponEffectiveness.heavy_tracked_vehicle = 90
-      Weapon0.WeaponEffectiveness.light_wheeled_vehicle = 50
-      Weapon0.WeaponEffectiveness.medium_wheeled_vehicle = 70
-      Weapon0.WeaponEffectiveness.heavy_wheeled_vehicle = 90
-      Weapon0.WeaponEffectiveness.light_ship = 50
-      Weapon0.WeaponEffectiveness.medium_ship  = 70
-      Weapon0.WeaponEffectiveness.heavy_ship = 90
-      Weapon0.WeaponEffectiveness.light_aircraft = 100
-      Weapon0.WeaponEffectiveness.medium_aircraft  = 100
-      Weapon0.WeaponEffectiveness.heavy_aircraft = 100
-   } Weapons
+	Weapons { 
+		Weapon0 ->* VehicleType.Artillery
+		Weapon0.name = Railgun
+		Weapon0.Type = laser shootable
+		Weapon0.Sound = cannon_very_big_s.ogg
+		Weapon0.targets = submerged floating ground_level
+		Weapon0.HitAccuracy.d1 = 60
+		Weapon0.ReactionFireShots = 0
+		Weapon0.LaserRechargeRate = 1
+		Weapon0.LaserRechargeCost.energy = 0
+		Weapon0.LaserRechargeCost.material = 500
+		Weapon0.LaserRechargeCost.fuel = 3000
+		Weapon0.MaxRange = 180
+		Weapon0.MinRange = 90
+		Weapon0.Punch@MaxRange = 110
+		Weapon0.Punch@MinRange = 140
+		Weapon0.WeaponEffectiveness.default = 0      
+		Weapon0.WeaponEffectiveness.trooper = 20
+		Weapon0.WeaponEffectiveness.rail_vehicle = 90
+		Weapon0.WeaponEffectiveness.building|turret|object = 100
+		Weapon0.WeaponEffectiveness.hoovercraft = 80
+		Weapon0.WeaponEffectiveness.helicopter = 100
+		Weapon0.WeaponEffectiveness.light_tracked_vehicle = 50
+		Weapon0.WeaponEffectiveness.medium_tracked_vehicle = 70
+		Weapon0.WeaponEffectiveness.heavy_tracked_vehicle = 90
+		Weapon0.WeaponEffectiveness.light_wheeled_vehicle = 50
+		Weapon0.WeaponEffectiveness.medium_wheeled_vehicle = 70
+		Weapon0.WeaponEffectiveness.heavy_wheeled_vehicle = 90
+		Weapon0.WeaponEffectiveness.light_ship = 50
+		Weapon0.WeaponEffectiveness.medium_ship  = 70
+		Weapon0.WeaponEffectiveness.heavy_ship = 90
+		Weapon0.WeaponEffectiveness.light_aircraft = 100
+		Weapon0.WeaponEffectiveness.medium_aircraft  = 100
+		Weapon0.WeaponEffectiveness.heavy_aircraft = 100
+	} Weapons
 } VehicleType

@@ -1,0 +1,10 @@
+technology {
+   Name = HACK Drohne
+   infotext = Forschungsprojekt abgeschlossen! HACK verfügbar!
+   id = 15115
+   RelatedUnitID = 15115
+   parent = 15000
+   researchpoints *= 16
+   techlevel = 4
+   TechnologiesRequired = 15000,100001,100104
+} Technology

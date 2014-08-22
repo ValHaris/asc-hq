@@ -26,6 +26,10 @@ VehicleType {
    TerrainAccess ->* VehicleType.heli_terrain
    HeightChangeMethod0.movecost = 10
    MovementSound = jet_pass.ogg
+   
+   Weapons.Weapon0.MaxRange += 10
+   Weapons.Weapon0.MinRange += 10
+   Weapons.Weapon0.ReactionFireShots = 0
 
    HeightChangeMethodNum = 2
    HeightChangeMethod0 {

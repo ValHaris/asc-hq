@@ -1,85 +1,91 @@
-BuildingType { 
-   Name = YBX
-   ID = 1314
-   parent = 498
+BuildingType {
+; Bughole
+	Name = YBX
+	ID = 1314
+	parent = 498
    
-   Armor = 1000
-   View = 40
-   Jamming = 21
-   ConstructionStages = 1
-   Weather = dry 
-   Fields = A1 
-   UseGFXpics = false
-   Pictures { 
-      dry = sy_bld_ybx.png
-   } Pictures
-   RubbleObjects = true
-   Rubble {
-      A1 = 1302
-   } Rubble
-   Entry = A1
-   Functions = Vehicle_Production Recycling Selfdestruct_at_conquer NoObjectChaining
-   Techlevel = 0
-   Transportation { 
-      MaxLoadableUnits = 2
-      MaxLoadableUnitSize = 5000
-      MaxLoadableMass = 5500
-      CategoriesNOT = light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle Light_ship Medium_ship Heavy_Ship Rail_vehicle light_aircraft medium_aircraft heavy_aircraft helicopter hoovercraft
-      EntranceSystemNum = 2
-      EntranceSystem0 {
-        Mode = out
-        UnitHeightAbs = low_level_flight 
-        UnitHeightRel = -100
-        ContainerHeight = ground_level
-        CategoriesNOT = 
-        DockingHeightAbs = low_level_flight
-        DockingHeightRel = -100 
-      } EntranceSystem0
-      EntranceSystem1 {
-        Mode = out
-        UnitHeightAbs = ground_level 
-        UnitHeightRel = -100
-        ContainerHeight = ground_level
-        CategoriesNOT = 
-        DockingHeightAbs = ground_level
-        DockingHeightRel = -100
-        Movecost = 10		
-      } EntranceSystem1
-   } Transportation
-   TerrainAccess { 
-      terrain_any = Lowland Hard_sand Soft_sand  
-      terrain_all = 
-      terrain_not = 
-      terrain_kill = Lava swamp very_shallow_water shallow_water river water deep_water
-   } TerrainAccess
-   MaxResearch = 0
-   ConstructionCost { 
-      Energy = 0
-      Material = 10000
-      fuel = 10000
-   } ConstructionCost
-   MaxResourceProduction { 
-      Energy = 0
-      Material = 0
-      fuel = 0
-   } MaxResourceProduction
-   defaultProduction {
-      energy = 
-      material = 
-      fuel = 
-   } defaultProduction
-   StorageCapacity { 
-      BImode { 
-         Energy = 100000
-         Material = 100000
-         fuel = 100000
-      } BImode
-      ASCmode { 
-         Energy = 100
-         Material = 100
-         fuel = 100
-      } ASCmode
-   } StorageCapacity
-   Height = ground_level
-   ExternalLoading =  
+	Armor = 500
+	View = 40
+	Jamming = 21
+	Features = Vehicle_Production Recycling Selfdestruct_at_conquer NoObjectChaining
+	ExternalLoading =  
+
+	MaxResourceProduction { 
+		Energy = 0
+		Material = 0
+		fuel = 0
+	} MaxResourceProduction
+	defaultProduction {
+		energy = 
+		material = 
+		fuel = 
+	} defaultProduction
+	StorageCapacity { 
+		BImode { 
+			Energy = 100000
+			Material = 100000
+			fuel = 100000
+		} BImode
+		ASCmode { 
+			Energy = 100
+			Material = 100
+			fuel = 100
+		} ASCmode
+	} StorageCapacity
+
+	Techlevel = 0
+	MaxResearch = 0
+
+	ConstructionStages = 1
+	ConstructionCost { 
+		Energy = 0
+		Material = 20000
+		fuel = 2000
+	} ConstructionCost
+	Height = ground_level
+	TerrainAccess { 
+		terrain_any = Lowland Hard_sand Soft_sand  
+		terrain_all = 
+		terrain_not = 
+		terrain_kill = Lava swamp very_shallow_water shallow_water river water deep_water
+	} TerrainAccess
+	Weather = dry 
+	Fields = A1 
+	UseGFXpics = false
+	Pictures { 
+		dry = sy_bld_ybx.png
+	} Pictures
+	RubbleObjects = true
+	Rubble {
+		A1 = 1302
+	} Rubble
+	Entry = A1
+
+	Transportation { 
+		MaxLoadableUnits = 2
+		MaxLoadableUnitSize = 5000
+		MaxLoadableMass = 5500
+		CategoriesNOT = light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle Light_ship Medium_ship Heavy_Ship Rail_vehicle light_aircraft medium_aircraft heavy_aircraft helicopter hoovercraft
+		EntranceSystemNum = 2
+		EntranceSystem0 {
+			Mode = out
+			UnitHeightAbs = low_level_flight 
+			UnitHeightRel = -100
+			ContainerHeight = ground_level
+			CategoriesNOT = 
+			DockingHeightAbs = low_level_flight
+			DockingHeightRel = -100 
+		} EntranceSystem0
+		EntranceSystem1 {
+			Mode = out
+			UnitHeightAbs = ground_level 
+			UnitHeightRel = -100
+			ContainerHeight = ground_level
+			CategoriesNOT = 
+			DockingHeightAbs = ground_level
+			DockingHeightRel = -100
+			Movecost = 10		
+		} EntranceSystem1
+	} Transportation
+
 } BuildingType

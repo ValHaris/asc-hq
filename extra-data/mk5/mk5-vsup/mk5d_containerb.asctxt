@@ -23,7 +23,7 @@ VehicleType {
    FuelConsumption = 0
    Weight = 100
    TerrainAccess ->* VehicleType.heli_terrain 
-   MovementSound = 
+   MovementSound = thump.ogg
    Features += ExternalAmmoTransfer
 
    Weapons { 

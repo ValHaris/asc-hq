@@ -11,8 +11,11 @@ VehicleType {
 
     Armor -= 100
     Jamming = 80
-    Features += no_reactionfire jam_only_own_field ManualSelfDestruct
+    Features += jam_only_own_field
 
-    TerrainAccess.terrain_any = hard_sand soft_sand lowland hillside mountains 
+    TerrainAccess.terrain_any = hard_sand soft_sand lowland mountains
+	
+	Weapons.Weapon0.Punch@MaxRange += 5
+	Weapons.Weapon0.Punch@MinRange += 5
 
 } VehicleType

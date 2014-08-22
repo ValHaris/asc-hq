@@ -25,11 +25,11 @@ VehicleType {
    } Tank
    Movement += 0 0 0 4 0 0 0 0 
    SelfRepairRate = 10
-   Weapons {
-      Number = 1
-      Weapon0 ->* VehicleType.SY_Trooper
-	  Weapon0.name = Stabwaffe
-      Weapon0.Punch@MaxRange += 4
-      Weapon0.Punch@MinRange += 4
-   } Weapons
+	Weapons {
+		Number = 1
+		Weapon0 ->* VehicleType.SY_Trooper
+		Weapon0.name = Stabwaffe
+		Weapon0.Punch@MaxRange += 5
+		Weapon0.Punch@MinRange += 5
+	} Weapons
 } VehicleType

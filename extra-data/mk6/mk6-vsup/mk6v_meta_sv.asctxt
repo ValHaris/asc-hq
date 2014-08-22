@@ -1,43 +1,37 @@
 VehicleType { 
-   Name = META SV
-   ID = 15105
-   parent = 336
+	Name = META SV
+	ID = 15105
+	parent = 15002
    
-   Description = tanker vehicle
-   Infotext = []
-   picture = mk6v_meta_sv.pcx
-   WreckageObject = 410
-   GuideSortHelp = 550 0 0 0 6 0 0 0 0 0
+	Description = tanker vehicle
+	picture = mk6v_meta_sv.pcx
+	WreckageObject = 410
+	GuideSortHelp = 550 0 0 0 6 0 0 0 0 0
+	Infotext = []
 
-   Armor = 750
-   Features += ExternalFuelTransfer ExternalMaterialTransfer ExternalAmmoTransfer
-   Category = heavy_tracked_vehicle
+	Features += ExternalFuelTransfer ExternalMaterialTransfer ExternalAmmoTransfer
+	Category = heavy_tracked_vehicle
 
-   Movement -= 0 0 0 10 0 0 0 0 
-   Tank.Material = 15000
-   Tank.fuel = 25000
+	Movement -= 0 0 0 10 0 0 0 0 
+	Tank.Material = 15000
+	Tank.fuel = 45000
 
-   Weapons { 
-      Initiative = 0
-      Number = 5
-      Weapon0 ->* VehicleType.def_MG
-      Weapon0.Name = Nadel Laser System
-      Weapon0.Type = Laser shootable 
-      Weapon0.Ammo = 3
-      Weapon0.LaserRechargeRate = 1
-      Weapon0.LaserRechargeCost.material = 5
-      Weapon0.LaserRechargeCost.fuel = 40
+	Weapons { 
+		Number = 5
+		Weapon0 ->* VehicleType.NLS1
+		Weapon0.Punch@MaxRange = 60
+		Weapon0.Punch@MinRange = 60
 
-      Weapon1 ->* VehicleType.ServiceGround 
+		Weapon1 ->* VehicleType.ServiceGround 
 
-      Weapon2 ->* VehicleType.AmmoLM 
-      Weapon2.Ammo = 20
+		Weapon2 ->* VehicleType.AmmoLM 
+		Weapon2.Ammo = 20
       
-      Weapon3 ->* VehicleType.AmmoSM 
-      Weapon3.Ammo = 20
+		Weapon3 ->* VehicleType.AmmoSM 
+		Weapon3.Ammo = 20
 
-      Weapon4 ->* VehicleType.AmmoCannon 
-      Weapon4.Ammo = 20
+		Weapon4 ->* VehicleType.AmmoCannon 
+		Weapon4.Ammo = 20
 
-   } Weapons
+	} Weapons
 } VehicleType

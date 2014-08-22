@@ -16,19 +16,19 @@ VehicleType {
 	Weapons {
 		Number = 3 
 		Weapon0 {
-			sound = weapon01_s.oog
+			sound = weapon01_s.ogg
 			targets = low_level_flight medium_level_flight high_level_flight 
 			shotFrom = low_level_flight medium_level_flight high_level_flight
-			Punch@MaxRange = 90
-			Punch@MinRange = 90
+			Punch@MaxRange = 95
+			Punch@MinRange = 95
 		} Weapon0
 		Weapon1 { 
 			Type = laser shootable 
-			sound = weapon01_s.oog
+			sound = weapon01_s.ogg
 			targets = orbit 
 			shotFrom = high_level_flight
-			Punch@MaxRange = 95
-			Punch@MinRange = 95
+			Punch@MaxRange = 100
+			Punch@MinRange = 100
 			LaserRechargeRate = 1
 			LaserRechargeCost {
 				energy = 0
@@ -58,11 +58,11 @@ VehicleType {
 		} Weapon1
 		Weapon2 { 
 			Type = laser shootable 
-			sound = weapon01_s.oog
+			sound = weapon01_s.ogg
 			targets = ground_level floating
 			shotFrom = low_level_flight
-			Punch@MaxRange = 120
-			Punch@MinRange = 120
+			Punch@MaxRange = 125
+			Punch@MinRange = 125
 			LaserRechargeRate = 1
 			LaserRechargeCost {
 				energy = 0

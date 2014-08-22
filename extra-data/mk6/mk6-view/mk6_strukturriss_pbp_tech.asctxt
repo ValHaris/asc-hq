@@ -1,0 +1,10 @@
+technology {
+   Name = RISS
+   infotext = Forschungsprojekt abgeschlossen! RISS verfuegbar!
+   id = 15112
+   RelatedUnitID = 
+   parent = 15000
+   researchpoints *= 17
+   techlevel = 5
+   TechnologiesRequired = 15000,100002,100105,100210 
+} Technology

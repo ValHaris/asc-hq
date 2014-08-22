@@ -1,0 +1,5 @@
+Techadapter {
+   ; Ozelot
+   Name = 629
+   TechnologiesRequired = 629
+} TechAdapter

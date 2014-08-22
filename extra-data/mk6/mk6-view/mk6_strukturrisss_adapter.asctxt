@@ -1,0 +1,5 @@
+Techadapter {
+	Name = 15113
+	;Bezeichnung der verknüpften Technologie: Strukturriss
+	TechnologiesRequired = 15000
+} TechAdapter

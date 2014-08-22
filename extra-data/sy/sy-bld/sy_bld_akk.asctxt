@@ -3,10 +3,10 @@ BuildingType {
    ID = 1301
    parent = 498
 
-   Armor = 500
+   Armor = 350
    View = 25
    Jamming = 20
-   Functions = Solar_Power_Plant 
+   Features = Solar_Power_Plant 
    ExternalLoading = floating ground_level low_level_flight 
    Transportation ->* BuildingType.Esmall
 
@@ -23,7 +23,7 @@ BuildingType {
    ConstructionCost { 
       Energy = 0
       Material = 5500
-      fuel = 5500
+      fuel = 550
    } ConstructionCost
 
    Weather = dry 

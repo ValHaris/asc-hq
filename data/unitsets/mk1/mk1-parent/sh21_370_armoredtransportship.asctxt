@@ -44,8 +44,7 @@ VehicleType {
       Number = 9
       Weapon0 ->* VehicleType.ServiceGround 
 
-      Weapon1 ->* VehicleType.Ship_MG
-      Weapon1.ReactionFireShots = 2
+      Weapon1 ->* VehicleType.MiniGun
       Weapon1.Ammo = 200
 
       Weapon2 ->* VehicleType.AmmoLM 

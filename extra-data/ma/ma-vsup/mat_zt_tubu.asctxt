@@ -1,10 +1,12 @@
 VehicleType { 
-   Name = ZT BuBu
+   Name = ZT TuBu
    parent = 400 401 22997
    ID = 22831
-   
+   SecondaryIds = 22827
+   ; mat_zt_turret
+
    Description = Bunkermontage
-   Infotext = [HitecBunkerbauer]
+   Infotext = [Dieser Zug bietet kompletten Service für alle Arten von Bunkern und teilstationären Geschuetzen.]
    Picture = mat_zt_tubu.png
 
    Armor = 400
@@ -20,14 +22,14 @@ VehicleType {
    FuelConsumption = 25
    Movement = 0 0 0 80 0 0 0 0 
 
-   Transportation ->* VehicleType.TransTurretMed 
+   Transportation ->* VehicleType.TransTurretBig2 
 
    Construction { 
       Buildings = 26
-      Vehicles = 22618 22617 22608 22607 22610
+      Vehicles = 22607 22608 22610 22617 22618
       Objects = 44 2093 2098 2096
       ObjectsRemovable = 
-      ObjectGroupsRemovable = 
+      ObjectGroupsRemovable = 6 7 8 12 13
       UnitConstructionMoveCostPercentage = 90
    } Construction
 
@@ -35,10 +37,9 @@ VehicleType {
    Weapons { 
       Number = 3
       Weapon0 ->* VehicleType.Def_MG
-      Weapon0.Type = machinegun ammo_transfer shootable 
-      Weapon0.Ammo = 40
+      Weapon0.Ammo = 200
       Weapon1 ->* VehicleType.AmmoCannon 
-      Weapon1.Ammo = 100
+      Weapon1.Ammo = 200
       Weapon2 ->* VehicleType.ServiceTurret
     } Weapons
 } VehicleType

@@ -29,7 +29,7 @@ VehicleType {
    Category = medium_aircraft
    MaxSurvivableStorm = 255
    ResourceDrillingRange = 0
-   SelfRepairRate = 15
+   SelfRepairRate = 10
    Weight = 50
    TerrainAccess ->* VehicleType.SY_fighter_ground
    Construction { 

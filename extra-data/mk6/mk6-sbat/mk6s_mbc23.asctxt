@@ -1,25 +1,26 @@
 VehicleType { 
-   Name = MBC 23
-   parent = 356 493
-   ID = 15109
+	Name = MBC 23
+	parent = 356 493 15000
+	ID = 15109
    
-   Description = Lenkwaffenkreuzer
-   picture = mk6s_mbc23.png
-   InfoImage = mk6s_mbc20.jpg
-   GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
+	Description = Lenkwaffenkreuzer
+	picture = mk6s_mbc23.png
+	InfoImage = mk6s_mbc20.jpg
+	GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
 
-   Features = MoveDuringReactionFire sonar jam_only_own_field 
-   Jamming = 65
-   View += 10
-   Transportation ->* VehicleType.notrans
+	Features = MoveDuringReactionFire sonar jam_only_own_field 
+	ConstructionCost ->* VehicleType.cc2000
+	Jamming = 19
+	View += 19
+	Transportation ->* VehicleType.notrans
    
-   Height = floating submerged
-   Movement += 0 27 0 0 0 0 0 0 
-   Tank { 
-      Energy = 0
-      Material = 0
-      fuel = 6000
-   } Tank
+	Height = floating submerged
+	Movement += 0 27 0 0 0 0 0 0 
+	Tank { 
+		Energy = 0
+		Material = 0
+		fuel = 6000
+	} Tank
     HeightChangeMethodNum = 2
     HeightChangeMethod0 {
         movecost = 5
@@ -37,31 +38,31 @@ VehicleType {
     } HeightChangeMethod1
 
    Weapons { 
-      Number = 4
-      Weapon0 ->* VehicleType.UTorp 
-      Weapon0.Ammo = 2
-      Weapon0.ReactionFireShots = 0
+		Number = 4
+		Weapon0 ->* VehicleType.UTorp 
+		Weapon0.Ammo = 4
+		Weapon0.ReactionFireShots = 0
 
-      Weapon1 ->* VehicleType.SOM 
-      Weapon1.ShotFrom = floating
-      Weapon1.MaxRange = 60
-      Weapon1.MinRange = 10
-      Weapon1.Ammo = 10
-      Weapon1.ReactionFireShots = 2
+		Weapon1 ->* VehicleType.SOM 
+		Weapon1.ShotFrom = floating
+		Weapon1.MaxRange = 70
+		Weapon1.MinRange = 10
+		Weapon1.Ammo = 10
+		Weapon1.ReactionFireShots = 2
 
-      Weapon2 ->* VehicleType.SAMH 
-      Weapon2.ShotFrom = submerged floating
-      Weapon2.MaxRange = 50
-      Weapon2.MinRange = 10
-      Weapon2.Ammo = 10
-      Weapon2.ReactionFireShots = 2
+		Weapon2 ->* VehicleType.SAMH 
+		Weapon2.ShotFrom = submerged floating
+		Weapon2.MaxRange = 60
+		Weapon2.MinRange = 10
+		Weapon2.Ammo = 20
+		Weapon2.ReactionFireShots = 2
 
-      Weapon3 ->* VehicleType.smSSM
-      Weapon3.MaxRange = 40
-      Weapon3.Ammo = 10
-      Weapon3.Punch@MaxRange = 80
-      Weapon3.Punch@MinRange = 80
-      Weapon3.ReactionFireShots = 2
+		Weapon3 ->* VehicleType.smSSM
+		Weapon3.MaxRange = 40
+		Weapon3.Ammo = 10
+		Weapon3.Punch@MaxRange = 80
+		Weapon3.Punch@MinRange = 80
+		Weapon3.ReactionFireShots = 2
 
-   } Weapons
+	} Weapons
 } VehicleType

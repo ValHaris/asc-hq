@@ -1,5 +1,0 @@
-Techadapter {
-   Name = 1453
-   ;Bezeichnung der verknüpften Technologie: Elite Mechanic
-   TechnologiesRequired = 1453
-} TechAdapter

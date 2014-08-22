@@ -3,7 +3,7 @@ VehicleType {
    abstract = true
    ID = 1391
    parent = 1394
-   Description =  space ship
+   Description = space ship
    Infotext = []
    Armor = 700
    View = 50
@@ -29,7 +29,7 @@ VehicleType {
    Category = heavy_aircraft
    MaxSurvivableStorm = 255
    ResourceDrillingRange = 0
-   SelfRepairRate = 15
+   SelfRepairRate = 10
    Weight = 200
    TerrainAccess ->* VehicleType.SY_Air
    Construction { 

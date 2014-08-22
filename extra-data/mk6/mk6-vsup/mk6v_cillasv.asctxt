@@ -1,38 +1,34 @@
 VehicleType { 
-   Name = CILLA SV
-   ID = 15103
-   parent = 336
+	Name = CILLA SV
+	ID = 15103
+	parent = 336
    
-   Description = Baufahrzeug
-   Infotext = [Baufahrzeug auf Basis des Cilla-Chassis. Transportiert kleinere Turretsysteme und repariert, versorgt alle stationaeren Einheiten und Kleingeraete.]
-   picture = mk6v_cillaSV.pcx
+	Description = Baufahrzeug
+	Infotext = [Baufahrzeug auf Basis des Cilla-Chassis. Transportiert kleinere Turretsysteme und repariert, versorgt alle stationaeren Einheiten und Kleingeraete.]
+	picture = mk6v_cillaSV.pcx
 ;   WreckageObject = 426
-   GuideSortHelp = 556 0 0 0 6 0 0 0 0 0
+	GuideSortHelp = 556 0 0 0 6 0 0 0 0 0
 
-   Transportation ->* VehicleType.TransTurretMed 
-   Armor += 100
-   Features += construct_vehicles construct_specific_buildings NoProductionCustomization ExternalRepair Repair_Facility  ExternalMaterialTransfer ExternalFuelTransfer ExternalAmmoTransfer
+	Transportation ->* VehicleType.TransTurretMed 
+	Armor += 100
+	Features += construct_vehicles construct_specific_buildings NoProductionCustomization ExternalRepair Repair_Facility  ExternalMaterialTransfer ExternalFuelTransfer ExternalAmmoTransfer
 
-   Tank { 
-      Material = 20000
-      fuel = 20000
-   } Tank
-   TerrainAccess ->* VehicleType.offroad 
+	Tank { 
+		Material = 20000
+		fuel = 20000
+	} Tank
+	TerrainAccess ->* VehicleType.offroad 
 
-   Construction {
-      Buildings = 2 4 6 30 32 39 15008
-      Vehicles = 15243 
-;							   LaZa JuTur
-      Objects = 1 3 10 30 45 181 2153 1000 998 997 2098 44 2658 15003
-      ObjectsRemovable = 2658
-      ObjectGroupsRemovable = 1 2 3 4 5 6 7 8 9 10 11 12 13 14 21
-      UnitConstructionMoveCostPercentage = 90
-   } Construction
+	Construction ->* VehicleType.constr_building
+	Construction.Vehicles = 15243 
+	Construction.Objects = 1 3 10 30 45 181 2153 1000 998 997 2098 44 2658 15003
+	Construction.ObjectsRemovable = 2658
+	Construction.ObjectGroupsRemovable = 1 2 3 4 5 6 7 8 9 10 11 12 13 14 21
 
-   Weapons { 
-      Number = 2
-      Weapon0 ->* VehicleType.ServiceTurret
-      Weapon1 ->* VehicleType.AmmoLM
-      Weapon1.Ammo = 20
-   } Weapons
+	Weapons { 
+		Number = 2
+		Weapon0 ->* VehicleType.ServiceTurret
+		Weapon1 ->* VehicleType.AmmoLM
+		Weapon1.Ammo = 20
+	} Weapons
 } VehicleType

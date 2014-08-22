@@ -22,13 +22,15 @@ ca. 3,5m lang, 2m breit, 1,75 hoch
    SelfRepairRate = 10
    MovementSound = trampling.ogg
 
-   Weapons { 
-      Number = 1
-      Weapon0 ->* VehicleType.SY_Trooper 
-      Weapon0.MinRange = 10
-      Weapon0.MaxRange = 30
-      Weapon0.Punch@MinRange += 20
-      Weapon0.WeaponEffectiveness.trooper = 80
-      Weapon0.Name = Saeurewerfer
-   } Weapons
+	Weapons { 
+		Number = 1
+		Weapon0 ->* VehicleType.SY_Trooper 
+		Weapon0.MinRange = 10
+		Weapon0.MaxRange = 30
+		Weapon0.Punch@MinRange += 20
+		Weapon0.LaserRechargeCost.material = 40
+		Weapon0.LaserRechargeCost.fuel = 130
+		Weapon0.WeaponEffectiveness.trooper = 80
+		Weapon0.Name = Saeurewerfer
+	} Weapons
 } VehicleType

@@ -10,7 +10,8 @@ VehicleType {
 
    Category = building|turret|object
    Features += no_midair_refuel moveduringreactionfire
-   Armor = 600
+   SelfRepairRate = 10
+   Armor = 550
    Weight = 100
    View = 50
    Jamming = 29

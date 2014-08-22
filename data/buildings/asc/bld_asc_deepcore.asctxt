@@ -1,76 +1,74 @@
 BuildingType { 
-   Name = Deep Core
-   ID = 38
-   parent = 499
+	Name = Deep Core
+	ID = 38
+	parent = 499
+	Infotext = []
 
-   Infotext = []
+	Features = AutoHarvestObjects 
+	Armor = 600
+	AutoHarvestObjects {
+		Objects = 
+		ObjectGroups = 15
+		Range = 20
+		MaxFieldsPerTurn = 15
+	} AutoHarvestObjects
+	
+	ConstructionCost { 
+		Energy = 0
+		Material = 20000
+		fuel = 2000
+	} ConstructionCost
+	Weather = dry
+	Fields = A1
+	UseGFXpics = false
+	Pictures { 
+		dry = bld_asc_deepcore.png
+	} Pictures
+	Entry = A1
+	RubbleObjects = false
 
-   Weather = dry
-   Fields = A1
-   UseGFXpics = false
-   Pictures { 
-      dry = bld_asc_deepcore.png
-   } Pictures
-   Entry = A1
-   RubbleObjects = false
+	Height = submerged 
+	TerrainAccess { 
+		terrain_any = water 
+		terrain_all = 
+		terrain_not = railroad large_rocks road
+		terrain_kill = lava deep_water river shallow_water very_shallow_water lowland hard_Sand soft_sand
+	} TerrainAccess
 
-   TerrainAccess { 
-      terrain_any = water 
-      terrain_all = 
-      terrain_not = railroad large_rocks road
-      terrain_kill = lava deep_water river shallow_water very_shallow_water lowland hard_Sand soft_sand
-   } TerrainAccess
+	Transportation { 
+		MaxLoadableUnits = 1
+		MaxLoadableUnitSize = 15
+		MaxLoadableMass = 15
+		CategoriesNOT = 
+		EntranceSystemNum = 1
+		EntranceSystem0 {
+			Mode = In out docking
+			UnitHeightAbs = submerged 
+			UnitHeightRel = -100
+			ContainerHeight = submerged
+			CategoriesNOT = 
+			DockingHeightAbs = submerged 
+			DockingHeightRel = -100 
+			DisableAttack = false
+		} EntranceSystem0
+	} Transportation
 
-   ConstructionCost { 
-      Energy = 0
-      Material = 15000
-      fuel = 15000
-   } ConstructionCost
+	MaxResourceProduction { 
+		Energy = -200
+		Material = 0
+		fuel = 0
+	} MaxResourceProduction
+	defaultProduction {
+		energy = -200
+		material = 0
+		fuel = 0
+	} defaultProduction
 
-   Features = AutoHarvestObjects 
-   Height = submerged 
-   
-   AutoHarvestObjects {
-      Objects = 
-      ObjectGroups = 15
-      Range = 20
-      MaxFieldsPerTurn = 15
-   } AutoHarvestObjects
-
-   Transportation { 
-      MaxLoadableUnits = 1
-      MaxLoadableUnitSize = 15
-      MaxLoadableMass = 15
-      CategoriesNOT = 
-      EntranceSystemNum = 1
-      EntranceSystem0 {
-        Mode = In out docking
-        UnitHeightAbs = submerged 
-        UnitHeightRel = -100
-        ContainerHeight = submerged
-        CategoriesNOT = 
-        DockingHeightAbs = submerged 
-        DockingHeightRel = -100 
-        DisableAttack = false
-      } EntranceSystem0
-   } Transportation
-
-   MaxResourceProduction { 
-      Energy = -200
-      Material = 0
-      fuel = 0
-   } MaxResourceProduction
-   defaultProduction {
-      energy = -200
-      material = 0
-      fuel = 0
-   } defaultProduction
-
-   StorageCapacity { 
-      ASCmode { 
-         Energy = 0
-         Material = 7000
-         fuel = 1000
-      } ASCmode
-   } StorageCapacity
+	StorageCapacity { 
+		ASCmode { 
+			Energy = 0
+			Material = 7000
+			fuel = 1000
+		} ASCmode
+	} StorageCapacity
 } BuildingType

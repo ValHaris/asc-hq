@@ -1,0 +1,10 @@
+technology {
+   Name = F.E.R.M
+   infotext = Forschungsprojekt abgeschlossen! F.E.R.M verfügbar!
+   id = 15114
+   RelatedUnitID = 15114
+   parent = 15000
+   researchpoints *= 17
+   techlevel = 5
+   TechnologiesRequired = 15000,100001,100105,100210,100313,100315
+} Technology

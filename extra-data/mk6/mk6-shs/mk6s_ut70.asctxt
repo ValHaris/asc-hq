@@ -17,9 +17,9 @@ VehicleType {
    TerrainAccess ->* VehicleType.mediumship_terrain 
 
    Weapons {
-      Number = 7
+      Number = 8
       Weapon1 ->* VehicleType.DLS
-      Weapon5 ->* VehicleType.AmmoBomb 
-      Weapon5.Ammo = 100
+      Weapon7 ->* VehicleType.AmmoCM 
+      Weapon7.Ammo = 20
    } Weapons
 } VehicleType

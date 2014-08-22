@@ -23,13 +23,17 @@ BuildingType {
 ; -----   N O T   D E F I N A T I O N S   ------------------------------------------------------------------------
 ; ----------------------------------------------------------------------------------------------------------------
 
-   cargo_trooper_only {
-      CategoriesNOT = medium_wheeled_vehicle heavy_wheeled_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle light_aircraft medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship building|turret|object helicopter hoovercraft default
-   } cargo_trooper_only
+	cargo_trooper_only {
+		CategoriesNOT = medium_wheeled_vehicle heavy_wheeled_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle light_aircraft medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship building|turret|object helicopter hoovercraft default
+	} cargo_trooper_only
 
-   cargo_trtrain {
-      CategoriesNOT = hoovercraft medium_ship heavy_ship rail_vehicle medium_aircraft heavy_aircraft
-   } cargo_trtrain
+	cargo_turret_only {
+		CategoriesNOT = trooper light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle light_aircraft medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship helicopter hoovercraft
+	} cargo_turret_only
+
+	cargo_trtrain {
+		CategoriesNOT = hoovercraft medium_ship heavy_ship rail_vehicle medium_aircraft heavy_aircraft
+	} cargo_trtrain
  
 ; ----------------------------------------------------------------------------------------------------------------
 ; -----   C A R R I E R   L A N D I N G   ------------------------------------------------------------------------
@@ -128,5 +132,10 @@ BuildingType {
         DockingHeightAbs = orbit 
         DockingHeightRel = -100 
    } OrbIOD
+
+	TurretOut ->* BuildingType.GrIO
+	TurretOut.CategoriesNOT -> BuildingType.cargo_turret_only.CategoriesNOT
+	TurretOut.MoveCost = 10 
+
 
 } BuildingType

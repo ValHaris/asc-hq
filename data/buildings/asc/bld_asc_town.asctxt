@@ -1,50 +1,47 @@
 BuildingType { 
-   Name = Town
-   ID = 24
-   parent = 499
+	Name = Town
+	ID = 24
+	parent = 499
 
-   Armor = 100000
-   View = 50
-   Features = matter_converter
-   notRemovable = true
-   MaxResearch = 10
-   NominalResearch = 10
+	Armor = 100000
+	View = 50
+	Features = matter_converter ammo_production
+	notRemovable = true
+	MaxResearch = 10
+	NominalResearch = 10
 
-   ConstructionStages = 1
-   Weather = dry 
-   Fields = A1 
-   UseGFXpics = false
-   Pictures { 
-      dry = bld_ASC_town.png
-   } Pictures
-   RubbleObjects = false
-;   rubble {
-;      A1 = 78
-;   } rubble
-   Entry = A1
+	ConstructionStages = 1
+	Weather = dry 
+	Fields = A1 
+	UseGFXpics = false
+	Pictures { 
+		dry = bld_ASC_town.png
+	} Pictures
+	RubbleObjects = false
+	Entry = A1
 
-   TerrainAccess { 
-      terrain_kill = water deep_water river
-   } TerrainAccess
+	TerrainAccess { 
+		terrain_kill = water deep_water river
+	} TerrainAccess
 
-   MaxResourceProduction { 
-      Energy = 400
-      Material = 400
-      fuel = 400
-   } MaxResourceProduction
+	MaxResourceProduction { 
+		Energy = 300
+		Material = 300
+		fuel = 300
+	} MaxResourceProduction
 
-   defaultProduction {
-      energy = 400
-      material = 400
-      fuel = 400
-   } defaultProduction
+	defaultProduction {
+		energy = 300
+		material = 300
+		fuel = 300
+	} defaultProduction
 
-   StorageCapacity { 
-      ASCmode { 
-         Energy = 1000
-         Material = 2000
-         fuel = 2000
-      } ASCmode
-   } StorageCapacity
+	StorageCapacity { 
+		ASCmode { 
+			Energy = 1000
+			Material = 2000
+			fuel = 2000
+		} ASCmode
+	} StorageCapacity
 
 } BuildingType

@@ -64,8 +64,8 @@ VehicleType {
       Height = ground_level
       consumption { 
          Energy = 0
-         Material = 300
-         fuel = 300
+         Material = 500
+         fuel = 1000
       } consumption
       terrain_any = Road Lowland Hard_sand Soft_sand mountains high_mountains
       terrain_all = 
