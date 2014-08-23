@@ -1,30 +1,30 @@
 VehicleType { 
-   Name = Container A
-   ID = 1418
-   parent = 400 401 402 423
+	Name = Container A
+	ID = 1418
+	parent = 400 401 402 423
 
-   Description = Transport Container
-   Picture = mk5d_containerA.pcx
-   InfoImage = mk5d_container.jpg
-   Infotext = [Der Container des Typs A speichert Material und Treibstoff.
-   InfoImage = Wikipedia ISO-Container]
+	Description = Transport Container
+	Picture = mk5d_containerA.pcx
+	InfoImage = mk5d_container.jpg
+	Infotext = [Der Container des Typs A speichert Material und Treibstoff.
+	InfoImage = Wikipedia ISO-Container]
 
-   Armor = 400
-   Weight = 100
-   Features += ExternalFuelTransfer ExternalMaterialTransfer
+	Armor = 400
+	Weight = 100
+	Features += ExternalFuelTransfer ExternalMaterialTransfer
 
-   Tank { 
-      Energy = 0
-      Material = 50000
-      fuel = 50000
-   } Tank
-   FuelConsumption = 0
-   TerrainAccess ->* VehicleType.heli_terrain
-   MovementSound = 
+	Tank { 
+		Energy = 0
+		Material = 70000
+		fuel = 70000
+	} Tank
+	FuelConsumption = 0
+	TerrainAccess ->* VehicleType.heli_terrain
+	MovementSound = thump.ogg
 
-   Weapons { 
-      Number = 1
-      Weapon0 ->* VehicleType.ServiceGround 
+	Weapons { 
+		Number = 1
+		Weapon0 ->* VehicleType.ServiceGround 
 
-   } Weapons
+	} Weapons
 } VehicleType

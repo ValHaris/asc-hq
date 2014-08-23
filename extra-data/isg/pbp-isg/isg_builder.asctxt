@@ -8,11 +8,12 @@ VehicleType {
     Infotext = [#crt#Planetenransporter#crt# #crt#
     Der BUILDER ist Eigentum der Interstellaren Gilde. Es darf nur zu Transportzwecken auf dem zugewiesenen Planeten eingesetzt werden. Offensiver Einsatz ist untersagt. Ersatz wird nur bei Naturkatastrophen gestellt.]
 
-    Features = self_repairing construct_specific_buildings no_midair_refuel icebreaker Repair_Facility ExternalMaterialTransfer ExternalFuelTransfer ExternalRepair
+    Features = self_repairing construct_specific_buildings no_midair_refuel icebreaker Repair_Facility ExternalMaterialTransfer ExternalFuelTransfer ExternalRepair Vehicle_production
+	CategoriesProduceable = building|turret|object default
     Category = heavy_aircraft
     Armor = 700
     View = 0
-    Weight = 3000
+    Weight = 6000
     Jamming = 0
     MaxSurvivableStorm = 255
     ResourceDrillingRange = 0
@@ -35,7 +36,7 @@ VehicleType {
         Height = medium_level_flight
         MaxDistance = 3000
         consumption {
-            Energie = 0
+            Energy = 0
             Material = 1000
             Fuel = 4000
         } consumption
@@ -67,6 +68,9 @@ VehicleType {
         Objects = 12005 181 2108 2105 2153 2092 2095 2094 2654
         ObjectsRemovable = 12005 2095 2094 2092 992 2658
         ObjectGroupsRemovable = 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 21
+		ProductionEfficiency = [0.000000 0.000000 2.000000
+								0.000000 1.000000 0.000000
+								0.000000 0.000000 1.000000] 
     } Construction
 
     WaitForAttack = false

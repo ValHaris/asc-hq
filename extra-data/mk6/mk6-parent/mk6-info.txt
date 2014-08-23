@@ -1,6 +1,7 @@
 MK6 teccnols unit set
 Grafiken: GAMER & SmokinMan
 Spezifikationen: GAMER
+nextSpecialID 15116
 
 **************************
 
@@ -15,6 +16,7 @@ ID 15007 airport2
 ID 15008 Radar
 ID 15009 Jamming
 ID 15015 Solarplant
+ID 15030 TECC Hangar
 
 Objekte
 ID 15001 Leuchtfeuer (permanent)
@@ -34,6 +36,8 @@ ID 15216 Meo
  ( 15241 Evi )
  ( 15306 Shadow )
 ID 15108 Jumro
+ID 15114 F.E.R.M
+ID 15115 HACK
 
 --Tanks--
 ID 15290 CillaTE
@@ -41,6 +45,7 @@ ID 15292 DevoTE
 ID 15293 Meta TE
 ID 15337 Klotz
 ID 15291 Meta TAG
+ID 15110 DevoJ
 
 --FastAttack & Transport--
 
@@ -51,6 +56,7 @@ ID 15242 Devo R
 ID 15305 Deltaseacher
 ID 15244 Terminal
 ID 15249 EMPM
+ID 15112 Strukturriss (+15113)
 
 --Jamming--
 ID 15306 Shadow

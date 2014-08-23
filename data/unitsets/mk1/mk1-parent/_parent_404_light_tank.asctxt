@@ -1,43 +1,42 @@
 VehicleType { 
-   Name = light tank
-   abstract = true
-   ID = 404
-   parent = 402
+	Name = light tank
+	abstract = true
+	ID = 404
+	parent = 402
 
-   Description = light tank
-   Infotext = 
-   WreckageObject = 497 496
+	Description = light tank
+	Infotext = 
+	WreckageObject = 497 496
 
-   Features = leaves_tracks 
-   Category = light_tracked_vehicle
-   Armor = 400
-   Weight = 40
-   View = 30
-   Jamming = 0
-   MaxSurvivableStorm = 255
-   ResourceDrillingRange = 0
-   SelfRepairRate = 0
-   minFieldRepairDamage = 10
+	Features = leaves_tracks 
+	Category = light_tracked_vehicle
+	Armor = 500
+	Weight = 50
+	View = 30
+	Jamming = 0
+	MaxSurvivableStorm = 255
+	ResourceDrillingRange = 0
+	SelfRepairRate = 0
+	minFieldRepairDamage = 10
 
-   Height = ground_level 
-   Tank { 
-      Energy = 0
-      Material = 0
-      fuel = 1000
-   } Tank
-   FuelConsumption = 12
-   Movement = 0 0 0 65 0 0 0 0 
-   TerrainAccess ->* VehicleType.lt_terrain 
+	Height = ground_level 
+	Tank { 
+		Energy = 0
+		Material = 0
+		fuel = 1000
+	} Tank
+	FuelConsumption = 12
+	Movement = 0 0 0 88 0 0 0 0 
+	TerrainAccess ->* VehicleType.lt_terrain 
 
-   Construction { 
-      Buildings = 
-      Vehicles = 
-      Objects = 
-   } Construction
+	Construction { 
+		Buildings = 
+		Vehicles = 
+		Objects = 
+	} Construction
 
-   WaitForAttack = false
-   Weapons { 
-      Initiative = 0
-      Number = 0
-   } Weapons
+	WaitForAttack = false
+	Weapons { 
+		Number = 0
+	} Weapons
 } VehicleType

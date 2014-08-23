@@ -1,22 +1,22 @@
 VehicleType { 
-   Name = DEBUGG
-   ID = 15304
-   parent = 304 15000
+	Name = DEBUGG
+	ID = 15304
+	parent = 304 15000
 
-   Description = main rocket bunker
-   Infotext = []
-   Picture = mk6b_debugg.png
+	Description = main rocket bunker
+	Picture = mk6b_debugg.png
 ;   InfoImage = mk1b_silo.jpg
-   GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
-   
-   View = 0
-   Tank.Fuel = 10000
-   Tank.Material = 5000
-   Features += ManualSelfDestruct
-   Jumpdrive ->* VehicleType.TeccnolsJump3
+	GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
+	Infotext = []
 
-   Weapons {
-      Weapon0.MaxRange = 180
-      Weapon1 ->* VehicleType.NLS
-   } Weapons
+	View = 0
+
+	Tank.Fuel = 10000
+	Tank.Material = 5000
+	Jumpdrive ->* VehicleType.TeccnolsJump3
+
+	Weapons {
+		Weapon0.MaxRange -= 90
+		Weapon1 ->* VehicleType.NLS
+	} Weapons
 } VehicleType

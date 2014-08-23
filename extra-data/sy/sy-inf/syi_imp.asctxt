@@ -19,7 +19,7 @@ VehicleType {
 
    
     ; Liks, Bughole, Mine , Fuel, Beton
-    Construction.Buildings = 1301 1303 1311
+    Construction.Buildings = 1301 1303 1311 1314
 	Construction.Objects = 1300 1305
 	Construction.ObjectsRemouvable = 1300
     Construction.ObjectGroupsRemovable = 2 3 4 6 7 8

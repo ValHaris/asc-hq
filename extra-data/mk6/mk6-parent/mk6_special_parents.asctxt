@@ -1,147 +1,149 @@
 VehicleType { 
    Abstract = true
    ID = 15000
+   parent = 400
 
 
 
 ;--- Waffen ---
-   TeccEMP { 
-         Name = EMP H
-         Type = Laser shootable 
-         targets =  submerged floating ground_level low_level_flight
-         shotFrom = submerged floating ground_level low_level_flight
-         MaxRange = 10
-         MinRange = 10
-         Ammo = 1
-	 ReactionFireShots = 0
-	 LaserRechargeRate = 1
-         LaserRechargeCost {
-            energy = 0
-            material = 0
-            fuel = 500
-         } LaserRechargeCost
-         HitAccuracy { 
-            d6 = 0
-            d5 = 0
-            d4 = 0
-            d3 = 0
-            d2 = 0
-            d1 = 50
-            0 = 100
-            u1 = 50
-            u2 = 0
-            u3 = 0
-            u4 = 0
-            u5 = 0
-            u6 = 0
-         } HitAccuracy
-      WeaponEffectiveness {      
-         default = 100
-         device = 100
-         trooper = 0
-         rail_vehicle = 100
-         building|turret|object = 50
-         hoovercraft = 100
-         helicopter = 100
+	TeccEMP { 
+		Name = EMP H
+		sound = laser_g.ogg
+		Type = Laser shootable 
+		targets = submerged floating ground_level low_level_flight
+		shotFrom = submerged floating ground_level low_level_flight
+		MaxRange = 10
+		MinRange = 10
+		Ammo = 1
+		ReactionFireShots = 0
+		LaserRechargeRate = 1
+		LaserRechargeCost {
+			energy = 0
+			material = 0
+			fuel = 500
+		} LaserRechargeCost
+		HitAccuracy { 
+			d6 = 0
+			d5 = 0
+			d4 = 0
+			d3 = 0
+			d2 = 0
+			d1 = 50
+			0 = 100
+			u1 = 50
+			u2 = 0
+			u3 = 0
+			u4 = 0
+			u5 = 0
+			u6 = 0
+		} HitAccuracy
+		WeaponEffectiveness {      
+			default = 100
+			device = 100
+			trooper = 0
+			rail_vehicle = 100
+			building|turret|object = 50
+			hoovercraft = 100
+			helicopter = 100
 
-         light_tracked_vehicle = 100
-         medium_tracked_vehicle = 100
-         heavy_tracked_vehicle = 100
+			light_tracked_vehicle = 100
+			medium_tracked_vehicle = 100
+			heavy_tracked_vehicle = 100
 
-         light_wheeled_vehicle = 100
-         medium_wheeled_vehicle = 100
-         heavy_wheeled_vehicle = 100
+			light_wheeled_vehicle = 100
+			medium_wheeled_vehicle = 100
+			heavy_wheeled_vehicle = 100
          
-         light_ship = 100
-         medium_ship  = 100
-         heavy_ship = 100
+			light_ship = 100
+			medium_ship  = 100
+			heavy_ship = 100
 
-         light_aircraft = 100
-         medium_aircraft  = 100
-         heavy_aircraft = 100
-      } WeaponEffectiveness
-   } TeccEMP
+			light_aircraft = 100
+			medium_aircraft  = 100
+			heavy_aircraft = 100
+		} WeaponEffectiveness
+	} TeccEMP
 
-   TeccEMP2 ->* vehicleType.TeccEMP
-   TeccEMP2.Name = EMP II 
-   TeccEMP2.targets = submerged floating ground_level low_level_flight medium_level_flight
-   TeccEMP2.shotFrom = submerged floating ground_level
-   TeccEMP2.HitAccuracy.d1 = 80
-   TeccEMP2.HitAccuracy.0 = 100
-   TeccEMP2.HitAccuracy.u1 = 80
-   TeccEMP2.HitAccuracy.u2 = 60
+	TeccEMP2 ->* vehicleType.TeccEMP
+	TeccEMP2.Name = EMP II 
+	TeccEMP2.targets = submerged floating ground_level low_level_flight medium_level_flight
+	TeccEMP2.shotFrom = submerged floating ground_level
+	TeccEMP2.HitAccuracy.d1 = 80
+	TeccEMP2.HitAccuracy.0 = 100
+	TeccEMP2.HitAccuracy.u1 = 80
+	TeccEMP2.HitAccuracy.u2 = 60
 
-   TeccEMP2Air ->* vehicleType.TeccEMP
-   TeccEMP2Air.Name = EMP V 
-   TeccEMP2Air.targets =  low_level_flight medium_level_flight
-   TeccEMP2Air.shotFrom = submerged floating ground_level low_level_flight medium_level_flight
-   TeccEMP2Air.HitAccuracy.d1 = 0
-   TeccEMP2Air.HitAccuracy.0 = 0
-   TeccEMP2Air.HitAccuracy.u1 = 100
-   TeccEMP2Air.HitAccuracy.u2 = 100
-   TeccEMP2Air.HitAccuracy.u3 = 50
+	TeccEMP2Air ->* vehicleType.TeccEMP
+	TeccEMP2Air.Name = EMP V 
+	TeccEMP2Air.targets =  low_level_flight medium_level_flight
+	TeccEMP2Air.shotFrom = submerged floating ground_level low_level_flight medium_level_flight
+	TeccEMP2Air.HitAccuracy.d1 = 0
+	TeccEMP2Air.HitAccuracy.0 = 0
+	TeccEMP2Air.HitAccuracy.u1 = 100
+	TeccEMP2Air.HitAccuracy.u2 = 100
+	TeccEMP2Air.HitAccuracy.u3 = 50
 
-   TeccEMPAir ->* vehicleType.TeccEMP
-   TeccEMPAir.Name = EMP D 
-   TeccEMPAir.targets = submerged floating ground_level low_level_flight medium_level_flight high_level_flight
-   TeccEMPAir.shotFrom = submerged floating ground_level low_level_flight medium_level_flight high_level_flight
-   TeccEMPAir.HitAccuracy.d1 = 90
-   TeccEMPAir.HitAccuracy.0 = 100
-   TeccEMPAir.HitAccuracy.u1 = 90
+	TeccEMPAir ->* vehicleType.TeccEMP
+	TeccEMPAir.Name = EMP D 
+	TeccEMPAir.targets = submerged floating ground_level low_level_flight medium_level_flight high_level_flight
+	TeccEMPAir.shotFrom = submerged floating ground_level low_level_flight medium_level_flight high_level_flight
+	TeccEMPAir.HitAccuracy.d1 = 90
+	TeccEMPAir.HitAccuracy.0 = 100
+	TeccEMPAir.HitAccuracy.u1 = 90
 
-   AGLS { 
-         Type = Laser shootable
-         Sound = weapon10_s.ogg 
-         targets = floating ground_level
-         shotFrom = ground_level low_level_flight medium_level_flight high_level_flight
-         MaxRange = 30
-         MinRange = 10
-         Ammo = 2
-	 LaserRechargeRate = 1
-         LaserRechargeCost {
-            energy = 0
-            material = 100
-            fuel = 50
-         } LaserRechargeCost
-         HitAccuracy { 
-            d6 = 0
-            d5 = 0
-            d4 = 0
-            d3 = 60
-            d2 = 80
-            d1 = 100
-            0 = 100
-            u1 = 0
-            u2 = 0
-            u3 = 0
-            u4 = 0
-            u5 = 0
-            u6 = 0
-         } HitAccuracy
-      WeaponEffectiveness {      
-         trooper = 100
-         rail_vehicle = 100
-         building|turret|object = 100
-         hoovercraft = 100
-         helicopter = 100
+	AGLS { 
+		Type = Laser shootable
+		Sound = weapon10_s.ogg 
+		targets = floating ground_level
+		shotFrom = ground_level low_level_flight medium_level_flight high_level_flight
+		MaxRange = 30
+		MinRange = 10
+		Ammo = 2
+		LaserRechargeRate = 1
+		LaserRechargeCost {
+			energy = 0
+			material = 100
+			fuel = 50
+		} LaserRechargeCost
+		HitAccuracy { 
+			d6 = 0
+			d5 = 0
+			d4 = 0
+			d3 = 60
+			d2 = 80
+			d1 = 100
+			0 = 100
+			u1 = 0
+			u2 = 0
+			u3 = 0
+			u4 = 0
+			u5 = 0
+			u6 = 0
+		} HitAccuracy
+		WeaponEffectiveness {      
+			trooper = 100
+			rail_vehicle = 100
+			building|turret|object = 100
+			hoovercraft = 100
+			helicopter = 100
 
-         light_tracked_vehicle = 100
-         medium_tracked_vehicle = 100
-         heavy_tracked_vehicle = 100
+			light_tracked_vehicle = 100
+			medium_tracked_vehicle = 100
+			heavy_tracked_vehicle = 100
 
-         light_wheeled_vehicle = 100
-         medium_wheeled_vehicle = 100
-         heavy_wheeled_vehicle = 100
+			light_wheeled_vehicle = 100
+			medium_wheeled_vehicle = 100
+			heavy_wheeled_vehicle = 100
          
-         light_ship = 100
-         medium_ship  = 100
-         heavy_ship = 100
+			light_ship = 100
+			medium_ship  = 100
+			heavy_ship = 100
 
-         light_aircraft = 100
-         medium_aircraft  = 100
-         heavy_aircraft = 100
-      } WeaponEffectiveness
-   } AGLS
+			light_aircraft = 100
+			medium_aircraft  = 100
+			heavy_aircraft = 100
+		} WeaponEffectiveness
+	} AGLS
 
    OGLS { 
          Type = Laser shootable
@@ -305,18 +307,36 @@ Plasmabomb {
       } WeaponEffectiveness
    } Plasmabomb
 
-   NLS { 
-         Name = Nadel Laser System
-         Sound = weapon10_s.ogg
-         Type = Laser shootable 
-         Ammo = 3
-	 LaserRechargeRate = 2
-         LaserRechargeCost {
-            energy = 0
-            material = 5
-            fuel = 40
-         } LaserRechargeCost
-   } NLS
+	NLS { 
+		Name = Nadel Laser
+		Sound = weapon10_s.ogg
+		Type = Laser shootable 
+		Ammo = 3
+		LaserRechargeRate = 2
+		LaserRechargeCost {
+			energy = 0
+			material = 5
+			fuel = 40
+		} LaserRechargeCost
+	} NLS
+
+	NLS1 ->* VehicleType.MGlow 
+	NLS1.Name = NLS Typ1
+	NLS1.Sound = weapon10_s.ogg
+	NLS1.Type = Laser shootable 
+	NLS1.Ammo = 3
+	NLS1.LaserRechargeRate = 2
+	NLS1.LaserRechargeCost.material = 5
+	NLS1.LaserRechargeCost.fuel = 40
+
+	NLS2 ->* VehicleType.MGmed 
+	NLS2.Name = NLS Typ2
+	NLS2.Sound = weapon10_s.ogg
+	NLS2.Type = Laser shootable 
+	NLS2.Ammo = 3
+	NLS2.LaserRechargeRate = 2
+	NLS2.LaserRechargeCost.material = 5
+	NLS2.LaserRechargeCost.fuel = 40
 
    TDW { 
          Name = Trooper Defence Weapon
@@ -377,179 +397,180 @@ Plasmabomb {
       } WeaponEffectiveness
    } TDW
 
-   DLS { 
-         Name = Defence Laser System
-         Sound = weapon10_s.ogg
-         Type = Laser shootable 
-         targets = floating ground_level low_level_flight medium_level_flight
-         shotFrom = floating ground_level
-	 ReactionFireShots = 2
-         Punch@MaxRange = 80
-         Punch@MinRange = 95
-         MaxRange = 20
-         MinRange = 10
-         Ammo = 4
-	 LaserRechargeRate = 1
-         LaserRechargeCost {
-            energy = 0
-            material = 20
-            fuel = 100
-         } LaserRechargeCost
-         HitAccuracy { 
-            d6 = 0
-            d5 = 0
-            d4 = 0
-            d3 = 0
-            d2 = 0
-            d1 = 0
-            0 = 100
-            u1 = 90
-            u2 = 85
-            u3 = 0
-            u4 = 0
-            u5 = 0
-            u6 = 0
-         } HitAccuracy
-      WeaponEffectiveness {      
-         trooper = 100
-         rail_vehicle = 100
-         building|turret|object = 100
-         hoovercraft = 100
-         helicopter = 100
+	DLS { 
+		Name = Defence Laser System
+		Sound = weapon10_s.ogg
+		Type = Laser shootable 
+		targets = floating ground_level low_level_flight medium_level_flight
+		shotFrom = floating ground_level
+		ReactionFireShots = 2
+		Punch@MaxRange = 85
+		Punch@MinRange = 95
+		MaxRange = 20
+		MinRange = 10
+		Ammo = 4
+		LaserRechargeRate = 1
+		LaserRechargeCost {
+			energy = 0
+			material = 20
+			fuel = 100
+		} LaserRechargeCost
+		HitAccuracy { 
+			d6 = 0
+			d5 = 0
+			d4 = 0
+			d3 = 0
+			d2 = 0
+			d1 = 0
+			0 = 100
+			u1 = 90
+			u2 = 85
+			u3 = 0
+			u4 = 0
+			u5 = 0
+			u6 = 0
+		} HitAccuracy
+		WeaponEffectiveness {      
+			trooper = 100
+			rail_vehicle = 100
+			building|turret|object = 100
+			hoovercraft = 100
+			helicopter = 100
 
-         light_tracked_vehicle = 100
-         medium_tracked_vehicle = 100
-         heavy_tracked_vehicle = 100
+			light_tracked_vehicle = 100
+			medium_tracked_vehicle = 100
+			heavy_tracked_vehicle = 100
 
-         light_wheeled_vehicle = 100
-         medium_wheeled_vehicle = 100
-         heavy_wheeled_vehicle = 100
+			light_wheeled_vehicle = 100
+			medium_wheeled_vehicle = 100
+			heavy_wheeled_vehicle = 100
          
-         light_ship = 100
-         medium_ship  = 100
-         heavy_ship = 100
+			light_ship = 100
+			medium_ship  = 100
+			heavy_ship = 100
 
-         light_aircraft = 100
-         medium_aircraft  = 100
-         heavy_aircraft = 100
-      } WeaponEffectiveness
-   } DLS
+			light_aircraft = 100
+			medium_aircraft  = 100
+			heavy_aircraft = 100
+		} WeaponEffectiveness
+	} DLS
 
-   GALS { 
-         Name = Ground-Air Laser System
-         Sound = weapon10_s.ogg
-         Type = Laser shootable 
-         targets = low_level_flight medium_level_flight high_level_flight
-         shotFrom = floating ground_level
-	 ReactionFireShots = 2
-         Punch@MaxRange = 75
-         Punch@MinRange = 80
-         MaxRange = 40
-         MinRange = 10
-         Ammo = 6
-	 LaserRechargeRate = 1
-         LaserRechargeCost {
-            energy = 0
-            material = 30
-            fuel = 200
-         } LaserRechargeCost
-         HitAccuracy { 
-            d6 = 0
-            d5 = 0
-            d4 = 0
-            d3 = 0
-            d2 = 0
-            d1 = 0
-            0 = 0
-            u1 = 100
-            u2 = 95
-            u3 = 90
-            u4 = 0
-            u5 = 0
-            u6 = 0
-         } HitAccuracy
-      WeaponEffectiveness {      
-         trooper = 100
-         rail_vehicle = 200
-         building|turret|object = 200
-         hoovercraft = 200
-         helicopter = 100
+	; ground-air laser System
+	GALS { 
+		Name = Ground-Air Laser System
+		Sound = weapon10_s.ogg
+		Type = Laser shootable 
+		targets = low_level_flight medium_level_flight high_level_flight
+		shotFrom = floating ground_level
+		ReactionFireShots = 2
+		Punch@MaxRange = 85
+		Punch@MinRange = 90
+		MaxRange = 40
+		MinRange = 10
+		Ammo = 6
+		LaserRechargeRate = 1
+		LaserRechargeCost {
+			energy = 0
+			material = 30
+			fuel = 200
+		} LaserRechargeCost
+		HitAccuracy { 
+			d6 = 0
+			d5 = 0
+			d4 = 0
+			d3 = 0
+			d2 = 0
+			d1 = 0
+			0 = 0
+			u1 = 100
+			u2 = 95
+			u3 = 90
+			u4 = 0
+			u5 = 0
+			u6 = 0
+		} HitAccuracy
+		WeaponEffectiveness {      
+			trooper = 100
+			rail_vehicle = 250
+			building|turret|object = 250
+			hoovercraft = 250
+			helicopter = 120
 
-         light_tracked_vehicle = 200
-         medium_tracked_vehicle = 200
-         heavy_tracked_vehicle = 200
+			light_tracked_vehicle = 250
+			medium_tracked_vehicle = 250
+			heavy_tracked_vehicle = 250
 
-         light_wheeled_vehicle = 200
-         medium_wheeled_vehicle = 200
-         heavy_wheeled_vehicle = 200
+			light_wheeled_vehicle = 250
+			medium_wheeled_vehicle = 250
+			heavy_wheeled_vehicle = 250
          
-         light_ship = 200
-         medium_ship  = 200
-         heavy_ship = 200
+			light_ship = 250
+			medium_ship  = 250
+			heavy_ship = 250
 
-         light_aircraft = 100
-         medium_aircraft  = 100
-         heavy_aircraft = 100
-      } WeaponEffectiveness
-   } GALS
+			light_aircraft = 100
+			medium_aircraft  = 100
+			heavy_aircraft = 120
+		} WeaponEffectiveness
+	} GALS
 
-   ADLS { 
-         Name = Air Defence Laser System
-         Sound = weapon10_s.ogg
-         Type = Laser shootable 
-         targets = low_level_flight medium_level_flight high_level_flight orbit
-         shotFrom = medium_level_flight high_level_flight
-	 ReactionFireShots = 2
-         Punch@MaxRange = 65
-         Punch@MinRange = 75
-         MaxRange = 20
-         MinRange = 10
-         Ammo = 4
-	 LaserRechargeRate = 1
-         LaserRechargeCost {
-            energy = 0
-            material = 20
-            fuel = 100
-         } LaserRechargeCost
-         HitAccuracy { 
-            d6 = 0
-            d5 = 0
-            d4 = 0
-            d3 = 0
-            d2 = 75
-            d1 = 90
-            0 = 100
-            u1 = 80
-            u2 = 0
-            u3 = 0
-            u4 = 0
-            u5 = 0
-            u6 = 0
-         } HitAccuracy
-      WeaponEffectiveness {      
-         trooper = 100
-         rail_vehicle = 100
-         building|turret|object = 100
-         hoovercraft = 100
-         helicopter = 100
+	ADLS { 
+		Name = Air Defence Laser System
+		Sound = weapon10_s.ogg
+		Type = Laser shootable 
+		targets = low_level_flight medium_level_flight high_level_flight orbit
+		shotFrom = medium_level_flight high_level_flight
+		ReactionFireShots = 2
+		Punch@MaxRange = 75
+		Punch@MinRange = 80
+		MaxRange = 20
+		MinRange = 10
+		Ammo = 4
+		LaserRechargeRate = 1
+		LaserRechargeCost {
+			energy = 0
+			material = 20
+			fuel = 100
+		} LaserRechargeCost
+		HitAccuracy { 
+			d6 = 0
+			d5 = 0
+			d4 = 0
+			d3 = 0
+			d2 = 90
+			d1 = 95
+			0 = 100
+            u1 = 95
+			u2 = 0
+			u3 = 0
+			u4 = 0
+			u5 = 0
+			u6 = 0
+		} HitAccuracy
+		WeaponEffectiveness {      
+			trooper = 100
+			rail_vehicle = 250
+			building|turret|object = 200
+			hoovercraft = 250
+			helicopter = 100
 
-         light_tracked_vehicle = 100
-         medium_tracked_vehicle = 100
-         heavy_tracked_vehicle = 100
+			light_tracked_vehicle = 200
+			medium_tracked_vehicle = 250
+			heavy_tracked_vehicle = 250
 
-         light_wheeled_vehicle = 100
-         medium_wheeled_vehicle = 100
-         heavy_wheeled_vehicle = 100
-         
-         light_ship = 100
-         medium_ship  = 100
-         heavy_ship = 100
+			light_wheeled_vehicle = 200
+			medium_wheeled_vehicle = 250
+			heavy_wheeled_vehicle = 250
 
-         light_aircraft = 100
-         medium_aircraft  = 100
-         heavy_aircraft = 100
-      } WeaponEffectiveness
-   } ADLS
+			light_ship = 200
+			medium_ship  = 250
+			heavy_ship = 250
+
+			light_aircraft = 100
+			medium_aircraft  = 100
+			heavy_aircraft = 100
+		} WeaponEffectiveness
+	} ADLS
 
 LRHEPT { 
          Type = Laser shootable
@@ -634,19 +655,19 @@ LRHEPT {
       terrain_kill = 
    } TeccnolsJump2
 
-   TeccnolsJump3 {
-      Height = ground_level
-      MaxDistance = 250
-      consumption {
-         Energie = 0
-         Material = 5000
-         Fuel = 10000
-      } consumption
-      terrain_any = road runway lowland hard_sand soft_sand 
-      terrain_all = beacon
-      terrain_not = forest small_rocks large_rocks bridge 
-      terrain_kill = 
-   } TeccnolsJump3
+	TeccnolsJump3 {
+		Height = ground_level
+		MaxDistance = 250
+		consumption {
+			Energie = 0
+			Material = 2500
+			Fuel = 5000
+		} consumption
+		terrain_any = road runway lowland hard_sand soft_sand 
+		terrain_all = beacon
+		terrain_not = forest large_rocks bridge 
+		terrain_kill = 
+	} TeccnolsJump3
 
    TeccnolsJump4 {
       Height = medium_level_flight
@@ -684,8 +705,8 @@ LRHEPT {
          Material = 500
          Fuel = 3000
       } consumption
-      terrain_any = turret_foundation runway spaceport
-      terrain_all = beacon
+      terrain_any = spaceport runway road lowland hard_sand soft_sand installation mountains high_mountains turret_foundation very_shallow_water shallow_water river water deep_water ditch
+      terrain_all = 
       terrain_not = 
       terrain_kill = 
    } TeccnolsJump6
@@ -697,4 +718,83 @@ LRHEPT {
       terrain_kill = swamp shallow_water Water Deep_water lava river
    } Turret_all_tecc
 
+	jump_flat_all {
+		Height = ground_level
+		MaxDistance = 150
+		consumption {
+			Energie = 0
+			Material = 200
+			Fuel = 3000
+		} consumption
+		terrain_any = road runway lowland hard_sand soft_sand
+		terrain_all =
+		terrain_not = forest large_rocks hillside swamp bridge morass installation
+		terrain_kill = swamp shallow_water Water Deep_water lava river
+	} jump_flat_all
+
+	EXEMP {
+		default = 150
+		trooper = 0
+		rail_vehicle = 200
+		building|turret|object = 250
+		hoovercraft = 160
+		helicopter = 160
+
+		light_tracked_vehicle = 150
+		medium_tracked_vehicle = 180
+		heavy_tracked_vehicle = 200
+
+		light_wheeled_vehicle = 120
+		medium_wheeled_vehicle = 150
+		heavy_wheeled_vehicle = 180
+         
+		light_ship = 150
+		medium_ship  = 200
+		heavy_ship = 250
+
+		light_aircraft = 130
+		medium_aircraft = 160
+		heavy_aircraft = 200
+
+	} EXEMP
+	all_terrain {
+		terrain_any = Road Runway Hard_sand Lowland Soft_sand Mountains High_mountains Ditch Turret_foundation Installation very_shallow_water shallow_water river water deep_water lava
+		terrain_all =
+		terrain_not = 
+		terrain_kill = 
+	} all_terrain
+
+	cc1000 {
+		CalculationMethod = add
+		Energy = -1000
+		Material = -1000
+		fuel = 0
+	} cc1000
+	cc2000 {
+		CalculationMethod = add
+		Energy = -2000
+		Material = -2000
+		fuel = 0
+	} cc2000
+	cc3000 {
+		CalculationMethod = add
+		Energy = -3000
+		Material = -3000
+		fuel = 0
+	} cc3000
+	cc4000 {
+		CalculationMethod = add
+		Energy = -4000
+		Material = -4000
+		fuel = 0
+	} cc4000
+	cc5000 {
+		CalculationMethod = add
+		Energy = -5000
+		Material = -5000
+		fuel = 0
+	} cc5000
+	
+	
+	
 } VehicleType

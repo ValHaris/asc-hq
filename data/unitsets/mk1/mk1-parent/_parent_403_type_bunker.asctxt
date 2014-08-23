@@ -7,6 +7,7 @@
 ; ----------------------------------------------------------------------------------------------------------------
 
     WreckageObject = 497 496
+	ConstructionCost.Energy = 3000
 
     Features = onlyTransMove
     Category = building|turret|object
@@ -17,6 +18,7 @@
     MaxSurvivableStorm = 255
     ResourceDrillingRange = 0
     SelfRepairRate = 0
+	minFieldRepairDamage = 15
 
     Height = ground_level 
     Movement = 0 0 0 10 0 0 0 0 

@@ -1,20 +1,20 @@
 VehicleType { 
-   Name = SS74
-   ID = 625
-   WreckageObject = 15625
-   parent = 322
-   Description = lr surface defence system
-   Infotext = [InfoImage = Wikipedia]
-   picture = mk3b_ss74.png
-   InfoImage = mk3b_ss74.jpg
-   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+	Name = SS74
+	ID = 625
+	parent = 322
 
-   Armor -= 100
-   Features += ManualSelfDestruct
+	Description = lr surface defence system
+	picture = mk3b_ss74.png
+	InfoImage = mk3b_ss74.jpg
+	WreckageObject = 15625
+	GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+	Infotext = [InfoImage = Wikipedia]
 
-   Weapons {
-      Weapon0 ->* VehicleType.type_large_missile 
-      Weapon0.Punch@MaxRange = 120
-      Weapon0.Punch@MinRange = 120
-   } Weapons
+	Armor -= 100
+
+	Weapons {
+		Weapon0 ->* VehicleType.type_large_missile 
+		Weapon0.Punch@MaxRange = 120
+		Weapon0.Punch@MinRange = 120
+	} Weapons
 } VehicleType

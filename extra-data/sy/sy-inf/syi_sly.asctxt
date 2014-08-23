@@ -1,35 +1,38 @@
 VehicleType { 
-   Name = SLY
-   ID = 1345
-   parent = 1395 202
+	Name = SLY
+	ID = 1345
+	parent = 1395 202
 
-   Description = special trooper
-   Picture = syi_sly.png
-   Infotext = []
+	Description = special trooper
+	Picture = syi_sly.png
+	Infotext = []
 
-   Transportation ->* VehicleType.TransLowTrooper
-   Transportation.MaxLoadableUnitSize = 1
-   Transportation.MaxLoadableUnits = 2
-   Transportation.CategoriesNOT -> VehicleType.cargo_deftro_only.CategoriesNOT
+	Transportation ->* VehicleType.TransLowTrooper
+	Transportation.MaxLoadableUnitSize = 1
+	Transportation.MaxLoadableUnits = 2
+	Transportation.CategoriesNOT -> VehicleType.cargo_deftro_only.CategoriesNOT
 
-   Armor += 50
-   Jamming = 65
-   SelfRepairRate = 20
-   Features += construct_specific_buildings
-   Construction.ObjectGroupsRemovable = 2 3 4 6 7 8
-   Tank { 
-      Energy = 0
-      Material = 2000
-      fuel = 3000
-   } Tank
-   Movement += 0 0 0 4 0 0 0 0 
+	Armor += 50
+	Jamming = 65
+	SelfRepairRate = 20
+	Features += construct_specific_buildings move_after_attack
+	Construction.ObjectGroupsRemovable = 2 3 4 6 7 8
+	Tank { 
+		Energy = 0
+		Material = 3000
+		fuel = 4000
+	} Tank
+	Movement += 0 0 0 10 0 0 0 0 
 
-   Weapons { 
-      Number = 1
-      Weapon0 ->* VehicleType.SY_Trooper 
-	  Weapon0.name = Stabwaffe
-      Weapon0.MinRange = 10
-      Weapon0.Punch@MinRange += 2
-      Weapon0.WeaponEffectiveness.trooper = 100
-   } Weapons
+	Weapons { 
+		Number = 1
+		Weapon0 ->* VehicleType.SY_Trooper 
+		Weapon0.name = Stabwaffe
+		Weapon0.MinRange = 10
+		Weapon0.Punch@MinRange += 10
+		Weapon0.Punch@MaxRange += 10
+		Weapon0.LaserRechargeCost.material = 40
+		Weapon0.LaserRechargeCost.fuel = 100
+		Weapon0.WeaponEffectiveness.trooper = 100
+	} Weapons
 } VehicleType

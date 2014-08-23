@@ -13,7 +13,7 @@ VehicleType {
 
    Armor += 100
    Weight = 390
-   Features += moveduringreactionfire ManualSelfDestruct
+   Features += ManualSelfDestruct
 
    TerrainAccess ->* VehicleType.Turret_only 
 

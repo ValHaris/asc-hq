@@ -1,98 +1,104 @@
 VehicleType { 
-   Name = TENDER
-   ID = 15107
-   parent = 400 401 402 419 15000
+	Name = TENDER
+	ID = 15107
+	parent = 400 401 402 419 15000
 
-   Description = dock ship
-   picture = mk6s_tender.png
+	Description = dock ship
+	picture = mk6s_tender.png
 ;   WreckageObject = 439
-   GuideSortHelp = 0 0 0 0 6 553 554 0 0 0
-   Infotext = [ ]
+	GuideSortHelp = 0 0 0 0 6 553 554 0 0 0
+	Infotext = [ ]
 
-   Jumpdrive ->* VehicleType.TeccnolsJump4
-   Jumpdrive.Height = low_level_flight
-   Jumpdrive.terrain_any = deep_water water river shallow_water Spaceport
-   View = 0
+	Jumpdrive ->* VehicleType.TeccnolsJump4
+	Jumpdrive.Height = low_level_flight
+	Jumpdrive.terrain_any = deep_water water river shallow_water Spaceport
+	View = 0
    
-   Features = MoveDuringReactionFire Repair_Facility self_repairing construct_specific_buildings icebreaker ExternalFueltransfer ExternalMaterialTransfer ExternalAmmoTransfer
-   Armor = 1600
-   Weight = 4000
-   SelfRepairRate = 10
+	Features = MoveDuringReactionFire Repair_Facility self_repairing construct_specific_buildings icebreaker ExternalFueltransfer ExternalMaterialTransfer ExternalAmmoTransfer
+	Armor = 1600
+	Weight = 4000
+	SelfRepairRate = 10
 
-   Transportation { 
-      MaxLoadableUnits = 3
-      MaxLoadableUnitSize = 5000
-      MaxLoadableMass = 5000
-      CategoriesNOT = light_aircraft medium_aircraft heavy_aircraft helicopter rail_vehicle default building|turret|object
-      EntranceSystemNum = 2
-      EntranceSystem0 ->* VehicleType.GrIO
-      EntranceSystem1 ->* VehicleType.SubIO
-   } Transportation
+	Transportation { 
+		MaxLoadableUnits = 3
+		MaxLoadableUnitSize = 5000
+		MaxLoadableMass = 5000
+		CategoriesNOT = light_aircraft medium_aircraft heavy_aircraft helicopter rail_vehicle default building|turret|object
+		EntranceSystemNum = 2
+		EntranceSystem0 ->* VehicleType.GrIO
+		EntranceSystem1 ->* VehicleType.SubIO
+	} Transportation
 
-   Height = submerged floating ground_level low_level_flight
-   Movement = 0 22 60 39 39 0 0 0 
-   TerrainAccess {
-      terrain_any = Spaceport runway shallow_water water deep_water river
-      terrain_all =
-      terrain_not = very_shallow_water small_rocks large_rocks forest
-      terrain_kill = lava
-   } TerrainAccess
-   Tank { 
-      Material = 50000
-      fuel = 60000
-   } Tank
+	Height = submerged floating ground_level low_level_flight
+	Movement = 0 22 60 39 39 0 0 0 
+	TerrainAccess {
+		terrain_any = Spaceport runway shallow_water water deep_water river
+		terrain_all =
+		terrain_not = very_shallow_water small_rocks large_rocks forest
+		terrain_kill = lava
+	} TerrainAccess
+	Tank { 
+		Material = 50000
+		fuel = 60000
+	} Tank
 
-   Construction { 
-      Buildings = 6 13 14 16-19 61 38 40 41
-      Vehicles = 15249
-      Objects = 996 997 998 1000 44 30 3 15003
-      ObjectGroupsRemovable = 1 2 3 4 6 7 8 10 11 13 14 15
-      UnitConstructionMoveCostPercentage = 90
-   } Construction
+	Construction { 
+		Buildings = 6 13 14 16-19 61 38 40 41
+		Vehicles = 15112
+		Objects = 996 997 998 1000 44 30 3 15003
+		ObjectGroupsRemovable = 1 2 3 4 6 7 8 10 11 13 14 15
+		UnitConstructionMoveCostPercentage = 40
+		UnitConstructionMinDistance = 1
+		UnitConstructionMaxDistance = 10
+		VehiclesInternally = 15249
+		ProductionEfficiency = [0.000000 0.000000 0.200000
+								0.000000 1.000000 0.000000
+								0.000000 0.000000 1.000000] 
+	} Construction
 
-   Weapons { 
-      Number = 2
-      Weapon0 ->* VehicleType.UTorp 
+	Weapons { 
+		Number = 2
+		Weapon0 ->* VehicleType.UTorp 
 
-      Weapon1 ->* VehicleType.SAMH 
-      Weapon1.Punch@MaxRange = 80
-	  Weapon1.Punch@MinRange = 80
-      Weapon1.ShotFrom = submerged floating low_level_flight
-      Weapon1.HitAccuracy.0 = 100
-      Weapon1.MaxRange = 30
-      Weapon1.Ammo = 10
+		Weapon1 ->* VehicleType.SAMH 
+		Weapon1.Punch@MaxRange = 80
+		Weapon1.Punch@MinRange = 80
+		Weapon1.ShotFrom = submerged floating low_level_flight
+		Weapon1.HitAccuracy.0 = 100
+		Weapon1.MaxRange = 30
+		Weapon1.Ammo = 10
 	  
-	  Weapon2 ->* VehicleType.ServiceSpSub
-      Weapon2.HitAccuracy.d1 = 100
+		Weapon2 ->* VehicleType.ServiceSpSub
+		Weapon2.HitAccuracy.d1 = 100
 
-   } Weapons
-   HeightChangeMethodNum = 4
-   HeightChangeMethod0 {
-      movecost = 10
-      heightdelta = 1
-      dist = 0
-      startheight = submerged ground_level
-      canattack = true
-   } HeightChangeMethod0
-   HeightChangeMethod1 {
-      movecost = 15
-      heightdelta = 2
-      dist = 0
-      startheight = floating
-      canattack = true
-   } HeightChangeMethod1
-   HeightChangeMethod2 {
-      movecost = 5
-      heightdelta = -1
-      dist = 0
-      startheight = floating
-      canattack = true
-   } HeightChangeMethod2
-   HeightChangeMethod3 {
-      movecost = 5
-      heightdelta = -1
-      dist = 0
-      startheight = low_level_flight ground_level
-      canattack = true
-   } HeightChangeMethod3
+	} Weapons
+	HeightChangeMethodNum = 4
+	HeightChangeMethod0 {
+		movecost = 10
+		heightdelta = 1
+		dist = 0
+		startheight = submerged ground_level
+		canattack = true
+	} HeightChangeMethod0
+	HeightChangeMethod1 {
+		movecost = 15
+		heightdelta = 2
+		dist = 0
+		startheight = floating
+		canattack = true
+	} HeightChangeMethod1
+	HeightChangeMethod2 {
+		movecost = 5
+		heightdelta = -1
+		dist = 0
+		startheight = floating
+		canattack = true
+	} HeightChangeMethod2
+	HeightChangeMethod3 {
+		movecost = 5
+		heightdelta = -1
+		dist = 0
+		startheight = low_level_flight ground_level
+		canattack = true
+	} HeightChangeMethod3
 } VehicleType

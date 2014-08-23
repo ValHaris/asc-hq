@@ -1,0 +1,72 @@
+VehicleType { 
+	Name = KOMISSAR
+	parent = 400 401 402 418 493  
+	ID = 12511
+ 
+	Description = command submarine
+	Picture = pu_komissar.png
+	Infotext = [Spezialeinheit]
+
+	Features += Repair_Facility self_repairing moveduringreactionfire sonar jam_only_own_field
+	Armor = 1300
+	View = 40
+	Jamming = 40
+	SelfRepairRate = 5
+	Weight = 4000
+
+	Transportation { 
+		MaxLoadableUnits = 15
+		MaxLoadableUnitSize = 150
+		MaxLoadableMass = 3000
+		CategoriesNOT = heavy_aircraft heavy_tracked_vehicle heavy_wheeled_vehicle rail_vehicle medium_ship heavy_ship default building|turret|object
+		EntranceSystemNum = 3
+		EntranceSystem0 ->* VehicleType.GrIO
+		EntranceSystem1 ->* VehicleType.Carrier
+		EntranceSystem2 ->* VehicleType.SubIO
+		EntranceSystem3 ->* VehicleType.Fl2Sub
+	} Transportation
+
+	Tank { 
+		Energy = 0
+		Material = 30000
+		fuel = 45000
+	} Tank
+	FuelConsumption = 50
+	Height = deep_submerged submerged floating 
+	Movement = 66 66 50 0 0 0 0 
+	TerrainAccess ->* VehicleType.verysmallship_terrain
+	TerrainAccess.terrain_not = small_rocks large_rocks installation
+
+	Weapons { 
+   
+      Number = 8
+      Weapon0 ->* VehicleType.SAMH 
+      Weapon0.Type = air_missile ammo_transfer shootable 
+      Weapon0.shotFrom = submerged floating 
+      Weapon0.MaxRange = 50
+      Weapon0.Ammo = 100
+      
+      Weapon1 ->* VehicleType.UTorp
+      Weapon1.MaxRange = 30 
+      Weapon1.Ammo = 100
+      
+      Weapon2 ->* VehicleType.BigMiniGun
+      Weapon2.Ammo = 200
+      
+      Weapon3 ->* VehicleType.AmmoMine 
+      Weapon3.Ammo = 100
+
+      Weapon4 ->* VehicleType.AmmoBomb 
+      Weapon4.Ammo = 100
+
+      Weapon5 ->* VehicleType.AmmoCannon 
+      Weapon5.Ammo = 200
+
+      Weapon6 ->* VehicleType.AmmoCM 
+      Weapon6.Ammo = 10
+
+      Weapon7 ->* VehicleType.AmmoSM 
+      Weapon7.Ammo = 100
+      
+   } Weapons
+} VehicleType

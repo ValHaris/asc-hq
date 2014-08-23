@@ -1,38 +1,39 @@
 VehicleType { 
-   Name = DAMON
-   parent = 248 15000
-   ID = 15248
+	Name = DAMON
+	parent = 248 15000
+	ID = 15248
 
-   Infotext = [Raumtaugliches Spionageflugzeug]
-   Picture = mk6a_damon.pcx
+	Infotext = [Raumtaugliches Spionageflugzeug]
+	Picture = mk6a_damon.pcx
 
-   Transportation ->* VehicleType.SonarSeaPlane
-   Transportation.MaxLoadableUnits = 2
-   Transportation.MaxLoadableUnitSize = 30
-   Transportation.MaxLoadableMass = 30
-   Transportation.CategoriesNOT = trooper light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship building|turret|object helicopter hoovercraft
-   Transportation.EntranceSystemNum = 3
-   Transportation.EntranceSystem2 ->* VehicleType.OrbIO
+	Transportation ->* VehicleType.SonarSeaPlane
+	Transportation.MaxLoadableUnits = 2
+	Transportation.MaxLoadableUnitSize = 30
+	Transportation.MaxLoadableMass = 30
+	Transportation.CategoriesNOT = trooper light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship building|turret|object helicopter hoovercraft
+	Transportation.EntranceSystemNum = 3
+	Transportation.EntranceSystem2 ->* VehicleType.OrbIO
 
-   Armor += 50
-   Weight = 150
-   Jamming += 10
+	Armor += 50
+	Weight = 150
+	View += 29
+	Jamming += 10
 
-   Height = ground_level low_level_flight medium_level_flight high_level_flight orbit 
-   Tank { 
-      fuel = 8000
-      Material = 500
-   } Tank
-   FuelConsumption = 20
-   Movement += 0 0 0 0 0 -10 -20 70 
-   MovementSound = aircraft_l_g.ogg
+	Height = ground_level low_level_flight medium_level_flight high_level_flight orbit 
+	Tank { 
+		fuel = 8000
+		Material = 500
+	} Tank
+	FuelConsumption = 20
+	Movement += 0 0 0 0 0 -10 -20 70 
+	MovementSound = aircraft_l_g.ogg
 
-   Weapons { 
-      Number = 1
-      Weapon0 ->* VehicleType.TeccEMPAir
-      Weapon0.Punch@MaxRange = 70
-      Weapon0.Punch@MinRange = 70
-      Weapon0.LaserRechargeCost.material = 50
-      Weapon0.ReactionFireShots = 0
-   } Weapons
+	Weapons { 
+		Number = 1
+		Weapon0 ->* VehicleType.TeccEMPAir
+		Weapon0.Punch@MaxRange = 70
+		Weapon0.Punch@MinRange = 70
+		Weapon0.LaserRechargeCost.material = 50
+		Weapon0.ReactionFireShots = 0
+	} Weapons
 } VehicleType

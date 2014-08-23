@@ -1,64 +1,63 @@
 BuildingType {
-   Name = Shipyard N
-   ID = 16
-   parent = 499
+	Name = Shipyard N
+	ID = 16
+	parent = 499
 
-   Infotext = [Fertigungsanlage für Schiffe, incl. Munition, Reparatur und Wiederverwertung.]
+	Infotext = [Fertigungsanlage für Schiffe, incl. Munition, Reparatur und Wiederverwertung.]
 
-   ConstructionStages = 1
-   Weather = dry
-   Entry = A4
-   Fields = A1 A3 A4 B1 B3 
-   ConstructionCost { 
-      Energy = 0
-      Material = 12000
-      fuel = 9000
-   } ConstructionCost
-   UseGFXpics = false
-   Pictures { 
-      dry = bld_ASC_port.png
-   } Pictures
-   RubbleObjects = false
+	Features = Vehicle_Production Ammo_Production Repair_Facility ExternalMaterialTransfer ExternalFuelTransfer ExternalAmmoTransfer recycling
+	Armor = 1000
+	ExternalLoading = floating ground_level 
+	CategoriesProduceable = light_ship medium_ship heavy_ship hoovercraft default heavy_aircraft
 
-   Features = Vehicle_Production Ammo_Production Repair_Facility ExternalMaterialTransfer ExternalFuelTransfer ExternalAmmoTransfer recycling
-   Armor = 2500
-   ExternalLoading = floating ground_level 
-   CategoriesProduceable = light_ship medium_ship heavy_ship hoovercraft default heavy_aircraft
+	ConstructionStages = 1
+	ConstructionCost { 
+		Energy = 0
+		Material = 15000
+		fuel = 1500
+	} ConstructionCost
+	Weather = dry
+	Entry = A4
+	Fields = A1 A3 A4 B1 B3 
+	UseGFXpics = false
+	Pictures { 
+		dry = bld_ASC_port.png
+	} Pictures
+	RubbleObjects = false
 
-   Transportation { 
-      MaxLoadableUnits = 6
-      MaxLoadableUnitSize = 6900
-      MaxLoadableMass = 50000
-      CategoriesNOT =  
-      EntranceSystemNum = 2
-      EntranceSystem0 {
-        Mode = In out docking
-        UnitHeightAbs = ground_level
-        UnitHeightRel = -100
-        ContainerHeight = ground_level
-        CategoriesNOT = heavy_aircraft
-        DockingHeightAbs = ground_level 
-        DockingHeightRel = -100 
-        DisableAttack = false
-      } EntranceSystem0
-      EntranceSystem1 {
-        Mode = In out docking
-        UnitHeightAbs = floating
-        UnitHeightRel = -100
-        ContainerHeight = ground_level
-        CategoriesNOT = 
-        DockingHeightAbs = floating 
-        DockingHeightRel = -100 
-        DisableAttack = false
-      } EntranceSystem1
-   } Transportation
+	Transportation { 
+		MaxLoadableUnits = 6
+		MaxLoadableUnitSize = 6900
+		MaxLoadableMass = 50000
+		CategoriesNOT =  
+		EntranceSystemNum = 2
+		EntranceSystem0 {
+			Mode = In out docking
+			UnitHeightAbs = ground_level
+			UnitHeightRel = -100
+			ContainerHeight = ground_level
+			CategoriesNOT = heavy_aircraft
+			DockingHeightAbs = ground_level 
+			DockingHeightRel = -100 
+			DisableAttack = false
+		} EntranceSystem0
+		EntranceSystem1 {
+			Mode = In out docking
+			UnitHeightAbs = floating
+			UnitHeightRel = -100
+			ContainerHeight = ground_level
+			CategoriesNOT = 
+			DockingHeightAbs = floating 
+			DockingHeightRel = -100 
+			DisableAttack = false
+		} EntranceSystem1
+	} Transportation
 
-
-   TerrainAccess { 
-      terrain_any = Shallow_water Water Very_shallow_water river lowland hard_sand
-      terrain_all = 
-      terrain_not = 
-      terrain_kill = lava deep_water
-   } TerrainAccess
+	TerrainAccess { 
+		terrain_any = Shallow_water Water Very_shallow_water river lowland hard_sand
+		terrain_all = 
+		terrain_not = 
+		terrain_kill = lava deep_water
+	} TerrainAccess
 
 } BuildingType

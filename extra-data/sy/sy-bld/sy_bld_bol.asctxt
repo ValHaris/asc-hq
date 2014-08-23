@@ -20,7 +20,7 @@ BuildingType {
       B4 = 1302
    } rubble
    Entry = B4
-   Functions = Mining_Station External_Loading 
+   Features = Mining_Station ExternalMaterialTransfer 
    Techlevel = 0
    TerrainAccess { 
       terrain_any = Lowland Road Hard_sand Soft_sand 
@@ -35,8 +35,8 @@ BuildingType {
    } ResourceExtractionEfficiency
    ConstructionCost { 
       Energy = 0
-      Material = 6500
-      fuel = 7500
+      Material = 10000
+      fuel = 1000
    } ConstructionCost
    MaxResourceProduction { 
       Energy = -200
@@ -61,5 +61,5 @@ BuildingType {
       } ASCmode
    } StorageCapacity
    Height = ground_level 
-   ExternalLoading = floating ground_level low_level_flight 
+   ExternalLoading = floating ground_level
 } BuildingType

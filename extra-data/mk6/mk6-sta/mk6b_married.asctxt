@@ -1,66 +1,68 @@
 VehicleType { 
-   Name = MARRIED
-   ID = 15223
-   parent = 223 15000
+	Name = MARRIED
+	ID = 15223
+	parent = 223 15000
 
-   Description = Abwehrgeschütz
-   Picture = mk6b_married.png
+	Description = Abwehrgeschütz
+	Picture = mk6b_married.png
 ;   InfoImage = mk1b_sdb.jpg
-   GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
-   Infotext = []
+	GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
+	Infotext = []
    
-   Armor = 550
-   Weight = 400
-   Features = 
-   View = 0
+	Armor = 550
+	Weight = 400
+	Features = 
+	View = 0
 
-   Movement = 0 0 0 20 0 0 0 20
-   FuelConsumption = 500
-   Tank.Fuel = 17000
-   Tank.Material = 8000
-   Height = ground_level orbit
-   TerrainAccess.Terrain_any = runway spaceport turret_foundation
-   TerrainAccess.Terrain_not = large_rocks bridge
-   Jumpdrive ->* VehicleType.TeccnolsJump6
-   Jumpdrive.MaxDistance = 100
-   Jumpdrive.consumption.Material = 300
-   Jumpdrive.consumption.Fuel = 1000
+	Movement = 0 0 0 20 0 0 0 20
+	FuelConsumption = 300
+	Tank.Fuel = 17000
+	Tank.Material = 8000
+	Height = ground_level orbit
+	TerrainAccess.Terrain_any = runway spaceport turret_foundation
+	TerrainAccess.Terrain_not = large_rocks bridge
 
-   WaitForAttack = true
-   Weapons { 
-      Number = 1
-      Weapon0 ->* VehicleType.OGLS
-      Weapon0.name = Ionenkanone
-      Weapon0.sound = lasergun.ogg
-      Weapon0.MaxRange = 80
-      Weapon0.ShotFrom = ground_level orbit
-      Weapon0.Targets = floating ground_level low_level_flight medium_level_flight high_level_flight
-      Weapon0.MinRange = 40
-      Weapon0.Punch@MaxRange = 110
-      Weapon0.Punch@MinRange = 125
-      Weapon0.Ammo = 4
-      Weapon0.LaserRechargeRate = 1
-      Weapon0.LaserRechargeCost.material = 200
-      Weapon0.LaserRechargeCost.fuel = 400
-      Weapon0.HitAccuracy.u3 = 80
-      Weapon0.HitAccuracy.u2 = 85
-      Weapon0.HitAccuracy.u1 = 90
-      Weapon0.ReactionFireShots = 2
-   } Weapons
+	Jumpdrive ->* VehicleType.TeccnolsJump6
+	Jumpdrive.MaxDistance = 80
+	Jumpdrive.consumption.Material = 300
+	Jumpdrive.consumption.Fuel = 1000
 
-   HeightChangeMethodNum = 2
-   HeightChangeMethod0 {
-      movecost = 20
-      heightdelta = 4
-      dist = 0
-      startheight = ground_level
-      canattack = false
-   } HeightChangeMethod0
-   HeightChangeMethod1 {
-      movecost = 10
-      heightdelta = -4
-      dist = 0
-      startheight = orbit
-      canattack = false
-   } HeightChangeMethod1
+	WaitForAttack = true
+	Weapons { 
+		Number = 1
+		Weapon0 ->* VehicleType.OGLS
+		Weapon0.name = Ionenkanone
+		Weapon0.sound = lasergun.ogg
+		Weapon0.MaxRange = 80
+		Weapon0.MinRange = 40
+		Weapon0.ShotFrom = ground_level orbit
+		Weapon0.Targets = floating ground_level low_level_flight medium_level_flight high_level_flight orbit
+		Weapon0.Punch@MaxRange = 110
+		Weapon0.Punch@MinRange = 125
+		Weapon0.Ammo = 4
+		Weapon0.LaserRechargeRate = 1
+		Weapon0.LaserRechargeCost.material = 200
+		Weapon0.LaserRechargeCost.fuel = 400
+		Weapon0.HitAccuracy.u4 = 80
+		Weapon0.HitAccuracy.u3 = 80
+		Weapon0.HitAccuracy.u2 = 80
+		Weapon0.HitAccuracy.u1 = 80
+		Weapon0.ReactionFireShots = 2
+	} Weapons
+
+	HeightChangeMethodNum = 2
+	HeightChangeMethod0 {
+		movecost = 20
+		heightdelta = 4
+		dist = 0
+		startheight = ground_level
+		canattack = false
+	} HeightChangeMethod0
+	HeightChangeMethod1 {
+		movecost = 10
+		heightdelta = -4
+		dist = 0
+		startheight = orbit
+		canattack = false
+	} HeightChangeMethod1
 } VehicleType

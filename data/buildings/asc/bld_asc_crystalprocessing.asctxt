@@ -1,59 +1,56 @@
 BuildingType { 
-   Name = Crystal Processing
-   ID = 35
-   parent = 499
+	Name = Crystal Processing
+	ID = 35
+	parent = 499
+	Infotext = []
 
-   Infotext = []
-   Armor = 2500
+	Features = AutoHarvestObjects 
+	Armor = 500
+	AutoHarvestObjects {
+		Objects = 
+		ObjectGroups = 11
+		Range = 15
+		MaxFieldsPerTurn = 15
+	} AutoHarvestObjects
 
-   Weather = dry
-   Fields = A2 A3 A4 B3
-   UseGFXpics = false
-   Pictures { 
-      dry = bld_asc_crystalprocessing.png
-   } Pictures
-   Entry = A2
-   RubbleObjects = false
+	ConstructionCost { 
+		Energy = 0
+		Material = 15000
+		fuel = 1500
+	} ConstructionCost
+	Weather = dry
+	Fields = A2 A3 A4 B3
+	UseGFXpics = false
+	Pictures { 
+		dry = bld_asc_crystalprocessing.png
+	} Pictures
+	Entry = A2
+	RubbleObjects = false
 
-   ConstructionCost { 
-      Energy = 0
-      Material = 12000
-      fuel = 12000
-   } ConstructionCost
+	Transportation { 
+		MaxLoadableUnits = 1
+		MaxLoadableUnitSize = 15
+		MaxLoadableMass = 15
+		CategoriesNOT = 
+		EntranceSystemNum = 1
+	} Transportation
 
-   Features = AutoHarvestObjects 
-   
-   AutoHarvestObjects {
-      Objects = 
-      ObjectGroups = 11
-      Range = 15
-      MaxFieldsPerTurn = 15
-   } AutoHarvestObjects
+	MaxResourceProduction { 
+		Energy = -200
+		Material = 0
+		fuel = 0
+	} MaxResourceProduction
+	defaultProduction {
+		energy = -200
+		material = 0
+		fuel = 0
+	} defaultProduction
 
-   Transportation { 
-      MaxLoadableUnits = 1
-      MaxLoadableUnitSize = 15
-      MaxLoadableMass = 15
-      CategoriesNOT = 
-      EntranceSystemNum = 1
-   } Transportation
-
-   MaxResourceProduction { 
-      Energy = -200
-      Material = 0
-      fuel = 0
-   } MaxResourceProduction
-   defaultProduction {
-      energy = -200
-      material = 0
-      fuel = 0
-   } defaultProduction
-
-   StorageCapacity { 
-      ASCmode { 
-         Energy = 0
-         Material = 7000
-         fuel = 1000
-      } ASCmode
-   } StorageCapacity
+	StorageCapacity { 
+		ASCmode { 
+			Energy = 0
+			Material = 7000
+			fuel = 1000
+		} ASCmode
+	} StorageCapacity
 } BuildingType

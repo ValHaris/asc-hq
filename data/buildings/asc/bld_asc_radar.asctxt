@@ -1,60 +1,58 @@
 BuildingType {
-   Name = Radar Station
-   ID = 7
-   parent = 499
+	Name = Radar Station
+	ID = 7
+	parent = 499
 
-   Description = [Radar Building]
-   InfoImageSmall = bld_asc_radar_k.png
-   InfoImage = bld_asc_radar.jpg
-   Infotext = [Eine Radarstation ist ein Gebäudekomplex, der er es ermöglicht eine Radaranlage zu betreiben. Radaranlagen werden meist an exponierter Stelle in einem Geländezug angelegt, um beste Voraussetzungen für das funktionieren der Radaranlage zu bekommen.
-              Zu einer Radarstation gehören in der Regel: Mannschaftsunterkünfte für Bedien- und Wartungspersonal, 
-              Telekommunikationsanlagen. Erdgebunden, oft aber Satelliten- oder Richtfunk ,
-              Elektrische Betriebsräume,
-              Ein Gebäude in dem die Radaranlage eingebaut ist, 
-              Wetterschutz für die Antenne (das sogenannte Radom),
-              Gegebenenfalls Notstromaggregate und autarke Wasserversorgung,
-              Bunkeranlagen bei militärischer Nutzung .
-              Quelle Text und Bild: Wikipedia
-              ]
+	Description = [Radar Building]
+	InfoImageSmall = bld_asc_radar_k.png
+	InfoImage = bld_asc_radar.jpg
+	Infotext = [Eine Radarstation ist ein Gebäudekomplex, der er es ermöglicht eine Radaranlage zu betreiben. Radaranlagen werden meist an exponierter Stelle in einem Geländezug angelegt, um beste Voraussetzungen für das funktionieren der Radaranlage zu bekommen.
+				Zu einer Radarstation gehören in der Regel: Mannschaftsunterkünfte für Bedien- und Wartungspersonal, 
+				Telekommunikationsanlagen. Erdgebunden, oft aber Satelliten- oder Richtfunk ,
+				Elektrische Betriebsräume,
+				Ein Gebäude in dem die Radaranlage eingebaut ist, 
+				Wetterschutz für die Antenne (das sogenannte Radom),
+				Gegebenenfalls Notstromaggregate und autarke Wasserversorgung,
+				Bunkeranlagen bei militärischer Nutzung .
+				Quelle Text und Bild: Wikipedia
+				]
 
-   Armor = 800
-   View = 130
-   Features = satelliteview
+	Armor = 700
+	View = 130
+	Features = satelliteview
 
-   ConstructionStages = 1
-   ConstructionCost { 
-      Energy = 0
-      Material = 11000
-      fuel = 13000
-   } ConstructionCost
-
-   Weather = dry few_snow much_snow snow_and_ice
-   Fields = A1 
-   UseGFXpics = false
-   Pictures { 
-      dry = bld_asc_radar.png
-      few_snow = bld_asc_radar.png
-      much_snow = bld_asc_radar.png
-      snow_and_ice = bld_asc_radar.png
-   } Pictures
-   RubbleObjects = false
+	ConstructionStages = 1
+	ConstructionCost { 
+		Energy = 0
+		Material = 15000
+		fuel = 1500
+	} ConstructionCost
+	Weather = dry few_snow much_snow snow_and_ice
+	Fields = A1 
+	UseGFXpics = false
+	Pictures { 
+		dry = bld_asc_radar.png
+		few_snow = bld_asc_radar.png
+		much_snow = bld_asc_radar.png
+		snow_and_ice = bld_asc_radar.png
+	} Pictures
+	RubbleObjects = false
 ;   rubble {
 ;      A1 = 76
 ;   } rubble
-   Entry = A1
-   TerrainAccess { 
-      terrain_any = Lowland Hard_sand Soft_sand
-      terrain_all = 
-      terrain_not = railroad turret_foundation installation
-      terrain_kill = shallow_water lava water deep_water river
-   } TerrainAccess
+	Entry = A1
+	TerrainAccess { 
+		terrain_any = Lowland Hard_sand Soft_sand
+		terrain_all = 
+		terrain_not = railroad turret_foundation installation
+		terrain_kill = shallow_water lava water deep_water river
+	} TerrainAccess
 
-   Transportation { 
-      MaxLoadableUnits = 2
-      MaxLoadableUnitSize = 15
-      MaxLoadableMass = 30
-      CategoriesNOT = Default hoovercraft Medium_tracked_vehicle Heavy_tracked_vehicle Medium_wheeled_vehicle Heavy_wheeled_vehicle Light_aircraft Medium_aircraft Heavy_aircraft Helicopter Light_ship Medium_ship Heavy_Ship Building|turret|object Rail_vehicle
-   } Transportation
-
+	Transportation { 
+		MaxLoadableUnits = 2
+		MaxLoadableUnitSize = 15
+		MaxLoadableMass = 30
+		CategoriesNOT = Default hoovercraft Medium_tracked_vehicle Heavy_tracked_vehicle Medium_wheeled_vehicle Heavy_wheeled_vehicle Light_aircraft Medium_aircraft Heavy_aircraft Helicopter Light_ship Medium_ship Heavy_Ship Building|turret|object Rail_vehicle
+	} Transportation
 
 } BuildingType

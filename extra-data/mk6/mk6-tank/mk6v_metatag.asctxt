@@ -1,28 +1,23 @@
 VehicleType { 
-   Name = META TAG
-   ID = 15291
-   parent = 293 15000
+	Name = META TAG
+	ID = 15291
+	parent = 15002 293
 
-   Description = heavy EMP tank
-   Picture = mk6v_metatag.pcx
+	Description = heavy EMP tank
+	Picture = mk6v_metatag.pcx
 ;   WreckageObject = 404
-   GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
+	GuideSortHelp += 0 0 0 0 6 0 0 0 0 0 
 
-   Armor -= 50
-   Tank.Fuel += 600
-   Tank.Material = 600
- 
+	Weapons { 
+		Number = 1
 
-   Weapons { 
-      Number = 1
+		Weapon0 ->* VehicleType.TeccEMP
+		Weapon0.MaxRange = 20
+		Weapon0.Punch@MinRange = 160
+		Weapon0.Punch@MaxRange = 130
+		Weapon0.LaserRechargeCost.Fuel = 650
+		Weapon0.LaserRechargeCost.Material = 150
+		Weapon0.Ammo = 3
 
-      Weapon0 ->* VehicleType.TeccEMP
-      Weapon0.MaxRange = 20
-      Weapon0.Punch@MinRange = 150
-      Weapon0.Punch@MaxRange = 90
-      Weapon0.LaserRechargeCost.Fuel = 650
-      Weapon0.LaserRechargeCost.Material = 150
-      Weapon0.Ammo = 2
-
-   } Weapons
+	} Weapons
 } VehicleType

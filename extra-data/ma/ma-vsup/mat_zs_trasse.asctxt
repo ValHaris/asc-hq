@@ -1,33 +1,29 @@
 VehicleType { 
-   Name = ZS TRASSE
-   parent = 400 401 402 412
-   ID = 22818
+	Name = ZS TRASSE
+	parent = 400 401 402 412
+	ID = 22818
 
-   Description = infrastructur train
-   Infotext = [Dieser Zug transportiert Schienen und Pipelinerohre. Fuer den Aufbau von Schienennetzen kaum zu verzichten, ist er sowohl in Offensiv als auch Defensive die Einheit, wenn Gleise fehlen.]
-   Picture = mat_zs_trasse.png
+	Description = infrastructur train
+	Infotext = [Dieser Zug transportiert Schienen und Pipelinerohre. Fuer den Aufbau von Schienennetzen kaum zu verzichten, ist er sowohl in Offensiv als auch Defensive die Einheit, wenn Gleise fehlen.]
+	Picture = mat_zs_trasse.png
 
-   Transportation ->* VehicleType.TransLowTrooper3
+	Transportation ->* VehicleType.TransLowTrooper
 
-   Weight = 150
+	Weight = 150
 
-   Movement = 0 0 0 110 0 0 0 0
-   Tank { 
-      Energy = 0
-      Material = 6600
-      fuel = 10000
-   } Tank
+	Movement = 0 0 0 140 0 0 0 0
+	Tank { 
+		Energy = 0
+		Material = 8000
+		fuel = 15000
+	} Tank
 
-   Construction { 
-      Objects = 2 991 992 995 999 3 30
-      ObjectsRemovable = 992
-      ObjectGroupsRemovable = 1 2 3 4 6 10 13
-   } Construction
+	Construction { 
+		Objects = 2 991 995 999 3 30
+	} Construction
 
-   Weapons { 
-      Initiative = -50
-      Number = 2
-      Weapon0 ->* VehicleType.Def_MG
-      Weapon1 ->* VehicleType.ServiceGround
-   } Weapons
+	Weapons { 
+		Number = 1
+		Weapon0 ->* VehicleType.Def_MG
+	} Weapons
 } VehicleType

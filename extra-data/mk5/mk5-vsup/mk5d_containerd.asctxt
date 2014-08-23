@@ -24,7 +24,7 @@ VehicleType {
    } Tank
    FuelConsumption = 0
    TerrainAccess ->* VehicleType.heli_terrain 
-   MovementSound = 
+   MovementSound = thump.ogg
 
    Weapons { 
       Initiative = 0

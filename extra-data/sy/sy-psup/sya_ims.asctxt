@@ -1,63 +1,65 @@
 VehicleType { 
-   Name = IMS
-   parent = 400 1395 1391 1399
-   ID = 1339
+	Name = IMS
+	parent = 400 1395 1391 1399
+	ID = 1339
 
-   Description = construction unit
-   Infotext = [Ernte und Infrastuktur Baueinheit.]
-   Picture = sya_ims.png
-   Armor = 500
-   Jamming = 39
-   Features += construct_specific_buildings construct_vehicles ExternalFuelTransfer ExternalMaterialTransfer
+	Description = construction unit
+	Infotext = [Ernte und Infrastuktur Baueinheit.]
+	Picture = sya_ims.png
 
-   Tank { 
-      Energy = 0
-      Material = 20000
-      fuel = 20000
-   } Tank
-   FuelConsumption = 25
-   Movement = 0 0 0 45 110 40 30 0 
-   TerrainAccess ->* VehicleType.Sy_Multi_Service
-   Height = ground_level low_level_flight medium_level_flight high_level_flight 
-   Weight = 200
-   Construction { 
-      Buildings = 
-      Vehicles = 1347
-;                                                     Laserzaun
-      Objects = 3 30 181 996 1305 1306 1308 1309 2153 2658
-      ObjectsRemovable = 988 1305 2658
-      ObjectGroupsRemovable = 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 21
-   } Construction
+	Armor = 350
+	Jamming = 39
+	Features += construct_specific_buildings construct_vehicles ExternalFuelTransfer ExternalMaterialTransfer
 
-   Transportation { 
-      MaxLoadableUnits = 2
-      MaxLoadableUnitSize = 10
-      MaxLoadableMass = 10
-      CategoriesNOT = light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_aircraft medium_aircraft heavy_aircraft rail_vehicle heavy_ship medium_ship light_ship helicopter
-      EntranceSystemNum = 3
-      EntranceSystem0 ->* VehicleType.GrIO
-      EntranceSystem0.RequireUnitFunction = onlyTransMove
-      EntranceSystem1 ->* VehicleType.OrbIO
-      EntranceSystem1.RequireUnitFunction = onlyTransMove
-      EntranceSystem2 {
-        Mode = out
-        UnitHeightAbs = ground_level
-        UnitHeightRel = -100
-        ContainerHeight = low_level_flight
-        CategoriesNOT = 
-        DockingHeightAbs = low_level_flight
-        DockingHeightRel = -100 
-        RequireUnitFunction = onlyTransMove
-      } EntranceSystem2
-   } Transportation
+	Tank { 
+		Energy = 0
+		Material = 20000
+		fuel = 20000
+	} Tank
+	FuelConsumption = 25
+	Movement = 0 0 0 45 110 40 30 0 
+	TerrainAccess ->* VehicleType.Sy_Multi_Service
+	Height = ground_level low_level_flight medium_level_flight high_level_flight 
+	Weight = 200
+	Construction { 
+		Buildings = 
+		Vehicles = 1347
+;	                                                     Laserzaun
+		Objects = 3 30 181 996 1305 1306 1308 1309 2153 2658
+		ObjectsRemovable = 988 1305 2658
+		ObjectGroupsRemovable = 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 21
+	} Construction
 
-   WaitForAttack = true
-   Weapons { 
-      Number = 2
-      Weapon0 ->* VehicleType.ServiceTurret
-      Weapon0.shotfrom = ground_level low_level_flight
-      Weapon0.HitAccuracy.d1 = 100	  
+	Transportation { 
+		MaxLoadableUnits = 2
+		MaxLoadableUnitSize = 10
+		MaxLoadableMass = 10
+		CategoriesNOT = light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_aircraft medium_aircraft heavy_aircraft rail_vehicle heavy_ship medium_ship light_ship helicopter
+		EntranceSystemNum = 3
+		EntranceSystem0 ->* VehicleType.GrIO
+		EntranceSystem0.RequireUnitFunction = onlyTransMove
+		EntranceSystem1 ->* VehicleType.OrbIO
+		EntranceSystem1.RequireUnitFunction = onlyTransMove
+		EntranceSystem2 {
+			Mode = out
+			UnitHeightAbs = ground_level
+			UnitHeightRel = -100
+			ContainerHeight = low_level_flight
+			CategoriesNOT = 
+			DockingHeightAbs = low_level_flight
+			DockingHeightRel = -100 
+			RequireUnitFunction = onlyTransMove
+		} EntranceSystem2
+	} Transportation
 
-      Weapon1 ->* VehicleType.SY_Fighter_small 
-   } Weapons
+	WaitForAttack = true
+	Weapons { 
+		Number = 2
+		
+		Weapon0 ->* VehicleType.ServiceTurret
+		Weapon0.shotfrom = ground_level low_level_flight
+		Weapon0.HitAccuracy.d1 = 100	  
+
+		Weapon1 ->* VehicleType.SY_Fighter_small 
+	} Weapons
 } VehicleType

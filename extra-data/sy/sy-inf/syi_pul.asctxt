@@ -13,7 +13,7 @@ ca. 8m lang, 5m breit, 3,25 hoch
 ]
 
    Features -= conquer_buildings
-   Armor += 200
+   Armor += 150
    Weight = 6
    Jamming = 11
    Tank { 

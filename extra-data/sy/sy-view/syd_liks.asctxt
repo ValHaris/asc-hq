@@ -1,18 +1,22 @@
 VehicleType { 
-   Name = LIKS
-   parent = 243
-   ID = 1347
-   WreckageObject = 1307
+	Name = LIKS
+	parent = 243
+	ID = 1347
+	WreckageObject = 1307
 
-   Description = Senorkriechpflanze
-   Picture = syd_liks.png
-;   GuideSortHelp += 0 0 0 0 2 0 0 0 0 0
-   InfoText = []
+	Description = Senorkriechpflanze
+	Picture = syd_liks.png
+	;   GuideSortHelp += 0 0 0 0 2 0 0 0 0 0
+	InfoText = []
 
-   Features = jam_only_own_field
-   Category = trooper
-   Jamming = 39
-   Movement += 0 0 0 2 0 0 0 0
-   View += 5
+	Features = jam_only_own_field self_repairing
+	Category = trooper
+	Jamming = 39
+	View += 5
+	SelfRepairRate = 10
+
+	Movement += 0 0 0 2 0 0 0 0
+	Tank.Material = 1000
+	Tank.Fuel = 1000
 
 } VehicleType

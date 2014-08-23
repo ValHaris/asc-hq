@@ -26,7 +26,8 @@ ID 563/294 P1000            old prototype siege stank
 ID 575/292 Sturmtiger       old medium tank
 ID 595/290 Tiger            old light tank
 ID 596/291 Tiger II         old medium tank
-ID 615/295 Maus             defence Tank
+ID 615/295 Maus             defence Tank (in PBP deaktiviert)
+ID 628		Bradley			Infantry tank
 
 --Air Defence --
 ID 526/215 MISTRAL          air defence trooper
@@ -37,6 +38,7 @@ ID 553/224 Gainful          SAM medium range
 ID 556/219 Patriot          missile air defence
 ID 567/225 Guideline        long range air missle
 ID 617/223 Rapier 2         lr air defence turret
+ID 629		Ozelot			Wiesel AA
 
 --Artillery--
 ID 597/250 FH 70            light artillery

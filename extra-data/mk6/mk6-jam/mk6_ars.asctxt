@@ -1,33 +1,53 @@
 BuildingType {
-   Name = ARS
-   ID = 15009
-   parent = 499
-   Infotext = [ Radarstöhranlage ]
-   Armor = 600
-   View = 50
-   Jamming = 66
-   ConstructionStages = 1
-   Weather = dry 
-   Fields = A1 
-   UseGFXpics = false
-   Pictures { 
-      dry = mk6_ars.png
-   } Pictures
-   RubbleObjects = false
-;   rubble {
-;      A1 = 76
-;   } rubble
-   Entry = A1
-   Transportation { 
-      MaxLoadableUnits = 2
-      MaxLoadableUnitSize = 15
-      MaxLoadableMass = 15
-      CategoriesNOT = Default hoovercraft Medium_tracked_vehicle Heavy_tracked_vehicle Medium_wheeled_vehicle Heavy_wheeled_vehicle Light_aircraft Medium_aircraft Heavy_aircraft Helicopter Light_ship Medium_ship Heavy_Ship Building|turret|object Rail_vehicle
-   } Transportation
-   Features = NoObjectChaining
-   ConstructionCost { 
-      Energy = 0
-      Material = 13000
-      fuel = 16000
-   } ConstructionCost
+	Name = ARS
+	ID = 15009
+	parent = 499
+	Infotext = [ Versorgungsanlageanlage ]
+
+	Features = NoObjectChaining Solar_Power_plant ExternalAmmoTransfer ExternalFuelTransfer ExternalMaterialTransfer ammo_production
+	ExternalLoading = ground_level floating
+
+	Armor = 800
+	View = 80
+	Jamming = 41
+
+	ConstructionStages = 1
+	ConstructionCost { 
+		Energy = 0
+		Material = 20000
+		fuel = 2000
+	} ConstructionCost
+	Weather = dry 
+	Fields = A1 
+	UseGFXpics = false
+	Pictures { 
+		dry = mk6_ars.png
+	} Pictures
+	RubbleObjects = false
+	Entry = A1
+
+	Transportation { 
+		MaxLoadableUnits = 1
+		MaxLoadableUnitSize = 6
+		MaxLoadableMass = 6
+		CategoriesNOT = Default hoovercraft Medium_tracked_vehicle Heavy_tracked_vehicle Medium_wheeled_vehicle Heavy_wheeled_vehicle Light_aircraft Medium_aircraft Heavy_aircraft Helicopter Light_ship Medium_ship Heavy_Ship Building|turret|object Rail_vehicle
+	} Transportation
+	MaxResourceProduction { 
+		Energy = 300
+		Material = 0
+		fuel = 0
+	} MaxResourceProduction
+	defaultProduction {
+		energy = 300
+		material = 0
+		fuel = 0
+	} defaultProduction
+	StorageCapacity { 
+		ASCmode { 
+			Energy = 5000
+			Material = 5000
+			fuel = 5000
+		} ASCmode
+	} StorageCapacity
+
 } BuildingType

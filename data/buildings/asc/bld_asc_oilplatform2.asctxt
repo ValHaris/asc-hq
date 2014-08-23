@@ -1,53 +1,56 @@
 BuildingType { 
-   Name = Great Oilplatform
-   ID = 14
-   parent = 499 498
-   Infotext = [Oelfoerderplattform fuer Gewaesser]
-   Armor = 2500
-   View = 50
-   ConstructionStages = 1
-   Weather = dry
-   Fields = A2 A4 B3 
-   UseGFXpics = false
-   Pictures { 
-      dry = bld_asc_oilplatform2.png
-   } Pictures
-   RubbleObjects = false
-   Entry = A4
-   Transportation ->* BuildingType.helideck 
-   Transportation.MaxLoadableUnits = 3
-   Transportation.MaxLoadableUnitSize = 200
-   Transportation.MaxLoadableMass = 500
+	Name = Great Oilplatform
+	ID = 14
+	parent = 499 498
+	Infotext = [Oelfoerderplattform fuer Gewaesser]
 
-   Functions = Mining_Station External_Loading 
-   TerrainAccess { 
-      terrain_any = Water
-      terrain_all = 
-      terrain_not = river harbour
-      terrain_kill = lava
-   } TerrainAccess
-   ConstructionCost { 
-      Energy = 0
-      Material = 16800
-      fuel = 10000
-   } ConstructionCost
-   MaxResourceProduction { 
-      Energy = 0
-      Material = 0
-      fuel = 4000
-   } MaxResourceProduction
-   defaultProduction {
-      energy = 
-      material = 
-      fuel = 4000
-   } defaultProduction
-   ResourceExtractionEfficiency {
-      Fuel = 2000
-   } ResourceExtractionEfficiency
-   StorageCapacity { 
-      ASCmode { 
-         fuel = 20000
-      } ASCmode
-   } StorageCapacity
-   ExternalLoading = floating ground_level 
+	Features = Mining_Station ExternalFuelTransfer 
+	ExternalLoading = floating ground_level 
+	Armor = 1000
+	View = 50
+
+	ConstructionStages = 1
+	ConstructionCost { 
+		Energy = 0
+		Material = 25000
+		fuel = 2500
+	} ConstructionCost
+	TerrainAccess { 
+		terrain_any = Water
+		terrain_all = 
+		terrain_not = river harbour
+		terrain_kill = lava
+	} TerrainAccess
+	Weather = dry
+	Fields = A2 A4 B3 
+	UseGFXpics = false
+	Pictures { 
+		dry = bld_asc_oilplatform2.png
+	} Pictures
+	RubbleObjects = false
+	Entry = A4
+
+	Transportation ->* BuildingType.helideck 
+	Transportation.MaxLoadableUnits = 3
+	Transportation.MaxLoadableUnitSize = 200
+	Transportation.MaxLoadableMass = 500
+
+	MaxResourceProduction { 
+		Energy = 0
+		Material = 0
+		fuel = 4000
+	} MaxResourceProduction
+	defaultProduction {
+		energy = 
+		material = 
+		fuel = 4000
+	} defaultProduction
+	ResourceExtractionEfficiency {
+		Fuel = 2000
+	} ResourceExtractionEfficiency
+	StorageCapacity { 
+		ASCmode { 
+			fuel = 20000
+		} ASCmode
+	} StorageCapacity
 } BuildingType

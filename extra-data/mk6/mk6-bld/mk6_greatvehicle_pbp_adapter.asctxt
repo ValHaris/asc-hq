@@ -1,5 +1,0 @@
-Techadapter {
-   ; GreatVehicle.
-   Name = B11
-   TechnologiesRequired = 15000
-} TechAdapter

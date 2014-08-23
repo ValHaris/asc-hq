@@ -1,0 +1,14 @@
+VehicleType { 
+	abstract = true
+	Name = META 
+	ID = 15002
+	parent = 406 15000
+
+	Description =  meta tank chassis
+;   WreckageObject = 404
+;   GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
+
+	Tank.Material = 1000
+	Tank.Fuel = 3000
+
+} VehicleType

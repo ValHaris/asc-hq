@@ -10,6 +10,7 @@ VehicleType {
    InfoImageSmall = mk6a_deltafighter_k.png
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
 
+   Weight = 50
    Tank.Material = 500 
  
   Weapons {

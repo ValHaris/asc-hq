@@ -1,47 +1,50 @@
 VehicleType { 
-   Name = BOX S
-   parent = 400 401 402 403 15000
-   ID = 15341
+	Name = BOX S
+	parent = 400 401 402 403 15000
+	ID = 15341
 ;   GuideSortHelp = 339 0 0 0 6 0 0 0 0 0
 
-   Description = Service Jump Box
-   Infotext = [ Die Box S ist eine reine ServiceStation und ist vollgestopft mit diversen vollautomatischen Reparaturanlagen. Aufgrund der starken Standardisierung der Teccnols Streitkraefte, können fast alle Waffengattungen hier direkten Service erhalten.]
-   picture = mk6b_box_s.png
+	Description = Service Jump Box
+	Infotext = [ Die Box S ist eine reine ServiceStation und ist vollgestopft mit diversen vollautomatischen Reparaturanlagen. Aufgrund der starken Standardisierung der Teccnols Streitkraefte, können fast alle Waffengattungen hier direkten Service erhalten.]
+	picture = mk6b_box_s.png
 ;   WreckageObject = 14235
 
-   JumpDrive ->* VehicleType.TeccnolsJump1
-   JumpDrive.MaxDistance = 500
-   JumpDrive.consumption.Material = 300
-   JumpDrive.consumption.Fuel = 3000
+	JumpDrive ->* VehicleType.TeccnolsJump1
+	JumpDrive.MaxDistance = 500
+	JumpDrive.consumption.Material = 300
+	JumpDrive.consumption.Fuel = 3000
+   
+	Transportation ->* VehicleType.TransTurretBig
+	Transportation.CategoriesNOT =
 
-   View = 0
-   Features = MoveDuringReactionFire externalRepair externalFuelTransfer externalMaterialTransfer externalAmmoTransfer
-   Armor += 100
-   Weight = 1000
+	View = 0
+	Features = MoveDuringReactionFire externalRepair Repair_Facility externalFuelTransfer externalMaterialTransfer externalAmmoTransfer
+	Armor += 100
+	Weight = 1000
 
 
-   Movement = 0 0 0 14 0 0 0 0 
-   Tank.Material = 40000
-   Tank.Fuel = 60000
-   TerrainAccess ->* VehicleType.heli_terrain 
+	Movement = 0 0 0 14 0 0 0 0 
+	Tank.Material = 40000
+	Tank.Fuel = 60000
+	TerrainAccess ->* VehicleType.heli_terrain 
 
-   Weapons { 
-      Number = 8
-      Weapon0 ->* VehicleType.DLS 
-      Weapon0.MaxRange = 30
-      Weapon1 ->* VehicleType.AmmoCannon 
-      Weapon1.Ammo = 100
-      Weapon2 ->* VehicleType.AmmoSM 
-      Weapon2.Ammo = 100
-      Weapon3 ->* VehicleType.AmmoLM 
-      Weapon3.Ammo = 100
-      Weapon4 ->* VehicleType.AmmoCM 
-      Weapon4.Ammo = 20
-      Weapon5 ->* VehicleType.AmmoSM 
-      Weapon5.Ammo = 100
-      Weapon6 ->* VehicleType.AmmoTorp 
-      Weapon6.Ammo = 100
-      Weapon7 ->* VehicleType.ServiceGround 
+	Weapons { 
+		Number = 8
+		Weapon0 ->* VehicleType.DLS 
+		Weapon0.MaxRange = 30
+		Weapon1 ->* VehicleType.AmmoCannon 
+		Weapon1.Ammo = 100
+		Weapon2 ->* VehicleType.AmmoSM 
+		Weapon2.Ammo = 100
+		Weapon3 ->* VehicleType.AmmoLM 
+		Weapon3.Ammo = 100
+		Weapon4 ->* VehicleType.AmmoCM 
+		Weapon4.Ammo = 20
+		Weapon5 ->* VehicleType.AmmoSM 
+		Weapon5.Ammo = 100
+		Weapon6 ->* VehicleType.AmmoTorp 
+		Weapon6.Ammo = 100
+		Weapon7 ->* VehicleType.ServiceGround 
 
-   } Weapons
+	} Weapons
 } VehicleType

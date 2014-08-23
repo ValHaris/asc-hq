@@ -1,52 +1,50 @@
 BuildingType { 
-   Name = Wind Power Plant
-   ID = 39
-   parent = 5
+	Name = Wind Power Plant
+	ID = 39
+	parent = 5
+	Infotext = [Windnergiekraftwerk]
 
-   Infotext = [Windnergiekraftwerk]
-   Armor = 800
-   Features += NoObjectChaining
-   MaxResourceProduction { 
-      Energy = 3000
-   } MaxResourceProduction
-   defaultProduction {
-      energy = 3000
-   } defaultProduction
+	Armor = 500
+	Features += NoObjectChaining
+	MaxResourceProduction { 
+		Energy = 3000
+	} MaxResourceProduction
+	defaultProduction {
+		energy = 3000
+	} defaultProduction
 
-   Transportation { 
-      MaxLoadableUnits = 1
-      MaxLoadableUnitSize = 5
-      MaxLoadableMass = 6
-      CategoriesNOT = Default hoovercraft Medium_tracked_vehicle Heavy_tracked_vehicle Medium_wheeled_vehicle Heavy_wheeled_vehicle Light_aircraft Medium_aircraft Heavy_aircraft Helicopter Light_ship Medium_ship Heavy_Ship Building|turret|object Rail_vehicle
-   } Transportation
+	Transportation { 
+		MaxLoadableUnits = 1
+		MaxLoadableUnitSize = 5
+		MaxLoadableMass = 6
+		CategoriesNOT = Default hoovercraft Medium_tracked_vehicle Heavy_tracked_vehicle Medium_wheeled_vehicle Heavy_wheeled_vehicle Light_aircraft Medium_aircraft Heavy_aircraft Helicopter Light_ship Medium_ship Heavy_Ship Building|turret|object Rail_vehicle
+	} Transportation
 
-   StorageCapacity { 
-      ASCmode { 
-         Energy = 2000
-      } ASCmode
-   } StorageCapacity
+	StorageCapacity { 
+		ASCmode { 
+			Energy = 2000
+		} ASCmode
+	} StorageCapacity
 
-   ConstructionStages = 1
-   Weather = dry
-   Fields = A1 
-   UseGFXpics = false
-   Pictures { 
-      dry = bld_asc_windrad.png
-   } Pictures
-   RubbleObjects = false
-   Entry = A1
-
-   ConstructionCost { 
-      Energy = 0
-      Material = 8000
-      fuel = 8000
-   } ConstructionCost
-
-   TerrainAccess { 
-      terrain_any = lowland hard_sand soft_sand mountains
-      terrain_all = 
-      terrain_not = railroad large_rocks bridge morass 
-      terrain_kill = lava deep_water river shallow_water very_shallow_water swamp
-   } TerrainAccess
+	ConstructionStages = 1
+	ConstructionCost { 
+		Energy = 0
+		Material = 10000
+		fuel = 1000
+	} ConstructionCost
+	Weather = dry
+	Fields = A1 
+	UseGFXpics = false
+	Pictures { 
+		dry = bld_asc_windrad.png
+	} Pictures
+	RubbleObjects = false
+	Entry = A1
+	TerrainAccess { 
+		terrain_any = lowland hard_sand soft_sand mountains
+		terrain_all = 
+		terrain_not = railroad large_rocks bridge morass 
+		terrain_kill = lava deep_water river shallow_water very_shallow_water swamp
+	} TerrainAccess
 
 } BuildingType

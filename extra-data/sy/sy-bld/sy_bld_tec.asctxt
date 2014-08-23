@@ -1,7 +1,7 @@
 BuildingType { 
    Name = TEC
    ID = 1302
-   Armor = 1200
+   Armor = 500
    View = 30
    Jamming = 31
    ConstructionStages = 1
@@ -49,8 +49,8 @@ BuildingType {
    MaxResearch = 0
    ConstructionCost { 
       Energy = 0
-      Material = 9500
-      fuel = 9500
+      Material = 15000
+      fuel = 1500
    } ConstructionCost
    MaxResourceProduction { 
       Energy = 0

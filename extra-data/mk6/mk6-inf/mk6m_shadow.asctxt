@@ -1,22 +1,45 @@
 VehicleType { 
-   Name = SHADOW
-   ID = 15306
-   parent = 306 15000
+	Name = SHADOW
+	ID = 15306
+	parent = 306 15000
 
-;   Infotext = [GolemType Roboter mit Radarstöhrelektronik. ]
-   picture = mk6m_shadow.pcx
-   GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
+	Infotext = [Der Shadow ist ein spezial Nahkampfroboter. Den Namen verdankt er seiner Fähigkeit direkt aus den Schatten heraus anzugreifen. Dies wird ermöglicht durch ein Instant-Jump-Triebwerk (I-J-T). Dieses Triebwerk ist ursprünglich ein Abfallprodukt aus der Raumfahrt. Der Energieaufwand für kleinere Objekte ist proportional kleiner, als für große Raumschiffe. Die TECC-Wissenschafftler erforschten daraus eine Möglichkeit, mehrere kurze Sprünge hintereinander auszuführen und die Einheiten trotzdem mobil zu halten. Das Instant-Jump-Triebwerk erzeugt dabei eine enorme Menge an Strahlung, was den Einsatz von eigenen Zielsystemen sowie Radartechnik unmöglicht macht. Der Shadow besitzt daher nur einen speziell abgestimmten EMP, der durch die Strahlung des IJT noch verstärkt wird. Da für das I-J-T keine Zielmarkierungen benötigt werden, kann der Shadow direkt in den Kampf hineinspringen, angreifen und sich danach mit einem weiteren Sprung direkt wieder in Sicherheit bringen.]
+	picture = mk6m_shadow.pcx
+	GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
 ;   wreckageobject = 14024
 
-   Tank.material = 500
-   Tank.fuel = 1100
+	Features += move_after_attack
+	Armor += 150
+	View = 0
+	Jamming -= 20
+	
+	Tank.material = 1000
+	Tank.fuel = 5000
+	movement -= 0 0 0 1 0 0 0 0
 
-   Weapons {
-      Number = 1
-      Weapon0 ->* VehicleType.TeccEMP
-      Weapon0.Punch@MaxRange = 80
-      Weapon0.Punch@MinRange = 80
-      Weapon0.LaserRechargeCost.Fuel = 580
-      Weapon0.LaserRechargeCost.Material = 80
-   } Weapons
+	Jumpdrive {
+		Height = ground_level
+		MaxDistance = 70
+		consumption {
+			Energie = 0
+			Material = 200
+			Fuel = 800
+		} consumption
+		terrain_any = road runway lowland hard_sand soft_sand 
+		terrain_all = 
+		terrain_not = swamp forest small_rocks large_rocks bridge
+		terrain_kill = 
+		JumpAfterAttack = true
+		AttackAfterJump = true
+		MovementConsumptionPercentage = 40
+	} Jumpdrive
+
+	Weapons {
+		Number = 1
+		Weapon0 ->* VehicleType.TeccEMP
+		Weapon0.Punch@MaxRange = 130
+		Weapon0.Punch@MinRange = 130
+		Weapon0.LaserRechargeCost.Fuel = 390
+		Weapon0.LaserRechargeCost.Material = 65
+	} Weapons
 } VehicleType

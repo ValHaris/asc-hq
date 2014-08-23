@@ -7,8 +7,6 @@ VehicleType {
    Infotext = [ground radar system]
    GuideSortHelp = 0 245 0 0 0 0 0 0 0 0
 
-
-   Armor -= 200
    View = 105
    Features += satelliteview ManualSelfDestruct
 

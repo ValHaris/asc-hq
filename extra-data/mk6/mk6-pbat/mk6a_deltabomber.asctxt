@@ -10,6 +10,8 @@ VehicleType {
    InfoImageSmall = mk6a_deltabomber_k.png
    GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
 
+   Weight = 50
+   
    Weapons {
       Number = 2
       Weapon0 ->* VehicleType.medbomb

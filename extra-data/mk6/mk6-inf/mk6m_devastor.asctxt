@@ -1,30 +1,31 @@
 VehicleType { 
-   Name = DEVASTOR
-   ID = 15210
-   parent = 210 15000
+	Name = DEVASTOR
+	ID = 15210
+	parent = 210 15000
 
 ;   Description = schwerer Kampfroboter
 ;   Infotext = []
-   Picture = mk6m_devastor.pcx
-   InfoImage = mk6m_devastor.jpg
-   InfoImageSmall = mk6m_devastor_k.png
-   GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
+	Picture = mk6m_devastor.pcx
+	InfoImage = mk6m_devastor.jpg
+	InfoImageSmall = mk6m_devastor_k.png
+	GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
 
-   Armor += 20
-;   Movement += 0 0 0 5 0 0 0 0
-   Tank.material = 600
-   Tank.fuel = 1100
+	Armor += 20
 
-   Weapons {
-      Weapon0 ->* VehicleType.type_laser
-      Weapon0.MaxRange = 30
-      Weapon0.Punch@MinRange = 90
-      Weapon0.WeaponEffectiveness.Trooper = 80
-      Weapon0.Ammo = 2
-      Weapon2 ->* VehicleType.TeccEMP
-      Weapon2.Punch@MaxRange = 110
-      Weapon2.Punch@MinRange = 110
-      Weapon2.LaserRechargeCost.Fuel = 610
-      Weapon2.LaserRechargeCost.Material = 110
-   } Weapons
+	Movement += 0 0 0 9 0 0 0 0
+	Tank.material = 600
+	Tank.fuel = 1100
+
+	Weapons {
+		Weapon0 ->* VehicleType.type_laser
+		Weapon0.MaxRange = 30
+		Weapon0.Punch@MinRange = 90
+		Weapon0.WeaponEffectiveness.Trooper = 80
+		Weapon0.Ammo = 2
+		Weapon2 ->* VehicleType.TeccEMP
+		Weapon2.Punch@MaxRange = 110
+		Weapon2.Punch@MinRange = 110
+		Weapon2.LaserRechargeCost.Fuel = 610
+		Weapon2.LaserRechargeCost.Material = 110
+	} Weapons
 } VehicleType

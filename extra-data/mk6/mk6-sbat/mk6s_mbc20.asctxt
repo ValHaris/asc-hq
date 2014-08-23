@@ -1,25 +1,27 @@
 VehicleType { 
-   Name = MBC 20
-   parent = 356 493
-   ID = 15356
+	Name = MBC 20
+	parent = 356 493 15000
+	ID = 15356
    
-   Description = Lenkwaffenkreuzer
-   picture = mk6s_mbc20.pcx
-   InfoImage = mk6s_mbc20.jpg
-   GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
+	Description = Lenkwaffenkreuzer
+	picture = mk6s_mbc20.pcx
+	InfoImage = mk6s_mbc20.jpg
+	GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
 
-   Features = MoveDuringReactionFire sonar jam_only_own_field 
-   Jamming = 65
-   View += 10
-   Transportation ->* VehicleType.notrans
+	Features = MoveDuringReactionFire sonar jam_only_own_field 
+	ConstructionCost ->* VehicleType.cc2000
+	Jamming = 19
+	View += 19
+	Armor += 50
+	Transportation ->* VehicleType.notrans
    
-   Height = floating submerged
-   Movement += 0 27 0 0 0 0 0 0 
-   Tank { 
-      Energy = 0
-      Material = 0
-      fuel = 6000
-   } Tank
+	Height = floating submerged
+	Movement += 0 27 0 0 0 0 0 0 
+	Tank { 
+		Energy = 0
+		Material = 0
+		fuel = 6000
+	} Tank
     HeightChangeMethodNum = 2
     HeightChangeMethod0 {
         movecost = 5
@@ -36,48 +38,49 @@ VehicleType {
         canattack = true
     } HeightChangeMethod1
 
-   Weapons { 
-      Number = 6
-      Weapon0 ->* VehicleType.UTorp 
-      Weapon0.Ammo = 2
-      Weapon0.ReactionFireShots = 0
+	Weapons { 
+		Number = 6
+		Weapon0 ->* VehicleType.UTorp 
+		Weapon0.Ammo = 4
+		Weapon0.ReactionFireShots = 0
 
-      Weapon1 ->* VehicleType.SSM 
-      Weapon1.ShotFrom = floating
-      Weapon1.MaxRange = 40
-      Weapon1.MinRange = 20
-      Weapon1.Ammo = 20
-      Weapon1.Punch@MaxRange = 100
-      Weapon1.Punch@MinRange = 100
-      Weapon1.ReactionFireShots = 2
+		Weapon1 ->* VehicleType.SSM 
+		Weapon1.ShotFrom = floating
+		Weapon1.MaxRange = 40
+		Weapon1.MinRange = 20
+		Weapon1.Ammo = 20
+		Weapon1.Punch@MaxRange = 100
+		Weapon1.Punch@MinRange = 100
+		Weapon1.ReactionFireShots = 2
 
-      Weapon2 ->* VehicleType.SgM 
-      Weapon2.targets = ground_level
-      Weapon2.MaxRange = 70
-      Weapon2.MinRange = 30
-      Weapon2.Ammo = 4
-      Weapon2.Punch@MaxRange = 110
-      Weapon2.Punch@MinRange = 110
-      Weapon2.ReactionFireShots = 0
+		Weapon2 ->* VehicleType.SgM 
+		Weapon2.targets = ground_level
+		Weapon2.MaxRange = 70
+		Weapon2.MinRange = 30
+		Weapon2.Ammo = 10
+		Weapon2.Punch@MaxRange = 110
+		Weapon2.Punch@MinRange = 110
+		Weapon2.ReactionFireShots = 0
 
-      Weapon3 ->* VehicleType.ShM
-      Weapon3.MaxRange = 60
-      Weapon3.MinRange = 20
-      Weapon3.Ammo = 8
-      Weapon3.Punch@MaxRange = 120
-      Weapon3.Punch@MinRange = 120
-      Weapon3.ReactionFireShots = 0
+		Weapon3 ->* VehicleType.ShM
+		Weapon3.MaxRange = 60
+		Weapon3.MinRange = 20
+		Weapon3.Ammo = 10
+		Weapon3.Punch@MaxRange = 120
+		Weapon3.Punch@MinRange = 120
+		Weapon3.ReactionFireShots = 0
 
-      Weapon4 ->* VehicleType.SAMH 
-      Weapon4.shotFrom = floating
-      Weapon4.MaxRange = 40
+		Weapon4 ->* VehicleType.SAMH 
+		Weapon4.shotFrom = submerged floating
+		Weapon4.MaxRange = 40
 
-      Weapon5 ->* VehicleType.smSSM
-      Weapon5.MaxRange = 30
-      Weapon5.Ammo = 10
-      Weapon5.Punch@MaxRange = 90
-      Weapon5.Punch@MinRange = 90
-      Weapon5.ReactionFireShots = 1
+		Weapon5 ->* VehicleType.smSSM
+		Weapon4.shotFrom = submerged floating
+		Weapon5.MaxRange = 30
+		Weapon5.Ammo = 10
+		Weapon5.Punch@MaxRange = 90
+		Weapon5.Punch@MinRange = 90
+		Weapon5.ReactionFireShots = 1
 
-   } Weapons
+	} Weapons
 } VehicleType

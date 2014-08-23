@@ -1,0 +1,22 @@
+VehicleType { 
+	Name = Ozelot
+	parent = 592
+	ID = 629
+   
+	Description = Airbourne AA
+	Infotext = [InfoImage = Wikipedia]
+	picture = mk3v_ozelot.png
+	InfoImage = mk3v_ozelot.jpg
+	InfoImageSmall = mk3v_ozelot_k.png
+	WreckageObject = 406
+	GuideSortHelp = 0 0 0 0 3 0 0 0 0 0
+	
+	Transportation ->* VehicleType.noTrans
+	Features = paratrooper MoveDuringReactionfire
+
+	Weapons { 
+		Number = 2
+		Weapon0 ->* VehicleType.SAMH
+		Weapon1 ->* VehicleType.MG40low
+	} Weapons
+} VehicleType

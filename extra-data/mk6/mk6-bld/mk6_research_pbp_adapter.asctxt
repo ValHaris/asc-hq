@@ -1,5 +1,0 @@
-Techadapter {
-   ; Research.
-   Name = B22
-   TechnologiesRequired = 15000
-} TechAdapter

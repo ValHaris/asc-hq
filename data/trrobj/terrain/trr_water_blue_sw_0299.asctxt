@@ -17,5 +17,8 @@ TerrainType {
       UseGFXpics = false
       Picture = trr_water_blue_sw.png gfx_ice90_blue_sw.png
    } much_snow
-   snow_and_ice ->* TerrainType.much_snow 
+   snow_and_ice { 
+      UseGFXpics = false
+      Picture = trr_water_blue_sw.png gfx_ice90_blue_sw.png
+   } snow_and_ice
 } TerrainType

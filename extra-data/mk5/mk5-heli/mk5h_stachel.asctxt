@@ -1,42 +1,43 @@
 VehicleType { 
-   Name = Stachel
-   parent = 382
-   ID = 1449
+	Name = Stachel
+	parent = 382
+	ID = 1449
 
-   Description = attack helicopter
-   picture = mk5h_Stachel.pcx
-   InfoImage = mk5h_stachel.jpg
-   Infotext = [Die begrenzte Anzahl an verfuegbaren Kampfflugzeugen liess auch in diesem Fall 
-   ein erhebliches mass an Improvisation erkennen. Der Lastesel der Outsider wurde anstelle 
-   der Containerladevorrichtungen mit 2 grossen Waffentraegern ausgestattet. Zwar besitzt das
-   Modell nicht die Wendigkeit und die Geschwindigkeit wie ein Kampfhubschrauber, aber jetzt ueber 
-   ein betraechtliches Waffenpotential.
-   InfoImage = Wikipedia Bell-Boeing V-22]
+	Description = attack helicopter
+	picture = mk5h_Stachel.pcx
+	InfoImage = mk5h_stachel.jpg
+	Infotext = [Die begrenzte Anzahl an verfuegbaren Kampfflugzeugen liess auch in diesem Fall 
+	ein erhebliches mass an Improvisation erkennen. Der Lastesel der Outsider wurde anstelle 
+	der Containerladevorrichtungen mit 2 grossen Waffentraegern ausgestattet. Zwar besitzt das
+	Modell nicht die Wendigkeit und die Geschwindigkeit wie ein Kampfhubschrauber, aber jetzt ueber 
+	ein betraechtliches Waffenpotential.
+	InfoImage = Wikipedia Bell-Boeing V-22]
 
-   Armor -= 70
-   Movement += 0 0 0 -10 -20 20 0 0 
-   MovementSound = heli_h_s.ogg
+	Armor -= 70
+	Movement += 0 0 0 -10 -20 20 0 0 
+	MovementSound = heli_h_s.ogg
 
-   Weapons { 
-      Number = 4
-      Weapon0.Ammo = 8
-      Weapon0.ShotFrom = low_level_flight
-      Weapon0.Punch@MaxRange = 110
-      Weapon0.Punch@MinRange = 110
+	Weapons { 
+		Number = 4
+		Weapon0.Ammo = 8
+		Weapon0.ShotFrom = low_level_flight
+		Weapon0.Punch@MaxRange = 115
+		Weapon0.Punch@MinRange = 115
 
-      Weapon1.Ammo = 6
-      Weapon1.MaxRange = 20
-      Weapon1.ShotFrom = medium_level_flight
-      Weapon1.Punch@MaxRange += 5
-      Weapon1.Punch@MinRange += 5
+		Weapon1.Ammo = 6
+		Weapon1.MaxRange = 20
+		Weapon1.ShotFrom = medium_level_flight
+		Weapon1.Punch@MaxRange += 5
+		Weapon1.Punch@MinRange += 5
       
-      Weapon2.Punch@MaxRange += 5
-      Weapon2.Punch@MinRange += 5
+		Weapon2.Punch@MaxRange += 15
+		Weapon2.Punch@MinRange += 15
 
-      Weapon3.Ammo = 8
-      Weapon3.Punch@MaxRange += 5
-      Weapon3.Punch@MinRange += 5
-      Weapon3.ShotFrom = medium_level_flight
+		Weapon3.Ammo = 8
+		Weapon3.MinRange = 20
+		Weapon3.MaxRange = 30
+		Weapon3.Punch@MaxRange += 5
+		Weapon3.Punch@MinRange += 5
 
-   } Weapons
+	} Weapons
 } VehicleType

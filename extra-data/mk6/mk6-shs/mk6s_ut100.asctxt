@@ -1,16 +1,23 @@
 VehicleType { 
-   Name = UT 100
-   parent = 369 493
-   ID = 15369
+	Name = UT 100
+	parent = 369 493
+	ID = 15369
 
-   picture = mk6s_ut100.png
-   GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
+	picture = mk6s_ut100.png
+	GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
 
-   Height = deep_submerged submerged floating
-   Movement += 66 66 0 0 0 0 0 0 
+	Armor += 100
+
+	Height = deep_submerged submerged floating
+	Movement += 66 66 0 0 0 0 0 0 
+	Tank.Fuel += 20000
+	Tank.Material += 20000
    
-   Weapons {
-      Number = 5 
-      Weapon1 ->* VehicleType.AmmoLM
-   } Weapons
+	Weapons {
+		Number = 7 
+		Weapon1 ->* VehicleType.AmmoCM
+		Weapon1.Ammo = 20
+		
+		Weapon5.Ammo = 200
+	} Weapons
 } VehicleType

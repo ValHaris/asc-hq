@@ -8,12 +8,13 @@ VehicleType {
    GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
 
    Features += paratrooper
+   View += 19
 
-   Construction { 
-      Objects = 15002
-   } Construction
+	Construction { 
+		Objects = 15002
+	} Construction
    
-   Tank.Fuel = 4500
-   Tank.Material = 900
+	Tank.Fuel = 4500
+	Tank.Material = 900
 
 } VehicleType

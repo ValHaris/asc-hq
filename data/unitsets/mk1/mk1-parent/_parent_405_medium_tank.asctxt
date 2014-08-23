@@ -1,43 +1,42 @@
 VehicleType { 
-   Name = Medium Tank
-   abstract = true
-   ID = 405
-   parent = 402
+	Name = Medium Tank
+	abstract = true
+	ID = 405
+	parent = 402
 
-   Description = medium tank
-   Infotext = 
-   WreckageObject = 497 496
+	Description = medium tank
+	Infotext = 
+	WreckageObject = 497 496
 
-   Features = leaves_tracks 
-   Category = medium_tracked_vehicle
-   Armor = 650
-   Weight = 65
-   View = 30
-   Jamming = 0
-   MaxSurvivableStorm = 255
-   ResourceDrillingRange = 0
-   SelfRepairRate = 0
-   minFieldRepairDamage = 15
+	Features = leaves_tracks 
+	Category = medium_tracked_vehicle
+	Armor = 750
+	Weight = 75
+	View = 30
+	Jamming = 0
+	MaxSurvivableStorm = 255
+	ResourceDrillingRange = 0
+	SelfRepairRate = 0
+	minFieldRepairDamage = 15
 
-   Tank { 
-      Energy = 0
-      Material = 0
-      fuel = 1100
-   } Tank
-   Height = ground_level 
-   FuelConsumption = 14
-   Movement = 0 0 0 65 0 0 0 0 
-   TerrainAccess ->* VehicleType.med_terrain 
+	Tank { 
+		Energy = 0
+		Material = 0
+		fuel = 1100
+	} Tank
+	Height = ground_level 
+	FuelConsumption = 14
+	Movement = 0 0 0 77 0 0 0 0 
+	TerrainAccess ->* VehicleType.med_terrain 
 
-   Construction { 
-      Buildings = 
-      Vehicles = 
-      Objects = 
-   } Construction
+	Construction { 
+		Buildings = 
+		Vehicles = 
+		Objects = 
+	} Construction
 
-   WaitForAttack = false
-   Weapons { 
-      Initiative = 0
-      Number = 0
+	WaitForAttack = false
+	Weapons { 
+		Number = 0
    } Weapons
 } VehicleType

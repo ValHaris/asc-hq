@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 15115
+   ;Bezeichnung der verknüpften Technologie: HACK
+   TechnologiesRequired = 15115
+} TechAdapter

@@ -1,98 +1,106 @@
 VehicleType { 
-   Name = FT 90
-   parent = 360 15000 497
-   ID = 15360
+	Name = FT 90
+	parent = 360 15000 497
+	ID = 15360
 
-   Description = aircraft carrier
+	Description = aircraft carrier
 ;   Infotext = []
-   picture = mk6s_ft90.png
-   WreckageObject = 414
-   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+	picture = mk6s_ft90.png
+	WreckageObject = 414
+	GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
    
-   Transportation {
-      EntranceSystemNum = 3
-      EntranceSystem2 {
-        Mode = In out
-        UnitHeightAbs = medium_level_flight
-        UnitHeightRel = 0
-        ContainerHeight = medium_level_flight
-        MoveCost = 40 
-        CategoriesNOT = 
-        DockingHeightAbs = 
-        DockingHeightRel = -100 
-      } EntranceSystem2
-   } Transportation 
+	Transportation {
+		EntranceSystemNum = 3
+		EntranceSystem2 {
+			Mode = In out
+			UnitHeightAbs = medium_level_flight
+			UnitHeightRel = 0
+			ContainerHeight = medium_level_flight
+			MoveCost = 40 
+			CategoriesNOT = 
+			DockingHeightAbs = 
+			DockingHeightRel = -100 
+		} EntranceSystem2
+	} Transportation 
 
 
-   Armor -= 300
-   View = 70
+	Armor -= 300
+	View = 70
 
-   TerrainAccess.Terrain_any += spaceport runway
-   Movement += 0 0 0 40 70 100 0 0
-   FuelConsuption = 45
-   Height = floating ground_level low_level_flight medium_level_flight
-   Weapons { 
-      Number = 5
-      Weapon0 ->* VehicleType.Ship_Flak 
-      Weapon0.Ammo = 20
+	TerrainAccess.Terrain_any += spaceport runway
+	Movement += 0 0 0 40 70 100 0 0
+	FuelConsuption = 45
+	Height = floating ground_level low_level_flight medium_level_flight
+
+	Construction {
+		Vehicles = 15112 15113
+		UnitConstructionMoveCostPercentage = 50
+		UnitConstructionMinDistance = 1
+		UnitConstructionMaxDistance = 9
+	} Construction
+
+	Weapons { 
+		Number = 5
+		Weapon0 ->* VehicleType.Ship_Flak 
+		Weapon0.Ammo = 20
       
-      Weapon1 ->* VehicleType.SAMH 
-      Weapon1.MaxRange = 50
-      Weapon1.Ammo = 100
+		Weapon1 ->* VehicleType.SAMH 
+		Weapon1.MaxRange = 50
+		Weapon1.Ammo = 100
 
-      Weapon2 ->* VehicleType.smAAM 
-      Weapon2.MaxRange = 30
-      Weapon2.Ammo = 100
+		Weapon2 ->* VehicleType.smAAM 
+		Weapon2.MaxRange = 30
+		Weapon2.Ammo = 100
 
-      Weapon3 ->* VehicleType.AmmoTorp 
-      Weapon3.Ammo = 50
+		Weapon3 ->* VehicleType.AmmoTorp 
+		Weapon3.Ammo = 50
 
-      Weapon4 ->* VehicleType.AmmoBomb 
-      Weapon4.Ammo = 100
+		Weapon4 ->* VehicleType.AmmoBomb 
+		Weapon4.Ammo = 100
 
-   } Weapons
+	} Weapons
 
-   HeightChangeMethodNum = 6
-   HeightChangeMethod0 {
-      movecost = 25
-      heightdelta = 2
-      dist = 0
-      startheight = floating
-      canattack = true
-   } HeightChangeMethod0
-   HeightChangeMethod1 {
-      movecost = 15
-      heightdelta = 1
-      dist = 0
-      startheight = low_level_flight
-      canattack = true
-   } HeightChangeMethod1
-   HeightChangeMethod2 {
-      movecost = 10
-      heightdelta = -1
-      dist = 0
-      startheight = medium_level_flight
-      canattack = true
-   } HeightChangeMethod2
-   HeightChangeMethod3 {
-      movecost = 20
-      heightdelta = -1
-      dist = 0
-      startheight = low_level_flight
-      canattack = true
-   } HeightChangeMethod3
-   HeightChangeMethod4 {
-      movecost = 0
-      heightdelta = -1
-      dist = 0
-      startheight = ground_level
-      canattack = true
-   } HeightChangeMethod4
-   HeightChangeMethod5 {
-      movecost = 10
-      heightdelta = 1
-      dist = 0
-      startheight = ground_level
-      canattack = true
-   } HeightChangeMethod5
+	HeightChangeMethodNum = 6
+	HeightChangeMethod0 {
+		movecost = 25
+		heightdelta = 2
+		dist = 0
+		startheight = floating
+		canattack = true
+	} HeightChangeMethod0
+	HeightChangeMethod1 {
+		movecost = 15
+		heightdelta = 1
+		dist = 0
+		startheight = low_level_flight
+		canattack = true
+	} HeightChangeMethod1
+	HeightChangeMethod2 {
+		movecost = 10
+		heightdelta = -1
+		dist = 0
+		startheight = medium_level_flight
+		canattack = true
+	} HeightChangeMethod2
+	HeightChangeMethod3 {
+		movecost = 20
+		heightdelta = -1
+		dist = 0
+		startheight = low_level_flight
+		canattack = true
+	} HeightChangeMethod3
+	HeightChangeMethod4 {
+		movecost = 0
+		heightdelta = -1
+		dist = 0
+		startheight = ground_level
+		canattack = true
+	} HeightChangeMethod4
+	HeightChangeMethod5 {
+		movecost = 10
+		heightdelta = 1
+		dist = 0
+		startheight = ground_level
+		canattack = true
+	} HeightChangeMethod5
 } VehicleType

@@ -1,27 +1,27 @@
 VehicleType { 
-   Name = Bullwark
-   ID = 15211
-   parent = 211 15000
+	Name = Bullwark
+	ID = 15211
+	parent = 211 15000
 
-   Description = Robotverteidiger
-   Picture = mk6m_bullwark.png
-   GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
+	Description = Robotverteidiger
+	Picture = mk6m_bullwark.png
+	GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
 ;   Infotext = []
 
-   Armor += 50
-;   Movement += 0 0 0 5 0 0 0 0
-   Tank.material = 1000
-   Tank.fuel = 1100
+	Armor += 50
+	Movement += 0 0 0 9 0 0 0 0
+	Tank.material = 1000
+	Tank.fuel = 1100
 
-   Weapons {
-      Number = 4
-      Weapon1 ->* VehicleType.type_laser
-      Weapon1.Ammo = 2
-      Weapon2 ->* VehicleType.NLS
-      Weapon3 ->* VehicleType.TeccEMP
-      Weapon3.Punch@MaxRange = 105
-      Weapon3.Punch@MinRange = 105
-      Weapon3.LaserRechargeCost.Fuel = 600
-      Weapon3.LaserRechargeCost.Material = 100
-   } Weapons
+	Weapons {
+		Number = 4
+		Weapon1 ->* VehicleType.type_laser
+		Weapon1.Ammo = 2
+		Weapon2 ->* VehicleType.NLS
+		Weapon3 ->* VehicleType.TeccEMP
+		Weapon3.Punch@MaxRange = 105
+		Weapon3.Punch@MinRange = 105
+		Weapon3.LaserRechargeCost.Fuel = 600
+		Weapon3.LaserRechargeCost.Material = 100
+	} Weapons
 } VehicleType

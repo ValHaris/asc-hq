@@ -1,31 +1,32 @@
 VehicleType {
-   Name = XYX
-   parent = 1390 
-   ID = 1313
+	Name = XYX
+	parent = 1390 
+	ID = 1313
 
-   Description = Multi-Defence Geschütz
-   Picture = syb_xyx.png
-   GuideSortHelp = 0 311 0 0 20 0 0 0 0 0
-   Infotext = [Informationen ueber diese Einheit sind nur gegen besondere Berechtigung erhaeltlich.]
+	Description = Multi-Defence Geschütz
+	Picture = syb_xyx.png
+	GuideSortHelp = 0 311 0 0 20 0 0 0 0 0
+	Infotext = [Informationen ueber diese Einheit sind nur gegen besondere Berechtigung erhaeltlich.]
 
-   Armor += 100
-   View = 50
-   Jamming = 30
+	Armor += 50
+	View = 60
+	Jamming = 30
 
-   Features = no_midair_refuel self_repairing MoveDuringReactionFire
-   Weapons { 
-      Number = 1
-      Weapon0 ->* VehicleType.SY_TankL 
-      Weapon0.sound = lasergun.ogg
-      Weapon0.targets = floating ground_level low_level_flight medium_level_flight high_level_flight
-      Weapon0.ReactionFireShots = 2
-      Weapon0.MaxRange = 40
-      Weapon0.MinRange = 10
-      Weapon0.LaserRechargeCost.fuel = 105
-      Weapon0.Punch@MaxRange = 90
-      Weapon0.Punch@MinRange = 100
-      Weapon0.HitAccuracy.u1 = 80
-      Weapon0.HitAccuracy.u2 = 75
-      Weapon0.HitAccuracy.u3 = 70
-   } Weapons
+	Features = no_midair_refuel self_repairing MoveDuringReactionFire
+	Weapons { 
+		Number = 1
+		Weapon0 ->* VehicleType.SY_TankL 
+		Weapon0.sound = lasergun.ogg
+		Weapon0.targets = floating ground_level low_level_flight medium_level_flight high_level_flight
+		Weapon0.ReactionFireShots = 2
+		Weapon0.MaxRange = 40
+		Weapon0.MinRange = 10
+		Weapon0.LaserRechargeCost.material = 50
+		Weapon0.LaserRechargeCost.fuel = 300
+		Weapon0.Punch@MaxRange = 90
+		Weapon0.Punch@MinRange = 100
+		Weapon0.HitAccuracy.u1 = 80
+		Weapon0.HitAccuracy.u2 = 75
+		Weapon0.HitAccuracy.u3 = 70
+	} Weapons
 } VehicleType

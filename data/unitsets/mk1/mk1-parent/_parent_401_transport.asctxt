@@ -103,6 +103,10 @@
    cargo_shuttle {
       CategoriesNOT = light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship building|turret|object helicopter hoovercraft default
    } cargo_shuttle
+   
+	cargo_droneL {
+		CategoriesNOT = default trooper light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship building|turret|object helicopter hoovercraft
+	} cargo_droneL
 
 ; ----------------------------------------------------------------------------------------------------------------
 ; -----   C A R R I E R   L A N D I N G   ------------------------------------------------------------------------

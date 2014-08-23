@@ -1,22 +1,22 @@
 BuildingType {
-   Name = SY Airport
+   Name = KERSS
    ID = 1325
    parent = 10
 
    Infotext = [Produktionsanlage für Flugzeuge incl. Munitionsproduktion, Reparatur und Wiederverwertung.]
 
-   Armor = 2000
+   Armor = 500
    Features = Vehicle_Production Ammo_Production Repair_Facility Recycling Produce_Units_that_cannot_leave
    CategoriesProduceable = default light_Aircraft medium_Aircraft heavy_aircraft
    ConstructionCost { 
       Energy = 0
-      Material = 15000
-      fuel = 15000
+      Material = 20000
+      fuel = 2000
    } ConstructionCost
    ExternalLoading = 
 
    ConstructionStages = 1
-   Height = high_level_flight 
+   Height = ground_level 
    Weather = dry 
    Fields = A2 A4 B2 B3 B4 
    UseGFXpics = false
@@ -35,32 +35,45 @@ BuildingType {
       B4 = 
    } rubble
    Entry = B3
+	TerrainAccess.terrain_kill =
 
    Transportation { 
-      MaxLoadableUnits = 8
+      MaxLoadableUnits = 6
       MaxLoadableUnitSize = 3000
       MaxLoadableMass = 1000000
       CategoriesNOT = default Medium_tracked_vehicle Heavy_tracked_vehicle light_wheeled_vehicle Medium_wheeled_vehicle Heavy_wheeled_vehicle Light_ship Medium_ship Heavy_Ship Rail_vehicle building|turret|object
-      EntranceSystemNum = 2
+      EntranceSystemNum = 3
       EntranceSystem0 {
         Mode = in out docking
-        UnitHeightAbs = ground_level high_level_flight
+        UnitHeightAbs = ground_level
         UnitHeightRel = -100
-        ContainerHeight = high_level_flight
+        ContainerHeight = ground_level
         CategoriesNOT = 
-        DockingHeightAbs = high_level_flight
+        DockingHeightAbs = ground_level
         DockingHeightRel = 0 
         DisableAttack = false
       } EntranceSystem0
       EntranceSystem1 {
-        Mode = out 
-        UnitHeightAbs = orbit
+        Mode = in out 
+        UnitHeightAbs = low_level_flight medium_level_flight
         UnitHeightRel = -100
-        ContainerHeight = high_level_flight
+        ContainerHeight = ground_level
         CategoriesNOT = 
         DockingHeightAbs = 
         DockingHeightRel = 0 
         DisableAttack = false
+		Movecost = 40
       } EntranceSystem1
+      EntranceSystem2 {
+        Mode = out 
+        UnitHeightAbs = orbit
+        UnitHeightRel = -100
+        ContainerHeight = ground_level
+        CategoriesNOT = 
+        DockingHeightAbs = 
+        DockingHeightRel = 0 
+        DisableAttack = false
+		Movecost = 20
+      } EntranceSystem2
    } Transportation
 } BuildingType

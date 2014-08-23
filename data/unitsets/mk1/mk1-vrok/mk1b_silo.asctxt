@@ -1,17 +1,21 @@
 VehicleType { 
-   Name = Silo
-   ID = 84
-   parent = 304
+	Name = Silo
+	ID = 84
+	parent = 304
 
-   Description = main rocket bunker
-   Picture = mk1b_silo.pcx
-   InfoImage = mk1b_silo.jpg
-   InfoImageSmall = mk1b_silo_k.png
-   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
-   Infotext = [ Gepanzerte stationaere Boden-Boden Raketenanlage. Aufgrund der große Treibstofftanks ist der Sprengkopf der 
+	Description = main rocket bunker
+	Picture = mk1b_silo.pcx
+	InfoImage = mk1b_silo.jpg
+	InfoImageSmall = mk1b_silo_k.png
+	GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+	Infotext = [ Gepanzerte stationaere Boden-Boden Raketenanlage. Aufgrund der große Treibstofftanks ist der Sprengkopf der 
    Rakete eher klein ausgefallen.]
    
-   Features += ManualSelfDestruct
-   Armor += 200
+	Armor += 100
+	
+	Weapons.Weapon0.Punch@MaxRange -= 5
+	Weapons.Weapon0.Punch@MinRange -= 5
+	Weapons.Weapon1 ->* VehicleType.BigMiniGun
+
    
 } VehicleType

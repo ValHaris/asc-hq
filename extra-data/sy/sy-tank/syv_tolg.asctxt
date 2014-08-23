@@ -1,13 +1,13 @@
 VehicleType { 
-   Name = TOLG
-   ID = 1309
-   parent = 1394 1395 1392 1399
+	Name = TOLG
+	ID = 1309
+	parent = 1394 1395 1392 1399
 
-   Description = Panzer
-   Picture = syv_tolg.png
-   InfoImage = syv_tolg.jpg
-   InfoImageSmall = syv_tolg_k.png
-   Infotext = [Obwohl sich die SY überwiegend in der Luft bewegen, mußten Fahrzeuge entwickelt und gebaut werden, die sich am Boden fortbewegen. Typisch für die SY wurde ein kompaktesModel für den Bodennahkampf geschaffen. Der Tolg-Schwebepanzer besitzt eine starke Panzerung, einen Plasmawerfer für den Nahkampf und 2 Kleinlaser.
+	Description = Panzer
+	Picture = syv_tolg.png
+	InfoImage = syv_tolg.jpg
+	InfoImageSmall = syv_tolg_k.png
+	Infotext = [Obwohl sich die SY überwiegend in der Luft bewegen, mußten Fahrzeuge entwickelt und gebaut werden, die sich am Boden fortbewegen. Typisch für die SY wurde ein kompaktesModel für den Bodennahkampf geschaffen. Der Tolg-Schwebepanzer besitzt eine starke Panzerung, einen Plasmawerfer für den Nahkampf und 2 Kleinlaser.
 Der Schwebeantrieb ist so dimensioniert, das er kurzfristig in die Luft aufsteigen kann, um kleinere Hindernisse zu überwinden. Ein Abfeuern der Waffen, ist im Flugmodus allerdings nicht möglich. Die dabei entstehenden Kräfte würden den Tolg abstürzen lassen.
 
 Technische Daten:
@@ -21,36 +21,34 @@ Haupteinsatzgebiet: Boden-Nahkampf
 
 InfoImage = Steffen Fröhlich]
 
-   Features += no_midair_refuel 
-   Armor = 850
-   Weight = 75
-   View = 32
+	Features += no_midair_refuel 
+	Armor = 850
+	Weight = 85
+	View = 32
 
-   Height = ground_level low_level_flight
-   Tank { 
-      Energy = 0
-      Material = 1000
-      fuel = 3000
-   } Tank
-   FuelConsumption = 20
-   Movement = 0 0 0 77 50 0 0 0 
+	Height = ground_level low_level_flight
+	Tank { 
+		Energy = 0
+		Material = 1000
+		fuel = 3500
+	} Tank
+	FuelConsumption = 20
+	Movement = 0 0 0 77 50 0 0 0 
 
-   Weapons { 
-      Number = 2
-      Weapon0 ->* VehicleType.SY_TankL 
-      Weapon0.Ammo = 6
-      Weapon0.LaserRechargeCost.fuel = 89
-      Weapon0.Punch@MaxRange = 89
-      Weapon0.Punch@MinRange = 89
+	Weapons { 
+		Number = 2
 
-      Weapon1 ->* VehicleType.SY_TankL 
-      Weapon1.Ammo = 6
-      Weapon1.targets = low_level_flight medium_level_flight
-      Weapon1.LaserRechargeCost.fuel = 55
-      Weapon1.Punch@MaxRange = 45
-      Weapon1.Punch@MinRange = 55
-      Weapon1.HitAccuracy.u1 = 100
-      Weapon1.HitAccuracy.u2 = 90
+		Weapon0 ->* VehicleType.SY_TankL 
+		Weapon0.Ammo = 6
+		Weapon0.Punch@MaxRange = 90
+		Weapon0.Punch@MinRange = 90
+		Weapon0.LaserRechargeCost.material = 50
+		Weapon0.LaserRechargeCost.fuel = 270
+
+		Weapon1 ->* VehicleType.SY_TankL_Air
+		Weapon1.ReactionFireShots = 1
+		Weapon1.MaxRange = 20
+		Weapon1.Ammo = 6
 
    } Weapons
 } VehicleType

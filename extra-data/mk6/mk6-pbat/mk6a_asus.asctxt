@@ -1,28 +1,30 @@
 VehicleType { 
-   Name = ASUS
-   parent = 271 15000
-   ID = 15271
+	Name = ASUS
+	parent = 271 15000
+	ID = 15271
 
-   Picture = mk6a_asus.png
-   GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
-   Infotext = [Der ASUS ist ein mittlerer Langstreeckenjäger der Technols und ist eine der wenigen Eigenentwicklungen, die auf eine Landebahn angewiesen sind.
-Innerhalb der Teccnols Luftwaffe übernimmt er die Funktion eines Luftüberlegenheitsjägers. Seine unkonventionelle Bauform erlaubt ihm trotz seiner recht schweren Panzerung innerhalb dichter Luftschichten eine hervorragende Agilität, die sich sogar mit Abfangjägern messen kann. Allerdings musste dafür auf die Möglichkeit in hohen Luftschichten zu operieren verzichtet werden.
-Die Hauptwaffe der ASUS ist ein Zwillings-Laser der in den äußeren Flügeln integriert ist. Im Gegensatz zu konventionellen festmontierten Waffen ist es dem Laser durch seine hochentwickelte Architektur möglich, Ziele die um bis zu 15° ausserhalb des Flugvektors des ASUS liegen zu treffen. Kombiniert mit der automatisierten Zielerfassung ist es einem erfahrenen ASUS Piloten dadurch möglich, innerhalb der 5 sekunden Strahldauer mehrere Feindmaschinen zu erfassen und zu vernichten. Der einzige Nachteil dieses Lasers ist seine lange Nachladezeit.
-Für den Nahkampf besitzt der Asus einen EMP der Klasse D.] 
+	Picture = mk6a_asus.png
+	GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
+	Infotext = [Der ASUS ist ein mittlerer Langstreeckenjäger der Technols und ist eine der wenigen Eigenentwicklungen, die auf eine Landebahn angewiesen sind.
+	Innerhalb der Teccnols Luftwaffe übernimmt er die Funktion eines Luftüberlegenheitsjägers. Seine unkonventionelle Bauform erlaubt ihm trotz seiner recht schweren Panzerung innerhalb dichter Luftschichten eine hervorragende Agilität, die sich sogar mit Abfangjägern messen kann. Allerdings musste dafür auf die Möglichkeit in hohen Luftschichten zu operieren verzichtet werden.
+	Die Hauptwaffe der ASUS ist ein Zwillings-Laser der in den äußeren Flügeln integriert ist. Im Gegensatz zu konventionellen festmontierten Waffen ist es dem Laser durch seine hochentwickelte Architektur möglich, Ziele die um bis zu 15° ausserhalb des Flugvektors des ASUS liegen zu treffen. Kombiniert mit der automatisierten Zielerfassung ist es einem erfahrenen ASUS Piloten dadurch möglich, innerhalb der 5 sekunden Strahldauer mehrere Feindmaschinen zu erfassen und zu vernichten. Der einzige Nachteil dieses Lasers ist seine lange Nachladezeit.
+	Für den Nahkampf besitzt der Asus einen EMP der Klasse D.] 
 
-   Tank.Fuel += 1000
-   Tank.Material = 1000
+	Tank.Fuel += 1000
+	Tank.Material = 1000
 
-   Weapons { 
-      Number = 2
-      Weapon0 ->* VehicleType.type_laser
-      Weapon0.name = Lasergun
-      Weapon0.targets = low_level_flight medium_level_flight high_level_flight
-      Weapon0.MaxRange = 20
-      Weapon0.Punch@MinRange += 10
-      Weapon1 ->* VehicleType.TeccEMPAir
-      Weapon1.Punch@MaxRange = 75
-      Weapon1.Punch@MinRange = 75
+	Weapons { 
+		Number = 2
+		Weapon0 ->* VehicleType.type_laser
+		Weapon0.name = Lasergun
+		Weapon0.targets = low_level_flight medium_level_flight high_level_flight
+		Weapon0.MaxRange = 20
+		Weapon0.Punch@MinRange += 10
+		Weapon0.Punch@MaxRange += 5
+
+		Weapon1 ->* VehicleType.TeccEMPAir
+		Weapon1.Punch@MaxRange = 87
+		Weapon1.Punch@MinRange = 87
 
    } Weapons
 } VehicleType

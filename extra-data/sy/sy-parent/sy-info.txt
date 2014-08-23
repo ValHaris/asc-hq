@@ -70,6 +70,7 @@ Units
 1351 Exol
 1352 Neks   Käfigfahrzeug
 1353 IMP
+1354 Tir
 
 Objekte
 

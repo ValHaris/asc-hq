@@ -12,10 +12,10 @@ ObjectType {
    Height = 87
 
    TerrainAccess.terrain_any = Lowland Hard_sand Soft_sand Very_shallow_water
-   TerrainAccess.terrain_not = forest large_rocks installation
+   TerrainAccess.terrain_not = large_rocks installation
    TerrainAccess.terrain_kill = river water deep_water lava
 
-   Armor = 2500
+   Armor = 1000
    ConstructionCost { 
       Energy = 0
       Material = 10000

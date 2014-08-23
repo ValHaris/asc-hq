@@ -1,35 +1,34 @@
 VehicleType { 
-   Name = TAL
-   ID = 1348
-   parent = 322 1395 1394
+	Name = TAL
+	ID = 1348
+	parent = 322 1395 1394
 
-   Description = Bodenabwehrwurm
-   Infotext = []
-   picture = syb_tal.png
-   WreckageObject = 1308
+	Description = Bodenabwehrwurm
+	Infotext = []
+	picture = syb_tal.png
+	WreckageObject = 1308
 ;   InfoImage = mk3b_ss74.jpg
 ;   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
-   Armor = 750
-   Jamming = 39
-   View = 0
-   Weight = 5000
-   Features = MoveDuringReactionFire jam_only_own_field self_repairing
-   SelfRepairRate = 15
+	Armor = 700
+	Jamming = 39
+	View = 0
+	Weight = 5000
+	Features = MoveDuringReactionFire jam_only_own_field self_repairing
+	SelfRepairRate = 10
 
-   TerrainAccess ->* VehicleType.SY_worm 
-   Tank.Fuel = 10000
-   Tank.Material = 5000
-   Movement = 0 0 0 10 0 0 0 0 
-;   ObjectsLayedByMovement = 1301
+	TerrainAccess ->* VehicleType.SY_worm 
+	Tank.Fuel = 10000
+	Tank.Material = 5000
+	Movement = 0 0 0 10 0 0 0 0 
+;	ObjectsLayedByMovement = 1301
    
-   JumpDrive ->* VehicleType.SY_worm_jump 
+	JumpDrive ->* VehicleType.SY_worm_jump 
 
-   WaitForAttack = true
-   Weapons {
+	WaitForAttack = true
+	Weapons {
       Weapon0 ->* VehicleType.type_laser
       Weapon0.name = Drohnenschacht 
-	  Weapon0.MaxRange += 10
       Weapon0.Sound = canon_s.ogg
       Weapon0.Punch@MaxRange = 110
       Weapon0.Punch@MinRange = 110
@@ -40,25 +39,7 @@ VehicleType {
       Weapon0.LaserRechargeCost.material = 200
       Weapon0.LaserRechargeCost.fuel = 400
 
-      Weapon1 ->* VehicleType.SY_TankL
-      Weapon1.name = Drohnenschacht 
-      Weapon1.Sound = canon_s.ogg
-      Weapon1.targets = floating ground_level low_level_flight medium_level_flight high_level_flight
-      Weapon1.HitAccuracy.u1 = 100
-      Weapon1.HitAccuracy.u2 = 95
-      Weapon1.HitAccuracy.u3 = 90
-	  Weapon1.MaxRange = 40
-      Weapon1.Punch@MaxRange = 110
-      Weapon1.Punch@MinRange = 110
-	  Weapon1.ReactionFireShots = 2
-      Weapon1.LaserRechargeRate = 1
-      Weapon1.Ammo = 4
-      Weapon1.LaserRechargeCost.energy = 0
-      Weapon1.LaserRechargeCost.material = 100
-      Weapon1.LaserRechargeCost.fuel = 200
-      Weapon1.WeaponEffectiveness.helicopter = 70
-      Weapon1.WeaponEffectiveness.light_aircraft = 70
-      Weapon1.WeaponEffectiveness.medium_aircraft  = 70
-      Weapon1.WeaponEffectiveness.heavy_aircraft = 70
+      Weapon1 ->* VehicleType.SY_WormMD
+
    } Weapons
 } VehicleType

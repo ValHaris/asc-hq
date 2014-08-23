@@ -1,29 +1,32 @@
 VehicleType { 
-   Name = IOX
-   parent = 1390
-   ID = 1312
+	Name = IOX
+	parent = 1390
+	ID = 1312
 
-   Description = Heavy Gun Turret
-   Infotext = [Zu dieser Waffe ist nicht viel zu sagen, ein großes Lasergeschütz. Aufgrund der Bodengebundenheit ist die Waffenreichweite begrenzt (Oberflächenkrümmumg). Das Hauptwaffensystem ist für die Bekämpfung von Boden- und bodennahen Zielen ausgelegt und verfügt über eine enorme Durchschlagskraft. Kleinere Hubschrauber wurden im Tiefflug förmlich eingeschmolzen, als sie vom Hauptenergiestrahl des Iox getroffen wurden. Kurzstreckenlaser sorgen für einen Schutz gegen Luftangriffe. Der Schweberantrieb des Iox funktioniert ähnlich wie beim Tolg, nur das dieser nicht direkt auf dem Boden funktioniert. Der Sockel des Iox muß vor dem Feuern im Boden verankert werden, um die Zielgenauigkeit zu erhalten. Ein Feuern direkt nach der Landung ist deshalb nicht möglich. Wenn die Energiespeicher voll geladen sind, ist der Geschützturm permanent einsatzbereit. Auch wenn er meistens nicht direkt feuern kann, stell er doch einen wirksamen Schutz für SY-Soldaten und Panzer dar.]
-   Picture = syb_iox.pcx
+	Description = Heavy Gun Turret
+	Infotext = [Zu dieser Waffe ist nicht viel zu sagen, ein großes Lasergeschütz. Aufgrund der Bodengebundenheit ist die Waffenreichweite begrenzt (Oberflächenkrümmumg). Das Hauptwaffensystem ist für die Bekämpfung von Bodenzielen ausgelegt und verfügt über eine enorme Durchschlagskraft. Kurzstreckenlaser sorgen für einen Schutz gegen Luftangriffe. Der Schweberantrieb des Iox funktioniert ähnlich wie beim Tolg, nur das dieser nicht direkt auf dem Boden funktioniert. Der Sockel des Iox muß vor dem Feuern im Boden verankert werden, um die Zielgenauigkeit zu erhalten. Ein Feuern direkt nach der Landung ist deshalb nicht möglich. Wenn die Energiespeicher voll geladen sind, ist der Geschützturm permanent einsatzbereit. Auch wenn er meistens nicht direkt feuern kann, stell er doch einen wirksamen Schutz für SY-Soldaten und Panzer dar.]
+	Picture = syb_iox.pcx
 
-   Weapons { 
-      Number = 2
-      Weapon0 ->* VehicleType.SY_TankL 
-      Weapon0.sound = lasergun.ogg
-      Weapon0.targets = floating ground_level low_level_flight
-      Weapon0.ReactionFireShots = 2
-      Weapon0.MaxRange = 60
-      Weapon0.MinRange = 20
-      Weapon0.LaserRechargeCost.fuel = 105
-      Weapon0.Punch@MaxRange = 100
-      Weapon0.Punch@MinRange = 115
-      Weapon0.HitAccuracy.u1 = 80
-      Weapon0.HitAccuracy.u2 = 0
-      Weapon0.HitAccuracy.u3 = 0
+	Weapons { 
+		Number = 2
 
-      Weapon1 ->* VehicleType.SY_TankL
-      Weapon1.ReactionFireShots = 1
+		Weapon0 ->* VehicleType.SY_TankL 
+		Weapon0.sound = lasergun.ogg
+		Weapon0.targets = floating ground_level low_level_flight
+		Weapon0.ReactionFireShots = 2
+		Weapon0.MaxRange = 60
+		Weapon0.MinRange = 20
+		Weapon0.LaserRechargeCost.material = 60
+		Weapon0.LaserRechargeCost.fuel = 345
+		Weapon0.Punch@MaxRange = 100
+		Weapon0.Punch@MinRange = 115
+		Weapon0.HitAccuracy.u1 = 0
+		Weapon0.HitAccuracy.u2 = 0
+		Weapon0.HitAccuracy.u3 = 0
 
-   } Weapons
+		Weapon1 ->* VehicleType.SY_TankL
+		Weapon1.ReactionFireShots = 1
+		Weapon1.MaxRange = 20
+
+	} Weapons
 } VehicleType

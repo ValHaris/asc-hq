@@ -1,32 +1,35 @@
 BuildingType {
-   Name = EMO
-   ID = 15008
-   Infotext = [Radar Gebaeude]
-   Armor = 600
-   View = 140
-   parent = 499
-   ConstructionStages = 1
-   Weather = dry
-   Fields = A1 
-   UseGFXpics = false
-   Pictures { 
-      dry = mk6_emo.png
-   } Pictures
-   RubbleObjects = false
+	Name = EMO
+	ID = 15008
+	parent = 7
+	Infotext = [Radar Gebaeude]
+
+	Features += NoObjectChaining
+	Armor -= 50
+	View += 29
+
+	ConstructionStages = 1
+	ConstructionCost { 
+		Energy = 0
+		Material += 1000
+		fuel += 100
+	} ConstructionCost
+	Weather = dry
+	Fields = A1 
+	UseGFXpics = false
+	Pictures { 
+		dry = mk6_emo.png
+	} Pictures
+	RubbleObjects = false
 ;   rubble {
 ;      A1 = 76
 ;   } rubble
-   Entry = A1
-   Transportation { 
-      MaxLoadableUnits = 2
-      MaxLoadableUnitSize = 15
-      MaxLoadableMass = 30
-      CategoriesNOT = Default hoovercraft Medium_tracked_vehicle Heavy_tracked_vehicle Medium_wheeled_vehicle Heavy_wheeled_vehicle Light_aircraft Medium_aircraft Heavy_aircraft Helicopter Light_ship Medium_ship Heavy_Ship Building|turret|object Rail_vehicle
-   } Transportation
-   Features = satelliteview NoObjectChaining
-   ConstructionCost { 
-      Energy = 0
-      Material = 11000
-      fuel = 14000
-   } ConstructionCost
+	Entry = A1
+
+	Transportation { 
+		MaxLoadableUnits = 2
+		MaxLoadableUnitSize = 15
+		MaxLoadableMass = 30
+		CategoriesNOT = Default hoovercraft Medium_tracked_vehicle Heavy_tracked_vehicle Medium_wheeled_vehicle Heavy_wheeled_vehicle Light_aircraft Medium_aircraft Heavy_aircraft Helicopter Light_ship Medium_ship Heavy_Ship Building|turret|object Rail_vehicle
+	} Transportation
 } BuildingType

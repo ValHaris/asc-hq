@@ -23,7 +23,7 @@ Eine deutlich erhöhte Panzerung und der Einbau von zwei von Radarstörsenkrechtst
     tank.material = 20000
     FuelConsumption = 45
     TerrainAccess.terrain_any = Road Runway Spaceport Hard_sand soft_sand lowland
-    TerrainAccess.terrain_not = hillside forest turret_foundation Installation large_rocks bridge
+    TerrainAccess.terrain_not = hillside forest Installation large_rocks bridge
 
     WaitForAttack = false
     Weapons { 

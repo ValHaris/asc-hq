@@ -1,29 +1,29 @@
 VehicleType { 
-   Name = Cita RJ
-   parent = 337
-   ID = 14025
+	Name = Cita RJ
+	parent = 337
+	ID = 14025
 
-   Description = jamming bunker
-   picture = mk4v_citarj.png
-   WreckageObject = 14025
-   GuideSortHelp = 0 310 0 0 4 0 0 0 0 0
-   Jamming = 45
-   Infotext = [Die Einheiten der Cita-Reihe sind eine Spezialität der Cromonischen Streitkräfte. Es handelt sich dabei um fahrende Bunkerstellungen. Entsprechend stark ist die Panzerung. Es handelt sich um eine sogenannte kombinierte Panzerung, die speziell gegen Antitankgeschosse entwickelt worden ist. Sie besteht aus mehreren Schichten, die solchen Geschossen viel von ihrer Wirkung nehmen und ist darüberhinaus von einer solchen Stärke, daß sie normalen Gefechtsbeschuß ohne Probleme abwehrt. Problematisch ist allerdings, daß die Citas aufgrund der Größe trotzdem prinzipiell ein gutes Ziel für schwere Waffen darstellen. Auch die Geschwindigkeit ist durch das riesige Gewicht sehr gering. Das größte Problem bei den mobilen Bunkern stellt deshalb der schnelle Transport dar. Hierfür kommt nur eine spezielle Landeinheit infrage, der Dolter. Er kann diese Einheiten optimal verschieben. Wichtig für einen effizienten Einsatz der Bunker ist deshalb, so unwahrscheinlich es auch klingt, ein gut ausgebautes Schienennetz.
+	Description = Anti Radar Citadelle
+	picture = mk4v_citarj.png
+	WreckageObject = 14025
+	GuideSortHelp = 0 310 0 0 4 0 0 0 0 0
+	Infotext = [Die Einheiten der Cita-Reihe sind eine Spezialität der cromonischen Streitkräfte. Es handelt sich dabei um fahrende Bunkerstellungen. Entsprechend stark ist die Panzerung. Es handelt sich um eine sogenannte kombinierte Panzerung, die speziell gegen Antitankgeschosse entwickelt worden ist. Sie besteht aus mehreren Schichten, die solchen Geschossen viel von ihrer Wirkung nehmen und ist darüberhinaus von einer solchen Stärke, daß sie normalen Gefechtsbeschuß ohne Probleme abwehrt. Problematisch ist allerdings, daß die Citas aufgrund der Größe trotzdem prinzipiell ein gutes Ziel für schwere Waffen darstellen. Auch die Geschwindigkeit ist durch das riesige Gewicht sehr gering. Das größte Problem bei den mobilen Bunkern stellt deshalb der schnelle Transport dar. Hierfür kommt nur eine spezielle Landeinheit infrage, der Dolter. Er kann diese Einheiten optimal verschieben. Wichtig für einen effizienten Einsatz der Bunker ist deshalb, so unwahrscheinlich es auch klingt, ein gut ausgebautes Schienennetz.
 Die Cita RJ ist eine sehr ungewöhnliche Modifikation der Citadelle. Ihr einziger Zweck ist es, wichtige Einheiten vor den Augen des Feindes zu verbergen. Hierzu wurden alle Waffen und Einrichtungen im Innenraum, die nicht lebensnotwendig sind, entfernt. In den verbliebenen kleinen Laderäumen können lediglich noch einige leichte Roboter mitgeführt werden. Stattdessen wurde der stärkste momentan erhältliche mobile Störsender eingebaut. So kann sie im Feld dazu beitragen, daß wichtige Schlüsseleinheiten vom Feind nicht erkannt und vernichtet werden können. Der Unterschied zum GT-Jam liegt hierbei in der großen Robustheit und etwas stärkeren Störwirkung, die allerdings mit der geringeren Mobilität der Citadellen erkauft wird. Aus diesem Grund wird die Cita RJ nur im defensiven Aufgabenbereich eingesetzt. Die leichte Bewaffnung, bestehend aus Panzerabwehrkanone und Maschinenkanonen, reicht, um sich leichtere Einheiten vom Leib zu halten, in ernsthafte Gefechte sollte die Cita RJ aber nicht verwickelt werden. Aufgrund des hohen Preises ist ein Totalverlust nämlich überaus schmerzhaft. ]
 
-   View += 10
-   Transportation ->* VehicleType.TransLowTrooper3 
+	Jamming = 49
+	View += 20
+	Transportation ->* VehicleType.TransLowTrooper3 
 
-   Weapons { 
-      Number = 2
+	Weapons { 
+		Number = 2
 
-      Weapon0 ->* VehicleType.Tank_Gun 
-      Weapon0.MaxRange = 20
-      Weapon0.Ammo = 6
-      Weapon0.Punch@MaxRange = 65
-      Weapon0.Punch@MinRange = 75
+		Weapon0 ->* VehicleType.Tank_Gun 
+		Weapon0.MaxRange = 20
+		Weapon0.Ammo = 6
+		Weapon0.Punch@MaxRange = 65
+		Weapon0.Punch@MinRange = 75
 
-      Weapon1 ->* VehicleType.Minigun 
+		Weapon1 ->* VehicleType.Minigun 
 
    } Weapons
 } VehicleType

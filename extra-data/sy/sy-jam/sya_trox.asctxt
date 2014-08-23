@@ -1,31 +1,33 @@
 VehicleType { 
-   Name = TROX
-   parent = 1393 1394 1398 311
-   ID = 1333
+	Name = TROX
+	parent = 1393 1394 1398 311
+	ID = 1333
 
-   Description = jamming unit
-   Infotext = [Die SY leben stark zurückgezogen. Bisher konnten nur wenige Humanuide in die Nähe von dicht bebauten Komplexen vordringen und von denen kehrte kaum jemand zurück. Teilweise paranoisch verteidigen die SY ihr Gebiet. Selbst Völker die mit den SY seit langen Seite an Seite leben und sogar Gebiete gemeinsam nutzen, werden gnadenlos gejagt, wenn sich einer zu dich an die Kernbasis heranwagt.
-Obwohl alle SY durch ihre organische Hüllenpanzerung eine erhebliche Tarnkapazität besitzen, enwickelten die SY hochentwickelte Störgeräte, um technische Langstreckenaufklärung zu erschweren. Neben dem stationären und dem bodengebundenen Modul, wurde auf Basis des Tris ein hoch mobiles System geschaffen. Der Trox ähnelt den Tris sehr stark und unterscheidet sich nur in der Anordnung der Antennenspitzen. Die Sonde ist nicht am Boden landefähig und muß in der Luft oder im orbit versorgt werden. Die Störleistung entspricht in etwa der von humanuiden Konstruktionen. In Kombination verfügen dei SY über eine effektive Störwirkung, die die gegnerische Zielerfassung erheblich erschwert. ]
-   GuideSortHelp = 0 311 0 0 20 0 0 0 0 0
-   Picture = sya_trox.pcx
+	Description = jamming unit
+	Picture = sya_trox.pcx
+	GuideSortHelp = 0 311 0 0 20 0 0 0 0 0
+	Infotext = [Die SY leben stark zurückgezogen. Bisher konnten nur wenige Humanuide in die Nähe von dicht bebauten Komplexen vordringen und von denen kehrte kaum jemand zurück. Teilweise paranoisch verteidigen die SY ihr Gebiet. Selbst Völker die mit den SY seit langen Seite an Seite leben und sogar Gebiete gemeinsam nutzen, werden gnadenlos gejagt, wenn sich einer zu dich an die Kernbasis heranwagt.
+				Obwohl alle SY durch ihre organische Hüllenpanzerung eine erhebliche Tarnkapazität besitzen, enwickelten die SY hochentwickelte Störgeräte, um technische Langstreckenaufklärung zu erschweren. Neben dem stationären und dem bodengebundenen Modul, wurde auf Basis des Tris ein hoch mobiles System geschaffen. Der Trox ähnelt den Tris sehr stark und unterscheidet sich nur in der Anordnung der Antennenspitzen. Die Sonde ist nicht am Boden landefähig und muß in der Luft oder im orbit versorgt werden. Die Störleistung entspricht in etwa der von humanuiden Konstruktionen. In Kombination verfügen dei SY über eine effektive Störwirkung, die die gegnerische Zielerfassung erheblich erschwert. ]
 
-   Armor = 220
-   Weight = 39
-   Category = light_aircraft
-   Jamming = 34
+	Features = self_repairing cruiserlanding
+	Category = light_aircraft
+	Armor = 220
+	Weight = 39
+	Jamming = 34
+	SelfRepairRate = 5
 
-   Height = low_level_flight medium_level_flight high_level_flight orbit
-   FuelConsumption = 30
-   Features = self_repairing cruiserlanding
-   Movement = 0 0 0 0 120 120 120 30 
-   TerrainAccess ->* VehicleType.SY_Air
+	Height = low_level_flight medium_level_flight high_level_flight orbit
+	FuelConsumption = 30
+	Movement = 0 0 0 0 120 120 120 30 
+	TerrainAccess ->* VehicleType.SY_Air
+	Tank.Material += 2000
+	Tank.Fuel += 1000
 
-   WaitForAttack = false
-   Weapons { 
-      Initiative = 0
-      Number = 0
-   } Weapons
-   HeightChangeMethod3 {
-      movecost = 100
-   } HeightChangeMethod3
+	WaitForAttack = false
+	Weapons { 
+		Number = 0
+	} Weapons
+	HeightChangeMethod3 {
+		movecost = 100
+	} HeightChangeMethod3
 } VehicleType

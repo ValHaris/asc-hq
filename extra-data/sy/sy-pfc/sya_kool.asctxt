@@ -1,44 +1,46 @@
 VehicleType {
-   Name = KOOL
-   parent = 400 1391 1395 1397
-   ID = 1300
+	Name = KOOL
+	parent = 400 1391 1395 1397
+	ID = 1300
 
-   Description = Sucher
-   Picture = sya_kool.png
-   Infotext = [Der Kool ist ein großes universelles Serviceflugzeug. Die SY stellen bei den ersten Konfrontationen mit den Humanuiden Spezies fest, das diese neben dem direkten Kampf auch andere vorher nicht bekannte Waffen einsetzen. Das Prinzip der Mine war den SY nicht bekannt und so verloren zu Beginn der Auseinandersetzungen viele SY ihr Leben. Um der Bedrohung durch Minen zu begegnen, wurde die Sensortechnik des Kool für die Suche nach Minen angepast. Vorher wurde sie ausschließlich zur Suche nach Rohstoffen eingesetzt. Gleichzeitig wurde dem Kool ein Präzisionslaser eingebaut, der Minen auf Distance kontrolliert zur Explosion bringt und so für Bodentruppen unschädlich macht. Neben, den Minensensoren verfügt der Kool über ein Reaktormodul, welches ihm ermöglicht Energie für Gebäude zur Verfügung zu stellen, die noch nicht an das Pipelinesystem angeschlossen sind.
-Der Sensorflieger ist meistens alleine anzutreffen, sie fliegen in geradlinigen Bahnen über die kontinenten und Meere und kartographieren das Gebiet. Doch Vorsicht ! Die Kool sind niemals wirklich alleine. Die Soldaten der SY sind darauf Konditioniert, die Arbeiter zu schützen. Jeglicher Angriff auf die Kool erzeugt autmatisch einen aggressive Reaktion der in der nähe befindlichen Soldaten.
-]
-   Armor = 600
-   View = 60
+	Description = Sucher
+	Picture = sya_kool.png
+	Infotext = [Der Kool ist ein großes universelles Serviceflugzeug. Die SY stellen bei den ersten Konfrontationen mit den Humanuiden Spezies fest, das diese neben dem direkten Kampf auch andere vorher nicht bekannte Waffen einsetzen. Das Prinzip der Mine war den SY nicht bekannt und so verloren zu Beginn der Auseinandersetzungen viele SY ihr Leben. Um der Bedrohung durch Minen zu begegnen, wurde die Sensortechnik des Kool für die Suche nach Minen angepast. Vorher wurde sie ausschließlich zur Suche nach Rohstoffen eingesetzt. Gleichzeitig wurde dem Kool ein Präzisionslaser eingebaut, der Minen auf Distance kontrolliert zur Explosion bringt und so für Bodentruppen unschädlich macht. Neben, den Minensensoren verfügt der Kool über ein Reaktormodul, welches ihm ermöglicht Energie für Gebäude zur Verfügung zu stellen, die noch nicht an das Pipelinesystem angeschlossen sind.
+	Der Sensorflieger ist meistens alleine anzutreffen, sie fliegen in geradlinigen Bahnen über die kontinenten und Meere und kartographieren das Gebiet. Doch Vorsicht ! Die Kool sind niemals wirklich alleine. Die Soldaten der SY sind darauf Konditioniert, die Arbeiter zu schützen. Jeglicher Angriff auf die Kool erzeugt autmatisch einen aggressive Reaktion der in der nähe befindlichen Soldaten.
+	]
 
-   Tank { 
-      Energy = 0
-      Material = 4000
-      fuel = 12000
-   } Tank
-   FuelConsumption = 20
-   Features = self_repairing jam_only_own_field automatic_resource_searching mine_layer mineview
-   Movement = 0 0 0 45 90 120 140 100 
-   ResourceDrillingRange = 4
-   Weight = 250
+	Armor = 450
+	View = 65
 
-   WaitForAttack = false
-   Weapons { 
-      Number = 2
-      Weapon0 ->* VehicleType.Sy_Fighter_gun 
-      Weapon0.MaxRange = 20
-      Weapon0.LaserRechargeCost.fuel = 55
-      Weapon0.Punch@MaxRange = 55
-      Weapon0.Punch@MinRange = 55
+	Tank { 
+		Energy = 0
+		Material = 4000
+		fuel = 12000
+	} Tank
+	FuelConsumption = 20
+	Features = self_repairing jam_only_own_field automatic_resource_searching mine_layer mineview
+	Movement = 0 0 0 45 90 120 140 100 
+	ResourceDrillingRange = 5
+	Weight = 250
 
-      Weapon1 ->* VehicleType.MineAir 
-      Weapon1.shotFrom = ground_level low_level_flight
-      Weapon1.targets = submerged floating ground_level
-      Weapon1.MaxRange = 20
-      Weapon1.Ammo = 0
-      Weapon1.Punch@MaxRange = 0
-      Weapon1.Punch@MinRange = 0
-      Weapon1.HitAccuracy.0 = 100
-      Weapon1.HitAccuracy.d2 = 100
-   } Weapons
+	WaitForAttack = false
+	Weapons { 
+		Number = 2
+		Weapon0 ->* VehicleType.Sy_Fighter_gun 
+		Weapon0.MaxRange = 20
+		Weapon0.LaserRechargeCost.material = 40
+		Weapon0.LaserRechargeCost.fuel = 195
+		Weapon0.Punch@MaxRange = 65
+		Weapon0.Punch@MinRange = 65
+
+		Weapon1 ->* VehicleType.MineAir 
+		Weapon1.shotFrom = ground_level low_level_flight
+		Weapon1.targets = submerged floating ground_level
+		Weapon1.MaxRange = 20
+		Weapon1.Ammo = 0
+		Weapon1.Punch@MaxRange = 0
+		Weapon1.Punch@MinRange = 0
+		Weapon1.HitAccuracy.0 = 100
+		Weapon1.HitAccuracy.d2 = 100
+	} Weapons
 } VehicleType

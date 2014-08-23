@@ -1,26 +1,29 @@
 VehicleType { 
-   Name = SUMMSE
-   parent = 380
-   ID = 1448
+	Name = SUMMSE
+	parent = 380
+	ID = 1448
 
-   Description = Kampfhubschrauber
-   picture = mk5h_summse.pcx
-   InfoImage = mk5h_summse.jpg
-   InfoText = [InfoImage = Wikipedia Hughes OH-6]
+	Description = Kampfhubschrauber
+	picture = mk5h_summse.pcx
+	InfoImage = mk5h_summse.jpg
+	InfoText = [Der Summse Helicopter ist ein leichtes und extrem wendiges Modell. Die Rundumsichtkanzel bietet dem Piloten und dem Scharfschützen sehr gute Sicht auf das Zielgebiet. Am Bewaffnung wurde nicht gesparrt, neben einem drehbaren mittleren MG und den für diese Klasse üblichen FaF-Raketen befinden sich noch Bomben mittlerer Größe und ein Scharfschütze mit an Bord. Waffengewicht und Lagestabilisierung erfordern allerdings einen höheren Treibstoffbedarf. Trotz seiner geringen Panzerung stellt dieser Helicopter ein erhebliches Angriffspotential.
+				InfoImage = Wikipedia Hughes OH-6]
+				
+	Armor -= 5
+	Weight += 5
+	FuelConsumption += 5
 
-   MovementSound = heli_h_s.ogg
-   Weapons { 
-      Initiative = 0
-      Number = 4
-      Weapon2 ->* VehicleType.lowbomb 
-      Weapon2.Ammo = 2
-      Weapon2.Punch@MaxRange = 100
-      Weapon2.Punch@MinRange = 100
+	MovementSound = heli_h_s.ogg
+	Weapons { 
+		Number = 4
+		Weapon2 ->* VehicleType.lowbomb 
+		Weapon2.Ammo = 2
+		Weapon2.Punch@MaxRange = 100
+		Weapon2.Punch@MinRange = 100
 
-      Weapon3 ->* vehicleType.Napalm 
-      Weapon3.Ammo = 2
-      Weapon3.Punch@MaxRange = 100
-      Weapon3.Punch@MinRange = 100
+		Weapon3 ->* VehicleType.Sniper 
+		Weapon3.shotFrom = low_level_flight
+		Weapon3.Ammo = 10
 
    } Weapons
 } VehicleType

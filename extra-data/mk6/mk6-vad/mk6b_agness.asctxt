@@ -1,38 +1,41 @@
 VehicleType { 
-   Name = AGNESS
-   ID = 15224
-   parent = 223 15000
+	Name = AGNESS
+	ID = 15224
+	parent = 223 15000
 
-   Description = Luftabwehrturm
+	Description = Luftabwehrturm
 ;   Infotext = []
-   Picture = mk6b_agness.png
-;   InfoImage = mk1b_silo.jpg
-   GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
+	Picture = mk6b_agness.png
+	GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
    
-   View = 0
-   Tank.Fuel = 11500
-   Tank.Material = 5500
-   Jumpdrive ->* VehicleType.TeccnolsJump3
+	Features += MoveDuringReactionFire
+	View = 0
+	Tank.Fuel = 11500
+	Tank.Material = 5500
+	Jumpdrive ->* VehicleType.TeccnolsJump3
 
-   Weapons {
-      Weapon0 {
-         Name = Ground-Air Railgun
-         sound = lasergun.ogg
-         Type = Laser shootable 
-	     LaserRechargeRate = 1
-         LaserRechargeCost {
-            energy = 0
-            material = 200
-            fuel = 500
-         } LaserRechargeCost
-         Ammo = 6
-         ReactionFireShots = 2
-         Punch@MinRange += 20
-      } Weapon0
+	Weapons {
+		Weapon0 {
+			Name = GA Railgun
+			sound = lasergun.ogg
+			Type = Laser shootable 
+			LaserRechargeRate = 1
+			LaserRechargeCost {
+				energy = 0
+				material = 150
+				fuel = 300
+			} LaserRechargeCost
+			Ammo = 6
+			Punch@MinRange += 20
+		} Weapon0
 
-      Weapon1 ->* VehicleType.GALS
-      Weapon1.MaxRange = 30
+		Weapon1 ->* VehicleType.GALS
+		Weapon1.MaxRange = 30
+		Weapon1.MinRange = 10
 
-      Weapon2 ->* VehicleType.NLS
+		Weapon2 ->* VehicleType.NLS
+		Weapon2.Punch@MinRange += 20
+		Weapon2.Punch@MaxRange += 15
+		Weapon2.MaxRange = 20
    } Weapons
 } VehicleType

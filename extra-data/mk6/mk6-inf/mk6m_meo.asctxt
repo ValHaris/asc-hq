@@ -1,18 +1,20 @@
 VehicleType { 
-   Name = MEO
-   ID = 15216
-   parent = 216 15000
+	Name = MEO
+	ID = 15216
+	parent = 216 15000
 
-   Picture = mk6m_meo.pcx
-   GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
+	Picture = mk6m_meo.pcx
+	GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
 
-   Tank.material = 500
-   Tank.fuel = 1100
-   Armor += 10
-   Weapons { 
-      Weapon0.MaxRange += 10
-      Weapon1 ->* VehicleType.MiniGun
-      Weapon1 ->* VehicleType.NLS
-      Weapon1.ReactionFireShots = 1
-   } Weapons
+	Armor += 10
+	Tank.material = 500
+	Tank.fuel = 1100
+	movement += 0 0 0 9 0 0 0 0
+
+	Weapons { 
+		Weapon0.MaxRange += 10
+		Weapon1 ->* VehicleType.MiniGun
+		Weapon1 ->* VehicleType.NLS
+		Weapon1.ReactionFireShots = 1
+	} Weapons
 } VehicleType

@@ -20,21 +20,21 @@ VehicleType {
       Number = 1
       Weapon0 ->* VehicleType.C4 
       Weapon0.Ammo = 1
-      Weapon0.Punch@MaxRange = 100
-      Weapon0.Punch@MinRange = 100
+      Weapon0.Punch@MaxRange = 110
+      Weapon0.Punch@MinRange = 110
       Weapon0.WeaponEffectiveness.default = 100      
       Weapon0.WeaponEffectiveness.trooper = 100
-      Weapon0.WeaponEffectiveness.rail_vehicle = 100
-      Weapon0.WeaponEffectiveness.building|turret|object = 100
+      Weapon0.WeaponEffectiveness.rail_vehicle = 120
+      Weapon0.WeaponEffectiveness.building|turret|object = 120
       Weapon0.WeaponEffectiveness.hoovercraft = 100
 
       Weapon0.WeaponEffectiveness.light_tracked_vehicle = 100
       Weapon0.WeaponEffectiveness.medium_tracked_vehicle = 100
-      Weapon0.WeaponEffectiveness.heavy_tracked_vehicle = 100
+      Weapon0.WeaponEffectiveness.heavy_tracked_vehicle = 120
 
       Weapon0.WeaponEffectiveness.light_wheeled_vehicle = 100
       Weapon0.WeaponEffectiveness.medium_wheeled_vehicle = 100
-      Weapon0.WeaponEffectiveness.heavy_wheeled_vehicle = 100
+      Weapon0.WeaponEffectiveness.heavy_wheeled_vehicle = 120
          
       Weapon0.WeaponEffectiveness.light_ship = 100
       Weapon0.WeaponEffectiveness.medium_ship  = 100

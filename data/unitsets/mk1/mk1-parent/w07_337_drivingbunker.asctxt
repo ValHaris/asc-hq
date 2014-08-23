@@ -1,35 +1,34 @@
 VehicleType { 
-   Name = mobile bunker
-   parent = 400 401 402 406
-   ID = 337
-   abstract = true
+	Name = mobile bunker
+	parent = 400 401 402 406
+	ID = 337
+	abstract = true
 
-   Description = mobile bunker
-   Infotext = [ Schwer gepanzertes langsam fahrendes Bunkersystem.]
+	Description = mobile bunker
+	Infotext = [ Schwer gepanzertes langsam fahrendes Bunkersystem.]
 
-   Armor = 1000
-   View = 40
-   Weight = 850
-   minFieldRepairDamage = 5
+	Armor = 1100
+	View = 40
+	Weight = 850
+	minFieldRepairDamage = 15
 
-   Tank { 
-      Energy = 0
-      Material = 1000
-      fuel = 4000
-   } Tank
-   FuelConsumption = 50
-   Movement = 0 0 0 20 0 0 0 0 
-   MovementSound = tankmove_s.ogg
+	Tank { 
+		Energy = 0
+		Material = 1000
+		fuel = 4000
+	} Tank
+	FuelConsumption = 50
+	Movement = 0 0 0 20 0 0 0 0 
+	MovementSound = tankmove_s.ogg
 
-   TerrainAccess {
-      terrain_any = Lowland Road Runway Hard_sand soft_sand very_shallow_water  
-      terrain_all = 
-      terrain_not = swamp large_rocks forest morass
-      terrain_kill = Water Deep_water lava river
-   } TerrainAccess
+	TerrainAccess {
+		terrain_any = Lowland Road Runway Hard_sand soft_sand very_shallow_water  
+		terrain_all = 
+		terrain_not = swamp large_rocks forest morass
+		terrain_kill = Water Deep_water lava river
+	} TerrainAccess
 
-   Weapons { 
-      Initiative = 0
-      Number = 0
+	Weapons { 
+		Number = 0
    } Weapons
 } VehicleType

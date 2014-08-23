@@ -16,8 +16,8 @@ BuildingType {
 
    ConstructionCost { 
       Energy = 0
-      Material = 15000
-      fuel = 15000
+      Material = 20000
+      fuel = 2000
    } ConstructionCost
 
    Features = AutoHarvestObjects 

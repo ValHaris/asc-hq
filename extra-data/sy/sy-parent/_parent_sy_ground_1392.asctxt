@@ -28,7 +28,7 @@ VehicleType {
    Category = hoovercraft
    MaxSurvivableStorm = 255
    ResourceDrillingRange = 0
-   SelfRepairRate = 15
+   SelfRepairRate = 10
    Weight = 28
    Construction { 
       Buildings = 

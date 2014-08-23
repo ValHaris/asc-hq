@@ -1,49 +1,52 @@
 BuildingType { 
-   Name = Oilplatform
-   ID = 13
-   Infotext = [ Oelforderplattform für Gewaesser in Kuestennähe. ]
-   parent = 499 498
-   Armor = 1500
-   View = 40
-   ConstructionStages = 1
-   Weather = dry
-   Fields = A1 
-   UseGFXpics = false
-   Pictures { 
-      dry = bld_asc_oilplatform.png
-   } Pictures
-   RubbleObjects = false
-   Entry = A1
-   Transportation ->* BuildingType.helideck 
+	Name = Oilplatform
+	ID = 13
+	parent = 499 498
+	Infotext = [ Oelforderplattform für Gewaesser in Kuestennähe. ]
 
-   Functions = Mining_Station 
-   TerrainAccess { 
-      terrain_any = Shallow_water Water Very_shallow_water
-      terrain_all = 
-      terrain_not = river harbour
-      terrain_kill = lava deep_water
-   } TerrainAccess
-   ConstructionCost { 
-      Energy = 0
-      Material = 8000
-      fuel = 8000
-   } ConstructionCost
-   MaxResourceProduction { 
-      Energy = -400
-      Material = 0
-      fuel = 3000
-   } MaxResourceProduction
-   defaultProduction {
-      energy = -400
-      material = 0
-      fuel = 3000
-   } defaultProduction
-   ResourceExtractionEfficiency {
-      Fuel = 2000
-   } ResourceExtractionEfficiency
-   StorageCapacity { 
-      ASCmode { 
-         fuel = 4000
-      } ASCmode
-   } StorageCapacity
+	Features = Mining_Station 
+	Armor = 800
+	View = 40
+
+	ConstructionStages = 1
+	ConstructionCost { 
+		Energy = 0
+		Material = 15000
+		fuel = 1500
+	} ConstructionCost
+	TerrainAccess { 
+		terrain_any = Shallow_water Water Very_shallow_water
+		terrain_all = 
+		terrain_not = river harbour
+		terrain_kill = lava deep_water
+	} TerrainAccess
+	Weather = dry
+	Fields = A1 
+	UseGFXpics = false
+	Pictures { 
+		dry = bld_asc_oilplatform.png
+	} Pictures
+	RubbleObjects = false
+	Entry = A1
+
+	Transportation ->* BuildingType.helideck 
+
+	MaxResourceProduction { 
+		Energy = -400
+		Material = 0
+		fuel = 3000
+	} MaxResourceProduction
+	defaultProduction {
+		energy = -400
+		material = 0
+		fuel = 3000
+	} defaultProduction
+	ResourceExtractionEfficiency {
+		Fuel = 2000
+	} ResourceExtractionEfficiency
+	StorageCapacity { 
+		ASCmode { 
+			fuel = 4000
+		} ASCmode
+	} StorageCapacity
 } BuildingType

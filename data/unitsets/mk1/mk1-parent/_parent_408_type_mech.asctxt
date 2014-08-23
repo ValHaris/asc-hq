@@ -1,45 +1,44 @@
  VehicleType { 
-   Abstract = true
-   ID = 408
-   parent = 402
+	Abstract = true
+	ID = 408
+	parent = 402
 
 ; ----------------------------------------------------------------------------------------------------------------
 ; -----   M E C H   W A R R I O R   ------------------------------------------------------------------------------
 ; ----------------------------------------------------------------------------------------------------------------
 
-   Infotext = []
-   WreckageObject = 497
+	Infotext = []
+	WreckageObject = 497
 
-   Features = conquer_buildings 
-   Category = light_tracked_vehicle
-   Armor = 350
-   Weight = 5
-   View = 30
-   Jamming = 0
-   MaxSurvivableStorm = 150
-   ResourceDrillingRange = 0
-   SelfRepairRate = 10
+	Features = conquer_buildings 
+	Category = light_tracked_vehicle
+	Armor = 350
+	Weight = 5
+	View = 30
+	Jamming = 0
+	MaxSurvivableStorm = 150
+	ResourceDrillingRange = 0
+	SelfRepairRate = 10
 
-   Height = ground_level 
-   Tank { 
-      Energy = 0
-      Material = 0
-      fuel = 500
-   } Tank
-   FuelConsumption = 5
-   Movement = 0 0 0 50 0 0 0 0 
-   TerrainAccess ->* Vehicletype.mech_trooper_terrain 
-   MovementSound = mechstepfast.ogg
+	Height = ground_level 
+	Tank { 
+		Energy = 0
+		Material = 0
+		fuel = 500
+	} Tank
+	FuelConsumption = 5
+	Movement = 0 0 0 60 0 0 0 0 
+	TerrainAccess ->* Vehicletype.mech_trooper_terrain 
+	MovementSound = mechstepfast.ogg
 
-   Construction { 
-      Buildings = 
-      Vehicles = 
-      Objects = 
-   } Construction
+	Construction { 
+		Buildings = 
+		Vehicles = 
+		Objects = 
+	} Construction
 
-   WaitForAttack = false
-   Weapons { 
-      Initiative = 0
-      Number = 0
-   } Weapons
+	WaitForAttack = false
+	Weapons { 
+		Number = 0
+	} Weapons
 } VehicleType

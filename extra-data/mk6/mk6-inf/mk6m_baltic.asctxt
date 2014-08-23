@@ -1,22 +1,23 @@
 VehicleType { 
-   Name = BALTIC
-   ID = 15213
-   parent = 213 15000
+	Name = BALTIC
+	ID = 15213
+	parent = 213 15000
 
-   Picture = mk6m_baltic.png
-   InfoImage = mk6m_baltic.jpg
-   InfoImageSmall = mk6m_baltic_k.png
-   GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
+	Picture = mk6m_baltic.png
+	InfoImage = mk6m_baltic.jpg
+	InfoImageSmall = mk6m_baltic_k.png
+	GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
 
-   Armor += 10
-   Tank.material = 500
-   Tank.fuel = 1100
+	Armor += 10
+	Movement += 0 0 0 9 0 0 0 0 
+	Tank.material = 500
+	Tank.fuel = 1100
    
-   Weapons { 
-      Number = 3
-      Weapon0 ->* VehicleType.NLS
-      Weapon2 ->* VehicleType.TeccEMP2Air
-      Weapon2.Punch@MaxRange = 70
-      Weapon2.Punch@MinRange = 70
-   } Weapons
+	Weapons { 
+		Number = 3
+		Weapon0 ->* VehicleType.NLS
+		Weapon2 ->* VehicleType.TeccEMP2Air
+		Weapon2.Punch@MaxRange = 70
+		Weapon2.Punch@MinRange = 70
+	} Weapons
 } VehicleType

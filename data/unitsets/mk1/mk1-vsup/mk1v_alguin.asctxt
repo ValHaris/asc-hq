@@ -1,28 +1,27 @@
 VehicleType { 
-   Name = Alguin
-   ID = 10
-   parent = 336
+	Name = Alguin
+	ID = 10
+	parent = 336
    
-   Description = tanker vehicle
-   picture = MK1v_alguin.pcx
-   InfoImage = mk1v_alguin.jpg
-   InfoImageSmall = mk1v_alguin_k.png
-   WreckageObject = 410
-   GuideSortHelp = 550 0 0 0 1 0 0 0 0 0
-   Infotext = [Tanker Vehicles are seen around every army. As the fuel tanks
+	Description = tanker vehicle
+	picture = MK1v_alguin.pcx
+	InfoImage = mk1v_alguin.jpg
+	InfoImageSmall = mk1v_alguin_k.png
+	WreckageObject = 410
+	GuideSortHelp = 550 0 0 0 1 0 0 0 0 0
+	Infotext = [Tanker Vehicles are seen around every army. As the fuel tanks
               of the heavy units run dry, they need to be filled, or the army
               will come to a halt, to be slaughtered by enemy artillery.
               InfoImage = BananaJoe]
 
-   Armor -= 50
-   Features += ExternalFuelTransfer 
+	Armor -= 50
+	Features += ExternalFuelTransfer 
 
-   Tank.fuel = 20000
+	Tank.fuel = 40000
 
-   Weapons { 
-      Initiative = 0
-      Number = 2
-      Weapon0 ->* VehicleType.def_MG
-      Weapon1 ->* VehicleType.ServiceGround 
+	Weapons { 
+		Number = 2
+		Weapon0 ->* VehicleType.def_MG
+		Weapon1 ->* VehicleType.ServiceGround 
    } Weapons
 } VehicleType

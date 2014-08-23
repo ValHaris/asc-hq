@@ -1,65 +1,66 @@
 VehicleType { 
-   Name = FSV 4x4
-   ID = 1412
-   parent = 400 401 402 335
+	Name = FSV 4x4
+	ID = 1412
+	parent = 400 401 402 335
 
-   Description = Offroad Transporter
-   Infotext = [Das "Maedchen fuer Alles". Der FSV 4x4 ist das Landtransportfahrzeug der "Outlaw". Dementsprechend hat es vielseitige Aufgaben zu uebernehem. Truppen-, Waffen-, Material- und Treibstofftransport, ausserdem den Transport der Defensivwaffen. Er ist nur schwach gepanzert und hat nur ein MG zur Verteidigung. Niemals offensiven Kraeften aussetzen.]
-   Picture = mk5v_fsv.pcx
-   WreckageObject = 1404
-   GuideSortHelp = 552 423 429 551 5 0 0 0 0 0
+	Description = Offroad Transporter
+	Picture = mk5v_fsv.pcx
+	WreckageObject = 1404
+	GuideSortHelp = 552 423 429 551 5 0 0 0 0 0
+	Infotext = [Das "Maedchen fuer Alles". Der FSV 4x4 ist das Landtransportfahrzeug der "Outlaw". Dementsprechend hat es vielseitige Aufgaben zu uebernehem. Truppen-, Waffen-, Material- und Treibstofftransport, ausserdem den Transport der Defensivwaffen. Er ist nur schwach gepanzert und hat nur ein MG zur Verteidigung. Niemals offensiven Kraeften aussetzen.]
 
-   Features += ExternalFuelTransfer ExternalMaterialTransfer ExternalAmmoTransfer automatic_resource_searching
-   Armor = 350
-   Category = light_wheeled_vehicle
-   ResourceDrillingRange = 1
-   Weight = 35
-   Transportation { 
-      MaxLoadableUnits = 5
-      MaxLoadableUnitSize = 45
-      MaxLoadableMass = 50
-      CategoriesNOT = hoovercraft light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle rail_vehicle medium_aircraft medium_ship light_aircraft heavy_aircraft light_ship heavy_ship helicopter 
-      EntranceSystemNum = 2
-      EntranceSystem0 ->* VehicleType.GrIO
-      EntranceSystem0.CategoriesNOT = building|turret|object default
-      EntranceSystem1 ->* VehicleType.TurretOut
-   } Transportation
+	Features += ExternalFuelTransfer ExternalMaterialTransfer ExternalAmmoTransfer automatic_resource_searching
+	Armor = 350
+	Category = light_wheeled_vehicle
+	ResourceDrillingRange = 1
+	Weight = 35
 
-   Tank { 
-      Energy = 0
-      Material = 20000
-      fuel = 20000
-   } Tank
-   FuelConsumption = 16
-   Movement += 0 0 0 6 0 0 0 0 
-   TerrainAccess ->* VehicleType.Offroad 
-   ObjectsLayedByMovement = 7
-   Construction { 
-      ObjectGroupsRemovable = 13
-   } Construction
+	Transportation { 
+		MaxLoadableUnits = 5
+		MaxLoadableUnitSize = 45
+		MaxLoadableMass = 50
+		CategoriesNOT = hoovercraft light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle rail_vehicle medium_aircraft medium_ship light_aircraft heavy_aircraft light_ship heavy_ship helicopter 
+		EntranceSystemNum = 2
+		EntranceSystem0 ->* VehicleType.GrIO
+		EntranceSystem0.CategoriesNOT = building|turret|object default
+		EntranceSystem1 ->* VehicleType.TurretOut
+	} Transportation
 
-   Weapons { 
-      Number = 7
-      Weapon0 ->* VehicleType.MG_Tank 
-      Weapon0.Ammo = 100
-      Weapon0.Punch@MaxRange = 40
-      Weapon0.Punch@MinRange = 40
+	Tank { 
+		Energy = 0
+		Material = 20000
+		fuel = 30000
+	} Tank
+	FuelConsumption = 16
+	Movement += 0 0 0 6 0 0 0 0 
+	TerrainAccess ->* VehicleType.Offroad 
+	ObjectsLayedByMovement = 7
+	Construction { 
+		ObjectGroupsRemovable = 13
+	} Construction
 
-      Weapon1 ->* VehicleType.ServiceGround
+	Weapons { 
+		Number = 7
+		Weapon0 ->* VehicleType.MGlow 
+		Weapon0.Ammo = 100
+		Weapon0.Punch@MaxRange = 40
+		Weapon0.Punch@MinRange = 40
 
-      Weapon2 ->* VehicleType.AmmoCannon 
-      Weapon2.Ammo = 50
+		Weapon1 ->* VehicleType.ServiceGround
 
-      Weapon3 ->* VehicleType.AmmoMine 
-      Weapon3.Ammo = 50
+		Weapon2 ->* VehicleType.AmmoCannon 
+		Weapon2.Ammo = 50
 
-      Weapon4 ->* VehicleType.AmmoBomb 
-      Weapon4.Ammo = 30
+		Weapon3 ->* VehicleType.AmmoMine 
+		Weapon3.Ammo = 50
 
-      Weapon5 ->* VehicleType.AmmoLM 
-      Weapon5.Ammo = 40
+		Weapon4 ->* VehicleType.AmmoBomb 
+		Weapon4.Ammo = 30
 
-      Weapon6 ->* VehicleType.AmmoSM 
-      Weapon6.Ammo = 40
-   } Weapons
+		Weapon5 ->* VehicleType.AmmoLM 
+		Weapon5.Ammo = 40
+
+		Weapon6 ->* VehicleType.AmmoSM 
+		Weapon6.Ammo = 40
+	} Weapons
 } VehicleType

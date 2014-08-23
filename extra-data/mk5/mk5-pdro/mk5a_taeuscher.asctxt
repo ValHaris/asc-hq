@@ -1,29 +1,29 @@
 VehicleType {
-   Name = Taeuscher
-   parent = 400 401 402 413 498
-   ID = 1452
+	Name = Taeuscher
+	parent = 400 401 402 413 498
+	ID = 1452
 
-   Description = Taeuschkoerper
-   Infotext = [ ]
-   Picture = MK5a_taeuscher.pcx
-   WreckageObject = 
+	Description = Taeuschkoerper
+	Infotext = [ ]
+	Picture = MK5a_taeuscher.pcx
+	WreckageObject = 
 
-   Armor = 150
-   View = 10
-   Category = default
-   Features = no_midair_refuel
-   Weight = 10
+	Armor = 150
+	View = 10
+	Category = default
+	Features = no_midair_refuel
+	Weight = 10
 
-   Height = ground_level low_level_flight medium_level_flight high_level_flight
-   Tank { 
-      fuel = 40
-   } Tank
-   FuelConsumption = 2
-   Movement = 0 0 0 0 100 120 100 0  
+	Height = ground_level low_level_flight medium_level_flight high_level_flight
+	Tank { 
+		fuel = 40
+	} Tank
+	FuelConsumption = 2
+	Movement = 0 0 0 0 100 120 100 0  
+	MovementSound = aircraft_l_g.ogg
 
-   Weapons { 
-      Initiative = 0
-      Number = 0
-   } Weapons
+	Weapons { 
+		Number = 0
+	} Weapons
 
 } VehicleType

@@ -1,0 +1,46 @@
+VehicleType { 
+	Name = HACK
+	ID = 15115
+	parent = 425
+
+	Description = Hackerdrohne
+	Picture = mk6d_hack.png
+	GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
+	Infotext = [Diese hoch spezialisierte Drohne ist die Antwort der TECCS auf die Fallschirmspringertruppen der anderen Voelker. Durch das Fehlen jeglicher Luftlandetruppen in der TECC-Armee-Struktur war es nur unter erheblichen Aufwand moeglich, gegnerische Gebaeude in unzugaenglichem Gebiet zu besetzen. Der Großraumtransporter CargoMX ist dazu einfach zu langsam und dem sprungfaehigen STRESS fehlt jegliche Aufklaerungsmoeglichkeit.
+
+Die Drohne selbst ist im Vergleich zu den anderen TECC Einheiten eher winzig und schon einfache Handfeuerwaffen reichen, um sie ausser Betrieb zu setzen. Ihre einzige Aufgabe besteht im Umprogrammieren gegnerischer Gebaeudesoftware. Die Spezial-KI der Drohne ueberwindet selbst schwerste Verschluesselungen ist aber für andere Einsatzarten nicht zu gebrauchen.
+
+Die Drohne ist in Leichtbauweise gefertigt und verfuegt aktuell über einen kleinen Brennstoffzellenantrieb. Spaetere Versionen sollen noch leichter sein und ueber einen Solarenergieantrieb verfuegen. Diese Drohnen können dann zwar unbegrenzt in der Luft bleiben, sind aber nicht in der Lage sich in hoehere Luftschichten zu begeben.
+
+Durch die kompakte Leichtbauweise kann sich die Drohne in jeder Art von Landschaft bewegen. Selbst Panzersperren sind nur eine Behinderung. Einzig Lava und Stacheldraht muessen durch die Drohne überflogen werden. Die TECC Transporteinheiten wurden entsprechend angepasst und können bei Bedarf die Drohne direkt auf Gebaeuden absetzen.]
+
+	Features = conquer_buildings paratrooper jam_only_own_field no_midair_refuel
+	Category = trooper
+	Armor = 50
+	Jamming = 39
+	Weight = 1
+
+	Height = ground_level low_level_flight medium_level_flight high_level_flight
+	movement = 0 0 0 100 100 100 100 0
+	MovementSound = sy_move_low_rumble_s.ogg
+	Tank.fuel = 50
+	FuelConsumption = 1
+	TerrainAccess ->* VehicleType.trooper_terrain
+
+	HeightChangeMethodNum = 2
+	HeightChangeMethod0 {
+		movecost = 2
+		heightdelta = 1
+		dist = 0
+		startheight = ground_level low_level_flight medium_level_flight
+		canattack = true
+	} HeightChangeMethod0
+	HeightChangeMethod1 {
+		movecost = 2
+		heightdelta = -1
+		dist = 0
+		startheight = low_level_flight medium_level_flight high_level_flight
+		canattack = true
+	} HeightChangeMethod1
+
+} VehicleType

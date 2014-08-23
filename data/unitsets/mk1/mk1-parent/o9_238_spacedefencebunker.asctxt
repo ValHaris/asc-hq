@@ -1,22 +1,23 @@
 VehicleType { 
-   Name = spacedefencebunker
-   abstract = true
-   ID = 238
-   parent = 400 401 402 403
-   Description = SpaceDefenceBunker
-   Infotext = [Main space defence system - long range rockets to fight against enemy satellites, 
+	Name = spacedefencebunker
+	abstract = true
+	ID = 238
+	parent = 400 401 402 403
+
+	Description = SpaceDefenceBunker
+	Infotext = [Main space defence system - long range rockets to fight against enemy satellites, 
    spaceships and spacestations.]
-   GuideSortHelp = 509 238 600 0 0 0 0 0 0 0
+	GuideSortHelp = 509 238 600 0 0 0 0 0 0 0
 
 
-   Armor += 100
-   Features += satelliteview ManualSelfDestruct
+	Armor += 100
+	Features += satelliteview ManualSelfDestruct
 
-   TerrainAccess ->* VehicleType.turret_Lowland 
+	TerrainAccess ->* VehicleType.turret_Lowland 
 
-   Weapons { 
-      Number = 2
-      Weapon0 ->* VehicleType.SOMB 
-      Weapon1 ->* VehicleType.Def_MG 
-   } Weapons
+	Weapons { 
+		Number = 2
+		Weapon0 ->* VehicleType.SOMB 
+		Weapon1 ->* VehicleType.Def_MG 
+	} Weapons
 } VehicleType
