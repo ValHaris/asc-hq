@@ -22,6 +22,7 @@
 #ifndef paradialogH
  #define paradialogH
 
+#include <vector>
 #include "global.h"
 
 #include <sigc++/sigc++.h>
@@ -54,12 +55,13 @@
 class AutoProgressBar;
 
 class StartupScreen: public SigC::Object {
-       PG_Label* infoLabel;
+       vector<PG_Label*> infoLabels;
        PG_Label* versionLabel;
        PG_ThemeWidget* background;
        AutoProgressBar* progressBar; 
        Surface fullscreenImage;
-        void disp( const ASCString& s );
+       void disp( const ASCString& s );
+       void dispLine( const ASCString& s, int line );
      public:
          StartupScreen( const ASCString& filename, SigC::Signal0<void>& ticker );        
          ~StartupScreen();

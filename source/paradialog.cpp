@@ -18,6 +18,7 @@
 
 #include "global.h"
 
+#include <boost/algorithm/string.hpp>
 #include <SDL_image.h>
 #include <signal.h>
 
@@ -297,8 +298,9 @@ ASC_PG_App& getPGApplication()
 }
 
 
+static const int progressHeight = 15;
      
-StartupScreen::StartupScreen( const ASCString& filename, SigC::Signal0<void>& ticker ) : infoLabel(NULL), versionLabel(NULL), background(NULL), progressBar(NULL), fullscreenImage(NULL)
+StartupScreen::StartupScreen( const ASCString& filename, SigC::Signal0<void>& ticker ) : versionLabel(NULL), background(NULL), progressBar(NULL), fullscreenImage(NULL)
 {
    MessagingHub::Instance().statusInformation.connect( SigC::slot( *this, &StartupScreen::disp ));
    
@@ -349,12 +351,8 @@ StartupScreen::StartupScreen( const ASCString& filename, SigC::Signal0<void>& ti
       image->SetBackground ( fullscreenImage.getBaseSurface(), PG_Draw::STRETCH );
    }
 
-   int progressHeight = 15;
    SDL_Surface* screen = PG_Application::GetApp()->GetScreen();
    progressBar = new AutoProgressBar( ticker, background, PG_Rect( 0, screen->h - progressHeight, screen->w, progressHeight ) );
-
-   infoLabel = new PG_Label( background, PG_Rect( screen->w/2, screen->h - progressHeight - 25, screen->w/2 - 10, 20 ));
-   infoLabel->SetAlignment( PG_Label::RIGHT );
 
    if ( MessagingHub::Instance().getVerbosity() > 0 ) {
       versionLabel = new PG_Label( background, PG_Rect( 10, screen->h - progressHeight - 25, screen->w/2, 20 ));
@@ -365,9 +363,33 @@ StartupScreen::StartupScreen( const ASCString& filename, SigC::Signal0<void>& ti
    background->Show();
 }
 
+/*!
+ * line is counting bottom up! 0 is the lower most line!
+ */
+void StartupScreen::dispLine( const ASCString& s, int line ) {
+   SDL_Surface* screen = PG_Application::GetApp()->GetScreen();
+   while ( infoLabels.size() <= line ) {
+       int y = screen->h - progressHeight - 25 * ( 1 + infoLabels.size());
+       if ( y < 0 )
+           return;
+
+       PG_Label* l = new PG_Label( background, PG_Rect( screen->w/2, y, screen->w/2 - 10, 20 ));
+       l->SetAlignment( PG_Label::RIGHT );
+       l->SetVisible(true);
+       infoLabels.push_back( l );
+   }
+   infoLabels[line]->SetText(s);
+}
+
 void StartupScreen::disp( const ASCString& s )
 {
-   infoLabel->SetText( s );
+   vector<ASCString> strs;
+   boost::split(strs, s, boost::is_any_of("\n"));
+
+   for ( int i = 0; i < strs.size(); ++i)
+       dispLine(strs[i], strs.size() -1 - i);
+   for ( int i = strs.size(); i < infoLabels.size(); ++i )
+       dispLine("", i );
 }
 
          
