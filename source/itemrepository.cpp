@@ -337,7 +337,7 @@ void  loadAllData( bool useCache )
       }
       displayLogMessage ( 4, "loading of cache completed\n");
    } else {
-      MessagingHub::Instance().statusInformation("rebuilding data cache, please be patient");
+      MessagingHub::Instance().statusInformation("rebuilding data cache, please be patient\n"+ listContainer());
       
       loadalltextfiles();
 
