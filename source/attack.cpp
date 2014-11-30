@@ -415,9 +415,30 @@ void tunitattacksunit :: setup ( Vehicle* &attackingunit, Vehicle* &attackedunit
 
 void log( const Vehicle* attacker, const Vehicle* attackee )
 {
-   if( CGameOptions::Instance()->logKillsToConsole ) 
-      std::cout << attackee->getOwner() << ";" << attacker->getOwner() << ";" << attackee->typ->id  << ";"
-            << attackee->typ->name  << ";" << attackee->getExperience_offensive() << ";" << attacker->getMap()->time.turn() <<  "\n" ;
+   if( CGameOptions::Instance()->logKillsToConsole ) {
+      static bool header = false;
+      ASCString msg;
+      if ( !header ) {
+          msg += "# Attacked player; Attacking player ; attacked unit type id ; attacked unit type name ; attacked unit offensive experience ; turn \n";
+          header = true;
+      }
+
+      msg +=  ASCString::toString(attackee->getOwner()) + ";"
+            + ASCString::toString(attacker->getOwner()) + ";"
+            + ASCString::toString(attackee->typ->id)  + ";"
+            + attackee->typ->name  + ";"
+            + ASCString::toString(attackee->getExperience_offensive()) + ";"
+            + ASCString::toString(attacker->getMap()->time.turn()) +  "\n" ;
+
+      std::cout << msg;
+#ifdef WIN32
+      ASCString filename = constructFileName( 0, "", "kills.txt");
+      std::ofstream outfile;
+
+      outfile.open( filename.c_str(), std::ios_base::app);
+      outfile << msg;
+#endif
+   }
 }
 
 void tunitattacksunit :: setresult( const Context& context )
@@ -454,16 +475,15 @@ void tunitattacksunit :: setresult( const Context& context )
       d2->execute ( context );
    }
    
-   
-   GameAction* f = new InflictDamage( _attackingunit, av.damage - _attackingunit->damage );
-   f->execute ( context );
-   
    if( av.damage >= 100 )
       log ( _attackedunit, _attackingunit );
 
    if( dv.damage >= 100 )
       log ( _attackingunit, _attackedunit );
    
+   GameAction* f = new InflictDamage( _attackingunit, av.damage - _attackingunit->damage );
+   f->execute ( context );
+
    GameAction* g = new InflictDamage( _attackedunit, dv.damage - _attackedunit->damage  );
    g->execute ( context );
    
