@@ -116,6 +116,7 @@ class ContainerBase {
       bool removeUnitFromCargo( int nwid, bool recursive = false );
       
       void addToCargo( Vehicle* v );
+      void moveToCargo( Vehicle* v );
       
       //! The ResourcePlus is used for different purposes by different building or vehicle functions, or not at all
       void setInternalResourcePlus( const Resources& res );
@@ -207,6 +208,7 @@ class MapField {
       void changeTerrainType( const TerrainType* terrain );
       void removeBuilding();
       void removeUnit();
+      void moveUnitHere( Vehicle* veh );
 #endif      
       TerrainType* getTerrainType();
       

@@ -827,7 +827,18 @@ void Vehicle :: setnewposition ( const MapCoordinate& mc, const Context& context
    (new UnitFieldRegistration( this, MapCoordinate3D(mc,0), UnitFieldRegistration::Position ))->execute( context );
 }
 
-
+void Vehicle :: unregisterPosition()
+{
+    if ( getCarrier() )
+        getCarrier()->removeUnitFromCargo(this);
+    else {
+        if ( getPosition().valid() ) {
+            MapField* fld = getMap()->getField(getPosition());
+            if ( fld->vehicle == this )
+                fld->vehicle = NULL;
+        }
+    }
+}
 
 void Vehicle::convert ( int col, bool recursive )
 {

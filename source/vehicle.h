@@ -306,6 +306,9 @@ class UnitHooveringLogic {
     void setnewposition ( const MapCoordinate& mc );
     void setnewposition ( const MapCoordinate& mc, const Context& context );
 
+    //! unregisters the unit at its current position (e.g. from a map field, or inside a transport)
+    void unregisterPosition();
+
     /** converts the unit so it is owned by 'player'. Note that the player is passed
         as parameter (values [0..8]) )
     */

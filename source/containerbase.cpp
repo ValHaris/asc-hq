@@ -381,6 +381,13 @@ void ContainerBase :: addToCargo( Vehicle* veh, int position )
    cargoChanged();
 }
 
+void ContainerBase :: moveToCargo( Vehicle* veh )
+{
+    veh->unregisterPosition();
+    addToCargo(veh);
+}
+
+
 bool ContainerBase :: removeUnitFromCargo( Vehicle* veh, bool recursive )
 {
    if ( !veh )

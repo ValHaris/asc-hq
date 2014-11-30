@@ -140,6 +140,9 @@ class ContainerBase {
                          -1 assigns slot automatically. The automatic mode should be used in almost all cases */
       void addToCargo( Vehicle* veh, int position = -1 );
       
+      /** adds the unit to the cargo, and removes its from its current position */
+      void moveToCargo( Vehicle* veh );
+
       //! removes the given unit from the container. \return true if the unit was found, false otherwise
       bool removeUnitFromCargo( Vehicle* veh, bool recursive = false );
       bool removeUnitFromCargo( int nwid, bool recursive = false );

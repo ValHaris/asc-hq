@@ -149,6 +149,10 @@ class  MapField {
     //! sorts the objects. Since objects can be on different levels of height, the lower one must be displayed first
     void sortobjects ( void );
 
+    //! registers the unit on the field, and unregisters it whereever it previously was
+    void moveUnitHere( Vehicle* veh );
+
+
     //! checks if there are objects from the given type on the field and returns them
     Object* checkForObject ( const ObjectType*  o );
 

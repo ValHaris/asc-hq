@@ -359,6 +359,13 @@ void MapField :: removeUnit()
    }
 }
 
+void MapField :: moveUnitHere( Vehicle* veh )
+{
+    veh->unregisterPosition();
+    veh->setnewposition( getx(), gety() );
+    vehicle = veh;
+}
+
 
 int MapField :: getWeather ( void )
 {
