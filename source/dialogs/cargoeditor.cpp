@@ -71,7 +71,7 @@ class CargoEditor : public PG_Window {
          if ( !veh )
             return false;
          
-         if ( container->vehicleFit( veh )) {
+         if ( container->doesVehicleFit( veh )) {
             container->addToCargo( veh );
             cargoWidget->redrawAll();
             updateGraph();

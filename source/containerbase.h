@@ -177,7 +177,7 @@ class ContainerBase {
 
       /** Does the vehicle fit into the container? This does not include checking if it can reach the entry
        */
-      bool vehicleFit ( const Vehicle* vehicle ) const;
+      bool doesVehicleFit ( const Vehicle* vehicle ) const;
 
       //! weight of all loaded units
       int cargoWeight() const;

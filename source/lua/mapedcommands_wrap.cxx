@@ -3674,6 +3674,274 @@ fail:
 }
 
 
+static int _wrap_ContainerBase_vehicleLoadable__SWIG_0(lua_State* L) {
+  int SWIG_arg = 0;
+  ContainerBase *arg1 = (ContainerBase *) 0 ;
+  Vehicle *arg2 = (Vehicle *) 0 ;
+  int arg3 ;
+  bool result;
+  
+  SWIG_check_num_args("ContainerBase::vehicleLoadable",3,3)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("ContainerBase::vehicleLoadable",1,"ContainerBase const *");
+  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("ContainerBase::vehicleLoadable",2,"Vehicle const *");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("ContainerBase::vehicleLoadable",3,"int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_ContainerBase,0))){
+    SWIG_fail_ptr("ContainerBase_vehicleLoadable",1,SWIGTYPE_p_ContainerBase);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_Vehicle,0))){
+    SWIG_fail_ptr("ContainerBase_vehicleLoadable",2,SWIGTYPE_p_Vehicle);
+  }
+  
+  arg3 = (int)lua_tonumber(L, 3);
+  result = (bool)((ContainerBase const *)arg1)->vehicleLoadable((Vehicle const *)arg2,arg3);
+  lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_ContainerBase_vehicleLoadable__SWIG_1(lua_State* L) {
+  int SWIG_arg = 0;
+  ContainerBase *arg1 = (ContainerBase *) 0 ;
+  Vehicle *arg2 = (Vehicle *) 0 ;
+  bool result;
+  
+  SWIG_check_num_args("ContainerBase::vehicleLoadable",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("ContainerBase::vehicleLoadable",1,"ContainerBase const *");
+  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("ContainerBase::vehicleLoadable",2,"Vehicle const *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_ContainerBase,0))){
+    SWIG_fail_ptr("ContainerBase_vehicleLoadable",1,SWIGTYPE_p_ContainerBase);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_Vehicle,0))){
+    SWIG_fail_ptr("ContainerBase_vehicleLoadable",2,SWIGTYPE_p_Vehicle);
+  }
+  
+  result = (bool)((ContainerBase const *)arg1)->vehicleLoadable((Vehicle const *)arg2);
+  lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_ContainerBase_vehicleLoadable(lua_State* L) {
+  int argc;
+  int argv[4]={
+    1,2,3,4
+  };
+  
+  argc = lua_gettop(L);
+  if (argc == 2) {
+    int _v;
+    {
+      void *ptr;
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_ContainerBase, 0)) {
+        _v = 0;
+      } else {
+        _v = 1;
+      }
+    }
+    if (_v) {
+      {
+        void *ptr;
+        if (SWIG_isptrtype(L,argv[1])==0 || SWIG_ConvertPtr(L,argv[1], (void **) &ptr, SWIGTYPE_p_Vehicle, 0)) {
+          _v = 0;
+        } else {
+          _v = 1;
+        }
+      }
+      if (_v) {
+        return _wrap_ContainerBase_vehicleLoadable__SWIG_1(L);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    {
+      void *ptr;
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_ContainerBase, 0)) {
+        _v = 0;
+      } else {
+        _v = 1;
+      }
+    }
+    if (_v) {
+      {
+        void *ptr;
+        if (SWIG_isptrtype(L,argv[1])==0 || SWIG_ConvertPtr(L,argv[1], (void **) &ptr, SWIGTYPE_p_Vehicle, 0)) {
+          _v = 0;
+        } else {
+          _v = 1;
+        }
+      }
+      if (_v) {
+        {
+          _v = lua_isnumber(L,argv[2]);
+        }
+        if (_v) {
+          return _wrap_ContainerBase_vehicleLoadable__SWIG_0(L);
+        }
+      }
+    }
+  }
+  
+  SWIG_Lua_pusherrstring(L,"Wrong arguments for overloaded function 'ContainerBase_vehicleLoadable'\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    ContainerBase::vehicleLoadable(Vehicle const *,int) const\n"
+    "    ContainerBase::vehicleLoadable(Vehicle const *) const\n");
+  lua_error(L);return 0;
+}
+
+
+static int _wrap_ContainerBase_vehicleUnloadable__SWIG_0(lua_State* L) {
+  int SWIG_arg = 0;
+  ContainerBase *arg1 = (ContainerBase *) 0 ;
+  VehicleType *arg2 = (VehicleType *) 0 ;
+  int arg3 ;
+  int result;
+  
+  SWIG_check_num_args("ContainerBase::vehicleUnloadable",3,3)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("ContainerBase::vehicleUnloadable",1,"ContainerBase const *");
+  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("ContainerBase::vehicleUnloadable",2,"VehicleType const *");
+  if(!lua_isnumber(L,3)) SWIG_fail_arg("ContainerBase::vehicleUnloadable",3,"int");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_ContainerBase,0))){
+    SWIG_fail_ptr("ContainerBase_vehicleUnloadable",1,SWIGTYPE_p_ContainerBase);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_VehicleType,0))){
+    SWIG_fail_ptr("ContainerBase_vehicleUnloadable",2,SWIGTYPE_p_VehicleType);
+  }
+  
+  arg3 = (int)lua_tonumber(L, 3);
+  result = (int)((ContainerBase const *)arg1)->vehicleUnloadable((VehicleType const *)arg2,arg3);
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_ContainerBase_vehicleUnloadable__SWIG_1(lua_State* L) {
+  int SWIG_arg = 0;
+  ContainerBase *arg1 = (ContainerBase *) 0 ;
+  VehicleType *arg2 = (VehicleType *) 0 ;
+  int result;
+  
+  SWIG_check_num_args("ContainerBase::vehicleUnloadable",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("ContainerBase::vehicleUnloadable",1,"ContainerBase const *");
+  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("ContainerBase::vehicleUnloadable",2,"VehicleType const *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_ContainerBase,0))){
+    SWIG_fail_ptr("ContainerBase_vehicleUnloadable",1,SWIGTYPE_p_ContainerBase);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_VehicleType,0))){
+    SWIG_fail_ptr("ContainerBase_vehicleUnloadable",2,SWIGTYPE_p_VehicleType);
+  }
+  
+  result = (int)((ContainerBase const *)arg1)->vehicleUnloadable((VehicleType const *)arg2);
+  lua_pushnumber(L, (lua_Number) result); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
+static int _wrap_ContainerBase_vehicleUnloadable(lua_State* L) {
+  int argc;
+  int argv[4]={
+    1,2,3,4
+  };
+  
+  argc = lua_gettop(L);
+  if (argc == 2) {
+    int _v;
+    {
+      void *ptr;
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_ContainerBase, 0)) {
+        _v = 0;
+      } else {
+        _v = 1;
+      }
+    }
+    if (_v) {
+      {
+        void *ptr;
+        if (SWIG_isptrtype(L,argv[1])==0 || SWIG_ConvertPtr(L,argv[1], (void **) &ptr, SWIGTYPE_p_VehicleType, 0)) {
+          _v = 0;
+        } else {
+          _v = 1;
+        }
+      }
+      if (_v) {
+        return _wrap_ContainerBase_vehicleUnloadable__SWIG_1(L);
+      }
+    }
+  }
+  if (argc == 3) {
+    int _v;
+    {
+      void *ptr;
+      if (SWIG_isptrtype(L,argv[0])==0 || SWIG_ConvertPtr(L,argv[0], (void **) &ptr, SWIGTYPE_p_ContainerBase, 0)) {
+        _v = 0;
+      } else {
+        _v = 1;
+      }
+    }
+    if (_v) {
+      {
+        void *ptr;
+        if (SWIG_isptrtype(L,argv[1])==0 || SWIG_ConvertPtr(L,argv[1], (void **) &ptr, SWIGTYPE_p_VehicleType, 0)) {
+          _v = 0;
+        } else {
+          _v = 1;
+        }
+      }
+      if (_v) {
+        {
+          _v = lua_isnumber(L,argv[2]);
+        }
+        if (_v) {
+          return _wrap_ContainerBase_vehicleUnloadable__SWIG_0(L);
+        }
+      }
+    }
+  }
+  
+  SWIG_Lua_pusherrstring(L,"Wrong arguments for overloaded function 'ContainerBase_vehicleUnloadable'\n"
+    "  Possible C/C++ prototypes are:\n"
+    "    ContainerBase::vehicleUnloadable(VehicleType const *,int) const\n"
+    "    ContainerBase::vehicleUnloadable(VehicleType const *) const\n");
+  lua_error(L);return 0;
+}
+
+
 static int _wrap_ContainerBase_setInternalResourcePlus(lua_State* L) {
   int SWIG_arg = 0;
   ContainerBase *arg1 = (ContainerBase *) 0 ;
@@ -3927,6 +4195,8 @@ static swig_lua_method swig_ContainerBase_methods[] = {
     {"removeUnitFromCargo", _wrap_ContainerBase_removeUnitFromCargo}, 
     {"addToCargo", _wrap_ContainerBase_addToCargo}, 
     {"moveToCargo", _wrap_ContainerBase_moveToCargo}, 
+    {"vehicleLoadable", _wrap_ContainerBase_vehicleLoadable}, 
+    {"vehicleUnloadable", _wrap_ContainerBase_vehicleUnloadable}, 
     {"setInternalResourcePlus", _wrap_ContainerBase_setInternalResourcePlus}, 
     {"setInternalResourceMaxPlus", _wrap_ContainerBase_setInternalResourceMaxPlus}, 
     {"getInternalResourcePlus", _wrap_ContainerBase_getInternalResourcePlus}, 

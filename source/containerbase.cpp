@@ -443,7 +443,7 @@ bool ContainerBase :: canCarryWeight( int additionalWeight, const Vehicle*  vehi
 }
 
 
-bool ContainerBase :: vehicleFit ( const Vehicle* vehicle ) const
+bool ContainerBase :: doesVehicleFit ( const Vehicle* vehicle ) const
 {
    bool isConquering = isBuilding() && getMap()->getPlayer(this).diplomacy.isHostile( vehicle) && vehicle->color != color;
    if ( baseType->vehicleFit ( vehicle->typ )) // checks size and type
@@ -467,7 +467,7 @@ bool  ContainerBase :: vehicleLoadable ( const Vehicle* vehicle, int uheight, co
    if ( uheight == -1 )
       uheight = vehicle->height;
 
-   if ( vehicleFit ( vehicle ))
+   if ( doesVehicleFit ( vehicle ))
       for ( ContainerBaseType::EntranceSystems::const_iterator i = baseType->entranceSystems.begin(); i != baseType->entranceSystems.end(); i++ )
          if ( (i->height_abs & uheight) || (i->height_abs == 0 ))
             if ( i->mode & ContainerBaseType::TransportationIO::In )
@@ -530,7 +530,7 @@ int  ContainerBase :: vehicleDocking ( const Vehicle* vehicle, bool out ) const
 
    int height = 0;
 
-   if ( baseType->vehicleFit ( vehicle->typ ) && ( vehicleFit( vehicle ) || out ) )
+   if ( baseType->vehicleFit ( vehicle->typ ) && ( doesVehicleFit( vehicle ) || out ) )
       for ( ContainerBaseType::EntranceSystems::const_iterator i = baseType->entranceSystems.begin(); i != baseType->entranceSystems.end(); i++ )
          if ( i->mode & ContainerBaseType::TransportationIO::Docking )
             if ( (i->container_height & getPosition().getBitmappedHeight()) || (i->container_height == 0))

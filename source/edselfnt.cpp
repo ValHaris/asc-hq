@@ -312,7 +312,7 @@ class CargoItemFactory: public MapItemTypeWidgetFactory<MapItemTypeWidget< Vehic
               
          bool result = true;
          Vehicle* unit = new Vehicle ( &item, actmap, container->getOwner() );
-         if ( container->vehicleFit ( unit ))
+         if ( container->doesVehicleFit ( unit ))
             result = false;
          delete unit;
          return result;
@@ -334,11 +334,11 @@ class CargoItemFactory: public MapItemTypeWidgetFactory<MapItemTypeWidget< Vehic
             unit->setnewposition ( container->getPosition() );
             unit->tank.material = 0;
             unit->tank.fuel = 0;
-            if ( container->vehicleFit ( unit )) {
+            if ( container->doesVehicleFit ( unit )) {
                unit->tank.material = unit->getStorageCapacity().material;
                unit->tank.fuel = unit->getStorageCapacity().fuel;
       
-               if ( !container->vehicleFit ( unit )) {
+               if ( !container->doesVehicleFit ( unit )) {
                   unit->tank.material = 0;
                   unit->tank.fuel = 0;
                   displaymessage("Warning:\nThe unit you just set could not be loaded with full material and fuel\nPlease set these values manually",1);

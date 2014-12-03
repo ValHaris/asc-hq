@@ -118,6 +118,10 @@ class ContainerBase {
       void addToCargo( Vehicle* v );
       void moveToCargo( Vehicle* v );
       
+      
+      bool vehicleLoadable ( const Vehicle* vehicle, int unitheight = -1 ) const;
+      int  vehicleUnloadable ( const VehicleType* vehicleType, int carrierHeight = -1 ) const;
+      
       //! The ResourcePlus is used for different purposes by different building or vehicle functions, or not at all
       void setInternalResourcePlus( const Resources& res );
       

@@ -38,7 +38,7 @@ bool CargoMoveCommand :: moveOutAvail( const Vehicle* movingUnit  )
    if ( carr ) {
       ContainerBase* carr2 = carr->getCarrier();
       if ( carr2 )
-         return carr2->vehicleFit( movingUnit  );
+         return carr2->doesVehicleFit( movingUnit  );
    }
    return false;
 
@@ -47,7 +47,7 @@ bool CargoMoveCommand :: moveOutAvail( const Vehicle* movingUnit  )
 bool CargoMoveCommand :: moveInAvail( const Vehicle* movingUnit , Vehicle* newCarrier )
 {
    if ( movingUnit && newCarrier )
-      return newCarrier->vehicleFit( movingUnit );  
+      return newCarrier->doesVehicleFit( movingUnit );  
    else
       return false;
 }
