@@ -118,6 +118,7 @@ class ContainerBase {
       void addToCargo( Vehicle* v );
       void moveToCargo( Vehicle* v );
       
+      bool doesVehicleFit ( const Vehicle* vehicle ) const;
       
       bool vehicleLoadable ( const Vehicle* vehicle, int unitheight = -1 ) const;
       int  vehicleUnloadable ( const VehicleType* vehicleType, int carrierHeight = -1 ) const;

@@ -3674,6 +3674,37 @@ fail:
 }
 
 
+static int _wrap_ContainerBase_doesVehicleFit(lua_State* L) {
+  int SWIG_arg = 0;
+  ContainerBase *arg1 = (ContainerBase *) 0 ;
+  Vehicle *arg2 = (Vehicle *) 0 ;
+  bool result;
+  
+  SWIG_check_num_args("ContainerBase::doesVehicleFit",2,2)
+  if(!SWIG_isptrtype(L,1)) SWIG_fail_arg("ContainerBase::doesVehicleFit",1,"ContainerBase const *");
+  if(!SWIG_isptrtype(L,2)) SWIG_fail_arg("ContainerBase::doesVehicleFit",2,"Vehicle const *");
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,1,(void**)&arg1,SWIGTYPE_p_ContainerBase,0))){
+    SWIG_fail_ptr("ContainerBase_doesVehicleFit",1,SWIGTYPE_p_ContainerBase);
+  }
+  
+  
+  if (!SWIG_IsOK(SWIG_ConvertPtr(L,2,(void**)&arg2,SWIGTYPE_p_Vehicle,0))){
+    SWIG_fail_ptr("ContainerBase_doesVehicleFit",2,SWIGTYPE_p_Vehicle);
+  }
+  
+  result = (bool)((ContainerBase const *)arg1)->doesVehicleFit((Vehicle const *)arg2);
+  lua_pushboolean(L,(int)(result!=0)); SWIG_arg++;
+  return SWIG_arg;
+  
+  if(0) SWIG_fail;
+  
+fail:
+  lua_error(L);
+  return SWIG_arg;
+}
+
+
 static int _wrap_ContainerBase_vehicleLoadable__SWIG_0(lua_State* L) {
   int SWIG_arg = 0;
   ContainerBase *arg1 = (ContainerBase *) 0 ;
@@ -4195,6 +4226,7 @@ static swig_lua_method swig_ContainerBase_methods[] = {
     {"removeUnitFromCargo", _wrap_ContainerBase_removeUnitFromCargo}, 
     {"addToCargo", _wrap_ContainerBase_addToCargo}, 
     {"moveToCargo", _wrap_ContainerBase_moveToCargo}, 
+    {"doesVehicleFit", _wrap_ContainerBase_doesVehicleFit}, 
     {"vehicleLoadable", _wrap_ContainerBase_vehicleLoadable}, 
     {"vehicleUnloadable", _wrap_ContainerBase_vehicleUnloadable}, 
     {"setInternalResourcePlus", _wrap_ContainerBase_setInternalResourcePlus}, 
