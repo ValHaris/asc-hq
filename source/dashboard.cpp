@@ -439,6 +439,9 @@ void DashboardPanel::showUnitData( Vehicle* veh, Building* bld, MapField* fld,  
 
       setLabelText( "armor", veh->typ->armor );
 
+      setLabelText( "jamming", veh->typ->jamming );
+      setLabelText( "view", veh->typ->view );
+
       int &pos = weaponsDisplayed;
       for ( int i = 0; i < veh->typ->weapons.count; ++i) {
          if ( !veh->typ->weapons.weapon[i].service() && pos < 10 ) {
@@ -483,8 +486,13 @@ void DashboardPanel::showUnitData( Vehicle* veh, Building* bld, MapField* fld,  
             setLabelText( "unitenergystatus", "" );
          }
 
+         setLabelText( "jamming", bld->typ->jamming );
+         setLabelText( "view", bld->typ->view );
+
 
       } else {
+         setLabelText( "jamming", "" );
+         setLabelText( "view", "" );
          setLabelText( "armor", "" );
          setLabelText( "unittypename", "" );
          setLabelText( "unitname", "" );
