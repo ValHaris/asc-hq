@@ -399,9 +399,9 @@ Maped_MainScreenWidget::Maped_MainScreenWidget( PG_Application& application )
 {
 
    setup( false, PG_Rect(15,30,Width() - 200, Height() - 73) );
-   mapDisplay->mouseButtonOnField.connect( SigC::slot( mousePressedOnField ));
+   mapDisplay->mouseButtonOnField.connect( sigc::ptr_fun( &mousePressedOnField ));
    mapDisplay->mouseButtonOnField.connect( sigc::mem_fun( *this, &Maped_MainScreenWidget::clickOnMap ));
-   mapDisplay->mouseDraggedToField.connect( SigC::slot( mouseDraggedToField ));
+   mapDisplay->mouseDraggedToField.connect( sigc::ptr_fun( &mouseDraggedToField ));
 
    
 
@@ -647,7 +647,7 @@ bool Maped_MainScreenWidget::runContextAction  (PG_PopupMenu::MenuItem* menuItem
 #endif
 
 
-bool Maped_MainScreenWidget::eventKeyUp(const SDL_KeyboardEvent* key)
+bool Maped_MainScreenWidget::eventKeyUp(const PG_MessageObject* o, const SDL_KeyboardEvent* key)
 {
    if ( key->keysym.sym ==  SDLK_RCTRL || key->keysym.sym == SDLK_LCTRL ) {
       execaction_ev( act_releaseControlPanel );
@@ -684,7 +684,7 @@ void helperFunction()
 }
 
 
-bool Maped_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
+bool Maped_MainScreenWidget::eventKeyDown(const PG_MessageObject* o, const SDL_KeyboardEvent* key)
 {
    int mod = SDL_GetModState() & ~(KMOD_NUM | KMOD_CAPS | KMOD_MODE);
 

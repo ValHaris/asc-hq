@@ -153,8 +153,7 @@ ASC_PG_App :: ASC_PG_App ( const ASCString& themeName )  : fullScreen(false), bi
    this->themeName = themeName;
    EnableSymlinks(true);
    EnableAppIdleCalls();
-   sigAppIdle.connect(  idleEvent ); // I don't get a direct connection to work
-   // sigAppIdle.connect( SigC::slot( &idler ));
+   sigAppIdle.connect( sigc::hide( idleEvent.make_slot() ));
    int i = 0;
    bool themeFound = false;
    ASCString path;
@@ -659,7 +658,7 @@ class   NewStringChooser : public ASC_PG_Dialog {
    int button;
    int item;
    
-   bool buttonpressed( int i )
+   bool buttonpressed( PG_Widget* w, int i )
    {
       button = i;
       QuitModal();
@@ -728,7 +727,7 @@ class MultiLineEditorDialog  : public ASC_PG_Dialog {
       {
          editor = new PG_MultiLineEdit( this, PG_Rect( 10, 40, Width() - 20, Height() - 80 ) );
          editor->SetText( textToEdit );
-         AddStandardButton( "OK" )->sigClick.connect( sigc::bind( sigc::mem_fun( *this, &MultiLineEditorDialog::quitModalLoop ), 1 ));
+         AddStandardButton( "OK" )->sigClick.connect( sigc::bind( sigc::mem_fun( *this, &MultiLineEditorDialog::quitModalLoopW ), 1 ));
       }
 
       ASCString GetEditedText() { return editor->GetText(); };
@@ -790,7 +789,7 @@ class StringEditor  : public ASC_PG_Dialog {
       {
          editor = new PG_LineEdit( this, PG_Rect( 10, 40, Width() - 20, 25 ) );
          editor->SetText( textToEdit );
-         AddStandardButton( "OK" )->sigClick.connect( sigc::bind( sigc::mem_fun( *this, &StringEditor::quitModalLoop ), 1 ));
+         AddStandardButton( "OK" )->sigClick.connect( sigc::bind( sigc::mem_fun( *this, &StringEditor::quitModalLoopW ), 1 ));
       }
 
       ASCString GetEditedText() { return editor->GetText(); };

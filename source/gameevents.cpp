@@ -581,8 +581,8 @@ ASCString AllEnemyUnitsDestroyed::getTypeName() const
 
 void AllEnemyUnitsDestroyed::arm()
 {
-   ContainerBase::anyContainerDestroyed.connect( SigC::hide<ContainerBase*>( sigc::mem_fun( *this, &AllEnemyUnitsDestroyed::triggered)));
-   ContainerBase::anyContainerConquered.connect( SigC::hide<ContainerBase*>( sigc::mem_fun( *this, &AllEnemyUnitsDestroyed::triggered)));
+   ContainerBase::anyContainerDestroyed.connect( sigc::hide( sigc::mem_fun( *this, &AllEnemyUnitsDestroyed::triggered)));
+   ContainerBase::anyContainerConquered.connect( sigc::hide( sigc::mem_fun( *this, &AllEnemyUnitsDestroyed::triggered)));
 }
 
 void AllEnemyUnitsDestroyed::triggered()
@@ -616,8 +616,8 @@ ASCString AllEnemyBuildingsDestroyed::getDetailledName() const
 
 void AllEnemyBuildingsDestroyed::arm()
 {
-   ContainerBase::anyContainerDestroyed.connect( SigC::hide<ContainerBase*>( sigc::mem_fun( *this, &AllEnemyBuildingsDestroyed::triggered)));
-   ContainerBase::anyContainerConquered.connect( SigC::hide<ContainerBase*>( sigc::mem_fun( *this, &AllEnemyBuildingsDestroyed::triggered)));
+   ContainerBase::anyContainerDestroyed.connect( sigc::hide( sigc::mem_fun( *this, &AllEnemyBuildingsDestroyed::triggered)));
+   ContainerBase::anyContainerConquered.connect( sigc::hide( sigc::mem_fun( *this, &AllEnemyBuildingsDestroyed::triggered)));
 }
 
 void AllEnemyBuildingsDestroyed::triggered()

@@ -2207,7 +2207,7 @@ int  trunreplay :: run ( int player, int viewingplayer, bool performEndTurnOpera
              setcursorpos ( lastvisiblecursorpos.x, lastvisiblecursorpos.y );
          */
        }  else {
-          PG_Application::GetApp()->sigAppIdle();
+          PG_Application::GetApp()->sigAppIdle( PG_Application::GetApp() );
           releasetimeslice();
        }
 

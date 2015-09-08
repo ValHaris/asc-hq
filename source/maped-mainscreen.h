@@ -115,8 +115,8 @@ protected:
     
     void brushChanged( int i );
     void selectionChanged( const Placeable* item ); 
-    bool eventKeyUp(const SDL_KeyboardEvent* key);
-    bool eventKeyDown(const SDL_KeyboardEvent* key);
+    bool eventKeyUp(const PG_MessageObject* o, const SDL_KeyboardEvent* key);
+    bool eventKeyDown(const PG_MessageObject* o, const SDL_KeyboardEvent* key);
     void setupStatusBar();
     
     void playerChanged( int player );

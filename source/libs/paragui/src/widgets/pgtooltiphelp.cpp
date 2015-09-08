@@ -51,7 +51,7 @@ PG_ToolTipHelp :: PG_ToolTipHelp( PG_Widget* parent, const std::string& text, in
 	parent->sigMouseEnter.connect( sigc::mem_fun( *this, &PG_ToolTipHelp::onParentEnter ) );
 	parent->sigMouseLeave.connect( sigc::mem_fun( *this, &PG_ToolTipHelp::onParentLeave ) );
 	parent->sigMouseMotion.connect( sigc::mem_fun( *this, &PG_ToolTipHelp::onMouseMotion ));
-	PG_Application::GetApp()->sigAppIdle.connect( sigc::mem_fun( *this, &PG_ToolTipHelp::onIdle ));
+	PG_Application::GetApp()->sigAppIdle.connect( sigc::hide( sigc::mem_fun( *this, &PG_ToolTipHelp::onIdle )));
 	PG_Application::GetApp()->EnableAppIdleCalls();
 
 	parent->sigDelete.connect( sigc::mem_fun( *this, &PG_ToolTipHelp::onParentDelete ));

@@ -255,10 +255,10 @@ class MapDisplayPG: public PG_Widget, protected MapRenderer {
 
       bool eventKeyDown(const SDL_KeyboardEvent* key)
       {
-         return keyboardHandler( key );
+         return keyboardHandler( NULL, key );
       };
 
-      bool keyboardHandler( const SDL_KeyboardEvent* keyEvent);
+      bool keyboardHandler( PG_MessageObject* o, const SDL_KeyboardEvent* keyEvent);
       
       bool disableKeyboardCursorMovement;
      

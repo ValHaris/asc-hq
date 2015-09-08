@@ -1654,7 +1654,7 @@ void MapDisplayPG::moveCursor( int dir, int step )
 }
 
 
-bool MapDisplayPG::keyboardHandler( const SDL_KeyboardEvent* keyEvent)
+bool MapDisplayPG::keyboardHandler( PG_MessageObject* o, const SDL_KeyboardEvent* keyEvent)
 {
    if ( !keyEvent || !actmap )
       return false;
