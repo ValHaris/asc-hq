@@ -52,10 +52,10 @@ class ActionSelectionWidget: public ActionWidget
          if ( actions.isActive_req( &action ) )
             check->SetPressed();
          
-         check->sigClick.connect( sigc::mem_fun( *this, &ActionSelectionWidget::click ));
+         check->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &ActionSelectionWidget::click )));
       }
    protected:
-      bool click( )
+      bool click( PG_RadioButton* button )
       {
          actions.setActive( &act, check->GetPressed() );
          return true;
@@ -132,8 +132,8 @@ class ActionManager : public ASC_PG_Dialog {
       ActionManager( GameMap* map ) : ASC_PG_Dialog( NULL, PG_Rect( -1, -1, 400, 550 ), "Manage Actions" ), gamemap( map ) 
       {
          StandardButtonDirection( Horizontal );
-         AddStandardButton("Close")->sigClick.connect( sigc::mem_fun( *this, &ActionManager::ok ));
-         AddStandardButton("Run")->sigClick.connect( sigc::mem_fun( *this, &ActionManager::run ));
+         AddStandardButton("Close")->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &ActionManager::ok )));
+         AddStandardButton("Run")->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &ActionManager::run )));
          selection = new ItemSelectorWidget( this, PG_Rect( 5, 20, Width()-10, Height() - 70 ), new ActionFactory( map ));
       }
    

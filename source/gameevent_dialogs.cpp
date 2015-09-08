@@ -643,6 +643,6 @@ BitMapEditor::BitMapEditor( BitType& value, const ASCString& title, const vector
    }
 
    PG_Button* ok = new PG_Button( this, PG_Rect( Width() - 100, Height() - 40, 90, 30), "OK" );
-   ok->sigClick.connect( sigc::mem_fun( *this, &BitMapEditor::ok ));
+   ok->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &BitMapEditor::ok )));
 }
 

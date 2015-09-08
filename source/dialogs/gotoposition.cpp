@@ -60,7 +60,7 @@ GotoPosition::GotoPosition ( GameMap* gamemap ) : ASC_PG_Dialog( NULL, PG_Rect( 
    // yfield->SetText( ASCString::toString( gamemap->getCursor().y ));
    yfield->sigEditReturn.connect( sigc::mem_fun( *this, &GotoPosition::ok ));
 
-   AddStandardButton( "~O~k" )->sigClick.connect( sigc::mem_fun( *this, &GotoPosition::ok ));
+   AddStandardButton( "~O~k" )->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &GotoPosition::ok )));
 };
 
 int GotoPosition::RunModal()

@@ -108,7 +108,7 @@ protected:
 
 	bool handleButtonClick(PG_Button* button);
 
-	bool handleEditEnd(PG_LineEdit* edit);
+	bool handleEditEnd();
 
 private:
 

@@ -329,7 +329,7 @@ class EditGameOptions : public ASC_PG_Dialog {
 
         
          PG_Button* ok = new PG_Button( this, PG_Rect( Width() - 100, Height() - 40, 90, 30), "OK" );
-         ok->sigClick.connect( sigc::mem_fun( *this, &EditGameOptions::ok ));
+         ok->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &EditGameOptions::ok )));
       };
 
 };

@@ -102,7 +102,7 @@ class CargoWidget : public PG_ScrollWidget {
 
       void click( int num, SPoint mousePos, bool first );
    protected:
-      bool 	handleScrollTrack (PG_ScrollBar *widget, long data);
+      bool 	handleScrollTrack (long data);
       
    public:
       CargoWidget( PG_Widget* parent, const PG_Rect& pos, ContainerBase* container, bool setup );

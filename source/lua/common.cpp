@@ -87,8 +87,8 @@ const TerrainType* getTerrainType( int id )
          propertyEditor = new ASC_PropertyEditor( this, PG_Rect( 10, GetTitlebarHeight()+10, Width() - 20, Height() - GetTitlebarHeight() - 60 ), "PropertyEditor", 70 );
          
          StandardButtonDirection( Horizontal );
-         AddStandardButton("OK")->sigClick.connect( sigc::mem_fun( *this, &PropertyDialog::ok ));
-         AddStandardButton("Cancel")->sigClick.connect( sigc::mem_fun( *this, &PropertyDialog::cancel ));
+         AddStandardButton("OK")->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &PropertyDialog::ok )));
+         AddStandardButton("Cancel")->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &PropertyDialog::cancel )));
       }
          
       

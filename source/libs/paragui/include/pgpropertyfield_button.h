@@ -49,7 +49,7 @@ class PG_PropertyField_Button : public PG_PropertyEditor::PG_PropertyEditorField
 	}
 
 public:
-	typedef sigc::signal<PG_PropertyField_Button*> ButtonPropertySignal;
+	typedef sigc::signal<void, PG_PropertyField_Button*> ButtonPropertySignal;
    ButtonPropertySignal sigClick;
 
 	/** Creates a PG_PropertyField_Checkbox
@@ -62,7 +62,7 @@ public:
 		PG_Rect r = propertyEditor->RegisterProperty( name, this, height );
       button = new PG_Button( propertyEditor, PG_Rect( r.x + 2, r.y + 2, r.w - 4, r.h -4 ), PG_NULLSTR, -1, propertyEditor->GetStyleName("ButtonProperty") );
       button->SetText( buttonname );
-		button->sigClick.connect( sigc::mem_fun(*this, &PG_PropertyField_Button::click));
+		button->sigClick.connect( sigc::hide( sigc::mem_fun(*this, &PG_PropertyField_Button::click)));
 	};
 
 	bool Valid() {

@@ -671,7 +671,7 @@ void PG_RichEdit::SetTabSize(Uint16 tabSize) {
 	my_TabSize = tabSize;
 }
 
-bool PG_RichEdit::handleScrollTrack(PG_ScrollBar* scrollbar, long pos) {
+bool PG_RichEdit::handleScrollTrack(long pos) {
 	my_scrollarea->Update();
 	return true;
 }

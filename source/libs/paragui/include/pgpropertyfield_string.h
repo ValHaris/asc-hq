@@ -43,13 +43,13 @@ class PG_PropertyField_String : public PG_PropertyEditor_LineField {
 
    protected:
 
-      bool EditEnd(PG_LineEdit* widget) {
+      bool EditEnd() {
          sigValueChanged(this,lineEdit->GetText());
          return true;
       }
 
    public:
-      typedef sigc::signal<PG_PropertyField_String*, StringType> StringPropertySignal;
+      typedef sigc::signal<void, PG_PropertyField_String*, StringType> StringPropertySignal;
       StringPropertySignal sigValueChanged;
       StringPropertySignal sigValueApplied;
 

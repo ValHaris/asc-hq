@@ -61,7 +61,7 @@ protected:
 		lineEdit->SetText( s.str() );
 	}
 
-	bool EditEnd(PG_LineEdit* widget) {
+	bool EditEnd() {
 		IntegerType i ;
 		if ( convert(i)) {
 			sigValueChanged(this,i);

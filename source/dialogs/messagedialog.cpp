@@ -57,7 +57,7 @@ MessageDialog::MessageDialog(PG_Widget* parent, const PG_Rect& r, const std::str
 
    my_btnok = new PG_Button(this, btn1, btn1text);
    my_btnok->SetID(1);
-   my_btnok->sigClick.connect(slot(*this, &MessageDialog::handleButton));
+   my_btnok->sigClick.connect( sigc::mem_fun(*this, &MessageDialog::handleButton));
    my_btnok->activateHotkey( 0 );
 
    if ( bttncount == 2 ) {
@@ -66,7 +66,7 @@ MessageDialog::MessageDialog(PG_Widget* parent, const PG_Rect& r, const std::str
 
       my_btncancel = new PG_Button(this, btn2, btn2text);
       my_btncancel->SetID(2);
-      my_btncancel->sigClick.connect(slot(*this, &MessageDialog::handleButton));
+      my_btncancel->sigClick.connect(sigc::mem_fun(*this, &MessageDialog::handleButton));
       my_btncancel->activateHotkey( 0 );
    }
 
@@ -82,7 +82,7 @@ MessageDialog::MessageDialog(PG_Widget* parent, const PG_Rect& r, const std::str
 
    my_btnok = new PG_Button(this, btn1, btn1text);
    my_btnok->SetID(1);
-   my_btnok->sigClick.connect(slot(*this, &MessageDialog::handleButton));
+   my_btnok->sigClick.connect(sigc::mem_fun(*this, &MessageDialog::handleButton));
    my_btnok->activateHotkey( 0 );
 
    Init(windowtext, textalign, style);

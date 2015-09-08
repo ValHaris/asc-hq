@@ -45,7 +45,7 @@ public:
 
 protected:
 	
-	bool handle_colorslide(const PG_ScrollBar* scrollbar, long data);
+	bool handle_colorslide(long data);
 
 	void SetBaseColor(const PG_Color& c);
 	

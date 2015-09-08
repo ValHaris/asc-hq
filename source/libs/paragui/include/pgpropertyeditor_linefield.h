@@ -57,7 +57,7 @@ protected:
 	}
 
 
-	virtual bool EditEnd(PG_LineEdit* widget) = 0;
+	virtual bool EditEnd() = 0;
 };
 
 #endif

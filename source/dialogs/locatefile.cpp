@@ -25,7 +25,7 @@ class FileFindDialog: public ASC_PG_Dialog {
    private:
       TextRenderer* location;
       PG_LineEdit* le;
-      bool find( PG_LineEdit* le )
+      bool find(  )
       {
          location->SetText("searching ...");
          ASCString filename = le->GetText();

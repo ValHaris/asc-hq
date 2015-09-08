@@ -69,9 +69,9 @@ public:
 	/**
 	Signal type declaration
 	**/
-	typedef sigc::signal<bool, PG_Window*> SignalWindowClose;
-	typedef sigc::signal<bool, PG_Window*> SignalWindowMinimize;
-	typedef sigc::signal<bool, PG_Window*> SignalWindowRestore;
+	typedef sigc::signal<bool> SignalWindowClose;
+	typedef sigc::signal<bool> SignalWindowMinimize;
+	typedef sigc::signal<bool> SignalWindowRestore;
 
 	/**
 	Constructor for the PG_Window class

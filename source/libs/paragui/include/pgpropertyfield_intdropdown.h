@@ -56,11 +56,11 @@ private:
 		PG_Rect r = propertyEditor->RegisterProperty( name, this );
 		dropdown = new PG_DropDown( propertyEditor, r, -1, propertyEditor->GetStyleName("DropDownSelectorProperty") );
 		dropdown->SetEditable( false );
-		dropdown->sigSelectItem.connect( sigc::mem_fun(*this, &PG_PropertyField_IntDropDown::click));
+		dropdown->sigSelectItem.connect( sigc::hide( sigc::mem_fun(*this, &PG_PropertyField_IntDropDown::click)));
 	}
 
 public:
-	typedef sigc::signal<PG_PropertyField_IntDropDown*, IntType> DropDownPropertySignal;
+	typedef sigc::signal<void, PG_PropertyField_IntDropDown*, IntType> DropDownPropertySignal;
 	DropDownPropertySignal sigValueChanged;
 	DropDownPropertySignal sigValueApplied;
 

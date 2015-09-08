@@ -103,9 +103,9 @@ public:
 	/**
 	Signal type declaration
 	**/
-class SignalScrollPos : public sigc::signal<bool, PG_ScrollBar*, long> {}
+class SignalScrollPos : public sigc::signal<bool, long> {}
 	;
-class SignalScrollTrack : public sigc::signal<bool, PG_ScrollBar*, long> {}
+class SignalScrollTrack : public sigc::signal<bool, long> {}
 	;
 
 	/**  */

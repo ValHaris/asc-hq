@@ -154,7 +154,7 @@ class ReplayRecorderWatcherGlobal {
  class ReplayRecorder : public sigc::trackable {
    
    VideoRecorder* rec;
-   SigC::Connection connection;
+   sigc::connection connection;
    bool movieModeStorage;
    ASCString lastFilename;
    
@@ -638,7 +638,7 @@ void viewOwnReplay( Player& player )
 }
 
 
-void checkforreplay ( void )
+void checkforreplay ( )
 {
    if ( !actmap->replayinfo )
       return;
@@ -2207,7 +2207,7 @@ int  trunreplay :: run ( int player, int viewingplayer, bool performEndTurnOpera
              setcursorpos ( lastvisiblecursorpos.x, lastvisiblecursorpos.y );
          */
        }  else {
-          PG_Application::GetApp()->sigAppIdle( PG_Application::GetApp() );
+          PG_Application::GetApp()->sigAppIdle();
           releasetimeslice();
        }
 
@@ -2284,5 +2284,5 @@ void trunreplay :: firstinit ( void )
 
 void hookReplayToSystem()
 {
-   ActionContainer::commitCommand.connect( SigC::slot( &logActionToReplay ));
+   ActionContainer::commitCommand.connect( sigc::ptr_fun( &logActionToReplay ));
 }

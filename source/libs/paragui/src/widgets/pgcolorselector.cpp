@@ -183,7 +183,7 @@ void PG_ColorSelector::SetBaseColor(const PG_Color& c) {
 	my_colorresult->Update();
 }
 
-bool PG_ColorSelector::handle_colorslide(const PG_ScrollBar* scrollbar, long data) {
+bool PG_ColorSelector::handle_colorslide(long data) {
 	SetBaseColor(my_colorbox->GetBaseColor());
 	return true;
 }

@@ -44,7 +44,7 @@ NextCampaignMap :: NextCampaignMap(PG_Widget* parent, const PG_Rect& r ) : Confi
 
    PG_Button* b = dynamic_cast<PG_Button*>( FindChild( "GO", true ) );
    if ( b )
-      b->sigClick.connect( sigc::mem_fun( *this, &NextCampaignMap::QuitModal ));
+      b->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &NextCampaignMap::QuitModal )));
    
 }
 

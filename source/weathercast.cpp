@@ -27,9 +27,9 @@ WeatherPanel::WeatherPanel ( PG_Widget *parent, const PG_Rect &r, const ASCStrin
     turnLabel->SetSizeByText();
     //    turnLabelWidth = turnLabel->Width();//????
     forward = new PG_Button(this, PG_Rect(Width() -60 , Height() - GuiDimension::getButtonHeight(), 55, 35), "forward", 90);
-    forward->sigClick.connect(sigc::mem_fun( *this, &WeatherPanel::buttonForward));
+    forward->sigClick.connect( sigc::hide(sigc::mem_fun( *this, &WeatherPanel::buttonForward)));
     back = new PG_Button(this, PG_Rect(Width() -(60 + 10) - 60, Height() - GuiDimension::getButtonHeight(), 55, 35), "back", 90);
-    back->sigClick.connect(sigc::mem_fun( *this, &WeatherPanel::buttonBack));
+    back->sigClick.connect( sigc::hide(sigc::mem_fun( *this, &WeatherPanel::buttonBack)));
 
 
     int windRoseYPos = GuiDimension::getTopOffSet();
@@ -248,7 +248,7 @@ Weathercast::Weathercast(const WeatherSystem& ws):  ASC_PG_Dialog(NULL, PG_Rect(
 
 
     okButton = new PG_Button(this, PG_Rect((xSize - GuiDimension::getButtonWidth()) / 2, ySize - (GuiDimension::getButtonHeight() + GuiDimension::getTopOffSet()), GuiDimension::getButtonWidth(), GuiDimension::getButtonHeight()), "OK", 90);
-    okButton->sigClick.connect(sigc::mem_fun( *this, &Weathercast::closeWindow ));
+    okButton->sigClick.connect( sigc::hide(sigc::mem_fun( *this, &Weathercast::closeWindow )));
 
     sigClose.connect( sigc::mem_fun( *this, &Weathercast::closeWindow ));    
 }

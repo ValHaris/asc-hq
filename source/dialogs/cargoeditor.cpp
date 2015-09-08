@@ -130,28 +130,28 @@ class CargoEditor : public PG_Window {
          int buttonLine = Height() - 110 + 60;
          int buttonHeight = 30;
          PG_Button* add = new PG_Button( this, PG_Rect( 10, buttonLine, 50, buttonHeight), "+" );
-         add->sigClick.connect( sigc::mem_fun( *this, &CargoEditor::addUnit ));
+         add->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &CargoEditor::addUnit )));
          
          PG_Button* rem = new PG_Button( this, PG_Rect( 70, buttonLine, 50, buttonHeight), "-" );
-         rem->sigClick.connect( sigc::mem_fun( *this, &CargoEditor::remove ));
+         rem->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &CargoEditor::remove )));
          
          PG_Button* copy = new PG_Button( this, PG_Rect( 130, buttonLine, 50, buttonHeight), "copy" );
-         copy->sigClick.connect( sigc::mem_fun( *this, &CargoEditor::copyUnit ));
+         copy->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &CargoEditor::copyUnit )));
          
          PG_Button* paste = new PG_Button( this, PG_Rect( 190, buttonLine, 50, buttonHeight), "paste" );
-         paste->sigClick.connect( sigc::mem_fun( *this, &CargoEditor::pasteUnit ));
+         paste->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &CargoEditor::pasteUnit )));
          
          PG_Button* edit = new PG_Button( this, PG_Rect( 250, buttonLine, 50, buttonHeight), "edit" );
-         edit->sigClick.connect( sigc::mem_fun( *this, &CargoEditor::editUnit ));
+         edit->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &CargoEditor::editUnit )));
          
          PG_Button* cargo = new PG_Button( this, PG_Rect( 310, buttonLine, 50, buttonHeight), "cargo" );
-         cargo->sigClick.connect( sigc::mem_fun( *this, &CargoEditor::editUnitCargo ));
+         cargo->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &CargoEditor::editUnitCargo )));
          
          PG_Button* cancel = new PG_Button( this, PG_Rect( 370, buttonLine, 50, buttonHeight), "cancel" );
-         cancel->sigClick.connect( sigc::mem_fun( *this, &CargoEditor::cancel ));
+         cancel->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &CargoEditor::cancel )));
          
          PG_Button* ok = new PG_Button( this, PG_Rect( 430, buttonLine, 50, buttonHeight), "ok" );
-         ok->sigClick.connect( sigc::mem_fun( *this, &CargoEditor::ok ));
+         ok->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &CargoEditor::ok )));
       }
 
       bool eventKeyDown(const SDL_KeyboardEvent* key)

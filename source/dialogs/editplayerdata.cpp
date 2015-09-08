@@ -74,7 +74,7 @@ EditPlayerData :: EditPlayerData(Player& player  ) : ASC_PG_Dialog( NULL, PG_Rec
 //   colorSelector->SetColor( player.getColor() );
 
    StandardButtonDirection( Horizontal );
-   AddStandardButton( "OK")->sigClick.connect( sigc::mem_fun( *this, &EditPlayerData::ok ));
+   AddStandardButton( "OK")->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &EditPlayerData::ok )));
 }
 
 bool EditPlayerData  :: ok()

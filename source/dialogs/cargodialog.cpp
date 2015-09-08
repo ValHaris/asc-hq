@@ -462,7 +462,7 @@ class CargoDialog : public Panel
          
       };
 
-      bool activate_i( int pane ) {
+      bool activate_i( PG_Button* b, int pane ) {
          if ( pane >= 0 && pane < activesubwindows.size() ) {
             activate( activesubwindows[pane]->getASCTXTname() );
             activesubwindows[pane]->update();
@@ -1067,7 +1067,7 @@ class BuildingControlWindow : public SubWindow
          if ( widget ) {
             PG_Button* b = dynamic_cast<PG_Button*>( widget->FindChild( "RepairButton", true ) );
             if ( b )
-               b->sigClick.connect( sigc::mem_fun( *this, &BuildingControlWindow::repair ));
+               b->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &BuildingControlWindow::repair )));
          }
       }
 
@@ -1864,7 +1864,7 @@ CargoDialog ::CargoDialog (PG_Widget *parent, ContainerBase* cb )
 
    NewGuiHost::pushIconHandler( &guiIconHandler );
 
-   activate_i(0);
+   activate_i(NULL, 0);
    cargoChanged();
    Show();
    setupOK = true;
@@ -1974,10 +1974,10 @@ void CargoDialog::userHandler( const ASCString& label, PropertyReadingContainer&
          cargoWidget->unitMarked.connect( sigc::mem_fun( *this, &CargoDialog::checkStoringPosition ));
          
          if ( ciw )
-            cargoWidget->unitMarked.connect( SigC::hide<Vehicle*>( sigc::mem_fun( *ciw, &CargoInfoWindow::update )));
+            cargoWidget->unitMarked.connect( sigc::hide( sigc::mem_fun( *ciw, &CargoInfoWindow::update )));
          
          if ( mainScreenWidget && mainScreenWidget->getGuiHost() )
-            cargoWidget->unitMarked.connect( SigC::hide<Vehicle*>( sigc::mem_fun( *this, &CargoDialog::clearSmallIcons )));
+            cargoWidget->unitMarked.connect( sigc::hide( sigc::mem_fun( *this, &CargoDialog::clearSmallIcons )));
 
          cargoWidget->unitClicked.connect ( sigc::mem_fun( *this, &CargoDialog::onUnitClick ));
 

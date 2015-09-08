@@ -248,13 +248,13 @@ bool PG_Window::handleButtonClick(PG_Button* button) {
 			// close window
 		case IDWINDOW_CLOSE:
 			Hide();
-			sigClose(this);
+			sigClose();
 			break;
 
 			// minimize window
 		case IDWINDOW_MINIMIZE:
 			Hide();
-			sigMinimize(this);
+			sigMinimize();
 			break;
 	}
 

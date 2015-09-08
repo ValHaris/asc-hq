@@ -51,12 +51,12 @@ SelectFromMap::SelectFromMap( CoordinateList& list, GameMap* map, bool justOne, 
 
    if ( !readOnly ) {
       PG_Button* m = new PG_Button ( this, PG_Rect( 10, 230, 130, 20 ), "mark (~space~)");
-      m->sigClick.connect( sigc::mem_fun( *this, &SelectFromMap::mark ));
+      m->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &SelectFromMap::mark )));
    }
 
 
    PG_Button* b = new PG_Button ( this, PG_Rect( 10, 270, 130, 20 ), "~O~K");
-   b->sigClick.connect( sigc::mem_fun( *this, &SelectFromMap::closeDialog ));
+   b->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &SelectFromMap::closeDialog )));
 
    omp = getMainScreenWidget()->getOverviewMapPanel();
    md  = getMainScreenWidget()->getMapDisplay();

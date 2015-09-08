@@ -897,11 +897,11 @@ MapInfoPanel::MapInfoPanel (PG_Widget *parent, const PG_Rect &r, MapDisplayPG* m
 
    PG_Button* b = dynamic_cast<PG_Button*>( FindChild( "weaprange", true ) );
    if ( b )
-      b->sigClick.connect( sigc::mem_fun( *this, &MapInfoPanel::showWeaponRange ));
+      b->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &MapInfoPanel::showWeaponRange )));
 
    PG_Button* b2 = dynamic_cast<PG_Button*>( FindChild( "moverange", true ) );
    if ( b2 )
-      b2->sigClick.connect( sigc::mem_fun( *this, &MapInfoPanel::showMovementRange ));
+      b2->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &MapInfoPanel::showMovementRange )));
 
 }
 

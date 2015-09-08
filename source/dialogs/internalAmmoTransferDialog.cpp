@@ -445,7 +445,7 @@ InternalAmmoTransferWindow :: InternalAmmoTransferWindow ( Vehicle* source, PG_W
 	
 	int buttonWidth = 150;
 	PG_Button* b = new PG_Button( this, PG_Rect( w - buttonWidth - border, h - 30 - border, buttonWidth, 30), "OK" );
-	b->sigClick.connect( sigc::mem_fun( *this, &InternalAmmoTransferWindow::ok ));
+	b->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &InternalAmmoTransferWindow::ok )));
 }
 
 void internalAmmoTransferWindow ( Vehicle* vehicle )

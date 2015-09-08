@@ -38,7 +38,7 @@ StdIoErrorHandler::StdIoErrorHandler( bool quitOnFatalError )
    MessagingHub::Instance().logMessage.connect( sigc::mem_fun( *this, &StdIoErrorHandler::messageLogger ));
 
    if ( quitOnFatalError )
-      MessagingHub::Instance().exitHandler.connect( sigc::bind( SigC::slot( exit ), -1 ));
+      MessagingHub::Instance().exitHandler.connect( sigc::bind( &exit , -1 ));
 
 }
 

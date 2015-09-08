@@ -838,11 +838,11 @@ UnitGuideWidget::UnitGuideWidget( PG_Widget* parent, const PG_Rect& pos, int tab
 	xPos += 120;
 	
 	showDifference = new PG_CheckButton( this, PG_Rect( xPos, yPos, 20, 20 ) );
-  showDifference->sigClick.connect( sigc::mem_fun( *this, &UnitGuideWidget::showDifferenceTrigger ));
+  showDifference->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &UnitGuideWidget::showDifferenceTrigger )));
 	xPos += 40;
 	
 	display = new PG_Button( this, PG_Rect( xPos, yPos, 100, 20 ), "display" );
-  display->sigClick.connect( sigc::mem_fun( *this, &UnitGuideWidget::displayUnit ));
+  display->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &UnitGuideWidget::displayUnit )));
 	xPos += 120;
 	
 	page = new DropDownSelector( this, PG_Rect( xPos, yPos, 200, 20 ) );
