@@ -1047,7 +1047,7 @@ void PG_Application::FlushEventQueue() {
 }
 
 void PG_Application::eventIdle() {
-	sigAppIdle();
+	sigAppIdle( this );
 	SDL_Delay(1);
 }
 

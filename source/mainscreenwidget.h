@@ -106,7 +106,7 @@ protected:
     
     void setup( bool messageLine, const PG_Rect& mapView );
     
-    bool idleHandler( PG_MessageObject* msgObj );
+    bool idleHandler();
 
     void mouseScrollChecker();
 

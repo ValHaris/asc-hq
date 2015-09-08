@@ -106,9 +106,9 @@ void MainScreenWidget::setup( bool messageLine, const PG_Rect& mapView )
    buildBackgroundImage( messageLine );
    dataLoaderTicker();
 
-   PG_Application::GetApp()->sigAppIdle.connect( sigc::mem_fun( *this, &MainScreenWidget::idleHandler ));
+   PG_Application::GetApp()->sigAppIdle.connect( sigc::hide( sigc::mem_fun( *this, &MainScreenWidget::idleHandler )));
 
-   mapChanged.connect( SigC::slot( OverviewMapHolder::clearmap ));
+   mapChanged.connect( sigc::ptr_fun( &OverviewMapHolder::clearmap ));
    dataLoaderTicker();
    
    MessagingHub::Instance().statusInformation.connect( sigc::mem_fun( *this, &MainScreenWidget::displayMessage ));
@@ -130,7 +130,7 @@ void MainScreenWidget :: toggleMapLayer( const ASCString& name )
 }
 
 
-bool MainScreenWidget :: idleHandler( PG_MessageObject* msgObj )
+bool MainScreenWidget :: idleHandler( )
 {
    if ( ticker > lastMessageTime + 500 ) {
       displayMessage( "" );

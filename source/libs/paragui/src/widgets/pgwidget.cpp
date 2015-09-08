@@ -1533,7 +1533,7 @@ int PG_Widget::RunModal() {
 	while(!_mid->quitModalLoop) {
 		if( PG_Application::GetApp()->GetAppIdleCallsEnabled () ) {
 			if ( PG_Application::GetEventSupplier()->PollEvent(&event) == 0) {
-				PG_Application::GetApp()->sigAppIdle( );
+				PG_Application::GetApp()->sigAppIdle( this );
 				SDL_Delay(1);
 				continue;
 			}

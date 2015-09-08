@@ -265,7 +265,7 @@ NewGuiHost :: NewGuiHost (MainScreenWidget *parent, MapDisplayPG* mapDisplay, co
    updateFieldInfo.connect ( sigc::mem_fun( *this, &NewGuiHost::evalCursor ));
    theGuiHost = this;
 
-   cursorMoved.connect( SigC::hide_return( sigc::mem_fun( *this, &NewGuiHost::clearSmallIcons )) );
+   cursorMoved.connect( sigc::hide_return( sigc::mem_fun( *this, &NewGuiHost::clearSmallIcons )) );
 
    
    PG_Application::GetApp()->sigKeyDown.connect( sigc::mem_fun( *this, &NewGuiHost::eventKeyDown ));
@@ -578,7 +578,7 @@ bool NewGuiHost::setNewButtonPressed( int i )
    return false;
 }
 
-bool NewGuiHost::eventKeyDown(const SDL_KeyboardEvent* key)
+bool NewGuiHost::eventKeyDown(PG_MessageObject* o, const SDL_KeyboardEvent* key)
 {
    int mod = SDL_GetModState() & ~(KMOD_NUM | KMOD_CAPS | KMOD_MODE | SDLK_LSHIFT | SDLK_RSHIFT);
    if ( mod )
@@ -635,7 +635,7 @@ bool NewGuiHost::eventKeyDown(const SDL_KeyboardEvent* key)
    return false;
 }
 
-bool NewGuiHost::eventKeyUp(const SDL_KeyboardEvent* key)
+bool NewGuiHost::eventKeyUp(PG_MessageObject* o, const SDL_KeyboardEvent* key)
 {
    if ( key->keysym.sym == SDLK_RETURN  && enterKeyPressed ) {
       enterKeyPressed = false;

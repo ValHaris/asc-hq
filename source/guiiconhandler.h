@@ -174,8 +174,8 @@ class NewGuiHost : public DashboardPanel {
         static SmallButtonHolder* smallButtonHolder;
 
 
-        bool eventKeyDown(const SDL_KeyboardEvent* key);
-        bool eventKeyUp(const SDL_KeyboardEvent* key);
+        bool eventKeyDown(PG_MessageObject* o, const SDL_KeyboardEvent* key);
+        bool eventKeyUp(PG_MessageObject* o, const SDL_KeyboardEvent* key);
 
         //! when operated by keyboard, set a new button as the pressed one
         bool setNewButtonPressed( int i );

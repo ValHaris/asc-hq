@@ -120,7 +120,7 @@ public:
 
 class SignalXMLTag : public sigc::signal<bool, PG_XMLTag*> {}
 	;
-class SignalAppIdle : public sigc::signal<bool> {}
+class SignalAppIdle : public sigc::signal<bool, PG_MessageObject*> {}
 	;
 
 	/**  */

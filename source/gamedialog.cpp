@@ -41,33 +41,33 @@ GameDialog* GameDialog::instance = 0;
 
 GameDialog::GameDialog():  ASC_PG_Dialog(NULL, PG_Rect( -1, -1, xSize, ySize ), "Game", SHOW_CLOSE ) {
     singlePlayerButton = new PG_Button(this, PG_Rect(buttonIndent, GuiDimension::getTopOffSet()*2, 150, GuiDimension::getButtonHeight()), "New Game", 90);
-    singlePlayerButton->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &GameDialog::newGame)));
+    singlePlayerButton->sigClick.connect( sigc::mem_fun( *this, &GameDialog::newGame));
 
     PG_Point p = ScreenToClient(singlePlayerButton->x, singlePlayerButton->y);
     multiPlayerButton = new PG_Button(this, PG_Rect(p.x, p.y + GuiDimension::getButtonHeight() + GuiDimension::getTopOffSet() , 150, GuiDimension::getButtonHeight()), "Continue Mail Game", 90);
-    multiPlayerButton->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &GameDialog::multiGame)));
+    multiPlayerButton->sigClick.connect( sigc::mem_fun( *this, &GameDialog::multiGame));
 
     p = ScreenToClient(multiPlayerButton->x, multiPlayerButton->y);
     loadGameButton = new PG_Button(this, PG_Rect(p.x, p.y + GuiDimension::getButtonHeight() + GuiDimension::getTopOffSet() , 150, GuiDimension::getButtonHeight()), "Load Game", 90);
-    loadGameButton->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &GameDialog::loadGame)));
+    loadGameButton->sigClick.connect( sigc::mem_fun( *this, &GameDialog::loadGame));
 
     p = ScreenToClient(loadGameButton->x, loadGameButton->y);
     saveGameButton = new PG_Button(this, PG_Rect(p.x, p.y + GuiDimension::getButtonHeight() + GuiDimension::getTopOffSet() , 150, GuiDimension::getButtonHeight()), "Save Game", 90);
-    saveGameButton->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &GameDialog::saveGame)));
+    saveGameButton->sigClick.connect( sigc::mem_fun( *this, &GameDialog::saveGame));
 
     p = ScreenToClient(loadGameButton->x, saveGameButton->y);
     PG_Button* superViseButton= new PG_Button(this, PG_Rect(p.x, p.y + GuiDimension::getButtonHeight() + GuiDimension::getTopOffSet() , 150, GuiDimension::getButtonHeight()), "Supervise Net Game", 90);
-    superViseButton->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &GameDialog::supervise)));
+    superViseButton->sigClick.connect( sigc::mem_fun( *this, &GameDialog::supervise));
 
 
     p = ScreenToClient(superViseButton->x, superViseButton->y);
     optionsButton = new PG_Button(this, PG_Rect(p.x, p.y + GuiDimension::getButtonHeight() + GuiDimension::getTopOffSet() , 150, GuiDimension::getButtonHeight()), "Options", 90);
-    optionsButton->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &GameDialog::showOptions)));
+    optionsButton->sigClick.connect( sigc::mem_fun( *this, &GameDialog::showOptions));
 
 
     p = ScreenToClient(optionsButton->x, optionsButton->y);
     exitButton  = new PG_Button(this, PG_Rect(p.x, p.y + GuiDimension::getButtonHeight() + GuiDimension::getTopOffSet() , 150, GuiDimension::getButtonHeight()), "Quit Game", 90);
-    exitButton->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &GameDialog::exitGame)));
+    exitButton->sigClick.connect( sigc::mem_fun( *this, &GameDialog::exitGame));
 
     if ( actmap ) {
       p = ScreenToClient(exitButton->x, exitButton->y);
@@ -246,7 +246,7 @@ const int ConfirmExitDialog::ySize = 120;
 ConfirmExitDialog::ConfirmExitDialog(PG_MessageObject* c): ASC_PG_Dialog(NULL, PG_Rect( 200, 100, xSize, ySize ), "End Game", MODAL ) {
 
     okButton = new PG_Button(this, PG_Rect(80, GuiDimension::getTopOffSet()*2, 150, GuiDimension::getButtonHeight()), "OK", 90);
-    okButton->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &ConfirmExitDialog::exitGame )));
+    okButton->sigClick.connect( sigc::mem_fun( *this, &ConfirmExitDialog::exitGame ));
 
     PG_Point p = ScreenToClient(okButton->x, okButton->y);
     cancelButton = new PG_Button(this, PG_Rect(p.x + 150 + 10, p.y, 150, GuiDimension::getButtonHeight()), "Cancel", 90);
@@ -286,11 +286,11 @@ SinglePlayerDialog* SinglePlayerDialog::instance = 0;
 SinglePlayerDialog::SinglePlayerDialog( PG_MessageObject * c): ASC_PG_Dialog(NULL, PG_Rect( 200, 100, xSize, ySize ), "Single Player", SHOW_CLOSE ) {
 
     campaignButton = new PG_Button(this, PG_Rect(buttonIndent, GuiDimension::getTopOffSet()*2, 150, GuiDimension::getButtonHeight()), "Campaign", 90);
-    campaignButton->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &SinglePlayerDialog::campaign )));
+    campaignButton->sigClick.connect( sigc::mem_fun( *this, &SinglePlayerDialog::campaign ));
 
     PG_Point p = ScreenToClient(campaignButton->x, campaignButton->y);
     singleLevelButton = new PG_Button(this, PG_Rect(p.x,  p.y + GuiDimension::getButtonHeight() + GuiDimension::getTopOffSet(), 150, GuiDimension::getButtonHeight()), "Single Level", 90);
-    singleLevelButton->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &SinglePlayerDialog::singleLevel )));
+    singleLevelButton->sigClick.connect( sigc::mem_fun( *this, &SinglePlayerDialog::singleLevel ));
 
     p = ScreenToClient(singleLevelButton->x, singleLevelButton->y);
     cancelButton = new PG_Button(this, PG_Rect(p.x,  p.y + GuiDimension::getButtonHeight() + GuiDimension::getTopOffSet() * 2, 150, GuiDimension::getButtonHeight()), "Cancel", 90);
@@ -346,11 +346,11 @@ const int MultiPlayerDialog::buttonIndent = 140;
 MultiPlayerDialog::MultiPlayerDialog(PG_MessageObject* c): ASC_PG_Dialog(NULL, PG_Rect( 200, 100, xSize, ySize ), "Multi Player", SHOW_CLOSE ) {
 
     continueGameButton = new PG_Button(this, PG_Rect(buttonIndent, GuiDimension::getTopOffSet()*2, GuiDimension::getButtonWidth(), GuiDimension::getButtonHeight()), "Continue Network Game", 90);
-    continueGameButton->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &MultiPlayerDialog::continueGame )));
+    continueGameButton->sigClick.connect( sigc::mem_fun( *this, &MultiPlayerDialog::continueGame ));
 
     PG_Point p = ScreenToClient(continueGameButton->x, continueGameButton->y);
     superViseButton = new PG_Button(this, PG_Rect(p.x,  p.y + GuiDimension::getButtonHeight() + GuiDimension::getTopOffSet(), GuiDimension::getButtonWidth(), GuiDimension::getButtonHeight()), "Supervise Network Game", 90);
-    superViseButton->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &MultiPlayerDialog::superVise )));
+    superViseButton->sigClick.connect( sigc::mem_fun( *this, &MultiPlayerDialog::superVise ));
 
     p = ScreenToClient(superViseButton->x, superViseButton->y);
     setupNWButton = new PG_Button(this, PG_Rect(p.x,  p.y + GuiDimension::getButtonHeight() + GuiDimension::getTopOffSet(), GuiDimension::getButtonWidth(), GuiDimension::getButtonHeight()), "Setup Network Game", 90);
@@ -358,7 +358,7 @@ MultiPlayerDialog::MultiPlayerDialog(PG_MessageObject* c): ASC_PG_Dialog(NULL, P
     
      p = ScreenToClient(setupNWButton->x, setupNWButton->y);
     changeMapPasswordButton = new PG_Button(this, PG_Rect(p.x,  p.y + GuiDimension::getButtonHeight() + GuiDimension::getTopOffSet(), GuiDimension::getButtonWidth(), GuiDimension::getButtonHeight()), "Change Password", 90);
-    changeMapPasswordButton->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &MultiPlayerDialog::changeMapPassword )));
+    changeMapPasswordButton->sigClick.connect( sigc::mem_fun( *this, &MultiPlayerDialog::changeMapPassword ));
 
     p = ScreenToClient(changeMapPasswordButton->x, changeMapPasswordButton->y);
     cancelButton = new PG_Button(this, PG_Rect(p.x,  p.y + GuiDimension::getButtonHeight() + GuiDimension::getTopOffSet() * 2, GuiDimension::getButtonWidth(), GuiDimension::getButtonHeight()), "Cancel", 90);
@@ -418,11 +418,11 @@ const int OptionsDialog::buttonIndent = 150;
 OptionsDialog::OptionsDialog(PG_MessageObject* c ): ASC_PG_Dialog(NULL, PG_Rect( 200, 100, xSize, ySize ), "Options", SHOW_CLOSE ) {
 
     soundButton = new PG_Button(this, PG_Rect(buttonIndent, GuiDimension::getTopOffSet()*2, 150, GuiDimension::getButtonHeight()), "Sound Options", 90);
-    soundButton->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &OptionsDialog::showSoundOptions )));
+    soundButton->sigClick.connect( sigc::mem_fun( *this, &OptionsDialog::showSoundOptions ));
 
     PG_Point p = ScreenToClient(soundButton->x, soundButton->y);
     otherButton = new PG_Button(this, PG_Rect(p.x,  p.y + GuiDimension::getButtonHeight() + GuiDimension::getTopOffSet(), 150, GuiDimension::getButtonHeight()), "Game Options", 90);
-    otherButton->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &OptionsDialog::showOtherOptions )));
+    otherButton->sigClick.connect( sigc::mem_fun( *this, &OptionsDialog::showOtherOptions ));
 
     p = ScreenToClient(otherButton->x, otherButton->y);
     PG_Button* okButton = new PG_Button(this, PG_Rect(p.x,  p.y + GuiDimension::getButtonHeight() + GuiDimension::getTopOffSet() * 2, 150, GuiDimension::getButtonHeight()), "Back", 90);
@@ -495,10 +495,10 @@ GameOptionsDialog::GameOptionsDialog(PG_MessageObject* c): ASC_PG_Dialog(NULL, P
 
     p = ScreenToClient(promptEndOfTurnLabel->x, promptEndOfTurnLabel->y);
     changePasswordButton = new PG_Button(this, PG_Rect((xSize - GuiDimension::getButtonWidth())/2, p.y + GuiDimension::getTopOffSet() + GetTextHeight() * 2 , GuiDimension::getButtonWidth(), GuiDimension::getButtonHeight()), "Change Password");
-    changePasswordButton->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &GameOptionsDialog::changePassword )));
+    changePasswordButton->sigClick.connect( sigc::mem_fun( *this, &GameOptionsDialog::changePassword ));
 
     okButton = new PG_Button(this, PG_Rect( buttonIndent, ySize - (GuiDimension::getButtonHeight() + GuiDimension::getTopOffSet()), GuiDimension::getButtonWidth(), GuiDimension::getButtonHeight()), "OK", 90);
-    okButton->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &GameOptionsDialog::ok )));
+    okButton->sigClick.connect( sigc::mem_fun( *this, &GameOptionsDialog::ok ));
 
     p = ScreenToClient(okButton->x, okButton->y);
     cancelButton = new PG_Button(this, PG_Rect(p.x + GuiDimension::getButtonWidth() + 10, p.y, GuiDimension::getButtonWidth(), GuiDimension::getButtonHeight()), "Cancel", 90);
@@ -521,10 +521,10 @@ bool GameOptionsDialog::closeWindow() {
 }
 
 bool GameOptionsDialog::changePassword(PG_Button* button){
-Hide();
-ChangeDefaultPasswordDialog::changeDefaultPasswordDialog(this);
-Show();
-return true;
+	Hide();
+	ChangeDefaultPasswordDialog::changeDefaultPasswordDialog(this);
+	Show();
+	return true;
 }
 bool GameOptionsDialog::ok(PG_Button* button) {
     CGameOptions::Instance()->CGameOptions::Instance()->endturnquestion = promptEndOfTurnCButton->GetPressed();
@@ -556,7 +556,7 @@ ChangePasswordDialog::ChangePasswordDialog(PG_MessageObject* c): ASC_PG_Dialog(N
     
 
     okButton = new PG_Button(this, PG_Rect( buttonIndent, ySize - (GuiDimension::getButtonHeight() + GuiDimension::getTopOffSet()), GuiDimension::getButtonWidth(), GuiDimension::getButtonHeight()), "OK", 90);
-    okButton->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &ChangePasswordDialog::ok )));
+    okButton->sigClick.connect( sigc::mem_fun( *this, &ChangePasswordDialog::ok ));
 
     p = ScreenToClient(okButton->x, okButton->y);
     cancelButton = new PG_Button(this, PG_Rect(p.x + GuiDimension::getButtonWidth() + 10, p.y, GuiDimension::getButtonWidth(), GuiDimension::getButtonHeight()), "Cancel", 90);
@@ -735,7 +735,7 @@ SaveGameBaseDialog::SaveGameBaseDialog(const ASCString& title, PG_MessageObject*
 
 
     okButton = new PG_Button(this, PG_Rect( buttonIndent, ySize - (GuiDimension::getButtonHeight() + GuiDimension::getTopOffSet()), GuiDimension::getButtonWidth(), GuiDimension::getButtonHeight()), "OK", 90);
-    okButton->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &SaveGameBaseDialog::ok )));
+    okButton->sigClick.connect( sigc::mem_fun( *this, &SaveGameBaseDialog::ok ));
 
     p = ScreenToClient(okButton->x, okButton->y);
     cancelButton = new PG_Button(this, PG_Rect(p.x + GuiDimension::getButtonWidth() + 10, p.y, GuiDimension::getButtonWidth(), GuiDimension::getButtonHeight()), "Cancel", 90);

@@ -131,7 +131,7 @@ DashboardPanel::DashboardPanel ( PG_Widget *parent, const PG_Rect &r, const ASCS
 
    PG_Widget* w = parent->FindChild( "unitexp", true );
    if ( w )
-      w->sigMouseButtonDown.connect( sigc::mem_fun( *this, &DashboardPanel::viewExperienceOverview ));
+      w->sigMouseButtonDown.connect( sigc::hide( sigc::hide( sigc::mem_fun( *this, &DashboardPanel::viewExperienceOverview ))));
 };
 
 bool DashboardPanel::viewExperienceOverview()
@@ -531,7 +531,7 @@ UnitInfoPanel::UnitInfoPanel (PG_Widget *parent, const PG_Rect &r ) : DashboardP
 
    PG_Label* l = dynamic_cast<PG_Label*>( parent->FindChild( "unitname", true ) );
    if ( l ) {
-      l->sigMouseButtonUp.connect( sigc::mem_fun( *this, &UnitInfoPanel::unitNaming ));
+      l->sigMouseButtonUp.connect( sigc::hide( sigc::hide( sigc::mem_fun( *this, &UnitInfoPanel::unitNaming ))));
    }
 
    VehicleTypeSelectionItemFactory::showVehicleInfo.connect( sigc::mem_fun( *this, &UnitInfoPanel::showUnitInfo ));
@@ -921,7 +921,7 @@ bool MapInfoPanel::scrollTrack( long pos )
    return true;
 }
 
-bool MapInfoPanel::checkBox( bool state, const char* name )
+bool MapInfoPanel::checkBox( PG_Widget* w, bool state, const char* name )
 {
    changeActive = true;
    mapDisplay->activateMapLayer( name, state );
