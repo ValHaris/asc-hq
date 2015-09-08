@@ -159,13 +159,13 @@ void AI::removeDisplay()
 typedef Loki::Functor<void> CloseScreenCallback;
 
 
-class AI_KeyboardWatcher : public SigC::Object {
+class AI_KeyboardWatcher : public sigc::trackable {
       CloseScreenCallback callback;
       MapDisplayPG::LockDisplay* lock;
       PG_Widget* w;
       MainScreenWidget::StandardActionLocker menuLocker;
 
-      bool keyPressed( const SDL_KeyboardEvent* key )
+      bool keyPressed( const PG_MessageObject* object , const SDL_KeyboardEvent* key )
       {
          if ( key->keysym.sym == SDLK_ESCAPE  ) {
             callback();
@@ -185,9 +185,9 @@ class AI_KeyboardWatcher : public SigC::Object {
          // w = new PG_Widget(NULL);
          // w->SetCapture();
          this->callback = callback;
-         // w->sigKeyDown.connect( SigC::slot( *this, &AI_KeyboardWatcher::keyPressed ));
+         // w->sigKeyDown.connect( sigc::mem_fun( *this, &AI_KeyboardWatcher::keyPressed ));
          if ( PG_Application::GetApp() )
-            PG_Application::GetApp()->sigKeyDown.connect( SigC::slot( *this, &AI_KeyboardWatcher::keyPressed ));
+            PG_Application::GetApp()->sigKeyDown.connect( sigc::mem_fun( *this, &AI_KeyboardWatcher::keyPressed ));
          
       };
 

@@ -63,7 +63,7 @@ class TechAdapterWidget: public SelectionWidget
 
 
 
-   class TechAdapterSelectionItemFactory: public SelectionItemFactory, public SigC::Object  {
+   class TechAdapterSelectionItemFactory: public SelectionItemFactory, public sigc::trackable  {
         
          ASCString selected;
          
@@ -84,7 +84,7 @@ class TechAdapterWidget: public SelectionWidget
          
          
          void restart();
-         SigC::Signal1<void,const ASCString&> techSelected;
+         sigc::signal<void,const ASCString&> techSelected;
    
          SelectionWidget* spawnNextItem( PG_Widget* parent, const PG_Point& pos );
       
@@ -285,22 +285,22 @@ class EditTechAdapter : public ASC_PG_Dialog
          
          
          allAdapterfactory = new TechAdapterSelectionItemFactory();
-         allAdapterfactory->techSelected.connect( SigC::slot( *this, &EditTechAdapter::techAdapterSelected ));
+         allAdapterfactory->techSelected.connect( sigc::mem_fun( *this, &EditTechAdapter::techAdapterSelected ));
          allItemSelector = new ItemSelectorWidget( eleft, PG_Rect( 10, 10, eleft->Width() - 20, eleft->Height()-20 ), allAdapterfactory );
 
          playerFactory = new TechAdapterSelectionItemFactory( playerAdapter );
-         playerFactory->techSelected.connect( SigC::slot( *this, &EditTechAdapter::techAdapterSelected ));
+         playerFactory->techSelected.connect( sigc::mem_fun( *this, &EditTechAdapter::techAdapterSelected ));
          playerItemSelector = new ItemSelectorWidget( eright, PG_Rect( 10, 10, eright->Width() - 20, eright->Height()-20 ), playerFactory );
          
          
-         (new PG_Button(this, PG_Rect( left.x + left.Width() + 10, left.y, right.x - left.x - left.Width() - 20,  30), "Add >>" ))->sigClick.connect( SigC::slot( *this, &EditTechAdapter::add));
-         (new PG_Button(this, PG_Rect( left.x + left.Width() + 10, left.y + 40, right.x - left.x - left.Width() - 20,  30), "Remove <<" ))->sigClick.connect( SigC::slot( *this, &EditTechAdapter::remove));
+         (new PG_Button(this, PG_Rect( left.x + left.Width() + 10, left.y, right.x - left.x - left.Width() - 20,  30), "Add >>" ))->sigClick.connect( sigc::mem_fun( *this, &EditTechAdapter::add));
+         (new PG_Button(this, PG_Rect( left.x + left.Width() + 10, left.y + 40, right.x - left.x - left.Width() - 20,  30), "Remove <<" ))->sigClick.connect( sigc::mem_fun( *this, &EditTechAdapter::remove));
          
          Emboss* deps = new Emboss(this, PG_Rect ( 10, Height() - 160, 330, 120 ), true);
          objectList = new TextRenderer( deps, PG_Rect(1,1,deps->Width() - 2, deps->Height() - 2) );
 
-         AddStandardButton("~O~K")->sigClick.connect( SigC::slot( *this, &EditTechAdapter::ok ));
-         AddStandardButton("~C~ancel")->sigClick.connect( SigC::slot( *this, &EditTechAdapter::cancel ));
+         AddStandardButton("~O~K")->sigClick.connect( sigc::mem_fun( *this, &EditTechAdapter::ok ));
+         AddStandardButton("~C~ancel")->sigClick.connect( sigc::mem_fun( *this, &EditTechAdapter::cancel ));
       };
 };
 

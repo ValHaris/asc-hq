@@ -133,7 +133,7 @@ class LoadNextMap {
 
 
 
-class OverviewMapHolder : public SigC::Object {
+class OverviewMapHolder : public sigc::trackable {
       GameMap& map;
       Surface overviewMapImage;
       Surface completedMapImage;
@@ -162,7 +162,7 @@ class OverviewMapHolder : public SigC::Object {
       
       static void clearmap( GameMap* actmap );
       
-      static SigC::Signal0<void> generationComplete;
+      static sigc::signal<void> generationComplete;
       
       void resetSize();
             
@@ -487,22 +487,22 @@ class GameMap {
       void endRound();
 
 
-      SigC::Signal1<void,Player&> sigPlayerTurnBegins;
-      SigC::Signal1<void,Player&> sigPlayerUserInteractionBegins;
-      SigC::Signal1<void,Player&> sigPlayerUserInteractionEnds;
-      SigC::Signal1<void,Player&> sigPlayerTurnEnds;
-      SigC::Signal1<void,Player&> sigPlayerTurnHasEnded;
-      SigC::Signal1<void,Player&> sigMapWon;
+      sigc::signal<void,Player&> sigPlayerTurnBegins;
+      sigc::signal<void,Player&> sigPlayerUserInteractionBegins;
+      sigc::signal<void,Player&> sigPlayerUserInteractionEnds;
+      sigc::signal<void,Player&> sigPlayerTurnEnds;
+      sigc::signal<void,Player&> sigPlayerTurnHasEnded;
+      sigc::signal<void,Player&> sigMapWon;
 
-      static SigC::Signal1<void,GameMap&> sigMapCreation;
-      static SigC::Signal1<void,GameMap&> sigMapDeletion;
-      static SigC::Signal2<void,GameMap*,Player&> sigPlayerTurnEndsStatic;
+      static sigc::signal<void,GameMap&> sigMapCreation;
+      static sigc::signal<void,GameMap&> sigMapDeletion;
+      static sigc::signal<void,GameMap*,Player&> sigPlayerTurnEndsStatic;
       
       //! called when the map is resized and all coordinates have to be adjusted 
-      SigC::Signal1<void,const MapCoodinateVector&> sigCoordinateShift;
+      sigc::signal<void,const MapCoodinateVector&> sigCoordinateShift;
       
       //! called when a new round starts (after switching from player 7 to player 0 )
-      SigC::Signal0<void> newRound;
+      sigc::signal<void> newRound;
 
 
       //! if a player has won a singleplayer map, but wants to continue playing without any enemies, this will be set to 1

@@ -34,8 +34,8 @@ TaskContainer::TaskContainer( GameMap* gamemap )
 {
    this->gamemap = gamemap;
    
-   gamemap->sigPlayerTurnHasEnded.connect( SigC::slot( *this, &TaskContainer::endTurn ));
-   gamemap->sigPlayerTurnBegins.connect( SigC::slot( *this, &TaskContainer::startTurn ));
+   gamemap->sigPlayerTurnHasEnded.connect( sigc::mem_fun( *this, &TaskContainer::endTurn ));
+   gamemap->sigPlayerTurnBegins.connect( sigc::mem_fun( *this, &TaskContainer::startTurn ));
 }            
 
 TaskContainer::~TaskContainer()

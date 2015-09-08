@@ -47,11 +47,11 @@ my_showCloseButton((flags & PG_Window::SHOW_CLOSE) != 0), my_showMinimizeButton(
 
 	my_buttonClose = new PG_Button(my_titlebar);
 	my_buttonClose->SetID(IDWINDOW_CLOSE);
-	my_buttonClose->sigClick.connect(slot(*this, &PG_Window::handleButtonClick));
+	my_buttonClose->sigClick.connect(sigc::mem_fun(*this, &PG_Window::handleButtonClick));
 
 	my_buttonMinimize = new PG_Button(my_titlebar);
 	my_buttonMinimize->SetID(IDWINDOW_MINIMIZE);
-	my_buttonMinimize->sigClick.connect(slot(*this, &PG_Window::handleButtonClick));
+	my_buttonMinimize->sigClick.connect(sigc::mem_fun(*this, &PG_Window::handleButtonClick));
 
 	LoadThemeStyle(style);
 

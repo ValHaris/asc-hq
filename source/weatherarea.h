@@ -236,7 +236,7 @@ int getValue();
 MapCoordinate posInArea;
 };
 //**************************************************************************************************************************************
-class WeatherSystem : public SigC::Object{
+class WeatherSystem : public sigc::trackable{
 private:
 
 static const int WEATHERVERSION = 1;

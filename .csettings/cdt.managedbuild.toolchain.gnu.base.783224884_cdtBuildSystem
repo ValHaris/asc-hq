@@ -5,7 +5,7 @@
 			<folderInfo id="cdt.managedbuild.toolchain.gnu.base.783224884.1368999874" name="/" resourcePath="">
 				<toolChain id="cdt.managedbuild.toolchain.gnu.base.2117759127" name="cdt.managedbuild.toolchain.gnu.base" superClass="cdt.managedbuild.toolchain.gnu.base">
 					<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="cdt.managedbuild.target.gnu.platform.base.930547350" name="Debug Platform" osList="linux,hpux,aix,qnx" superClass="cdt.managedbuild.target.gnu.platform.base"/>
-					<builder id="cdt.managedbuild.target.gnu.builder.base.1332870843" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Gnu Make Builder" parallelBuildOn="true" parallelizationNumber="optimal" superClass="cdt.managedbuild.target.gnu.builder.base"/>
+					<builder id="cdt.managedbuild.target.gnu.builder.base.1332870843" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Gnu Make Builder" parallelBuildOn="false" superClass="cdt.managedbuild.target.gnu.builder.base"/>
 					<tool id="cdt.managedbuild.tool.gnu.archiver.base.891403870" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.base"/>
 					<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.base.932907417" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.base">
 						<option id="gnu.cpp.compiler.option.include.paths.1483571118" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
@@ -44,7 +44,7 @@
 						<option id="gnu.both.asm.option.include.paths.931991776" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
 							<listOptionValue builtIn="false" value="/usr/include/c++/4.7/iostream"/>
 							<listOptionValue builtIn="false" value="/usr/include/SDL"/>
-							<listOptionValue builtIn="false" value="/usr/include/sigc++-1.2/"/>
+							<listOptionValue builtIn="false" value="/usr/include/sigc++-2.0/"/>
 						</option>
 						<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1861756393" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 					</tool>

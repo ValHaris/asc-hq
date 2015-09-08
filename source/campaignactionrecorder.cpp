@@ -52,9 +52,9 @@ void CampaignActionLogger::commitCommand( GameMap* map, Command& command )
 
 CampaignActionLogger::CampaignActionLogger ( GameMap* map ) : gamemap ( map ), commands(), writer( commands )
 {
-   gamemap->sigPlayerUserInteractionEnds.connect( SigC::slot( *this, &CampaignActionLogger::endTurn ));
-   gamemap->sigMapWon.connect( SigC::slot( *this, &CampaignActionLogger::mapWon ));
-   gamemap->actions.commitCommand.connect( SigC::slot( *this, &CampaignActionLogger::commitCommand ));
+   gamemap->sigPlayerUserInteractionEnds.connect( sigc::mem_fun( *this, &CampaignActionLogger::endTurn ));
+   gamemap->sigMapWon.connect( sigc::mem_fun( *this, &CampaignActionLogger::mapWon ));
+   gamemap->actions.commitCommand.connect( sigc::mem_fun( *this, &CampaignActionLogger::commitCommand ));
 }
 
 

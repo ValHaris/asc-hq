@@ -31,14 +31,14 @@ void StdIoErrorHandler::messageLogger( const ASCString& msg, int level )
 
 StdIoErrorHandler::StdIoErrorHandler( bool quitOnFatalError )
 {
-   MessagingHub::Instance().warning.connect( SigC::slot( *this, &StdIoErrorHandler::printStderr ));
-   MessagingHub::Instance().error.connect( SigC::slot( *this, &StdIoErrorHandler::printStderr ));
-   MessagingHub::Instance().fatalError.connect( SigC::slot( *this, &StdIoErrorHandler::printStderr ));
-   MessagingHub::Instance().infoMessage.connect( SigC::slot( *this, &StdIoErrorHandler::printStdout ));
-   MessagingHub::Instance().logMessage.connect( SigC::slot( *this, &StdIoErrorHandler::messageLogger ));
+   MessagingHub::Instance().warning.connect( sigc::mem_fun( *this, &StdIoErrorHandler::printStderr ));
+   MessagingHub::Instance().error.connect( sigc::mem_fun( *this, &StdIoErrorHandler::printStderr ));
+   MessagingHub::Instance().fatalError.connect( sigc::mem_fun( *this, &StdIoErrorHandler::printStderr ));
+   MessagingHub::Instance().infoMessage.connect( sigc::mem_fun( *this, &StdIoErrorHandler::printStdout ));
+   MessagingHub::Instance().logMessage.connect( sigc::mem_fun( *this, &StdIoErrorHandler::messageLogger ));
 
    if ( quitOnFatalError )
-      MessagingHub::Instance().exitHandler.connect( SigC::bind( SigC::slot( exit ), -1 ));
+      MessagingHub::Instance().exitHandler.connect( sigc::bind( SigC::slot( exit ), -1 ));
 
 }
 

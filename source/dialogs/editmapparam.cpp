@@ -98,13 +98,13 @@ GameParameterEditorWidget :: GameParameterEditorWidget ( GameMap* gamemap, PG_Wi
    propertyEditor = new PG_PropertyEditor( this, PG_Rect( 0,0, rect.Width() - 110, rect.Height() ), "PropertyEditor", 70 );
    
    PG_Button* load = new PG_Button( this, PG_Rect( rect.Width() - 100, 0,  100, 30 ), "Load" );
-   load->sigClick.connect( SigC::slot( *this, &GameParameterEditorWidget::LoadParameter ));
+   load->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &GameParameterEditorWidget::LoadParameter )));
    
    PG_Button* save = new PG_Button( this, PG_Rect( rect.Width() - 100, 40, 100, 30 ), "Save" );
-   save->sigClick.connect( SigC::slot( *this, &GameParameterEditorWidget::SaveParameter ));
+   save->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &GameParameterEditorWidget::SaveParameter )));
    
    PG_Button* def = new PG_Button( this, PG_Rect( rect.Width() - 100, 80, 100, 30 ), "Default" );
-   def->sigClick.connect( SigC::slot( *this, &GameParameterEditorWidget::ResetParameter ));
+   def->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &GameParameterEditorWidget::ResetParameter )));
    
    
    for ( int i = 0; i< gameparameternum; ++i ) {
@@ -160,7 +160,7 @@ class EditMapParameters : public ASC_PG_Dialog {
       {
          gpew = new GameParameterEditorWidget ( actmap, this, PG_Rect( 10, GetTitlebarHeight(), Width() - 20, Height() - GetTitlebarHeight() - 40 ));
          PG_Button* ok = new PG_Button( this, PG_Rect( Width() - 100, Height() - 40, 90, 30), "OK" );
-         ok->sigClick.connect( SigC::slot( *this, &EditMapParameters::ok ));
+         ok->sigClick.connect( sigc::hide(sigc::mem_fun( *this, &EditMapParameters::ok )));
       };
 
 };

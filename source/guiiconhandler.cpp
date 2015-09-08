@@ -51,7 +51,7 @@ const float smallGuiIconSizeFactor = 1;
 
 GuiButton::GuiButton( PG_Widget *parent, const PG_Rect &r ) : PG_Button( parent, r, "", -1, "GuiButton"), func( NULL ), id(-1)
 {
-  sigClick.connect ( SigC::slot( *this, &GuiButton::exec ));
+  sigClick.connect ( sigc::mem_fun( *this, &GuiButton::exec ));
   SetBackground( PRESSED, IconRepository::getIcon("empty-pressed.png").getBaseSurface() );
   SetBackground( HIGHLITED, IconRepository::getIcon("empty-high.png").getBaseSurface() );
   SetBackground( UNPRESSED, IconRepository::getIcon("empty.png").getBaseSurface() );
@@ -128,8 +128,8 @@ void GuiButton::showInfoText()
 
 SmallGuiButton::SmallGuiButton( PG_Widget *parent, const PG_Rect &r, GuiButton* guiButton, NewGuiHost* host ) : PG_Button( parent, r, "", -1, "GuiButton"), referenceButton( guiButton )
 {
-  sigClick.connect ( SigC::slot( *host, &NewGuiHost::clearSmallIcons ));
-  sigClick.connect ( SigC::slot( *guiButton, &GuiButton::exec ));
+  sigClick.connect ( sigc::mem_fun( *host, &NewGuiHost::clearSmallIcons ));
+  sigClick.connect ( sigc::mem_fun( *guiButton, &GuiButton::exec ));
 
   SetBackground( PRESSED, IconRepository::getIcon("empty-pressed.png").getBaseSurface() );
   SetBackground( HIGHLITED, IconRepository::getIcon("empty-high.png").getBaseSurface() );
@@ -261,20 +261,20 @@ NewGuiHost :: NewGuiHost (MainScreenWidget *parent, MapDisplayPG* mapDisplay, co
          : DashboardPanel( parent, r, "GuiIcons", false ) , handler(NULL), enterKeyPressed(false), keyPressedButton(-1)
 {
    this->mapDisplay = mapDisplay;
-   mapDisplay->mouseButtonOnField.connect( SigC::slot( *this, &NewGuiHost::mapIconProcessing ));
-   updateFieldInfo.connect ( SigC::slot( *this, &NewGuiHost::evalCursor ));
+   mapDisplay->mouseButtonOnField.connect( sigc::mem_fun( *this, &NewGuiHost::mapIconProcessing ));
+   updateFieldInfo.connect ( sigc::mem_fun( *this, &NewGuiHost::evalCursor ));
    theGuiHost = this;
 
-   cursorMoved.connect( SigC::hide_return( SigC::slot( *this, &NewGuiHost::clearSmallIcons )) );
+   cursorMoved.connect( SigC::hide_return( sigc::mem_fun( *this, &NewGuiHost::clearSmallIcons )) );
 
    
-   PG_Application::GetApp()->sigKeyDown.connect( SigC::slot( *this, &NewGuiHost::eventKeyDown ));
-   PG_Application::GetApp()->sigKeyUp.connect( SigC::slot( *this, &NewGuiHost::eventKeyUp ));
+   PG_Application::GetApp()->sigKeyDown.connect( sigc::mem_fun( *this, &NewGuiHost::eventKeyDown ));
+   PG_Application::GetApp()->sigKeyUp.connect( sigc::mem_fun( *this, &NewGuiHost::eventKeyUp ));
    SetTransparency(255);
    
-   parent->lockOptionsChanged.connect( SigC::slot( *this, &NewGuiHost::lockOptionsChanged ));
+   parent->lockOptionsChanged.connect( sigc::mem_fun( *this, &NewGuiHost::lockOptionsChanged ));
 
-   GameMap::sigMapDeletion.connect( SigC::slot( *this, &NewGuiHost::mapDeleted ));
+   GameMap::sigMapDeletion.connect( sigc::mem_fun( *this, &NewGuiHost::mapDeleted ));
 }
 
 void NewGuiHost::lockOptionsChanged( int options )

@@ -53,7 +53,7 @@
 
 class AutoProgressBar;
 
-class StartupScreen: public SigC::Object {
+class StartupScreen: public sigc::trackable {
        PG_Label* infoLabel;
        PG_Label* versionLabel;
        PG_ThemeWidget* background;
@@ -61,7 +61,7 @@ class StartupScreen: public SigC::Object {
        Surface fullscreenImage;
         void disp( const ASCString& s );
      public:
-         StartupScreen( const ASCString& filename, SigC::Signal0<void>& ticker );        
+         StartupScreen( const ASCString& filename, sigc::signal<void>& ticker );        
          ~StartupScreen();
 };
 
@@ -106,7 +106,7 @@ class StartupScreen: public SigC::Object {
 
        void SetNewScreenSurface( SDL_Surface* surface );
        
-       // SigC::Signal0<void> sigQuit;
+       // sigc::signal<void> sigQuit;
       // PG_Theme* LoadTheme(const char* xmltheme, bool asDefault = true, const char* searchpath = NULL );
  };
 
@@ -174,7 +174,7 @@ class ColoredBar : public PG_ThemeWidget {
 class SpecialDisplayWidget : public PG_Widget {
    public:
 
-      typedef SigC::Signal3<void,const PG_Rect&, const ASCString&, const PG_Rect&> DisplayHook;
+      typedef sigc::signal<void,const PG_Rect&, const ASCString&, const PG_Rect&> DisplayHook;
       
       DisplayHook display;
       

@@ -89,7 +89,7 @@ void MoveUnitCommand::changeCoordinates( const MapCoodinateVector& delta )
 
 MoveUnitCommand::MoveUnitCommand( GameMap* map ) : UnitCommand( map ) 
 {
-   map->sigCoordinateShift.connect( SigC::slot( *this, &MoveUnitCommand::changeCoordinates ));
+   map->sigCoordinateShift.connect( sigc::mem_fun( *this, &MoveUnitCommand::changeCoordinates ));
 }
 
 
@@ -98,7 +98,7 @@ MoveUnitCommand :: MoveUnitCommand ( Vehicle* unit )
    : UnitCommand ( unit ), flags(0), verticalDirection(0), multiTurnMovement(false)
 {
    if ( unit )
-      unit->getMap()->sigCoordinateShift.connect( SigC::slot( *this, &MoveUnitCommand::changeCoordinates ));
+      unit->getMap()->sigCoordinateShift.connect( sigc::mem_fun( *this, &MoveUnitCommand::changeCoordinates ));
 }
 
 

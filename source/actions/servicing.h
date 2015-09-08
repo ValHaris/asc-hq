@@ -35,7 +35,7 @@ class ResourceWatch {
    public:
       ResourceWatch( ContainerBase* container );
       ContainerBase* getContainer();
-      SigC::Signal1<void, int> sigChanged;
+      sigc::signal<void, int> sigChanged;
 
       const Resources amount();
       const Resources avail();
@@ -45,7 +45,7 @@ class ResourceWatch {
       bool getResources( Resources res );
 };
 
-class Transferrable: public SigC::Object {
+class Transferrable: public sigc::trackable {
    protected:
       ResourceWatch& source;
       ResourceWatch& dest;
@@ -80,8 +80,8 @@ class Transferrable: public SigC::Object {
       bool setDestAmount( long amount );
       void showAll();
       
-      SigC::Signal1<void,const std::string&> sigSourceAmount;
-      SigC::Signal1<void,const std::string&> sigDestAmount;
+      sigc::signal<void,const std::string&> sigSourceAmount;
+      sigc::signal<void,const std::string&> sigDestAmount;
       
       int setAmount( ContainerBase* target, int newamount );
       void fill( ContainerBase* target );
@@ -148,7 +148,7 @@ class ServiceTargetSearcher : protected ServiceChecker {
 
 
 
-class TransferHandler : public SigC::Object, protected ServiceChecker {
+class TransferHandler : public sigc::trackable, protected ServiceChecker {
    private:
       ResourceWatch sourceRes;
       ResourceWatch destRes;
@@ -182,7 +182,7 @@ class TransferHandler : public SigC::Object, protected ServiceChecker {
       void emptyDest();
       bool commit( const Context& context );
 
-      SigC::Signal0<bool> updateRanges;
+      sigc::signal<bool> updateRanges;
       ~TransferHandler();
 };
 

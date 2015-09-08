@@ -54,13 +54,13 @@ GotoPosition::GotoPosition ( GameMap* gamemap ) : ASC_PG_Dialog( NULL, PG_Rect( 
    int fieldwidth = (Width()-3*border)/2;
    xfield = new PG_LineEdit( this, PG_Rect( border, 40, fieldwidth, 20));
    // xfield->SetText( ASCString::toString( gamemap->getCursor().x ));
-   xfield->sigEditReturn.connect( SigC::slot( *this, &GotoPosition::line1completed ));
+   xfield->sigEditReturn.connect( sigc::mem_fun( *this, &GotoPosition::line1completed ));
 
    yfield = new PG_LineEdit( this, PG_Rect( (Width()+border)/2, 40, fieldwidth, 20));
    // yfield->SetText( ASCString::toString( gamemap->getCursor().y ));
-   yfield->sigEditReturn.connect( SigC::slot( *this, &GotoPosition::ok ));
+   yfield->sigEditReturn.connect( sigc::mem_fun( *this, &GotoPosition::ok ));
 
-   AddStandardButton( "~O~k" )->sigClick.connect( SigC::slot( *this, &GotoPosition::ok ));
+   AddStandardButton( "~O~k" )->sigClick.connect( sigc::mem_fun( *this, &GotoPosition::ok ));
 };
 
 int GotoPosition::RunModal()

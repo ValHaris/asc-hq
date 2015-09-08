@@ -160,7 +160,7 @@ class TurnPassed : public EventTrigger {
 };
 
 
-class UnitTrigger : public EventTrigger, public SigC::Object {
+class UnitTrigger : public EventTrigger, public sigc::trackable {
     protected:
       int unitID;
     public:
@@ -254,7 +254,7 @@ class BuildingPositionTrigger : public PositionTrigger {
 };
 
 
-class BuildingConquered : public BuildingPositionTrigger, public SigC::Object {
+class BuildingConquered : public BuildingPositionTrigger, public sigc::trackable {
     protected:
       BuildingConquered( EventTriggerID id ) : BuildingPositionTrigger( id ) {};
       virtual State getState( int player );
@@ -288,7 +288,7 @@ class BuildingDestroyed : public BuildingPositionTrigger {
       ASCString getDetailledName() const { return BuildingPositionTrigger::getName() + " destroyed"; };
 };
 
-class BuildingSeen : public BuildingPositionTrigger, public SigC::Object {
+class BuildingSeen : public BuildingPositionTrigger, public sigc::trackable {
     protected:
       virtual State getState( int player );
     public:
@@ -300,7 +300,7 @@ class BuildingSeen : public BuildingPositionTrigger, public SigC::Object {
       void triggered();
 };
 
-class EventTriggered : public EventTrigger, public SigC::Object {
+class EventTriggered : public EventTrigger, public sigc::trackable {
       int eventID;
       Event* getTargetEventName() const;
     protected:
@@ -318,7 +318,7 @@ class EventTriggered : public EventTrigger, public SigC::Object {
       void triggered();
 };
 
-class AllEnemyUnitsDestroyed : public EventTrigger, public SigC::Object {
+class AllEnemyUnitsDestroyed : public EventTrigger, public sigc::trackable {
    private:
       void triggered();
    protected:
@@ -335,7 +335,7 @@ class AllEnemyUnitsDestroyed : public EventTrigger, public SigC::Object {
       void arm();
 };
 
-class AllEnemyBuildingsDestroyed : public EventTrigger, public SigC::Object {
+class AllEnemyBuildingsDestroyed : public EventTrigger, public sigc::trackable {
    private:
       void triggered();
    protected:
@@ -351,7 +351,7 @@ class AllEnemyBuildingsDestroyed : public EventTrigger, public SigC::Object {
       void arm();
 };
 
-class SpecificUnitEntersPolygon : public EventTrigger, public FieldAddressing, public SigC::Object {
+class SpecificUnitEntersPolygon : public EventTrigger, public FieldAddressing, public sigc::trackable {
       int unitID;
       bool found;
       bool arming;
@@ -372,7 +372,7 @@ class SpecificUnitEntersPolygon : public EventTrigger, public FieldAddressing, p
       void fieldOperator( const MapCoordinate& mc );
 };
 
-class AnyUnitEntersPolygon : public EventTrigger, public FieldAddressing, public SigC::Object {
+class AnyUnitEntersPolygon : public EventTrigger, public FieldAddressing, public sigc::trackable {
       int player;
       bool found;
       bool arming;
@@ -394,7 +394,7 @@ class AnyUnitEntersPolygon : public EventTrigger, public FieldAddressing, public
 };
 
 
-class ResourceTribute : public EventTrigger, public SigC::Object {
+class ResourceTribute : public EventTrigger, public sigc::trackable {
       Resources demand;
       int payingPlayer;
     protected:

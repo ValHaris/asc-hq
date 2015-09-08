@@ -55,22 +55,22 @@ PG_ScrollWidget::PG_ScrollWidget(PG_Widget* parent, const PG_Rect& r, const std:
 	my_objVerticalScrollbar->SetRange(0,0);
 	my_widthScrollbar = my_objVerticalScrollbar->Width();
 	my_objVerticalScrollbar->Hide();
-	my_objVerticalScrollbar->sigScrollPos.connect(slot(*this, &PG_ScrollWidget::handleScrollPos));
-	my_objVerticalScrollbar->sigScrollTrack.connect(slot(*this, &PG_ScrollWidget::handleScrollTrack));
+	my_objVerticalScrollbar->sigScrollPos.connect(sigc::mem_fun(*this, &PG_ScrollWidget::handleScrollPos));
+	my_objVerticalScrollbar->sigScrollTrack.connect(sigc::mem_fun(*this, &PG_ScrollWidget::handleScrollTrack));
 
 	my_objHorizontalScrollbar = new PG_ScrollBar(this, PG_Rect(0,0,r.w, my_heightHorizontalScrollbar), PG_ScrollBar::HORIZONTAL, IDWIDGETLIST_HSCROLL, style);
 	my_objHorizontalScrollbar->SetRange(0,0);
 	my_heightHorizontalScrollbar = my_objHorizontalScrollbar->Height();
 	my_objHorizontalScrollbar->Hide();
-	my_objHorizontalScrollbar->sigScrollPos.connect(slot(*this, &PG_ScrollWidget::handleScrollPos));
-	my_objHorizontalScrollbar->sigScrollTrack.connect(slot(*this, &PG_ScrollWidget::handleScrollTrack));
+	my_objHorizontalScrollbar->sigScrollPos.connect(sigc::mem_fun(*this, &PG_ScrollWidget::handleScrollPos));
+	my_objHorizontalScrollbar->sigScrollTrack.connect(sigc::mem_fun(*this, &PG_ScrollWidget::handleScrollTrack));
 
 	my_scrollarea = new PG_ScrollArea(this);
 	RecalcPositions(false,false);
-	my_scrollarea->sigAreaChangedHeight.connect(slot(*this, &PG_ScrollWidget::handleAreaChangedHeight));
-	my_scrollarea->sigAreaChangedHeight.connect(sigAreaChangedHeight.slot());
-	my_scrollarea->sigAreaChangedWidth.connect(slot(*this, &PG_ScrollWidget::handleAreaChangedWidth));
-	my_scrollarea->sigAreaChangedWidth.connect(sigAreaChangedWidth.slot());
+	my_scrollarea->sigAreaChangedHeight.connect(sigc::mem_fun(*this, &PG_ScrollWidget::handleAreaChangedHeight));
+	my_scrollarea->sigAreaChangedHeight.connect(sigAreaChangedHeight.make_slot());
+	my_scrollarea->sigAreaChangedWidth.connect(sigc::mem_fun(*this, &PG_ScrollWidget::handleAreaChangedWidth));
+	my_scrollarea->sigAreaChangedWidth.connect(sigAreaChangedWidth.make_slot());
 	my_scrollarea->SetShiftOnRemove(false, false);
 }
 

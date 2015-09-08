@@ -37,11 +37,11 @@ PG_Window(parent, r, windowtitle, MODAL) {
 
 	my_btnok = new PG_Button(this, btn1, btn1text);
 	my_btnok->SetID(1);
-	my_btnok->sigClick.connect(slot(*this, &PG_MessageBox::handleButton));
+	my_btnok->sigClick.connect( sigc::mem_fun(*this, &PG_MessageBox::handleButton));
 
 	my_btncancel = new PG_Button(this, btn2, btn2text);
 	my_btncancel->SetID(2);
-	my_btncancel->sigClick.connect(slot(*this, &PG_MessageBox::handleButton));
+	my_btncancel->sigClick.connect(sigc::mem_fun(*this, &PG_MessageBox::handleButton));
 
 	Init(windowtext, textalign, style);
 }
@@ -51,7 +51,7 @@ PG_Window(parent, r, windowtitle, MODAL) {
 
 	my_btnok = new PG_Button(this, btn1, btn1text);
 	my_btnok->SetID(1);
-	my_btnok->sigClick.connect(slot(*this, &PG_MessageBox::handleButton));
+	my_btnok->sigClick.connect(sigc::mem_fun(*this, &PG_MessageBox::handleButton));
 	my_btncancel = NULL;
 
 	Init(windowtext, textalign, style);

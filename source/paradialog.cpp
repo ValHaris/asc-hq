@@ -194,7 +194,7 @@ ASC_PG_App :: ASC_PG_App ( const ASCString& themeName )  : fullScreen(false), bi
 bool ASC_PG_App :: queueWidgetForDeletion( PG_Widget* widget )
 {
    deletionQueue.push_back( widget );
-   widget->sigDelete.connect( SigC::slot( *this, &ASC_PG_App::removeFromDeletionQueue ));
+   widget->sigDelete.connect( sigc::mem_fun( *this, &ASC_PG_App::removeFromDeletionQueue ));
    return true;
 }
 
@@ -298,9 +298,9 @@ ASC_PG_App& getPGApplication()
 
 
      
-StartupScreen::StartupScreen( const ASCString& filename, SigC::Signal0<void>& ticker ) : infoLabel(NULL), versionLabel(NULL), background(NULL), progressBar(NULL), fullscreenImage(NULL)
+StartupScreen::StartupScreen( const ASCString& filename, sigc::signal<void>& ticker ) : infoLabel(NULL), versionLabel(NULL), background(NULL), progressBar(NULL), fullscreenImage(NULL)
 {
-   MessagingHub::Instance().statusInformation.connect( SigC::slot( *this, &StartupScreen::disp ));
+   MessagingHub::Instance().statusInformation.connect( sigc::mem_fun( *this, &StartupScreen::disp ));
    
    tnfilestream s ( filename, tnstream::reading );
 
@@ -389,10 +389,10 @@ bool ASC_PG_App:: InitScreen ( int w, int h, int depth, Uint32 flags )
 
       fullScreen = flags & SDL_FULLSCREEN;
       
-      MessagingHub::Instance().error.connect( SigC::bind( SigC::slot( *this, &ASC_PG_App:: messageDialog ), MessagingHubBase::Error ));
-      MessagingHub::Instance().fatalError.connect( SigC::bind( SigC::slot( *this, &ASC_PG_App:: messageDialog ), MessagingHubBase::FatalError ));
-      MessagingHub::Instance().warning.connect(SigC::bind( SigC::slot( *this, &ASC_PG_App:: messageDialog ), MessagingHubBase::Warning ));
-      MessagingHub::Instance().infoMessage.connect( SigC::bind( SigC::slot( *this, &ASC_PG_App:: messageDialog ), MessagingHubBase::InfoMessage ));
+      MessagingHub::Instance().error.connect( sigc::bind( sigc::mem_fun( *this, &ASC_PG_App:: messageDialog ), MessagingHubBase::Error ));
+      MessagingHub::Instance().fatalError.connect( sigc::bind( sigc::mem_fun( *this, &ASC_PG_App:: messageDialog ), MessagingHubBase::FatalError ));
+      MessagingHub::Instance().warning.connect(sigc::bind( sigc::mem_fun( *this, &ASC_PG_App:: messageDialog ), MessagingHubBase::Warning ));
+      MessagingHub::Instance().infoMessage.connect( sigc::bind( sigc::mem_fun( *this, &ASC_PG_App:: messageDialog ), MessagingHubBase::InfoMessage ));
    }
 
    return result;
@@ -654,7 +654,7 @@ class   NewStringChooser : public ASC_PG_Dialog {
       {
          listbox = new PG_ListBox( this, PG_Rect( 10, 30, Width()-140, Height() - 40) );
          listbox->SetMultiSelect( false );
-         listbox->sigSelectItem.connect( SigC::slot( *this, &NewStringChooser::itemSelected ));
+         listbox->sigSelectItem.connect( sigc::mem_fun( *this, &NewStringChooser::itemSelected ));
 
          int counter = 0;
          for ( vector<ASCString>::const_iterator i = _strings.begin(); i != _strings.end(); ++i ) {
@@ -666,7 +666,7 @@ class   NewStringChooser : public ASC_PG_Dialog {
 
          counter = 0;
          for ( vector<ASCString>::const_iterator i = _buttons.begin(); i != _buttons.end(); ++i ) {
-            AddStandardButton(*i)->sigClick.connect( SigC::bind( SigC::slot( *this, & NewStringChooser::buttonpressed ),counter ));
+            AddStandardButton(*i)->sigClick.connect( sigc::bind( sigc::mem_fun( *this, & NewStringChooser::buttonpressed ),counter ));
             ++counter;
          }
       }
@@ -701,7 +701,7 @@ class MultiLineEditorDialog  : public ASC_PG_Dialog {
       {
          editor = new PG_MultiLineEdit( this, PG_Rect( 10, 40, Width() - 20, Height() - 80 ) );
          editor->SetText( textToEdit );
-         AddStandardButton( "OK" )->sigClick.connect( SigC::bind( SigC::slot( *this, &MultiLineEditorDialog::quitModalLoop ), 1 ));
+         AddStandardButton( "OK" )->sigClick.connect( sigc::bind( sigc::mem_fun( *this, &MultiLineEditorDialog::quitModalLoop ), 1 ));
       }
 
       ASCString GetEditedText() { return editor->GetText(); };
@@ -763,7 +763,7 @@ class StringEditor  : public ASC_PG_Dialog {
       {
          editor = new PG_LineEdit( this, PG_Rect( 10, 40, Width() - 20, 25 ) );
          editor->SetText( textToEdit );
-         AddStandardButton( "OK" )->sigClick.connect( SigC::bind( SigC::slot( *this, &StringEditor::quitModalLoop ), 1 ));
+         AddStandardButton( "OK" )->sigClick.connect( sigc::bind( sigc::mem_fun( *this, &StringEditor::quitModalLoop ), 1 ));
       }
 
       ASCString GetEditedText() { return editor->GetText(); };

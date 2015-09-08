@@ -156,12 +156,12 @@ NewMessage :: NewMessage ( GameMap* gamemap, Message* msg, bool reminder ) : ASC
       editor->SetText( message->text );
    editor->SetInputFocus();
     
-   AddStandardButton("OK")->sigClick.connect( SigC::slot( *this, &NewMessage::ok ));
-   AddStandardButton("Cancel")->sigClick.connect( SigC::slot( *this, &NewMessage::cancel ));
+   AddStandardButton("OK")->sigClick.connect( sigc::mem_fun( *this, &NewMessage::ok ));
+   AddStandardButton("Cancel")->sigClick.connect( sigc::mem_fun( *this, &NewMessage::cancel ));
    AddStandardButton("");
-   AddStandardButton("Coordinates")->sigClick.connect( SigC::slot( *this, &NewMessage::insertCoordinates ));
+   AddStandardButton("Coordinates")->sigClick.connect( sigc::mem_fun( *this, &NewMessage::insertCoordinates ));
    PG_Button* coord = AddStandardButton("Cursor Coord");
-   coord->sigClick.connect( SigC::slot( *this, &NewMessage::insertCursorCoordinates ));
+   coord->sigClick.connect( sigc::mem_fun( *this, &NewMessage::insertCursorCoordinates ));
    new PG_ToolTipHelp ( coord, "ctrl-r");
   
 }
@@ -210,13 +210,13 @@ class IngameMessageViewer : public ASC_PG_Dialog {
          /* if ( !buttonText.empty() ) { */
          if ( msg.reminder ) {
             PG_Button* b = new PG_Button( this, PG_Rect( Width() - 70, Height() - 40, 60, 30), "Done" );
-            b->sigClick.connect( SigC::slot( *this, &IngameMessageViewer::ok) );
+            b->sigClick.connect( sigc::mem_fun( *this, &IngameMessageViewer::ok) );
             
             PG_Button* b2 = new PG_Button( this, PG_Rect( Width() - 140, Height() - 40, 60, 30), "Keep" );
-            b2->sigClick.connect( SigC::slot( *this, &IngameMessageViewer::keep) );
+            b2->sigClick.connect( sigc::mem_fun( *this, &IngameMessageViewer::keep) );
          } else {
             PG_Button* b = new PG_Button( this, PG_Rect( Width() - 110, Height() - 40, 100, 30), "OK" );
-            b->sigClick.connect( SigC::slot( *this, &IngameMessageViewer::ok) );
+            b->sigClick.connect( sigc::mem_fun( *this, &IngameMessageViewer::ok) );
          }
             footerHeight = 50;
          /* } else
@@ -434,7 +434,7 @@ class MessageListItemFactory: public SelectionItemFactory  {
       void itemMarked( const SelectionWidget* widget );
       void itemSelected( const SelectionWidget* widget, bool mouse );
 
-      SigC::Signal1<void, Message* > messageSelected;
+      sigc::signal<void, Message* > messageSelected;
 };
 
 
@@ -537,7 +537,7 @@ void MessageSelectionWindow::messageSelected(  Message* msg )
          PG_Rect r ( my_xpos + Width(), my_ypos, min( PG_Application::GetScreenWidth()/2, 500), Height() );
          viewer = new IngameMessageViewer( "Message", *msg, r );
          viewer->Show();
-         viewer->sigDelete.connect( SigC::slot( *this, &MessageSelectionWindow::viewerDeleted ));
+         viewer->sigDelete.connect( sigc::mem_fun( *this, &MessageSelectionWindow::viewerDeleted ));
       } else 
          viewer->SetMessage( *msg );
    }
@@ -549,10 +549,10 @@ MessageSelectionWindow::MessageSelectionWindow( PG_Widget *parent, const PG_Rect
 {
   
    MessageListItemFactory* factory = new MessageListItemFactory( messages, gamemap );
-   factory->messageSelected.connect ( SigC::slot( *this, &MessageSelectionWindow::messageSelected ));
+   factory->messageSelected.connect ( sigc::mem_fun( *this, &MessageSelectionWindow::messageSelected ));
 
    ItemSelectorWidget* isw = new ItemSelectorWidget( this, PG_Rect(10, GetTitlebarHeight(), r.Width() - 10, r.Height() - GetTitlebarHeight()), factory );
-   isw->sigQuitModal.connect( SigC::slot( *this, &ItemSelectorWindow::QuitModal));
+   isw->sigQuitModal.connect( sigc::mem_fun( *this, &ItemSelectorWindow::QuitModal));
 };
 
 

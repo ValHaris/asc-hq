@@ -36,6 +36,7 @@
 #include "pgthemewidget.h"
 #include "pglabel.h"
 #include <string>
+#include <sigc++/sigc++.h>
 
 class PG_Button;
 
@@ -68,9 +69,9 @@ public:
 	/**
 	Signal type declaration
 	**/
-	typedef PG_Signal1<PG_Window*> SignalWindowClose;
-	typedef PG_Signal1<PG_Window*> SignalWindowMinimize;
-	typedef PG_Signal1<PG_Window*> SignalWindowRestore;
+	typedef sigc::signal<bool, PG_Window*> SignalWindowClose;
+	typedef sigc::signal<bool, PG_Window*> SignalWindowMinimize;
+	typedef sigc::signal<bool, PG_Window*> SignalWindowRestore;
 
 	/**
 	Constructor for the PG_Window class

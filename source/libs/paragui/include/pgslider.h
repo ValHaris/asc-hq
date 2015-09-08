@@ -56,12 +56,10 @@ public:
 	/**
 	Signal type declaration
 	**/
-	template<class datatype>
-class SignalSlide : public PG_Signal2<PG_ScrollBar*, datatype> {}
+class SignalSlide : public sigc::signal<bool, PG_ScrollBar*, long> {}
 	;
 
-	template<class datatype>
-class SignalSlideEnd : public PG_Signal2<PG_ScrollBar*, datatype> {}
+class SignalSlideEnd : public sigc::signal<bool, PG_ScrollBar*, long> {}
 	;
 
 	/**
@@ -81,9 +79,9 @@ class SignalSlideEnd : public PG_Signal2<PG_ScrollBar*, datatype> {}
 
 	void LoadThemeStyle(const std::string& widgettype);
 
-	SignalSlide<long> sigSlide;
+	SignalSlide sigSlide;
 
-	SignalSlideEnd<long> sigSlideEnd;
+	SignalSlideEnd sigSlideEnd;
 
 	void RecalcPositions();
 

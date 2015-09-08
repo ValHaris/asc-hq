@@ -154,7 +154,7 @@ class Event {
 
       void arm();
 
-      SigC::Signal0<void> executed;
+      sigc::signal<void> executed;
 
       virtual ~Event();
 };

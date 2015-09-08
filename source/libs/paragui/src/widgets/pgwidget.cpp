@@ -1533,7 +1533,7 @@ int PG_Widget::RunModal() {
 	while(!_mid->quitModalLoop) {
 		if( PG_Application::GetApp()->GetAppIdleCallsEnabled () ) {
 			if ( PG_Application::GetEventSupplier()->PollEvent(&event) == 0) {
-				PG_Application::GetApp()->sigAppIdle( this );
+				PG_Application::GetApp()->sigAppIdle( );
 				SDL_Delay(1);
 				continue;
 			}
@@ -1938,7 +1938,11 @@ void PG_Widget::activateHotkey( int keymodifier )
    // I don't like the way keypresses are NOT propagated to child in non-modal operation mode,
    // but changing that would be a major change to Paraguis event handling
    // So as a workaround we just register at the global signal 
-   PG_Application::GetApp()->sigKeyDown.connect( SigC::slot( *this, &PG_Widget::eventKeyDown ));
+   PG_Application::GetApp()->sigKeyDown.connect(  sigc::mem_fun( *this, &PG_Widget::propagateKeyDown ));
+}
+
+bool PG_Widget::propagateKeyDown( PG_MessageObject* object, const SDL_KeyboardEvent* event ) {
+	return eventKeyDown( event );
 }
 
 int PG_Widget::getHotkeyModifier()

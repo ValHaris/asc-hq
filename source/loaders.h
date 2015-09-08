@@ -70,7 +70,7 @@ class  tspfldloaders {
            tnstream*        stream;
            GameMap*     spfld;
 
-           static SigC::Signal1<void,GameMap*> mapLoaded; 
+           static sigc::signal<void,GameMap*> mapLoaded; 
 
            void            readoldevents     ( void );
 

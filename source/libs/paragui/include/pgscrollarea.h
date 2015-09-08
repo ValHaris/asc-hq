@@ -33,6 +33,7 @@
 #ifndef PG_SCROLLAREA_H
 #define PG_SCROLLAREA_H
 
+#include <sigc++/sigc++.h>
 #include "pgwidget.h"
 #include "pgpoint.h"
 
@@ -48,9 +49,9 @@
 class DECLSPEC PG_ScrollArea : public PG_Widget {
 public:
 
-class SignalAreaChangedHeight : public PG_Signal2<PG_ScrollArea*, Uint16> {}
+class SignalAreaChangedHeight : public sigc::signal<bool, PG_ScrollArea*, Uint16> {}
 	;
-class SignalAreaChangedWidth : public PG_Signal2<PG_ScrollArea*, Uint16> {}
+class SignalAreaChangedWidth : public sigc::signal<bool, PG_ScrollArea*, Uint16> {}
 	;
 
 	/**

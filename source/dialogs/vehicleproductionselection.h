@@ -45,8 +45,8 @@ class VehicleProduction_SelectionItemFactory: public VehicleTypeSelectionItemFac
 
       Resources getCost( const VehicleType* type );
 
-      SigC::Signal2<void,const VehicleType*, bool > sigVehicleTypeSelected;
-      SigC::Signal1<void,const VehicleType* > sigVehicleTypeMarked;
+      sigc::signal<void,const VehicleType*, bool > sigVehicleTypeSelected;
+      sigc::signal<void,const VehicleType* > sigVehicleTypeMarked;
       
       void updateProducables();
       
@@ -99,7 +99,7 @@ class VehicleProduction_SelectionWindow : public ASC_PG_Dialog
       
       void updateProducables();
       
-      SigC::Signal0<void> reloadProducebles;
+      sigc::signal<void> reloadProducebles;
       
       bool addProductionLine();
 

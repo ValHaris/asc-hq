@@ -95,10 +95,10 @@ class MailOptionsDialog : public ASC_PG_Dialog {
             }
             
             PG_Button* apply = new PG_Button( this, PG_Rect( Width()/2 + 20, 30, Width()/2-30, 20),"Apply");
-            apply->sigClick.connect( SigC::slot( *this, &MailOptionsDialog::cannedConfigSelected));
+            apply->sigClick.connect( sigc::mem_fun( *this, &MailOptionsDialog::cannedConfigSelected));
             
            
-            // dds->selectionSignal.connect( SigC::slot( *this, &MailOptionsDialog::cannedConfigSelected));
+            // dds->selectionSignal.connect( sigc::mem_fun( *this, &MailOptionsDialog::cannedConfigSelected));
          } else
             dds = NULL;
          
@@ -109,8 +109,8 @@ class MailOptionsDialog : public ASC_PG_Dialog {
          if ( !help.empty() ) 
             new TextRenderer( this, PG_Rect( 10, 100, Width()-20, 160 ), help); 
          
-         AddStandardButton("OK")->sigClick.connect( SigC::slot( *this, &MailOptionsDialog::ok));
-         AddStandardButton("Cancel")->sigClick.connect( SigC::slot( *this, &MailOptionsDialog::cancel));
+         AddStandardButton("OK")->sigClick.connect( sigc::mem_fun( *this, &MailOptionsDialog::ok));
+         AddStandardButton("Cancel")->sigClick.connect( sigc::mem_fun( *this, &MailOptionsDialog::cancel));
          
       }
 };

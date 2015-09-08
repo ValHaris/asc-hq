@@ -92,7 +92,7 @@ public:
     }; 
     
 
-    SigC::Signal1<void,int> lockOptionsChanged;
+    sigc::signal<void,int> lockOptionsChanged;
     
     
 protected:

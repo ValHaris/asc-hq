@@ -50,19 +50,19 @@ void PG_MenuBar::Add(const std::string& text, PG_PopupMenu* menu, Uint16 indent,
 	last->button->SetBehaviour( PG_Button::SIGNALONCLICK );
 	last->button->SetFontSize(GetFontSize());
 
-	last->button->sigClick.connect(slot(*this, &PG_MenuBar::handle_button), (PG_Pointer)last);
-	last->button->sigMouseLeave.connect(slot(*this, &PG_MenuBar::leaveButton), (PG_Pointer)last );
-	last->button->sigMouseEnter.connect(slot(*this, &PG_MenuBar::enterButton), (PG_Pointer)last );
-   last->button->activateHotkey( getHotkeyModifier() );
+	last->button->sigClick.connect(sigc::bind( sigc::mem_fun(*this, &PG_MenuBar::handle_button), (PG_Pointer)last));
+	last->button->sigMouseLeave.connect(sigc::bind(sigc::mem_fun(*this, &PG_MenuBar::leaveButton), (PG_Pointer)last ));
+	last->button->sigMouseEnter.connect(sigc::bind(sigc::mem_fun(*this, &PG_MenuBar::enterButton), (PG_Pointer)last ));
+    last->button->activateHotkey( getHotkeyModifier() );
 
 	last->popupmenu = menu;
 
 	ItemList.push_back(last);
 
-   menu->sigSelectMenuItem.connect( SigC::slot( *this, &PG_MenuBar::deactivateItem ));
+   menu->sigSelectMenuItem.connect( sigc::mem_fun( *this, &PG_MenuBar::deactivateItem ));
 }
 
-bool PG_MenuBar::deactivateItem()
+bool PG_MenuBar::deactivateItem(PG_PopupMenu::MenuItem* item)
 {
    my_active->Hide();
    my_active = NULL;

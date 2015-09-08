@@ -137,7 +137,7 @@ class NewMap: public ASC_PG_Dialog {
          new PG_PropertyField_Checkbox<bool>( properties, "Direct Access", &gamemap->campaign.directaccess );
          (new PG_PropertyField_String<ASCString>( properties, "Password", &gamemap->codeWord )); //->SetPassHidden('*');
          terrainButton = (new PG_PropertyField_Button( properties, "Terrain", "", 50 ))->GetButton();
-         terrainButton->sigClick.connect( SigC::slot( *this, &NewMap::selectTerrain ));
+         terrainButton->sigClick.connect( sigc::mem_fun( *this, &NewMap::selectTerrain ));
 
          (new PG_PropertyField_Integer<int>( properties, "Wind Speed", &gamemap->weather.windSpeed ))->SetRange(0,255);
 
@@ -152,8 +152,8 @@ class NewMap: public ASC_PG_Dialog {
 
          StandardButtonDirection ( ASC_PG_Dialog::Horizontal );
 
-         AddStandardButton ( "Cancel" )->sigClick.connect( SigC::slot( *this, &NewMap::cancel ));
-         AddStandardButton ( "OK" )->sigClick.connect( SigC::slot( *this, &NewMap::ok ));
+         AddStandardButton ( "Cancel" )->sigClick.connect( sigc::mem_fun( *this, &NewMap::cancel ));
+         AddStandardButton ( "OK" )->sigClick.connect( sigc::mem_fun( *this, &NewMap::ok ));
          
       };
 

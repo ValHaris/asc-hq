@@ -54,7 +54,7 @@ class BuildingTypeCountWidget: public BuildingTypeBaseWidget  {
 };
 
 
-class BuildingTypeSelectionItemFactory: public SelectionItemFactory, public SigC::Object  {
+class BuildingTypeSelectionItemFactory: public SelectionItemFactory, public sigc::trackable  {
       Resources plantResources;
       const Player& actplayer;
    public:
@@ -74,7 +74,7 @@ class BuildingTypeSelectionItemFactory: public SelectionItemFactory, public SigC
    public:
       BuildingTypeSelectionItemFactory( Resources plantResources, const Container& types, const Player& player );
       
-      SigC::Signal0<void> reloadAllItems;
+      sigc::signal<void> reloadAllItems;
 
       void restart();
    

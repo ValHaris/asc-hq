@@ -127,7 +127,7 @@ void AttackPanel::registerSpecialDisplay( const ASCString& name )
 {
    SpecialDisplayWidget* sdw = dynamic_cast<SpecialDisplayWidget*>( FindChild( name, true ) );
    if ( sdw )
-      sdw->display.connect( SigC::slot( *this, &AttackPanel::painter ));
+      sdw->display.connect( sigc::mem_fun( *this, &AttackPanel::painter ));
 }
 
 

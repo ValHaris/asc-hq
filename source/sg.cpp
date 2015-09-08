@@ -1348,7 +1348,7 @@ void loadLegacyFonts()
 
 
 
-class GameThreadParams: public SigC::Object
+class GameThreadParams: public sigc::trackable
 {
    private:
       bool exit() { exitMainloop = true; return true; };
@@ -1358,7 +1358,7 @@ class GameThreadParams: public SigC::Object
       bool exitMainloop;
       GameThreadParams( ASC_PG_App& app ) : application ( app ), exitMainloop(false) 
       {
-         app.sigQuit.connect( SigC::slot( *this, &GameThreadParams::exit ));
+         app.sigQuit.connect( sigc::mem_fun( *this, &GameThreadParams::exit ));
       };
 };
 
@@ -1543,12 +1543,12 @@ void deployMapPlayingHooks ( GameMap* map )
 #include "clparser/asc.cpp"
 
 
-class ResourceLogger: public SigC::Object {
+class ResourceLogger: public sigc::trackable {
       ofstream s;
    public:
       ResourceLogger() {
          s.open("resource-log", ios_base::out | ios_base::trunc );
-         MessagingHub::Instance().logCategorizedMessage.connect( SigC::slot( *this, &ResourceLogger::message ));
+         MessagingHub::Instance().logCategorizedMessage.connect( sigc::mem_fun( *this, &ResourceLogger::message ));
          MessagingHub::Instance().setLoggingCategory("ResourceWork", true);
       };
 
@@ -1670,7 +1670,7 @@ int main(int argc, char *argv[] )
 
    MessagingHub::Instance().setVerbosity( cl->r() );
    StdIoErrorHandler stdIoErrorHandler(false);
-   MessagingHub::Instance().exitHandler.connect( SigC::bind( SigC::slot( exit_asc ), -1 ));
+   MessagingHub::Instance().exitHandler.connect( sigc::bind( SigC::slot( exit_asc ), -1 ));
 
    // ResourceLogger rl;
 

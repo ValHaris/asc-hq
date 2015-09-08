@@ -33,7 +33,7 @@
 #include "../astar2.h"
 
 
-class MoveUnitCommand : public UnitCommand, public TaskInterface, public SigC::Object {
+class MoveUnitCommand : public UnitCommand, public TaskInterface, public sigc::trackable {
    
    public:
       static bool avail ( Vehicle* eht );

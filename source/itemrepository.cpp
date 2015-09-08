@@ -31,7 +31,7 @@
 #include "packagerepository.h"
 
 
-SigC::Signal0<void> dataLoaderTicker;
+sigc::signal<void> dataLoaderTicker;
 
 
 const char* cacheFileName = "asc2.cache";

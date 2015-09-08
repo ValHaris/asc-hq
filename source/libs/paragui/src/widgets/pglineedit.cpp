@@ -53,7 +53,7 @@ PG_LineEdit::PG_LineEdit(PG_Widget* parent, const PG_Rect& r, const std::string&
 	LoadThemeStyle(style);
 
    if ( cursorBlinkingTime > 0 )
-      PG_Application::GetApp()->sigAppIdle.connect( SigC::slot( *this, &PG_LineEdit::IdleBlinker ));
+      PG_Application::GetApp()->sigAppIdle.connect( sigc::mem_fun( *this, &PG_LineEdit::IdleBlinker ));
 }
 
 PG_LineEdit::~PG_LineEdit() {}

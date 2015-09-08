@@ -35,7 +35,7 @@
 
 #include "propstrings_priv.h"
 
-PG_Button::SignalButtonClick<> PG_Button::sigGlobalClick;
+PG_Button::SignalButtonClick PG_Button::sigGlobalClick;
 
 class PG_ButtonStateData {
 public:
