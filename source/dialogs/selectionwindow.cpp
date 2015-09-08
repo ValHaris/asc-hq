@@ -268,8 +268,8 @@ void ItemSelectorWidget::reLoad( bool show )
       if ( visibleRowCount < 0 )
          visibleRowCount = scrollWidget->Height() / (w->Height() + gapWidth);
 
-      w->itemSelected.connect( SigC::bind( SigC::slot( *this, &ItemSelectorWidget::itemSelected ), true ));
-      w->itemMarked.connect( SigC::slot( *this, &ItemSelectorWidget::markItem ));
+      w->itemSelected.connect( sigc::bind( sigc::mem_fun( *this, &ItemSelectorWidget::itemSelected ), true ));
+      w->itemMarked.connect( sigc::mem_fun( *this, &ItemSelectorWidget::markItem ));
       w->setSelectionCallback( &selectionCallBack );
       widgets.push_back ( w );
       
@@ -308,8 +308,8 @@ ItemSelectorWindow::ItemSelectorWindow( PG_Widget *parent, const PG_Rect &r , co
    
    itemSelector = new ItemSelectorWidget( this, PG_Rect( 5, GetTitlebarHeight () + 2, Width()-5, Height()- GetTitlebarHeight ()- 5 ), itemFactory );
    
-   itemSelector->sigItemSelected.connect(  SigC::slot( *this, &ItemSelectorWindow::itemSelected ));
-   itemSelector->sigQuitModal.connect( SigC::slot( *this, &ItemSelectorWindow::QuitModal));
+   itemSelector->sigItemSelected.connect(  sigc::mem_fun( *this, &ItemSelectorWindow::itemSelected ));
+   itemSelector->sigQuitModal.connect( sigc::mem_fun( *this, &ItemSelectorWindow::QuitModal));
 };
 
 void ItemSelectorWindow::itemSelected( const SelectionWidget* )

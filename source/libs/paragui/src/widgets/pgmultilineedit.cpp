@@ -11,8 +11,8 @@ PG_MultiLineEdit::PG_MultiLineEdit(PG_Widget* parent, const PG_Rect& r, const st
 	my_isCursorAtEOL = false;
 	my_allowHiddenCursor = false;
 	my_firstLine = 0;
-	my_vscroll->sigScrollPos.connect(slot(*this, &PG_MultiLineEdit::handleScroll));
-	my_vscroll->sigScrollTrack.connect(slot(*this, &PG_MultiLineEdit::handleScroll));
+	my_vscroll->sigScrollPos.connect(sigc::mem_fun(*this, &PG_MultiLineEdit::handleScroll));
+	my_vscroll->sigScrollTrack.connect(sigc::mem_fun(*this, &PG_MultiLineEdit::handleScroll));
 	my_vscroll->Hide();
 	my_mark = -1;
 }

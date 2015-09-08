@@ -38,8 +38,8 @@ PG_Slider::PG_Slider(PG_Widget* parent, const PG_Rect& r, ScrollDirection direct
 	scrollbutton[1] = NULL;
 
 	// connect signals
-	sigScrollPos.connect(sigSlideEnd.slot());
-	sigScrollTrack.connect(sigSlide.slot());
+	sigScrollPos.connect(sigSlideEnd.make_slot());
+	sigScrollTrack.connect(sigSlide.make_slot());
 
 	LoadThemeStyle(style);
 	SetPosition(scroll_min);

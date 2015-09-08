@@ -15,7 +15,6 @@ libpgcore_la_SOURCES = \
 	pgrectlist.cpp \
 	pgsurfacecache.cpp \
 	pgtimerobject.cpp \
-	pgsigconvert.cpp \
 	pgcolor.cpp \
 	pgsdleventsupplier.cpp \
 	pgsdlscreenupdater.cpp 

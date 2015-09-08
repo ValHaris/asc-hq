@@ -219,7 +219,7 @@ int main(int argc, char *argv[] )
    }
 
    MessagingHub::Instance().setVerbosity( cl->r() );
-   MessagingHub::Instance().exitHandler.connect( SigC::bind( SigC::slot( exit_asc ), -1 ));
+   MessagingHub::Instance().exitHandler.connect( sigc::bind( SigC::slot( exit_asc ), -1 ));
 
    #ifdef logging
     logtofile ( kgetstartupmessage() );

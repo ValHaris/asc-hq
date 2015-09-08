@@ -257,15 +257,15 @@ FileSelectionWindow::FileSelectionWindow( PG_Widget *parent, const PG_Rect &r, c
    this->overwriteMessage = overwriteMessage;
 
    factory = new FileSelectionItemFactory( fileWildcard );
-   factory->filenameSelectedMouse.connect ( SigC::slot( *this, &FileSelectionWindow::fileNameSelected ));
-   factory->filenameSelectedKeyb.connect ( SigC::slot( *this, &FileSelectionWindow::fileNameSelected ));
-   // factory->filenameMarked.connect   ( SigC::slot( *this, &FileSelectionWindow::fileNameSelected ));
+   factory->filenameSelectedMouse.connect ( sigc::mem_fun( *this, &FileSelectionWindow::fileNameSelected ));
+   factory->filenameSelectedKeyb.connect ( sigc::mem_fun( *this, &FileSelectionWindow::fileNameSelected ));
+   // factory->filenameMarked.connect   ( sigc::mem_fun( *this, &FileSelectionWindow::fileNameSelected ));
    ItemSelectorWidget* isw = new ItemSelectorWidget( this, PG_Rect(10, GetTitlebarHeight(), r.Width() - 20, r.Height() - GetTitlebarHeight()), factory );
    if ( save ) {
       isw->constrainNames( false );
-      isw->nameEntered.connect( SigC::slot( *this, &FileSelectionWindow::fileNameEntered ));
+      isw->nameEntered.connect( sigc::mem_fun( *this, &FileSelectionWindow::fileNameEntered ));
    }
-   isw->sigQuitModal.connect( SigC::slot( *this, &ItemSelectorWindow::QuitModal));
+   isw->sigQuitModal.connect( sigc::mem_fun( *this, &ItemSelectorWindow::QuitModal));
 
 };
 
@@ -396,15 +396,15 @@ SavegameSelectionWindow::SavegameSelectionWindow( PG_Widget *parent, const PG_Re
    this->overwriteMessage = overwriteMessage;
 
    factory = new SavegameSelectionItemFactory( fileWildcard );
-   factory->filenameSelectedMouse.connect ( SigC::slot( *this, &SavegameSelectionWindow::fileNameSelected ));
-   factory->filenameSelectedKeyb.connect ( SigC::slot( *this, &SavegameSelectionWindow::fileNameSelected ));
-   // factory->filenameMarked.connect   ( SigC::slot( *this, &SavegameSelectionWindow::fileNameSelected ));
+   factory->filenameSelectedMouse.connect ( sigc::mem_fun( *this, &SavegameSelectionWindow::fileNameSelected ));
+   factory->filenameSelectedKeyb.connect ( sigc::mem_fun( *this, &SavegameSelectionWindow::fileNameSelected ));
+   // factory->filenameMarked.connect   ( sigc::mem_fun( *this, &SavegameSelectionWindow::fileNameSelected ));
    ItemSelectorWidget* isw = new ItemSelectorWidget( this, PG_Rect(10, GetTitlebarHeight(), r.Width() - 20, r.Height() - GetTitlebarHeight()), factory );
    if ( save ) {
       isw->constrainNames( false );
-      isw->nameEntered.connect( SigC::slot( *this, &SavegameSelectionWindow::fileNameEntered ));
+      isw->nameEntered.connect( sigc::mem_fun( *this, &SavegameSelectionWindow::fileNameEntered ));
    }
-   isw->sigQuitModal.connect( SigC::slot( *this, &ItemSelectorWindow::QuitModal));
+   isw->sigQuitModal.connect( sigc::mem_fun( *this, &ItemSelectorWindow::QuitModal));
 
 };
 

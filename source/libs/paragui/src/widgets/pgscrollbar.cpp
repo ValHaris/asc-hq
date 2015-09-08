@@ -48,15 +48,15 @@ PG_ScrollBar::PG_ScrollBar(PG_Widget* parent, const PG_Rect& r, ScrollDirection 
 
 	scrollbutton[0] = new PG_Button(this);
 	scrollbutton[0]->SetID((direction == VERTICAL) ? IDSCROLLBAR_UP : IDSCROLLBAR_LEFT);
-	scrollbutton[0]->sigClick.connect(slot(*this, &PG_ScrollBar::handleButtonClick));
+	scrollbutton[0]->sigClick.connect(sigc::mem_fun(*this, &PG_ScrollBar::handleButtonClick));
 
 	scrollbutton[1] = new PG_Button(this);
 	scrollbutton[1]->SetID((direction == VERTICAL) ? IDSCROLLBAR_DOWN : IDSCROLLBAR_RIGHT);
-	scrollbutton[1]->sigClick.connect(slot(*this, &PG_ScrollBar::handleButtonClick));
+	scrollbutton[1]->sigClick.connect(sigc::mem_fun(*this, &PG_ScrollBar::handleButtonClick));
 
 	dragbutton = new ScrollButton(this);
 	dragbutton->SetID(IDSCROLLBAR_DRAG);
-	dragbutton->sigClick.connect(slot(*this, &PG_ScrollBar::handleButtonClick));
+	dragbutton->sigClick.connect(sigc::mem_fun(*this, &PG_ScrollBar::handleButtonClick));
 
 	if(style != PG_PropStr::Scrollbar) {
 		LoadThemeStyle(PG_PropStr::Scrollbar);

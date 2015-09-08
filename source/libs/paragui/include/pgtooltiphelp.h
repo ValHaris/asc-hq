@@ -56,7 +56,7 @@ class PG_LineEdit;
  
  @ToDo Query the cursor size and position the help so it doesn't overlap with large cursors
 */
-class DECLSPEC PG_ToolTipHelp: public SigC::Object {
+class DECLSPEC PG_ToolTipHelp: public sigc::trackable {
 private:
 
 class Ticker: public PG_TimerObject {
@@ -94,10 +94,10 @@ protected:
 
 	static PG_LineEdit* toolTipLabel;
 
-	bool onParentEnter( PG_Pointer dummy );
-	bool onParentLeave( PG_Pointer dummy );
+	bool onParentEnter( );
+	bool onParentLeave( );
 	bool onParentDelete( const PG_MessageObject* object );
-	bool onMouseMotion( const SDL_MouseMotionEvent *motion );
+	bool onMouseMotion( const PG_MessageObject* object, const SDL_MouseMotionEvent *motion );
 	bool onIdle();
 
 

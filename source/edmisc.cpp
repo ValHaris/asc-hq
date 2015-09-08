@@ -1722,7 +1722,7 @@ public:
         }
 
         okButton = AddStandardButton( "OK" );
-        okButton->sigClick.connect( SigC::slot( *this, &SelectUnitSetFilter::ok ));
+        okButton->sigClick.connect( sigc::mem_fun( *this, &SelectUnitSetFilter::ok ));
     };
 
     bool ok() {
@@ -2838,8 +2838,8 @@ class ItemLocator : public ASC_PG_Dialog {
 public:
     ItemLocator() : ASC_PG_Dialog(NULL, PG_Rect(-1,-1,400,200 ), "Item Locator")
     {
-        AddStandardButton("OK")->sigClick.connect( SigC::slot(*this, &ItemLocator::ok ));
-        AddStandardButton("cancel")->sigClick.connect( SigC::slot(*this, &ItemLocator::cancel ));
+        AddStandardButton("OK")->sigClick.connect( sigc::mem_fun(*this, &ItemLocator::ok ));
+        AddStandardButton("cancel")->sigClick.connect( sigc::mem_fun(*this, &ItemLocator::cancel ));
 
         typeSelector = new DropDownSelector(this, PG_Rect(20, 60, 150, 25 ));
         typeSelector->AddItem("Terrain");
@@ -3397,7 +3397,7 @@ CopyMap::CopyMap() : FieldAddressing( actmap ), ASC_PG_Dialog( NULL, PG_Rect( 30
 
 
     PG_Button* ok = new PG_Button( this, PG_Rect( startX, startY + dialogLine*(lineHeight+lineSpacing) , startX2 - xSpacer - startX, lineHeight ), "Paste" );
-    ok->sigClick.connect( SigC::slot( *this, &CopyMap::paste ));
+    ok->sigClick.connect( sigc::mem_fun( *this, &CopyMap::paste ));
 
     dialogLine = 0;
 

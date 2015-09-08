@@ -180,7 +180,7 @@ void BuildingConquered::arm()
 
    Building* bld = gamemap->getField ( pos )->building;
    if ( bld )
-      bld->conquered.connect( SigC::slot( *this, &BuildingConquered::triggered ));
+      bld->conquered.connect( sigc::mem_fun( *this, &BuildingConquered::triggered ));
 }
 
 void BuildingConquered::triggered()
@@ -210,8 +210,8 @@ void BuildingLost::arm()
 
    Building* bld = gamemap->getField ( pos )->building;
    if ( bld ) {
-      bld->conquered.connect( SigC::slot( *this, &BuildingConquered::triggered ));
-      bld->destroyed.connect( SigC::slot( *this, &BuildingConquered::triggered ));
+      bld->conquered.connect( sigc::mem_fun( *this, &BuildingConquered::triggered ));
+      bld->destroyed.connect( sigc::mem_fun( *this, &BuildingConquered::triggered ));
    }
 }
 
@@ -291,7 +291,7 @@ void BuildingSeen::arm()
    if ( bld ) {
       bld->connection |= cconnection_seen;
       #ifdef sgmain
-      buildingSeen.connect( SigC::slot( *this, &BuildingSeen::triggered ));
+      buildingSeen.connect( sigc::mem_fun( *this, &BuildingSeen::triggered ));
       #endif
    }
 }
@@ -381,8 +381,8 @@ void UnitLost::arm()
 {
    Vehicle* veh = gamemap->getUnit( unitID );
    if ( veh ) {
-      veh->destroyed.connect( SigC::slot( *this, &UnitLost::triggered ));
-      veh->conquered.connect( SigC::slot( *this, &UnitLost::triggered ));
+      veh->destroyed.connect( sigc::mem_fun( *this, &UnitLost::triggered ));
+      veh->conquered.connect( sigc::mem_fun( *this, &UnitLost::triggered ));
    }
 }
 
@@ -439,7 +439,7 @@ void UnitConquered::arm()
 {
    Vehicle* veh = gamemap->getUnit( unitID );
    if ( veh )
-      veh->conquered.connect( SigC::slot( *this, &UnitConquered::triggered ));
+      veh->conquered.connect( sigc::mem_fun( *this, &UnitConquered::triggered ));
 }
 
 
@@ -468,7 +468,7 @@ void UnitDestroyed::arm()
 {
   Vehicle* veh = gamemap->getUnit( unitID );
   if ( veh )
-     veh->destroyed.connect( SigC::slot( *this, &UnitDestroyed::triggered ));
+     veh->destroyed.connect( sigc::mem_fun( *this, &UnitDestroyed::triggered ));
 }
 
 
@@ -548,7 +548,7 @@ void EventTriggered::arm()
 {
    Event* e = getTargetEventName();
    if ( e )
-      e->executed.connect( SigC::slot( *this, &EventTriggered::triggered));
+      e->executed.connect( sigc::mem_fun( *this, &EventTriggered::triggered));
 }
 
 void EventTriggered::triggered()
@@ -581,8 +581,8 @@ ASCString AllEnemyUnitsDestroyed::getTypeName() const
 
 void AllEnemyUnitsDestroyed::arm()
 {
-   ContainerBase::anyContainerDestroyed.connect( SigC::hide<ContainerBase*>( SigC::slot( *this, &AllEnemyUnitsDestroyed::triggered)));
-   ContainerBase::anyContainerConquered.connect( SigC::hide<ContainerBase*>( SigC::slot( *this, &AllEnemyUnitsDestroyed::triggered)));
+   ContainerBase::anyContainerDestroyed.connect( SigC::hide<ContainerBase*>( sigc::mem_fun( *this, &AllEnemyUnitsDestroyed::triggered)));
+   ContainerBase::anyContainerConquered.connect( SigC::hide<ContainerBase*>( sigc::mem_fun( *this, &AllEnemyUnitsDestroyed::triggered)));
 }
 
 void AllEnemyUnitsDestroyed::triggered()
@@ -616,8 +616,8 @@ ASCString AllEnemyBuildingsDestroyed::getDetailledName() const
 
 void AllEnemyBuildingsDestroyed::arm()
 {
-   ContainerBase::anyContainerDestroyed.connect( SigC::hide<ContainerBase*>( SigC::slot( *this, &AllEnemyBuildingsDestroyed::triggered)));
-   ContainerBase::anyContainerConquered.connect( SigC::hide<ContainerBase*>( SigC::slot( *this, &AllEnemyBuildingsDestroyed::triggered)));
+   ContainerBase::anyContainerDestroyed.connect( SigC::hide<ContainerBase*>( sigc::mem_fun( *this, &AllEnemyBuildingsDestroyed::triggered)));
+   ContainerBase::anyContainerConquered.connect( SigC::hide<ContainerBase*>( sigc::mem_fun( *this, &AllEnemyBuildingsDestroyed::triggered)));
 }
 
 void AllEnemyBuildingsDestroyed::triggered()
@@ -697,7 +697,7 @@ void SpecificUnitEntersPolygon::arm ()
    arming = true;
    operate();
    arming = false;
-   fieldCrossed.connect( SigC::slot( *this, &SpecificUnitEntersPolygon::triggered));
+   fieldCrossed.connect( sigc::mem_fun( *this, &SpecificUnitEntersPolygon::triggered));
    Vehicle* veh = gamemap->getUnit( unitID );
    if ( veh )
       veh->connection |= cconnection_areaentered_specificunit;
@@ -785,7 +785,7 @@ void AnyUnitEntersPolygon::arm()
    arming = true;
    operate();
    arming = false;
-   fieldCrossed.connect( SigC::slot( *this, &AnyUnitEntersPolygon::triggered));
+   fieldCrossed.connect( sigc::mem_fun( *this, &AnyUnitEntersPolygon::triggered));
    #endif
 }
 
@@ -846,7 +846,7 @@ void ResourceTribute::setup()
 void ResourceTribute::arm()
 {
   #ifdef sgmain
-   tributeTransferred.connect( SigC::slot( *this, &ResourceTribute::triggered));
+   tributeTransferred.connect( sigc::mem_fun( *this, &ResourceTribute::triggered));
   #endif 
 }
 

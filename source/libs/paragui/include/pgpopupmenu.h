@@ -34,11 +34,11 @@
 #define PG_POPUPMENU_H
 
 #include "pgthemewidget.h"
-#include "pgsignals.h"
 #include "pgstring.h"
 
 #include <string>
 #include <list>
+#include <sigc++/sigc++.h>
 #ifdef HASH_MAP_INC
 # include HASH_MAP_INC
 #else
@@ -96,13 +96,12 @@ class DECLSPEC MenuItem : public PG_Rect, public PG_MessageObject {
 		/**
 		Signal type declaration
 		**/
-		template<class datatype = PG_Pointer>
-	class SignalSelectMenuItem : public PG_Signal1<MenuItem*, datatype> {}
+	class SignalSelectMenuItem : public sigc::signal<bool, MenuItem*> {}
 		;
 
-		SignalSelectMenuItem<> sigSelectMenuItem;
+		SignalSelectMenuItem sigSelectMenuItem;
 
-		typedef SigC::Slot2<bool, MenuItem*, PG_Pointer> MenuItemSlot;
+		typedef sigc::slot<bool, MenuItem*, PG_Pointer> MenuItemSlot;
 
 	public: // methods
 		MenuItem(PG_PopupMenu *parent,
@@ -191,8 +190,7 @@ public: // methods
 	/**
 	Signal type declaration
 	**/
-	template<class datatype = PG_Pointer>
-class SignalSelectMenuItem : public PG_Signal1<MenuItem*, datatype> {}
+class SignalSelectMenuItem : public sigc::signal<bool, MenuItem*> {}
 	;
 
 	PG_PopupMenu(PG_Widget *parent,
@@ -263,7 +261,7 @@ class SignalSelectMenuItem : public PG_Signal1<MenuItem*, datatype> {}
 	void openMenu(int x = -1, int y = -1);
 
 
-	SignalSelectMenuItem<> sigSelectMenuItem;
+	SignalSelectMenuItem sigSelectMenuItem;
 
 protected: // methods
 

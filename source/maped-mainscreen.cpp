@@ -89,7 +89,7 @@ void Menu::addfield( const char* name )
    currentMenu = new PG_PopupMenu( NULL, -1, -1, "" );
    categories.push_back ( currentMenu );
    Add ( name, currentMenu );
-   currentMenu->sigSelectMenuItem.connect( SigC::slot( *this, &Menu::execAction ));
+   currentMenu->sigSelectMenuItem.connect( sigc::mem_fun( *this, &Menu::execAction ));
 
 }
 
@@ -400,7 +400,7 @@ Maped_MainScreenWidget::Maped_MainScreenWidget( PG_Application& application )
 
    setup( false, PG_Rect(15,30,Width() - 200, Height() - 73) );
    mapDisplay->mouseButtonOnField.connect( SigC::slot( mousePressedOnField ));
-   mapDisplay->mouseButtonOnField.connect( SigC::slot( *this, &Maped_MainScreenWidget::clickOnMap ));
+   mapDisplay->mouseButtonOnField.connect( sigc::mem_fun( *this, &Maped_MainScreenWidget::clickOnMap ));
    mapDisplay->mouseDraggedToField.connect( SigC::slot( mouseDraggedToField ));
 
    
@@ -411,46 +411,46 @@ Maped_MainScreenWidget::Maped_MainScreenWidget( PG_Application& application )
    menu = new Menu(this, PG_Rect(15,0,Width()-200,20));
 
    
-   PG_Application::GetApp()->sigKeyDown.connect( SigC::slot( *this, &Maped_MainScreenWidget::eventKeyDown ));
+   PG_Application::GetApp()->sigKeyDown.connect( sigc::mem_fun( *this, &Maped_MainScreenWidget::eventKeyDown ));
    
    int xpos = Width() - 150;
    int w = 140;
    int ypos = 180;
 
    PG_Button* buttonC = new PG_Button( this, PG_Rect( xpos, ypos, w, 20), "Clear Selection" );
-   buttonC->sigClick.connect( SigC::slot( *this, &Maped_MainScreenWidget::clearSelection ));
+   buttonC->sigClick.connect( sigc::mem_fun( *this, &Maped_MainScreenWidget::clearSelection ));
    ypos += 25;
 
    
    PG_Button* button = new PG_Button( this, PG_Rect( xpos, ypos, w, 20), "Select Vehicle" );
-   button->sigClick.connect( SigC::slot( *this, &Maped_MainScreenWidget::selectVehicle ));
+   button->sigClick.connect( sigc::mem_fun( *this, &Maped_MainScreenWidget::selectVehicle ));
    ypos += 25;
    
    PG_Button* button2 = new PG_Button( this, PG_Rect( xpos, ypos, w, 20), "Select Building" );
-   button2->sigClick.connect( SigC::slot( *this, &Maped_MainScreenWidget::selectBuilding ));
+   button2->sigClick.connect( sigc::mem_fun( *this, &Maped_MainScreenWidget::selectBuilding ));
    ypos += 25;
 
    PG_Button* button3 = new PG_Button( this, PG_Rect( xpos, ypos, w - 50, 20), "Sel. Object" );
-   button3->sigClick.connect( SigC::slot( *this, &Maped_MainScreenWidget::selectObject ));
+   button3->sigClick.connect( sigc::mem_fun( *this, &Maped_MainScreenWidget::selectObject ));
 
    PG_Button* button3b = new PG_Button( this, PG_Rect( xpos+ w - 45, ypos, 45, 20), "List" );
-   button3b->sigClick.connect( SigC::slot( *this, &Maped_MainScreenWidget::selectObjectList ));
+   button3b->sigClick.connect( sigc::mem_fun( *this, &Maped_MainScreenWidget::selectObjectList ));
    ypos += 25;
 
 
    PG_Button* button4 = new PG_Button( this, PG_Rect( xpos, ypos, w - 50, 20), "Sel. Terrain" );
-   button4->sigClick.connect( SigC::slot( *this, &Maped_MainScreenWidget::selectTerrain ));
+   button4->sigClick.connect( sigc::mem_fun( *this, &Maped_MainScreenWidget::selectTerrain ));
 
    PG_Button* button4b = new PG_Button( this, PG_Rect( xpos + w - 45, ypos, 45, 20), "List" );
-   button4b->sigClick.connect( SigC::slot( *this, &Maped_MainScreenWidget::selectTerrainList ));
+   button4b->sigClick.connect( sigc::mem_fun( *this, &Maped_MainScreenWidget::selectTerrainList ));
    ypos += 25;
 
    PG_Button* button5 = new PG_Button( this, PG_Rect( xpos, ypos, w, 20), "Select Mine" );
-   button5->sigClick.connect( SigC::slot( *this, &Maped_MainScreenWidget::selectMine ));
+   button5->sigClick.connect( sigc::mem_fun( *this, &Maped_MainScreenWidget::selectMine ));
    ypos += 25;
     
    PG_Button* button6 = new PG_Button( this, PG_Rect( xpos, ypos, w, 20), "Lua Brush" );
-   button6->sigClick.connect( SigC::slot( *this, &Maped_MainScreenWidget::selectLuaBrush ));
+   button6->sigClick.connect( sigc::mem_fun( *this, &Maped_MainScreenWidget::selectLuaBrush ));
    ypos += 25;
    
    
@@ -459,7 +459,7 @@ Maped_MainScreenWidget::Maped_MainScreenWidget( PG_Application& application )
    brushSelector->AddItem("1");
    brushSelector->AddItem("3");
    brushSelector->AddItem("5");
-   brushSelector->selectionSignal.connect( SigC::slot( *this, &Maped_MainScreenWidget::brushChanged ));
+   brushSelector->selectionSignal.connect( sigc::mem_fun( *this, &Maped_MainScreenWidget::brushChanged ));
    ypos += 25;
    
   
@@ -468,17 +468,17 @@ Maped_MainScreenWidget::Maped_MainScreenWidget( PG_Application& application )
       weatherSelector->AddItem( cwettertypen[i] );
     ypos += 25;  
             
-   weatherSelector->selectionSignal.connect( SigC::slot( selection, &SelectionHolder::setWeather ) );
-//   weatherSelector->selectionSignal.connect( SigC::slot( *currentSelectionWidget, &SelectionItemWidget::Update ));
+   weatherSelector->selectionSignal.connect( sigc::mem_fun( selection, &SelectionHolder::setWeather ) );
+//   weatherSelector->selectionSignal.connect( sigc::mem_fun( *currentSelectionWidget, &SelectionItemWidget::Update ));
    
 
    playerSelector = new DropDownSelector( this, PG_Rect( xpos, ypos, w, 20));
    for ( int i = 0; i < 9; ++i )
       playerSelector->AddItem( "Player " + ASCString::toString(i) );
-   playerSelector->selectionSignal.connect( SigC::slot( selection, &SelectionHolder::setPlayer ) );
+   playerSelector->selectionSignal.connect( sigc::mem_fun( selection, &SelectionHolder::setPlayer ) );
    ypos += 25;
 
-   selection.playerChanged.connect( SigC::slot( *this, &Maped_MainScreenWidget::playerChanged ));
+   selection.playerChanged.connect( sigc::mem_fun( *this, &Maped_MainScreenWidget::playerChanged ));
 
    
    currentSelectionWidget = new SelectionItemWidget( this, PG_Rect( Width() - BuildingItem::Width() - 10, ypos, BuildingItem::Width(), BuildingItem::Height() ) );
@@ -489,8 +489,8 @@ Maped_MainScreenWidget::Maped_MainScreenWidget( PG_Application& application )
    selectionName2 = new PG_Label( this, PG_Rect( xpos, ypos, currentSelectionWidget->Width(), 20 ));
    ypos += 25;
    
-   selection.selectionChanged.connect( SigC::slot( *currentSelectionWidget, &SelectionItemWidget::set ));
-   selection.selectionChanged.connect( SigC::slot( *this, &Maped_MainScreenWidget::selectionChanged ));
+   selection.selectionChanged.connect( sigc::mem_fun( *currentSelectionWidget, &SelectionItemWidget::set ));
+   selection.selectionChanged.connect( sigc::mem_fun( *this, &Maped_MainScreenWidget::selectionChanged ));
 
    spawnOverviewMapPanel( "Mapeditor_OverviewMap" );
 
@@ -549,8 +549,8 @@ void Maped_MainScreenWidget::setupStatusBar()
    coordinateDisplay = new PG_Label ( this, PG_Rect( x, y, 80, height ) );
    coordinateDisplay->SetFontSize(11);
    
-   updateFieldInfo.connect( SigC::slot( *this, &Maped_MainScreenWidget::updateStatusBar ));
-   cursorMoved.connect( SigC::slot( *this, &Maped_MainScreenWidget::updateStatusBar ));
+   updateFieldInfo.connect( sigc::mem_fun( *this, &Maped_MainScreenWidget::updateStatusBar ));
+   cursorMoved.connect( sigc::mem_fun( *this, &Maped_MainScreenWidget::updateStatusBar ));
 }
 
 void Maped_MainScreenWidget::updateStatusBar()
@@ -620,7 +620,7 @@ bool Maped_MainScreenWidget::clickOnMap( const MapCoordinate& field, const SPoin
             contextMenu->addMenuItem( (*i)->getText( field ), (*i)->getActionID() );
          }
 
-      contextMenu->sigSelectMenuItem.connect( SigC::slot( *this, &Maped_MainScreenWidget::runContextAction   ));
+      contextMenu->sigSelectMenuItem.connect( sigc::mem_fun( *this, &Maped_MainScreenWidget::runContextAction   ));
       
       contextMenu->Show();
       return true;
@@ -946,7 +946,7 @@ void showSelectionWindow( PG_Widget* parent, PG_WindowPointer &selectionWindow, 
    if ( !selectionWindow ) {
       ItemSelectorWindow* sw = new MapItemSelectionWindow( parent, PG_Rect( parent->Width()-300, 100, 280, parent->Height()-150), "select item", new MapItemTypeWidgetFactory< MapItemTypeWidget<ItemType> >(itemRepository) );
 
-      filtersChangedSignal.connect( SigC::slot( *sw, &ItemSelectorWindow::reLoad ));
+      filtersChangedSignal.connect( sigc::mem_fun( *sw, &ItemSelectorWindow::reLoad ));
       selectionWindow = sw;
    }
    

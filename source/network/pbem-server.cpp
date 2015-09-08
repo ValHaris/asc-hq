@@ -81,7 +81,7 @@ class AuthenticationDialog : public ASC_PG_Dialog {
          (new PG_PropertyField_String<ASCString>( propertyEditor , "Default Password", &password ))->SetPassHidden('*');
          
          PG_Button* ok = new PG_Button( this, PG_Rect( Width() - 100, Height() - 40, 90, 30), "OK" );
-         ok->sigClick.connect( SigC::slot( *this, &AuthenticationDialog::ok ));
+         ok->sigClick.connect( sigc::mem_fun( *this, &AuthenticationDialog::ok ));
       }
       
       const ASCString& getName() { return name; };

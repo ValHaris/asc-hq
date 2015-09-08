@@ -204,9 +204,9 @@ void Player :: setParentMap( GameMap* map, int pos )
 {
    parentMap = map;
    player = pos;
-   parentMap->sigPlayerTurnBegins.connect( SigC::slot( *this, &Player::turnBegins ));   
-   parentMap->sigPlayerUserInteractionBegins.connect( SigC::slot( *this, &Player::userInteractionBegins ));   
-   parentMap->sigPlayerTurnEnds.connect( SigC::slot( *this, &Player::turnEnds ));   
+   parentMap->sigPlayerTurnBegins.connect( sigc::mem_fun( *this, &Player::turnBegins ));   
+   parentMap->sigPlayerUserInteractionBegins.connect( sigc::mem_fun( *this, &Player::userInteractionBegins ));   
+   parentMap->sigPlayerTurnEnds.connect( sigc::mem_fun( *this, &Player::turnEnds ));   
 }
 
 

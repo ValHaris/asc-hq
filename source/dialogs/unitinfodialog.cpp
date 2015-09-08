@@ -83,15 +83,15 @@ class UnitInfoDialog : public Panel {
          {
             SpecialDisplayWidget* sdw = dynamic_cast<SpecialDisplayWidget*>( FindChild( name, true ) );
             if ( sdw )
-               sdw->display.connect( SigC::slot( *this, &UnitInfoDialog::painter ));
+               sdw->display.connect( sigc::mem_fun( *this, &UnitInfoDialog::painter ));
          };
 
          void registerSpecialInput( const ASCString& name )
          {
             SpecialInputWidget* siw = dynamic_cast<SpecialInputWidget*>( FindChild( name, true ) );
             if ( siw ) {
-               siw->sigMouseButtonDown.connect( SigC::slot( *this, &UnitInfoDialog::onClick ));
-               siw->sigMouseButtonUp.connect( SigC::slot( *this, &UnitInfoDialog::onRelease ));
+               siw->sigMouseButtonDown.connect( sigc::mem_fun( *this, &UnitInfoDialog::onClick ));
+               siw->sigMouseButtonUp.connect( sigc::mem_fun( *this, &UnitInfoDialog::onRelease ));
             }
          };
 
@@ -312,7 +312,7 @@ class UnitInfoDialog : public Panel {
         
         UnitInfoDialog (PG_Widget *parent, const Vehicle* vehicle, const VehicleType* vehicleType ) 
            : Panel( parent, PG_Rect::null, "UnitInfoDialog", false ), veh(vehicle), vt( vehicleType ), weaponGraph(NULL), currentWeapon(-1) {
-               sigClose.connect( SigC::slot( *this, &UnitInfoDialog::QuitModal ));
+               sigClose.connect( sigc::mem_fun( *this, &UnitInfoDialog::QuitModal ));
 
                if( veh )
                   vt = veh->typ;
@@ -499,7 +499,7 @@ class UnitInfoDialog : public Panel {
                yoffset += sw->Height();
 
                assignWeaponInfo( this, sw, vt->weapons.weapon[i] );
-               sw->sigMouseButtonDown.connect( SigC::bind( SigC::slot( *this, &UnitInfoDialog::onWeaponClick ), i));
+               sw->sigMouseButtonDown.connect( sigc::bind( sigc::mem_fun( *this, &UnitInfoDialog::onWeaponClick ), i));
             }
          }
          if ( label == "entrancesystems" && vt ) {
@@ -520,7 +520,7 @@ class UnitInfoDialog : public Panel {
                xoffset += sw->Width();
 
                // assignWeaponInfo( this, sw, vt->weapons.weapon[i] );
-               sw->sigMouseButtonDown.connect( SigC::bind( SigC::slot( *this, &UnitInfoDialog::onEntranceClick ), i));
+               sw->sigMouseButtonDown.connect( sigc::bind( sigc::mem_fun( *this, &UnitInfoDialog::onEntranceClick ), i));
             }
          }
       }; 

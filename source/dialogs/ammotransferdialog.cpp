@@ -67,10 +67,10 @@ class TransferWidget : public PG_Widget {
    
             updateRange();
    
-            slider->sigSlide.connect( SigC::slot( *transferrable, &Transferrable::setDestAmount ));
-            slider->sigSlideEnd.connect( SigC::slot( *this, &TransferWidget::updatePos));
+            slider->sigSlide.connect( sigc::mem_fun( *transferrable, &Transferrable::setDestAmount ));
+            slider->sigSlideEnd.connect( sigc::mem_fun( *this, &TransferWidget::updatePos));
 
-            handler.updateRanges.connect( SigC::slot( *this, &TransferWidget::updateRange));
+            handler.updateRanges.connect( sigc::mem_fun( *this, &TransferWidget::updateRange));
          }
 
          
@@ -80,11 +80,11 @@ class TransferWidget : public PG_Widget {
          
          l = new PG_Label ( this, labels );
          l->SetAlignment( PG_Label::LEFT );
-         transferrable->sigSourceAmount.connect( SigC::slot( *l, &PG_Label::SetText ));
+         transferrable->sigSourceAmount.connect( sigc::mem_fun( *l, &PG_Label::SetText ));
          
          l = new PG_Label ( this, labels );
          l->SetAlignment( PG_Label::RIGHT );
-         transferrable->sigDestAmount.connect( SigC::slot( *l, &PG_Label::SetText ));
+         transferrable->sigDestAmount.connect( sigc::mem_fun( *l, &PG_Label::SetText ));
       };
 };
 
@@ -175,7 +175,7 @@ AmmoTransferWindow :: AmmoTransferWindow ( ContainerBase* source, ContainerBase*
       PG_CheckButton* production = new PG_CheckButton( area, PG_Rect( border, ypos, area->w - 30, 20 ), "allow ammo production" );
       if ( CGameOptions::Instance()->autoproduceammunition )
          production->SetPressed(  );
-      production->sigClick.connect( SigC::slot( *handler, &TransferHandler::allowAmmoProduction ));
+      production->sigClick.connect( sigc::mem_fun( *handler, &TransferHandler::allowAmmoProduction ));
       ypos += 30;
    }
    
@@ -186,7 +186,7 @@ AmmoTransferWindow :: AmmoTransferWindow ( ContainerBase* source, ContainerBase*
 
    int buttonWidth = 150;
    PG_Button* b = new PG_Button( this, PG_Rect( w - buttonWidth - border, h - 30 - border, buttonWidth, 30), "OK" );
-   b->sigClick.connect( SigC::slot( *this, &AmmoTransferWindow::ok ));
+   b->sigClick.connect( sigc::mem_fun( *this, &AmmoTransferWindow::ok ));
    
    for ( TransferHandler::Transfers::iterator i = handler->getTransfers().begin(); i != handler->getTransfers().end(); ++i ) 
       (*i)->showAll();

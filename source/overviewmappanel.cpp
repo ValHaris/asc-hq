@@ -30,19 +30,19 @@ OverviewMapPanel::OverviewMapPanel( PG_Widget *parent, const PG_Rect &r, MapDisp
 {
    SpecialDisplayWidget* sdw = dynamic_cast<SpecialDisplayWidget*>( FindChild( "overviewmap", true ) );
    if ( sdw ) {
-      sdw->display.connect( SigC::slot( *this, &OverviewMapPanel::painter ));
-      sdw->sigMouseMotion.connect( SigC::slot( *this, &OverviewMapPanel::mouseMotion ));
-      sdw->sigMouseButtonDown.connect( SigC::slot( *this, &OverviewMapPanel::mouseButtonDown ));
+      sdw->display.connect( sigc::mem_fun( *this, &OverviewMapPanel::painter ));
+      sdw->sigMouseMotion.connect( sigc::mem_fun( *this, &OverviewMapPanel::mouseMotion ));
+      sdw->sigMouseButtonDown.connect( sigc::mem_fun( *this, &OverviewMapPanel::mouseButtonDown ));
    }
    
    ovmap = sdw;
    assert( ovmap );
       
-   OverviewMapHolder::generationComplete.connect ( SigC::slot( *this, &OverviewMapPanel::redraw ));
-   viewChanged.connect ( SigC::slot( *this, &OverviewMapPanel::redraw ));
+   OverviewMapHolder::generationComplete.connect ( sigc::mem_fun( *this, &OverviewMapPanel::redraw ));
+   viewChanged.connect ( sigc::mem_fun( *this, &OverviewMapPanel::redraw ));
 
-   lockMapdisplay.connect( SigC::slot( *this, &OverviewMapPanel::lockPanel ));
-   unlockMapdisplay.connect( SigC::slot( *this, &OverviewMapPanel::unlockPanel ));
+   lockMapdisplay.connect( sigc::mem_fun( *this, &OverviewMapPanel::lockPanel ));
+   unlockMapdisplay.connect( sigc::mem_fun( *this, &OverviewMapPanel::unlockPanel ));
    
 
 }

@@ -29,7 +29,7 @@
 #include "dialog.h"
 #include "cannedmessages.h"
 
-SigC::Signal0<void> tributeTransferred;
+sigc::signal<void> tributeTransferred;
 
 void MapNetwork :: searchfield ( int x, int y, int dir )
 {

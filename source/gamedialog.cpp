@@ -41,41 +41,41 @@ GameDialog* GameDialog::instance = 0;
 
 GameDialog::GameDialog():  ASC_PG_Dialog(NULL, PG_Rect( -1, -1, xSize, ySize ), "Game", SHOW_CLOSE ) {
     singlePlayerButton = new PG_Button(this, PG_Rect(buttonIndent, GuiDimension::getTopOffSet()*2, 150, GuiDimension::getButtonHeight()), "New Game", 90);
-    singlePlayerButton->sigClick.connect( SigC::slot( *this, &GameDialog::newGame));
+    singlePlayerButton->sigClick.connect( sigc::mem_fun( *this, &GameDialog::newGame));
 
     PG_Point p = ScreenToClient(singlePlayerButton->x, singlePlayerButton->y);
     multiPlayerButton = new PG_Button(this, PG_Rect(p.x, p.y + GuiDimension::getButtonHeight() + GuiDimension::getTopOffSet() , 150, GuiDimension::getButtonHeight()), "Continue Mail Game", 90);
-    multiPlayerButton->sigClick.connect( SigC::slot( *this, &GameDialog::multiGame));
+    multiPlayerButton->sigClick.connect( sigc::mem_fun( *this, &GameDialog::multiGame));
 
     p = ScreenToClient(multiPlayerButton->x, multiPlayerButton->y);
     loadGameButton = new PG_Button(this, PG_Rect(p.x, p.y + GuiDimension::getButtonHeight() + GuiDimension::getTopOffSet() , 150, GuiDimension::getButtonHeight()), "Load Game", 90);
-    loadGameButton->sigClick.connect( SigC::slot( *this, &GameDialog::loadGame));
+    loadGameButton->sigClick.connect( sigc::mem_fun( *this, &GameDialog::loadGame));
 
     p = ScreenToClient(loadGameButton->x, loadGameButton->y);
     saveGameButton = new PG_Button(this, PG_Rect(p.x, p.y + GuiDimension::getButtonHeight() + GuiDimension::getTopOffSet() , 150, GuiDimension::getButtonHeight()), "Save Game", 90);
-    saveGameButton->sigClick.connect( SigC::slot( *this, &GameDialog::saveGame));
+    saveGameButton->sigClick.connect( sigc::mem_fun( *this, &GameDialog::saveGame));
 
     p = ScreenToClient(loadGameButton->x, saveGameButton->y);
     PG_Button* superViseButton= new PG_Button(this, PG_Rect(p.x, p.y + GuiDimension::getButtonHeight() + GuiDimension::getTopOffSet() , 150, GuiDimension::getButtonHeight()), "Supervise Net Game", 90);
-    superViseButton->sigClick.connect( SigC::slot( *this, &GameDialog::supervise));
+    superViseButton->sigClick.connect( sigc::mem_fun( *this, &GameDialog::supervise));
 
 
     p = ScreenToClient(superViseButton->x, superViseButton->y);
     optionsButton = new PG_Button(this, PG_Rect(p.x, p.y + GuiDimension::getButtonHeight() + GuiDimension::getTopOffSet() , 150, GuiDimension::getButtonHeight()), "Options", 90);
-    optionsButton->sigClick.connect( SigC::slot( *this, &GameDialog::showOptions));
+    optionsButton->sigClick.connect( sigc::mem_fun( *this, &GameDialog::showOptions));
 
 
     p = ScreenToClient(optionsButton->x, optionsButton->y);
     exitButton  = new PG_Button(this, PG_Rect(p.x, p.y + GuiDimension::getButtonHeight() + GuiDimension::getTopOffSet() , 150, GuiDimension::getButtonHeight()), "Quit Game", 90);
-    exitButton->sigClick.connect( SigC::slot( *this, &GameDialog::exitGame));
+    exitButton->sigClick.connect( sigc::mem_fun( *this, &GameDialog::exitGame));
 
     if ( actmap ) {
       p = ScreenToClient(exitButton->x, exitButton->y);
       continueButton = new PG_Button(this, PG_Rect(p.x, p.y + GuiDimension::getButtonHeight() + 2 * GuiDimension::getTopOffSet() , 150, GuiDimension::getButtonHeight()), "Return to Game", 90);
-      continueButton->sigClick.connect( SigC::slot( *this, &GameDialog::closeWindow ));
+      continueButton->sigClick.connect( sigc::mem_fun( *this, &GameDialog::closeWindow ));
     }
 
-    sigClose.connect( SigC::slot( *this, &GameDialog::closeWindow ));    
+    sigClose.connect( sigc::mem_fun( *this, &GameDialog::closeWindow ));    
     SetInputFocus();
 }
 
@@ -246,11 +246,11 @@ const int ConfirmExitDialog::ySize = 120;
 ConfirmExitDialog::ConfirmExitDialog(PG_MessageObject* c): ASC_PG_Dialog(NULL, PG_Rect( 200, 100, xSize, ySize ), "End Game", MODAL ) {
 
     okButton = new PG_Button(this, PG_Rect(80, GuiDimension::getTopOffSet()*2, 150, GuiDimension::getButtonHeight()), "OK", 90);
-    okButton->sigClick.connect( SigC::slot( *this, &ConfirmExitDialog::exitGame ));
+    okButton->sigClick.connect( sigc::mem_fun( *this, &ConfirmExitDialog::exitGame ));
 
     PG_Point p = ScreenToClient(okButton->x, okButton->y);
     cancelButton = new PG_Button(this, PG_Rect(p.x + 150 + 10, p.y, 150, GuiDimension::getButtonHeight()), "Cancel", 90);
-    cancelButton->sigClick.connect( SigC::slot( *this, &ConfirmExitDialog::closeWindow ));
+    cancelButton->sigClick.connect( sigc::mem_fun( *this, &ConfirmExitDialog::closeWindow ));
 }
 
 
@@ -286,17 +286,17 @@ SinglePlayerDialog* SinglePlayerDialog::instance = 0;
 SinglePlayerDialog::SinglePlayerDialog( PG_MessageObject * c): ASC_PG_Dialog(NULL, PG_Rect( 200, 100, xSize, ySize ), "Single Player", SHOW_CLOSE ) {
 
     campaignButton = new PG_Button(this, PG_Rect(buttonIndent, GuiDimension::getTopOffSet()*2, 150, GuiDimension::getButtonHeight()), "Campaign", 90);
-    campaignButton->sigClick.connect( SigC::slot( *this, &SinglePlayerDialog::campaign ));
+    campaignButton->sigClick.connect( sigc::mem_fun( *this, &SinglePlayerDialog::campaign ));
 
     PG_Point p = ScreenToClient(campaignButton->x, campaignButton->y);
     singleLevelButton = new PG_Button(this, PG_Rect(p.x,  p.y + GuiDimension::getButtonHeight() + GuiDimension::getTopOffSet(), 150, GuiDimension::getButtonHeight()), "Single Level", 90);
-    singleLevelButton->sigClick.connect( SigC::slot( *this, &SinglePlayerDialog::singleLevel ));
+    singleLevelButton->sigClick.connect( sigc::mem_fun( *this, &SinglePlayerDialog::singleLevel ));
 
     p = ScreenToClient(singleLevelButton->x, singleLevelButton->y);
     cancelButton = new PG_Button(this, PG_Rect(p.x,  p.y + GuiDimension::getButtonHeight() + GuiDimension::getTopOffSet() * 2, 150, GuiDimension::getButtonHeight()), "Cancel", 90);
-    cancelButton->sigClick.connect( SigC::slot( *this, &SinglePlayerDialog::closeWindow ));
+    cancelButton->sigClick.connect( sigc::mem_fun( *this, &SinglePlayerDialog::closeWindow ));
 
-    sigClose.connect( SigC::slot( *this, &SinglePlayerDialog::closeWindow ));
+    sigClose.connect( sigc::mem_fun( *this, &SinglePlayerDialog::closeWindow ));
     caller = c;
     SetInputFocus();
 }
@@ -346,27 +346,27 @@ const int MultiPlayerDialog::buttonIndent = 140;
 MultiPlayerDialog::MultiPlayerDialog(PG_MessageObject* c): ASC_PG_Dialog(NULL, PG_Rect( 200, 100, xSize, ySize ), "Multi Player", SHOW_CLOSE ) {
 
     continueGameButton = new PG_Button(this, PG_Rect(buttonIndent, GuiDimension::getTopOffSet()*2, GuiDimension::getButtonWidth(), GuiDimension::getButtonHeight()), "Continue Network Game", 90);
-    continueGameButton->sigClick.connect( SigC::slot( *this, &MultiPlayerDialog::continueGame ));
+    continueGameButton->sigClick.connect( sigc::mem_fun( *this, &MultiPlayerDialog::continueGame ));
 
     PG_Point p = ScreenToClient(continueGameButton->x, continueGameButton->y);
     superViseButton = new PG_Button(this, PG_Rect(p.x,  p.y + GuiDimension::getButtonHeight() + GuiDimension::getTopOffSet(), GuiDimension::getButtonWidth(), GuiDimension::getButtonHeight()), "Supervise Network Game", 90);
-    superViseButton->sigClick.connect( SigC::slot( *this, &MultiPlayerDialog::superVise ));
+    superViseButton->sigClick.connect( sigc::mem_fun( *this, &MultiPlayerDialog::superVise ));
 
     p = ScreenToClient(superViseButton->x, superViseButton->y);
     setupNWButton = new PG_Button(this, PG_Rect(p.x,  p.y + GuiDimension::getButtonHeight() + GuiDimension::getTopOffSet(), GuiDimension::getButtonWidth(), GuiDimension::getButtonHeight()), "Setup Network Game", 90);
-    setupNWButton->sigClick.connect( SigC::slot( *this, &MultiPlayerDialog::closeWindow ));
+    setupNWButton->sigClick.connect( sigc::mem_fun( *this, &MultiPlayerDialog::closeWindow ));
     
      p = ScreenToClient(setupNWButton->x, setupNWButton->y);
     changeMapPasswordButton = new PG_Button(this, PG_Rect(p.x,  p.y + GuiDimension::getButtonHeight() + GuiDimension::getTopOffSet(), GuiDimension::getButtonWidth(), GuiDimension::getButtonHeight()), "Change Password", 90);
-    changeMapPasswordButton->sigClick.connect( SigC::slot( *this, &MultiPlayerDialog::changeMapPassword ));
+    changeMapPasswordButton->sigClick.connect( sigc::mem_fun( *this, &MultiPlayerDialog::changeMapPassword ));
 
     p = ScreenToClient(changeMapPasswordButton->x, changeMapPasswordButton->y);
     cancelButton = new PG_Button(this, PG_Rect(p.x,  p.y + GuiDimension::getButtonHeight() + GuiDimension::getTopOffSet() * 2, GuiDimension::getButtonWidth(), GuiDimension::getButtonHeight()), "Cancel", 90);
-    cancelButton->sigClick.connect( SigC::slot( *this, &MultiPlayerDialog::closeWindow ));
+    cancelButton->sigClick.connect( sigc::mem_fun( *this, &MultiPlayerDialog::closeWindow ));
 
-    cancelButton->sigClick.connect( SigC::slot( *this, &MultiPlayerDialog::closeWindow ));
+    cancelButton->sigClick.connect( sigc::mem_fun( *this, &MultiPlayerDialog::closeWindow ));
 
-    sigClose.connect( SigC::slot( *this, &MultiPlayerDialog::closeWindow ));
+    sigClose.connect( sigc::mem_fun( *this, &MultiPlayerDialog::closeWindow ));
 
     caller = c;
     SetInputFocus();
@@ -418,17 +418,17 @@ const int OptionsDialog::buttonIndent = 150;
 OptionsDialog::OptionsDialog(PG_MessageObject* c ): ASC_PG_Dialog(NULL, PG_Rect( 200, 100, xSize, ySize ), "Options", SHOW_CLOSE ) {
 
     soundButton = new PG_Button(this, PG_Rect(buttonIndent, GuiDimension::getTopOffSet()*2, 150, GuiDimension::getButtonHeight()), "Sound Options", 90);
-    soundButton->sigClick.connect( SigC::slot( *this, &OptionsDialog::showSoundOptions ));
+    soundButton->sigClick.connect( sigc::mem_fun( *this, &OptionsDialog::showSoundOptions ));
 
     PG_Point p = ScreenToClient(soundButton->x, soundButton->y);
     otherButton = new PG_Button(this, PG_Rect(p.x,  p.y + GuiDimension::getButtonHeight() + GuiDimension::getTopOffSet(), 150, GuiDimension::getButtonHeight()), "Game Options", 90);
-    otherButton->sigClick.connect( SigC::slot( *this, &OptionsDialog::showOtherOptions ));
+    otherButton->sigClick.connect( sigc::mem_fun( *this, &OptionsDialog::showOtherOptions ));
 
     p = ScreenToClient(otherButton->x, otherButton->y);
     PG_Button* okButton = new PG_Button(this, PG_Rect(p.x,  p.y + GuiDimension::getButtonHeight() + GuiDimension::getTopOffSet() * 2, 150, GuiDimension::getButtonHeight()), "Back", 90);
-    okButton->sigClick.connect( SigC::slot( *this, &OptionsDialog::closeWindow ));
+    okButton->sigClick.connect( sigc::mem_fun( *this, &OptionsDialog::closeWindow ));
 
-    sigClose.connect( SigC::slot( *this, &OptionsDialog::closeWindow ));
+    sigClose.connect( sigc::mem_fun( *this, &OptionsDialog::closeWindow ));
 
     caller = c;
     SetInputFocus();
@@ -495,16 +495,16 @@ GameOptionsDialog::GameOptionsDialog(PG_MessageObject* c): ASC_PG_Dialog(NULL, P
 
     p = ScreenToClient(promptEndOfTurnLabel->x, promptEndOfTurnLabel->y);
     changePasswordButton = new PG_Button(this, PG_Rect((xSize - GuiDimension::getButtonWidth())/2, p.y + GuiDimension::getTopOffSet() + GetTextHeight() * 2 , GuiDimension::getButtonWidth(), GuiDimension::getButtonHeight()), "Change Password");
-    changePasswordButton->sigClick.connect( SigC::slot( *this, &GameOptionsDialog::changePassword ));
+    changePasswordButton->sigClick.connect( sigc::mem_fun( *this, &GameOptionsDialog::changePassword ));
 
     okButton = new PG_Button(this, PG_Rect( buttonIndent, ySize - (GuiDimension::getButtonHeight() + GuiDimension::getTopOffSet()), GuiDimension::getButtonWidth(), GuiDimension::getButtonHeight()), "OK", 90);
-    okButton->sigClick.connect( SigC::slot( *this, &GameOptionsDialog::ok ));
+    okButton->sigClick.connect( sigc::mem_fun( *this, &GameOptionsDialog::ok ));
 
     p = ScreenToClient(okButton->x, okButton->y);
     cancelButton = new PG_Button(this, PG_Rect(p.x + GuiDimension::getButtonWidth() + 10, p.y, GuiDimension::getButtonWidth(), GuiDimension::getButtonHeight()), "Cancel", 90);
-    cancelButton->sigClick.connect( SigC::slot( *this, &GameOptionsDialog::closeWindow ));
+    cancelButton->sigClick.connect( sigc::mem_fun( *this, &GameOptionsDialog::closeWindow ));
 
-    sigClose.connect( SigC::slot( *this, &GameOptionsDialog::closeWindow ));
+    sigClose.connect( sigc::mem_fun( *this, &GameOptionsDialog::closeWindow ));
 
     caller = c;
     SetInputFocus();
@@ -556,13 +556,13 @@ ChangePasswordDialog::ChangePasswordDialog(PG_MessageObject* c): ASC_PG_Dialog(N
     
 
     okButton = new PG_Button(this, PG_Rect( buttonIndent, ySize - (GuiDimension::getButtonHeight() + GuiDimension::getTopOffSet()), GuiDimension::getButtonWidth(), GuiDimension::getButtonHeight()), "OK", 90);
-    okButton->sigClick.connect( SigC::slot( *this, &ChangePasswordDialog::ok ));
+    okButton->sigClick.connect( sigc::mem_fun( *this, &ChangePasswordDialog::ok ));
 
     p = ScreenToClient(okButton->x, okButton->y);
     cancelButton = new PG_Button(this, PG_Rect(p.x + GuiDimension::getButtonWidth() + 10, p.y, GuiDimension::getButtonWidth(), GuiDimension::getButtonHeight()), "Cancel", 90);
-    cancelButton->sigClick.connect( SigC::slot( *this, &ChangePasswordDialog::closeWindow ));
+    cancelButton->sigClick.connect( sigc::mem_fun( *this, &ChangePasswordDialog::closeWindow ));
     
-    sigClose.connect( SigC::slot( *this, &ChangePasswordDialog::closeWindow ));
+    sigClose.connect( sigc::mem_fun( *this, &ChangePasswordDialog::closeWindow ));
 
     caller = c;
     SetInputFocus();		
@@ -614,7 +614,7 @@ void ChangeDefaultPasswordDialog::changeDefaultPasswordDialog(PG_MessageObject* 
  MousePreferencesDialog::MousePreferencesDialog(PG_MessageObject* c) : ASC_PG_Dialog(NULL, PG_Rect( 200, 100, xSize, ySize ), "Mouse Options",
         SHOW_CLOSE ) {
    
-   sigClose.connect( SigC::slot( *this, &MousePreferencesDialog::closeWindow ));
+   sigClose.connect( sigc::mem_fun( *this, &MousePreferencesDialog::closeWindow ));
 
     caller = c;
     SetInputFocus();
@@ -715,7 +715,7 @@ SaveGameBaseDialog::SaveGameBaseDialog(const ASCString& title, PG_MessageObject*
     PG_Point p = ScreenToClient(fileList->x, fileList->y);
     /* slider = new PG_ScrollBar(this, PG_Rect(xSize - (GuiDimension::getLeftIndent() + GuiDimension::getSliderWidth()) , p.y, GuiDimension::getSliderWidth(), fileList->Height()), PG_ScrollBar::VERTICAL);
      slider->SetRange(0,fileList->GetWidgetCount());
-     slider->sigScrollTrack.connect( SigC::slot( *this, &SaveGameBaseDialog::handleSlider));*/
+     slider->sigScrollTrack.connect( sigc::mem_fun( *this, &SaveGameBaseDialog::handleSlider));*/
 
 
     fileNameLabel = new PG_Label(this, PG_Rect(GuiDimension::getLeftIndent(), p.y + fileList->Height() + GuiDimension::getTopOffSet(), 10, 10), "Filename: ");
@@ -735,13 +735,13 @@ SaveGameBaseDialog::SaveGameBaseDialog(const ASCString& title, PG_MessageObject*
 
 
     okButton = new PG_Button(this, PG_Rect( buttonIndent, ySize - (GuiDimension::getButtonHeight() + GuiDimension::getTopOffSet()), GuiDimension::getButtonWidth(), GuiDimension::getButtonHeight()), "OK", 90);
-    okButton->sigClick.connect( SigC::slot( *this, &SaveGameBaseDialog::ok ));
+    okButton->sigClick.connect( sigc::mem_fun( *this, &SaveGameBaseDialog::ok ));
 
     p = ScreenToClient(okButton->x, okButton->y);
     cancelButton = new PG_Button(this, PG_Rect(p.x + GuiDimension::getButtonWidth() + 10, p.y, GuiDimension::getButtonWidth(), GuiDimension::getButtonHeight()), "Cancel", 90);
-    cancelButton->sigClick.connect( SigC::slot( *this, &SaveGameBaseDialog::closeWindow ));
+    cancelButton->sigClick.connect( sigc::mem_fun( *this, &SaveGameBaseDialog::closeWindow ));
 
-    sigClose.connect( SigC::slot( *this, &SaveGameBaseDialog::closeWindow ));
+    sigClose.connect( sigc::mem_fun( *this, &SaveGameBaseDialog::closeWindow ));
 
     caller = c;
     SetInputFocus();

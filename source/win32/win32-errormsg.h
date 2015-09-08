@@ -16,7 +16,7 @@
 #include "../ascstring.h"
 
 
-  class Win32IoErrorHandler : public SigC::Object {
+  class Win32IoErrorHandler : public sigc::trackable {
        void printError( const ASCString& msg );
      public:
         Win32IoErrorHandler();

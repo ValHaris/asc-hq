@@ -343,7 +343,7 @@ void selectFields( FieldAddressing::Fields& fields )
    sbfm.RunModal();
 }
 
-class UnitListFactory: public SelectionItemFactory, public SigC::Object  {
+class UnitListFactory: public SelectionItemFactory, public sigc::trackable  {
    public:
       typedef list<const VehicleType*> UnitList;
    private:
@@ -643,6 +643,6 @@ BitMapEditor::BitMapEditor( BitType& value, const ASCString& title, const vector
    }
 
    PG_Button* ok = new PG_Button( this, PG_Rect( Width() - 100, Height() - 40, 90, 30), "OK" );
-   ok->sigClick.connect( SigC::slot( *this, &BitMapEditor::ok ));
+   ok->sigClick.connect( sigc::mem_fun( *this, &BitMapEditor::ok ));
 }
 

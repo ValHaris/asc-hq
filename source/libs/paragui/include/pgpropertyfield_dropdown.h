@@ -41,7 +41,7 @@
    from the dropdown widget.
  */
 template<typename StringType, typename iterator = char*>
-class PG_PropertyField_DropDown: public PG_PropertyEditor::PG_PropertyEditorField, public SigC::Object  {
+class PG_PropertyField_DropDown: public PG_PropertyEditor::PG_PropertyEditorField, public sigc::trackable  {
 private:
 	StringType* myProperty;
 	PG_DropDown* dropdown;
@@ -56,11 +56,11 @@ private:
 		PG_Rect r = propertyEditor->RegisterProperty( name, this );
 		dropdown = new PG_DropDown( propertyEditor, r, -1, propertyEditor->GetStyleName("DropDownSelectorProperty") );
 		dropdown->SetEditable( false );
-		dropdown->sigSelectItem.connect( SigC::slot(*this, &PG_PropertyField_DropDown::click));
+		dropdown->sigSelectItem.connect( sigc::mem_fun(*this, &PG_PropertyField_DropDown::click));
 	}
 
 public:
-	typedef PG_Signal2<PG_PropertyField_DropDown*, StringType> DropDownPropertySignal;
+	typedef sigc::signal<PG_PropertyField_DropDown*, StringType> DropDownPropertySignal;
 	DropDownPropertySignal sigValueChanged;
 	DropDownPropertySignal sigValueApplied;
 

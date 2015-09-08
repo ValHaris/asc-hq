@@ -31,7 +31,7 @@
 #include "actions/changeview.h"
 #include "actions/viewregistration.h"
 
-SigC::Signal0<void> buildingSeen;
+sigc::signal<void> buildingSeen;
 
 
 void         tcomputeview::initviewcalculation(  int view, int jamming, int sx, int sy, int _mode, int _height  )  // mode: +1 = add view  ;  -1 = remove view

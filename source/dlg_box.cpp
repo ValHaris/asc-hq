@@ -3375,7 +3375,7 @@ class ViewTextQuery : public ASC_PG_Dialog {
          if ( button2.length() ) {
             r = PG_Rect( 10, Height() - 40, Width()/2-15, 30 );
             PG_Button* b = new PG_Button( this, PG_Rect( Width()/2+5, Height() - 40, Width()/2-15, 30 ), button2 );
-            b->sigClick.connect( SigC::bind( SigC::slot( *this, &ViewTextQuery::quitModalLoop ), 1));
+            b->sigClick.connect( sigc::bind( sigc::mem_fun( *this, &ViewTextQuery::quitModalLoop ), 1));
             b->activateHotkey(0);
          } else 
             r = PG_Rect( 10, Height() - 40, Width() - 20, 30 );
@@ -3383,7 +3383,7 @@ class ViewTextQuery : public ASC_PG_Dialog {
 
 
         PG_Button* b = new PG_Button( this, r, button1 );
-        b->sigClick.connect( SigC::bind( SigC::slot( *this, &ViewTextQuery::quitModalLoop ), 0));
+        b->sigClick.connect( sigc::bind( sigc::mem_fun( *this, &ViewTextQuery::quitModalLoop ), 0));
         b->activateHotkey(0);
 
         new TextRenderer( this, PG_Rect( 10, 30, Width()-20, Height() - 70 ), readtextmessage( id ));

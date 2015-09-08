@@ -36,6 +36,7 @@
 
 #include <list>
 #include <utility>
+#include <sigc++/sigc++.h>
 
 #include "pgmessageobject.h"
 #include "pgscreenupdater.h"
@@ -117,11 +118,9 @@ public:
 	Signal type declaration
 	**/
 
-	template<class datatype = PG_Pointer>
-class SignalXMLTag : public PG_Signal1<PG_XMLTag*, datatype> {}
+class SignalXMLTag : public sigc::signal<bool, PG_XMLTag*> {}
 	;
-	template<class datatype = PG_Pointer>
-class SignalAppIdle : public PG_Signal1<PG_MessageObject*, datatype> {}
+class SignalAppIdle : public sigc::signal<bool> {}
 	;
 
 	/**  */
@@ -609,8 +608,8 @@ class SignalAppIdle : public PG_Signal1<PG_MessageObject*, datatype> {}
 	my_ScreenUpdater->UpdateRects( screen, numrects, rects);   	
    }
    
-	SignalXMLTag<> sigXMLTag;
-	SignalAppIdle<> sigAppIdle;
+	SignalXMLTag sigXMLTag;
+	SignalAppIdle sigAppIdle;
 
 
    class BulkModeActivator {

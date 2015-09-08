@@ -151,7 +151,7 @@ class ReplayRecorderWatcherGlobal {
 } replayRecorderWatcherGlobal;
 
 
- class ReplayRecorder : public SigC::Object {
+ class ReplayRecorder : public sigc::trackable {
    
    VideoRecorder* rec;
    SigC::Connection connection;
@@ -177,7 +177,7 @@ class ReplayRecorderWatcherGlobal {
          }
          
          if ( !connection.connected() )
-            connection = postScreenUpdate.connect( SigC::slot( *this, &ReplayRecorder::screenUpdate ));
+            connection = postScreenUpdate.connect( sigc::mem_fun( *this, &ReplayRecorder::screenUpdate ));
       }
       
       void pause()

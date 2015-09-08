@@ -29,7 +29,7 @@ class tnstream;
 class Command;
 class MemoryStreamStorage;
 
-class TaskContainer : public AbstractTaskContainer, public SigC::Object {
+class TaskContainer : public AbstractTaskContainer, public sigc::trackable {
       GameMap* gamemap;
       static void hook( GameMap& gamemap );
       static void getCommand( GameMap* gamemap, Command& command );

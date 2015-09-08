@@ -40,18 +40,18 @@
 */
 
 template<typename B>
-class PG_PropertyField_Checkbox : public PG_PropertyEditor::PG_PropertyEditorField, public SigC::Object  {
+class PG_PropertyField_Checkbox : public PG_PropertyEditor::PG_PropertyEditorField, public sigc::trackable  {
 	B* myProperty;
 	PG_CheckButton* checkbox;
 	bool switchInverted;
 
-	bool click( bool b) {
+	bool click( const PG_Widget* button, bool b) {
 		sigValueChanged(this,b);
 		return true;
 	}
 
 public:
-	typedef PG_Signal2<PG_PropertyField_Checkbox*, B> CheckboxPropertySignal;
+	typedef sigc::signal<void, PG_PropertyField_Checkbox*, B> CheckboxPropertySignal;
 	CheckboxPropertySignal sigValueChanged;
 	CheckboxPropertySignal sigValueApplied;
 
@@ -64,7 +64,7 @@ public:
 	PG_PropertyField_Checkbox( PG_PropertyEditor* propertyEditor, const std::string& name, B* b, bool inverted = false ) : myProperty( b ), switchInverted( inverted ) {
 		PG_Rect r = propertyEditor->RegisterProperty( name, this );
 		checkbox = new PG_CheckButton( propertyEditor, r, PG_NULLSTR, -1, propertyEditor->GetStyleName("BoolProperty") );
-		checkbox->sigClick.connect( SigC::slot(*this, &PG_PropertyField_Checkbox::click));
+		checkbox->sigClick.connect( sigc::mem_fun(*this, &PG_PropertyField_Checkbox<B>::click));
 		Reload();
 	};
 
@@ -77,7 +77,7 @@ public:
 	PG_PropertyField_Checkbox( PG_PropertyEditor* propertyEditor, const std::string& name, const B& b, bool inverted = false ) : myProperty( NULL ), switchInverted( inverted ) {
 		PG_Rect r = propertyEditor->RegisterProperty( name, this );
 		checkbox = new PG_CheckButton( propertyEditor, r, PG_NULLSTR, -1, propertyEditor->GetStyleName("BoolProperty") );
-		checkbox->sigClick.connect( SigC::slot(*this, &PG_PropertyField_Checkbox::click));
+		checkbox->sigClick.connect( sigc::mem_fun(*this, &PG_PropertyField_Checkbox::click));
 
 		if ( bool(b) ^ switchInverted )
 			checkbox->SetPressed();

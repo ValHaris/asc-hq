@@ -41,7 +41,7 @@
 	Abstract base class for various property editor fields .
 */
 
-class DECLSPEC PG_PropertyEditor_LineField : public PG_PropertyEditor::PG_PropertyEditorField, public SigC::Object {
+class DECLSPEC PG_PropertyEditor_LineField : public PG_PropertyEditor::PG_PropertyEditorField, public sigc::trackable {
 public:
 	void Focus() {
 		lineEdit->EditBegin();
@@ -53,11 +53,11 @@ protected:
 	PG_PropertyEditor_LineField ( PG_PropertyEditor* propertyEditor, const std::string& name ) {
 		PG_Rect r = propertyEditor->RegisterProperty( name, this );
 		lineEdit = new PG_LineEdit( propertyEditor, r, propertyEditor->GetStyleName( "LineFieldProperty" ) );
-		lineEdit->sigEditEnd.connect( SigC::slot( *this, &PG_PropertyEditor_LineField::EditEnd ));
+		lineEdit->sigEditEnd.connect( sigc::mem_fun( *this, &PG_PropertyEditor_LineField::EditEnd ));
 	}
 
 
-	virtual bool EditEnd() = 0;
+	virtual bool EditEnd(PG_LineEdit* widget) = 0;
 };
 
 #endif

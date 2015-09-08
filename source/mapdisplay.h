@@ -100,7 +100,7 @@ class MapRenderer {
       
       int bitmappedHeight2pass( int height );
       
-      SigC::Signal2<void,Surface&,int> additionalItemDisplayHook;
+      sigc::signal<void,Surface&,int> additionalItemDisplayHook;
       
       void addMapLayer( MapLayer* mapLayer ) { layerRenderer.push_back( mapLayer ); };
      
@@ -190,7 +190,7 @@ class MapDisplayPG: public PG_Widget, protected MapRenderer {
       void changeZoom( int delta) { setNewZoom( getZoom() + delta); };
       void setNewZoom( int zoom );
       int getZoom() const { return zoom; };
-      SigC::Signal1<void, int> newZoom;
+      sigc::signal<void, int> newZoom;
       
       MapCoordinate screenPos2mapPos( const SPoint& pos );
       MapCoordinate widgetPos2mapPos( const SPoint& pos );
@@ -295,7 +295,7 @@ class MapDisplayPG: public PG_Widget, protected MapRenderer {
       void activateMapLayer( const ASCString& name, bool active );
       void toggleMapLayer( const ASCString& name );
       bool layerActive( const ASCString& name );
-      SigC::Signal2<void, bool, const ASCString&> layerChanged;
+      sigc::signal<void, bool, const ASCString&> layerChanged;
       void getActiveLayers( vector<ASCString>& list );
 
 
@@ -311,7 +311,7 @@ class MapDisplayPG: public PG_Widget, protected MapRenderer {
            \param int  the button that was pressed
            \param int  the priority of the signal
       */
-      SigC::Signal5<bool,const MapCoordinate&, const SPoint&, bool, int, int> mouseButtonOnField;
+      sigc::signal<bool,const MapCoordinate&, const SPoint&, bool, int, int> mouseButtonOnField;
 
       /** Signal that is fired when the mouse is dragged onto a new field with mouse buttons pressed.
            \param MapCoordinate the Coordinate of the field that was clicked
@@ -319,7 +319,7 @@ class MapDisplayPG: public PG_Widget, protected MapRenderer {
            \param bool true if the cursor had been repositioned
            \param int  the priority of the signal
        */
-      SigC::Signal4<bool,const MapCoordinate&, const SPoint&, bool, int> mouseDraggedToField;
+      sigc::signal<bool,const MapCoordinate&, const SPoint&, bool, int> mouseDraggedToField;
       
       
       struct Cursor {
@@ -361,8 +361,8 @@ class MapDisplayPG: public PG_Widget, protected MapRenderer {
            
 };
 
-extern SigC::Signal0<void> lockMapdisplay;
-extern SigC::Signal0<void> unlockMapdisplay;
+extern sigc::signal<void> lockMapdisplay;
+extern sigc::signal<void> unlockMapdisplay;
 
 
 typedef MapDisplayPG::LockDisplay tlockdispspfld;
