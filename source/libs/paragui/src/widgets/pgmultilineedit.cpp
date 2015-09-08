@@ -17,7 +17,7 @@ PG_MultiLineEdit::PG_MultiLineEdit(PG_Widget* parent, const PG_Rect& r, const st
 	my_mark = -1;
 }
 
-bool PG_MultiLineEdit::handleScroll(PG_ScrollBar* widget, long data) {
+bool PG_MultiLineEdit::handleScroll(long data) {
 	SetVPosition(my_vscroll->GetPosition());
 	my_allowHiddenCursor = true;
 	return true;

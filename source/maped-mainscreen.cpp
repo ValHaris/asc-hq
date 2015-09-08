@@ -418,39 +418,39 @@ Maped_MainScreenWidget::Maped_MainScreenWidget( PG_Application& application )
    int ypos = 180;
 
    PG_Button* buttonC = new PG_Button( this, PG_Rect( xpos, ypos, w, 20), "Clear Selection" );
-   buttonC->sigClick.connect( sigc::mem_fun( *this, &Maped_MainScreenWidget::clearSelection ));
+   buttonC->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &Maped_MainScreenWidget::clearSelection )));
    ypos += 25;
 
    
    PG_Button* button = new PG_Button( this, PG_Rect( xpos, ypos, w, 20), "Select Vehicle" );
-   button->sigClick.connect( sigc::mem_fun( *this, &Maped_MainScreenWidget::selectVehicle ));
+   button->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &Maped_MainScreenWidget::selectVehicle )));
    ypos += 25;
    
    PG_Button* button2 = new PG_Button( this, PG_Rect( xpos, ypos, w, 20), "Select Building" );
-   button2->sigClick.connect( sigc::mem_fun( *this, &Maped_MainScreenWidget::selectBuilding ));
+   button2->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &Maped_MainScreenWidget::selectBuilding )));
    ypos += 25;
 
    PG_Button* button3 = new PG_Button( this, PG_Rect( xpos, ypos, w - 50, 20), "Sel. Object" );
-   button3->sigClick.connect( sigc::mem_fun( *this, &Maped_MainScreenWidget::selectObject ));
+   button3->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &Maped_MainScreenWidget::selectObject )));
 
    PG_Button* button3b = new PG_Button( this, PG_Rect( xpos+ w - 45, ypos, 45, 20), "List" );
-   button3b->sigClick.connect( sigc::mem_fun( *this, &Maped_MainScreenWidget::selectObjectList ));
+   button3b->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &Maped_MainScreenWidget::selectObjectList )));
    ypos += 25;
 
 
    PG_Button* button4 = new PG_Button( this, PG_Rect( xpos, ypos, w - 50, 20), "Sel. Terrain" );
-   button4->sigClick.connect( sigc::mem_fun( *this, &Maped_MainScreenWidget::selectTerrain ));
+   button4->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &Maped_MainScreenWidget::selectTerrain )));
 
    PG_Button* button4b = new PG_Button( this, PG_Rect( xpos + w - 45, ypos, 45, 20), "List" );
-   button4b->sigClick.connect( sigc::mem_fun( *this, &Maped_MainScreenWidget::selectTerrainList ));
+   button4b->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &Maped_MainScreenWidget::selectTerrainList )));
    ypos += 25;
 
    PG_Button* button5 = new PG_Button( this, PG_Rect( xpos, ypos, w, 20), "Select Mine" );
-   button5->sigClick.connect( sigc::mem_fun( *this, &Maped_MainScreenWidget::selectMine ));
+   button5->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &Maped_MainScreenWidget::selectMine )));
    ypos += 25;
     
    PG_Button* button6 = new PG_Button( this, PG_Rect( xpos, ypos, w, 20), "Lua Brush" );
-   button6->sigClick.connect( sigc::mem_fun( *this, &Maped_MainScreenWidget::selectLuaBrush ));
+   button6->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &Maped_MainScreenWidget::selectLuaBrush )));
    ypos += 25;
    
    

@@ -126,18 +126,18 @@
                      bnum = 2;
 
                   
-                  addButton ( "~O~k", bnum ) -> sigClick.connect( sigc::mem_fun( *this, &PasswordDialog::ok ));
+                  addButton ( "~O~k", bnum ) -> sigClick.connect( sigc::hide( sigc::mem_fun( *this, &PasswordDialog::ok )));
                   
                   if ( firstTime && defaultAllowed ) {
-                     addButton ( "~D~efault", bnum ) -> sigClick.connect( sigc::mem_fun( *this, &PasswordDialog::def ));
+                     addButton ( "~D~efault", bnum ) -> sigClick.connect( sigc::hide( sigc::mem_fun( *this, &PasswordDialog::def )));
                      if ( cancelAllowed ) {
-                        addButton ( "~C~ancel", bnum ) -> sigClick.connect( sigc::mem_fun( *this, &PasswordDialog::cancel ));
+                        addButton ( "~C~ancel", bnum ) -> sigClick.connect( sigc::hide( sigc::mem_fun( *this, &PasswordDialog::cancel )));
                      }
                   } else {
                      if ( cancelAllowed ) {
-                        addButton ( "~C~ancel", bnum ) -> sigClick.connect( sigc::mem_fun( *this, &PasswordDialog::cancel ));
+                        addButton ( "~C~ancel", bnum ) -> sigClick.connect( sigc::hide( sigc::mem_fun( *this, &PasswordDialog::cancel )));
                      } else {
-                        addButton ( "~A~bort", bnum ) -> sigClick.connect( sigc::mem_fun( *this, &PasswordDialog::cancel ));
+                        addButton ( "~A~bort", bnum ) -> sigClick.connect( sigc::hide( sigc::mem_fun( *this, &PasswordDialog::cancel )));
                      }
                   }
                };

@@ -293,14 +293,14 @@ class EditTechAdapter : public ASC_PG_Dialog
          playerItemSelector = new ItemSelectorWidget( eright, PG_Rect( 10, 10, eright->Width() - 20, eright->Height()-20 ), playerFactory );
          
          
-         (new PG_Button(this, PG_Rect( left.x + left.Width() + 10, left.y, right.x - left.x - left.Width() - 20,  30), "Add >>" ))->sigClick.connect( sigc::mem_fun( *this, &EditTechAdapter::add));
-         (new PG_Button(this, PG_Rect( left.x + left.Width() + 10, left.y + 40, right.x - left.x - left.Width() - 20,  30), "Remove <<" ))->sigClick.connect( sigc::mem_fun( *this, &EditTechAdapter::remove));
+         (new PG_Button(this, PG_Rect( left.x + left.Width() + 10, left.y, right.x - left.x - left.Width() - 20,  30), "Add >>" ))->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &EditTechAdapter::add)));
+         (new PG_Button(this, PG_Rect( left.x + left.Width() + 10, left.y + 40, right.x - left.x - left.Width() - 20,  30), "Remove <<" ))->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &EditTechAdapter::remove)));
          
          Emboss* deps = new Emboss(this, PG_Rect ( 10, Height() - 160, 330, 120 ), true);
          objectList = new TextRenderer( deps, PG_Rect(1,1,deps->Width() - 2, deps->Height() - 2) );
 
-         AddStandardButton("~O~K")->sigClick.connect( sigc::mem_fun( *this, &EditTechAdapter::ok ));
-         AddStandardButton("~C~ancel")->sigClick.connect( sigc::mem_fun( *this, &EditTechAdapter::cancel ));
+         AddStandardButton("~O~K")->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &EditTechAdapter::ok )));
+         AddStandardButton("~C~ancel")->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &EditTechAdapter::cancel )));
       };
 };
 

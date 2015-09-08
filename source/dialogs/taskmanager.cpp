@@ -76,8 +76,8 @@ class TaskWidget: public ActionWidget
          this->taskContainer = taskContainer;
          this->command = command;
          
-         (new PG_Button(this, PG_Rect( width-70, 5, 60, 15 ), "Run"))->sigClick.connect( sigc::mem_fun( *this, &TaskWidget::run ));
-         (new PG_Button(this, PG_Rect( width-70, 22, 60, 15 ), "Cancel"))->sigClick.connect( sigc::mem_fun( *this, &TaskWidget::cancel ));
+         (new PG_Button(this, PG_Rect( width-70, 5, 60, 15 ), "Run"))->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &TaskWidget::run )));
+         (new PG_Button(this, PG_Rect( width-70, 22, 60, 15 ), "Cancel"))->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &TaskWidget::cancel )));
       }
    protected:
       bool click( )
@@ -176,8 +176,8 @@ class TaskManager : public ASC_PG_Dialog {
       TaskManager( GameMap* map ) : ASC_PG_Dialog( NULL, PG_Rect( -1, -1, 600, 550 ), "Manage Tasks" ), gamemap( map ) 
       {
          StandardButtonDirection( Horizontal );
-         AddStandardButton("Close")->sigClick.connect( sigc::mem_fun( *this, &TaskManager::ok ));
-         AddStandardButton("Run All")->sigClick.connect( sigc::mem_fun( *this, &TaskManager::run ));
+         AddStandardButton("Close")->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &TaskManager::ok )));
+         AddStandardButton("Run All")->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &TaskManager::run )));
          selection = new ItemSelectorWidget( this, PG_Rect( 5, 20, Width()-10, Height() - 70 ), new TaskFactory( map ));
       }
    

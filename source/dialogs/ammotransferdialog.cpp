@@ -175,7 +175,7 @@ AmmoTransferWindow :: AmmoTransferWindow ( ContainerBase* source, ContainerBase*
       PG_CheckButton* production = new PG_CheckButton( area, PG_Rect( border, ypos, area->w - 30, 20 ), "allow ammo production" );
       if ( CGameOptions::Instance()->autoproduceammunition )
          production->SetPressed(  );
-      production->sigClick.connect( sigc::mem_fun( *handler, &TransferHandler::allowAmmoProduction ));
+      production->sigClick.connect( sigc::hide( sigc::mem_fun( *handler, &TransferHandler::allowAmmoProduction )));
       ypos += 30;
    }
    
@@ -186,7 +186,7 @@ AmmoTransferWindow :: AmmoTransferWindow ( ContainerBase* source, ContainerBase*
 
    int buttonWidth = 150;
    PG_Button* b = new PG_Button( this, PG_Rect( w - buttonWidth - border, h - 30 - border, buttonWidth, 30), "OK" );
-   b->sigClick.connect( sigc::mem_fun( *this, &AmmoTransferWindow::ok ));
+   b->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &AmmoTransferWindow::ok )));
    
    for ( TransferHandler::Transfers::iterator i = handler->getTransfers().begin(); i != handler->getTransfers().end(); ++i ) 
       (*i)->showAll();

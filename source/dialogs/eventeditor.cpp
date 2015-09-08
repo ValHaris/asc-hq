@@ -76,7 +76,7 @@ class EventEditor : public ASC_PG_Dialog {
          event->action->setup();
       }
 
-      bool setupTrigger( int num )
+      bool setupTrigger( PG_Widget* w, int num )
       {
          if ( event->trigger.size() > num )
             if ( event->trigger[num] )
@@ -111,7 +111,7 @@ class EventEditor : public ASC_PG_Dialog {
          }
       }
       
-      bool invertTrigger( bool invert, int e )
+      bool invertTrigger( PG_Widget* w, bool invert, int e )
       {
          if ( event->trigger.size() > e ) {
             event->trigger[e]->invert = invert;
@@ -180,7 +180,7 @@ class EventEditor : public ASC_PG_Dialog {
                   eventType->SelectItem ( i );
 
          eventType->selectionSignal.connect( sigc::mem_fun( *this, &EventEditor::actionSelected ));
-         (new PG_Button( this, PG_Rect( labelWidth + 50 + 300, ypos, 100, 25 ), "setup"))->sigClick.connect( sigc::mem_fun( *this, &EventEditor::setupEvent ));
+         (new PG_Button( this, PG_Rect( labelWidth + 50 + 300, ypos, 100, 25 ), "setup"))->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &EventEditor::setupEvent )));
          ypos += 40;
 
          new PG_Label( this, PG_Rect( 10, ypos, labelWidth, 25 ), "Description:" );
@@ -243,8 +243,8 @@ class EventEditor : public ASC_PG_Dialog {
          ypos += 40;
 
          
-         AddStandardButton ( "Cancel" )->sigClick.connect( sigc::mem_fun( *this, &EventEditor::QuitModal ));
-         AddStandardButton ( "OK" )->sigClick.connect( sigc::mem_fun( *this, &EventEditor::ok ));
+         AddStandardButton ( "Cancel" )->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &EventEditor::QuitModal )));
+         AddStandardButton ( "OK" )->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &EventEditor::ok )));
          
       };
 
@@ -366,16 +366,16 @@ class EventList : public ASC_PG_Dialog {
       {
          int w = 500;
          PG_Button* b = new PG_Button( this, PG_Rect ( w, 40, 90, 25 ), "~N~ew" );
-         b->sigClick.connect( sigc::mem_fun( *this, &EventList::ButtonNew ));
+         b->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &EventList::ButtonNew )));
 
          b = new PG_Button( this, PG_Rect ( w, 80, 90, 25 ), "~E~dit" );
-         b->sigClick.connect( sigc::mem_fun( *this, &EventList::ButtonEdit ));
+         b->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &EventList::ButtonEdit )));
          
          b = new PG_Button( this, PG_Rect ( w, 120, 90, 25 ), "~D~elete" );
-         b->sigClick.connect( sigc::mem_fun( *this, &EventList::ButtonDelete ));
+         b->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &EventList::ButtonDelete )));
          
          b = new PG_Button( this, PG_Rect ( w, 160, 90, 25 ), "~O~K" );
-         b->sigClick.connect( sigc::mem_fun( *this, &EventList::ButtonOK ));
+         b->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &EventList::ButtonOK )));
          
 
          listbox = new PG_ListBox( this, PG_Rect( 20, 40, w - 30, Height()-50 ));

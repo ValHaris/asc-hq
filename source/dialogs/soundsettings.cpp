@@ -34,8 +34,9 @@ class SoundSettings : public ASC_PG_Dialog
    protected:
 
       bool radioButtonEvent( PG_RadioButton* button, bool state);
-      bool buttonEvent( PG_Button* button );
-      bool eventScrollTrack(PG_ScrollBar* slider, long data);
+      bool buttonEvent( );
+      bool eventScrollTrack_sound(long data);
+      bool eventScrollTrack_music(long data);
 
       bool diag();
 };
@@ -53,12 +54,12 @@ SoundSettings::SoundSettings(PG_Widget* parent, const PG_Rect& r, PG_MessageObje
    sSettings = CGameOptions::Instance()->sound;
 
    PG_CheckButton* musb = new PG_CheckButton(this, PG_Rect( 30, 50, 200, 20 ), "Enable Music", 1 );
-   musb->sigClick.connect(sigc::mem_fun( *this, &SoundSettings::radioButtonEvent ));
+   musb->sigClick.connect( sigc::mem_fun( *this, &SoundSettings::radioButtonEvent ));
    new PG_Label ( this, PG_Rect(30, 80, 150, 20), "Music Volume" );
    PG_Slider* mus = new PG_Slider(this, PG_Rect(180, 80, 200, 20), PG_Slider::HORIZONTAL, 21);
    mus->SetRange(0,100);
    mus->SetPosition(sSettings.musicVolume);
-   mus->sigScrollTrack.connect( sigc::mem_fun( *this, &SoundSettings::eventScrollTrack ));
+   mus->sigScrollTrack.connect( sigc::mem_fun( *this, &SoundSettings::eventScrollTrack_music ));
 
    if ( sSettings.muteMusic )
       musb->SetUnpressed();
@@ -67,12 +68,12 @@ SoundSettings::SoundSettings(PG_Widget* parent, const PG_Rect& r, PG_MessageObje
 
 
    PG_CheckButton* sndb = new PG_CheckButton(this, PG_Rect( 30, 150, 200, 20 ), "Enable Sound", 2 );
-   sndb->sigClick.connect(sigc::mem_fun( *this, &SoundSettings::radioButtonEvent ));
+   sndb->sigClick.connect( sigc::mem_fun( *this, &SoundSettings::radioButtonEvent ));
    new PG_Label ( this, PG_Rect(30, 180, 150, 20), "Sound Volume" );
    PG_Slider* snd = new PG_Slider(this, PG_Rect(180, 180, 200, 20), PG_Slider::HORIZONTAL, 31);
    snd->SetRange(0,100);
    snd->SetPosition(sSettings.soundVolume);
-   snd->sigScrollTrack.connect( sigc::mem_fun( *this, &SoundSettings::eventScrollTrack ));
+   snd->sigScrollTrack.connect( sigc::mem_fun( *this, &SoundSettings::eventScrollTrack_sound ));
    if ( sSettings.muteEffects )
       sndb->SetUnpressed();
    else
@@ -80,16 +81,16 @@ SoundSettings::SoundSettings(PG_Widget* parent, const PG_Rect& r, PG_MessageObje
 
 
    PG_Button* b1 = new PG_Button(this, PG_Rect(30,r.h-40,(r.w-70)/2,30), "OK", 100);
-   b1->sigClick.connect(sigc::mem_fun( *this, &SoundSettings::closeWindow ));
+   b1->sigClick.connect( sigc::hide(sigc::mem_fun( *this, &SoundSettings::closeWindow )));
 
    PG_Button* b2 = new PG_Button(this, PG_Rect(r.w/2+5,r.h-40,(r.w-70)/2,30), "Cancel", 101);
-   b2->sigClick.connect(sigc::mem_fun( *this, &SoundSettings::buttonEvent ));
+   b2->sigClick.connect( sigc::hide(sigc::mem_fun( *this, &SoundSettings::buttonEvent )));
 
    sigClose.connect( sigc::mem_fun( *this, &SoundSettings::closeWindow ));
    
 
    PG_Button* b3 = new PG_Button(this, PG_Rect( Width() -100, 25, 90, 20 ), "Diagnostics" );
-   b3->sigClick.connect( sigc::mem_fun( *this, &SoundSettings::diag));
+   b3->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &SoundSettings::diag)));
 
    // caller = c;
    // SetInputFocus();
@@ -119,22 +120,20 @@ bool SoundSettings::radioButtonEvent( PG_RadioButton* button, bool state)
 }
 
 
-bool SoundSettings::eventScrollTrack(PG_ScrollBar* slider, long data)
+bool SoundSettings::eventScrollTrack_music(long data)
 {
-   if(slider->GetID() == 21) {
-      CGameOptions::Instance()->sound.musicVolume = data;
-      CGameOptions::Instance()->setChanged();
-      updateSettings();
-      return true;
-   }
+  CGameOptions::Instance()->sound.musicVolume = data;
+  CGameOptions::Instance()->setChanged();
+  updateSettings();
+  return true;
+}
 
-   if(slider->GetID() == 31) {
-      CGameOptions::Instance()->sound.soundVolume = data;
-      CGameOptions::Instance()->setChanged();
-      updateSettings();
-      return true;
-   }
-   return false;
+bool SoundSettings::eventScrollTrack_sound(long data)
+{
+  CGameOptions::Instance()->sound.soundVolume = data;
+  CGameOptions::Instance()->setChanged();
+  updateSettings();
+  return true;
 }
 
 
@@ -148,7 +147,7 @@ bool SoundSettings::diag()
 }
 
 
-bool SoundSettings::buttonEvent( PG_Button* button )
+bool SoundSettings::buttonEvent( )
 {
    quitModalLoop(2);
    CGameOptions::Instance()->sound = sSettings;

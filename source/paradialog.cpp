@@ -516,6 +516,11 @@ bool ASC_PG_Dialog::eventKeyDown(const SDL_KeyboardEvent *key){
 
 
 
+bool ASC_PG_Dialog::quitModalLoopW(PG_Button* button, int value )
+{
+   return quitModalLoop( value );
+}
+
 bool ASC_PG_Dialog::quitModalLoop(int value )
 {
    SetModalStatus( value );

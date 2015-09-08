@@ -118,7 +118,7 @@ void PG_SpinnerBox::AdjustSize() {
 	Show();
 }
 
-bool PG_SpinnerBox::handleEditEnd(PG_LineEdit* edit) {
+bool PG_SpinnerBox::handleEditEnd() {
 	const std::string& text = m_pEditBox->GetText();
 	m_iValue = (!text.empty()) ? atoi(text.c_str()) : 0;
 

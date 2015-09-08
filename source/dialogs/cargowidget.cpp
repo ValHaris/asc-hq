@@ -413,7 +413,7 @@ void CargoWidget::registerStoringPositions( vector<StoringPosition*> sp, const i
    unitHighLight.clickOnMarkedUnit.connect( sigc::mem_fun( *this, &CargoWidget::click ));
 }
 
-bool  CargoWidget::handleScrollTrack (PG_ScrollBar *widget, long data)
+bool  CargoWidget::handleScrollTrack (long data)
 {
    sigScrollTrack();
    return true;

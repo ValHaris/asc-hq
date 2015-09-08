@@ -540,14 +540,14 @@ class ProductionEditorWindow : public ASC_PG_Dialog {
 
          
          PG_Button* addB = new PG_Button( this, PG_Rect( (my_width - centerSpace) / 2, 100, centerSpace, 30 ), "->" );
-         addB->sigClick.connect( sigc::mem_fun( *this, &ProductionEditorWindow::addOne ));
+         addB->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &ProductionEditorWindow::addOne )));
          
          PG_Button* removeB = new PG_Button( this, PG_Rect( (my_width - centerSpace) / 2, 140, centerSpace, 30 ), "<-" );
-         removeB->sigClick.connect( sigc::mem_fun( *this, &ProductionEditorWindow::removeOne ));
+         removeB->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &ProductionEditorWindow::removeOne )));
 
          
          PG_Button* ok = new PG_Button( this, PG_Rect( my_width - 100, my_height - 40, 90, 30 ), "OK" );
-         ok->sigClick.connect( sigc::mem_fun( *this, &ProductionEditorWindow::ok ));
+         ok->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &ProductionEditorWindow::ok )));
       };
 
 };

@@ -70,7 +70,7 @@ TechWidget :: TechWidget( PG_Widget* parent, const PG_Point& pos, int width, con
    if ( tech->relatedUnitID > 0 ) {
       PG_Button* b = new PG_Button( this, PG_Rect( width - 2 * lineheight - 10, Height()/2-lineheight, 2*lineheight, 2*lineheight ));
       b->SetIcon( IconRepository::getIcon( "blue-i.png").getBaseSurface() );
-      b->sigClick.connect( sigc::mem_fun( *this, &TechWidget::info ));
+      b->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &TechWidget::info )));
    }
    
    SetTransparency( 255 );
@@ -316,16 +316,16 @@ class ChooseTech : public ASC_PG_Dialog
          factory->techSelected.connect( sigc::mem_fun( *this, &ChooseTech::techSelected ));
          itemSelector = new ItemSelectorWidget( this, PG_Rect( 10, 40, 400, Height() - 80 ), factory );
 
-         (allTechsCheckButton = new PG_CheckButton( this, PG_Rect( 10, Height() - 40, 300, 25 ), "Show ~A~ll Technologies"))->sigClick.connect( sigc::mem_fun( *this, &ChooseTech::changeTechView));
+         (allTechsCheckButton = new PG_CheckButton( this, PG_Rect( 10, Height() - 40, 300, 25 ), "Show ~A~ll Technologies"))->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &ChooseTech::changeTechView)));
          techList = new PG_MultiLineEdit( this, PG_Rect ( 450, 40, 300, 200 ));
          techList->SetEditable(false);
          pointsLabel = new PG_Label( this, PG_Rect( 450, 250, 300, 25 ));
          availLabel = new PG_Label( this, PG_Rect( 450, 280, 300, 25 ), "Accumulated research points: " + ASCString::toString( player.research.progress) );
 
-         (new PG_Button( this, PG_Rect( 450, 320, 300, 20), "List Prerequisites" ))->sigClick.connect( sigc::mem_fun( *this, &ChooseTech::showPrerequisites ));
+         (new PG_Button( this, PG_Rect( 450, 320, 300, 20), "List Prerequisites" ))->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &ChooseTech::showPrerequisites )));
 
-         AddStandardButton("~C~ancel")->sigClick.connect( sigc::mem_fun( *this, &ChooseTech::cancel ));
-         AddStandardButton("~O~K")->sigClick.connect( sigc::mem_fun( *this, &ChooseTech::ok ));
+         AddStandardButton("~C~ancel")->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &ChooseTech::cancel )));
+         AddStandardButton("~O~K")->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &ChooseTech::ok )));
       };
       
       bool selectionPerformed()

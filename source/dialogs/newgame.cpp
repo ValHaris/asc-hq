@@ -99,7 +99,7 @@ class StartMultiplayerGame: public ConfigurableWindow {
       EmailSetupWidget* emailSetup;
       PG_Widget* emailSetupParent;
    
-      bool nextPage(PG_Button* button = NULL);
+      bool nextPage();
       void showPage();
       bool checkPlayerStat();
       
@@ -234,15 +234,15 @@ StartMultiplayerGame::StartMultiplayerGame(PG_MessageObject* c): ConfigurableWin
 
     PG_Button* next = dynamic_cast<PG_Button*>(FindChild("next", true ));
     if ( next )
-      next->sigClick.connect( sigc::mem_fun( *this, &StartMultiplayerGame::nextPage ));
+      next->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &StartMultiplayerGame::nextPage )));
 
     PG_Button* start = dynamic_cast<PG_Button*>(FindChild("start", true ));
     if ( start )
-      start->sigClick.connect( sigc::mem_fun( *this, &StartMultiplayerGame::start ));
+      start->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &StartMultiplayerGame::start )));
       
     PG_Button* qstart = dynamic_cast<PG_Button*>(FindChild("quickstart", true ));
     if ( qstart )
-      qstart->sigClick.connect( sigc::mem_fun( *this, &StartMultiplayerGame::quickstart ));
+      qstart->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &StartMultiplayerGame::quickstart )));
       
     PG_CheckButton* supervisor = dynamic_cast<PG_CheckButton*>(FindChild("SupervisorOn", true ));
     if ( supervisor ) {
@@ -250,7 +250,7 @@ StartMultiplayerGame::StartMultiplayerGame(PG_MessageObject* c): ConfigurableWin
          supervisor->SetPressed();
        else
           supervisor->SetUnpressed();
-       supervisor->sigClick.connect( sigc::mem_fun( *this, &StartMultiplayerGame::togglesupervisor ));
+       supervisor->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &StartMultiplayerGame::togglesupervisor )));
     }
 
     PG_LineEdit* s1 = dynamic_cast<PG_LineEdit*>( FindChild( "SupervisorPlain", true ));
@@ -301,7 +301,7 @@ void StartMultiplayerGame::loadCampaigns()
    if ( !list ) 
       return;
    
-   list->sigSelectItem.connect( sigc::mem_fun( *this, &StartMultiplayerGame::campaignSelected ));
+   list->sigSelectItem.connect( sigc::hide( sigc::mem_fun( *this, &StartMultiplayerGame::campaignSelected )));
    
    
    tfindfile ff ( "*.asccampaign" );
@@ -527,7 +527,7 @@ GameMap* StartMultiplayerGame::searchForMap( const ASCString& password )
    return NULL;
 }
 
-bool StartMultiplayerGame::nextPage(PG_Button* button)
+bool StartMultiplayerGame::nextPage()
 {
    int oldpage = page;
    switch ( page )  {

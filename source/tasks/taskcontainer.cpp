@@ -51,8 +51,8 @@ void TaskContainer::hook( GameMap& gamemap )
 
 void TaskContainer::registerHooks()
 {
-   GameMap::sigMapCreation.connect( SigC::slot( &TaskContainer::hook ));
-   ActionContainer::commitCommand.connect( SigC::slot( &TaskContainer::getCommand ));
+   GameMap::sigMapCreation.connect( sigc::ptr_fun( &TaskContainer::hook ));
+   ActionContainer::commitCommand.connect( sigc::ptr_fun( &TaskContainer::getCommand ));
    
 }
 

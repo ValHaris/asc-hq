@@ -21,7 +21,7 @@ DropDownSelector::DropDownSelector( PG_Widget *parent, const PG_Rect &r, int ite
    : PG_DropDown( parent, r, -1, style ), first(true)
 {
    SetEditable(false);
-   sigSelectItem.connect( sigc::mem_fun( *this, &DropDownSelector::itemSelected ));
+   sigSelectItem.connect( sigc::hide( sigc::mem_fun( *this, &DropDownSelector::itemSelected )));
 
    for ( int i = 0; i < itemnum; ++i )
       AddItem( items[i] );
@@ -33,7 +33,7 @@ DropDownSelector::DropDownSelector( PG_Widget *parent, const PG_Rect &r, const s
    : PG_DropDown( parent, r, -1, style ), first(true)
 {
    SetEditable(false);
-   sigSelectItem.connect( sigc::mem_fun( *this, &DropDownSelector::itemSelected ));
+   sigSelectItem.connect( sigc::hide( sigc::mem_fun( *this, &DropDownSelector::itemSelected )));
 
    for ( std::vector<ASCString>::const_iterator i = names.begin(); i != names.end(); ++i )
       AddItem( *i );
@@ -45,10 +45,10 @@ DropDownSelector::DropDownSelector( PG_Widget *parent, const PG_Rect &r, int id,
    : PG_DropDown( parent, r, id, style ), first(true)
 {
    SetEditable(false);
-   sigSelectItem.connect( sigc::mem_fun( *this, &DropDownSelector::itemSelected ));
+   sigSelectItem.connect( sigc::hide( sigc::mem_fun( *this, &DropDownSelector::itemSelected )));
 }
 
-bool DropDownSelector::itemSelected(  ) // PG_ListBoxBaseItem* i, void* p
+bool DropDownSelector::itemSelected(  )
 {
    selectionSignal( GetSelectedItemIndex ());
    return true;

@@ -54,13 +54,13 @@ public:
 	/**
 	Signal type declaration
 	**/
-class SignalEditBegin : public sigc::signal<bool, PG_LineEdit*> {}
+class SignalEditBegin : public sigc::signal<bool> {}
 	;
-class SignalEditEnd : public sigc::signal<bool, PG_LineEdit*> {}
+class SignalEditEnd : public sigc::signal<bool> {}
 	;
-class SignalEditReturn : public sigc::signal<bool, PG_LineEdit*> {}
+class SignalEditReturn : public sigc::signal<bool> {}
 	;
-class SignalEditUpdate : public sigc::signal<bool, PG_LineEdit*> {}
+class SignalEditUpdate : public sigc::signal<bool> {}
    ;
 
 	/** */
@@ -148,7 +148,7 @@ class SignalEditUpdate : public sigc::signal<bool, PG_LineEdit*> {}
 	SignalEditBegin sigEditBegin;
 	SignalEditEnd sigEditEnd;
 	SignalEditReturn sigEditReturn;
-   SignalEditUpdate sigEditUpdate;
+    SignalEditUpdate sigEditUpdate;
 
 
    

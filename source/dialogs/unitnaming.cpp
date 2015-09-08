@@ -57,7 +57,7 @@ UnitNaming::UnitNaming ( ContainerBase* myUnit) : ASC_PG_Dialog( NULL, PG_Rect( 
    privateName->SetText( myUnit->privateName);
    privateName->sigEditReturn.connect( sigc::mem_fun( *this, &UnitNaming::ok ));
 
-   AddStandardButton( "~O~k" )->sigClick.connect( sigc::mem_fun( *this, &UnitNaming::ok ));
+   AddStandardButton( "~O~k" )->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &UnitNaming::ok )));
 };
 
 int UnitNaming::RunModal()

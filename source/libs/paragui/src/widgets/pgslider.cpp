@@ -162,7 +162,7 @@ bool PG_Slider::eventMouseButtonUp(const SDL_MouseButtonEvent* button) {
 			break;
 	}
 
-	sigSlideEnd(this, scroll_current);
+	sigSlideEnd(scroll_current);
 
 	return true;
 }

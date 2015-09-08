@@ -54,16 +54,16 @@ void hookGuiToMap( GameMap* map )
 {
    if ( !map->getGuiHooked() ) {
 
-      map->sigPlayerUserInteractionBegins.connect( SigC::slot( &viewcomp ) );
-      map->sigPlayerUserInteractionBegins.connect( SigC::hide<Player&>( repaintMap.slot() ));
+      map->sigPlayerUserInteractionBegins.connect( sigc::ptr_fun( &viewcomp ) );
+      map->sigPlayerUserInteractionBegins.connect( sigc::hide( repaintMap.make_slot() ));
       
-      map->sigPlayerUserInteractionBegins.connect( SigC::hide<Player&>( SigC::slot( &checkforreplay )));
-      map->sigPlayerUserInteractionBegins.connect( SigC::slot( &viewunreadmessages ));
-      map->sigPlayerUserInteractionBegins.connect( SigC::slot( &checkJournal ));
-      map->sigPlayerUserInteractionBegins.connect( SigC::slot( &checkUsedASCVersions ));
-      map->sigPlayerUserInteractionBegins.connect( SigC::hide<Player&>( updateFieldInfo.slot() ));
+      map->sigPlayerUserInteractionBegins.connect( sigc::hide( sigc::ptr_fun( &checkforreplay )));
+      map->sigPlayerUserInteractionBegins.connect( sigc::ptr_fun( &viewunreadmessages ));
+      map->sigPlayerUserInteractionBegins.connect( sigc::ptr_fun( &checkJournal ));
+      map->sigPlayerUserInteractionBegins.connect( sigc::ptr_fun( &checkUsedASCVersions ));
+      map->sigPlayerUserInteractionBegins.connect( sigc::hide( updateFieldInfo.make_slot() ));
 
-      map->sigPlayerTurnHasEnded.connect( SigC::slot( viewOwnReplay));
+      map->sigPlayerTurnHasEnded.connect( sigc::ptr_fun( &viewOwnReplay));
       map->guiHooked();
    }
 }
@@ -137,7 +137,7 @@ int runTester ( )
    }
 #endif
 
-   GameMap::sigPlayerTurnEndsStatic.connect( SigC::slot( automaticTrainig ));
+   GameMap::sigPlayerTurnEndsStatic.connect( sigc::ptr_fun( &automaticTrainig ));
    //ActionContainer::postActionExecution.connect( SigC::slot( &checkGameEvents ));
 
    suppressMapTriggerExecution = false;
@@ -155,9 +155,9 @@ static void __runResearch( Player& player ){
 
 void deployMapPlayingHooks ( GameMap* map )
 {
-   map->sigPlayerTurnBegins.connect( SigC::slot( initReplayLogging ));
-   map->sigPlayerTurnBegins.connect( SigC::slot( transfer_all_outstanding_tribute ));   
-   map->sigPlayerTurnBegins.connect( SigC::slot( __runResearch ));
+   map->sigPlayerTurnBegins.connect( sigc::ptr_fun( &initReplayLogging ));
+   map->sigPlayerTurnBegins.connect( sigc::ptr_fun( &transfer_all_outstanding_tribute ));
+   map->sigPlayerTurnBegins.connect( sigc::ptr_fun( &__runResearch ));
 }
 
 
@@ -193,7 +193,7 @@ int main(int argc, char *argv[] )
 
    MessagingHub::Instance().setVerbosity( cl->r() );
    StdIoErrorHandler stdIoErrorHandler(false);
-   MessagingHub::Instance().exitHandler.connect( sigc::bind( SigC::slot( exit_asc ), -1 ));
+   MessagingHub::Instance().exitHandler.connect( sigc::bind( &exit_asc, -1 ));
 
 #ifdef WIN32
    Win32IoErrorHandler* win32ErrorDialogGenerator = new Win32IoErrorHandler;
@@ -204,7 +204,7 @@ int main(int argc, char *argv[] )
 
    SoundSystem soundSystem ( true, true, true );
 
-   tspfldloaders::mapLoaded.connect( SigC::slot( deployMapPlayingHooks ));
+   tspfldloaders::mapLoaded.connect( sigc::ptr_fun( &deployMapPlayingHooks ));
    TaskContainer::registerHooks();
    
    PG_FileArchive archive( argv[0] );

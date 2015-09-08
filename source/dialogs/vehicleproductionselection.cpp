@@ -234,12 +234,12 @@ VehicleProduction_SelectionWindow::VehicleProduction_SelectionWindow( PG_Widget 
       PG_CheckButton* fillRes = new PG_CheckButton( this, PG_Rect( 10, y + 2, r.Width() / 2 - 50, 20), "Fill with Resources" );
       if ( factory->getResourceFilling() )
          fillRes->SetPressed();
-      fillRes->sigClick.connect( sigc::mem_fun( *factory, &VehicleProduction_SelectionItemFactory::setResourceFilling ));
+      fillRes->sigClick.connect( sigc::hide( sigc::mem_fun( *factory, &VehicleProduction_SelectionItemFactory::setResourceFilling )));
       if ( plant->baseType->hasFunction(ContainerBaseType::AmmoProduction)) {
          PG_CheckButton* fillAmmo = new PG_CheckButton( this, PG_Rect( 10, y + 20, r.Width() / 2 - 50, 20), "Fill with Ammo" );
          if ( factory->getAmmoFilling() )
             fillAmmo->SetPressed();
-         fillAmmo->sigClick.connect( sigc::mem_fun( *factory, &VehicleProduction_SelectionItemFactory::setAmmoFilling ));
+         fillAmmo->sigClick.connect( sigc::hide( sigc::mem_fun( *factory, &VehicleProduction_SelectionItemFactory::setAmmoFilling )));
       } else
          factory->setAmmoFilling( false );
          
@@ -252,15 +252,15 @@ VehicleProduction_SelectionWindow::VehicleProduction_SelectionWindow( PG_Widget 
    
    PG_Rect rr ( r.Width() / 2 + 10, y + 2, (r.Width() - 20) - (r.Width() / 2 + 10) , 35);
    PG_Button* b  = new PG_Button( this, PG_Rect( rr.x + rr.h + 5, rr.y, rr.w - 40, rr.h ) , "Produce" );
-   b->sigClick.connect( sigc::mem_fun( *this,&VehicleProduction_SelectionWindow::produce ));
+   b->sigClick.connect( sigc::hide( sigc::mem_fun( *this,&VehicleProduction_SelectionWindow::produce )));
 
    if ( !plant->baseType->hasFunction(ContainerBaseType::NoProductionCustomization) && internally ) {
       PG_Button* b2 = new PG_Button( this, PG_Rect( rr.x, rr.y, rr.h, rr.h ), "+" );
-      b2->sigClick.connect( sigc::mem_fun( *this, &VehicleProduction_SelectionWindow::addProductionLine ));
+      b2->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &VehicleProduction_SelectionWindow::addProductionLine )));
       new PG_ToolTipHelp( b2, "Add production line");
 
       PG_Button* b3 = new PG_Button( this, PG_Rect( rr.x - rr.h - 5, rr.y, rr.h, rr.h ), "-" );
-      b3->sigClick.connect( sigc::mem_fun( *this, &VehicleProduction_SelectionWindow::removeProductionLine ));
+      b3->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &VehicleProduction_SelectionWindow::removeProductionLine )));
       new PG_ToolTipHelp( b3, "Remove production line");
    }
 };

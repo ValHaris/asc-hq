@@ -56,10 +56,10 @@ public:
 	/**
 	Signal type declaration
 	**/
-class SignalSlide : public sigc::signal<bool, PG_ScrollBar*, long> {}
+class SignalSlide : public sigc::signal<bool, long> {}
 	;
 
-class SignalSlideEnd : public sigc::signal<bool, PG_ScrollBar*, long> {}
+class SignalSlideEnd : public sigc::signal<bool, long> {}
 	;
 
 	/**

@@ -51,7 +51,7 @@ const float smallGuiIconSizeFactor = 1;
 
 GuiButton::GuiButton( PG_Widget *parent, const PG_Rect &r ) : PG_Button( parent, r, "", -1, "GuiButton"), func( NULL ), id(-1)
 {
-  sigClick.connect ( sigc::mem_fun( *this, &GuiButton::exec ));
+  sigClick.connect( sigc::hide( sigc::mem_fun( *this, &GuiButton::exec )));
   SetBackground( PRESSED, IconRepository::getIcon("empty-pressed.png").getBaseSurface() );
   SetBackground( HIGHLITED, IconRepository::getIcon("empty-high.png").getBaseSurface() );
   SetBackground( UNPRESSED, IconRepository::getIcon("empty.png").getBaseSurface() );
@@ -128,8 +128,8 @@ void GuiButton::showInfoText()
 
 SmallGuiButton::SmallGuiButton( PG_Widget *parent, const PG_Rect &r, GuiButton* guiButton, NewGuiHost* host ) : PG_Button( parent, r, "", -1, "GuiButton"), referenceButton( guiButton )
 {
-  sigClick.connect ( sigc::mem_fun( *host, &NewGuiHost::clearSmallIcons ));
-  sigClick.connect ( sigc::mem_fun( *guiButton, &GuiButton::exec ));
+  sigClick.connect( sigc::hide( sigc::mem_fun( *host, &NewGuiHost::clearSmallIcons )));
+  sigClick.connect( sigc::hide( sigc::mem_fun( *guiButton, &GuiButton::exec )));
 
   SetBackground( PRESSED, IconRepository::getIcon("empty-pressed.png").getBaseSurface() );
   SetBackground( HIGHLITED, IconRepository::getIcon("empty-high.png").getBaseSurface() );

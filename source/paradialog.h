@@ -128,7 +128,8 @@ class ASC_PG_Dialog : public PG_Window {
    protected:
       PG_MessageObject* caller;
       virtual bool closeWindow();
-      bool quitModalLoop(int value ); 
+      bool quitModalLoopW(PG_Button* button, int value );
+      bool quitModalLoop(int value );
       virtual bool eventKeyDown(const SDL_KeyboardEvent *key);
     public:
        ASC_PG_Dialog ( PG_Widget *parent, const PG_Rect &r, const ASCString& windowtext, WindowFlags flags=DEFAULT, const ASCString& style="Window", int heightTitlebar=25);

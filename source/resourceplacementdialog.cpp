@@ -150,8 +150,8 @@ ResourcePlacementDialog::ResourcePlacementDialog( ) :
   
   //Buttons OK and Cancel
 
-  (new PG_Button(this, PG_Rect(30, Height()-40, (Width()-70)/2, 30), "OK", 100))->sigClick.connect(sigc::mem_fun( *this, &ResourcePlacementDialog::buttonEvent ));
-  (new PG_Button(this, PG_Rect(Width()/2+5, Height()-40, (Width()-70)/2, 30), "Cancel", 101))->sigClick.connect(sigc::mem_fun( *this, &ResourcePlacementDialog::closeWindow ));
+  (new PG_Button(this, PG_Rect(30, Height()-40, (Width()-70)/2, 30), "OK", 100))->sigClick.connect( sigc::hide(sigc::mem_fun( *this, &ResourcePlacementDialog::buttonEvent )));
+  (new PG_Button(this, PG_Rect(Width()/2+5, Height()-40, (Width()-70)/2, 30), "Cancel", 101))->sigClick.connect( sigc::hide(sigc::mem_fun( *this, &ResourcePlacementDialog::closeWindow )));
 
   sigClose.connect( sigc::mem_fun( *this, &ResourcePlacementDialog::closeWindow ));
 }
