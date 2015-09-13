@@ -15,6 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <sigc++/sigc++.h>
 #include <pgimage.h>
 #include <pgtooltiphelp.h>
 #include "cargodialog.h"

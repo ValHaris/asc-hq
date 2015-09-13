@@ -159,6 +159,10 @@ class NewGuiHost : public DashboardPanel {
 
         void mapDeleted( GameMap& map );
         
+        bool eventKeyDownSignal(const PG_MessageObject* o, const SDL_KeyboardEvent* key);
+        bool eventKeyUpSignal(const PG_MessageObject* o, const SDL_KeyboardEvent* key);
+
+
      protected:
         bool mapIconProcessing( const MapCoordinate& pos, const SPoint& mousePos, bool cursorChanged, int button, int prio );
 
@@ -174,8 +178,8 @@ class NewGuiHost : public DashboardPanel {
         static SmallButtonHolder* smallButtonHolder;
 
 
-        bool eventKeyDown(PG_MessageObject* o, const SDL_KeyboardEvent* key);
-        bool eventKeyUp(PG_MessageObject* o, const SDL_KeyboardEvent* key);
+        bool eventKeyDown(const SDL_KeyboardEvent* key);
+        bool eventKeyUp(const SDL_KeyboardEvent* key);
 
         //! when operated by keyboard, set a new button as the pressed one
         bool setNewButtonPressed( int i );
