@@ -1391,6 +1391,8 @@ int gamethread ( void* data )
       loadLegacyFonts();
       loaddata();
       
+      suppressMapTriggerExecution = false;
+
       mtl = loadStartupMap( gtp->filename.c_str() );
    }
    catch ( const ParsingError & err ) {
@@ -1424,9 +1426,7 @@ int gamethread ( void* data )
 
 
 //   ActionContainer::postActionExecution.connect( SigC::slot( &checkGameEvents ));
-            
-   suppressMapTriggerExecution = false;
-   
+
    static ShowNewTechnology showNewTechs;
    setResearchPresenter( &showNewTechs );
 
