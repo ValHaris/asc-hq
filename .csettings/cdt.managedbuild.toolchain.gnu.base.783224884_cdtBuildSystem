@@ -11,7 +11,8 @@
 						<option id="gnu.cpp.compiler.option.include.paths.1483571118" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
 							<listOptionValue builtIn="false" value="/usr/include/c++/4.7/"/>
 							<listOptionValue builtIn="false" value="/usr/include/SDL"/>
-							<listOptionValue builtIn="false" value="/usr/include/sigc++-1.2/"/>
+							<listOptionValue builtIn="false" value="/usr/include/sigc++-2.0/"/>
+							<listOptionValue builtIn="false" value="/usr/lib/x86_64-linux-gnu/sigc++-2.0/include/"/>
 						</option>
 						<option id="gnu.cpp.compiler.option.preprocessor.def.1316201208" name="Defined symbols (-D)" superClass="gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
 							<listOptionValue builtIn="false" value="_UNIX_"/>
@@ -24,7 +25,6 @@
 						<option id="gnu.c.compiler.option.include.paths.213029683" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
 							<listOptionValue builtIn="false" value="/usr/include/c++/4.7/"/>
 							<listOptionValue builtIn="false" value="/usr/include/SDL"/>
-							<listOptionValue builtIn="false" value="/usr/include/sigc++-1.2/"/>
 						</option>
 						<option id="gnu.c.compiler.option.preprocessor.def.symbols.1517196610" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" valueType="definedSymbols">
 							<listOptionValue builtIn="false" value="_UNIX_"/>
@@ -44,7 +44,6 @@
 						<option id="gnu.both.asm.option.include.paths.931991776" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
 							<listOptionValue builtIn="false" value="/usr/include/c++/4.7/iostream"/>
 							<listOptionValue builtIn="false" value="/usr/include/SDL"/>
-							<listOptionValue builtIn="false" value="/usr/include/sigc++-2.0/"/>
 						</option>
 						<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1861756393" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 					</tool>

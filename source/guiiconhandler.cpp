@@ -268,14 +268,24 @@ NewGuiHost :: NewGuiHost (MainScreenWidget *parent, MapDisplayPG* mapDisplay, co
    cursorMoved.connect( sigc::hide_return( sigc::mem_fun( *this, &NewGuiHost::clearSmallIcons )) );
 
    
-   PG_Application::GetApp()->sigKeyDown.connect( sigc::mem_fun( *this, &NewGuiHost::eventKeyDown ));
-   PG_Application::GetApp()->sigKeyUp.connect( sigc::mem_fun( *this, &NewGuiHost::eventKeyUp ));
+   PG_Application::GetApp()->sigKeyDown.connect( sigc::mem_fun( *this, &NewGuiHost::eventKeyDownSignal ));
+   PG_Application::GetApp()->sigKeyUp.connect( sigc::mem_fun( *this, &NewGuiHost::eventKeyUpSignal ));
    SetTransparency(255);
    
    parent->lockOptionsChanged.connect( sigc::mem_fun( *this, &NewGuiHost::lockOptionsChanged ));
 
    GameMap::sigMapDeletion.connect( sigc::mem_fun( *this, &NewGuiHost::mapDeleted ));
 }
+
+bool NewGuiHost::eventKeyDownSignal(const PG_MessageObject* o, const SDL_KeyboardEvent* key)
+{
+	return eventKeyDown(key);
+}
+bool NewGuiHost::eventKeyUpSignal(const PG_MessageObject* o, const SDL_KeyboardEvent* key)
+{
+	return eventKeyUp(key);
+}
+
 
 void NewGuiHost::lockOptionsChanged( int options )
 {
@@ -578,7 +588,7 @@ bool NewGuiHost::setNewButtonPressed( int i )
    return false;
 }
 
-bool NewGuiHost::eventKeyDown(PG_MessageObject* o, const SDL_KeyboardEvent* key)
+bool NewGuiHost::eventKeyDown(const SDL_KeyboardEvent* key)
 {
    int mod = SDL_GetModState() & ~(KMOD_NUM | KMOD_CAPS | KMOD_MODE | SDLK_LSHIFT | SDLK_RSHIFT);
    if ( mod )
@@ -635,7 +645,7 @@ bool NewGuiHost::eventKeyDown(PG_MessageObject* o, const SDL_KeyboardEvent* key)
    return false;
 }
 
-bool NewGuiHost::eventKeyUp(PG_MessageObject* o, const SDL_KeyboardEvent* key)
+bool NewGuiHost::eventKeyUp(const SDL_KeyboardEvent* key)
 {
    if ( key->keysym.sym == SDLK_RETURN  && enterKeyPressed ) {
       enterKeyPressed = false;
