@@ -128,7 +128,7 @@
 				FavorSizeOrSpeed="1"
 				OmitFramePointers="true"
 				AdditionalIncludeDirectories="../..;../../tools;../../libs/getopt;&quot;$(libsigcpp)&quot;;&quot;../../libs/loki-0.1.6/include&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;HEXAGON;_WIN32_;converter;minimalIO;_MSC_VER;_SDL_"
+				PreprocessorDefinitions="WIN32;NDEBUG;HEXAGON;_WIN32_;converter;minimalIO;_SDL_"
 				StringPooling="false"
 				MinimalRebuild="false"
 				RuntimeLibrary="2"

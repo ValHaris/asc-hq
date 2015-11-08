@@ -326,6 +326,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\unitcostcalculator-standard.cpp"
+				>
+			</File>
+			<File
 				RelativePath="..\..\vehicletype.cpp"
 				>
 			</File>
