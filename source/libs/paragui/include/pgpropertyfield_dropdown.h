@@ -46,7 +46,7 @@ private:
 	StringType* myProperty;
 	PG_DropDown* dropdown;
 
-	bool click() {
+	bool click( PG_ListBoxBaseItem* item ) {
 		StringType value = dropdown->GetText();
 		sigValueChanged(this,value);
 		return true;
@@ -60,7 +60,7 @@ private:
 	}
 
 public:
-	typedef sigc::signal<PG_PropertyField_DropDown*, StringType> DropDownPropertySignal;
+	typedef sigc::signal<bool, PG_PropertyField_DropDown*, StringType> DropDownPropertySignal;
 	DropDownPropertySignal sigValueChanged;
 	DropDownPropertySignal sigValueApplied;
 
