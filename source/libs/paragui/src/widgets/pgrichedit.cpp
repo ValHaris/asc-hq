@@ -53,10 +53,10 @@ PG_ScrollWidget(parent, r, style) {
 	my_AutoVerticalResize = autoResize;
 	my_AutoHorizontalResize = autoResize;
 
-	my_objVerticalScrollbar->sigScrollTrack.connect(slot(*this, &PG_RichEdit::handleScrollTrack));
-	my_objVerticalScrollbar->sigScrollPos.connect(slot(*this, &PG_RichEdit::handleScrollTrack));
-	my_objHorizontalScrollbar->sigScrollTrack.connect(slot(*this, &PG_RichEdit::handleScrollTrack));
-	my_objHorizontalScrollbar->sigScrollPos.connect(slot(*this, &PG_RichEdit::handleScrollTrack));
+	my_objVerticalScrollbar->sigScrollTrack.connect(sigc::mem_fun(*this, &PG_RichEdit::handleScrollTrack));
+	my_objVerticalScrollbar->sigScrollPos.connect(sigc::mem_fun(*this, &PG_RichEdit::handleScrollTrack));
+	my_objHorizontalScrollbar->sigScrollTrack.connect(sigc::mem_fun(*this, &PG_RichEdit::handleScrollTrack));
+	my_objHorizontalScrollbar->sigScrollPos.connect(sigc::mem_fun(*this, &PG_RichEdit::handleScrollTrack));
 }
 
 void PG_RichEdit::SetAlignment(Uint8 align) {
@@ -671,7 +671,7 @@ void PG_RichEdit::SetTabSize(Uint16 tabSize) {
 	my_TabSize = tabSize;
 }
 
-bool PG_RichEdit::handleScrollTrack() {
+bool PG_RichEdit::handleScrollTrack(long pos) {
 	my_scrollarea->Update();
 	return true;
 }

@@ -34,9 +34,11 @@
 #define PG_MENUBAR_H
 
 #include "pgthemewidget.h"
+#include "pgpopupmenu.h"
 
 class PG_Button;
 class PG_PopupMenu;
+
 
 /**
 	@author Alexander Pipelka
@@ -91,8 +93,7 @@ protected:
 	bool enterButton ( PG_Pointer last );
 private:
 
-
-   bool deactivateItem();
+   bool deactivateItem(PG_PopupMenu::MenuItem* item);
    
 	/**
 		Callback handler for MSG_BUTTONCLICK messages

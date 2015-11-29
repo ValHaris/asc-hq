@@ -39,8 +39,8 @@ class OverviewMapPanel : public LayoutablePanel {
      protected:
         void painter ( const PG_Rect &src, const ASCString& name, const PG_Rect &dst);
         void redraw() { Redraw(true); };
-        bool mouseButtonDown ( const SDL_MouseButtonEvent *button);
-        bool mouseMotion (  const SDL_MouseMotionEvent *motion);
+        bool mouseButtonDown ( PG_MessageObject* o, const SDL_MouseButtonEvent *button);
+        bool mouseMotion ( PG_MessageObject* o, const SDL_MouseMotionEvent *motion);
         bool mouseClick ( SPoint pos );
 
    private:

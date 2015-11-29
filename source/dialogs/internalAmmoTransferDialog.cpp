@@ -302,8 +302,8 @@ InternalAmmoTransferWidget::InternalAmmoTransferWidget( PG_Widget* parent, const
 	slider->SetRange( 0, _handler->getMaxAmmo( weaponID ) );
 	slider->SetPosition( *amount );
 	
-	slider->sigSlide.connect( SigC::slot( *this, &InternalAmmoTransferWidget::slide ));
-	slider->sigSlideEnd.connect( SigC::slot( *this, &InternalAmmoTransferWidget::slideEnd));
+	slider->sigSlide.connect( sigc::mem_fun( *this, &InternalAmmoTransferWidget::slide ));
+	slider->sigSlideEnd.connect( sigc::mem_fun( *this, &InternalAmmoTransferWidget::slideEnd));
 	
 	PG_Rect labels = PG_Rect( 0, 0, pos.w, 20 );
 	std::stringstream nameStream;
@@ -445,7 +445,7 @@ InternalAmmoTransferWindow :: InternalAmmoTransferWindow ( Vehicle* source, PG_W
 	
 	int buttonWidth = 150;
 	PG_Button* b = new PG_Button( this, PG_Rect( w - buttonWidth - border, h - 30 - border, buttonWidth, 30), "OK" );
-	b->sigClick.connect( SigC::slot( *this, &InternalAmmoTransferWindow::ok ));
+	b->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &InternalAmmoTransferWindow::ok )));
 }
 
 void internalAmmoTransferWindow ( Vehicle* vehicle )

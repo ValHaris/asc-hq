@@ -159,6 +159,10 @@ class NewGuiHost : public DashboardPanel {
 
         void mapDeleted( GameMap& map );
         
+        bool eventKeyDownSignal(const PG_MessageObject* o, const SDL_KeyboardEvent* key);
+        bool eventKeyUpSignal(const PG_MessageObject* o, const SDL_KeyboardEvent* key);
+
+
      protected:
         bool mapIconProcessing( const MapCoordinate& pos, const SPoint& mousePos, bool cursorChanged, int button, int prio );
 

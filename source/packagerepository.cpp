@@ -59,7 +59,7 @@ void PackageRepository :: write ( tnstream& stream )
    writePointerContainer( packageRepository, stream );
 }
 
-SigC::Signal0<void> PackageRepository::packgeDescriptionLoaded;
+sigc::signal<void> PackageRepository::packgeDescriptionLoaded;
 
 void PackageRepository :: postChecks() 
 {

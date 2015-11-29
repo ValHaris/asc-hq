@@ -33,7 +33,7 @@ ASCString LoggingOutputHandler::getFilename( const ASCString& path )
 LoggingOutputHandler::LoggingOutputHandler( const ASCString& path )
    : filename( getFilename( path )), logfile( filename.c_str() )
 {
-   MessagingHub::Instance().logMessage.connect( SigC::slot( *this, &LoggingOutputHandler::messageLogger ));
+   MessagingHub::Instance().logMessage.connect( sigc::mem_fun( *this, &LoggingOutputHandler::messageLogger ));
 }
 
 

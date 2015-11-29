@@ -101,18 +101,18 @@ void MainScreenWidget::setup( bool messageLine, const PG_Rect& mapView )
    displayLogMessage ( 5, "done\nMainScreenWidget completed\n");
    dataLoaderTicker();
 
-   repaintDisplay.connect ( SigC::bind( SigC::slot( *this, &MainScreenWidget::Update ), true ));
+   repaintDisplay.connect ( sigc::bind( sigc::mem_fun( *this, &MainScreenWidget::Update ), true ));
    
    buildBackgroundImage( messageLine );
    dataLoaderTicker();
 
-   PG_Application::GetApp()->sigAppIdle.connect( SigC::slot( *this, &MainScreenWidget::idleHandler ));
+   PG_Application::GetApp()->sigAppIdle.connect( sigc::hide( sigc::mem_fun( *this, &MainScreenWidget::idleHandler )));
 
-   mapChanged.connect( SigC::slot( OverviewMapHolder::clearmap ));
+   mapChanged.connect( sigc::ptr_fun( &OverviewMapHolder::clearmap ));
    dataLoaderTicker();
    
-   MessagingHub::Instance().statusInformation.connect( SigC::slot( *this, &MainScreenWidget::displayMessage ));
-   MessagingHub::Instance().messageWindowFactory.connect( SigC::slot( *this, &MainScreenWidget::createStatusWindow ));
+   MessagingHub::Instance().statusInformation.connect( sigc::mem_fun( *this, &MainScreenWidget::displayMessage ));
+   MessagingHub::Instance().messageWindowFactory.connect( sigc::mem_fun( *this, &MainScreenWidget::createStatusWindow ));
 }
 
 
@@ -130,7 +130,7 @@ void MainScreenWidget :: toggleMapLayer( const ASCString& name )
 }
 
 
-bool MainScreenWidget :: idleHandler( PG_MessageObject* msgObj )
+bool MainScreenWidget :: idleHandler( )
 {
    if ( ticker > lastMessageTime + 500 ) {
       displayMessage( "" );

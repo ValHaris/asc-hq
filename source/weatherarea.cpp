@@ -482,11 +482,11 @@ WeatherSystem::WeatherSystem(GameMap* map, int spawn, float ws2fr, unsigned int 
 
     defaultWindSpeeds.push_back(100 - sum);
     setLikelihoodWindSpeed(defaultWindSpeeds);
-    map->newRound.connect(SigC::slot(*this, &WeatherSystem::update));
+    map->newRound.connect(sigc::mem_fun(*this, &WeatherSystem::update));
 }
 
 WeatherSystem::WeatherSystem(GameMap* map):gameMap(map) {
-    map->newRound.connect(SigC::slot(*this, &WeatherSystem::update));
+    map->newRound.connect(sigc::mem_fun(*this, &WeatherSystem::update));
 
 
 }

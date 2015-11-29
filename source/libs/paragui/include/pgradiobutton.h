@@ -33,6 +33,7 @@
 #ifndef PG_RADIOBUTTON_H
 #define PG_RADIOBUTTON_H
 
+#include <sigc++/sigc++.h>
 #include "pgthemewidget.h"
 #include "pglabel.h"
 
@@ -59,8 +60,7 @@ public:
 	/**
 	Signal type declaration
 	**/
-	template<class datatype = PG_Pointer>
-class SignalButtonClick : public PG_Signal2<PG_RadioButton*, datatype> {}
+class SignalButtonClick : public sigc::signal<bool, PG_RadioButton*, bool> {}
 	;
 
 	/** */
@@ -104,7 +104,7 @@ class SignalButtonClick : public PG_Signal2<PG_RadioButton*, datatype> {}
 		return my_groupNext;
 	}
 
-	SignalButtonClick<bool> sigClick;
+	SignalButtonClick sigClick;
 
 protected:
 

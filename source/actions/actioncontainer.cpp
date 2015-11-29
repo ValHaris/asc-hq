@@ -26,9 +26,9 @@
 #include "../basestrm.h"
 #include "../util/messaginghub.h"
 
-SigC::Signal2<void,GameMap*,const Command&> ActionContainer::postActionExecution;
-SigC::Signal2<void,GameMap*,Command&> ActionContainer::commitCommand;
-SigC::Signal1<void,GameMap*> ActionContainer::actionListChanged;
+sigc::signal<void,GameMap*,const Command&> ActionContainer::postActionExecution;
+sigc::signal<void,GameMap*,Command&> ActionContainer::commitCommand;
+sigc::signal<void,GameMap*> ActionContainer::actionListChanged;
 
 
 ActionContainer::ActionContainer( GameMap* gamemap )

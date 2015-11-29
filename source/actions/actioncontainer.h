@@ -82,13 +82,13 @@ class ActionContainer {
       void getActionDescriptions( vector<ASCString>& list );
       
       //! signales an executed Command. The command can still be undone after postActionExecution
-      static SigC::Signal2<void,GameMap*,const Command&> postActionExecution;
+      static sigc::signal<void,GameMap*,const Command&> postActionExecution;
       
       /** The command, which has already been executed, is finally commited and will not be undone any more
           This may be used to store it in the replay structure  */
-      static SigC::Signal2<void,GameMap*,Command&> commitCommand;
+      static sigc::signal<void,GameMap*,Command&> commitCommand;
       
-      static SigC::Signal1<void,GameMap*> actionListChanged;
+      static sigc::signal<void,GameMap*> actionListChanged;
       
       ~ActionContainer();
 };

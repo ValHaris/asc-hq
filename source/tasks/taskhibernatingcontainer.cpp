@@ -25,7 +25,7 @@
 
 void TaskHibernatingContainer::registerHooks()
 {
-   GameMap::sigMapCreation.connect( SigC::slot( &TaskHibernatingContainer::hook ));
+   GameMap::sigMapCreation.connect( sigc::ptr_fun( &TaskHibernatingContainer::hook ));
 }
 
 void TaskHibernatingContainer::hook( GameMap& gamemap )

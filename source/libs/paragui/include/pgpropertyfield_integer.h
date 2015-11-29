@@ -72,7 +72,7 @@ protected:
 
 public:
 
-	typedef PG_Signal2<PG_PropertyField_Integer*, IntegerType> IntegerPropertySignal;
+	typedef sigc::signal<void, PG_PropertyField_Integer*, IntegerType> IntegerPropertySignal;
 	IntegerPropertySignal sigValueChanged;
 	IntegerPropertySignal sigValueApplied;
 

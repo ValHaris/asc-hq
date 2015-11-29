@@ -23,7 +23,7 @@ void Win32IoErrorHandler::printError( const ASCString& msg )
 
 Win32IoErrorHandler::Win32IoErrorHandler()
 {
-   MessagingHub::Instance().error.connect( SigC::slot( *this, &Win32IoErrorHandler::printError ));
-   MessagingHub::Instance().fatalError.connect( SigC::slot( *this, &Win32IoErrorHandler::printError ));
+   MessagingHub::Instance().error.connect( sigc::mem_fun( *this, &Win32IoErrorHandler::printError ));
+   MessagingHub::Instance().fatalError.connect( sigc::mem_fun( *this, &Win32IoErrorHandler::printError ));
 }
 

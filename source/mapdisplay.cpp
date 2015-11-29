@@ -64,8 +64,8 @@ MapRenderer::Icons MapRenderer::icons;
 bool tempsvisible = true;
 
 
-SigC::Signal0<void> lockMapdisplay;
-SigC::Signal0<void> unlockMapdisplay;
+sigc::signal<void> lockMapdisplay;
+sigc::signal<void> unlockMapdisplay;
 
 
 class ContainerInfoLayer : public MapLayer {
@@ -627,9 +627,9 @@ MapDisplayPG::MapDisplayPG ( MainScreenWidget *parent, const PG_Rect r )
    
    setNewZoom( CGameOptions::Instance()->mapzoom );
 
-   repaintMap.connect( SigC::slot( *this, &MapDisplayPG::updateWidget ));
+   repaintMap.connect( sigc::mem_fun( *this, &MapDisplayPG::updateWidget ));
 
-   PG_Application::GetApp()->sigKeyDown.connect( SigC::slot( *this, &MapDisplayPG::keyboardHandler ));
+   PG_Application::GetApp()->sigKeyDown.connect( sigc::mem_fun( *this, &MapDisplayPG::keyboardHandler ));
 
    SetName( "THEMapDisplay");
 
@@ -640,7 +640,7 @@ MapDisplayPG::MapDisplayPG ( MainScreenWidget *parent, const PG_Rect r )
       s.assignDefaultPalette();
    }
    
-   MapRenderer::additionalItemDisplayHook.connect( SigC::slot( *this, &MapDisplayPG::displayAddons ));
+   MapRenderer::additionalItemDisplayHook.connect( sigc::mem_fun( *this, &MapDisplayPG::displayAddons ));
    
    upperLeftSourceBlitCorner = SPoint( getFieldPosX(0,0), getFieldPosY(0,0));
 
@@ -655,8 +655,8 @@ MapDisplayPG::MapDisplayPG ( MainScreenWidget *parent, const PG_Rect r )
    addMapLayer( new UnitInfoLayer()     , "unitinfo" );
    addMapLayer( new UnitTrainingLayer() , "unittraining" );
 
-   parent->lockOptionsChanged.connect( SigC::slot( *this, &MapDisplayPG::lockOptionsChanged ));
-   GameMap::sigMapDeletion.connect( SigC::slot( *this, &MapDisplayPG::sigMapDeleted ));
+   parent->lockOptionsChanged.connect( sigc::mem_fun( *this, &MapDisplayPG::lockOptionsChanged ));
+   GameMap::sigMapDeletion.connect( sigc::mem_fun( *this, &MapDisplayPG::sigMapDeleted ));
 }
 
 
@@ -1654,7 +1654,7 @@ void MapDisplayPG::moveCursor( int dir, int step )
 }
 
 
-bool MapDisplayPG::keyboardHandler( const SDL_KeyboardEvent* keyEvent)
+bool MapDisplayPG::keyboardHandler( PG_MessageObject* o, const SDL_KeyboardEvent* keyEvent)
 {
    if ( !keyEvent || !actmap )
       return false;

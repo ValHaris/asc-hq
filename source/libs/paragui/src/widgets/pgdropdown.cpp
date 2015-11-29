@@ -27,6 +27,7 @@
 */
 
 #include <algorithm>
+#include <sigc++/sigc++.h>
 
 #include "pgdropdown.h"
 #include "pglog.h"
@@ -42,14 +43,14 @@ my_EditBox(NULL), my_DropButton(NULL), my_DropList(NULL) {
 	SetID(id);
 
 	my_EditBox = new PG_LineEdit(this, rect, style);
-	my_EditBox->sigEditBegin.connect(sigEditBegin.slot());
-	my_EditBox->sigEditEnd.connect(sigEditEnd.slot());
-	my_EditBox->sigEditReturn.connect(sigEditReturn.slot());
+	my_EditBox->sigEditBegin.connect( sigEditBegin.make_slot() );
+	my_EditBox->sigEditEnd.connect( sigEditEnd.make_slot() );
+	my_EditBox->sigEditReturn.connect( sigEditReturn.make_slot() );
 
 	PG_Rect rbutton(abs(r.my_width - r.my_height), 0, r.my_height, r.my_height);
 	my_DropButton = new PG_Button(this, rbutton, PG_NULLSTR, -1, style);
 	my_DropButton->SetID(IDDROPDOWN_BOX);
-	my_DropButton->sigClick.connect(slot(*this, &PG_DropDown::handleButtonClick));
+	my_DropButton->sigClick.connect( sigc::mem_fun(*this, &PG_DropDown::handleButtonClick));
 
 	PG_Rect rlist(r.my_xpos, r.my_ypos + r.my_height +1, r.my_width, r.my_height /* * 5 */);
 	my_DropList = new PG_ListBox(NULL, rlist, style);
@@ -57,8 +58,8 @@ my_EditBox(NULL), my_DropButton(NULL), my_DropList(NULL) {
 	my_DropList->SetShiftOnRemove(false, true);
 
 	//my_DropList->EnableScrollBar(false);
-	my_DropList->sigSelectItem.connect(slot(*this, &PG_DropDown::select_handler));
-	my_DropList->sigDelete.connect(slot(*this, &PG_DropDown::onDropListDeletion));
+	my_DropList->sigSelectItem.connect( sigc::mem_fun(*this, &PG_DropDown::select_handler));
+	my_DropList->sigDelete.connect(sigc::mem_fun(*this, &PG_DropDown::onDropListDeletion));
 
 	LoadThemeStyle(style);
 }

@@ -15,6 +15,7 @@
  *                                                                         *
  ***************************************************************************/
 
+#include <sigc++/sigc++.h>
 #include <pgimage.h>
 #include <pgtooltiphelp.h>
 #include "cargodialog.h"
@@ -64,7 +65,7 @@ const VehicleType* selectVehicletype( ContainerBase* plant, const vector<Vehicle
 
 class CargoDialog;
 
-class SubWindow: public SigC::Object
+class SubWindow: public sigc::trackable
 {
    protected:
       CargoDialog* cargoDialog;
@@ -187,7 +188,7 @@ class Movement : public GuiFunction
 };
 
 
-class UnitProduction : public GuiFunction, public SigC::Object
+class UnitProduction : public GuiFunction, public sigc::trackable
 {
       CargoDialog& parent;
       ConstructUnitCommand::Producables producables;
@@ -404,13 +405,13 @@ class CargoDialog : public Panel
       void registerSpecialDisplay( const ASCString& name ) {
          SpecialDisplayWidget* sdw = dynamic_cast<SpecialDisplayWidget*>( FindChild( name, true ) );
          if ( sdw )
-            sdw->display.connect( SigC::slot( *this, &CargoDialog::painter ));
+            sdw->display.connect( sigc::mem_fun( *this, &CargoDialog::painter ));
       };
 
       void registerSpecialInput( const ASCString& name ) {
          SpecialInputWidget* siw = dynamic_cast<SpecialInputWidget*>( FindChild( name, true ) );
          if ( siw )
-            siw->sigMouseButtonDown.connect( SigC::slot( *this, &CargoDialog::onClick ));
+            siw->sigMouseButtonDown.connect( sigc::mem_fun( *this, &CargoDialog::onClick ));
       };
 
       bool onClick ( PG_MessageObject* obj, const SDL_MouseButtonEvent* event ) {
@@ -462,7 +463,7 @@ class CargoDialog : public Panel
          
       };
 
-      bool activate_i( int pane ) {
+      bool activate_i( PG_Button* b, int pane ) {
          if ( pane >= 0 && pane < activesubwindows.size() ) {
             activate( activesubwindows[pane]->getASCTXTname() );
             activesubwindows[pane]->update();
@@ -667,7 +668,7 @@ class CargoDialog : public Panel
          else return NULL;
       };
 
-      SigC::Signal0<void>  sigCargoChanged;
+      sigc::signal<void>  sigCargoChanged;
 
       void setUnitInfoWidgets( const ContainerBase* container, const ASCString& prefix ) {
          if ( container ) {
@@ -1006,7 +1007,7 @@ class NetControlWindow : public SubWindow
                for ( int y = 0; y < 4; ++y ) {
                   PG_Button* b = findButton( x, y );
                   if ( b ) {
-                     b->sigClick.connect( SigC::bind( SigC::bind( SigC::slot( *this, &NetControlWindow::click ), x), y));
+                     b->sigClick.connect( sigc::bind( sigc::bind( sigc::mem_fun( *this, &NetControlWindow::click ), x), y));
                      if ( y >= 2)
                         b->SetToggle( true );
                   }
@@ -1040,7 +1041,7 @@ class CargoInfoWindow : public SubWindow
 
       void registerSubwindow( CargoDialog* cd ) {
          SubWindow::registerSubwindow( cd );
-         cargoDialog->sigCargoChanged.connect( SigC::slot( *this, &CargoInfoWindow::update ));
+         cargoDialog->sigCargoChanged.connect( sigc::mem_fun( *this, &CargoInfoWindow::update ));
       };
 
 
@@ -1058,7 +1059,7 @@ class CargoInfoWindow : public SubWindow
 class BuildingControlWindow : public SubWindow
 {
    public:
-      SigC::Signal0<void> damageChanged;
+      sigc::signal<void> damageChanged;
 
 
       void registerChilds( CargoDialog* cd ) {
@@ -1067,7 +1068,7 @@ class BuildingControlWindow : public SubWindow
          if ( widget ) {
             PG_Button* b = dynamic_cast<PG_Button*>( widget->FindChild( "RepairButton", true ) );
             if ( b )
-               b->sigClick.connect( SigC::slot( *this, &BuildingControlWindow::repair ));
+               b->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &BuildingControlWindow::repair )));
          }
       }
 
@@ -1377,7 +1378,7 @@ class ResearchGraph : public GraphWidget
          recalc();
       }
 
-      SigC::Signal0<void> sigChange;
+      sigc::signal<void> sigChange;
 
 };
 
@@ -1544,8 +1545,8 @@ class MatterAndMiningBaseWindow : public SubWindow
          if ( first && slider ) {
             first = false;
             slider->SetRange( 0, 100 );
-            slider->sigScrollPos.connect( SigC::slot( *this, &MatterAndMiningBaseWindow::scrollPos ));
-            slider->sigScrollTrack.connect( SigC::slot( *this, &MatterAndMiningBaseWindow::scrollTrack ));
+            slider->sigScrollPos.connect( sigc::mem_fun( *this, &MatterAndMiningBaseWindow::scrollPos ));
+            slider->sigScrollTrack.connect( sigc::mem_fun( *this, &MatterAndMiningBaseWindow::scrollTrack ));
          }
 
          for ( int r = 0; r < 3; ++r )
@@ -1773,11 +1774,11 @@ CargoDialog ::CargoDialog (PG_Widget *parent, ContainerBase* cb )
 {
    shutdownImmediately = false;
 
-   sigClose.connect( SigC::slot( *this, &CargoDialog::QuitModal ));
+   sigClose.connect( sigc::mem_fun( *this, &CargoDialog::QuitModal ));
 
    registerGuiFunctions( guiIconHandler );
 
-   cb->destroyed.connect( SigC::slot( *this, &CargoDialog::containerDestroyed ));
+   cb->destroyed.connect( sigc::mem_fun( *this, &CargoDialog::containerDestroyed ));
 
    ciw = new CargoInfoWindow;
    subwindows.push_back( ciw );
@@ -1802,8 +1803,8 @@ CargoDialog ::CargoDialog (PG_Widget *parent, ContainerBase* cb )
 
 
 
-   // cb->resourceChanged.connect( SigC::slot( *this, &CargoDialog::updateResourceDisplay ));
-   // cb->ammoChanged.connect( SigC::slot( *this, &CargoDialog::showAmmo ));
+   // cb->resourceChanged.connect( sigc::mem_fun( *this, &CargoDialog::updateResourceDisplay ));
+   // cb->ammoChanged.connect( sigc::mem_fun( *this, &CargoDialog::showAmmo ));
 
 
    try {
@@ -1864,7 +1865,7 @@ CargoDialog ::CargoDialog (PG_Widget *parent, ContainerBase* cb )
 
    NewGuiHost::pushIconHandler( &guiIconHandler );
 
-   activate_i(0);
+   activate_i(NULL, 0);
    cargoChanged();
    Show();
    setupOK = true;
@@ -1879,7 +1880,7 @@ void CargoDialog::userHandler( const ASCString& label, PropertyReadingContainer&
       int y = 0;
       for ( int i = 0; i < activesubwindows.size(); ++i ) {
          SubWinButton* button = new SubWinButton( parent, SPoint( x, y ), activesubwindows[i] );
-         button->sigClick.connect( SigC::bind( SigC::slot( *this, &CargoDialog::activate_i  ), i));
+         button->sigClick.connect( sigc::bind( sigc::mem_fun( *this, &CargoDialog::activate_i  ), i));
          if ( x + 2*SubWinButton::buttonwidth < parent->Width() )
             x += SubWinButton::buttonwidth;
          else {
@@ -1910,7 +1911,7 @@ void CargoDialog::userHandler( const ASCString& label, PropertyReadingContainer&
 
    if ( label == "ResearchGraph" ) {
       ResearchGraph* graph = new ResearchGraph( parent, PG_Rect( 0, 0, parent->Width(), parent->Height() ), container );
-      graph->sigChange.connect( SigC::slot( *researchWindow, &SubWindow::update ));
+      graph->sigChange.connect( sigc::mem_fun( *researchWindow, &SubWindow::update ));
    }
 
    if ( label == "MiningGraph" ) {
@@ -1921,7 +1922,7 @@ void CargoDialog::userHandler( const ASCString& label, PropertyReadingContainer&
 
    if ( label == "DamageBar" ) {
       DamageBarWidget* dbw = new DamageBarWidget( parent, PG_Rect( 0, 0, parent->Width(), parent->Height() ), container );
-      buildingControlWindow->damageChanged.connect( SigC::slot( *dbw, &DamageBarWidget::repaint ));
+      buildingControlWindow->damageChanged.connect( sigc::mem_fun( *dbw, &DamageBarWidget::repaint ));
    }
 
    if ( label == "ScrollArea" ) {
@@ -1929,10 +1930,10 @@ void CargoDialog::userHandler( const ASCString& label, PropertyReadingContainer&
       if ( unitScrollArea ) {
          cargoWidget = new CargoWidget( unitScrollArea, PG_Rect( 1, 1, unitScrollArea->Width() -2 , unitScrollArea->Height() -2 ), container, false );
          cargoWidget->enableDragNDrop( true );
-         cargoWidget->sigDragDone.connect( SigC::slot( *this, &CargoDialog::dragUnitToInnerContainer ));
-         cargoWidget->sigDragAvail.connect( SigC::slot( *this, &CargoDialog::dragUnitToInnerContainerAvail ));
-         cargoWidget->sigDragInProcess.connect( SigC::slot( *this, &CargoDialog::dragInProcess ));
-         cargoWidget->sigDragAborted.connect( SigC::slot( *this, &CargoDialog::dragAborted ));
+         cargoWidget->sigDragDone.connect( sigc::mem_fun( *this, &CargoDialog::dragUnitToInnerContainer ));
+         cargoWidget->sigDragAvail.connect( sigc::mem_fun( *this, &CargoDialog::dragUnitToInnerContainerAvail ));
+         cargoWidget->sigDragInProcess.connect( sigc::mem_fun( *this, &CargoDialog::dragInProcess ));
+         cargoWidget->sigDragAborted.connect( sigc::mem_fun( *this, &CargoDialog::dragAborted ));
 
          vector<StoringPosition*> storingPositionVector;
 
@@ -1969,19 +1970,19 @@ void CargoDialog::userHandler( const ASCString& label, PropertyReadingContainer&
          }
 
          cargoWidget->registerStoringPositions( storingPositionVector, unitColumnCount );
-         cargoWidget->sigScrollTrack.connect( SigC::slot( *this, &CargoDialog::clearSmallIcons ));
+         cargoWidget->sigScrollTrack.connect( sigc::mem_fun( *this, &CargoDialog::clearSmallIcons ));
 
-         cargoWidget->unitMarked.connect( SigC::slot( *this, &CargoDialog::checkStoringPosition ));
+         cargoWidget->unitMarked.connect( sigc::mem_fun( *this, &CargoDialog::checkStoringPosition ));
          
          if ( ciw )
-            cargoWidget->unitMarked.connect( SigC::hide<Vehicle*>( SigC::slot( *ciw, &CargoInfoWindow::update )));
+            cargoWidget->unitMarked.connect( sigc::hide( sigc::mem_fun( *ciw, &CargoInfoWindow::update )));
          
          if ( mainScreenWidget && mainScreenWidget->getGuiHost() )
-            cargoWidget->unitMarked.connect( SigC::hide<Vehicle*>( SigC::slot( *this, &CargoDialog::clearSmallIcons )));
+            cargoWidget->unitMarked.connect( sigc::hide( sigc::mem_fun( *this, &CargoDialog::clearSmallIcons )));
 
-         cargoWidget->unitClicked.connect ( SigC::slot( *this, &CargoDialog::onUnitClick ));
+         cargoWidget->unitClicked.connect ( sigc::mem_fun( *this, &CargoDialog::onUnitClick ));
 
-         container->cargoChanged.connect( SigC::slot( *cargoWidget, &CargoWidget::redrawAll ));
+         container->cargoChanged.connect( sigc::mem_fun( *cargoWidget, &CargoWidget::redrawAll ));
       }
    }
    if ( label == "UnitTypeList"  || label == "UnitTypeListHorizontal" )  {
@@ -2143,7 +2144,7 @@ void UnitProduction::execute( const MapCoordinate& pos, ContainerBase* subject, 
       production->setMode( ConstructUnitCommand::internal );
       producables = production->getProduceableVehicles();
       VehicleProduction_SelectionWindow fsw( NULL, PG_Rect( 10, 10, 450, 550 ), parent.getContainer(), producables, true );
-      fsw.reloadProducebles.connect( SigC::slot( *this, &UnitProduction::productionLinesChanged ));
+      fsw.reloadProducebles.connect( sigc::mem_fun( *this, &UnitProduction::productionLinesChanged ));
       fsw.SetTransparency(0);
       fsw.Show();
       fsw.RunModal();
@@ -2623,7 +2624,7 @@ class VehicleWidget: public VehicleBaseWidget
       };
 };
 
-class VehicleSelectionFactory: public SelectionItemFactory, public SigC::Object
+class VehicleSelectionFactory: public SelectionItemFactory, public sigc::trackable
 {
    public:
       typedef vector<Vehicle*> Container;

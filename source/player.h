@@ -54,7 +54,7 @@ enum DiplomaticStates { WAR, TRUCE, PEACE, PEACE_SV, ALLIANCE };
 extern const char* diplomaticStateNames[diplomaticStateNum+1];
 
 
-class DiplomaticStateVector : public SigC::Object {
+class DiplomaticStateVector : public sigc::trackable {
 
       friend class AllianceSetupWidget;
       friend class ChangeDiplomaticState;
@@ -96,7 +96,7 @@ class GameMap;
 
 
 //! the different players in ASC. There may be 8 players (0..7) and neutral units (8)
-class Player : public SigC::Object {
+class Player : public sigc::trackable {
       int player;
       GameMap* parentMap;
       

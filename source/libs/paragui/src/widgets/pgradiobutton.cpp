@@ -55,7 +55,7 @@ PG_RadioButton::PG_RadioButton(PG_Widget* parent, const PG_Rect& r, const std::s
 	my_widgetButton = new PG_Button(this, rectButton);
 	my_widgetButton->SetToggle(true);
 	my_widgetButton->EnableReceiver(false);
-	my_widgetButton->sigClick.connect(slot(*this, &PG_RadioButton::handleButtonClick));
+	my_widgetButton->sigClick.connect( sigc::mem_fun(*this, &PG_RadioButton::handleButtonClick));
 
 	rectLabel.SetRect(rectButton.my_width, 0, r.my_width - rectButton.my_width, r.my_height);
 	my_widgetLabel = new PG_Label(this, rectLabel, text, style);

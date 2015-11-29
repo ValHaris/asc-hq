@@ -173,7 +173,7 @@ protected:
 
 private:
 
-	bool handleScrollTrack();
+	bool handleScrollTrack(long pos);
 
 	enum { MARK_SPACE, MARK_NONBREAKABLE_SPACE, MARK_ENTER, MARK_TAB,
 	       MARK_TEXT_LEFT, MARK_TEXT_CENTER, MARK_TEXT_RIGHT, MARK_TEXT_BLOCK,

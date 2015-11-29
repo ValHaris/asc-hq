@@ -134,9 +134,9 @@ class PlayerSetupWindow : public ASC_PG_Dialog {
       {
          asw = new PlayerSetupWidget( actmap, PlayerSetupWidget::AllEditable, this, PG_Rect( 5, 30, r.Width() - 10, r.Height() - 60 ));
          PG_Button* ok = new PG_Button( this, PG_Rect( Width() - 200, Height() - 30, 90, 20 ), "OK" );
-         ok->sigClick.connect( SigC::slot( *this, &PlayerSetupWindow::Apply ));
+         ok->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &PlayerSetupWindow::Apply )));
          PG_Button* cancel = new PG_Button( this, PG_Rect( Width() - 100, Height() - 30, 90, 20 ), "Cancel" );
-         cancel->sigClick.connect( SigC::slot( *this, &PlayerSetupWindow::QuitModal ));
+         cancel->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &PlayerSetupWindow::QuitModal )));
       }
 
       bool Apply()

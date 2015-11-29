@@ -16,7 +16,7 @@
 #include "ascstring.h"
 #include <fstream>
 
- class LoggingOutputHandler : public SigC::Object {
+ class LoggingOutputHandler : public sigc::trackable {
        ASCString filename;
        std::ofstream logfile;
        void messageLogger( const ASCString& msg, int level );

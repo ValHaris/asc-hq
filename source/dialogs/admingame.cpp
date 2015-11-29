@@ -317,19 +317,19 @@ class AdminGameWindow : public ASC_PG_Dialog {
          new ActionItem( actionlistbox, 20, "export technology", PlayerActionFunctor( this, &AdminGameWindow::exportTechs));
          new ActionItem( actionlistbox, 20, "import technology", PlayerActionFunctor( this, &AdminGameWindow::importTechs));
 
-         (new PG_Button( scrollwidget, PG_Rect( 3*gap+2*selectorWidth, ypos, 50, selectorHeight ), "Apply" ))->sigClick.connect( SigC::slot( *this, &AdminGameWindow::apply ));
+         (new PG_Button( scrollwidget, PG_Rect( 3*gap+2*selectorWidth, ypos, 50, selectorHeight ), "Apply" ))->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &AdminGameWindow::apply )));
          
          ypos += 270;
          
          new PG_Label( scrollwidget, PG_Rect( 20, ypos, 100, 20 ), "Turn:" );
          turn = new PG_LineEdit( scrollwidget, PG_Rect( 130, ypos, 50, 20));
          turn->SetEditable( true );
-         turn->sigEditEnd.connect( SigC::slot( *this, &AdminGameWindow::turnEdited ));
-         turn->sigEditReturn.connect( SigC::slot( *this, &AdminGameWindow::turnEdited ));
+         turn->sigEditEnd.connect( sigc::mem_fun( *this, &AdminGameWindow::turnEdited ));
+         turn->sigEditReturn.connect( sigc::mem_fun( *this, &AdminGameWindow::turnEdited ));
 
          if ( turnSkipper ) {
              PG_Button* b = new PG_Button ( scrollwidget, PG_Rect( 200, ypos, 100, 50 ), "skip player" );
-             b->sigClick.connect( SigC::slot( *this, &AdminGameWindow::skipPlayer ));
+             b->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &AdminGameWindow::skipPlayer )));
          }
 
          ypos += 30;
@@ -341,7 +341,7 @@ class AdminGameWindow : public ASC_PG_Dialog {
          
          if ( actmap->network ) {
             ypos += 30;         
-            (new PG_Button( scrollwidget, PG_Rect( 20, ypos, 200, 20 ), "Setup data transfer" ))->sigClick.connect( SigC::slot( *this, &AdminGameWindow::netSetup )) ;
+            (new PG_Button( scrollwidget, PG_Rect( 20, ypos, 200, 20 ), "Setup data transfer" ))->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &AdminGameWindow::netSetup ))) ;
          }
          
          ypos += 30;
@@ -350,11 +350,11 @@ class AdminGameWindow : public ASC_PG_Dialog {
          ypos += PlayerSetupWidget::guessHeight(gamemap) + gap;
 
 
-         (new PG_Button( scrollwidget, PG_Rect( gap, ypos, Width() - 3* gap, 30), "OK" ))->sigClick.connect( SigC::slot( *this, &AdminGameWindow::ok));
+         (new PG_Button( scrollwidget, PG_Rect( gap, ypos, Width() - 3* gap, 30), "OK" ))->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &AdminGameWindow::ok)));
          ypos += 40;
 
          if ( actmap->getgameparameter(cgp_superVisorCanSaveMap)) {
-            (new PG_Button( scrollwidget, PG_Rect( gap, ypos, Width() - 3* gap, 30), "Save as Map" ))->sigClick.connect( SigC::slot( *this, &AdminGameWindow::saveAsMap));
+            (new PG_Button( scrollwidget, PG_Rect( gap, ypos, Width() - 3* gap, 30), "Save as Map" ))->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &AdminGameWindow::saveAsMap)));
             ypos += 40;
          }
 

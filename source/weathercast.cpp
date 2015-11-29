@@ -27,9 +27,9 @@ WeatherPanel::WeatherPanel ( PG_Widget *parent, const PG_Rect &r, const ASCStrin
     turnLabel->SetSizeByText();
     //    turnLabelWidth = turnLabel->Width();//????
     forward = new PG_Button(this, PG_Rect(Width() -60 , Height() - GuiDimension::getButtonHeight(), 55, 35), "forward", 90);
-    forward->sigClick.connect(SigC::slot( *this, &WeatherPanel::buttonForward));
+    forward->sigClick.connect( sigc::hide(sigc::mem_fun( *this, &WeatherPanel::buttonForward)));
     back = new PG_Button(this, PG_Rect(Width() -(60 + 10) - 60, Height() - GuiDimension::getButtonHeight(), 55, 35), "back", 90);
-    back->sigClick.connect(SigC::slot( *this, &WeatherPanel::buttonBack));
+    back->sigClick.connect( sigc::hide(sigc::mem_fun( *this, &WeatherPanel::buttonBack)));
 
 
     int windRoseYPos = GuiDimension::getTopOffSet();
@@ -49,7 +49,7 @@ WeatherPanel::WeatherPanel ( PG_Widget *parent, const PG_Rect &r, const ASCStrin
     updateWeatherSpeed(actmap->time.turn());
 
     SpecialDisplayWidget* sdw  = new SpecialDisplayWidget(this, PG_Rect(0, 0, 150, 300));
-    sdw->display.connect( SigC::slot( *this, &WeatherPanel::painter ));
+    sdw->display.connect( sigc::mem_fun( *this, &WeatherPanel::painter ));
 
     // Weathercast* wc = static_cast<Weathercast*>(GetParent());
     // wc->Redraw();
@@ -241,16 +241,16 @@ Weathercast::Weathercast(const WeatherSystem& ws):  ASC_PG_Dialog(NULL, PG_Rect(
 
     weatherPanel = new WeatherPanel ( this, PG_Rect( 350, 30, 150, 300),"weatherPanel", false );
     sdw  = new SpecialDisplayWidget(this, PG_Rect(mapXPos, mapYPos, 350, 250));
-    sdw->display.connect( SigC::slot( *this, &Weathercast::painter ));
-    sdw->sigMouseMotion.connect( SigC::slot( *this, &Weathercast::mouseMotion ));
-    sdw->sigMouseButtonDown.connect( SigC::slot( *this, &Weathercast::mouseButtonDown ));
-    viewChanged.connect ( SigC::slot( *this, &Weathercast::redraw ));
+    sdw->display.connect( sigc::mem_fun( *this, &Weathercast::painter ));
+    sdw->sigMouseMotion.connect( sigc::mem_fun( *this, &Weathercast::mouseMotion ));
+    sdw->sigMouseButtonDown.connect( sigc::mem_fun( *this, &Weathercast::mouseButtonDown ));
+    viewChanged.connect ( sigc::mem_fun( *this, &Weathercast::redraw ));
 
 
     okButton = new PG_Button(this, PG_Rect((xSize - GuiDimension::getButtonWidth()) / 2, ySize - (GuiDimension::getButtonHeight() + GuiDimension::getTopOffSet()), GuiDimension::getButtonWidth(), GuiDimension::getButtonHeight()), "OK", 90);
-    okButton->sigClick.connect(SigC::slot( *this, &Weathercast::closeWindow ));
+    okButton->sigClick.connect( sigc::hide(sigc::mem_fun( *this, &Weathercast::closeWindow )));
 
-    sigClose.connect( SigC::slot( *this, &Weathercast::closeWindow ));    
+    sigClose.connect( sigc::mem_fun( *this, &Weathercast::closeWindow ));    
 }
 
 Weathercast::~Weathercast() {}

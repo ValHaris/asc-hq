@@ -76,7 +76,7 @@ class EventEditor : public ASC_PG_Dialog {
          event->action->setup();
       }
 
-      bool setupTrigger( int num )
+      bool setupTrigger( PG_Widget* w, int num )
       {
          if ( event->trigger.size() > num )
             if ( event->trigger[num] )
@@ -111,7 +111,7 @@ class EventEditor : public ASC_PG_Dialog {
          }
       }
       
-      bool invertTrigger( bool invert, int e )
+      bool invertTrigger( PG_Widget* w, bool invert, int e )
       {
          if ( event->trigger.size() > e ) {
             event->trigger[e]->invert = invert;
@@ -179,8 +179,8 @@ class EventEditor : public ASC_PG_Dialog {
                if ( event->action->getName() == actionNames[i] )
                   eventType->SelectItem ( i );
 
-         eventType->selectionSignal.connect( SigC::slot( *this, &EventEditor::actionSelected ));
-         (new PG_Button( this, PG_Rect( labelWidth + 50 + 300, ypos, 100, 25 ), "setup"))->sigClick.connect( SigC::slot( *this, &EventEditor::setupEvent ));
+         eventType->selectionSignal.connect( sigc::mem_fun( *this, &EventEditor::actionSelected ));
+         (new PG_Button( this, PG_Rect( labelWidth + 50 + 300, ypos, 100, 25 ), "setup"))->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &EventEditor::setupEvent )));
          ypos += 40;
 
          new PG_Label( this, PG_Rect( 10, ypos, labelWidth, 25 ), "Description:" );
@@ -193,10 +193,10 @@ class EventEditor : public ASC_PG_Dialog {
             
             DropDownSelector* trigger = new DropDownSelector( this, PG_Rect( labelWidth+30, ypos, 200,25 ), triggerNames );
                  
-            (new PG_Button( this, PG_Rect( labelWidth+50+200, ypos, 100, 25 ), "setup"))->sigClick.connect( SigC::bind( SigC::slot( *this, &EventEditor::setupTrigger ), e));
+            (new PG_Button( this, PG_Rect( labelWidth+50+200, ypos, 100, 25 ), "setup"))->sigClick.connect( sigc::bind( sigc::mem_fun( *this, &EventEditor::setupTrigger ), e));
             
             PG_CheckButton* inv = new PG_CheckButton( this, PG_Rect( labelWidth+70+300, ypos, 100, 25 ), "invert");
-            inv->sigClick.connect( SigC::bind( SigC::slot( *this, &EventEditor::invertTrigger ), e));
+            inv->sigClick.connect( sigc::bind( sigc::mem_fun( *this, &EventEditor::invertTrigger ), e));
             if ( event->trigger.size() > e ) {
                if ( event->trigger[e]->invert )
                   inv->SetPressed();
@@ -209,7 +209,7 @@ class EventEditor : public ASC_PG_Dialog {
                   if ( triggerNames[i] == "Nothing (always false)"  )
                      trigger->SelectItem ( i );
                
-            trigger->selectionSignal.connect( SigC::bind( SigC::slot( *this, &EventEditor::triggerSelected), e ));
+            trigger->selectionSignal.connect( sigc::bind( sigc::mem_fun( *this, &EventEditor::triggerSelected), e ));
             ypos += 40;
          }
 
@@ -243,8 +243,8 @@ class EventEditor : public ASC_PG_Dialog {
          ypos += 40;
 
          
-         AddStandardButton ( "Cancel" )->sigClick.connect( SigC::slot( *this, &EventEditor::QuitModal ));
-         AddStandardButton ( "OK" )->sigClick.connect( SigC::slot( *this, &EventEditor::ok ));
+         AddStandardButton ( "Cancel" )->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &EventEditor::QuitModal )));
+         AddStandardButton ( "OK" )->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &EventEditor::ok )));
          
       };
 
@@ -366,16 +366,16 @@ class EventList : public ASC_PG_Dialog {
       {
          int w = 500;
          PG_Button* b = new PG_Button( this, PG_Rect ( w, 40, 90, 25 ), "~N~ew" );
-         b->sigClick.connect( SigC::slot( *this, &EventList::ButtonNew ));
+         b->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &EventList::ButtonNew )));
 
          b = new PG_Button( this, PG_Rect ( w, 80, 90, 25 ), "~E~dit" );
-         b->sigClick.connect( SigC::slot( *this, &EventList::ButtonEdit ));
+         b->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &EventList::ButtonEdit )));
          
          b = new PG_Button( this, PG_Rect ( w, 120, 90, 25 ), "~D~elete" );
-         b->sigClick.connect( SigC::slot( *this, &EventList::ButtonDelete ));
+         b->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &EventList::ButtonDelete )));
          
          b = new PG_Button( this, PG_Rect ( w, 160, 90, 25 ), "~O~K" );
-         b->sigClick.connect( SigC::slot( *this, &EventList::ButtonOK ));
+         b->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &EventList::ButtonOK )));
          
 
          listbox = new PG_ListBox( this, PG_Rect( 20, 40, w - 30, Height()-50 ));

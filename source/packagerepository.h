@@ -36,7 +36,7 @@ class PackageRepository : public TextFileDataLoader, public deallocating_vector<
       virtual void postChecks();
       ASCString getTypeName() { return "package"; };
       
-      static SigC::Signal0<void> packgeDescriptionLoaded;
+      static sigc::signal<void> packgeDescriptionLoaded;
       
       void checkPackageDependency( const Package* pack, const PackageData* packageData = NULL );
       

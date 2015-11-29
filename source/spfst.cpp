@@ -42,16 +42,16 @@
 
 #include "spfst-legacy.h"
 
-SigC::Signal0<void> repaintMap;
-SigC::Signal0<void> repaintDisplay;
-SigC::Signal0<void> updateFieldInfo;
-SigC::Signal0<void> cursorMoved;
-SigC::Signal1<void,ContainerBase*> showContainerInfo;
-SigC::Signal1<void,VehicleType*> showVehicleTypeInfo;
-SigC::Signal0<void> viewChanged;
-SigC::Signal1<void,GameMap*> mapChanged;
-SigC::Signal0<bool> idleEvent;
-SigC::Signal1<void, const Context&> fieldCrossed;
+sigc::signal<void> repaintMap;
+sigc::signal<void> repaintDisplay;
+sigc::signal<void> updateFieldInfo;
+sigc::signal<void> cursorMoved;
+sigc::signal<void,ContainerBase*> showContainerInfo;
+sigc::signal<void,VehicleType*> showVehicleTypeInfo;
+sigc::signal<void> viewChanged;
+sigc::signal<void,GameMap*> mapChanged;
+sigc::signal<bool> idleEvent;
+sigc::signal<void, const Context&> fieldCrossed;
 
 
 

@@ -47,20 +47,20 @@ SelectFromMap::SelectFromMap( CoordinateList& list, GameMap* map, bool justOne, 
 
    
    listbox = new PG_ListBox( this, PG_Rect( 10, 30, 130, readOnly ? 210 : 180 ));
-   listbox->sigSelectItem.connect( SigC::slot( *this, &SelectFromMap::listItemClicked ));
+   listbox->sigSelectItem.connect( sigc::mem_fun( *this, &SelectFromMap::listItemClicked ));
 
    if ( !readOnly ) {
       PG_Button* m = new PG_Button ( this, PG_Rect( 10, 230, 130, 20 ), "mark (~space~)");
-      m->sigClick.connect( SigC::slot( *this, &SelectFromMap::mark ));
+      m->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &SelectFromMap::mark )));
    }
 
 
    PG_Button* b = new PG_Button ( this, PG_Rect( 10, 270, 130, 20 ), "~O~K");
-   b->sigClick.connect( SigC::slot( *this, &SelectFromMap::closeDialog ));
+   b->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &SelectFromMap::closeDialog )));
 
    omp = getMainScreenWidget()->getOverviewMapPanel();
    md  = getMainScreenWidget()->getMapDisplay();
-   md->mouseButtonOnField.connect( SigC::slot( *this, &SelectFromMap::markField2 ));
+   md->mouseButtonOnField.connect( sigc::mem_fun( *this, &SelectFromMap::markField2 ));
    oldprio = md->setSignalPriority( 2 );
    
 
