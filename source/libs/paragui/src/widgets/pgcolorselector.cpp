@@ -135,7 +135,7 @@ PG_ColorSelector::PG_ColorSelector(PG_Widget* parent, const PG_Rect&r, const std
 
 	my_colorslider->SetBackground((SDL_Surface*)NULL);
 	my_colorslider->SetSimpleBackground(false);
-	my_colorslider->sigSlide.connect(slot(*this, &PG_ColorSelector::handle_colorslide));
+	my_colorslider->sigSlide.connect(sigc::mem_fun(*this, &PG_ColorSelector::handle_colorslide));
 	
 	my_colorresult = new PG_ThemeWidget(this, PG_Rect(r.h+20,r.h/2,r.w - ((r.h+20)+5), r.h - (5+r.h/2)));
 	my_colorresult->SetSimpleBackground(true);

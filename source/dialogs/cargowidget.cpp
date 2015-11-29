@@ -76,8 +76,8 @@ PG_Rect StoringPosition :: CalcSize( const PG_Point& pos  )
 StoringPosition :: StoringPosition( PG_Widget *parent, const PG_Point &pos, const PG_Point& unitPos, HighLightingManager& highLightingManager, const ContainerBase::Cargo& storageVector, int number, bool regularPosition, CargoWidget* cargoWidget  )
       : PG_Widget ( parent, CalcSize(pos), true ), highlight( highLightingManager ), storage( storageVector), num(number), regular(regularPosition), unitPosition( unitPos ), dragState( Off ), dragTarget( NoDragging )
 {
-   highlight.markChanged.connect( SigC::slot( *this, &StoringPosition::markChanged ));
-   highlight.redrawAll.connect( SigC::bind( SigC::slot( *this, &StoringPosition::Redraw), true));
+   highlight.markChanged.connect( sigc::mem_fun( *this, &StoringPosition::markChanged ));
+   highlight.redrawAll.connect( sigc::bind( sigc::mem_fun( *this, &StoringPosition::Redraw), true));
 
    if ( unitPosition.x < 0 ) {
       unitPosition.x = (Width() - fieldsizex)/2;
@@ -399,21 +399,21 @@ CargoWidget :: CargoWidget( PG_Widget* parent, const PG_Rect& pos, ContainerBase
       registerStoringPositions( StoringPosition::setup( this, container, unitHighLight, unitColumnCount ), unitColumnCount );
 
    if ( my_objVerticalScrollbar )
-      my_objVerticalScrollbar->sigScrollTrack.connect ( SigC::slot( *this, &CargoWidget::handleScrollTrack ));
+      my_objVerticalScrollbar->sigScrollTrack.connect ( sigc::mem_fun( *this, &CargoWidget::handleScrollTrack ));
 
    if ( my_objHorizontalScrollbar )
-      my_objHorizontalScrollbar->sigScrollTrack.connect ( SigC::slot( *this, &CargoWidget::handleScrollTrack ));
+      my_objHorizontalScrollbar->sigScrollTrack.connect ( sigc::mem_fun( *this, &CargoWidget::handleScrollTrack ));
 };
 
 void CargoWidget::registerStoringPositions( vector<StoringPosition*> sp, const int& colCount )
 {
    unitColumnCount = colCount;
    storingPositionVector  = sp;
-   unitHighLight.markChanged.connect( SigC::slot( *this, &CargoWidget::checkStoringPosition ));
-   unitHighLight.clickOnMarkedUnit.connect( SigC::slot( *this, &CargoWidget::click ));
+   unitHighLight.markChanged.connect( sigc::mem_fun( *this, &CargoWidget::checkStoringPosition ));
+   unitHighLight.clickOnMarkedUnit.connect( sigc::mem_fun( *this, &CargoWidget::click ));
 }
 
-bool  CargoWidget::handleScrollTrack (PG_ScrollBar *widget, long data)
+bool  CargoWidget::handleScrollTrack (long data)
 {
    sigScrollTrack();
    return true;

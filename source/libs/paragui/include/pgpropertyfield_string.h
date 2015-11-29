@@ -49,7 +49,7 @@ class PG_PropertyField_String : public PG_PropertyEditor_LineField {
       }
 
    public:
-      typedef PG_Signal2<PG_PropertyField_String*, StringType> StringPropertySignal;
+      typedef sigc::signal<void, PG_PropertyField_String*, StringType> StringPropertySignal;
       StringPropertySignal sigValueChanged;
       StringPropertySignal sigValueApplied;
 

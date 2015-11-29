@@ -25,7 +25,7 @@ class FileFindDialog: public ASC_PG_Dialog {
    private:
       TextRenderer* location;
       PG_LineEdit* le;
-      bool find( PG_LineEdit* le )
+      bool find(  )
       {
          location->SetText("searching ...");
          ASCString filename = le->GetText();
@@ -42,7 +42,7 @@ class FileFindDialog: public ASC_PG_Dialog {
       FileFindDialog () : ASC_PG_Dialog( NULL, PG_Rect( -1, -1, 500, 200 ), "Locate File") 
       {
          le = new PG_LineEdit( this, PG_Rect( 20, 40, 460, 25 ));
-         le->sigEditEnd.connect( SigC::slot( *this, &FileFindDialog::find )); 
+         le->sigEditEnd.connect( sigc::mem_fun( *this, &FileFindDialog::find )); 
          
          location = new TextRenderer ( this, PG_Rect( 20, 90, 460, 90 ));
       }

@@ -288,20 +288,20 @@ void hookGuiToMap( GameMap* map )
 {
    if ( !map->getGuiHooked() ) {
 
-      map->sigPlayerUserInteractionBegins.connect( SigC::slot( &viewcomp ) );
-      map->sigPlayerUserInteractionBegins.connect( SigC::hide<Player&>( repaintMap.slot() ));
+      map->sigPlayerUserInteractionBegins.connect( sigc::ptr_fun( &viewcomp ) );
+      map->sigPlayerUserInteractionBegins.connect( sigc::hide( repaintMap.make_slot() ));
       
-      map->sigPlayerUserInteractionBegins.connect( SigC::slot( &positionCursor ));
-      map->sigPlayerUserInteractionBegins.connect( SigC::hide<Player&>( SigC::slot( &checkforreplay )));
-      map->sigPlayerUserInteractionBegins.connect( SigC::slot( &checkForNewResearch ));
-      map->sigPlayerUserInteractionBegins.connect( SigC::slot( &viewunreadmessages ));
-      map->sigPlayerUserInteractionBegins.connect( SigC::slot( &checkJournal ));
-      map->sigPlayerUserInteractionBegins.connect( SigC::slot( &checkUsedASCVersions ));
-      map->sigPlayerUserInteractionBegins.connect( SigC::hide<Player&>( updateFieldInfo.slot() ));
+      map->sigPlayerUserInteractionBegins.connect( sigc::ptr_fun( &positionCursor ));
+      map->sigPlayerUserInteractionBegins.connect( sigc::hide( sigc::ptr_fun( &checkforreplay )));
+      map->sigPlayerUserInteractionBegins.connect( sigc::ptr_fun( &checkForNewResearch ));
+      map->sigPlayerUserInteractionBegins.connect( sigc::ptr_fun( &viewunreadmessages ));
+      map->sigPlayerUserInteractionBegins.connect( sigc::ptr_fun( &checkJournal ));
+      map->sigPlayerUserInteractionBegins.connect( sigc::ptr_fun( &checkUsedASCVersions ));
+      map->sigPlayerUserInteractionBegins.connect( sigc::hide( updateFieldInfo.make_slot() ));
 
-      map->sigPlayerUserInteractionEnds.connect( SigC::slot( &runPendingTasks ));
+      map->sigPlayerUserInteractionEnds.connect( sigc::ptr_fun( &runPendingTasks ));
 
-      map->sigPlayerTurnHasEnded.connect( SigC::slot( viewOwnReplay));
+      map->sigPlayerTurnHasEnded.connect( sigc::ptr_fun( &viewOwnReplay));
       map->guiHooked();
    }
 }
@@ -1347,7 +1347,7 @@ void loadLegacyFonts()
 
 
 
-class GameThreadParams: public SigC::Object
+class GameThreadParams: public sigc::trackable
 {
    private:
       bool exit() { exitMainloop = true; return true; };
@@ -1357,7 +1357,7 @@ class GameThreadParams: public SigC::Object
       bool exitMainloop;
       GameThreadParams( ASC_PG_App& app ) : application ( app ), exitMainloop(false) 
       {
-         app.sigQuit.connect( SigC::slot( *this, &GameThreadParams::exit ));
+         app.sigQuit.connect( sigc::hide( sigc::mem_fun( *this, &GameThreadParams::exit )));
       };
 };
 
@@ -1370,9 +1370,9 @@ void checkGameEvents( GameMap* map,const Command& command )
 
 int gamethread ( void* data )
 {
-   GameMap::sigMapDeletion.connect( SigC::slot( &resetActions ));
-   GameMap::sigMapDeletion.connect( SigC::slot( &resetActmap ));
-   GameMap::sigPlayerTurnEndsStatic.connect( SigC::slot( automaticTrainig ));
+   GameMap::sigMapDeletion.connect( sigc::ptr_fun( &resetActions ));
+   GameMap::sigMapDeletion.connect( sigc::ptr_fun( &resetActmap ));
+   GameMap::sigPlayerTurnEndsStatic.connect( sigc::ptr_fun( &automaticTrainig ));
    
    TaskContainer::registerHooks();
    
@@ -1390,6 +1390,8 @@ int gamethread ( void* data )
       loadLegacyFonts();
       loaddata();
       
+      suppressMapTriggerExecution = false;
+
       mtl = loadStartupMap( gtp->filename.c_str() );
    }
    catch ( const ParsingError & err ) {
@@ -1423,9 +1425,7 @@ int gamethread ( void* data )
 
 
 //   ActionContainer::postActionExecution.connect( SigC::slot( &checkGameEvents ));
-            
-   suppressMapTriggerExecution = false;
-   
+
    static ShowNewTechnology showNewTechs;
    setResearchPresenter( &showNewTechs );
 
@@ -1527,9 +1527,9 @@ static void __runResearch( Player& player ){
 
 void deployMapPlayingHooks ( GameMap* map )
 {
-   map->sigPlayerTurnBegins.connect( SigC::slot( initReplayLogging ));
-   map->sigPlayerTurnBegins.connect( SigC::slot( transfer_all_outstanding_tribute ));   
-   map->sigPlayerTurnBegins.connect( SigC::slot( __runResearch ));
+   map->sigPlayerTurnBegins.connect( sigc::ptr_fun( &initReplayLogging ));
+   map->sigPlayerTurnBegins.connect( sigc::ptr_fun( &transfer_all_outstanding_tribute ));
+   map->sigPlayerTurnBegins.connect( sigc::ptr_fun( &__runResearch ));
 }
 
 
@@ -1542,12 +1542,12 @@ void deployMapPlayingHooks ( GameMap* map )
 #include "clparser/asc.cpp"
 
 
-class ResourceLogger: public SigC::Object {
+class ResourceLogger: public sigc::trackable {
       ofstream s;
    public:
       ResourceLogger() {
          s.open("resource-log", ios_base::out | ios_base::trunc );
-         MessagingHub::Instance().logCategorizedMessage.connect( SigC::slot( *this, &ResourceLogger::message ));
+         MessagingHub::Instance().logCategorizedMessage.connect( sigc::mem_fun( *this, &ResourceLogger::message ));
          MessagingHub::Instance().setLoggingCategory("ResourceWork", true);
       };
 
@@ -1669,7 +1669,7 @@ int main(int argc, char *argv[] )
 
    MessagingHub::Instance().setVerbosity( cl->r() );
    StdIoErrorHandler stdIoErrorHandler(false);
-   MessagingHub::Instance().exitHandler.connect( SigC::bind( SigC::slot( exit_asc ), -1 ));
+   MessagingHub::Instance().exitHandler.connect( sigc::bind( &exit_asc, -1 ));
 
    // ResourceLogger rl;
 
@@ -1701,15 +1701,15 @@ int main(int argc, char *argv[] )
    soundSystem.setEffectVolume ( CGameOptions::Instance()->sound.soundVolume );
 
    
-   tspfldloaders::mapLoaded.connect( SigC::slot( deployMapPlayingHooks ));
+   tspfldloaders::mapLoaded.connect( sigc::ptr_fun( &deployMapPlayingHooks ));
 
    PG_FileArchive archive( argv[0] );
 
    ASC_PG_App app ( "asc2_dlg" );
 
-   app.sigAppIdle.connect ( SigC::slot( mainloopidle ));
+   app.sigAppIdle.connect ( sigc::ptr_fun( &mainloopidle ));
 
-   cursorMoved.connect( updateFieldInfo );
+   cursorMoved.connect( updateFieldInfo.make_slot() );
 
    
    ScreenResolutionSetup screenResolutionSetup ( *cl );

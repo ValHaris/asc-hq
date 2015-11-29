@@ -33,7 +33,7 @@ class AutoProgressBar: public PG_ProgressBar {
 
       void tick();
    public:
-      AutoProgressBar( SigC::Signal0<void>& tickSignal, PG_Widget *parent, const PG_Rect &r=PG_Rect::null, const std::string &style="Progressbar" );
+      AutoProgressBar( sigc::signal<void>& tickSignal, PG_Widget *parent, const PG_Rect &r=PG_Rect::null, const std::string &style="Progressbar" );
       void close( );
 };
 

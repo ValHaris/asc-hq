@@ -134,8 +134,8 @@ class ImportBI3MapDialog : public ASC_PG_Dialog {
 ImportBI3MapDialog::ImportBI3MapDialog( GameMap* gamemap, bool insert ) : ASC_PG_Dialog( NULL, PG_Rect(-1,-1,450,370), "Import BI Map") , actmap(gamemap)
 {
    this->insert = insert;
-   AddStandardButton("OK")->sigClick.connect( SigC::slot( *this, &ImportBI3MapDialog::ok ));
-   AddStandardButton("Cancel")->sigClick.connect( SigC::slot( *this, &ImportBI3MapDialog::cancel ));
+   AddStandardButton("OK")->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &ImportBI3MapDialog::ok )));
+   AddStandardButton("Cancel")->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &ImportBI3MapDialog::cancel )));
 
    int ypos = 30;
    new PG_Label( this, PG_Rect( 20, ypos, Width()-40,20), "Directory of BI3 installation:");

@@ -109,12 +109,12 @@
                   
                   line1 = new PG_LineEdit( this, PG_Rect( border, 50, Width() - 2 * border, 20));
                   line1->SetPassHidden('*');
-                  line1->sigEditReturn.connect( SigC::slot( *this, &PasswordDialog::line1completed ));
+                  line1->sigEditReturn.connect( sigc::mem_fun( *this, &PasswordDialog::line1completed ));
 
                   if ( firstTime ) {
                      line2 = new PG_LineEdit( this, PG_Rect( border, 80, Width() - 2 * border, 20));
                      line2->SetPassHidden('*');
-                     line2->sigEditReturn.connect( SigC::slot( *this, &PasswordDialog::ok ));
+                     line2->sigEditReturn.connect( sigc::mem_fun( *this, &PasswordDialog::ok ));
                   } else {
                      line2 = NULL;
                   }
@@ -126,18 +126,18 @@
                      bnum = 2;
 
                   
-                  addButton ( "~O~k", bnum ) -> sigClick.connect( SigC::slot( *this, &PasswordDialog::ok ));
+                  addButton ( "~O~k", bnum ) -> sigClick.connect( sigc::hide( sigc::mem_fun( *this, &PasswordDialog::ok )));
                   
                   if ( firstTime && defaultAllowed ) {
-                     addButton ( "~D~efault", bnum ) -> sigClick.connect( SigC::slot( *this, &PasswordDialog::def ));
+                     addButton ( "~D~efault", bnum ) -> sigClick.connect( sigc::hide( sigc::mem_fun( *this, &PasswordDialog::def )));
                      if ( cancelAllowed ) {
-                        addButton ( "~C~ancel", bnum ) -> sigClick.connect( SigC::slot( *this, &PasswordDialog::cancel ));
+                        addButton ( "~C~ancel", bnum ) -> sigClick.connect( sigc::hide( sigc::mem_fun( *this, &PasswordDialog::cancel )));
                      }
                   } else {
                      if ( cancelAllowed ) {
-                        addButton ( "~C~ancel", bnum ) -> sigClick.connect( SigC::slot( *this, &PasswordDialog::cancel ));
+                        addButton ( "~C~ancel", bnum ) -> sigClick.connect( sigc::hide( sigc::mem_fun( *this, &PasswordDialog::cancel )));
                      } else {
-                        addButton ( "~A~bort", bnum ) -> sigClick.connect( SigC::slot( *this, &PasswordDialog::cancel ));
+                        addButton ( "~A~bort", bnum ) -> sigClick.connect( sigc::hide( sigc::mem_fun( *this, &PasswordDialog::cancel )));
                      }
                   }
                };

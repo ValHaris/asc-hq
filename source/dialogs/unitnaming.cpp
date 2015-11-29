@@ -50,14 +50,14 @@ UnitNaming::UnitNaming ( ContainerBase* myUnit) : ASC_PG_Dialog( NULL, PG_Rect( 
    int fieldwidth = Width() - 3 * border - width;
    publicName = new PG_LineEdit( this, PG_Rect( border*2 + width, 40, fieldwidth, 20));
    publicName->SetText( myUnit->name );
-   publicName->sigEditReturn.connect( SigC::slot( *this, &UnitNaming::line1completed ));
+   publicName->sigEditReturn.connect( sigc::mem_fun( *this, &UnitNaming::line1completed ));
 
    new PG_Label( this, PG_Rect( border, 70, width, 20), "Private: ");
    privateName = new PG_LineEdit( this, PG_Rect( border*2 + width, 70, fieldwidth, 20));
    privateName->SetText( myUnit->privateName);
-   privateName->sigEditReturn.connect( SigC::slot( *this, &UnitNaming::ok ));
+   privateName->sigEditReturn.connect( sigc::mem_fun( *this, &UnitNaming::ok ));
 
-   AddStandardButton( "~O~k" )->sigClick.connect( SigC::slot( *this, &UnitNaming::ok ));
+   AddStandardButton( "~O~k" )->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &UnitNaming::ok )));
 };
 
 int UnitNaming::RunModal()

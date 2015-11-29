@@ -53,7 +53,7 @@ PG_LineEdit::PG_LineEdit(PG_Widget* parent, const PG_Rect& r, const std::string&
 	LoadThemeStyle(style);
 
    if ( cursorBlinkingTime > 0 )
-      PG_Application::GetApp()->sigAppIdle.connect( SigC::slot( *this, &PG_LineEdit::IdleBlinker ));
+      PG_Application::GetApp()->sigAppIdle.connect( sigc::hide( sigc::mem_fun( *this, &PG_LineEdit::IdleBlinker )));
 }
 
 PG_LineEdit::~PG_LineEdit() {}
@@ -171,7 +171,7 @@ void PG_LineEdit::EditBegin() {
 	my_isCursorVisible = true;
 	Update();
 
-	sigEditBegin(this);
+	sigEditBegin();
 	eventEditBegin(GetID(), this, 0,0);
 }
 
@@ -182,7 +182,7 @@ void PG_LineEdit::EditEnd() {
 	Update();
 	ReleaseInputFocus();
 
-	sigEditEnd(this);
+	sigEditEnd();
 	eventEditEnd(GetID(), this, 0,0);
 }
 
@@ -303,7 +303,7 @@ bool PG_LineEdit::eventKeyDown(const SDL_KeyboardEvent* key) {
 				return false;
 			}
 			EditEnd();
-			sigEditReturn(this);
+			sigEditReturn();
 			return true;
 
 		case SDLK_HOME:
@@ -431,14 +431,14 @@ void PG_LineEdit::InsertChar(const PG_Char& c) {
 		#endif*/
 		my_text.insert(my_cursorPosition, 1, c);
 		SetCursorPos(++my_cursorPosition);
-      sigEditUpdate(this);
+        sigEditUpdate();
 	}
 }
 
 /** */
 void PG_LineEdit::DeleteChar(Uint16 pos) {
 	my_text.erase(pos, 1);
-   sigEditUpdate(this);
+    sigEditUpdate();
 }
 
 /** */

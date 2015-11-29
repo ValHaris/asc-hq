@@ -111,7 +111,7 @@
   // extern VisibilityStates fieldVisibility  ( tfield* pe, int player, GameMap* gamemap, int additionalEnemyJamming );
   extern int getPlayersWithSharedViewMask( int player, GameMap* gamemap );
   
-  extern SigC::Signal0<void> buildingSeen;
+  extern sigc::signal<void> buildingSeen;
 
   class RecalculateAreaView {
      MapCoordinate position;

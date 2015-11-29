@@ -64,8 +64,7 @@ public:
 	/**
 	Signal type declaration
 	**/
-	template<class datatype>
-class SignalChange : public PG_Signal2<PG_SpinnerBox*, datatype> {}
+class SignalChange : public sigc::signal<bool, PG_SpinnerBox*, int> {}
 	;
 
 	enum {
@@ -103,13 +102,13 @@ class SignalChange : public PG_Signal2<PG_SpinnerBox*, datatype> {}
 		return( m_sMask );
 	}
 
-	SignalChange<int> sigChange;
+	SignalChange sigChange;
 
 protected:
 
 	bool handleButtonClick(PG_Button* button);
 
-	bool handleEditEnd(PG_LineEdit* edit);
+	bool handleEditEnd();
 
 private:
 

@@ -77,13 +77,13 @@ OverviewMapHolder :: OverviewMapHolder( GameMap& gamemap ) : map(gamemap), initi
 void OverviewMapHolder :: connect()
 {
    if ( !connected ) {
-      idleEvent.connect ( SigC::slot( *this, &OverviewMapHolder::idleHandler ));
+      idleEvent.connect ( sigc::mem_fun( *this, &OverviewMapHolder::idleHandler ));
       connected = true;
    }
 }
 
 
-SigC::Signal0<void> OverviewMapHolder::generationComplete;
+sigc::signal<void> OverviewMapHolder::generationComplete;
 
 bool OverviewMapHolder :: idleHandler( )
 {
@@ -1474,9 +1474,9 @@ void GameMap::objectGrowth()
    checkunitsforremoval( this );
 }
 
-SigC::Signal1<void,GameMap&> GameMap::sigMapDeletion;
-SigC::Signal1<void,GameMap&> GameMap::sigMapCreation;
-SigC::Signal2<void,GameMap*,Player&> GameMap::sigPlayerTurnEndsStatic;
+sigc::signal<void,GameMap&> GameMap::sigMapDeletion;
+sigc::signal<void,GameMap&> GameMap::sigMapCreation;
+sigc::signal<void,GameMap*,Player&> GameMap::sigPlayerTurnEndsStatic;
 
 GameMap :: ~GameMap ()
 {

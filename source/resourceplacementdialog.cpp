@@ -94,7 +94,7 @@ ResourcePlacementDialog::ResourcePlacementDialog( ) :
   fuelOffSetSlider = new PG_Slider(this, PG_Rect(xFuelWidgetPos, yFuelOffSetSliderPos, xsize - (xFuelWidgetPos + leftIndent) , hFuelWidget), PG_ScrollBar::HORIZONTAL);
   fuelOffSetSlider->SetRange(ResourcePlacement::MINFUELVALUE, ResourcePlacement::MAXFUELVALUE);
   fuelOffSetSlider->SetPosition(atoi(fuelOffSetValue->GetText()));
-  fuelOffSetSlider->sigSlide.connect(slot(*this, &ResourcePlacementDialog::scrollTrackEventFuel));
+  fuelOffSetSlider->sigSlide.connect(sigc::mem_fun(*this, &ResourcePlacementDialog::scrollTrackEventFuel));
 
 
   //MaterialOffSet
@@ -112,7 +112,7 @@ ResourcePlacementDialog::ResourcePlacementDialog( ) :
   materialOffSetSlider = new PG_Slider(this, PG_Rect(xFuelWidgetPos, yMaterialOffSetSliderPos, xsize - (xFuelWidgetPos + leftIndent) , hFuelWidget), PG_ScrollBar::HORIZONTAL);
   materialOffSetSlider->SetRange(ResourcePlacement::MINMATERIALVALUE, ResourcePlacement::MAXMATERIALVALUE);
   materialOffSetSlider->SetPosition(atoi(materialOffSetValue->GetText()));
-  materialOffSetSlider->sigSlide.connect(slot(*this, &ResourcePlacementDialog::scrollTrackEventMaterial));
+  materialOffSetSlider->sigSlide.connect(sigc::mem_fun(*this, &ResourcePlacementDialog::scrollTrackEventMaterial));
 
   //FuelFreeRatio
   int yFuelFreeRatioLabelPos = yMaterialOffSetSliderPos + hFuelWidget + yOffSet;
@@ -129,7 +129,7 @@ ResourcePlacementDialog::ResourcePlacementDialog( ) :
   fuelFreeRatioSlider = new PG_Slider(this, PG_Rect(xFuelWidgetPos, yFuelFreeRatioSliderPos, xsize - (xFuelWidgetPos + leftIndent) , hFuelWidget), PG_ScrollBar::HORIZONTAL);
   fuelFreeRatioSlider->SetRange(0, 100);
   fuelFreeRatioSlider->SetPosition(atoi(fuelFreeRatioValue->GetText()));
-  fuelFreeRatioSlider->sigSlide.connect(slot(*this, &ResourcePlacementDialog::scrollTrackEventFuelFreeRatio));
+  fuelFreeRatioSlider->sigSlide.connect(sigc::mem_fun(*this, &ResourcePlacementDialog::scrollTrackEventFuelFreeRatio));
   
   //MaterialFreeRatio
   int yMaterialFreeRatioLabelPos = yFuelFreeRatioSliderPos + hFuelWidget ;
@@ -146,14 +146,14 @@ ResourcePlacementDialog::ResourcePlacementDialog( ) :
   materialFreeRatioSlider = new PG_Slider(this, PG_Rect(xFuelWidgetPos, yMaterialFreeRatioSliderPos, xsize - (xFuelWidgetPos + leftIndent) , hFuelWidget), PG_ScrollBar::HORIZONTAL);
   materialFreeRatioSlider->SetRange(0, 100);
   materialFreeRatioSlider->SetPosition(atoi(materialFreeRatioValue->GetText()));
-  materialFreeRatioSlider->sigSlide.connect(slot(*this, &ResourcePlacementDialog::scrollTrackEventMaterialFreeRatio));
+  materialFreeRatioSlider->sigSlide.connect(sigc::mem_fun(*this, &ResourcePlacementDialog::scrollTrackEventMaterialFreeRatio));
   
   //Buttons OK and Cancel
 
-  (new PG_Button(this, PG_Rect(30, Height()-40, (Width()-70)/2, 30), "OK", 100))->sigClick.connect(SigC::slot( *this, &ResourcePlacementDialog::buttonEvent ));
-  (new PG_Button(this, PG_Rect(Width()/2+5, Height()-40, (Width()-70)/2, 30), "Cancel", 101))->sigClick.connect(SigC::slot( *this, &ResourcePlacementDialog::closeWindow ));
+  (new PG_Button(this, PG_Rect(30, Height()-40, (Width()-70)/2, 30), "OK", 100))->sigClick.connect( sigc::mem_fun( *this, &ResourcePlacementDialog::buttonEvent ));
+  (new PG_Button(this, PG_Rect(Width()/2+5, Height()-40, (Width()-70)/2, 30), "Cancel", 101))->sigClick.connect( sigc::hide(sigc::mem_fun( *this, &ResourcePlacementDialog::closeWindow )));
 
-  sigClose.connect( SigC::slot( *this, &ResourcePlacementDialog::closeWindow ));
+  sigClose.connect( sigc::mem_fun( *this, &ResourcePlacementDialog::closeWindow ));
 }
 
 

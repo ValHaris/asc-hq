@@ -112,7 +112,7 @@ WeatherDialog::WeatherDialog() :  ASC_PG_Dialog(NULL, PG_Rect( 100, 50, xsize, y
     fallOutLabel->SetSizeByText();
 
     fallOutButton = new PG_Button(this, PG_Rect(valueXPos, fallOutYPos, (Width()- valueXPos)/2, 30), "Edit", 100);
-    fallOutButton->sigClick.connect(SigC::slot( *this, &WeatherDialog::editFallOut ));
+    fallOutButton->sigClick.connect( sigc::hide(sigc::mem_fun( *this, &WeatherDialog::editFallOut )));
 
     //WindSpeed
     int windSpeedYPos =  fallOutYPos + GetTextHeight() * 2;
@@ -120,7 +120,7 @@ WeatherDialog::WeatherDialog() :  ASC_PG_Dialog(NULL, PG_Rect( 100, 50, xsize, y
     windSpeedLabel->SetSizeByText();
 
     windSpeedButton = new PG_Button(this, PG_Rect(valueXPos, windSpeedYPos, (Width()- valueXPos)/2, 30), "Edit", 100);
-    windSpeedButton->sigClick.connect(SigC::slot( *this, &WeatherDialog::editWindSpeed));
+    windSpeedButton->sigClick.connect( sigc::hide(sigc::mem_fun( *this, &WeatherDialog::editWindSpeed)));
 
     //WindDirection
     int windDirYPos =  windSpeedYPos + GetTextHeight() + GuiDimension::getTopOffSet();
@@ -128,29 +128,29 @@ WeatherDialog::WeatherDialog() :  ASC_PG_Dialog(NULL, PG_Rect( 100, 50, xsize, y
     windDirectionLabel->SetSizeByText();
 
     windDirectionButton = new PG_Button(this, PG_Rect(valueXPos, windDirYPos, (Width()- valueXPos)/2, 30), "Edit", 100);
-    windDirectionButton->sigClick.connect(SigC::slot( *this, &WeatherDialog::editWindDirection));
+    windDirectionButton->sigClick.connect( sigc::hide(sigc::mem_fun( *this, &WeatherDialog::editWindDirection)));
 
     //eventAreas
     int eventAreasYPos = windDirYPos + GetTextHeight() + GuiDimension::getTopOffSet();
     eventAreasLabel = new PG_Label(this, PG_Rect(GuiDimension::getLeftIndent(), eventAreasYPos, xsize/3 , GetTextHeight()*2), "Event driven weather:");
     eventAreasLabel->SetSizeByText();
     eventAreasButton = new PG_Button(this, PG_Rect(valueXPos, eventAreasYPos, (Width()- valueXPos)/2, 30), "Edit", 100);
-    eventAreasButton->sigClick.connect(SigC::slot( *this, &WeatherDialog::editEventAreas));
+    eventAreasButton->sigClick.connect( sigc::hide(sigc::mem_fun( *this, &WeatherDialog::editEventAreas)));
 
     //eventWindChanges
     int eventWindChangesYPos = eventAreasYPos + GetTextHeight() + GuiDimension::getTopOffSet();
     eventWindChangesLabel = new PG_Label(this, PG_Rect(GuiDimension::getLeftIndent(), eventWindChangesYPos, xsize/3 , GetTextHeight()*2), "Event driven wind changes:");
     eventWindChangesLabel->SetSizeByText();
     eventWindChangesButton = new PG_Button(this, PG_Rect(valueXPos, eventWindChangesYPos, (Width()- valueXPos)/2, 30), "Edit", 100);
-    eventWindChangesButton->sigClick.connect(SigC::slot( *this, &WeatherDialog::editEventWindChanges));
+    eventWindChangesButton->sigClick.connect( sigc::hide(sigc::mem_fun( *this, &WeatherDialog::editEventWindChanges)));
 
 
 
     //Ok and Cancel Button
-    (new PG_Button(this, PG_Rect(30, Height()-40, (Width()-70)/2, 30), "OK", 100))->sigClick.connect(SigC::slot( *this, &WeatherDialog::buttonEvent ));
-    (new PG_Button(this, PG_Rect(Width()/2+5, Height()-40, (Width()-70)/2, 30), "Cancel", 101))->sigClick.connect(SigC::slot( *this, &WeatherDialog::closeWindow ));
+    (new PG_Button(this, PG_Rect(30, Height()-40, (Width()-70)/2, 30), "OK", 100))->sigClick.connect( sigc::hide(sigc::mem_fun( *this, &WeatherDialog::buttonEvent )));
+    (new PG_Button(this, PG_Rect(Width()/2+5, Height()-40, (Width()-70)/2, 30), "Cancel", 101))->sigClick.connect( sigc::hide(sigc::mem_fun( *this, &WeatherDialog::closeWindow )));
 
-    sigClose.connect( SigC::slot( *this, &WeatherDialog::closeWindow ));
+    sigClose.connect( sigc::mem_fun( *this, &WeatherDialog::closeWindow ));
 
 }
 
@@ -254,17 +254,17 @@ EventAreasDialog::EventAreasDialog() : ASC_PG_Dialog(NULL, PG_Rect( 100, 100, xS
     //add Button
     int yPosButtons = 20 + eventList->Height() + GuiDimension::getTopOffSet();
     addButton = new PG_Button(this, PG_Rect(xPos1, yPosButtons, 70, 35), "Add", 90);
-    addButton->sigClick.connect(SigC::slot( *this, &EventAreasDialog::buttonAdd ));
+    addButton->sigClick.connect( sigc::hide(sigc::mem_fun( *this, &EventAreasDialog::buttonAdd )));
 
     //remove Button
     removeButton = new PG_Button(this, PG_Rect(Width() - (xPos1 + 70), yPosButtons, 70, 35), "Remove", 90);
-    removeButton->sigClick.connect(SigC::slot( *this, &EventAreasDialog::buttonRemove ));
+    removeButton->sigClick.connect( sigc::hide(sigc::mem_fun( *this, &EventAreasDialog::buttonRemove )));
 
     //Ok and Cancel Button
-    (new PG_Button(this, PG_Rect((Width()- GuiDimension::getButtonWidth())/2, Height()-40, GuiDimension::getButtonWidth() , 30), "OK", 100))->sigClick.connect(SigC::slot( *this, &EventAreasDialog::buttonEvent ));
-    //(new PG_Button(this, PG_Rect(Width()/2+5, Height()-40, (Width()-70)/2, 30), "Cancel", 101))->sigClick.connect(SigC::slot( *this, &EventAreasDialog::closeWindow ));
+    (new PG_Button(this, PG_Rect((Width()- GuiDimension::getButtonWidth())/2, Height()-40, GuiDimension::getButtonWidth() , 30), "OK", 100))->sigClick.connect( sigc::hide(sigc::mem_fun( *this, &EventAreasDialog::buttonEvent )));
+    //(new PG_Button(this, PG_Rect(Width()/2+5, Height()-40, (Width()-70)/2, 30), "Cancel", 101))->sigClick.connect( sigc::hide(sigc::mem_fun( *this, &EventAreasDialog::closeWindow )));
 
-    sigClose.connect( SigC::slot( *this, &EventAreasDialog::closeWindow ));
+    sigClose.connect( sigc::mem_fun( *this, &EventAreasDialog::closeWindow ));
 }
 
 EventAreasDialog::~EventAreasDialog() {}
@@ -355,17 +355,17 @@ EventWindChangesDialog::EventWindChangesDialog() : ASC_PG_Dialog(NULL, PG_Rect( 
     //add Button
     int yPosButtons = 20 + eventList->Height() + GuiDimension::getTopOffSet();
     addButton = new PG_Button(this, PG_Rect(xPos1, yPosButtons, 50, 35), "Add", 90);
-    addButton->sigClick.connect(SigC::slot( *this, &EventWindChangesDialog::buttonAdd ));
+    addButton->sigClick.connect( sigc::hide(sigc::mem_fun( *this, &EventWindChangesDialog::buttonAdd )));
 
     //remove Button
     removeButton = new PG_Button(this, PG_Rect(Width() - (xPos1 + 50), yPosButtons, 50, 35), "Remove", 90);
-    removeButton->sigClick.connect(SigC::slot( *this, &EventWindChangesDialog::buttonRemove ));
+    removeButton->sigClick.connect( sigc::hide(sigc::mem_fun( *this, &EventWindChangesDialog::buttonRemove )));
 
     //Ok and Cancel Button
-    (new PG_Button(this, PG_Rect((Width()-GuiDimension::getButtonWidth())/2, Height()-40, GuiDimension::getButtonWidth(), 30), "OK", 100))->sigClick.connect(SigC::slot( *this, &EventWindChangesDialog::buttonEvent ));
-    //(new PG_Button(this, PG_Rect(Width()/2+5, Height()-40, (Width()-70)/2, 30), "Cancel", 101))->sigClick.connect(SigC::slot( *this, &EventWindChangeDialog::closeWindow ));
+    (new PG_Button(this, PG_Rect((Width()-GuiDimension::getButtonWidth())/2, Height()-40, GuiDimension::getButtonWidth(), 30), "OK", 100))->sigClick.connect( sigc::hide(sigc::mem_fun( *this, &EventWindChangesDialog::buttonEvent )));
+    //(new PG_Button(this, PG_Rect(Width()/2+5, Height()-40, (Width()-70)/2, 30), "Cancel", 101))->sigClick.connect( sigc::hide(sigc::mem_fun( *this, &EventWindChangeDialog::closeWindow )));
 
-    sigClose.connect( SigC::slot( *this, &EventWindChangesDialog::closeWindow ));
+    sigClose.connect( sigc::mem_fun( *this, &EventWindChangesDialog::closeWindow ));
 }
 
 EventWindChangesDialog::~EventWindChangesDialog() {}
@@ -439,10 +439,10 @@ AddWindChangeDialog::AddWindChangeDialog(EventWindChangesDialog* ewcd):  ASC_PG_
     }
 
     //Ok and Cancel Button
-    (new PG_Button(this, PG_Rect(30, Height()-40, (Width()-70)/2, 30), "OK", 100))->sigClick.connect(SigC::slot( *this, &AddWindChangeDialog::buttonEvent ));
-    (new PG_Button(this, PG_Rect(Width()/2+5, Height()-40, (Width()-70)/2, 30), "Cancel", 101))->sigClick.connect(SigC::slot( *this, &AddWindChangeDialog::closeWindow ));
+    (new PG_Button(this, PG_Rect(30, Height()-40, (Width()-70)/2, 30), "OK", 100))->sigClick.connect( sigc::hide(sigc::mem_fun( *this, &AddWindChangeDialog::buttonEvent )));
+    (new PG_Button(this, PG_Rect(Width()/2+5, Height()-40, (Width()-70)/2, 30), "Cancel", 101))->sigClick.connect( sigc::hide(sigc::mem_fun( *this, &AddWindChangeDialog::closeWindow )));
 
-    sigClose.connect( SigC::slot( *this, &AddWindChangeDialog::closeWindow ));
+    sigClose.connect( sigc::mem_fun( *this, &AddWindChangeDialog::closeWindow ));
 
 }
 
@@ -566,10 +566,10 @@ AddWeatherAreaDialog::AddWeatherAreaDialog(EventAreasDialog* ead):  ASC_PG_Dialo
     }
 
     //Ok and Cancel Button
-    (new PG_Button(this, PG_Rect(30, Height()-40, (Width()-70)/2, 30), "OK", 100))->sigClick.connect(SigC::slot( *this, &AddWeatherAreaDialog::buttonEvent ));
-    (new PG_Button(this, PG_Rect(Width()/2+5, Height()-40, (Width()-70)/2, 30), "Cancel", 101))->sigClick.connect(SigC::slot( *this, &AddWeatherAreaDialog::closeWindow ));
+    (new PG_Button(this, PG_Rect(30, Height()-40, (Width()-70)/2, 30), "OK", 100))->sigClick.connect( sigc::hide(sigc::mem_fun( *this, &AddWeatherAreaDialog::buttonEvent )));
+    (new PG_Button(this, PG_Rect(Width()/2+5, Height()-40, (Width()-70)/2, 30), "Cancel", 101))->sigClick.connect( sigc::hide(sigc::mem_fun( *this, &AddWeatherAreaDialog::closeWindow )));
 
-    sigClose.connect( SigC::slot( *this, &AddWeatherAreaDialog::closeWindow ));
+    sigClose.connect( sigc::mem_fun( *this, &AddWeatherAreaDialog::closeWindow ));
 
 }
 
@@ -627,10 +627,10 @@ void ChanceSettingsDialog::buildUpForm(const vector<string>& labelVec) {
     note = new PG_Label(this, PG_Rect(GuiDimension::getLeftIndent(), noteYPos, xsize/3 , GetTextHeight()*2), "The sum of chances must equal 100");
     note->SetSizeByText();
     //Ok and Cancel Button
-    (new PG_Button(this, PG_Rect(30, Height()-40, (Width()-70)/2, 30), "OK", 100))->sigClick.connect(SigC::slot( *this, &ChanceSettingsDialog::buttonEvent ));
-    (new PG_Button(this, PG_Rect(Width()/2+5, Height()-40, (Width()-70)/2, 30), "Cancel", 101))->sigClick.connect(SigC::slot( *this, &ChanceSettingsDialog::closeWindow ));
+    (new PG_Button(this, PG_Rect(30, Height()-40, (Width()-70)/2, 30), "OK", 100))->sigClick.connect( sigc::hide(sigc::mem_fun( *this, &ChanceSettingsDialog::buttonEvent )));
+    (new PG_Button(this, PG_Rect(Width()/2+5, Height()-40, (Width()-70)/2, 30), "Cancel", 101))->sigClick.connect( sigc::hide(sigc::mem_fun( *this, &ChanceSettingsDialog::closeWindow )));
 
-    sigClose.connect( SigC::slot( *this, &ChanceSettingsDialog::closeWindow ));
+    sigClose.connect( sigc::mem_fun( *this, &ChanceSettingsDialog::closeWindow ));
 
 }
 

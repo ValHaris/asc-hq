@@ -43,7 +43,7 @@ void checkDataFileVersion()
             
 void checkDataVersion()
 {
-   PackageRepository::packgeDescriptionLoaded.connect( SigC::slot( &checkDataFileVersion ));
+   PackageRepository::packgeDescriptionLoaded.connect( sigc::ptr_fun( &checkDataFileVersion ));
 }
             
 

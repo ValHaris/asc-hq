@@ -857,7 +857,7 @@ void   tspfldloaders::chainitems ( GameMap* actmap )
 /*     Set Player Existencies                                */
 /**************************************************************/
 
-SigC::Signal1<void,GameMap*> tspfldloaders::mapLoaded;
+sigc::signal<void,GameMap*> tspfldloaders::mapLoaded;
 
 
 tspfldloaders::tspfldloaders ( void )

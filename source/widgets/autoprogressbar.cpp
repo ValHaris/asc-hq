@@ -43,11 +43,11 @@ void AutoProgressBar :: tick()
    lastticktime = ticker;
 };
 
-AutoProgressBar :: AutoProgressBar( SigC::Signal0<void>& tickSignal, PG_Widget *parent, const PG_Rect &r, const std::string &style ) : PG_ProgressBar( parent, r, style ), lastticktime(-1), counter(0)
+AutoProgressBar :: AutoProgressBar( sigc::signal<void>& tickSignal, PG_Widget *parent, const PG_Rect &r, const std::string &style ) : PG_ProgressBar( parent, r, style ), lastticktime(-1), counter(0)
 {
    lastdisplaytime = starttime = ticker;
 
-   tickSignal.connect( SigC::slot( *this, &AutoProgressBar::tick ));
+   tickSignal.connect( sigc::mem_fun( *this, &AutoProgressBar::tick ));
 
    try {
       tnfilestream stream ( "progress.dat", tnstream::reading  );

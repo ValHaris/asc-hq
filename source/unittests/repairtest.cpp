@@ -19,11 +19,11 @@
 /* NextTurnStrategy_Abort will delete the map if the game cannot be continued.
  * To avoid double deallocation, we must intercept the event and release the auto_ptr
  */
-class MapHolder : public SigC::Object {
+class MapHolder : public sigc::trackable {
 		auto_ptr<GameMap> game;
 	public:
 		MapHolder( GameMap* gamemap ) : game( gamemap ){
-			   GameMap::sigMapDeletion.connect( SigC::slot( *this, &MapHolder::reset ));
+			   GameMap::sigMapDeletion.connect( sigc::mem_fun( *this, &MapHolder::reset ));
 		}
 
 		GameMap* get() {

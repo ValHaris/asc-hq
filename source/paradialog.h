@@ -54,7 +54,7 @@
 
 class AutoProgressBar;
 
-class StartupScreen: public SigC::Object {
+class StartupScreen: public sigc::trackable {
        vector<PG_Label*> infoLabels;
        PG_Label* versionLabel;
        PG_ThemeWidget* background;
@@ -63,7 +63,7 @@ class StartupScreen: public SigC::Object {
        void disp( const ASCString& s );
        void dispLine( const ASCString& s, int line );
      public:
-         StartupScreen( const ASCString& filename, SigC::Signal0<void>& ticker );        
+         StartupScreen( const ASCString& filename, sigc::signal<void>& ticker );        
          ~StartupScreen();
 };
 
@@ -108,7 +108,7 @@ class StartupScreen: public SigC::Object {
 
        void SetNewScreenSurface( SDL_Surface* surface );
        
-       // SigC::Signal0<void> sigQuit;
+       // sigc::signal<void> sigQuit;
       // PG_Theme* LoadTheme(const char* xmltheme, bool asDefault = true, const char* searchpath = NULL );
  };
 
@@ -130,7 +130,8 @@ class ASC_PG_Dialog : public PG_Window {
    protected:
       PG_MessageObject* caller;
       virtual bool closeWindow();
-      bool quitModalLoop(int value ); 
+      bool quitModalLoopW(PG_Button* button, int value );
+      bool quitModalLoop(int value );
       virtual bool eventKeyDown(const SDL_KeyboardEvent *key);
     public:
        ASC_PG_Dialog ( PG_Widget *parent, const PG_Rect &r, const ASCString& windowtext, WindowFlags flags=DEFAULT, const ASCString& style="Window", int heightTitlebar=25);
@@ -176,7 +177,7 @@ class ColoredBar : public PG_ThemeWidget {
 class SpecialDisplayWidget : public PG_Widget {
    public:
 
-      typedef SigC::Signal3<void,const PG_Rect&, const ASCString&, const PG_Rect&> DisplayHook;
+      typedef sigc::signal<void,const PG_Rect&, const ASCString&, const PG_Rect&> DisplayHook;
       
       DisplayHook display;
       

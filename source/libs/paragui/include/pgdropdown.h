@@ -33,8 +33,8 @@
 #ifndef PG_DROPDOWN_H
 #define PG_DROPDOWN_H
 
+#include <sigc++/sigc++.h>
 #include "pgwidget.h"
-#include "pgsignals.h"
 #include "pglabel.h"
 #include "pglineedit.h"
 
@@ -58,8 +58,7 @@ public:
 	/**
 	Signal type declaration
 	**/
-	template<class datatype = PG_Pointer>
-class SignalSelectItem : public PG_Signal1<PG_ListBoxBaseItem*, datatype> {}
+class SignalSelectItem : public sigc::signal<bool, PG_ListBoxBaseItem*> {}
 	;
 
 	enum {
@@ -177,11 +176,11 @@ class SignalSelectItem : public PG_Signal1<PG_ListBoxBaseItem*, datatype> {}
 
 	void AddChild(PG_Widget* child);
 
-	SignalSelectItem<> sigSelectItem;
+	SignalSelectItem sigSelectItem;
 
-	PG_LineEdit::SignalEditBegin<> sigEditBegin;
-	PG_LineEdit::SignalEditEnd<> sigEditEnd;
-	PG_LineEdit::SignalEditReturn<> sigEditReturn;
+	PG_LineEdit::SignalEditBegin sigEditBegin;
+	PG_LineEdit::SignalEditEnd sigEditEnd;
+	PG_LineEdit::SignalEditReturn sigEditReturn;
 
 protected:
 

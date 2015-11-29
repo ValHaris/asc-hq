@@ -39,7 +39,7 @@ protected:
 
 	virtual void DeleteChar(Uint16 pos);
 
-	bool handleScroll(PG_ScrollBar* widget, long data);
+	bool handleScroll(long data);
 
 private:
 

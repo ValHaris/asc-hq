@@ -75,28 +75,28 @@
        enum MessageType { FatalError, Error, Warning, InfoMessage, StatusInfo, LogMessage };
        
        //! displays an error message and aborts the game
-       SigC::Signal1<void, const ASCString&> fatalError;
+       sigc::signal<void, const ASCString&> fatalError;
 
        //! exits the program
-       SigC::Signal0<void> exitHandler;
+       sigc::signal<void> exitHandler;
               
        //! displays an error message and continues game
-       SigC::Signal1<void, const ASCString&> error;
+       sigc::signal<void, const ASCString&> error;
        
        //! displays a warning
-       SigC::Signal1<void, const ASCString&> warning;
+       sigc::signal<void, const ASCString&> warning;
        
        //! displays an informational message 
-       SigC::Signal1<void, const ASCString&> infoMessage;
+       sigc::signal<void, const ASCString&> infoMessage;
        
        //! displays a message in the message line
-       SigC::Signal1<void, const ASCString&> statusInformation;
+       sigc::signal<void, const ASCString&> statusInformation;
        
        //! prints a message to the logging file
-       SigC::Signal2<void, const ASCString&,int> logMessage;
+       sigc::signal<void, const ASCString&,int> logMessage;
 
        //! prints a message to the logging file
-       SigC::Signal2<void, const ASCString&,const ASCString&> logCategorizedMessage;
+       sigc::signal<void, const ASCString&,const ASCString&> logCategorizedMessage;
 
        //! displays any kind of message, as specified by parameter
        void message( MessageType type, const char* msg, ... );
@@ -117,7 +117,7 @@
        StatusMessageWindowHolder infoMessageWindow( const ASCString& msg );
         
        //! prints a message to the logging file
-       SigC::Signal1<StatusMessageWindowHolder, const ASCString&> messageWindowFactory;
+       sigc::signal<StatusMessageWindowHolder, const ASCString&> messageWindowFactory;
               
    };
        

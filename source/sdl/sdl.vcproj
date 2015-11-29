@@ -22,7 +22,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(SDL)/include&quot;;../../../libs/getopt;../.;../../../libs/jpeg;../../../libs/bzlib;&quot;$(Libsigcpp)&quot;"
+				AdditionalIncludeDirectories="&quot;$(SDL)/include&quot;;../../../libs/getopt;../.;../../../libs/jpeg;../../../libs/bzlib;&quot;$(libsigcpp2)&quot;"
 				PreprocessorDefinitions="WIN32,_DEBUG,_LIB,_WIN32_,_MSC_VER,_NOASM_,WIN32_LEAN_AND_MEAN,_SDL_,XMD_H"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -78,7 +78,7 @@
 				FavorSizeOrSpeed="1"
 				OmitFramePointers="TRUE"
 				OptimizeForProcessor="2"
-				AdditionalIncludeDirectories="&quot;$(SDL)/include&quot;;../../../libs/getopt;../.;../../../libs/jpeg;../../../libs/bzlib;&quot;$(Libsigcpp)&quot;"
+				AdditionalIncludeDirectories="&quot;$(SDL)/include&quot;;../../../libs/getopt;../.;../../../libs/jpeg;../../../libs/bzlib;&quot;$(libsigcpp2)&quot;"
 				PreprocessorDefinitions="WIN32,NDEBUG,_LIB;_WIN32_,_MSC_VER,_NOASM_,WIN32_LEAN_AND_MEAN,_SDL_,XMD_H"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"

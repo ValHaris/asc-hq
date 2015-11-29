@@ -308,8 +308,8 @@ bool ResourceWatch::getResources( Resources res )
 ResourceTransferrable::ResourceTransferrable( int resource, ResourceWatch& src, ResourceWatch& dst, bool isExchangable  ) 
    : Transferrable( src, dst ), resourceType ( resource ), exchangable( isExchangable )
       {
-         source.sigChanged.connect( SigC::slot( *this, &ResourceTransferrable::srcChanged ));
-         dest.sigChanged.connect( SigC::slot( *this, &ResourceTransferrable::dstChanged ));
+         source.sigChanged.connect( sigc::mem_fun( *this, &ResourceTransferrable::srcChanged ));
+         dest.sigChanged.connect( sigc::mem_fun( *this, &ResourceTransferrable::dstChanged ));
       };
       
       ASCString ResourceTransferrable::getName() 

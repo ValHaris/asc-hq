@@ -72,7 +72,7 @@ namespace GuiFunctions
 
 
 
-class AttackGui : public GuiIconHandler, public GuiFunction, public SigC::Object
+class AttackGui : public GuiIconHandler, public GuiFunction, public sigc::trackable
 {
     pair<const AttackWeap*, int> getEntry( const MapCoordinate& pos, int num );
 
@@ -90,7 +90,7 @@ protected:
 
 public:
     AttackGui() {
-        GameMap::sigMapDeletion.connect( SigC::slot( *this, &AttackGui::mapDeleted ));
+        GameMap::sigMapDeletion.connect( sigc::mem_fun( *this, &AttackGui::mapDeleted ));
     };
     void setupWeapons( AttackCommand* va ) {
         delete NewGuiHost::pendingCommand;
@@ -923,7 +923,7 @@ public:
 };
 
 
-class JumpDriveIcon : public GuiFunction, public SigC::Object
+class JumpDriveIcon : public GuiFunction, public sigc::trackable
 {
 public:
     bool available( const MapCoordinate& pos, ContainerBase* subject, int num ) {
@@ -1400,7 +1400,7 @@ public:
 
 
 
-class ObjectBuildingGui : public GuiIconHandler, public GuiFunction, public SigC::Object
+class ObjectBuildingGui : public GuiIconHandler, public GuiFunction, public sigc::trackable
 {
     Vehicle* veh;
 
@@ -1423,7 +1423,7 @@ protected:
 
 public:
     ObjectBuildingGui() : veh( NULL ) {
-        GameMap::sigMapDeletion.connect( SigC::slot( *this, &ObjectBuildingGui::mapDeleted ));
+        GameMap::sigMapDeletion.connect( sigc::mem_fun( *this, &ObjectBuildingGui::mapDeleted ));
     };
 
     bool init( Vehicle* vehicle );

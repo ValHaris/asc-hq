@@ -164,7 +164,7 @@ class VehiclePropertyEditor : public ASC_PG_Dialog {
          new PG_PropertyField_IntDropDown<Uint8>( propertyEditor, "Orientation", &veh->direction, cdirnames );
 
          PG_Button* ok = new PG_Button( this, PG_Rect( Width() - 100, Height() - 40, 90, 30), "OK" );
-         ok->sigClick.connect( SigC::slot( *this, &VehiclePropertyEditor::ok ));
+         ok->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &VehiclePropertyEditor::ok )));
       };
 
 };
