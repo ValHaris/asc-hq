@@ -1,1 +1,5 @@
-yum install gcc-c++ gcc bzip2-devel SDL-devel SDL_image-devel lua-devel SDL_mixer-devel wxGTK-devel libsigc++-devel SDL_sound-devel physfs-devel boost-devel expat-devel
+echo For compiling on Fedora Core 23, you need to set the following variables:
+echo export \"CXXFLAGS=-std=c++11 -fPIC\"
+echo export CFLAGS=-fPIC
+
+dnf install rpm-build gcc-c++ gcc bzip2-devel SDL-devel SDL_image-devel lua-devel SDL_mixer-devel wxGTK-devel libsigc++20-devel SDL_sound-devel physfs-devel boost-devel expat-devel
