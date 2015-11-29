@@ -1128,11 +1128,11 @@
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 			>
 			<File
-				RelativePath=".\mapeditor-icon.ico"
+				RelativePath=".\mapeditor.rc"
 				>
 			</File>
 			<File
-				RelativePath=".\mapeditor.rc"
+				RelativePath=".\pbpeditor-icon.ico"
 				>
 			</File>
 		</Filter>
