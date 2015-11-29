@@ -771,31 +771,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\src\core\pgsigconvert.cpp"
-					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							Optimization="0"
-							AdditionalIncludeDirectories=""
-							PreprocessorDefinitions="ZLIB_DLL;WIN32;_DEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_DYNAMIC_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
-							BasicRuntimeChecks="3"
-						/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							Optimization="1"
-							AdditionalIncludeDirectories=""
-							PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_MBCS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP;$(NoInherit)"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
 					RelativePath="..\src\core\pgsurfacecache.cpp"
 					>
 					<FileConfiguration
