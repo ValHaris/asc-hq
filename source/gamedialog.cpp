@@ -26,7 +26,7 @@
 #include "dialogs/newgame.h"
 #include "dialogs/editgameoptions.h"
 #include "dialog.h"
-#include "sigc++/retype.h"
+#include "sigc++/adaptors/retype.h"
 #include "iconrepository.h"
 #include "sg.h"
 #include "loaders.h"

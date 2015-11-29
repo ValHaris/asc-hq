@@ -20,7 +20,7 @@
  *                                                                         *
  ***************************************************************************/
 
-#include "sigc++/retype.h"
+ #include "sigc++/adaptors/retype.h"
 
 #include "dashboard.h"
 #include "graphics/blitter.h"
