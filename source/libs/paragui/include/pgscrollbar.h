@@ -103,11 +103,9 @@ public:
 	/**
 	Signal type declaration
 	**/
-	template<class datatype>
-class SignalScrollPos : public PG_Signal2<PG_ScrollBar*, datatype> {}
+class SignalScrollPos : public sigc::signal<bool, long> {}
 	;
-	template<class datatype>
-class SignalScrollTrack : public PG_Signal2<PG_ScrollBar*, datatype> {}
+class SignalScrollTrack : public sigc::signal<bool, long> {}
 	;
 
 	/**  */
@@ -141,8 +139,8 @@ class SignalScrollTrack : public PG_Signal2<PG_ScrollBar*, datatype> {}
 	void SetPageSize(int ps);
 
    
-	SignalScrollPos<long> sigScrollPos;
-	SignalScrollTrack<long> sigScrollTrack;
+	SignalScrollPos sigScrollPos;
+	SignalScrollTrack sigScrollTrack;
 
 protected:
 
@@ -165,7 +163,7 @@ protected:
 
 	int scroll_max;
 
-	int scroll_current;
+	long scroll_current;
 
 	int my_linesize;
 

@@ -371,7 +371,7 @@ AC_SUBST(BOOST_LIBS)
 
 
 dnl SigC++
-PKG_CHECK_MODULES(SIGC, sigc++-1.2)
+PKG_CHECK_MODULES(SIGC, sigc++-2.0)
 
 AC_SUBST(SIGC_LIBS)
 AC_SUBST(SIGC_CFLAGS)
@@ -426,7 +426,7 @@ fi
 
 
 AC_CHECK_HEADER(expat.h,,AC_LIB_MISSING( Expat, http://expat.sourceforge.net))
-AC_CHECK_LIB(expat, XML_ParserCreate,,AC_LIB_MISSING( Expat, http://expat.sourceforge.net))
+AC_SEARCH_LIBS(XML_ParserCreate,expat,,AC_LIB_MISSING( Expat, http://expat.sourceforge.net))
 
 AC_CHECK_PROG(zipfound,zip,yes,no)
 if test $zipfound != yes; then 

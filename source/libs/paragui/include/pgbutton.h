@@ -35,9 +35,9 @@
 #define PG_BUTTON_H
 
 #include "pgwidget.h"
-#include "pgsignals.h"
 #include "pgdraw.h"
 #include <string>
+#include <sigc++/sigc++.h>
 
 
 class PG_ButtonDataInternal;
@@ -161,8 +161,7 @@ public:
 	/**
 	Signal type declaration
 	**/
-	template<class datatype = PG_Pointer>
-class SignalButtonClick : public PG_Signal1<PG_Button*, datatype> {}
+class SignalButtonClick : public sigc::signal<bool, PG_Button*> {}
 	;
 
 	/**
@@ -344,9 +343,9 @@ class SignalButtonClick : public PG_Signal1<PG_Button*, datatype> {}
    void SetText(const std::string& text);
 
    
-	SignalButtonClick<> sigClick;
+	SignalButtonClick sigClick;
 
-	static SignalButtonClick<> sigGlobalClick;
+	static SignalButtonClick sigGlobalClick;
 
 protected:
 

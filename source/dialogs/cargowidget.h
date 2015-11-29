@@ -32,11 +32,11 @@ class HighLightingManager
    public:
       HighLightingManager();
       int getMark();
-      SigC::Signal2<void,int,int> markChanged;
+      sigc::signal<void,int,int> markChanged;
       void setNew(int pos );
-      SigC::Signal0<bool> redrawAll;
+      sigc::signal<bool> redrawAll;
       //! the bool param is set to true if this is the first click on a unit 
-      SigC::Signal3<void,int, SPoint, bool> clickOnMarkedUnit;
+      sigc::signal<void,int, SPoint, bool> clickOnMarkedUnit;
 };
 
 class CargoWidget;
@@ -102,16 +102,16 @@ class CargoWidget : public PG_ScrollWidget {
 
       void click( int num, SPoint mousePos, bool first );
    protected:
-      bool 	handleScrollTrack (PG_ScrollBar *widget, long data);
+      bool 	handleScrollTrack (long data);
       
    public:
       CargoWidget( PG_Widget* parent, const PG_Rect& pos, ContainerBase* container, bool setup );
       bool eventKeyDown(const SDL_KeyboardEvent* key);
       Vehicle* getMarkedUnit();
-      SigC::Signal1<void,Vehicle*> unitMarked;
+      sigc::signal<void,Vehicle*> unitMarked;
 
       //! the bool param is set to true if this is the first click on a unit 
-      SigC::Signal3<void,Vehicle*,SPoint,bool> unitClicked;
+      sigc::signal<void,Vehicle*,SPoint,bool> unitClicked;
       void redrawAll();
       
       void startDrag( Vehicle* v );
@@ -119,15 +119,15 @@ class CargoWidget : public PG_ScrollWidget {
       void releaseDrag( int x, int y );
       
       //! First param: dragged unit, Second Param: target unit
-      SigC::Signal2<void, Vehicle*, Vehicle*> sigDragDone;
+      sigc::signal<void, Vehicle*, Vehicle*> sigDragDone;
       
       //! First param: dragged unit, Second Param: target unit
-      SigC::Signal2<bool, Vehicle*, Vehicle*> sigDragAvail;
+      sigc::signal<bool, Vehicle*, Vehicle*> sigDragAvail;
       
-      SigC::Signal0<void> sigDragInProcess;
-      SigC::Signal0<void> sigDragAborted;
+      sigc::signal<void> sigDragInProcess;
+      sigc::signal<void> sigDragAborted;
 
-      SigC::Signal0<void> sigScrollTrack;
+      sigc::signal<void> sigScrollTrack;
 
       void enableDragNDrop( bool enable ) { dragNdrop = enable; };
       bool dragNdropEnabled() const { return dragNdrop; }; 

@@ -389,7 +389,7 @@ int processEvents ( )
 bool syncGraphics = true;
 
 
-SigC::Signal1<void,const SDL_Surface*> postScreenUpdate;
+sigc::signal<void,const SDL_Surface*> postScreenUpdate;
 
 void queueOperation( GraphicsQueueOperation* gqo, bool wait, bool forceAsync )
 {

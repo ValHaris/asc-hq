@@ -33,7 +33,7 @@
 #include "objects.h"
 
 
-extern SigC::Signal0<void> filtersChangedSignal;
+extern sigc::signal<void> filtersChangedSignal;
 
 
 class Placeable {

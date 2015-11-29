@@ -21,7 +21,7 @@ InfoPopUp::InfoPopUp(PG_Widget* parent): PG_PopupMenu(parent, 20, 20 ) {
   addMenuItem("", 5,MenuItem::MIF_SEPARATOR );
   addMenuItem("Terrain", 6, slot(showTerrainInfo));
   //ut = new PG_PopupMenu::MenuItem(this, "Unit Type",  1, MenuItem::MIF_NONE);
-  //ut->sigSelectMenuItem.connect(SigC::slot(*this, &InfoPopUp::showUnitInfo));
+  //ut->sigSelectMenuItem.connect(sigc::mem_fun(*this, &InfoPopUp::showUnitInfo));
   //actmap->getField(mc)->vehicle;
   Hide();
 }

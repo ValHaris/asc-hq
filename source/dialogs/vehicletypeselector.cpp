@@ -39,7 +39,7 @@ VehicleTypeBaseWidget :: VehicleTypeBaseWidget( PG_Widget* parent, const PG_Poin
 
    PG_Button* b = new PG_Button( this, PG_Rect( buttonXPos(width, 0 ), Height()/2-lineheight, 2*lineheight, 2*lineheight ));
    b->SetIcon( IconRepository::getIcon( "blue-i.png").getBaseSurface() );
-   b->sigClick.connect( SigC::slot( *this, &VehicleTypeBaseWidget::info ));
+   b->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &VehicleTypeBaseWidget::info )));
    
    SetTransparency( 255 );
 };
@@ -99,7 +99,7 @@ VehicleBaseWidget :: VehicleBaseWidget( PG_Widget* parent, const PG_Point& pos, 
 
    PG_Button* b = new PG_Button( this, PG_Rect( buttonXPos(width, 0 ), Height()/2-lineheight, 2*lineheight, 2*lineheight ));
    b->SetIcon( IconRepository::getIcon( "blue-i.png").getBaseSurface() );
-   b->sigClick.connect( SigC::slot( *this, &VehicleBaseWidget::info ));
+   b->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &VehicleBaseWidget::info )));
 
    SetTransparency( 255 );
 };
@@ -181,7 +181,7 @@ VehicleTypeCountLocateWidget::VehicleTypeCountLocateWidget( PG_Widget* parent, c
    
    PG_Button* b = new PG_Button( this, PG_Rect( buttonXPos(width, 1 ), Height()/2-lineheight, 2*lineheight, 2*lineheight ));
    b->SetIcon( IconRepository::getIcon( "magnifier.png").getBaseSurface() );
-   b->sigClick.connect( SigC::slot( *this, &VehicleTypeCountLocateWidget::locate ));
+   b->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &VehicleTypeCountLocateWidget::locate )));
          
 }
 
@@ -233,7 +233,7 @@ SelectionWidget* VehicleTypeSelectionItemFactory::spawnNextItem( PG_Widget* pare
       return NULL;
 };
 
-SigC::Signal1<void,const VehicleType*> VehicleTypeSelectionItemFactory::showVehicleInfo;
+sigc::signal<void,const VehicleType*> VehicleTypeSelectionItemFactory::showVehicleInfo;
 
 
 void VehicleTypeSelectionItemFactory::itemSelected( const SelectionWidget* widget, bool mouse )

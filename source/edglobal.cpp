@@ -332,7 +332,7 @@ class PlayerColorPanel : public PG_Widget {
             lab->SetFontSize(15);
          }
 
-         PG_Application::GetApp()->sigAppIdle.connect( SigC::slot( *this, &PlayerColorPanel::idler ));
+         PG_Application::GetApp()->sigAppIdle.connect( sigc::hide( sigc::mem_fun( *this, &PlayerColorPanel::idler )));
       }
 
       void Show( bool fade = false )

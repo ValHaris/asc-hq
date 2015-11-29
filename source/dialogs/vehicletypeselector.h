@@ -75,18 +75,18 @@ class VehicleTypeCountLocateWidget: public VehicleTypeCountWidget  {
    public:
       VehicleTypeCountLocateWidget( PG_Widget* parent, const PG_Point& pos, int width, const VehicleType* vehicletype, const Player& player, int number );
       
-      SigC::Signal1<void,const VehicleType*> locateVehicles;
+      sigc::signal<void,const VehicleType*> locateVehicles;
 };
 
 
-class VehicleTypeSelectionItemFactory: public SelectionItemFactory, public SigC::Object  {
+class VehicleTypeSelectionItemFactory: public SelectionItemFactory, public sigc::trackable  {
       Resources plantResources;
       const Player& actplayer;
       bool showResourcesForUnit;
    public:
       typedef vector<const VehicleType*> Container;
 
-      static SigC::Signal1<void,const VehicleType*> showVehicleInfo;
+      static sigc::signal<void,const VehicleType*> showVehicleInfo;
       
    protected:
       Container::iterator it;
@@ -101,7 +101,7 @@ class VehicleTypeSelectionItemFactory: public SelectionItemFactory, public SigC:
       VehicleTypeSelectionItemFactory( Resources plantResources, const Container& types, const Player& player );
       VehicleTypeSelectionItemFactory( const Container& types, const Player& player );
       
-      SigC::Signal0<void> reloadAllItems;
+      sigc::signal<void> reloadAllItems;
 
       void restart();
    

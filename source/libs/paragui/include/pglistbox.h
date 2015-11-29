@@ -29,6 +29,7 @@
 #ifndef PG_LISTBOX_H
 #define PG_LISTBOX_H
 
+#include <sigc++/sigc++.h>
 #include "pgwidgetlist.h"
 #include "pglabel.h"
 
@@ -52,8 +53,7 @@ public:
 	/**
 	Signal type declaration
 	**/
-	template<class datatype = PG_Pointer>
-class SignalSelectItem : public PG_Signal1<PG_ListBoxBaseItem*, datatype> {}
+class SignalSelectItem : public sigc::signal<bool, PG_ListBoxBaseItem*> {}
 	;
 
 	/** */
@@ -124,7 +124,7 @@ class SignalSelectItem : public PG_Signal1<PG_ListBoxBaseItem*, datatype> {}
 
 	void AddChild(PG_Widget* child);
 
-	SignalSelectItem<> sigSelectItem;
+	SignalSelectItem sigSelectItem;
 
 protected:
 

@@ -27,7 +27,7 @@
 
 
 
-class VehicleCounterFactory: public SelectionItemFactory, public SigC::Object  {
+class VehicleCounterFactory: public SelectionItemFactory, public sigc::trackable  {
 public:
     typedef vector<const VehicleType*> Container;
 protected:

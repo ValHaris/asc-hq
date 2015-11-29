@@ -20,7 +20,7 @@
  *                                                                         *
  ***************************************************************************/
 
- #include "sigc++/retype.h"
+ #include "sigc++/adaptors/retype.h"
 
 #include "dashboard.h"
 #include "graphics/blitter.h"
@@ -88,7 +88,7 @@ class ExperienceOverview : public PG_Widget {
    public:
       ExperienceOverview( const PG_Point& pos, int exp = -1 ) : PG_Widget( NULL, getSize(pos), true )
       {
-         // PG_Application::GetApp()->sigMouseButtonUp.connect( SigC::slot( *this, &ExperienceOverview::QuitModal ));
+         // PG_Application::GetApp()->sigMouseButtonUp.connect( sigc::mem_fun( *this, &ExperienceOverview::QuitModal ));
       }
 
 
@@ -113,7 +113,7 @@ class ExperienceOverview : public PG_Widget {
 DashboardPanel::DashboardPanel ( PG_Widget *parent, const PG_Rect &r, const ASCString& panelName_, bool loadTheme = true )
    :LayoutablePanel ( parent, r, panelName_, loadTheme ), veh(NULL), bld(NULL)
 {
-   updateFieldInfo.connect ( SigC::slot( *this, &DashboardPanel::eval ));
+   updateFieldInfo.connect ( sigc::mem_fun( *this, &DashboardPanel::eval ));
    registerSpecialDisplay( "windarrow" );
 
    registerSpecialDisplay( "unitexp" );
@@ -125,13 +125,13 @@ DashboardPanel::DashboardPanel ( PG_Widget *parent, const PG_Rect &r, const ASCS
    registerSpecialDisplay( "showplayercolor1" );
    registerSpecialDisplay( "field_weather" );
 
-   ContainerBase::anyContainerDestroyed.connect( SigC::slot( *this, &DashboardPanel::containerDeleted ));
+   ContainerBase::anyContainerDestroyed.connect( sigc::mem_fun( *this, &DashboardPanel::containerDeleted ));
    
-   GameMap::sigMapDeletion.connect( SigC::slot( *this, &DashboardPanel::reset ));
+   GameMap::sigMapDeletion.connect( sigc::mem_fun( *this, &DashboardPanel::reset ));
 
    PG_Widget* w = parent->FindChild( "unitexp", true );
    if ( w )
-      w->sigMouseButtonDown.connect( SigC::slot( *this, &DashboardPanel::viewExperienceOverview ));
+      w->sigMouseButtonDown.connect( sigc::hide( sigc::hide( sigc::mem_fun( *this, &DashboardPanel::viewExperienceOverview ))));
 };
 
 bool DashboardPanel::viewExperienceOverview()
@@ -191,7 +191,7 @@ void DashboardPanel::registerSpecialDisplay( const ASCString& name )
 {
    SpecialDisplayWidget* sdw = dynamic_cast<SpecialDisplayWidget*>( FindChild( name, true ) );
    if ( sdw )
-     sdw->display.connect( SigC::slot( *this, &DashboardPanel::painter ));
+     sdw->display.connect( sigc::mem_fun( *this, &DashboardPanel::painter ));
 }
 
 
@@ -525,16 +525,16 @@ UnitInfoPanel::UnitInfoPanel (PG_Widget *parent, const PG_Rect &r ) : DashboardP
 {
    SpecialInputWidget* siw = dynamic_cast<SpecialInputWidget*>( FindChild( "weapinfo", true ) );
    if ( siw ) {
-      siw->sigMouseButtonDown.connect( SigC::slot( *this, &UnitInfoPanel::onClick ));
-      siw->sigMouseButtonUp.connect( SigC::slot( *this, &UnitInfoPanel::onClick ));
+      siw->sigMouseButtonDown.connect( sigc::mem_fun( *this, &UnitInfoPanel::onClick ));
+      siw->sigMouseButtonUp.connect( sigc::mem_fun( *this, &UnitInfoPanel::onClick ));
    }
 
    PG_Label* l = dynamic_cast<PG_Label*>( parent->FindChild( "unitname", true ) );
    if ( l ) {
-      l->sigMouseButtonUp.connect( SigC::slot( *this, &UnitInfoPanel::unitNaming ));
+      l->sigMouseButtonUp.connect( sigc::hide( sigc::hide( sigc::mem_fun( *this, &UnitInfoPanel::unitNaming ))));
    }
 
-   VehicleTypeSelectionItemFactory::showVehicleInfo.connect( SigC::slot( *this, &UnitInfoPanel::showUnitInfo ));
+   VehicleTypeSelectionItemFactory::showVehicleInfo.connect( sigc::mem_fun( *this, &UnitInfoPanel::showUnitInfo ));
 }
 
 void UnitInfoPanel::showUnitInfo( const VehicleType* vt )
@@ -649,7 +649,7 @@ class WeaponInfoLine: public PG_Image {
       {
          SpecialDisplayWidget* sdw = dynamic_cast<SpecialDisplayWidget*>( FindChild( name, true ) );
          if ( sdw )
-            sdw->display.connect( SigC::slot( *this, &WeaponInfoLine::painter ));
+            sdw->display.connect( sigc::mem_fun( *this, &WeaponInfoLine::painter ));
       };
 
 	   void eventMouseEnter()
@@ -853,8 +853,8 @@ MapInfoPanel::MapInfoPanel (PG_Widget *parent, const PG_Rect &r, MapDisplayPG* m
    zoomSlider = dynamic_cast<PG_Slider*>( FindChild( "zoomscroller", true ) );
    if ( zoomSlider ) {
       zoomSlider->SetRange(0,75); // results in zoomlevels from 100 - 25
-      zoomSlider->sigSlide.connect( SigC::slot( *this, &MapInfoPanel::scrollTrack ));
-      mapDisplay->newZoom.connect( SigC::slot( *this, &MapInfoPanel::zoomChanged ));
+      zoomSlider->sigSlide.connect( sigc::mem_fun( *this, &MapInfoPanel::scrollTrack ));
+      mapDisplay->newZoom.connect( sigc::mem_fun( *this, &MapInfoPanel::zoomChanged ));
       zoomSlider->SetPosition( 100 - mapDisplay->getZoom() );
    }   
 
@@ -866,18 +866,18 @@ MapInfoPanel::MapInfoPanel (PG_Widget *parent, const PG_Rect &r, MapDisplayPG* m
          )
          layerChanged( true, label[i]);
       if ( cb ) 
-         cb->sigClick.connect( SigC::bind( SigC::slot( *this, &MapInfoPanel::checkBox ), label[i] ));
+         cb->sigClick.connect( sigc::bind( sigc::mem_fun( *this, &MapInfoPanel::checkBox ), label[i] ));
    }      
    
-   mapDisplay->layerChanged.connect( SigC::slot( *this, &MapInfoPanel::layerChanged ));
+   mapDisplay->layerChanged.connect( sigc::mem_fun( *this, &MapInfoPanel::layerChanged ));
       
    PG_Button* b = dynamic_cast<PG_Button*>( FindChild( "weaprange", true ) );
    if ( b )
-      b->sigClick.connect( SigC::slot( *this, &MapInfoPanel::showWeaponRange ));
+      b->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &MapInfoPanel::showWeaponRange )));
    
    PG_Button* b2 = dynamic_cast<PG_Button*>( FindChild( "moverange", true ) );
    if ( b2 )
-      b2->sigClick.connect( SigC::slot( *this, &MapInfoPanel::showMovementRange ));
+      b2->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &MapInfoPanel::showMovementRange )));
    
 }
 
@@ -921,7 +921,7 @@ bool MapInfoPanel::scrollTrack( long pos )
    return true;
 }
 
-bool MapInfoPanel::checkBox( bool state, const char* name )
+bool MapInfoPanel::checkBox( PG_Widget* w, bool state, const char* name )
 {
    changeActive = true;
    mapDisplay->activateMapLayer( name, state );
@@ -933,7 +933,7 @@ bool MapInfoPanel::checkBox( bool state, const char* name )
 
 ActionInfoPanel::ActionInfoPanel (PG_Widget *parent, const PG_Rect &r ) : DashboardPanel( parent, r, "ActionInfo" )
 {
-   ActionContainer::actionListChanged.connect( SigC::slot( *this, &ActionInfoPanel::update ));
+   ActionContainer::actionListChanged.connect( sigc::mem_fun( *this, &ActionInfoPanel::update ));
 }
 
 void ActionInfoPanel::update( GameMap* map )

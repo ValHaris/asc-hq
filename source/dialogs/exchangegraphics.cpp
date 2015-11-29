@@ -283,21 +283,21 @@ class ExchangeGraphics: public ASC_PG_Dialog
          selectedType->AddItem( "Object" );
          selectedType->SelectItem( 0 );
 
-         (new PG_Button( this, PG_Rect( 10, 100, 180, 30), "Select Filename"))->sigClick.connect( SigC::slot( *this, &ExchangeGraphics::fileSelect ));
+         (new PG_Button( this, PG_Rect( 10, 100, 180, 30), "Select Filename"))->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &ExchangeGraphics::fileSelect )));
 
          terrain = new PG_Label( this, PG_Rect( 10, 140, 180, 25));
          object  = new PG_Label( this, PG_Rect( 10, 170, 180, 25));
 
 
-         (new PG_Button( this, PG_Rect( 10, 200, 180, 30), "Apply"))->sigClick.connect( SigC::slot( *this, &ExchangeGraphics::apply ));
-         (new PG_Button( this, PG_Rect( 10, 240, 180, 30), "Restore Original"))->sigClick.connect( SigC::slot( *this, &ExchangeGraphics::restore ));
-         (new PG_Button( this, PG_Rect( 10, 280, 180, 30), "Replacement Summary"))->sigClick.connect( SigC::slot( *this, &ExchangeGraphics::summary ));
-         (new PG_Button( this, PG_Rect( 10, 320, 180, 30), "Load from file"))->sigClick.connect( SigC::slot( *this, &ExchangeGraphics::readFile ));
-         (new PG_Button( this, PG_Rect( 10, 360, 180, 30), "Close"))->sigClick.connect( SigC::slot( *this, &ExchangeGraphics::close ));
-         (new PG_Button( this, PG_Rect( 10, 400, 180, 30), "Snow"))->sigClick.connect( SigC::slot( *this, &ExchangeGraphics::snow ));
+         (new PG_Button( this, PG_Rect( 10, 200, 180, 30), "Apply"))->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &ExchangeGraphics::apply )));
+         (new PG_Button( this, PG_Rect( 10, 240, 180, 30), "Restore Original"))->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &ExchangeGraphics::restore )));
+         (new PG_Button( this, PG_Rect( 10, 280, 180, 30), "Replacement Summary"))->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &ExchangeGraphics::summary )));
+         (new PG_Button( this, PG_Rect( 10, 320, 180, 30), "Load from file"))->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &ExchangeGraphics::readFile )));
+         (new PG_Button( this, PG_Rect( 10, 360, 180, 30), "Close"))->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &ExchangeGraphics::close )));
+         (new PG_Button( this, PG_Rect( 10, 400, 180, 30), "Snow"))->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &ExchangeGraphics::snow )));
 
-         cursorMoved.connect( SigC::slot( *this, &ExchangeGraphics::newCursorPos ));
-         updateFieldInfo.connect( SigC::slot( *this, &ExchangeGraphics::newCursorPos ));
+         cursorMoved.connect( sigc::mem_fun( *this, &ExchangeGraphics::newCursorPos ));
+         updateFieldInfo.connect( sigc::mem_fun( *this, &ExchangeGraphics::newCursorPos ));
    
          newCursorPos();
 

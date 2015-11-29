@@ -50,7 +50,7 @@ MapComponent::MapComponent( const MapItemType* item ) : mapItem( item )
 {
    if ( !initialized ) {
       initialized = true;
-      selection.playerChanged.connect( SigC::slot( &MapComponent::setPlayer ));
+      selection.playerChanged.connect( sigc::ptr_fun( &MapComponent::setPlayer ));
          
    }
 }

@@ -164,18 +164,18 @@ extern int getheightdelta ( const ContainerBase* c1, const ContainerBase* c2 );
 //! }@
 
 
-extern SigC::Signal0<void> repaintMap;
-extern SigC::Signal0<void> repaintDisplay;
-extern SigC::Signal0<void> updateFieldInfo;
-extern SigC::Signal0<void> cursorMoved;
+extern sigc::signal<void> repaintMap;
+extern sigc::signal<void> repaintDisplay;
+extern sigc::signal<void> updateFieldInfo;
+extern sigc::signal<void> cursorMoved;
 
 //! the view of the player onto the map changed, for example because he scrolled the map
-extern SigC::Signal0<void> viewChanged;
-extern SigC::Signal1<void,GameMap*> mapChanged;
-extern SigC::Signal1<void,ContainerBase*> showContainerInfo;
-extern SigC::Signal1<void,VehicleType*> showVehicleTypeInfo;
-extern SigC::Signal0<bool> idleEvent;
-extern SigC::Signal1<void, const Context&> fieldCrossed;
+extern sigc::signal<void> viewChanged;
+extern sigc::signal<void,GameMap*> mapChanged;
+extern sigc::signal<void,ContainerBase*> showContainerInfo;
+extern sigc::signal<void,VehicleType*> showVehicleTypeInfo;
+extern sigc::signal<bool> idleEvent;
+extern sigc::signal<void, const Context&> fieldCrossed;
 
 extern void displaymap();
 

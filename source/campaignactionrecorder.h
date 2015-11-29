@@ -42,7 +42,7 @@ class LuaCommandListRecorder : public LuaCommandListWriter<C> {
 };
 
 
-class CampaignActionLogger : public SigC::Object, public ActionRecorder {
+class CampaignActionLogger : public sigc::trackable, public ActionRecorder {
    
       void endTurn( Player& player );
       

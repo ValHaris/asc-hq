@@ -89,7 +89,7 @@ class MapInfoPanel : public DashboardPanel {
         
         void layerChanged( bool state, const ASCString& label );        
         bool scrollTrack( long pos );
-        bool checkBox( bool state, const char* name );
+        bool checkBox( PG_Widget* w, bool state, const char* name );
         void zoomChanged( int zoom );
 
         bool showWeaponRange();

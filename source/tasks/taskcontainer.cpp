@@ -34,8 +34,8 @@ TaskContainer::TaskContainer( GameMap* gamemap )
 {
    this->gamemap = gamemap;
    
-   gamemap->sigPlayerTurnHasEnded.connect( SigC::slot( *this, &TaskContainer::endTurn ));
-   gamemap->sigPlayerTurnBegins.connect( SigC::slot( *this, &TaskContainer::startTurn ));
+   gamemap->sigPlayerTurnHasEnded.connect( sigc::mem_fun( *this, &TaskContainer::endTurn ));
+   gamemap->sigPlayerTurnBegins.connect( sigc::mem_fun( *this, &TaskContainer::startTurn ));
 }            
 
 TaskContainer::~TaskContainer()
@@ -51,8 +51,8 @@ void TaskContainer::hook( GameMap& gamemap )
 
 void TaskContainer::registerHooks()
 {
-   GameMap::sigMapCreation.connect( SigC::slot( &TaskContainer::hook ));
-   ActionContainer::commitCommand.connect( SigC::slot( &TaskContainer::getCommand ));
+   GameMap::sigMapCreation.connect( sigc::ptr_fun( &TaskContainer::hook ));
+   ActionContainer::commitCommand.connect( sigc::ptr_fun( &TaskContainer::getCommand ));
    
 }
 

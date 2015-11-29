@@ -764,17 +764,15 @@ public:
 
 	void EnableReceiver(bool enable, bool bRecursive = false);
 
-	template<class datatype = PG_Pointer>
-class SignalMouseEnter : public PG_Signal0<datatype> {}
+class SignalMouseEnter : public sigc::signal<bool> {}
 	;
 
-	template<class datatype = PG_Pointer>
-class SignalMouseLeave : public PG_Signal0<datatype> {}
+class SignalMouseLeave : public sigc::signal<bool> {}
 	;
 
-	SignalMouseEnter<> sigMouseEnter;
+	SignalMouseEnter sigMouseEnter;
 
-	SignalMouseLeave<> sigMouseLeave;
+	SignalMouseLeave sigMouseLeave;
 
 	/**
 	  	change the parent of the widget.
@@ -917,6 +915,9 @@ private:
 	PG_Widget(const PG_Widget&);
 
 	PG_Widget& operator=(const PG_Widget&);
+
+	bool propagateKeyDown( PG_MessageObject* object, const SDL_KeyboardEvent* event );
+
 
 	static int my_ObjectCounter;
 

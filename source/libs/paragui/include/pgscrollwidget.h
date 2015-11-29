@@ -143,11 +143,11 @@ protected:
 
    bool eventMouseButtonDown(const SDL_MouseButtonEvent* button);
    
-	/**  */
-	bool handleScrollPos(PG_ScrollBar* widget, long data);
+	bool handleScrollPos_horiz(long data);
+	bool handleScrollPos_vert(long data);
 
-	/**  */
-	bool handleScrollTrack(PG_ScrollBar* widget, long data);
+	bool handleScrollTrack_horiz(long data);
+	bool handleScrollTrack_vert(long data);
 
 	bool handleAreaChangedHeight(PG_ScrollArea* area, Uint16 h);
 

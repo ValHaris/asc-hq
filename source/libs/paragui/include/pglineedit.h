@@ -30,7 +30,6 @@
 #define PG_LINEEDIT
 
 #include "pgthemewidget.h"
-#include "pgsignals.h"
 #include "pgstring.h"
 
 /** \file pglineedit.h
@@ -55,17 +54,13 @@ public:
 	/**
 	Signal type declaration
 	**/
-	template<class datatype = PG_Pointer>
-class SignalEditBegin : public PG_Signal1<PG_LineEdit*, datatype> {}
+class SignalEditBegin : public sigc::signal<bool> {}
 	;
-	template<class datatype = PG_Pointer>
-class SignalEditEnd : public PG_Signal1<PG_LineEdit*, datatype> {}
+class SignalEditEnd : public sigc::signal<bool> {}
 	;
-	template<class datatype = PG_Pointer>
-class SignalEditReturn : public PG_Signal1<PG_LineEdit*, datatype> {}
+class SignalEditReturn : public sigc::signal<bool> {}
 	;
-   template<class datatype = PG_Pointer>
-class SignalEditUpdate : public PG_Signal1<PG_LineEdit*, datatype> {}
+class SignalEditUpdate : public sigc::signal<bool> {}
    ;
 
 	/** */
@@ -150,10 +145,10 @@ class SignalEditUpdate : public PG_Signal1<PG_LineEdit*, datatype> {}
 
 	bool Action(KeyAction action);
 
-	SignalEditBegin<> sigEditBegin;
-	SignalEditEnd<> sigEditEnd;
-	SignalEditReturn<> sigEditReturn;
-   SignalEditUpdate<> sigEditUpdate;
+	SignalEditBegin sigEditBegin;
+	SignalEditEnd sigEditEnd;
+	SignalEditReturn sigEditReturn;
+    SignalEditUpdate sigEditUpdate;
 
 
    

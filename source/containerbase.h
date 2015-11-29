@@ -125,7 +125,7 @@ class ContainerBase {
       //! removes ALL units from cargo
       void clearCargo();
 
-      SigC::Signal0<void> cargoChanged;
+      sigc::signal<void> cargoChanged;
 
       
       //! a name given by the user or the map creator
@@ -313,10 +313,10 @@ class ContainerBase {
       virtual int maxAmmo( int type ) const = 0 ;
 
 
-      SigC::Signal0<void> conquered;
-      SigC::Signal0<void> destroyed;
-      static SigC::Signal1<void,ContainerBase*> anyContainerDestroyed;
-      static SigC::Signal1<void,ContainerBase*> anyContainerConquered;
+      sigc::signal<void> conquered;
+      sigc::signal<void> destroyed;
+      static sigc::signal<void,ContainerBase*> anyContainerDestroyed;
+      static sigc::signal<void,ContainerBase*> anyContainerConquered;
 
       static int calcShadowDist( int binaryHeight );
 

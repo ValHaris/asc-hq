@@ -89,7 +89,7 @@ class ListBoxImageItem : public PG_ListBoxBaseItem {
          new PG_Label( this, PG_Rect(diplomaticStateIconSize + 5, diplomaticStateIconSpace, 200,diplomaticStateIconSize), getStateName<SelectionType>(s));
       }
       
-      SigC::Signal1<void,SelectionType> sigSet;
+      sigc::signal<void,SelectionType> sigSet;
       
       bool eventMouseButtonUp(const SDL_MouseButtonEvent* button) 
       {
@@ -127,7 +127,7 @@ class DiplomaticModeChooser : public PG_Widget {
          PG_ListBox listBox( NULL, PG_Rect( x, y + Height(), 250, getItemNum<SelectionType>() * ( diplomaticStateIconSpace * 2 + diplomaticStateIconSize ) + 4 ));
          for ( int i = 0; i < getItemNum<SelectionType>(); ++i) {
             ListBoxImageItem<SelectionType>* item = new ListBoxImageItem<SelectionType>( NULL, PG_Point(0,0), SelectionType(i));
-            item->sigSet.connect( SigC::slot( *this, &DiplomaticModeChooser::SetState));
+            item->sigSet.connect( sigc::mem_fun( *this, &DiplomaticModeChooser::SetState));
             listBox.AddChild( item );
          }
          listBox.Show();
@@ -139,7 +139,7 @@ class DiplomaticModeChooser : public PG_Widget {
       {
       };
 
-      SigC::Signal1<void,SelectionType> sigStateChange;
+      sigc::signal<void,SelectionType> sigStateChange;
             
       void eventDraw (SDL_Surface *surface, const PG_Rect &rect)
       {
@@ -254,12 +254,12 @@ AllianceSetupWidget::AllianceSetupWidget( GameMap* gamemap, ApplyStrategy* apply
                   PG_Rect rect ( x + (colWidth - diplomaticStateIconSize)/2 ,  (lineHeight - diplomaticStateIconSize)/2,diplomaticStateIconSize,diplomaticStateIconSize); 
                   if ( allEditable ) {
                      DiplomaticModeChooser<DiplomaticStates>* dmc = new DiplomaticModeChooser<DiplomaticStates>( horizontalBar, rect, getState(i,j), true );
-                     dmc->sigStateChange.connect( SigC::bind( SigC::slot( *this, &AllianceSetupWidget::setState ), j, i));
+                     dmc->sigStateChange.connect( sigc::bind( sigc::mem_fun( *this, &AllianceSetupWidget::setState ), j, i));
                      diplomaticWidgets[ linearize( i,j) ] = dmc;
                   } else {
                      DiplomaticTransitions& s = stateChanges[i][j];
                      DiplomaticModeChooser<DiplomaticTransitions>* dmc = new DiplomaticModeChooser<DiplomaticTransitions>( horizontalBar, rect, s, i == gamemap->actplayer );
-                     // dmc->sigStateChange.connect( SigC::bind( SigC::slot( *this, &AllianceSetupWidget::setState ), j, i));
+                     // dmc->sigStateChange.connect( sigc::bind( sigc::mem_fun( *this, &AllianceSetupWidget::setState ), j, i));
                      diplomaticWidgets[ linearize( i,j) ] = dmc;
                   }   
                      
@@ -348,9 +348,9 @@ class AllianceSetupWindow : public ASC_PG_Dialog {
       {
          asw = new AllianceSetupWidget( actmap, strategy, allEditable, this, PG_Rect( 5, 30, r.Width() - 10, r.Height() - 60 ));
          PG_Button* ok = new PG_Button( this, PG_Rect( Width() - 200, Height() - 30, 90, 20 ), "OK" );
-         ok->sigClick.connect( SigC::slot( *this, &AllianceSetupWindow::Apply ));
+         ok->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &AllianceSetupWindow::Apply )));
          PG_Button* cancel = new PG_Button( this, PG_Rect( Width() - 100, Height() - 30, 90, 20 ), "Cancel" );
-         cancel->sigClick.connect( SigC::slot( *this, &AllianceSetupWindow::QuitModal ));
+         cancel->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &AllianceSetupWindow::QuitModal )));
       }
 
       bool Apply()

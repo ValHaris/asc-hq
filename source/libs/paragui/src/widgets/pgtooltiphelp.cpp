@@ -48,13 +48,13 @@ PG_ToolTipHelp :: PG_ToolTipHelp( PG_Widget* parent, const std::string& text, in
 
         tooltips[parent] = this;
         
-	parent->sigMouseEnter.connect( SigC::slot( *this, &PG_ToolTipHelp::onParentEnter ), parent );
-	parent->sigMouseLeave.connect( SigC::slot( *this, &PG_ToolTipHelp::onParentLeave ), parent );
-	parent->sigMouseMotion.connect( SigC::slot( *this, &PG_ToolTipHelp::onMouseMotion ));
-	PG_Application::GetApp()->sigAppIdle.connect( SigC::slot( *this, &PG_ToolTipHelp::onIdle ));
+	parent->sigMouseEnter.connect( sigc::mem_fun( *this, &PG_ToolTipHelp::onParentEnter ) );
+	parent->sigMouseLeave.connect( sigc::mem_fun( *this, &PG_ToolTipHelp::onParentLeave ) );
+	parent->sigMouseMotion.connect( sigc::mem_fun( *this, &PG_ToolTipHelp::onMouseMotion ));
+	PG_Application::GetApp()->sigAppIdle.connect( sigc::hide( sigc::mem_fun( *this, &PG_ToolTipHelp::onIdle )));
 	PG_Application::GetApp()->EnableAppIdleCalls();
 
-	parent->sigDelete.connect( SigC::slot( *this, &PG_ToolTipHelp::onParentDelete ));
+	parent->sigDelete.connect( sigc::mem_fun( *this, &PG_ToolTipHelp::onParentDelete ));
 
 	SetText( text );
 }
@@ -64,7 +64,7 @@ void PG_ToolTipHelp :: SetText( const std::string& text ) {
 	my_text = text;
 }
 
-bool PG_ToolTipHelp :: onIdle(  ) {
+bool PG_ToolTipHelp :: onIdle() {
 	if ( !ticker )
 		return false;
 
@@ -89,7 +89,7 @@ bool PG_ToolTipHelp :: onIdle(  ) {
 }
 
 
-bool PG_ToolTipHelp :: onParentEnter( void* dummy ) {
+bool PG_ToolTipHelp :: onParentEnter( ) {
 	if ( !ticker )
 		ticker = new Ticker(100);
 
@@ -99,7 +99,7 @@ bool PG_ToolTipHelp :: onParentEnter( void* dummy ) {
 	return true;
 }
 
-bool PG_ToolTipHelp :: onParentLeave( void* dummy ) {
+bool PG_ToolTipHelp :: onParentLeave( ) {
 	// if the ToolTipLabel is beneath the mouse cursor, we'll receive a onParentLeave notification that we'll ignore
 	if ( toolTipLabel && toolTipLabel->IsMouseInside() )
 		return false;
@@ -118,7 +118,7 @@ bool PG_ToolTipHelp :: onParentDelete( const PG_MessageObject* object ) {
 	return true;
 }
 
-bool PG_ToolTipHelp :: onMouseMotion( const SDL_MouseMotionEvent *motion ) {
+bool PG_ToolTipHelp :: onMouseMotion( const PG_MessageObject* object, const SDL_MouseMotionEvent *motion ) {
 	if ( ticker )
 		lastTick = ticker->getTicker();
 
@@ -159,7 +159,7 @@ void PG_ToolTipHelp :: ShowHelp( const PG_Point& pos ) {
 
 	toolTipLabel->MoveWidget( r, false );
 	toolTipLabel->Show();
-	toolTipLabel->sigMouseMotion.connect( SigC::slot( *this, &PG_ToolTipHelp::onMouseMotion ));
+	toolTipLabel->sigMouseMotion.connect( sigc::mem_fun( *this, &PG_ToolTipHelp::onMouseMotion ));
 }
 
 void PG_ToolTipHelp :: HideHelp( ) {

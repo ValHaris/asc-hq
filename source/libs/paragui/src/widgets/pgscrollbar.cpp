@@ -48,15 +48,15 @@ PG_ScrollBar::PG_ScrollBar(PG_Widget* parent, const PG_Rect& r, ScrollDirection 
 
 	scrollbutton[0] = new PG_Button(this);
 	scrollbutton[0]->SetID((direction == VERTICAL) ? IDSCROLLBAR_UP : IDSCROLLBAR_LEFT);
-	scrollbutton[0]->sigClick.connect(slot(*this, &PG_ScrollBar::handleButtonClick));
+	scrollbutton[0]->sigClick.connect(sigc::mem_fun(*this, &PG_ScrollBar::handleButtonClick));
 
 	scrollbutton[1] = new PG_Button(this);
 	scrollbutton[1]->SetID((direction == VERTICAL) ? IDSCROLLBAR_DOWN : IDSCROLLBAR_RIGHT);
-	scrollbutton[1]->sigClick.connect(slot(*this, &PG_ScrollBar::handleButtonClick));
+	scrollbutton[1]->sigClick.connect(sigc::mem_fun(*this, &PG_ScrollBar::handleButtonClick));
 
 	dragbutton = new ScrollButton(this);
 	dragbutton->SetID(IDSCROLLBAR_DRAG);
-	dragbutton->sigClick.connect(slot(*this, &PG_ScrollBar::handleButtonClick));
+	dragbutton->sigClick.connect(sigc::mem_fun(*this, &PG_ScrollBar::handleButtonClick));
 
 	if(style != PG_PropStr::Scrollbar) {
 		LoadThemeStyle(PG_PropStr::Scrollbar);
@@ -241,7 +241,7 @@ bool PG_ScrollBar::eventMouseButtonUp(const SDL_MouseButtonEvent* button) {
 				}
 			}
 
-			sigScrollPos(this, scroll_current);
+			sigScrollPos(scroll_current);
 			return true;
 
 		case 4:
@@ -250,12 +250,12 @@ bool PG_ScrollBar::eventMouseButtonUp(const SDL_MouseButtonEvent* button) {
 			} else {
 				SetPosition(scroll_current - my_linesize);
 			}
-			sigScrollPos(this, scroll_current);
+			sigScrollPos(scroll_current);
 			return true;
 
 		case 5:
 			SetPosition(scroll_current + my_linesize);
-			sigScrollPos(this, scroll_current);
+			sigScrollPos(scroll_current);
 			return true;
 	}
 
@@ -321,7 +321,7 @@ bool PG_ScrollBar::ScrollButton::eventMouseMotion(const SDL_MouseMotionEvent* mo
 		int pos = GetPosFromPoint(p);
 		if(GetParent()->scroll_current != pos || my_tickMode) {
 			GetParent()->scroll_current = pos;
-			GetParent()->sigScrollTrack(GetParent(), pos);
+			GetParent()->sigScrollTrack(pos);
 		}
 
 	}
@@ -380,7 +380,7 @@ bool PG_ScrollBar::handleButtonClick(PG_Button* button) {
 			return false;
 		}
 		SetPosition(scroll_current - my_linesize);
-		sigScrollPos(this, scroll_current);
+		sigScrollPos(scroll_current);
 		return true;
 	}
 
@@ -389,7 +389,7 @@ bool PG_ScrollBar::handleButtonClick(PG_Button* button) {
 			return false;
 		}
 		SetPosition(scroll_current + my_linesize);
-		sigScrollPos(this, scroll_current);
+		sigScrollPos(scroll_current);
 		return true;
 
 	}
@@ -413,7 +413,7 @@ bool PG_ScrollBar::ScrollButton::eventMouseButtonUp(const SDL_MouseButtonEvent* 
 	PG_Button::eventMouseButtonUp(button);
 
 	//GetParent()->SetPosition(pos);
-	GetParent()->sigScrollPos(GetParent(), pos);
+	GetParent()->sigScrollPos(pos);
 
 	return true;
 }

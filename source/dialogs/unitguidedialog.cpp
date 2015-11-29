@@ -791,7 +791,7 @@ UnitGuideWidget::UnitGuideWidget( PG_Widget* parent, const PG_Rect& pos, int tab
 	{
 		mainCategory->AddItem( mainCategories[ i ].name );
 	}
-	mainCategory->selectionSignal.connect( SigC::slot( *this, &UnitGuideWidget::mainCategoryChanged ) );
+	mainCategory->selectionSignal.connect( sigc::mem_fun( *this, &UnitGuideWidget::mainCategoryChanged ) );
 	xPos += 220;
 	
 	unitSetLabel = new PG_Label ( this, PG_Rect( xPos, yPos, 100, 20 ), "Unit Set" );
@@ -803,7 +803,7 @@ UnitGuideWidget::UnitGuideWidget( PG_Widget* parent, const PG_Rect& pos, int tab
 	{
 		unitSet->AddItem( unitSets[ i ]->name );
 	}
-	unitSet->selectionSignal.connect( SigC::slot( *this, &UnitGuideWidget::unitSetChanged ) );
+	unitSet->selectionSignal.connect( sigc::mem_fun( *this, &UnitGuideWidget::unitSetChanged ) );
 	xPos = 20;
 	yPos += 25;
 	
@@ -812,7 +812,7 @@ UnitGuideWidget::UnitGuideWidget( PG_Widget* parent, const PG_Rect& pos, int tab
 	xPos += 120;
 	
 	subCategory = new DropDownSelector( this, PG_Rect( xPos, yPos, 200, 20 ) );
-	subCategory->selectionSignal.connect( SigC::slot( *this, &UnitGuideWidget::subCategoryChanged ) );
+	subCategory->selectionSignal.connect( sigc::mem_fun( *this, &UnitGuideWidget::subCategoryChanged ) );
 	xPos += 220;
 	
 	unitLabel = new PG_Label ( this, PG_Rect( xPos, yPos, 100, 20 ), "Unit" );
@@ -838,11 +838,11 @@ UnitGuideWidget::UnitGuideWidget( PG_Widget* parent, const PG_Rect& pos, int tab
 	xPos += 120;
 	
 	showDifference = new PG_CheckButton( this, PG_Rect( xPos, yPos, 20, 20 ) );
-  showDifference->sigClick.connect( SigC::slot( *this, &UnitGuideWidget::showDifferenceTrigger ));
+  showDifference->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &UnitGuideWidget::showDifferenceTrigger )));
 	xPos += 40;
 	
 	display = new PG_Button( this, PG_Rect( xPos, yPos, 100, 20 ), "display" );
-  display->sigClick.connect( SigC::slot( *this, &UnitGuideWidget::displayUnit ));
+  display->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &UnitGuideWidget::displayUnit )));
 	xPos += 120;
 	
 	page = new DropDownSelector( this, PG_Rect( xPos, yPos, 200, 20 ) );
@@ -854,7 +854,7 @@ UnitGuideWidget::UnitGuideWidget( PG_Widget* parent, const PG_Rect& pos, int tab
 	page->AddItem( "TerrainAccess 1" );
 	page->AddItem( "TerrainAccess 2" );
 	page->AddItem( "Production" );
-	page->selectionSignal.connect( SigC::slot( *this, &UnitGuideWidget::pageChanged ) );
+	page->selectionSignal.connect( sigc::mem_fun( *this, &UnitGuideWidget::pageChanged ) );
 	
 	xPos = 0;
 	yPos += 25;

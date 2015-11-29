@@ -151,7 +151,7 @@ enum tuseractions {
 
  };
 
-class SelectionHolder : public SigC::Object {
+class SelectionHolder : public sigc::trackable {
      const Placeable* currentItem;
      int actplayer;
      int currentWeather;
@@ -161,7 +161,7 @@ class SelectionHolder : public SigC::Object {
  
      int getPlayer() { return actplayer; };
      void setPlayer( int player );
-     SigC::Signal1<void,int> playerChanged;
+     sigc::signal<void,int> playerChanged;
      
      void setWeather( int weather );
      int getWeather() { return currentWeather; };
@@ -171,7 +171,7 @@ class SelectionHolder : public SigC::Object {
      void setSelection( const Placeable& component ) ;
      void pickup ( MapField* fld );
      
-     SigC::Signal1<void,const Placeable*> selectionChanged;
+     sigc::signal<void,const Placeable*> selectionChanged;
      void clear(); 
 };
  

@@ -34,8 +34,8 @@
 #define PG_TIMEROBJECT_H
 
 #include "paragui.h"
-#include "pgsignals.h"
 #include <map>
+#include <sigc++/sigc++.h>
 
 
 /**
@@ -55,8 +55,7 @@ public:
 	/**
 	Signal type declaration
 	**/
-	template<class datatype = PG_Pointer>
-class SignalTimer : public PG_Signal2<PG_TimerObject*, PG_TimerObject::ID, datatype> {}
+class SignalTimer : public sigc::signal<bool, PG_TimerObject*, PG_TimerObject::ID> {}
 	;
 
 	/**
@@ -102,7 +101,7 @@ class SignalTimer : public PG_Signal2<PG_TimerObject*, PG_TimerObject::ID, datat
 
 	virtual Uint32 eventTimer(Uint32 interval);
 
-	SignalTimer<> sigTimer;
+	SignalTimer sigTimer;
 
 private:
 

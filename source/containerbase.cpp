@@ -64,8 +64,8 @@ ASCString ContainerBase::getPrivateName() const
 }
 
 
-SigC::Signal1<void,ContainerBase*> ContainerBase :: anyContainerDestroyed;
-SigC::Signal1<void,ContainerBase*> ContainerBase :: anyContainerConquered;
+sigc::signal<void,ContainerBase*> ContainerBase :: anyContainerDestroyed;
+sigc::signal<void,ContainerBase*> ContainerBase :: anyContainerConquered;
 
 
 Resources ContainerBase :: putResource ( const Resources& res, bool queryonly, int scope, int player)

@@ -300,7 +300,7 @@ PG_PopupMenu& PG_PopupMenu::addMenuItem(const std::string& caption,
 
 	MenuItem* item = new MenuItem(this, caption, ID, flags);
 	appendItem(item);
-	item->sigSelectMenuItem.connect(handler, data);
+	item->sigSelectMenuItem.connect(sigc::bind( handler, data));
 
 	return *this;
 }
@@ -906,7 +906,7 @@ bool PG_PopupMenu::SetMenuItemSlot(int id, MenuItem::MenuItemSlot slot, PG_Point
 
 		if(id==itid) {
 			item=*it;
-			item->sigSelectMenuItem.connect(slot, clientdata);
+			item->sigSelectMenuItem.connect( sigc::bind( slot, clientdata));
 			return true;
 		}
 		it++;

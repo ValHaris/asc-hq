@@ -58,8 +58,8 @@ class SelectionWidget : public PG_Widget {
       virtual ASCString getName() const = 0;
       
 
-      SigC::Signal1<void,const SelectionWidget*> itemSelected;
-      SigC::Signal1<void,const SelectionWidget*> itemMarked;
+      sigc::signal<void,const SelectionWidget*> itemSelected;
+      sigc::signal<void,const SelectionWidget*> itemMarked;
                  
    protected:
       
@@ -118,9 +118,9 @@ class ItemSelectorWidget : public PG_Widget {
       // the ItemSelectorWindow will take ownership over the itemFactory
       ItemSelectorWidget( PG_Widget *parent, const PG_Rect &r , SelectionItemFactory* itemFactory ) ;
 
-      SigC::Signal1<void,const SelectionWidget*> sigItemSelected;
-      SigC::Signal1<void,ASCString> nameEntered;
-      SigC::Signal0<bool> sigQuitModal;
+      sigc::signal<void,const SelectionWidget*> sigItemSelected;
+      sigc::signal<void,ASCString> nameEntered;
+      sigc::signal<bool> sigQuitModal;
       
       void constrainNames( bool constrain );
       int getItemNum() const { return widgets.size(); };

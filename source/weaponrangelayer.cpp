@@ -82,7 +82,7 @@ void UnitWeaponRangeLayer::operateField( GameMap* actmap, const MapCoordinate& p
    }
    
    UnitWeaponRangeLayer::UnitWeaponRangeLayer() : icon1 ( IconRepository::getIcon( "markedfield-red.png")), icon2 ( IconRepository::getIcon( "markedfield-red2.png")), gamemap(NULL) {
-      // cursorMoved.connect( SigC::slot( *this, UnitWeaponRangeLayer::cursorMoved ));
+      // cursorMoved.connect( sigc::mem_fun( *this, UnitWeaponRangeLayer::cursorMoved ));
    }
 
    void UnitWeaponRangeLayer::paintSingleField( const MapRenderer::FieldRenderInfo& fieldInfo,  int layer, const SPoint& pos )

@@ -129,7 +129,7 @@ class MineTypeRepository : public ItemRepository<MineType>  {
 extern MineTypeRepository mineTypeRepository;
 
 
-extern SigC::Signal0<void> dataLoaderTicker;
+extern sigc::signal<void> dataLoaderTicker;
 
 
 extern ItemRepositoryLoader<VehicleType>  vehicleTypeRepository;

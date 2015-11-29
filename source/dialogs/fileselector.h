@@ -96,9 +96,9 @@ class FileSelectionItemFactory: public SelectionItemFactory  {
       
       SelectionWidget* spawnNextItem( PG_Widget* parent, const PG_Point& pos );
       
-      SigC::Signal1<void,const ASCString& > filenameSelectedMouse;
-      SigC::Signal1<void,const ASCString& > filenameSelectedKeyb;
-      SigC::Signal1<void,const ASCString& > filenameMarked;
+      sigc::signal<void,const ASCString& > filenameSelectedMouse;
+      sigc::signal<void,const ASCString& > filenameSelectedKeyb;
+      sigc::signal<void,const ASCString& > filenameMarked;
       
       void itemMarked( const SelectionWidget* widget );
       
@@ -145,9 +145,9 @@ class SavegameSelectionItemFactory: public SelectionItemFactory  {
 
       SelectionWidget* spawnNextItem( PG_Widget* parent, const PG_Point& pos );
 
-      SigC::Signal1<void,const ASCString& > filenameSelectedMouse;
-      SigC::Signal1<void,const ASCString& > filenameSelectedKeyb;
-      SigC::Signal1<void,const ASCString& > filenameMarked;
+      sigc::signal<void,const ASCString& > filenameSelectedMouse;
+      sigc::signal<void,const ASCString& > filenameSelectedKeyb;
+      sigc::signal<void,const ASCString& > filenameMarked;
 
       void itemMarked( const SelectionWidget* widget );
 

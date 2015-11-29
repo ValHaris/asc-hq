@@ -51,16 +51,16 @@ PG_SpinnerBox::PG_SpinnerBox(PG_Widget *parent, const PG_Rect& r, const std::str
 	down_rect.SetRect( box_rect.my_width, my_height - (my_height/2), (my_height/2), (my_height/2));
 
 	m_pEditBox = new PG_MaskEdit(this, box_rect, style);
-	m_pEditBox->sigEditEnd.connect(slot(*this, &PG_SpinnerBox::handleEditEnd));
+	m_pEditBox->sigEditEnd.connect(sigc::mem_fun(*this, &PG_SpinnerBox::handleEditEnd));
 
 	m_pButtonUp = new PG_Button(this, up_rect);
 	m_pButtonUp->SetID(IDSPINNERBOX_UP);
-	m_pButtonUp->sigClick.connect(slot(*this, &PG_SpinnerBox::handleButtonClick));
+	m_pButtonUp->sigClick.connect(sigc::mem_fun(*this, &PG_SpinnerBox::handleButtonClick));
 	m_pButtonUp->LoadThemeStyle(style, "ButtonUp");
 
 	m_pButtonDown = new PG_Button( this, down_rect);
 	m_pButtonDown->SetID(IDSPINNERBOX_DOWN);
-	m_pButtonDown->sigClick.connect(slot(*this, &PG_SpinnerBox::handleButtonClick));
+	m_pButtonDown->sigClick.connect(sigc::mem_fun(*this, &PG_SpinnerBox::handleButtonClick));
 	m_pButtonDown->LoadThemeStyle(style, "ButtonDown");
 
 	m_iMinValue = 0;
@@ -118,7 +118,7 @@ void PG_SpinnerBox::AdjustSize() {
 	Show();
 }
 
-bool PG_SpinnerBox::handleEditEnd(PG_LineEdit* edit) {
+bool PG_SpinnerBox::handleEditEnd() {
 	const std::string& text = m_pEditBox->GetText();
 	m_iValue = (!text.empty()) ? atoi(text.c_str()) : 0;
 

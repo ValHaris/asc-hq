@@ -108,7 +108,7 @@ void Menu::addfield( const char* name )
    Add ( s, currentMenu );
 #endif
 
-   currentMenu->sigSelectMenuItem.connect( SigC::slot( *this, &Menu::execAction ));
+   currentMenu->sigSelectMenuItem.connect( sigc::mem_fun( *this, &Menu::execAction ));
 }
 
 void Menu::addbutton( const char* name, int id )
@@ -294,7 +294,7 @@ Menu::Menu ( PG_Widget *parent, const PG_Rect &rect)
 
 
 
-class UnitMovementRangeLayer : public MapLayer, public SigC::Object {
+class UnitMovementRangeLayer : public MapLayer, public sigc::trackable {
    Surface& icon;
    GameMap* gamemap;
 
@@ -366,7 +366,7 @@ class UnitMovementRangeLayer : public MapLayer, public SigC::Object {
       }
       
       UnitMovementRangeLayer() : icon ( IconRepository::getIcon( "markedfield-blue.png")), gamemap(NULL) {
-         cursorMoved.connect( SigC::slot( *this, &UnitMovementRangeLayer::reset ));
+         cursorMoved.connect( sigc::mem_fun( *this, &UnitMovementRangeLayer::reset ));
       }
 
       bool onLayer( int layer ) { return layer == 17; };
@@ -479,7 +479,7 @@ ASC_MainScreenWidget::ASC_MainScreenWidget( PG_Application& application )
 
    mapDisplay->addMapLayer( new VisibilityLayer(), "visibilityvalue" );
 
-   mapDisplay->layerChanged.connect( SigC::slot( *this, &ASC_MainScreenWidget :: mapLayerChanged));
+   mapDisplay->layerChanged.connect( sigc::mem_fun( *this, &ASC_MainScreenWidget :: mapLayerChanged));
 
    // making a copy, because the activateMapLayer will modify the visibleMapLayer object
    vector<ASCString> layer = CGameOptions::Instance()->visibleMapLayer;

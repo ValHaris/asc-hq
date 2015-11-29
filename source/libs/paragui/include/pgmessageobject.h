@@ -34,10 +34,12 @@
 #define PG_MESSAGEOBJECT_H
 
 #include "paragui.h"
-#include "pgsignals.h"
 #include <vector>
+#include <sigc++/sigc++.h>
 
 class PG_Widget;
+
+typedef void* PG_Pointer;
 
 /**
 	@author Alexander Pipelka
@@ -47,43 +49,32 @@ class PG_Widget;
 	Provides a message pump and global handlers for all other PG_MessageObject instances.
 */
 
-class DECLSPEC PG_MessageObject : public virtual SigC::Object {
+class DECLSPEC PG_MessageObject : public virtual sigc::trackable {
 
 public:
 
 	/**
 	Signal type declaration
 	**/
-	template<class datatype = PG_Pointer>
-class SignalActive : public PG_Signal2<PG_MessageObject*, const SDL_ActiveEvent*, datatype> {}
+class SignalActive : public sigc::signal<bool, PG_MessageObject*, const SDL_ActiveEvent*> {}
 	;
-	template<class datatype = PG_Pointer>
-class SignalKeyDown : public PG_Signal2<PG_MessageObject*, const SDL_KeyboardEvent*, datatype> {}
+class SignalKeyDown : public sigc::signal<bool, PG_MessageObject*, const SDL_KeyboardEvent*> {}
 	;
-	template<class datatype = PG_Pointer>
-class SignalKeyUp : public PG_Signal2<PG_MessageObject*, const SDL_KeyboardEvent*, datatype> {}
+class SignalKeyUp : public sigc::signal<bool, PG_MessageObject*, const SDL_KeyboardEvent*> {}
 	;
-	template<class datatype = PG_Pointer>
-class SignalMouseMotion : public PG_Signal2<PG_MessageObject*, const SDL_MouseMotionEvent*, datatype> {}
+class SignalMouseMotion : public sigc::signal<bool, PG_MessageObject*, const SDL_MouseMotionEvent*> {}
 	;
-	template<class datatype = PG_Pointer>
-class SignalMouseButtonDown : public PG_Signal2<PG_MessageObject*, const SDL_MouseButtonEvent*, datatype> {}
+class SignalMouseButtonDown : public sigc::signal<bool, PG_MessageObject*, const SDL_MouseButtonEvent*> {}
 	;
-	template<class datatype = PG_Pointer>
-class SignalMouseButtonUp : public PG_Signal2<PG_MessageObject*, const SDL_MouseButtonEvent*, datatype> {}
+class SignalMouseButtonUp : public sigc::signal<bool, PG_MessageObject*, const SDL_MouseButtonEvent*> {}
 	;
-	template<class datatype = PG_Pointer>
-class SignalQuit : public PG_Signal1<PG_MessageObject*, datatype> {}
+class SignalQuit : public sigc::signal<bool, PG_MessageObject*> {}
 	;
-	template<class datatype = PG_Pointer>
-class SignalSysWM : public PG_Signal2<PG_MessageObject*, const SDL_SysWMEvent*, datatype> {}
+class SignalSysWM : public sigc::signal<bool, PG_MessageObject*, const SDL_SysWMEvent*> {}
 	;
-	template<class datatype = PG_Pointer>
-class SignalVideoResize : public PG_Signal2<PG_MessageObject*, const SDL_ResizeEvent*, datatype> {}
+class SignalVideoResize : public sigc::signal<bool, PG_MessageObject*, const SDL_ResizeEvent*> {}
 	;
-
-	template<class datatype = PG_Pointer>
-class SignalDelete : public PG_Signal1<const PG_MessageObject*, datatype> {}
+class SignalDelete : public sigc::signal<bool, const PG_MessageObject*> {}
 	;
 
 	/**
@@ -152,17 +143,17 @@ class SignalDelete : public PG_Signal1<const PG_MessageObject*, datatype> {}
 	*/
 	virtual bool ProcessEvent(const SDL_Event* event);
 
-	SignalActive<> sigActive;
-	SignalKeyDown<> sigKeyDown;
-	SignalKeyUp<> sigKeyUp;
-	SignalMouseMotion<> sigMouseMotion;
-	SignalMouseButtonDown<> sigMouseButtonDown;
-	SignalMouseButtonUp<> sigMouseButtonUp;
-	SignalSysWM<> sigSysWM;
-	SignalVideoResize<> sigVideoResize;
-	SignalQuit<> sigQuit;
+	SignalActive sigActive;
+	SignalKeyDown sigKeyDown;
+	SignalKeyUp sigKeyUp;
+	SignalMouseMotion sigMouseMotion;
+	SignalMouseButtonDown sigMouseButtonDown;
+	SignalMouseButtonUp sigMouseButtonUp;
+	SignalSysWM sigSysWM;
+	SignalVideoResize sigVideoResize;
+	SignalQuit sigQuit;
 
-	SignalDelete<> sigDelete;
+	SignalDelete sigDelete;
 protected:
 
 	/**
