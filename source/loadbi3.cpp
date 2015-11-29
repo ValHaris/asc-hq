@@ -923,7 +923,7 @@ void        tloadBImap ::   ReadACTNPart(void)
          xlt[0] = Line[X];
          for ( int b = 0; b < translationTable->objecttranslate.size(); b++ )
              if ( translationTable->objecttranslate[b].BIpic == Line[X] ) {
-                for ( int c = 1; c < 5; c++ )
+                for ( int c = 0; c < 4; c++ )
                    if ( translationTable->objecttranslate[b].objects[c] != -1 )
                       xlt[xl++] = translationTable->objecttranslate[b].objects[c];
                 trrID = translationTable->objecttranslate[b].terrainID;
