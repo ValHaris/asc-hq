@@ -42,7 +42,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/MP"
 				Optimization="0"
-				AdditionalIncludeDirectories="../.;&quot;$(SDL)/include&quot;;&quot;$(SDL_image)&quot;;../../../libs/getopt;&quot;$(libsigcpp)&quot;;../../../libs/paragui/include;../../../libs/sdlmm/include;&quot;$(libpng)&quot;;&quot;../../../libs/loki-0.1.6/include&quot;;../../../libs/bzlib"
+				AdditionalIncludeDirectories="../.;&quot;$(SDL)/include&quot;;&quot;$(SDL_image)&quot;;../../../libs/getopt;&quot;$(libsigcpp2)&quot;;../../../libs/paragui/include;../../../libs/sdlmm/include;&quot;$(libpng)&quot;;&quot;../../../libs/loki-0.1.6/include&quot;;../../../libs/bzlib"
 				PreprocessorDefinitions="WIN32;ASC_DEBUG;FREEMAPZOOM;NEWKEYB;_WIN32_;karteneditor;_SDL_;LUAINTERFACE;NOMINMAX"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -65,10 +65,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="triangulate.lib libbzip2.lib SDLmm.lib SDL.lib SDL_image.lib SDL_mixer.lib SDLmain.lib sigc-1.2.debug.lib paragui_static.lib physfs.lib freetype_D.lib libexpat.lib libpng13d.lib lua.lib"
+				AdditionalDependencies="triangulate.lib libbzip2.lib SDLmm.lib SDL.lib SDL_image.lib SDL_mixer.lib SDLmain.lib sigc-vc90-d-2_0.lib paragui_static.lib physfs.lib freetype_D.lib libexpat.lib libpng13d.lib lua.lib"
 				OutputFile="$(OutDir)/bin/mapeditor2-debug.exe"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="&quot;../../../$(ConfigurationName)/lib&quot;;&quot;$(libsigcpp)\MSVC_Net2003\$(ConfigurationName)\&quot;;&quot;../../../libs/SDLmm/SDLmm/$(ConfigurationName)&quot;;&quot;$(SDL)/VisualC/SDLmain/$(ConfigurationName)&quot;;&quot;$(SDL)/VisualC/SDL/$(ConfigurationName)&quot;;&quot;../../../libs/paragui/VisualC/$(ConfigurationName)&quot;;&quot;$(physfs)/$(ConfigurationName)&quot;;&quot;$(libpng)\projects\visualc71\Win32_DLL_$(ConfigurationName)&quot;"
+				AdditionalLibraryDirectories="&quot;../../../$(ConfigurationName)/lib&quot;;&quot;../../../libs/SDLmm/SDLmm/$(ConfigurationName)&quot;;&quot;$(SDL)/VisualC/SDLmain/$(ConfigurationName)&quot;;&quot;$(SDL)/VisualC/SDL/$(ConfigurationName)&quot;;&quot;../../../libs/paragui/VisualC/$(ConfigurationName)&quot;;&quot;$(physfs)/$(ConfigurationName)&quot;;&quot;$(libpng)\projects\visualc71\Win32_DLL_$(ConfigurationName)&quot;"
 				ManifestFile="$(OutDir)\bin\$(TargetFileName).intermediate.manifest"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(OutDir)/bin/mapeditor.pdb"
@@ -130,7 +130,7 @@
 				InlineFunctionExpansion="1"
 				FavorSizeOrSpeed="1"
 				OmitFramePointers="true"
-				AdditionalIncludeDirectories="../.;&quot;$(SDL)/include&quot;;&quot;$(SDL_image)&quot;;../../../libs/getopt;&quot;$(libsigcpp)&quot;;../../../libs/paragui/include;../../../libs/sdlmm/include;&quot;$(libpng)&quot;;&quot;../../../libs/loki-0.1.6/include&quot;;../../../libs/bzlib"
+				AdditionalIncludeDirectories="../.;&quot;$(SDL)/include&quot;;&quot;$(SDL_image)&quot;;../../../libs/getopt;&quot;$(libsigcpp2)&quot;;../../../libs/paragui/include;../../../libs/sdlmm/include;&quot;$(libpng)&quot;;&quot;../../../libs/loki-0.1.6/include&quot;;../../../libs/bzlib"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;FREEMAPZOOM;NEWKEYB;_WIN32_;karteneditor;_SDL_;NOMINMAX;LUAINTERFACE"
 				StringPooling="true"
 				RuntimeLibrary="2"
@@ -155,10 +155,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="triangulate.lib libbzip2.lib SDLmm.lib SDL.lib SDL_image.lib SDL_mixer.lib SDLmain.lib sigc-1.2.lib paragui_static.lib physfs.lib freetype.lib libexpat.lib libpng13.lib lua.lib"
+				AdditionalDependencies="triangulate.lib libbzip2.lib SDLmm.lib SDL.lib SDL_image.lib SDL_mixer.lib SDLmain.lib sigc-vc90-2_0.lib  paragui_static.lib physfs.lib freetype.lib libexpat.lib libpng13.lib lua.lib"
 				OutputFile="$(OutDir)/bin/mapeditor2.exe"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;../../../$(ConfigurationName)/lib&quot;;&quot;$(libsigcpp)\MSVC_Net2003\$(ConfigurationName)\&quot;;&quot;../../../libs/SDLmm/SDLmm/$(ConfigurationName)&quot;;&quot;$(SDL)/VisualC/SDLmain/Release_NOSTDIO&quot;;&quot;$(SDL)/VisualC/SDL/$(ConfigurationName)&quot;;&quot;../../../libs/paragui/VisualC/$(ConfigurationName)&quot;;&quot;$(physfs)/$(ConfigurationName)&quot;;&quot;$(libpng)\projects\visualc71\Win32_DLL_$(ConfigurationName)&quot;"
+				AdditionalLibraryDirectories="&quot;../../../$(ConfigurationName)/lib&quot;;&quot;../../../libs/SDLmm/SDLmm/$(ConfigurationName)&quot;;&quot;$(SDL)/VisualC/SDLmain/Release_NOSTDIO&quot;;&quot;$(SDL)/VisualC/SDL/$(ConfigurationName)&quot;;&quot;../../../libs/paragui/VisualC/$(ConfigurationName)&quot;;&quot;$(physfs)/$(ConfigurationName)&quot;;&quot;$(libpng)\projects\visualc71\Win32_DLL_$(ConfigurationName)&quot;"
 				ManifestFile="$(OutDir)\bin\$(TargetFileName).intermediate.manifest"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(OutDir)/bin/mapeditor.pdb"
