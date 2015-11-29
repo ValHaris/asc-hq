@@ -43,7 +43,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="&quot;$(SDL_image)&quot;;&quot;$(Libsigcpp)&quot;;../../libs/SDLmm/src;../../../source;&quot;$(SDL)/include&quot;;../../sdl;../../libs/getopt;../../win32/msvc;&quot;../../libs/loki-0.1.6/include&quot;;../../libs/bzlib"
+				AdditionalIncludeDirectories="&quot;$(SDL_image)&quot;;&quot;$(libsigcpp2)&quot;;../../libs/SDLmm/src;../../../source;&quot;$(SDL)/include&quot;;../../sdl;../../libs/getopt;../../win32/msvc;&quot;../../libs/loki-0.1.6/include&quot;;../../libs/bzlib"
 				PreprocessorDefinitions="WIN32;_DEBUG;HEXAGON;_WIN32_;converter;_NOASM_;_SDL_"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -112,7 +112,7 @@
 				InlineFunctionExpansion="1"
 				FavorSizeOrSpeed="1"
 				OmitFramePointers="true"
-				AdditionalIncludeDirectories="&quot;$(SDL_image)&quot;;&quot;$(Libsigcpp)&quot;;../../libs/SDLmm/src;../../../source;&quot;$(SDL)/include&quot;;../../sdl;../../libs/getopt;../../win32/msvc;&quot;../../libs/loki-0.1.6/include&quot;;../../libs/bzlib"
+				AdditionalIncludeDirectories="&quot;$(SDL_image)&quot;;&quot;$(libsigcpp2)&quot;;../../libs/SDLmm/src;../../../source;&quot;$(SDL)/include&quot;;../../sdl;../../libs/getopt;../../win32/msvc;&quot;../../libs/loki-0.1.6/include&quot;;../../libs/bzlib"
 				PreprocessorDefinitions="WIN32;NDEBUG;HEXAGON;_WIN32_;converter;_NOASM_;_SDL_"
 				StringPooling="true"
 				MinimalRebuild="false"
