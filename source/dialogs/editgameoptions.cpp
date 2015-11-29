@@ -30,7 +30,7 @@
 
 
 #include "selectionwindow.h"
-#include "sigc++/retype.h"
+#include "sigc++/adaptors/retype.h"
 #include "editmapparam.h"
 #include "fileselector.h"
 #include "../ascstring.h"
