@@ -1,0 +1,1 @@
+zypper install SDL-devel SDL_image-devel SDL_mixer-devel SDL_sound-devel SDLmm-devel gcc-c++ libsigc++2-devel physfs-devel boost-devel freetype2-devel libexpat-devel libjpeg-devel pkg-config zip lua-devel wxGTK-devel 
