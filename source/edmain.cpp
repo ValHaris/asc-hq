@@ -260,7 +260,12 @@ int main(int argc, char *argv[] )
    if ( fullscreen )
       flags |= SDL_FULLSCREEN;
    
+   #ifdef pbpeditor
+   app.setIcon( "pbpeditor-icon.png" );
+   #else
    app.setIcon( "mapeditor-icon.png" );
+   #endif
+
    if ( !app.InitScreen( xr, yr, 32, flags))
       fatalError( "Could not initialize video mode");
 #ifdef WIN32
