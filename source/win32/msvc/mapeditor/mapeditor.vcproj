@@ -126,10 +126,10 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/MP"
-				Optimization="2"
+				Optimization="3"
 				InlineFunctionExpansion="1"
 				FavorSizeOrSpeed="1"
-				OmitFramePointers="true"
+				OmitFramePointers="false"
 				AdditionalIncludeDirectories="../.;&quot;$(SDL)/include&quot;;&quot;$(SDL_image)&quot;;../../../libs/getopt;&quot;$(libsigcpp2)&quot;;../../../libs/paragui/include;../../../libs/sdlmm/include;&quot;$(libpng)&quot;;&quot;../../../libs/loki-0.1.6/include&quot;;../../../libs/bzlib"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;FREEMAPZOOM;NEWKEYB;_WIN32_;karteneditor;_SDL_;NOMINMAX;LUAINTERFACE"
 				StringPooling="true"
