@@ -53,7 +53,7 @@
                virtual void buttonpressed(int  id);
        protected :
                Uint8 flip,showland,showdesert,showforest,showmaterial,showfuel,correctvalues,calculatevalues;
-               Uint8 initialized[ layercount ];
+               bool initialized[ layercount ];
                Uint8 *constructionlayer;
                int layer,actlayer;
                int barsize,maxbarsize;
