@@ -28,6 +28,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <iostream>
+#include <fstream>
 
 #include "typen.h"
 #include "buildingtype.h"

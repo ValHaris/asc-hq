@@ -432,7 +432,7 @@ PrehistoricEventStructure::LargeTriggerData :: ~LargeTriggerData ( )
 
 PrehistoricEventStructure :: PrehistoricEventStructure()
 {
-   a.action= 255;
+   a.action= 127;
    a.saveas = 0;
    a.num = 0;
    player = 0;
