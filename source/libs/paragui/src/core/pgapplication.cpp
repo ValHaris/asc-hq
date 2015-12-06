@@ -78,22 +78,33 @@ PG_EventSupplier* PG_Application::my_defaultEventSupplier = NULL;
 bool PG_Application::defaultUpdateOverlappingSiblings = true;
 PG_Char PG_Application::highlightingTag = 0;
 PG_ScreenUpdater* PG_Application::my_ScreenUpdater = NULL;
-
+PG_Application::ScreenInitialization PG_Application::screenInitialized = PG_Application::None;
 
 /**
 	new shutdown procedure (called at application termination
 */
 void PARAGUI_ShutDownCode() {
 
-	// shutdown SDL
-	SDL_Quit();
+    // If screen initialization fails and XError is shutting down the application, we observed that SDL_Quit could hang
+    // so we only do it after the screen has been successfully setup
+    if ( PG_Application::isScreenInitialized() == PG_Application::Finished )
+        SDL_Quit();
+    else if ( PG_Application::isScreenInitialized() == PG_Application::Trying ){
+        std::cerr << "If ASC fails to start up with graphics, try running \"asc -w\" to use windowed mode\n";
+        std::cerr << "You can specify the resolution too: asc -w -x 1024 -y 740 \n";
+    }
 }
+
+PG_Application::ScreenInitialization PG_Application::isScreenInitialized() {
+    return screenInitialized;
+}
+
 
 PG_SDLScreenUpdater defaultScreenUpdater;
 
 
 PG_Application::PG_Application()
-		: my_quitEventLoop(false), emergencyQuit(false), enableAppIdleCalls(false) {
+: my_quitEventLoop(false), emergencyQuit(false), enableAppIdleCalls(false) {
 
 	// set UTF8 encoding if UNICODE support is enabled
 	// we use the "C" locale because it's hard to get the current locale setting
@@ -170,8 +181,12 @@ bool PG_Application::InitScreen(int w, int h, int depth, Uint32 flags) {
 		}
 	}
 
+
+
 	//if(SDL_VideoModeOK(w, h, depth, flags) == 0)
 	//	return false;
+
+    screenInitialized = Trying;
 
 	/* Initialize the display */
 	PG_Application::screen = SDL_SetVideoMode(w, h, depth, flags);
@@ -185,6 +200,8 @@ bool PG_Application::InitScreen(int w, int h, int depth, Uint32 flags) {
 #endif // DEBUG
 
 	SetScreen(screen);
+
+	screenInitialized = Finished;
 
 	eventInit();
 
