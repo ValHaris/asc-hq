@@ -726,6 +726,12 @@ private:
 	static bool defaultUpdateOverlappingSiblings;
 
    static PG_Char highlightingTag;
+
+public:
+   enum ScreenInitialization { None, Trying, Finished };
+   static ScreenInitialization isScreenInitialized();
+private:
+   static ScreenInitialization screenInitialized;
 };
 
 /**
