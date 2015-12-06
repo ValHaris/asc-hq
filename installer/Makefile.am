@@ -1,6 +1,7 @@
 CLEANFILES = *.exe *.tar.bz2 licdata.txt
 
 installer: 
+	svn update @inst_win32_build_dir@
 	cat $(abs_top_srcdir)/COPYING | unix2dos > licdata.txt
 	makensis asc.nsi
 
