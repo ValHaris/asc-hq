@@ -63,7 +63,7 @@ const char* getFullVersionString (  )
 ASCString getVersionAndCompilation()
 {
    char startupmessagebuffer[1000];
-   sprintf( startupmessagebuffer, "Version: %s\nCompiled %s      %s\n", asc_release, __DATE__, __TIME__);
+   sprintf( startupmessagebuffer, "Version: %s", asc_release);
    return ASCString(startupmessagebuffer);
 }
 
@@ -76,21 +76,21 @@ ASCString getstartupmessage (  )
 ASCString getaboutmessage (  )
 {
     char startupmessagebuffer[1000];
-    sprintf( startupmessagebuffer, "Advanced Strategic Command : %s ; made %s ; %s", asc_release, __DATE__, __TIME__);
+    sprintf( startupmessagebuffer, "Advanced Strategic Command : %s ", asc_release);
     return ASCString(startupmessagebuffer);
 }
 
 ASCString kgetstartupmessage (  )
 {
     char startupmessagebuffer[1000];
-    sprintf( startupmessagebuffer, "\n      Mapeditor for\nAdvanced Strategic Command \n%s\nmade %s      %s\n\n", asc_release, __DATE__, __TIME__);
+    sprintf( startupmessagebuffer, "\n      Mapeditor for\nAdvanced Strategic Command \n%s\n", asc_release);
     return ASCString(startupmessagebuffer);
 }
 
 ASCString kgetaboutmessage (  )
 {
     char startupmessagebuffer[1000];
-    sprintf( startupmessagebuffer, "Mapeditor for Advanced Strategic Command : %s ; made %s ; %s", asc_release, __DATE__, __TIME__);
+    sprintf( startupmessagebuffer, "Mapeditor for Advanced Strategic Command : %s ", asc_release);
     return ASCString(startupmessagebuffer);
 }
 
