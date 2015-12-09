@@ -648,33 +648,35 @@ void selectAndRunLuaScript()
 
 void showUnitAiProperties()
 {
-   MapField* fld = getSelectedField();
-   if ( fld->vehicle && fieldvisiblenow(fld ) ) {
-      Vehicle* v = fld->vehicle;
-      ASCString s;
-      s += "Unit nwid = " + ASCString::toString( v->networkid ) + "\n";
+    MapField* fld = getSelectedField();
+    if ( fld->vehicle && fieldvisiblenow(fld ) ) {
+        Vehicle* v = fld->vehicle;
+        ASCString s;
+        s += "Unit nwid = " + ASCString::toString( v->networkid ) + "\n";
 
-      AiParameter* a = NULL;
+        AiParameter* a = NULL;
 
-      for ( int i = 0; i < 8; ++i )
-         if ( v->aiparam[i] ) {
-         a = v->aiparam[i];
-         break;
-         }
+        for ( int i = 0; i < 8; ++i )
+            if ( v->aiparam[i] ) {
+                a = v->aiparam[i];
+                break;
+            }
 
-         s += "Task = " + ASCString(AItasks[(int)a->getTask() ]) + "\n";
-         s += "Job = " + ASCString(AIjobs[(int)a->getJob() ]) + "\n";
+        if ( a ) {
+            s += "Task = " + ASCString(AItasks[(int)a->getTask() ]) + "\n";
+            s += "Job = " + ASCString(AIjobs[(int)a->getJob() ]) + "\n";
 
 
-         s += "Destination: ";
-         if ( a->dest.valid() )
-            s += a->dest.toString();
-         s += "\n";
+            s += "Destination: ";
+            if ( a->dest.valid() )
+                s += a->dest.toString();
+            s += "\n";
+        }
 
-         ViewFormattedText vat ( "AI properties", s, PG_Rect( 20, -1 , 450, 480 ));
-         vat.Show();
-         vat.RunModal();
-   }
+        ViewFormattedText vat ( "AI properties", s, PG_Rect( 20, -1 , 450, 480 ));
+        vat.Show();
+        vat.RunModal();
+    }
 }
 
 
