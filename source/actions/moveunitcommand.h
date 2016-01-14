@@ -54,7 +54,8 @@ class MoveUnitCommand : public UnitCommand, public TaskInterface, public sigc::t
       int flags;
       int verticalDirection;
       bool multiTurnMovement;
-      
+      AStar3D::OperationLimiter* limiter;
+
       MoveUnitCommand( GameMap* map ); 
       template<class Child> friend GameAction* GameActionCreator( GameMap* map);
       
@@ -87,7 +88,7 @@ class MoveUnitCommand : public UnitCommand, public TaskInterface, public sigc::t
       
       int getVerticalDirection() const { return verticalDirection; };
       
-      void calcPath() { AStar3D* const a = new AStar3D( getMap(), getUnit(), false); calcPath( a ); delete a; }
+      void calcPath();
       void calcPath( AStar3D* const astar );
       const AStar3D::Path& getPath();
       
@@ -127,6 +128,7 @@ class MoveUnitCommand : public UnitCommand, public TaskInterface, public sigc::t
       bool operatable();
       void rearm();
       
+      ~MoveUnitCommand();
 };
 
 #endif
