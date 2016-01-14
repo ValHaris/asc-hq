@@ -87,15 +87,18 @@ void MoveUnitCommand::changeCoordinates( const MapCoodinateVector& delta )
    destination += delta;
 }
 
-MoveUnitCommand::MoveUnitCommand( GameMap* map ) : UnitCommand( map ) 
+MoveUnitCommand::MoveUnitCommand( GameMap* map ) : UnitCommand( map ) , limiter(NULL)
 {
    map->sigCoordinateShift.connect( sigc::mem_fun( *this, &MoveUnitCommand::changeCoordinates ));
 }
 
-
+MoveUnitCommand::~MoveUnitCommand()
+{
+    delete limiter;
+}
 
 MoveUnitCommand :: MoveUnitCommand ( Vehicle* unit )
-   : UnitCommand ( unit ), flags(0), verticalDirection(0), multiTurnMovement(false)
+   : UnitCommand ( unit ), flags(0), verticalDirection(0), multiTurnMovement(false), limiter(NULL)
 {
    if ( unit )
       unit->getMap()->sigCoordinateShift.connect( sigc::mem_fun( *this, &MoveUnitCommand::changeCoordinates ));
@@ -206,10 +209,11 @@ ActionResult MoveUnitCommand::searchFields(int height, int capabilities)
 
    if ( (capabilities | flags) & LimitVerticalDirection ) {
       if ( getVerticalDirection() == 0 ) {
-         HeightChangeLimitation hcl ( !(capabilities & DisableHeightChange) );
+         HeightChangeLimitation* hcl = new HeightChangeLimitation( !(capabilities & DisableHeightChange) );
          PathFinder pf ( veh, veh->getMovement() );
-         pf.registerOperationLimiter( &hcl );
+         pf.registerOperationLimiter( hcl );
          pf.getMovementFields ( reachableFields, reachableFieldsIndirect, h );
+         limiter = hcl;
       } else {
          const VehicleType::HeightChangeMethod* hcm = veh->getHeightChange( getVerticalDirection() );
          if ( !hcm )
@@ -217,14 +221,17 @@ ActionResult MoveUnitCommand::searchFields(int height, int capabilities)
    
          h = veh->getPosition().getNumericalHeight() + hcm->heightDelta;
          
-         MovementLimitation ml ( capabilities & ShortestHeightChange );
+         MovementLimitation* ml = new MovementLimitation( capabilities & ShortestHeightChange );
          PathFinder pf ( veh, veh->getMovement() );
-         pf.registerOperationLimiter( &ml );
+         pf.registerOperationLimiter( ml );
          pf.getMovementFields ( reachableFields, reachableFieldsIndirect, h );
+         limiter = NULL; // the unit shouldn't take any detours anyway to reach the destination,
+                         // and MovementLimitation can only be used once due to its internal counter.
       }
    } else {
       PathFinder pf ( veh, veh->getMovement() );
       pf.getMovementFields ( reachableFields, reachableFieldsIndirect, -1 );
+      limiter = NULL;
    }
 
    if ( reachableFields.size() == 0 ) 
@@ -288,6 +295,14 @@ bool MoveUnitCommand::isFieldReachable( const MapCoordinate& pos, bool direct )
    }
    return false;  
 }
+
+void MoveUnitCommand::calcPath()
+{
+    AStar3D a( getMap(), getUnit(), false);
+    a.registerOperationLimiter(limiter);
+    calcPath( &a );
+}
+
 
 void MoveUnitCommand::calcPath( AStar3D* const astar)
 {
