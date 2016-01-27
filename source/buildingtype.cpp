@@ -205,8 +205,8 @@ BuildingType::LocalCoordinate BuildingType::getLocalCoordinate( const MapCoordin
 
 
 
-const int building_version = 14;
-
+const int building_version = 15;
+const int guardInt = 0xA5C0A5C0;
 
 void BuildingType :: read ( tnstream& stream )
 {
@@ -239,16 +239,6 @@ void BuildingType :: read ( tnstream& stream )
                    }   
                }  
 
-                   /*
-      if ( version >= 9 ) 
-         for ( int x = 0; x < 4; x++ )
-            for ( int y = 0; y < 6 ; y++ )
-               field_Exists[x][y] = stream.readInt( );
-         */
-  
-     //@todo foobar
-     
-      
                    
       entry.x = stream.readInt( );
       entry.y = stream.readInt( );
@@ -306,6 +296,10 @@ void BuildingType :: read ( tnstream& stream )
       stream.readInt( ); // was: unitheight_forbidden =
       externalloadheight = stream.readInt( );
 
+      if ( version >= 15 )
+          if ( stream.readInt() != guardInt )
+              throw tinvalidversion  ( stream.getLocation(), 1000, 0 );
+
       if ( version >= 3)
          stream.readInt(); // was: vehicleCategoriesLoadable =
 
@@ -336,6 +330,9 @@ void BuildingType :: read ( tnstream& stream )
                     if ( bi_picture[w][k][i][j] == -1 ) 
                        w_picture[w][k][i][j].read(stream );
                  
+      if ( version >= 15 )
+          if ( stream.readInt() != guardInt+1 )
+              throw tinvalidversion  ( stream.getLocation(), 1001, 0 );
 
 
       if ( version >= 4 )
@@ -344,17 +341,25 @@ void BuildingType :: read ( tnstream& stream )
       if ( version >= 6 )
          nominalresearchpoints = stream.readInt();
 
+      if ( version >= 15 )
+          if ( stream.readInt() != guardInt+2 )
+              throw tinvalidversion  ( stream.getLocation(), 1002, 0 );
+
       if ( version >= 7 ) {
          techDependency.read( stream );
          defaultMaxResearchpoints = stream.readInt();
       }
 
       if ( version >= 8 )
-         infotext = stream.readString();
+         infotext = stream.readString(true);
 
       if ( version >= 11 )
          buildingNotRemovable = stream.readInt();
       
+      if ( version >= 15 )
+          if ( stream.readInt() != guardInt+3 )
+              throw tinvalidversion  ( stream.getLocation(), 1003, 0 );
+
       if ( version >= 12 ) {
          int num = stream.readInt();
          for ( int i = 0; i < num; ++i ) {
@@ -371,6 +376,11 @@ void BuildingType :: read ( tnstream& stream )
       
       if ( version >= 14 )
          description = stream.readString();
+
+      if ( version >= 15 )
+          if ( stream.readInt() != guardInt+4 )
+              throw tinvalidversion  ( stream.getLocation(), 1004, 0 );
+
    } else
       throw tinvalidversion  ( stream.getLocation(), building_version, version );
 }
@@ -447,6 +457,8 @@ void BuildingType :: write ( tnstream& stream ) const
    stream.writeInt ( 0 );
    stream.writeInt ( externalloadheight );
 
+   stream.writeInt( guardInt );
+
    stream.writeInt ( 0 );
 
    if ( !name.empty() )
@@ -460,9 +472,12 @@ void BuildingType :: write ( tnstream& stream ) const
                    if ( bi_picture[w][k][i][j] == -1 )
                       w_picture[w][k][i][j].write(stream);
 
+    stream.writeInt( guardInt +1 );
     ContainerBaseType::write ( stream );
 
     stream.writeInt( nominalresearchpoints );
+
+    stream.writeInt( guardInt +2 );
 
     techDependency.write ( stream );
     stream.writeInt( defaultMaxResearchpoints );
@@ -470,6 +485,8 @@ void BuildingType :: write ( tnstream& stream ) const
     stream.writeString ( infotext );
     stream.writeInt( buildingNotRemovable );
     
+    stream.writeInt( guardInt +3 );
+
     stream.writeInt( destructionObjects.size());
     for ( DestructionObjects::const_iterator i = destructionObjects.begin(); i != destructionObjects.end(); ++i) {
        stream.writeInt( i->first.x);
@@ -481,6 +498,7 @@ void BuildingType :: write ( tnstream& stream ) const
        stream.writeString( originalImageFilename[w] );
     
     stream.writeString( description );
+    stream.writeInt( guardInt +4 );
 }
 
 
