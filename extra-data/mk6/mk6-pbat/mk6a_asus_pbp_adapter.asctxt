@@ -1,5 +1,0 @@
-Techadapter {
-   Name = 15271
-   ;Bezeichnung der verknüpften Technologie: Asus
-   TechnologiesRequired = 15271
-} TechAdapter

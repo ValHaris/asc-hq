@@ -1,5 +1,0 @@
-Techadapter {
-   Name = 1428
-   ;Bezeichnung der verknüpften Technologie: GCS
-   TechnologiesRequired = 1428
-} TechAdapter

@@ -1,5 +1,0 @@
-Techadapter {
-   ; leichter Panzer
-   Name = 22751
-   TechnologiesRequired = 22751
-} TechAdapter

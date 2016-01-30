@@ -1,5 +1,0 @@
-Techadapter {
-   Name = 15325
-   ;Bezeichnung der verknüpften Technologie: Tanker
-   TechnologiesRequired = 15325
-} TechAdapter

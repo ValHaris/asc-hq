@@ -1,0 +1,49 @@
+ObjectType { 
+	Name = Mixed Bridge
+	ID = 2692
+	SecondaryIDs = 288001
+	parent = 2
+	GroupID = 
+	visible_in_fogOfWar = false
+	LinkableObjects = 1 1000 997 981 280001 280997 281000 288001 2 980 991 992 995 999 2692 280002 280991 280992 280995 280999 282692
+
+	Weather = dry 
+	Armor = 0
+	;                def lTr mTr hvT lWh mWh hWh tro rlv mAC mSh BTO lAC hAC lSh hSh Hli hov
+	Movemalus_plus =  
+	Movemalus_abs =   10 11  11  12  11  11  12  10  11  20  11  17  20  20  11  12  20  15  
+	AttackBonus_abs = -1
+	AttackBonus_plus = -1.1
+	DefenseBonus_abs = -1
+	DefenseBonus_plus = -1.1
+	Jamming_abs = -1
+	Jamming_plus = 0
+	Height = 116
+	ConstructionCost { 
+		Energy = 0
+		Material = 0
+		fuel = 0
+		Movement = 0
+	} ConstructionCost
+	RemovalCost { 
+		Energy = 0
+		Material = 0
+		fuel = 0
+		Movement = 0
+	} RemovalCost
+	NetBehaviour = NetToSelf AutoBorder NetToBuildingEntry
+	TerrainAccess { 
+		terrain_any = Shallow_water Very_shallow_water Swamp Morass
+		terrain_all = 
+		terrain_not = Road Railroad Runway 
+		terrain_kill =  
+	} TerrainAccess
+	TerrainProperties_Filter = Forest Small_rocks Large_rocks
+	TerrainProperties_Add = Road Railroad Bridge
+	dry { 
+		UseGFXpics = false
+		Picture = ob_mix_bridge_2692.png 65
+		ImageReference =  -1 
+		FlipPictures   =  0 
+	} dry
+} ObjectType

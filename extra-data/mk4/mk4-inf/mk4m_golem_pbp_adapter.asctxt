@@ -1,5 +1,0 @@
-Techadapter {
-   Name = 1213
-   ;Bezeichnung der verknüpften Technologie: Golem
-   TechnologiesRequired = 1213
-} TechAdapter

@@ -1,5 +1,0 @@
-Techadapter {
-   Name = 15290
-   ;Bezeichnung der verknüpften Technologie: cillaTE
-   TechnologiesRequired = 15290
-} TechAdapter

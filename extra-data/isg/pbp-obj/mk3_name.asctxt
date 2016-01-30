@@ -1,8 +1,0 @@
-ObjectType {
-   name = MK3
-   ID = 12101
-   parent = 12100
-   dry { 
-      picture = mk3_name.pcx 1
-   } dry
-} ObjectType
