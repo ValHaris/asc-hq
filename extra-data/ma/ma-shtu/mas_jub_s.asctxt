@@ -1,27 +1,27 @@
 VehicleType { 
-   Name = JUB S
-   parent = 364
-   ID = 22710
+	Name = JUB S
+	parent = 364
+	ID = 22710
 
-   Description = submarine
-   Picture = mas_jub_s.pcx
-   WreckageObject = 434
-   Infotext = [Beim JUB S handelt es sich nicht, wie der Name vermuten läßt, um ein modifiziertes JUB. Es stellt vielmehr eine komplette Neuentwicklung dar. Das Ziel war es, bei Angriffen auf feindliche Schiffe Verluste durch gegnerische Zerstörerverbände zu vermeiden. Hierzu wurden komplett neue Torpedos entwickelt, welche sich durch einen extrem verlängerten und damit stromlinienförmigen Sprengkopf auszeichen. Zusammen mit der fischschuppenähnlichen Beschichtung verleihen Sie dem Torpedo eine unnachahmliche Geschwindigkeit und Reichweite. Die Torpedos des JUB S sind auf schwimmende Ziele abgestimmt, welche sie dicht unter der Oberfläche ansteuern und sehr sicher treffen. Zusätzlich verfügt es auch noch über 2 Standardtorpedorohre, um auch im Kampf mit normalen U-Booten bestehen zu können. Durch die beiden verschiedenen Torpedos ist der Munitionsvorrat allerdings begrenzt. Auch ist der Rumpf dadurch etwas bauchiger als beim JUB, was sich auf die erreichbare Höchstgeschwindigkeit auswirkt. Die Panzerung ist ebenfalls etwas dünner als beim JUB, allerdings immer noch recht ordentlich.
-Speziell beim Angriff auf schwere Kampfschiffe ist das JUB S extrem effizient, weshalb es zu einer festen Größe in malanischen Flottenverbänden geworden ist.
-   ]
+	Description = submarine
+	Picture = mas_jub_s.pcx
+	WreckageObject = 434
+	InfoText = [Beim JUB S handelt es sich nicht, wie der Name vermuten läßt, um ein modifiziertes JUB. Es stellt vielmehr eine komplette Neuentwicklung dar. Das Ziel war es, bei Angriffen auf feindliche Schiffe Verluste durch gegnerische Zerstörerverbände zu vermeiden. Hierzu wurden komplett neue Torpedos entwickelt, welche sich durch einen extrem verlängerten und damit stromlinienförmigen Sprengkopf auszeichen. Zusammen mit der fischschuppenähnlichen Beschichtung verleihen Sie dem Torpedo eine unnachahmliche Geschwindigkeit und Reichweite. Die Torpedos des JUB S sind auf schwimmende Ziele abgestimmt, welche sie dicht unter der Oberfläche ansteuern und sehr sicher treffen. Zusätzlich verfügt es auch noch über 2 Standardtorpedorohre, um auch im Kampf mit normalen U-Booten bestehen zu können. Durch die beiden verschiedenen Torpedos ist der Munitionsvorrat allerdings begrenzt. Auch ist der Rumpf dadurch etwas bauchiger als beim JUB, was sich auf die erreichbare Höchstgeschwindigkeit auswirkt. Die Panzerung ist ebenfalls etwas dünner als beim JUB, allerdings immer noch recht ordentlich.
+		Speziell beim Angriff auf schwere Kampfschiffe ist das JUB S extrem effizient, weshalb es zu einer festen Größe in malanischen Flottenverbänden geworden ist.
+		]
 
     Armor -= 100
 ;   Movement -= 11 11 10 0 0 0 0 0
-   Weapons { 
-      Number = 2
-      Weapon0 ->* VehicleType.UTorp 
-      Weapon0.Ammo = 6
+	Weapons { 
+		Number = 2
+		Weapon0 ->* VehicleType.UTorp 
+		Weapon0.Ammo = 6
 
-      Weapon1 ->* VehicleType.STorp
-      Weapon1.Ammo = 4
-      Weapon1.MaxRange = 30
-      Weapon1.Punch@MaxRange = 110
-      Weapon1.Punch@MinRange = 110
-      Weapon1.ReactionFireShots = 0
-	  } Weapons
+		Weapon1 ->* VehicleType.STorp
+		Weapon1.Ammo = 4
+		Weapon1.MaxRange = 30
+		Weapon1.Punch@MaxRange = 115
+		Weapon1.Punch@MinRange = 115
+		Weapon1.ReactionFireShots = 0
+	} Weapons
 } VehicleType

@@ -1,31 +1,31 @@
 VehicleType { 
-   Name = JUB U
-   parent = 364
-   ID = 22713
+	Name = JUB U
+	parent = 364
+	ID = 22713
 
-   Description = U-Boot Jaeger
-   Picture = mas_jub_u.pcx
-   WreckageObject = 434
-   Infotext = [Beim JUB U handelt es sich um eine Weiterentwicklung des JUB S. Es verfügt ebenfalls über 2 verschiedene Torpedowaffen. Im Gegensatz zum JUB S sind die hier verwendeten Spezialtorpedos nur für den U-Boot-Kampf geeignet. Sie verfügen über eine ähnliche Form und Struktur wie die Torpedos des JUB S. Allerdings ist die Sonarsteuerung weiterentwickelt, um auch weit entfernte Ziele sicher anvisieren zu können. Bedauerlicherweise verhindern Reflexionen an der Wasseroberfläche aber die Bekämpfung schwimmender Ziele, so daß der Einsatz nur gegen getauchte Boote sinnvoll ist. Für den Kampf gegen Schiffe kommen Standardtorpedos zum Einsatz. Hier ist die recht hohe Geschwindigkeit des JUB U ein großer Pluspunkt. Sie wurde durch Verbesserungen des Rumpfdesigns gegenüber dem JUB S ermöglicht und kommt nahe an die des JUB heran. Daß das JUB trotzdem nicht unentbehrlich ist, liegt an der Ineffizienz der verwendeten Torpedos gegen Taucher, die in großer Zahl auch einem Jagd-U-Boot gefährlich werden können.
-In heutigen Seeschlachten ist das JUB U unentbehrlich, um gegnerische U-Boote auf Distanz zu halten und wirkungsvoll bekämpfen zu können und die eigene Flotte zu schützen.
-   ]
+	Description = U-Boot Jaeger
+	Picture = mas_jub_u.pcx
+	WreckageObject = 434
+	InfoText = [Beim JUB U handelt es sich um eine Weiterentwicklung des JUB S. Es verfügt ebenfalls über 2 verschiedene Torpedowaffen. Im Gegensatz zum JUB S sind die hier verwendeten Spezialtorpedos nur für den U-Boot-Kampf geeignet. Sie verfügen über eine ähnliche Form und Struktur wie die Torpedos des JUB S. Allerdings ist die Sonarsteuerung weiterentwickelt, um auch weit entfernte Ziele sicher anvisieren zu können. Bedauerlicherweise verhindern Reflexionen an der Wasseroberfläche aber die Bekämpfung schwimmender Ziele, so daß der Einsatz nur gegen getauchte Boote sinnvoll ist. Für den Kampf gegen Schiffe kommen Standardtorpedos zum Einsatz. Hier ist die recht hohe Geschwindigkeit des JUB U ein großer Pluspunkt. Sie wurde durch Verbesserungen des Rumpfdesigns gegenüber dem JUB S ermöglicht und kommt nahe an die des JUB heran. Daß das JUB trotzdem nicht unentbehrlich ist, liegt an der Ineffizienz der verwendeten Torpedos gegen Taucher, die in großer Zahl auch einem Jagd-U-Boot gefährlich werden können.
+		In heutigen Seeschlachten ist das JUB U unentbehrlich, um gegnerische U-Boote auf Distanz zu halten und wirkungsvoll bekämpfen zu können und die eigene Flotte zu schützen.
+		]
 
-   Armor -= 100
+	Armor -= 100
    
-   Weapons { 
-      Number = 2
-      Weapon0 ->* VehicleType.UTorp 
-      Weapon0.Ammo = 4
+	Weapons { 
+		Number = 2
+		Weapon0 ->* VehicleType.UTorp 
+		Weapon0.Ammo = 4
 
-      Weapon1 ->* VehicleType.UTorp
-      Weapon1.Ammo = 6
-      Weapon1.targets = deep_submerged submerged
-      Weapon1.shotFrom = floating deep_submerged submerged
-      Weapon1.MaxRange = 30
-      Weapon1.Punch@MaxRange = 110
-      Weapon1.Punch@MinRange = 110
-      Weapon1.HitAccuracy.d1 = 85
-      Weapon1.HitAccuracy.0 = 100
-      Weapon1.HitAccuracy.u1 = 85
-   } Weapons
+		Weapon1 ->* VehicleType.UTorp
+		Weapon1.Ammo = 6
+		Weapon1.targets = deep_submerged submerged
+		Weapon1.shotFrom = floating deep_submerged submerged
+		Weapon1.MaxRange = 30
+		Weapon1.Punch@MaxRange = 115
+		Weapon1.Punch@MinRange = 115
+		Weapon1.HitAccuracy.d1 = 85
+		Weapon1.HitAccuracy.0 = 100
+		Weapon1.HitAccuracy.u1 = 85
+	} Weapons
 } VehicleType

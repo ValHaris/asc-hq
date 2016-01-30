@@ -1,46 +1,45 @@
 VehicleType {
-   abstract = true 
-   parent = 400 401 402
-   ID = 353
+	Abstract = true 
+	parent = 400 401 402
+	ID = 353
 
-   Name = fregatte
-   Description = fregatte
-   Infotext = []
-   WreckageObject = 441
-   GuideSortHelp = 0 353 565 0 0 0 0 0 0 0
+	Name = fregatte
+	Description = fregatte
+	WreckageObject = 441
+	GuideSortHelp = 0 353 565 0 0 0 0 0 0 0
+	Infotext = []
 
+	Armor = 1000
+	View = 40
+	Jamming = 0
+	Features = MoveDuringReactionFire
+	Category = medium_ship
+	minFieldRepairDamage = 10
+	MaxSurvivableStorm = 210
+	ResourceDrillingRange = 0
+	SelfRepairRate = 0
+	Weight = 1000
+	Transportation ->* VehicleType.TransCruiserSmall
 
-   Armor = 1000
-   View = 40
-   Jamming = 0
-   WaitForAttack = false
-   Features = MoveDuringReactionFire
-   Category = medium_ship
-   MaxSurvivableStorm = 210
-   ResourceDrillingRange = 0
-   SelfRepairRate = 0
-   Weight = 1000
-   Transportation ->* VehicleType.TransCruiserSmall
+	Height = floating 
+	Tank { 
+		Energy = 0
+		Material = 3000
+		fuel = 8000
+	} Tank
+	FuelConsumption = 24
+	Movement = 0 0 71 0 0 0 0 0 
+	TerrainAccess ->* VehicleType.smallship_terrain
+	MovementSound = med_ship_a_s.ogg
 
-   Height = floating 
-   Tank { 
-      Energy = 0
-      Material = 3000
-      fuel = 8000
-   } Tank
-   FuelConsumption = 24
-   Movement = 0 0 71 0 0 0 0 0 
-   TerrainAccess ->* VehicleType.smallship_terrain
-   MovementSound = med_ship_a_s.ogg
+	Construction { 
+		Buildings = 
+		Vehicles = 
+		Objects = 
+	} Construction
 
-   Construction { 
-      Buildings = 
-      Vehicles = 
-      Objects = 
-   } Construction
-
-   Weapons { 
-      Initiative = 0
-      Number = 0
-   } Weapons
+	WaitForAttack = false
+	Weapons { 
+		Number = 0
+	} Weapons
 } VehicleType

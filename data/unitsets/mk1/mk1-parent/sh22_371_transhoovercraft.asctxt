@@ -1,47 +1,47 @@
 VehicleType { 
-   abstract = true 
-   parent = 400 401 402
-   ID = 371
+	Abstract = true 
+	parent = 400 401 402
+	ID = 371
 
-   Name = transport hoovercraft
-   Description = transport hoovercraft
-   Infotext = []
-   WreckageObject = 405
-   GuideSortHelp = 521 371 550 551 0 0 0 0 0 0
+	Name = transport hoovercraft
+	Description = transport hoovercraft
+	WreckageObject = 405
+	GuideSortHelp = 521 371 550 551 0 0 0 0 0 0
+	InfoText = []
 
-   Armor = 550
-   View = 30
-   Jamming = 0
-   WaitForAttack = false
-   Features = moveduringreactionfire
-   Category = hoovercraft
-   MaxSurvivableStorm = 160
-   ResourceDrillingRange = 0
-   SelfRepairRate = 0
-   Weight = 200
-   Transportation ->* VehicleType.TransHoovercraft 
+	Armor = 550
+	View = 30
+	Jamming = 0
+	Features = moveduringreactionfire
+	Category = hoovercraft
+	minFieldRepairDamage = 10
+	MaxSurvivableStorm = 160
+	ResourceDrillingRange = 0
+	SelfRepairRate = 0
+	Weight = 200
+	Transportation ->* VehicleType.TransHoovercraft 
 
-   Height = ground_level 
-   Tank { 
-      Energy = 0
-      Material = 5000
-      fuel = 7000
-   } Tank
-   FuelConsumption = 22
-   Movement = 0 0 0 70 0 0 0 0 
-   TerrainAccess ->* VehicleType.hoover_terrain 
-   MovementSound = hovercraft_s.ogg
+	Height = ground_level 
+	Tank { 
+		Energy = 0
+		Material = 5000
+		fuel = 7000
+	} Tank
+	FuelConsumption = 22
+	Movement = 0 0 0 70 0 0 0 0 
+	TerrainAccess ->* VehicleType.hoover_terrain 
+	MovementSound = hovercraft_s.ogg
 
-   Construction { 
-      Buildings = 
-      Vehicles = 
-      Objects = 
-   } Construction
+	Construction { 
+		Buildings = 
+		Vehicles = 
+		Objects = 
+	} Construction
 
-   Weapons { 
-      Initiative = 0
-      Number = 1
-      Weapon0 ->* VehicleType.MG45med 
-   } Weapons
+	WaitForAttack = false
+	Weapons { 
+		Number = 1
+		Weapon0 ->* VehicleType.MG45med 
+	} Weapons
 
 } VehicleType

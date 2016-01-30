@@ -215,3 +215,4 @@ ID 12202 AXU Hanni
  12594 Boras            VDT            Drohnenträger
  12595 Schukow		ctulhu		Drohnenträger				grafic by schukow/GAMER
  12596 Prinzipal	Exol Lucius	SuperJellyfish				grafic by GAMER
+ 12597 Snake			Whale EX

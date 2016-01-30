@@ -1,52 +1,51 @@
 VehicleType {
-   abstract = true 
-   parent = 400 401 402
-   ID = 354
+	Abstract = true 
+	parent = 400 401 402
+	ID = 354
 
-   Name = destroyer
-   Description = destroyer
-   Infotext = [Destroyers are usually the first thing the enemy sees before
-              a battle starts. Destroyers are quite agile and can be effectively
-              deployed in groups to take out a heavily armored target. Destroyers
-              can make the difference between victory and defeat with their
-              manoueverability and submarine defense weapons, but they certainly
-              can not win the battle all by themselves, as they are lightly
-              armored.]
-   WreckageObject = 438
-   GuideSortHelp = 0 354 565 0 0 0 0 0 0 0
+	Name = destroyer
+	Description = destroyer
+	Infotext = [Destroyers are usually the first thing the enemy sees before
+				a battle starts. Destroyers are quite agile and can be effectively
+				deployed in groups to take out a heavily armored target. Destroyers
+				can make the difference between victory and defeat with their
+				manoueverability and submarine defense weapons, but they certainly
+				can not win the battle all by themselves, as they are lightly
+				armored.]
+	WreckageObject = 438
+	GuideSortHelp = 0 354 565 0 0 0 0 0 0 0
 
+	Armor = 1200
+	View = 40
+	Jamming = 0
+	Features = MoveDuringReactionFire Repair_Facility
+	Category = medium_ship
+	minFieldRepairDamage = 10
+	MaxSurvivableStorm = 220
+	ResourceDrillingRange = 0
+	SelfRepairRate = 0
+	Weight = 1600
+	Transportation ->* VehicleType.TransCruiserSmall
 
-   Armor = 1200
-   View = 40
-   Jamming = 0
-   WaitForAttack = false
-   Features = MoveDuringReactionFire Repair_Facility
-   Category = medium_ship
-   MaxSurvivableStorm = 220
-   ResourceDrillingRange = 0
-   SelfRepairRate = 0
-   Weight = 1600
-   Transportation ->* VehicleType.TransCruiserSmall
+	Height = floating 
+	Tank { 
+		Energy = 0
+		Material = 4000
+		fuel = 10000
+	} Tank
+	FuelConsumption = 26
+	Movement = 0 0 71 0 0 0 0 0 
+	TerrainAccess ->* VehicleType.mediumship_terrain
+	MovementSound = med_ship_a_s.ogg
 
-   Height = floating 
-   Tank { 
-      Energy = 0
-      Material = 4000
-      fuel = 10000
-   } Tank
-   FuelConsumption = 26
-   Movement = 0 0 71 0 0 0 0 0 
-   TerrainAccess ->* VehicleType.mediumship_terrain
-   MovementSound = med_ship_a_s.ogg
+	Construction { 
+		Buildings = 
+		Vehicles = 
+		Objects = 
+	} Construction
 
-   Construction { 
-      Buildings = 
-      Vehicles = 
-      Objects = 
-   } Construction
-
-   Weapons { 
-      Initiative = 0
-      Number = 0
-   } Weapons
+	WaitForAttack = false
+	Weapons { 
+		Number = 0
+	} Weapons
 } VehicleType

@@ -1,35 +1,31 @@
 VehicleType { 
-   Name = SEST AM
-   parent = 22998 326
-   ID = 22504
+	Name = SEST AM
+	parent = 22998 326
+	ID = 22504
 
-   Description = Seekampf SEST
-   Picture = maa_sest_am.pcx
-   Infotext = [Der SEST AM ist ein speziell für die Bekämpfung von Flottenverbänden konzipierter Senkrechtstarter. Die Bewaffnung ist gegenüber den herkömmlichen SEST komplett umgebaut. Kanonen fehlen völlig. Aus Gründen der Gewichtsersparnis ist die Panzerung teilweise ebenfalls etwas schwächer.
+	Description = Seekampf SEST
+	Picture = maa_sest_am.pcx
+	InfoText = [Der SEST AM ist ein speziell für die Bekämpfung von Flottenverbänden konzipierter Senkrechtstarter. Die Bewaffnung ist gegenüber den herkömmlichen SEST komplett umgebaut. Kanonen fehlen völlig. Aus Gründen der Gewichtsersparnis ist die Panzerung teilweise ebenfalls etwas schwächer.
    
-   
-So hat der SEST AM genügend Ladekapazität, um seine aus Torpedos und Bomben bestehende Ladung sicher und punktgenau ins Ziel zu bringen. Besonders die Antischiffstorpedos sind sehr gefährlich. Schon aus großer Entfernung abgeworfen, erfassen sie mit hoher Genauigkeit ihr Ziel und steuern dieses pfeilschnell an, wobei das pfeilschnell wörtlich zu nehmen ist. Statt der sonst üblichen Schrauben, wird dieser Torpedo durch ein kleines Raketenaggregat angetrieben, wodurch das Ziel kaum die Chance auf Gegenmaßnahmen hat. Die Standardtorpedos hingegen verfügen durch das eingebaute Sonar auch über die Möglichkeit, getauchte U-Boote anzugreifen. In diesem Zusammenhang ist es allerdings wichtig zu wissen, daß der SEST AM über kein eigenes Sonarortungssystem verfügt, sondern hierbei auf die Unterstützung von Sonardrohnen oder die Ortungsfähigkeiten der eigenen Flotte angewiesen ist. Sobald der Torpedo im Wasser ist, orientiert sich dieser dann selbst und trifft sein Ziel mit hoher Präzision. Beide Waffen sind aufgrund der Konstruktion etwas größer und schwerer als die bei anderen Völkern im Einsatz befindlichen Pendants. So ist die Traglast des SEST AM auf je zwei Stück dieser Torpedos begrenzt.
-Einige übliche Wasserbomben zur U-Bootbekämpfung runden das Waffenarsenal ab.
+		So hat der SEST AM genügend Ladekapazität, um seine aus Torpedos und Bomben bestehende Ladung sicher und punktgenau ins Ziel zu bringen. Besonders die Antischiffstorpedos sind sehr gefährlich. Schon aus großer Entfernung abgeworfen, erfassen sie mit hoher Genauigkeit ihr Ziel und steuern dieses pfeilschnell an, wobei das pfeilschnell wörtlich zu nehmen ist. Statt der sonst üblichen Schrauben, wird dieser Torpedo durch ein kleines Raketenaggregat angetrieben, wodurch das Ziel kaum die Chance auf Gegenmaßnahmen hat. Die Standardtorpedos hingegen verfügen durch das eingebaute Sonar auch über die Möglichkeit, getauchte U-Boote anzugreifen. In diesem Zusammenhang ist es allerdings wichtig zu wissen, daß der SEST AM über kein eigenes Sonarortungssystem verfügt, sondern hierbei auf die Unterstützung von Sonardrohnen oder die Ortungsfähigkeiten der eigenen Flotte angewiesen ist. Sobald der Torpedo im Wasser ist, orientiert sich dieser dann selbst und trifft sein Ziel mit hoher Präzision. Beide Waffen sind aufgrund der Konstruktion etwas größer und schwerer als die bei anderen Völkern im Einsatz befindlichen Pendants. So ist die Traglast des SEST AM auf je zwei Stück dieser Torpedos begrenzt.
+		Einige übliche Wasserbomben zur U-Bootbekämpfung runden das Waffenarsenal ab.
 
+		Damit ist er hervorragend an seinen Einsatzzweck angepaßt. Leider geht dies zu Lasten seiner Verteidigungsfähigkeiten. Gegen Boden- und Lufteinheiten ist der SEST AM völlig wehrlos, was besonders bei der Anwesenheit von Tragflächenbooten und Bodeneffektfahrzeugen im Kampfgebiet fatale Konsequenzen haben kann. Die Geschwaderführer sind daher anzuweisen, stets im Verband mit entsprechenden Sicherungseinheiten zu agieren.]
 
-Damit ist er hervorragend an seinen Einsatzzweck angepaßt. Leider geht dies zu Lasten seiner Verteidigungsfähigkeiten. Gegen Boden- und Lufteinheiten ist der SEST AM völlig wehrlos, was besonders bei der Anwesenheit von Tragflächenbooten und Bodeneffektfahrzeugen im Kampfgebiet fatale Konsequenzen haben kann. Die Geschwaderführer sind daher anzuweisen, stets im Verband mit entsprechenden Sicherungseinheiten zu agieren.]
+	Armor += 20
+	Movement = 0 0 0 30 160 160 0 0 
+	FuelConsumption = 30
 
-   Armor += 20
-   Movement = 0 0 0 30 160 160 0 0 
-   FuelConsumption = 30
+	Weapons { 
+		Weapon0.Ammo = 2
+		Weapon0.MinRange = 20
+		Weapon0.MaxRange = 30
 
-    Weapons { 
-      Weapon0.Ammo = 2
-      Weapon0.MinRange = 20
-      Weapon0.MaxRange = 30
+		Weapon1 ->* VehicleType.AUTorp 
+		Weapon1.Ammo = 2
 
-      Weapon1 ->* VehicleType.AUTorp 
-      Weapon1.Ammo = 2
-      Weapon1.Punch@MaxRange = 100
-      Weapon1.Punch@MinRange = 100
+		Weapon2.Punch@MaxRange += 20
+		Weapon2.Punch@MinRange += 20
 
-      Weapon2.Punch@MaxRange += 20
-      Weapon2.Punch@MinRange += 20
-
-   } Weapons
+	} Weapons
 } VehicleType

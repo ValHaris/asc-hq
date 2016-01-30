@@ -43,7 +43,7 @@ BuildingType {
    } Transportation
 	
 
-	Height = submerged deep_submerged
+	Height = submerged
 	TerrainAccess {
 		terrain_any = water deep_water
 		terrain_kill = 

@@ -21,7 +21,7 @@ Esox lucius !
 Die einfache Schiffbesatzung nennt dieses Schiff liebevoll, schlicht und einfach: „Gassenhauer“]
 
    Features += icebreaker
-   Armor = 1800
+   Armor = 2200
    FuelConsumption += 5
    Transportation ->* VehicleType.noTrans
 
@@ -29,8 +29,8 @@ Die einfache Schiffbesatzung nennt dieses Schiff liebevoll, schlicht und einfach
       Number = 5
 	  ; Rammsporn
       Weapon0 ->* VehicleType.Rampart 
-      Weapon0.Punch@MaxRange = 170
-      Weapon0.Punch@MinRange = 170
+      Weapon0.Punch@MaxRange = 250
+      Weapon0.Punch@MinRange = 250
       Weapon0.targets = submerged floating ground_level 
       Weapon0.HitAccuracy.d1 = 80
 	  

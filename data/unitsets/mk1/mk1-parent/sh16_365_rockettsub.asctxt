@@ -1,45 +1,44 @@
 VehicleType { 
-   abstract = true 
-   parent = 400 401 402 493
-   ID = 365
+	Abstract = true 
+	parent = 400 401 402 493
+	ID = 365
 
-   Name = rocket submarine
-   Description = rocket submarine
-   Infotext = []
-   WreckageObject = 435
-   GuideSortHelp = 519 365 0 0 0 0 0 0 0 0
+	Name = rocket submarine
+	Description = rocket submarine
+	WreckageObject = 435
+	GuideSortHelp = 519 365 0 0 0 0 0 0 0 0
+	InfoText = []
 
+	Armor = 1000
+	View = 30
+	Jamming = 0
+	Features = sonar
+	Category = heavy_ship
+	minFieldRepairDamage = 15
+	MaxSurvivableStorm = 220
+	ResourceDrillingRange = 0
+	SelfRepairRate = 0
+	Weight = 3000
 
-   Armor = 1000
-   View = 30
-   Jamming = 0
-   Features = sonar
-   Category = heavy_ship
-   MaxSurvivableStorm = 220
-   ResourceDrillingRange = 0
-   SelfRepairRate = 0
-   Weight = 3000
+	Height = deep_submerged submerged floating 
+	Tank { 
+		Energy = 0
+		Material = 0
+		fuel = 10000
+	} Tank
+	FuelConsumption = 35
+	Movement = 66 66 60 0 0 0 0 0 
+	TerrainAccess ->* VehicleType.very_bigship_terrain
 
-   Height = deep_submerged submerged floating 
-   Tank { 
-      Energy = 0
-      Material = 0
-      fuel = 10000
-   } Tank
-   FuelConsumption = 35
-   Movement = 66 66 60 0 0 0 0 0 
-   TerrainAccess ->* VehicleType.very_bigship_terrain
+	Construction { 
+		Buildings = 
+		Vehicles = 
+		Objects = 
+	} Construction
 
-   Construction { 
-      Buildings = 
-      Vehicles = 
-      Objects = 
-   } Construction
-
-   WaitForAttack = false
-   Weapons { 
-      Initiative = 0
-      Number = 0
-   } Weapons
+	WaitForAttack = false
+	Weapons { 
+		Number = 0
+	} Weapons
 
 } VehicleType

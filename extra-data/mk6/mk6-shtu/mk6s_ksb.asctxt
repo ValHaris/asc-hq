@@ -1,25 +1,25 @@
 VehicleType { 
-   Name = KSB
-   parent = 364 15000
-   ID = 15364
+	Name = KSB
+	parent = 364 15000
+	ID = 15364
    
-   picture = mk6s_ksb.png
-   InfoImage = mk6s_ksb.jpg
-   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+	Picture = mk6s_ksb.png
+	InfoImage = mk6s_ksb.jpg
+	GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
-   Armor += 200
+	Armor += 200
 
-   Movement -= 11 11 0 0 0 0 0 0 
-   Tank.material = 600
+	Movement -= 11 11 0 0 0 0 0 0 
+	Tank.Material = 600
 
-   Weapons { 
-      Number = 2
-      Weapon0 ->* VehicleType.UTorp 
-      Weapon0.Ammo = 20
-      Weapon0.Punch@MaxRange = 130
-      Weapon0.Punch@MinRange = 130
-      Weapon0.ReactionFireShots = 2
+	Weapons { 
+		Number = 2
+		Weapon0 ->* VehicleType.UTorp 
+		Weapon0.Ammo = 20
+		Weapon0.Punch@MaxRange = 130
+		Weapon0.Punch@MinRange = 130
+		Weapon0.ReactionFireShots = 2
 
-      Weapon1 ->* VehicleType.DLS 
-   } Weapons
+		Weapon1 ->* VehicleType.DLS 
+	} Weapons
 } VehicleType

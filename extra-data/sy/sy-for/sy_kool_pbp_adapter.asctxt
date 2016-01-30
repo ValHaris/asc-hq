@@ -1,5 +1,5 @@
-Techadapter {
-   ; Kool
-   Name = 1300
-   TechnologiesRequired = 1300
+TechAdapter {
+	; Kool
+	Name = 208680
+	TechnologiesRequired = 1300
 } TechAdapter

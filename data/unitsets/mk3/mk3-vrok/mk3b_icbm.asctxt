@@ -5,9 +5,12 @@ VehicleType {
     parent = 304
 
     Description = Raketensilo
-    Infotext = [Atlas ICBM Silo]
+    InfoText = [Atlas ICBM Silo]
     Picture = mk3b_icbm.png
     GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+	ConstructionCost { 
+		Energy = 70000
+	} ConstructionCost
 
     Armor -= 100
     Jamming = 80

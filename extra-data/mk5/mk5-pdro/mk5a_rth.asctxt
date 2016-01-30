@@ -16,23 +16,26 @@ VehicleType {
 	Weapons {
 		Number = 3 
 		Weapon0 {
-			sound = weapon01_s.ogg
+			Sound = weapon01_s.ogg
+			Name = Lufteinschlag
 			targets = low_level_flight medium_level_flight high_level_flight 
 			shotFrom = low_level_flight medium_level_flight high_level_flight
-			Punch@MaxRange = 95
-			Punch@MinRange = 95
-		} Weapon0
-		Weapon1 { 
-			Type = laser shootable 
-			sound = weapon01_s.ogg
-			targets = orbit 
-			shotFrom = high_level_flight
 			Punch@MaxRange = 100
 			Punch@MinRange = 100
+			WeaponEffectiveness ->* VehicleType.AntiAirWeapon
+		} Weapon0
+		Weapon1 { 
+			Name = Orbitaleinschlag
+			Type = laser shootable 
+			Sound = weapon01_s.ogg
+			targets = orbit 
+			shotFrom = high_level_flight
+			Punch@MaxRange = 110
+			Punch@MinRange = 110
 			LaserRechargeRate = 1
 			LaserRechargeCost {
-				energy = 0
-				material = 0
+				Energy = 0
+				Material = 0
 				fuel = 0
 			} LaserRechargeCost
 			MaxRange = 10
@@ -53,12 +56,12 @@ VehicleType {
 				u5 = 0
 				u6 = 0
 			} HitAccuracy
-			WeaponEffectiveness {
-			} WeaponEffectiveness
+			WeaponEffectiveness ->* VehicleType.AntiAirWeapon
 		} Weapon1
 		Weapon2 { 
+			Name = Bodeneinschlag
 			Type = laser shootable 
-			sound = weapon01_s.ogg
+			Sound = weapon01_s.ogg
 			targets = ground_level floating
 			shotFrom = low_level_flight
 			Punch@MaxRange = 125
@@ -87,11 +90,8 @@ VehicleType {
 				u5 = 0
 				u6 = 0
 			} HitAccuracy
-			WeaponEffectiveness {
-				trooper = 0
-				default = 0
-				device = 0
-			} WeaponEffectiveness
+			WeaponEffectiveness ->* VehicleType.AntiTankMissile
+			WeaponEffectiveness.trooper = 50
 		} Weapon2
 	} Weapons
 } VehicleType

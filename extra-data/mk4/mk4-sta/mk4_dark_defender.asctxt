@@ -5,7 +5,7 @@ VehicleType {
 
    Description = Verteidiger
    Infotext = [Waechter des HQ]
-   Picture = mk4_defender.png
+   Picture = mk4_dark_defender.png
 
    ConstructionCost { 
       CalculationMethod = manual

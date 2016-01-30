@@ -5,7 +5,7 @@ ObjectType {
    parent = 999
    
    canExistBeneathBuildings = true
-   LinkableObjects = 2 995 991 992 999
+;   LinkableObjects = 2 995 991 992 999
    Armor = 0
 
    ConstructionCost { 

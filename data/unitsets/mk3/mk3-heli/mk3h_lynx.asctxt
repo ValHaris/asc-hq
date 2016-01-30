@@ -1,13 +1,14 @@
 VehicleType { 
-   Name = Lynx
-   parent = 400 401 402 409
-   ID = 604
-   WreckageObject = 15604 15904
-   Description = sea helicopter
-   picture = mk3h_lynx.png
-   InfoImage = mk3h_lynx.jpg
-   GuideSortHelp = 515 602 0 0 3 0 0 0 0 0
-   Infotext = [Der Kampfhubschrauber Lynx wurde speziell für die Bekämpfung feindlicher
+	Name = Lynx
+	parent = 400 401 402 409
+	ID = 604
+
+	WreckageObject = 15604 15904
+	Description = sea helicopter
+	Picture = mk3h_lynx.png
+	InfoImage = mk3h_lynx.jpg
+	GuideSortHelp = 515 602 0 0 3 0 0 0 0 0
+	InfoText = [Der Kampfhubschrauber Lynx wurde speziell für die Bekämpfung feindlicher
 Seesteitkräfte entwickelt. Seine relativ kleine Größe in Verbindung mit
 einem recht geringen Gewicht erlauben die Stationierung auch auf Schiffen
 mittlerer Größe mit Hangardeck. In Kombination mit z.B. Fregatten oder Zerstörer
@@ -35,30 +36,29 @@ hier meistens ein sofortiger Rückzug nach dem Angriff in den Wirkungsbereich
 der Flugabwehr der eigenen Flotte. 
    InfoImage = Wikipedia Westland Lynx]
 
-   Armor = 350
-   Features += sonar 
-   Weight = 40
-   FuelConsumption = 20
+	Armor = 350
+	Features += sonar 
+	Weight = 40
+	FuelConsumption = 20
 
-   Weapons { 
-      Initiative = 0
-      Number = 3
-      Weapon0 ->* Vehicletype.ASM 
-      Weapon0.targets = floating
-      Weapon0.Ammo = 3
-      Weapon0.MaxRange = 30
-      Weapon0.Punch@MaxRange = 95
-      Weapon0.Punch@MinRange = 95
+	Weapons { 
+		Number = 3
+		Weapon0 ->* Vehicletype.ASM 
+		Weapon0.targets = floating
+		Weapon0.Ammo = 3
+		Weapon0.MaxRange = 30
+		Weapon0.Punch@MaxRange = 95
+		Weapon0.Punch@MinRange = 95
 
-      Weapon1 ->* VehicleType.AUTorp 
-      Weapon1.Ammo = 2
-      Weapon1.Punch@MaxRange = 90
-      Weapon1.Punch@MinRange = 95
+		Weapon1 ->* VehicleType.AUTorp 
+		Weapon1.Ammo = 2
+		Weapon1.Punch@MaxRange = 105
+		Weapon1.Punch@MinRange = 105
       
-      Weapon2 ->* VehicleType.DCA 
-      Weapon2.Ammo = 4
-      Weapon2.Punch@MaxRange = 100
-      Weapon2.Punch@MinRange = 100
+		Weapon2 ->* VehicleType.DCA 
+		Weapon2.Ammo = 4
+		Weapon2.Punch@MaxRange = 115
+		Weapon2.Punch@MinRange = 115
       
-   } Weapons
+	} Weapons
 } VehicleType

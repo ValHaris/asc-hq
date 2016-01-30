@@ -8,7 +8,7 @@ TerrainType {
       AttackBonus = 0
       BasicJamming = 0
   ;              def liT mdT hvT liW mdW hvW tro ril mdA mdS BTO liA hvA liS hvS hli hov
-      MoveMalus = 10  14  14  14  16  16  16  12  10  19  10  11  19  19  10  10  19  10
+      MoveMalus = 10  14  14  14  16  16  16  12  10  19  11  11  19  19  10  12  19  10
       TerrainProperties = shallow_water 
    } dry
    

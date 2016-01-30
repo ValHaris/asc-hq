@@ -1,27 +1,27 @@
 VehicleType { 
-   Name = DELTAHUNTER
-   parent = 15001 276 
-   ID = 15326
+	Name = DELTAHUNTER
+	parent = 15001 276 
+	ID = 15326
    
-   Description = U-Boot Jaeger
-   Infotext = []
-   Picture = mk6a_deltahunter.pcx
-   InfoImage = mk6a_deltahunter.jpg
-   InfoImageSmall = mk6a_deltahunter_k.png
-   GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
+	Description = U-Boot Jaeger
+	InfoText = []
+	Picture = mk6a_deltahunter.pcx
+	InfoImage = mk6a_deltahunter.jpg
+	InfoImageSmall = mk6a_deltahunter_k.png
+	GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
 
-   Weight = 50
+	Weight = 50
 
-   Weapons {
-      Number = 2
-      Weapon0 ->* VehicleType.ATorp 
-      Weapon0.Ammo = 1
-      Weapon0.Punch@MaxRange = 105
-      Weapon0.Punch@MinRange = 105
+	Weapons {
+		Number = 2
+		Weapon0 ->* VehicleType.ATorp 
+		Weapon0.Ammo = 1
+		Weapon0.Punch@MaxRange = 115
+		Weapon0.Punch@MinRange = 115
 
-      Weapon1 ->* VehicleType.DCA 
-      Weapon1.Ammo = 4
-      Weapon1.Punch@MaxRange = 105
-      Weapon1.Punch@MinRange = 105
-   } Weapons
+		Weapon1 ->* VehicleType.DCA 
+		Weapon1.Ammo = 4
+		Weapon1.Punch@MaxRange = 110
+		Weapon1.Punch@MinRange = 110
+	} Weapons
 } VehicleType

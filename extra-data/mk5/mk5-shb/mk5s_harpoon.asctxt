@@ -1,40 +1,39 @@
 VehicleType {
-   ID = 1491
-   Name = HARPOON
-   parent = 367
+	ID = 1491
+	Name = HARPOON
+	parent = 367
 
-   Description = ship hunter
-   Infotext = [InfoImage = Wikipedia Schnellboot]
-   picture = mk5s_harpoon.pcx
-   InfoImage = mk5s_harpoon.jpg
-   GuideSortHelp = 0 0 0 0 6 0 0 0 0 0
+	Description = ship hunter
+	Picture = mk5s_harpoon.pcx
+	InfoImage = mk5s_harpoon.jpg
+	GuideSortHelp = 0 0 0 0 6 0 0 0 0 0
+	InfoText = [InfoImage = Wikipedia Schnellboot]
 
-   Features += MoveDuringReactionFire
-   TerrainAccess ->* VehicleType.verysmallship_terrain
+	Features += MoveDuringReactionFire
+	TerrainAccess ->* VehicleType.verysmallship_terrain
 
-   Weapons { 
-      Initiative = 0
-      Number = 3
-      Weapon0 ->* VehicleType.storp 
-      Weapon0.shotFrom = floating ground_level
-      Weapon0.MaxRange = 20
-      Weapon0.Ammo = 4
-      Weapon0.Punch@MaxRange = 125
-      Weapon0.Punch@MinRange = 125
-      Weapon0.ReactionFireShots = 0
+	Weapons { 
+		Number = 3
+		Weapon0 ->* VehicleType.STorp 
+		Weapon0.shotFrom = floating ground_level
+		Weapon0.MaxRange = 20
+		Weapon0.Ammo = 4
+		Weapon0.Punch@MaxRange = 130
+		Weapon0.Punch@MinRange = 130
+		Weapon0.ReactionFireShots = 0
 
-      Weapon1 ->* VehicleType.storp 
-      Weapon1.shotFrom = floating ground_level
-      Weapon1.MaxRange = 30
-      Weapon1.Ammo = 2
-      Weapon1.Punch@MaxRange = 110
-      Weapon1.Punch@MinRange = 110
-      Weapon1.ReactionFireShots = 0
+		Weapon1 ->* VehicleType.STorp 
+		Weapon1.shotFrom = floating ground_level
+		Weapon1.MaxRange = 30
+		Weapon1.Ammo = 2
+		Weapon1.Punch@MaxRange = 115
+		Weapon1.Punch@MinRange = 115
+		Weapon1.ReactionFireShots = 0
 
-      Weapon2 ->* VehicleType.AirMiniGun
-      Weapon2.Ammo = 6
-      Weapon2.ReactionFireShots = 2
+		Weapon2 ->* VehicleType.AirMiniGun
+		Weapon2.Ammo = 6
+		Weapon2.ReactionFireShots = 2
 
-   } Weapons
+	} Weapons
 } VehicleType
 

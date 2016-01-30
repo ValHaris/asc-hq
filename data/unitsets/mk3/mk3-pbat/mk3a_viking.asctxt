@@ -1,23 +1,18 @@
 VehicleType { 
-   Name = Viking
-   parent = 326
-   ID = 514
-   WreckageObject = 15514 15814
+	Name = Viking
+	parent = 326
+	ID = 514
+	WreckageObject = 15514 15814
 
-   Description = anti ship plane
-   picture = mk3a_viking.png
-   InfoImage = mk3a_viking.jpg
-   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+	Description = anti ship plane
+	Picture = mk3a_viking.png
+	InfoImage = mk3a_viking.jpg
+	GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
-   Armor -= 20
-   Weapons { 
-      Initiative = 0
-      Number = 3
-      Weapon0 ->* VehicleType.ATorp 
-      Weapon0.Ammo = 4
-      Weapon0.Punch@MaxRange += 5
-      Weapon0.Punch@MinRange += 5
+	Armor -= 20
 
-      Weapon1 ->* VehicleType.Air_MG 
+	Weapons { 
+		Weapon0.Punch@MaxRange += 5
+		Weapon0.Punch@MinRange += 5
    } Weapons
 } VehicleType

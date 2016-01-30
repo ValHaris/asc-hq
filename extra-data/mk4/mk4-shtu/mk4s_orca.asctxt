@@ -1,29 +1,28 @@
 VehicleType { 
-   Name = Orca
-   parent = 364
-   ID = 1261
+	Name = Orca
+	parent = 364
+	ID = 1261
 
-   Description = Jagd-UBoot
-   picture = mk4s_orca.png
-   InfoImage = mk4s_orca.jpg
-   wreckageobject = 14261
-   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
-   InfoText = [Das Jagd-U-Boot vom Typ Orca ist das Standard U-Boot schlechthin. Schnell, sehr gut gepanzert und mit tödlichen Torpedos ausgerüstet, kann es vielen größeren Schiffen sehr gefährlich werden. Da ein Abschuß der Torpedos aus der Bewegung heraus möglich ist und das Schiff dann sofort wieder verschwinden kann, ist es dabei für viele Einheiten kaum angreifbar. Zusätzlich besitzt es noch leichte Kanonen- und MG-Bewaffnung. Die größte Schwäche stellen die sogenannten U-Boot-Jäger dar. Diese Einheiten können das Orca versenken, ohne Gegenwehr befürchten zu müssen. Hier sind auf normaler Tauchstufe die Torpedobomber zu nennen, die durch ihre Wasserbomben große Schäden anrichten können. Falls das U-Boot deswegen tiefer taucht, kann es durch leichte Schiffe und Kreuzer mit Wasserbomben versenkt werden. Der erfahrene Kapitän plant deshalb immer den enstprechenden Schutz durch andere Einheiten ein und erhält so eine gefährliche Waffe für die Seekriegsführung. ]
+	Description = Jagd-UBoot
+	Picture = mk4s_orca.png
+	InfoImage = mk4s_orca.jpg
+	WreckageObject = 14261
+	GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+	InfoText = [Das Jagd-U-Boot vom Typ Orca ist das Standard U-Boot schlechthin. Schnell, sehr gut gepanzert und mit tödlichen Torpedos ausgerüstet, kann es vielen größeren Schiffen sehr gefährlich werden. Da ein Abschuß der Torpedos aus der Bewegung heraus möglich ist und das Schiff dann sofort wieder verschwinden kann, ist es dabei für viele Einheiten kaum angreifbar. Zusätzlich besitzt es noch leichte Kanonen- und MG-Bewaffnung. Die größte Schwäche stellen die sogenannten U-Boot-Jäger dar. Diese Einheiten können das Orca versenken, ohne Gegenwehr befürchten zu müssen. Hier sind auf normaler Tauchstufe die Torpedobomber zu nennen, die durch ihre Wasserbomben große Schäden anrichten können. Falls das U-Boot deswegen tiefer taucht, kann es durch leichte Schiffe und Kreuzer mit Wasserbomben versenkt werden. Der erfahrene Kapitän plant deshalb immer den enstprechenden Schutz durch andere Einheiten ein und erhält so eine gefährliche Waffe für die Seekriegsführung. ]
 
-   Weapons { 
-      Initiative = 50
-      Number = 3
-      Weapon0 ->* VehicleType.UTorp
-      Weapon0.Ammo = 10
-      Weapon0.Punch@MaxRange = 110
-      Weapon0.Punch@MinRange = 110
+	Weapons { 
+		Number = 3
+		Weapon0 ->* VehicleType.UTorp
+		Weapon0.Punch@MinRange = 115 
+		Weapon0.Punch@MaxRange = 115 
+		Weapon0.Ammo = 10
       
-      Weapon1 ->* VehicleType.Ship_MG
-      Weapon1.Ammo = 6
+		Weapon1 ->* VehicleType.Ship_MG
+		Weapon1.Ammo = 6
 
-      Weapon2 ->* VehicleType.Ship_gun
-      Weapon2.Ammo = 6
-      Weapon2.Punch@MaxRange = 60
-      Weapon2.Punch@MinRange = 70
-   } Weapons
+		Weapon2 ->* VehicleType.Ship_gun
+		Weapon2.Ammo = 6
+		Weapon2.Punch@MaxRange = 70
+		Weapon2.Punch@MinRange = 80
+	} Weapons
 } VehicleType

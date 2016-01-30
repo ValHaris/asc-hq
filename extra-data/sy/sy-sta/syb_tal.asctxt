@@ -1,45 +1,36 @@
 VehicleType { 
 	Name = TAL
 	ID = 1348
-	parent = 322 1395 1394
+	parent = 1388 322
 
 	Description = Bodenabwehrwurm
-	Infotext = []
-	picture = syb_tal.png
+	InfoText = []
+	Picture = syb_tal.png
 	WreckageObject = 1308
 ;   InfoImage = mk3b_ss74.jpg
 ;   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
+	ConstructionCost.CalculationMethod = add
+	ConstructionCost.Material = 5000
+
 	Armor = 700
-	Jamming = 39
-	View = 0
-	Weight = 5000
-	Features = MoveDuringReactionFire jam_only_own_field self_repairing
+	Features += MoveDuringReactionFire
 	SelfRepairRate = 10
 
-	TerrainAccess ->* VehicleType.SY_worm 
-	Tank.Fuel = 10000
-	Tank.Material = 5000
-	Movement = 0 0 0 10 0 0 0 0 
-;	ObjectsLayedByMovement = 1301
-   
-	JumpDrive ->* VehicleType.SY_worm_jump 
-
-	WaitForAttack = true
 	Weapons {
-      Weapon0 ->* VehicleType.type_laser
-      Weapon0.name = Drohnenschacht 
-      Weapon0.Sound = canon_s.ogg
-      Weapon0.Punch@MaxRange = 110
-      Weapon0.Punch@MinRange = 110
-      Weapon0.LaserRechargeRate = 1
-	  Weapon0.ReactionFireShots = 2
-      Weapon0.Ammo = 4
-      Weapon0.LaserRechargeCost.energy = 0
-      Weapon0.LaserRechargeCost.material = 200
-      Weapon0.LaserRechargeCost.fuel = 400
+		Weapon0 ->* VehicleType.type_laser
+		Weapon0.Name = Drohnenschacht 
+		Weapon0.Sound = canon_s.ogg
+		Weapon0.Punch@MaxRange = 110
+		Weapon0.Punch@MinRange = 110
+		Weapon0.LaserRechargeRate = 1
+		Weapon0.ReactionFireShots = 2
+		Weapon0.Ammo = 4
+		Weapon0.LaserRechargeCost.Energy = 0
+		Weapon0.LaserRechargeCost.Material = 200
+		Weapon0.LaserRechargeCost.Fuel = 400
 
-      Weapon1 ->* VehicleType.SY_WormMD
+		Weapon1 ->* VehicleType.SY_WormMD
 
    } Weapons
 } VehicleType

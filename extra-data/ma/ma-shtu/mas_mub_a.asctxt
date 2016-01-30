@@ -1,69 +1,69 @@
 VehicleType { 
-   Name = MUB A
-   parent = 365
-   ID = 22700
+	Name = MUB A
+	parent = 365
+	ID = 22700
 
-   Description = Anti-Air-U-Boot
-   Picture = mas_mub_a.pcx
-   WreckageObject = 435
-   Infotext = [Das MUB A ist die wichtigste Einheit für die Luftverteidigung der malanischen Flotte. Ausgestattet mit mehreren hochmodernen und sehr leistungsfähigen Laserbatterien kann es anfliegende Feindeinheiten bis in die höchsten Luftschichten schon auf große Entfernung wirksam bekämpfen. Dies bedingt allerdings eine sehr genaue Ausrichtung der Laser, was einen Angriff während der Fahrt unmöglich macht. Andererseits erlaubt die Lasertechnik sehr wohl eine schnelle Fahrtaufnahme nach dem Waffeneinsatz, während die Energiespeicher der Laser aufgeladen werden.
-Eine Besonderheit der verwendeten Laserbatterien ist die Nutzung blauen Lichts, welche eines der größten Geheimnisse der malanischen Wissenschaft darstellt. Dies ermöglicht den Beschuß von tief- und mittelhoch fliegenden Flugzeugen von unterhalb der Wasseroberfläche, wo das Schiff für feindliche Kanonen unerreichbar ist. So kann der effektive Schutz der eigenen Flotte vor feindlichen Torpedobombern jederzeit gewährleistet werden.
-Die für die Waffen benötigten Energiemengen sind enorm, weshalb sowohl die Treibstofftanks als auch die Speichereinheiten sehr voluminös dimensioniert wurden und einen großen Teil des Rumpfes einnehmen. Obwohl das MUB A wesentlich größer als ein Jagd-U-Boot ist, beschränkt sich die Sekundärbewaffnung daher auf einige Torpedos zur Verteidigung. Die Spezialpanzerung absorbiert jedoch auch schwerere Treffer und sorgt dafür, daß das MUB-A auch in größeren Gefechten nicht zur Achillesferse der eigenen Flotte werden kann. Der starke Antrieb ermöglicht es ihm, mit schnelleren Einheiten mitzuhalten und so als Begleitschutz von U-Boot-Rudeln zu fungieren.
-Es handelt sich alles in allem um eine sehr gelungene Konstruktion, die für jeden Flottenverband unersetzlich und daher fast immer in größerer Anzahl vorhanden ist.
-]
+	Description = Anti-Air-U-Boot
+	Picture = mas_mub_a.pcx
+	WreckageObject = 435
+	InfoText = [Das MUB A ist die wichtigste Einheit für die Luftverteidigung der malanischen Flotte. Ausgestattet mit mehreren hochmodernen und sehr leistungsfähigen Laserbatterien kann es anfliegende Feindeinheiten bis in die höchsten Luftschichten schon auf große Entfernung wirksam bekämpfen. Dies bedingt allerdings eine sehr genaue Ausrichtung der Laser, was einen Angriff während der Fahrt unmöglich macht. Andererseits erlaubt die Lasertechnik sehr wohl eine schnelle Fahrtaufnahme nach dem Waffeneinsatz, während die Energiespeicher der Laser aufgeladen werden.
+		Eine Besonderheit der verwendeten Laserbatterien ist die Nutzung blauen Lichts, welche eines der größten Geheimnisse der malanischen Wissenschaft darstellt. Dies ermöglicht den Beschuß von tief- und mittelhoch fliegenden Flugzeugen von unterhalb der Wasseroberfläche, wo das Schiff für feindliche Kanonen unerreichbar ist. So kann der effektive Schutz der eigenen Flotte vor feindlichen Torpedobombern jederzeit gewährleistet werden.
+		Die für die Waffen benötigten Energiemengen sind enorm, weshalb sowohl die Treibstofftanks als auch die Speichereinheiten sehr voluminös dimensioniert wurden und einen großen Teil des Rumpfes einnehmen. Obwohl das MUB A wesentlich größer als ein Jagd-U-Boot ist, beschränkt sich die Sekundärbewaffnung daher auf einige Torpedos zur Verteidigung. Die Spezialpanzerung absorbiert jedoch auch schwerere Treffer und sorgt dafür, daß das MUB-A auch in größeren Gefechten nicht zur Achillesferse der eigenen Flotte werden kann. Der starke Antrieb ermöglicht es ihm, mit schnelleren Einheiten mitzuhalten und so als Begleitschutz von U-Boot-Rudeln zu fungieren.
+		Es handelt sich alles in allem um eine sehr gelungene Konstruktion, die für jeden Flottenverband unersetzlich und daher fast immer in größerer Anzahl vorhanden ist.
+		]
 
-   Features += MoveDuringReactionFire move_after_attack
-   Armor += 200
-   View = 40
-   Weight = 2300
-   Tank.fuel = 15000
-   FuelConsumption = 30
-   Movement += 11 11 10 0 0 0 0 0 
-   TerrainAccess ->* VehicleType.bigship_terrain 
+	Features += MoveDuringReactionFire move_after_attack
+	Armor += 200
+	View = 40
+	Weight = 2300
 
-   WaitForAttack = true
-   Weapons { 
-      Number = 2
+	Tank.fuel = 15000
+	FuelConsumption = 30
+	Movement += 11 11 10 0 0 0 0 0 
+	TerrainAccess ->* VehicleType.bigship_terrain 
+
+	WaitForAttack = true
+	Weapons { 
+		Number = 2
       
-      Weapon0 ->* VehicleType.UTorp 
-      Weapon0.Ammo = 4
-      Weapon0.MaxRange = 30
-	  Weapon0.Punch@MinRange = 125
-	  Weapon0.Punch@MaxRange = 125
-      Weapon0.ReactionFireShots = 2
+		Weapon0 ->* VehicleType.UTorp 
+		Weapon0.Ammo = 4
+		Weapon0.MaxRange = 30
+		Weapon0.Punch@MinRange = 135
+		Weapon0.Punch@MaxRange = 135
+		Weapon0.ReactionFireShots = 2
       
-      Weapon1 { 
-         Type = laser shootable
-         targets = low_level_flight medium_level_flight high_level_flight
-         shotFrom = floating submerged
-         MaxRange = 60
-         MinRange = 10
-         Ammo = 10
-         Punch@MaxRange = 85
-         Punch@MinRange = 90
-         LaserRechargeRate = 2
-         ReactionFireShots = 3
-         LaserRechargeCost {
-            energy = 0
-            material = 0
-            fuel = 500
-         } LaserRechargeCost
-         HitAccuracy { 
-            d6 = 0
-            d5 = 0
-            d4 = 0
-            d3 = 0
-            d2 = 0
-            d1 = 0
-            0 = 0
-            u1 = 100
-            u2 = 98
-            u3 = 95
-            u4 = 0
-            u5 = 0
-            u6 = 0
-         } HitAccuracy
-         cantHit =  
-      } Weapon1
-   } Weapons
+		Weapon1 { 
+			Type = laser shootable
+			targets = low_level_flight medium_level_flight high_level_flight
+			shotFrom = floating submerged
+			MaxRange = 60
+			MinRange = 10
+			Ammo = 10
+			Punch@MaxRange = 85
+			Punch@MinRange = 90
+			LaserRechargeRate = 2
+			ReactionFireShots = 3
+			LaserRechargeCost {
+				Energy = 0
+				Material = 0
+				fuel = 500
+			} LaserRechargeCost
+			HitAccuracy { 
+				d6 = 0
+				d5 = 0
+				d4 = 0
+				d3 = 0
+				d2 = 0
+				d1 = 0
+				0 = 0
+				u1 = 100
+				u2 = 98
+				u3 = 95
+				u4 = 0
+				u5 = 0
+				u6 = 0
+			} HitAccuracy
+		} Weapon1
+	} Weapons
 } VehicleType

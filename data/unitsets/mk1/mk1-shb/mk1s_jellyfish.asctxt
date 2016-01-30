@@ -1,15 +1,15 @@
 VehicleType { 
-   Name = Jellyfish
-   ID = 27
-   parent = 354
+	Name = Jellyfish
+	ID = 27
+	parent = 354
 
-   Description = submarine destroyer
-   picture = mk1s_jellyfish.pcx
-   InfoImage = mk1s_jellyfish.jpg
-   InfoImageSmall = mk1s_jellyfish_k.png
-   WreckageObject = 427
-   GuideSortHelp += 0 0 0 0 1 601 0 0 0 0
-   Infotext = [As any experienced naval commander should know, submarines are
+	Description = submarine destroyer
+	Picture = mk1s_jellyfish.pcx
+	InfoImage = mk1s_jellyfish.jpg
+	InfoImageSmall = mk1s_jellyfish_k.png
+	WreckageObject = 427
+	GuideSortHelp += 0 0 0 0 1 601 0 0 0 0
+	InfoText = [As any experienced naval commander should know, submarines are
               not to be taken lightly. They can take down the larger ships
               in a short time, and even a group of Destroyers may find itself
               hard pressed to avert the enemy. To lighten their load, a specialized
@@ -19,39 +19,38 @@ VehicleType {
               attack party, provided it is being defended from the party itself;
               it is very vulnerable to submarines up close]
 
-   Armor += 100
-   Features += sonar
+	Armor += 100
+	Features += sonar
 
-   Weapons { 
-      Initiative = 0
-      Number = 5
-      Weapon0 ->* VehicleType.Ship_Gun 
-      Weapon0.Ammo = 10
-      Weapon0.Punch@MaxRange = 75
-      Weapon0.Punch@MinRange = 90
+	Weapons { 
+		Number = 5
+		Weapon0 ->* VehicleType.Ship_Gun 
+		Weapon0.Ammo = 10
+		Weapon0.Punch@MaxRange = 75
+		Weapon0.Punch@MinRange = 90
 
-      Weapon1 ->* VehicleType.DCS 
-      Weapon1.MaxRange = 20
-      Weapon1.MinRange = 20
-      Weapon1.Ammo = 10
-      Weapon1.Punch@MaxRange = 140
-      Weapon1.Punch@MinRange = 140
+		Weapon1 ->* VehicleType.DCS 
+		Weapon1.MaxRange = 20
+		Weapon1.MinRange = 20
+		Weapon1.Ammo = 10
+		Weapon1.Punch@MaxRange = 140
+		Weapon1.Punch@MinRange = 140
 
-      Weapon2 ->* VehicleType.Ship_Flak 
-      Weapon2.MaxRange = 20
-      Weapon2.Ammo = 10
-      Weapon2.ReactionFireShots = 1
+		Weapon2 ->* VehicleType.Ship_Flak 
+		Weapon2.MaxRange = 20
+		Weapon2.Ammo = 10
+		Weapon2.ReactionFireShots = 1
 
-      Weapon3 ->* VehicleType.DCS 
-      Weapon3.Ammo = 10
-      Weapon3.Punch@MaxRange = 150
-      Weapon3.Punch@MinRange = 150
+		Weapon3 ->* VehicleType.DCS 
+		Weapon3.Ammo = 10
+		Weapon3.Punch@MaxRange = 150
+		Weapon3.Punch@MinRange = 150
 
-      Weapon4 ->* VehicleType.SUTorp 
-      Weapon4.MaxRange = 30
-      Weapon4.MinRange = 20
-      Weapon4.Ammo = 10
-      Weapon4.Punch@MaxRange = 130
-      Weapon4.Punch@MinRange = 130
-   } Weapons
+		Weapon4 ->* VehicleType.SUTorp 
+		Weapon4.MaxRange = 30
+		Weapon4.MinRange = 20
+		Weapon4.Ammo = 10
+		Weapon4.Punch@MaxRange = 135
+		Weapon4.Punch@MinRange = 135
+	} Weapons
 } VehicleType

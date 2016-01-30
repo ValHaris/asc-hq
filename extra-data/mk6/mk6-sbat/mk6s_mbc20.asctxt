@@ -4,7 +4,7 @@ VehicleType {
 	ID = 15356
    
 	Description = Lenkwaffenkreuzer
-	picture = mk6s_mbc20.pcx
+	Picture = mk6s_mbc20.pcx
 	InfoImage = mk6s_mbc20.jpg
 	GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
 

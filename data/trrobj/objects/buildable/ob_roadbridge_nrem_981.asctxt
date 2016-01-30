@@ -5,7 +5,7 @@ ObjectType {
    GroupID = 
 
    canExistBeneathBuildings = true
-   LinkableObjects = 1 997 1000
+;   LinkableObjects = 1 997 1000
    Armor = 0
 
    ConstructionCost { 

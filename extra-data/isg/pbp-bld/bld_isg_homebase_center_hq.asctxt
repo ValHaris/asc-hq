@@ -70,7 +70,7 @@ BuildingType {
       } BImode
       ASCmode { 
          Energy = 10000
-         Material = 10000
+         Material = 100000
          fuel = 1000000
       } ASCmode
    } StorageCapacity

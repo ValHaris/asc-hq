@@ -1,11 +1,13 @@
 VehicleType { 
     Name = Hornisse
-    parent = 1402
+    parent = 331
     ID = 12502
 
     Description = Antigravmoped
     Picture = pu_hornisse.png
-    Infotext = [Das Chassis einer auf Salanto gefunden Enduro diente hier Basis. Auf dem Schwarzmarkt konnten die Mechaniker Teccnols-Schrott erwerben und so nahm das Projekt Gestalt an.
+    InfoImage = 
+	InfoImageSmall =
+	InfoText = [Das Chassis einer auf Salanto gefunden Enduro diente hier Basis. Auf dem Schwarzmarkt konnten die Mechaniker Teccnols-Schrott erwerben und so nahm das Projekt Gestalt an.
                Pfiffig, wie sie sind, wurde die Hornisse mit modernster Elektronik ausgestattet. Die regenerative Panzerung bietet einen guten Schutz. Durch die für das Gefährt angemessene Bewaffung, ist die Hornisse auch recht wehrhaft.
                Das Highlight ist aber ein miniaturisierter Antigravantrieb, der es ermöglicht Hindernisse schwebend zu überwinden. Dieser verbraucht nur minimal Rescourcen und bietet so eine große Reichweite.]
 

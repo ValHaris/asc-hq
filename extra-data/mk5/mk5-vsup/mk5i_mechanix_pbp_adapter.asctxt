@@ -1,5 +1,5 @@
-Techadapter {
-   Name = 1409
-   ;Bezeichnung der verknüpften Technologie: Mechanic
-   TechnologiesRequired = 1409
+TechAdapter {
+	Name = 1409
+	;Bezeichnung der verknüpften Technologie: Mechanic
+	TechnologiesRequired = 1409
 } TechAdapter

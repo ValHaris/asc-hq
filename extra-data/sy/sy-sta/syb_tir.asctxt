@@ -1,33 +1,24 @@
 VehicleType { 
 	Name = TIR
 	ID = 1354
-	parent = 319 1395 1394
+	parent = 1388 319
 
 	Description = Multiabwehrwurm
-	Infotext = []
-	picture = syb_tir.png
+	Picture = syb_tir.png
 	WreckageObject = 1308
+	InfoText = []
 
 	Armor = 1200
-	Jamming = 39
-	View = 0
 	Weight = 2000
-	Features = MoveDuringReactionFire jam_only_own_field self_repairing
-	SelfRepairRate = 10
+	Features += MoveDuringReactionFire
 
-	TerrainAccess ->* VehicleType.SY_worm 
-	Tank.Fuel = 10000
-	Tank.Material = 5000
 	Movement = 0 0 0 19 0 0 0 0 
-;	ObjectsLayedByMovement = 1301
    
-	JumpDrive ->* VehicleType.SY_worm_jump 
-
 	WaitForAttack = false
 	Weapons {
 		Number = 3
 		Weapon0 ->* VehicleType.type_laser
-		Weapon0.name = Drohnenschacht 
+		Weapon0.Name = Drohnenschacht 
 		Weapon0.Sound = canon_s.ogg
 		Weapon0.MaxRange = 70
 		Weapon0.MinRange = 20
@@ -36,15 +27,15 @@ VehicleType {
 		Weapon0.LaserRechargeRate = 1
 		Weapon0.ReactionFireShots = 1
 		Weapon0.Ammo = 3
-		Weapon0.LaserRechargeCost.energy = 0
-		Weapon0.LaserRechargeCost.material = 200
-		Weapon0.LaserRechargeCost.fuel = 400
+		Weapon0.LaserRechargeCost.Energy = 0
+		Weapon0.LaserRechargeCost.Material = 200
+		Weapon0.LaserRechargeCost.Fuel = 400
 		
 		Weapon1 ->* VehicleType.SY_WormMD
 		Weapon1.ReactionFireShots = 1
 
 		Weapon2 ->* VehicleType.type_laser
-		Weapon2.name = Drohnenschacht 
+		Weapon2.Name = Drohnenschacht 
 		Weapon2.Sound = canon_s.ogg
 		Weapon2.MaxRange = 70
 		Weapon2.MinRange = 20
@@ -53,9 +44,9 @@ VehicleType {
 		Weapon2.LaserRechargeRate = 1
 		Weapon2.ReactionFireShots = 1
 		Weapon2.Ammo = 3
-		Weapon2.LaserRechargeCost.energy = 0
-		Weapon2.LaserRechargeCost.material = 200
-		Weapon2.LaserRechargeCost.fuel = 400
+		Weapon2.LaserRechargeCost.Energy = 0
+		Weapon2.LaserRechargeCost.Material = 200
+		Weapon2.LaserRechargeCost.Fuel = 400
 
-   } Weapons
+	} Weapons
 } VehicleType

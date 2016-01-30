@@ -1,61 +1,61 @@
 VehicleType { 
-   Name = DEFKIND
-   ID = 15100
-   parent = 497 327 15000
+	Name = DEFKIND
+	ID = 15100
+	parent = 497 327 15000
 
-   Description = Verteidigungsschweber
-   Picture = mk6a_defkind.png
-   InfoImage = mk6a_defkind.jpg
-   InfoImageSmall = mk6a_defkind_k.png
-   GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
-   Infotext = [Schwere Verteidigungsflugzeuge vom Typ Defkind sind ein wichtiges Element in fast jeder Teccnol Verteidigungslinie. Durch ihre hohe Waffenreichweite projezieren sie einen Verteidigungsschirm um die primären Angriffselemente. Dank ihrer hohen Geschwindigkeit können sie dabei mit jedem Vorstoß mithalten - außer eventuell bei einem reinen Jägerangriff, und selbst bei dem verzögern sie den Vorstoß nur geringfügig. Häufig werden Defkind eingesetzt, um die Verteidigung über unwegsamem Gebiet zu gewährleisten - beispielsweise entlang von unregelmäßigen Küstenstreifen oder bei Gebirgen, oder um die Verteidigung schnell an Schwachstellen verstärken zu können, die durch zu langsame Bodentruppen auftreten. Eine weiterer beliebte Einsatztaktik besteht darin, die Defkind hinter Baliste zu positionieren, und somit gemeinsam mit dieser das Feuer zu eröffnen. Auf niedriger und mittlerer Flughöhe übernimmt der Defkind einen Teil der Bodenverteidigung, während er auf großer Höhe in der Lage ist einen effektiven Verteidigungsschirm gegen orbitale Angriffe zu errichten. Durch den Sprungantrieb ist der Defkind auch in der Lage, sich hinter eine feindliche Linie zu begeben und dort die Verteidigung von Jumpboxen zu übernehmen. Dank seiner VTOL Fähigkeit kann der Defkind auch sehr gut im Feld repariert werden.
-Beim Einsatz von Defkind sind aber zwei wichtige Punkte zu beachten: Die massive Bewaffnung des Defkind erfordert es, das dieser in seinem Flug kurz inne hält, bevor die Waffen abgefeuert werden. Außerdem ist der Defkind aufgrund seines Sprungantriebes und der damit einher gehenden Sensoreninterferenz darauf angewiesen, das ihm andere Einheiten Zieldaten zur Verfügung stellen. ]
+	Description = Verteidigungsschweber
+	Picture = mk6a_defkind.png
+	InfoImage = mk6a_defkind.jpg
+	InfoImageSmall = mk6a_defkind_k.png
+	GuideSortHelp += 0 0 0 0 6 0 0 0 0 0
+	InfoText = [Schwere Verteidigungsflugzeuge vom Typ Defkind sind ein wichtiges Element in fast jeder Teccnol Verteidigungslinie. Durch ihre hohe Waffenreichweite projezieren sie einen Verteidigungsschirm um die primären Angriffselemente. Dank ihrer hohen Geschwindigkeit können sie dabei mit jedem Vorstoß mithalten - außer eventuell bei einem reinen Jägerangriff, und selbst bei dem verzögern sie den Vorstoß nur geringfügig. Häufig werden Defkind eingesetzt, um die Verteidigung über unwegsamem Gebiet zu gewährleisten - beispielsweise entlang von unregelmäßigen Küstenstreifen oder bei Gebirgen, oder um die Verteidigung schnell an Schwachstellen verstärken zu können, die durch zu langsame Bodentruppen auftreten. Eine weiterer beliebte Einsatztaktik besteht darin, die Defkind hinter Baliste zu positionieren, und somit gemeinsam mit dieser das Feuer zu eröffnen. Auf niedriger und mittlerer Flughöhe übernimmt der Defkind einen Teil der Bodenverteidigung, während er auf großer Höhe in der Lage ist einen effektiven Verteidigungsschirm gegen orbitale Angriffe zu errichten. Durch den Sprungantrieb ist der Defkind auch in der Lage, sich hinter eine feindliche Linie zu begeben und dort die Verteidigung von Jumpboxen zu übernehmen. Dank seiner VTOL Fähigkeit kann der Defkind auch sehr gut im Feld repariert werden.
+				Beim Einsatz von Defkind sind aber zwei wichtige Punkte zu beachten: Die massive Bewaffnung des Defkind erfordert es, das dieser in seinem Flug kurz inne hält, bevor die Waffen abgefeuert werden. Außerdem ist der Defkind aufgrund seines Sprungantriebes und der damit einher gehenden Sensoreninterferenz darauf angewiesen, das ihm andere Einheiten Zieldaten zur Verfügung stellen. ]
 
-   Category = heavy_aircraft
-   Weight = 300
-   Armor += 250
-   View = 0
-   jamming = 0
-   Features -= Jam_Only_Own_Field Move_After_Attack
-   JumpDrive ->* VehicleType.TeccnolsJump4
-   JumpDrive.MaxDistance = 300
+	Category = heavy_aircraft
+	Weight = 300
+	Armor += 250
+	View = 0
+	Jamming = 0
+	Features -= jam_only_own_field move_after_attack
+	JumpDrive ->* VehicleType.TeccnolsJump4
+	JumpDrive.MaxDistance = 300
 
-   Tank.Material = 2000
-   Tank.Fuel = 12000
-   movement += 0 0 0 -35 -50 -50 130 0
-   Height = ground_level low_level_flight medium_level_flight high_level_flight
-   TerrainAccess {
-      terrain_any = Road Runway Spaceport Hard_sand
-      terrain_all =
-      terrain_not = hillside forest Installation large_rocks bridge
-      terrain_kill = Shallow_water Water Deep_water River lava
-   } TerrainAccess   
-   MovementSound = jet_pass.ogg
+	Tank.Material = 2000
+	Tank.Fuel = 12000
+	Movement += 0 0 0 -35 -50 -50 130 0
+	Height = ground_level low_level_flight medium_level_flight high_level_flight
+	TerrainAccess {
+		terrain_any = Road Runway Spaceport Hard_sand
+		terrain_all =
+		terrain_not = Hillside Forest Installation Large_rocks Bridge
+		terrain_kill = Shallow_water Water Deep_water River Lava
+	} TerrainAccess   
+	MovementSound = jet_pass.ogg
 
-   WaitForAttack = true
-   Weapons { 
-      Number = 4
-      Weapon0 ->* VehicleType.AAMH
-      Weapon0.MaxRange = 50
-      Weapon0.Punch@MaxRange = 85
-      Weapon0.Punch@MinRange = 85
-      Weapon0.ReactionFireShots = 2
-      Weapon0.Ammo = 10
-      Weapon1 ->* VehicleType.AMO
-      Weapon1.MaxRange = 60
-      Weapon1.Punch@MaxRange = 90
-      Weapon1.Punch@MinRange = 90
-      Weapon1.ReactionFireShots = 1
-      Weapon2.Ammo = 6
-      Weapon2 ->* Vehicletype.smASM
-      Weapon2.MaxRange = 50
-      Weapon2.Punch@MaxRange = 95
-      Weapon2.Punch@MinRange = 95
-      Weapon2.ReactionFireShots = 1
-      Weapon2.WeaponEffectiveness.trooper = 0
-      Weapon2.Ammo = 6
-      Weapon3 ->* Vehicletype.TDW
-      Weapon3.MaxRange = 40
-   } Weapons
+	WaitForAttack = true
+	Weapons { 
+		Number = 4
+		Weapon0 ->* VehicleType.AAMH
+		Weapon0.MaxRange = 50
+		Weapon0.Punch@MaxRange = 85
+		Weapon0.Punch@MinRange = 85
+		Weapon0.ReactionFireShots = 2
+		Weapon0.Ammo = 20
+		Weapon1 ->* VehicleType.AMO
+		Weapon1.MaxRange = 60
+		Weapon1.Punch@MaxRange = 90
+		Weapon1.Punch@MinRange = 90
+		Weapon1.ReactionFireShots = 1
+		Weapon2.Ammo = 10
+		Weapon2 ->* VehicleType.smASM
+		Weapon2.MaxRange = 50
+		Weapon2.Punch@MaxRange = 95
+		Weapon2.Punch@MinRange = 95
+		Weapon2.ReactionFireShots = 1
+		Weapon2.WeaponEffectiveness.trooper = 0
+		Weapon2.Ammo = 10
+		Weapon3 ->* VehicleType.TDW
+		Weapon3.MaxRange = 40
+	} Weapons
    
 } VehicleType

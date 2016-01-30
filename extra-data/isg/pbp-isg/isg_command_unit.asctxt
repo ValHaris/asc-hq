@@ -1,125 +1,124 @@
 VehicleType { 
-   Name = ISG Command Unit
-   parent = 400
-   ID = 12006
+	Name = ISG Command Unit
+	parent = 400
+	ID = 12006
 
-   Description = Command Unit
-   Infotext = [Waechter der Invasionslandezone]
-   Picture = isg_command_unit.png
+	Description = Command Unit
+	InfoText = [Waechter der Invasionslandezone]
+	Picture = isg_command_unit.png
 
-   ConstructionCost { 
-      CalculationMethod = manual
-      Energy = 10000
-      Material = 10000
-      fuel = 0
-   } ConstructionCost
+	ConstructionCost { 
+		CalculationMethod = manual
+		Energy = 10000
+		Material = 10000
+		fuel = 0
+	} ConstructionCost
 
-   Features = Sonar satelliteview MoveDuringReactionFire
-   Armor = 5000
-   minFieldRepairDamage = 80
-   View = 150
-   Jamming = 105
-   Category = building|turret|object
-   MaxSurvivableStorm = 255
-   ResourceDrillingRange = 0
-   SelfRepairRate = 0
-   Weight = 20000
+	Features = Sonar satelliteview MoveDuringReactionFire
+	Armor = 5000
+	minFieldRepairDamage = 80
+	View = 150
+	Jamming = 105
+	Category = building|turret|object
+	MaxSurvivableStorm = 255
+	ResourceDrillingRange = 0
+	SelfRepairRate = 0
+	Weight = 20000
 
-   Height = ground_level 
-   Tank { 
-      Energy = 0
-      Material = 0
-      fuel = 0
-   } Tank
-   FuelConsumption = 0
-   Movement = 0 0 0 0 0 0 0 0 
-   TerrainAccess { 
-      terrain_any = runway hard_sand lowland soft_sand
-      terrain_all = 
-      terrain_not = 
-      terrain_kill = lava
-   } TerrainAccess
+	Height = ground_level 
+	Tank { 
+		Energy = 0
+		Material = 0
+		fuel = 0
+	} Tank
+	FuelConsumption = 0
+	Movement = 0 0 0 0 0 0 0 0 
+	TerrainAccess { 
+		terrain_any = runway hard_sand lowland soft_sand
+		terrain_all = 
+		terrain_not = 
+		terrain_kill = lava
+	} TerrainAccess
 
-   Construction { 
-      Buildings = 
-      Vehicles =  
-      Objects = 
-      ObjectsRemovable = 
-      ObjectGroupsRemovable = 
-   } Construction
+	Construction { 
+		Buildings = 
+		Vehicles =  
+		Objects = 
+		ObjectsRemovable = 
+		ObjectGroupsRemovable = 
+	} Construction
 
-   WaitForAttack = false
-   Weapons { 
-      Number = 5
+	WaitForAttack = false
+	Weapons { 
+		Number = 5
 
-      Weapon0 ->* VehicleType.SSM
-      Weapon0.type = laser shootable
-      Weapon0.targets = submerged floating ground_level 
-      Weapon0.WeaponEffectiveness.default = 0
-      Weapon0.WeaponEffectiveness.trooper = 0
-      Weapon0.HitAccuracy.d1 = 100
-      Weapon0.LaserRechargeRate = 1
-      Weapon0.LaserRechargeCost.material = 0
-      Weapon0.LaserRechargeCost.fuel = 0
-      Weapon0.MaxRange = 120
-      Weapon0.MinRange = 20
-      Weapon0.Punch@MaxRange = 130
-      Weapon0.Punch@MinRange = 130
-      Weapon0.Ammo = 6
-      Weapon0.ReactionFireShots = 2
+		Weapon0 ->* VehicleType.SSM
+		Weapon0.Type = laser shootable
+		Weapon0.targets = submerged floating ground_level 
+		Weapon0.WeaponEffectiveness.default = 0
+		Weapon0.WeaponEffectiveness.trooper = 0
+		Weapon0.HitAccuracy.d1 = 100
+		Weapon0.LaserRechargeRate = 1
+		Weapon0.LaserRechargeCost.Material = 0
+		Weapon0.LaserRechargeCost.fuel = 0
+		Weapon0.MaxRange = 120
+		Weapon0.MinRange = 20
+		Weapon0.Punch@MaxRange = 130
+		Weapon0.Punch@MinRange = 130
+		Weapon0.Ammo = 6
+		Weapon0.ReactionFireShots = 2
 
-      Weapon1 ->* VehicleType.SAMH
-      Weapon1.type = laser shootable
-      Weapon1.LaserRechargeRate = 1
-      Weapon1.LaserRechargeCost.material = 0
-      Weapon1.LaserRechargeCost.fuel = 0
-      Weapon1.MaxRange = 100
-      Weapon1.MinRange = 20
-      Weapon1.Punch@MaxRange = 100
-      Weapon1.Punch@MinRange = 100
-      Weapon1.Ammo = 6
+		Weapon1 ->* VehicleType.SAMH
+		Weapon1.Type = laser shootable
+		Weapon1.LaserRechargeRate = 1
+		Weapon1.LaserRechargeCost.Material = 0
+		Weapon1.LaserRechargeCost.fuel = 0
+		Weapon1.MaxRange = 100
+		Weapon1.MinRange = 20
+		Weapon1.Punch@MaxRange = 100
+		Weapon1.Punch@MinRange = 100
+		Weapon1.Ammo = 6
 
-      Weapon2 ->* VehicleType.SOM
-      Weapon2.type = laser shootable
-      Weapon2.LaserRechargeRate = 1
-      Weapon2.LaserRechargeCost.material = 0
-      Weapon2.LaserRechargeCost.fuel = 0
-      Weapon2.MaxRange = 120
-      Weapon2.MinRange = 10
-      Weapon2.Punch@MaxRange = 100
-      Weapon2.Punch@MinRange = 100
-      Weapon2.Ammo = 5
+		Weapon2 ->* VehicleType.SOM
+		Weapon2.Type = laser shootable
+		Weapon2.LaserRechargeRate = 1
+		Weapon2.LaserRechargeCost.Material = 0
+		Weapon2.LaserRechargeCost.fuel = 0
+		Weapon2.MaxRange = 120
+		Weapon2.MinRange = 10
+		Weapon2.Punch@MaxRange = 100
+		Weapon2.Punch@MinRange = 100
+		Weapon2.Ammo = 5
 
-      Weapon3 ->* VehicleType.Laser_gun
-      Weapon3.WeaponEffectiveness ->* VehicleType.AntiAirWeapon
-      Weapon3.targets = low_level_flight medium_level_flight high_level_flight 
-      Weapon3.HitAccuracy.u1 = 100
-      Weapon3.HitAccuracy.u2 = 100
-      Weapon3.HitAccuracy.u3 = 100
-      Weapon3.LaserRechargeRate = 2
-      Weapon3.LaserRechargeCost.material = 0
-      Weapon3.LaserRechargeCost.fuel = 0
-      Weapon3.MaxRange = 30
-      Weapon3.MinRange = 10
-      Weapon3.Punch@MaxRange = 85
-      Weapon3.Punch@MinRange = 85
-      Weapon3.Ammo = 10
-      Weapon3.ReactionFireShots = 4
+		Weapon3 ->* VehicleType.Laser_gun
+		Weapon3.WeaponEffectiveness ->* VehicleType.AntiAirWeapon
+		Weapon3.targets = low_level_flight medium_level_flight high_level_flight 
+		Weapon3.HitAccuracy.u1 = 100
+		Weapon3.HitAccuracy.u2 = 100
+		Weapon3.HitAccuracy.u3 = 100
+		Weapon3.LaserRechargeRate = 2
+		Weapon3.LaserRechargeCost.Material = 0
+		Weapon3.LaserRechargeCost.fuel = 0
+		Weapon3.MaxRange = 30
+		Weapon3.MinRange = 10
+		Weapon3.Punch@MaxRange = 85
+		Weapon3.Punch@MinRange = 85
+		Weapon3.Ammo = 10
+		Weapon3.ReactionFireShots = 4
 
-      Weapon4 ->* VehicleType.Laser_gun
-      Weapon4.WeaponEffectiveness ->* VehicleType.Anti100
-      Weapon4.targets = submerged floating ground_level 
-      Weapon4.HitAccuracy.u1 = 100
-      Weapon4.HitAccuracy.u2 = 100
-      Weapon4.HitAccuracy.u3 = 100
-      Weapon4.LaserRechargeRate = 2
-      Weapon4.LaserRechargeCost.material = 0
-      Weapon4.LaserRechargeCost.fuel = 0
-      Weapon4.MaxRange = 50
-      Weapon4.MinRange = 10
-      Weapon4.Punch@MaxRange = 80
-      Weapon4.Punch@MinRange = 80
-      Weapon4.Ammo = 10
-      Weapon4.ReactionFireShots = 4
-   } Weapons
+		Weapon4 ->* VehicleType.Laser_gun
+		Weapon4.WeaponEffectiveness ->* VehicleType.Anti100
+		Weapon4.targets = submerged floating ground_level 
+		Weapon4.HitAccuracy.d1 = 100
+		Weapon4.HitAccuracy.u2 = 100
+		Weapon4.LaserRechargeRate = 2
+		Weapon4.LaserRechargeCost.Material = 0
+		Weapon4.LaserRechargeCost.fuel = 0
+		Weapon4.MaxRange = 50
+		Weapon4.MinRange = 10
+		Weapon4.Punch@MaxRange = 80
+		Weapon4.Punch@MinRange = 80
+		Weapon4.Ammo = 10
+		Weapon4.ReactionFireShots = 4
+	} Weapons
 } VehicleType

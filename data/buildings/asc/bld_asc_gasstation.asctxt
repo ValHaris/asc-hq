@@ -4,7 +4,7 @@ BuildingType {
 	parent = 499
 	Infotext = [Tankstelle für alle am Boden befindlichen oder schwimmenden Einheiten.]
 
-	Features = externalFuelTransfer solar_power_plant
+	Features = externalFuelTransfer externalMaterialTransfer solar_power_plant
 	Armor = 300
 	ExternalLoading = ground_level floating
 

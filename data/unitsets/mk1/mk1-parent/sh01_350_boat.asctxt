@@ -1,25 +1,25 @@
 VehicleType {
-   abstract = true 
-   parent = 400 401 402
-   ID = 350
+	Abstract = true 
+	parent = 400 401 402
+	ID = 350
 
-   Name = boat
-   Description = boat
-   Infotext = []
-   WreckageObject = 441
-   GuideSortHelp = 0 350 0 0 0 0 0 0 0 0
+	Name = boat
+	Description = boat
+	WreckageObject = 441
+	GuideSortHelp = 0 350 0 0 0 0 0 0 0 0
+	InfoText = []
 
+	Armor = 500
+	View = 40
+	Jamming = 0
 
-   Armor = 500
-   View = 40
-   Jamming = 0
-   WaitForAttack = false
-   Features = MoveDuringReactionFire
-   Category = light_ship
-   MaxSurvivableStorm = 160
-   ResourceDrillingRange = 0
-   SelfRepairRate = 0
-   Weight = 80
+	Features = MoveDuringReactionFire
+	Category = light_ship
+	minFieldRepairDamage = 5
+	MaxSurvivableStorm = 160
+	ResourceDrillingRange = 0
+	SelfRepairRate = 0
+	Weight = 80
 
    Height = floating 
    Tank { 
@@ -38,6 +38,7 @@ VehicleType {
       Objects = 
    } Construction
 
+	WaitForAttack = false
    Weapons { 
       Initiative = 0
       Number = 0

@@ -25,7 +25,7 @@ BuildingType {
 		MaxLoadableUnits = 18
 		MaxLoadableUnitSize = 200
 		MaxLoadableMass = 1000
-		CategoriesNOT = default building|turret|object rail_vehicle light_aircraft medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship helicopter
+		CategoriesNOT = default building|turret|object light_aircraft medium_aircraft heavy_aircraft light_ship medium_ship heavy_ship helicopter
 	} Transportation
 
 	MaxResourceProduction { 

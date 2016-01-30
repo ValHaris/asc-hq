@@ -1,66 +1,65 @@
 VehicleType { 
-   Name = Duke
-   parent = 365
-   ID = 1291
+	Name = Duke
+	parent = 365
+	ID = 1291
    
-   Description = Heli-Trans U-Boot
-   Infotext = [DUKE
-
+	Description = Heli-Trans U-Boot
+	Picture = mk4s_duke.png
+	WreckageObject = 14291
+	InfoText = [DUKE
 
 Unterseeboot mit Helikopterbasis. Dieses auf dem Pluto basierende U-Boot dient als tauchfähiger Helikopter- und Drohnenträger. Es bietet nicht nur Transportmöglichkeit und Schutz, sondern auch kompletten Service sowohl für Helikopter als auch für die Drohnen der Thunder Reihe.
 Die Raketenbatterien wurden verkleinert und der Torpedovorrat verringert; es wurden Flugabwehrkanonen eingebaut um den Flakschutz im aufgetauchten Zustand zu verbessern.
 Geleitschutz sollte verfügbar sein. ]
-   picture = mk4s_duke.png
-   wreckageobject = 14291
 
-   Armor += 500
-   View = 50
-   Transportation ->* VehicleType.TransHeliCarrier 
-   Transportation.EntranceSystemNum = 4
-   Transportation.EntranceSystem3 ->* VehicleType.carrier
-   Transportation.EntranceSystem3.RequireUnitFunction = paratrooper
+	Armor += 500
+	View = 50
+	Transportation ->* VehicleType.TransHeliCarrier 
+	Transportation.EntranceSystemNum = 4
+	Transportation.EntranceSystem3 ->* VehicleType.carrier
+	Transportation.EntranceSystem3.RequireUnitFunction = paratrooper
 
-   Features += self_repairing jam_only_own_field Repair_Facility moveduringreactionfire
-   Category = heavy_ship
-   SelfRepairRate = 10
-   Weight += 500
+	Features += self_repairing jam_only_own_field Repair_Facility moveduringreactionfire
+	Category = heavy_ship
+	SelfRepairRate = 10
+	Weight += 500
 
-   Tank { 
-      Energy = 0
-      Material = 10000
-      fuel = 30000
-   } Tank
-   FuelConsumption = 40
-   TerrainAccess ->* VehicleType.very_bigship_terrain 
-   Movement = 55 55 52 0 0 0 0 0 
+	Tank { 
+		Energy = 0
+		Material = 10000
+		fuel = 30000
+	} Tank
+	FuelConsumption = 40
+	TerrainAccess ->* VehicleType.very_bigship_terrain 
+	Movement = 55 55 52 0 0 0 0 0 
 
-   waitforattack = true
-   Weapons { 
-      Number = 5
-      Weapon0 ->* VehicleType.UTorp 
-      Weapon0.MaxRange = 30
-      Weapon0.Punch@MaxRange = 120
-      Weapon0.Punch@MinRange = 120
-      Weapon0.Ammo = 20
+	WaitForAttack = true
+	Weapons { 
+		Number = 5
+		Weapon0 ->* VehicleType.UTorp 
+		Weapon0.MaxRange = 30
+		Weapon0.Punch@MaxRange = 125
+		Weapon0.Punch@MinRange = 125
+		Weapon0.Ammo = 20
 
-      Weapon1 ->* VehicleType.SAMH
-      Weapon1.shotFrom = submerged floating 
-      Weapon1.MaxRange = 30
-      Weapon1.Ammo = 30
-      Weapon1.ReactionfireShots = 1
-      Weapon1.Punch@MaxRange = 80
-      Weapon1.Punch@MinRange = 80
+		Weapon1 ->* VehicleType.SAMH
+		Weapon1.shotFrom = submerged floating 
+		Weapon1.MaxRange = 30
+		Weapon1.Ammo = 30
+		Weapon1.ReactionFireShots = 1
+		Weapon1.Punch@MaxRange = 80
+		Weapon1.Punch@MinRange = 80
 
-      Weapon2 ->* VehicleType.SAMH
-	  Weapon2.Type = ground_missile shootable
-	  Weapon2.Ammo = 30
-      Weapon2.Punch@MaxRange = 75
-      Weapon2.Punch@MinRange = 75
+		Weapon2 ->* VehicleType.SAMH
+		Weapon2.Type = ground_missile shootable
+		Weapon2.Ammo = 30
+		Weapon2.Punch@MaxRange = 75
+		Weapon2.Punch@MinRange = 75
 
-      Weapon3 ->* VehicleType.AmmoMG
-      Weapon3.Ammo = 100
-      Weapon4 ->* VehicleType.AmmoBomb
-      Weapon4.Ammo = 30
+		Weapon3 ->* VehicleType.AmmoMG
+		Weapon3.Ammo = 100
+		Weapon4 ->* VehicleType.AmmoBomb
+		Weapon4.Ammo = 30
 
-   } Weapons
+	} Weapons
 } VehicleType

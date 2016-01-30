@@ -8,9 +8,9 @@
 
 	ConstructionCost { 
 		CalculationMethod = auto
-		energy =
-		material =
-		fuel = 
+		Energy =
+		Material =
+		Fuel = 
 	} ConstructionCost
 
 	Construction { 
@@ -38,6 +38,7 @@
 ;   WeaponX.WeaponEffectiveness ->* VehicleType.AntiTankMissile
 	AntiTankMissile {      
 		trooper = 0
+		default = 0
 		rail_vehicle = 120
 		building|turret|object = 120
 		hoovercraft = 120
@@ -557,11 +558,11 @@
 		MaxRange = 20
 		MinRange = 10
 		Ammo = 6
-		Punch@MaxRange = 100
-		Punch@MinRange = 100
+		Punch@MaxRange = 110
+		Punch@MinRange = 110
 
 		HitAccuracy ->* VehicleType.HitAcc
-		HitAccuracy.d1 = 85
+		HitAccuracy.d1 = 100
 		HitAccuracy.0 = 100
 		HitAccuracy.u1 = 100
 
@@ -580,8 +581,8 @@
 			medium_wheeled_vehicle = 100
 			heavy_wheeled_vehicle = 100
          
-			light_ship = 80
-			medium_ship  = 90
+			light_ship = 70
+			medium_ship  = 85
 			heavy_ship = 100
 
 			light_aircraft = 70
@@ -597,7 +598,7 @@
 	SUSTorp ->* Vehicletype.STorp
 	SUSTorp.targets = floating submerged
 	SUSTorp.shotFrom = floating
-	SUSTorp.HitAccuracy.d1 = 100
+	SUSTorp.HitAccuracy.d1 = 90
 	SUSTorp.HitAccuracy.u1 = 0
 
 	SUTorp ->* Vehicletype.SUSTorp

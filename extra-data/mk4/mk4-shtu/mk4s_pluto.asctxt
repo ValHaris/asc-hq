@@ -1,14 +1,14 @@
 VehicleType { 
-   Name = Pluto
-   parent = 365
-   ID = 1267
+	Name = Pluto
+	parent = 365
+	ID = 1267
 
-   Description = Raketen U-Boot
-   picture = mk4s_pluto.png
-   InfoImage = mk4s_pluto.jpg
-   wreckageobject = 14267
-   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
-   Infotext = [Schon in den ersten hochtechnisierten Kriegen zeigte sich, dass die Beherrschung der Meere nicht nur durch große Kriegsschiffe möglich war, sondern dass auch U-Boot-Flotten dazu in der Lage waren. Ein Rudel Jagd-U-Boote kann ein ungeschützt operierendes Schlachtschiff ohne große Mühe versenken und ganze Flotten von Transportern in den Schutz sicherer Häfen verbannen. Was den U-Booten bis dahin jedoch fehlte, waren weitreichende Waffen, um an den Zerstörereskorten vorbei Treffer anbringen, oder Ziele an Land bekämpfen zu können. Die wohl beste Lösung für dieses Problem stellen bis jetzt die Raketen-U-Boote (auch CM-U-Boote genannt) dar, welche bei der chromonischen Marine durch die Boote der Pluto-Klasse repräsentiert werden.
+	Description = Raketen U-Boot
+	Picture = mk4s_pluto.png
+	InfoImage = mk4s_pluto.jpg
+	WreckageObject = 14267
+	GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+	InfoText = [Schon in den ersten hochtechnisierten Kriegen zeigte sich, dass die Beherrschung der Meere nicht nur durch große Kriegsschiffe möglich war, sondern dass auch U-Boot-Flotten dazu in der Lage waren. Ein Rudel Jagd-U-Boote kann ein ungeschützt operierendes Schlachtschiff ohne große Mühe versenken und ganze Flotten von Transportern in den Schutz sicherer Häfen verbannen. Was den U-Booten bis dahin jedoch fehlte, waren weitreichende Waffen, um an den Zerstörereskorten vorbei Treffer anbringen, oder Ziele an Land bekämpfen zu können. Die wohl beste Lösung für dieses Problem stellen bis jetzt die Raketen-U-Boote (auch CM-U-Boote genannt) dar, welche bei der chromonischen Marine durch die Boote der Pluto-Klasse repräsentiert werden.
 
 Dieses mussten erheblich größer gebaut werden, als zum Beispiel die Standard-Jagd-U-Boote der Barracuda- und der Orca-Klasse! Größere Treibstoffvorräte, Raketenabschussrampen und auch die Munition selber benötigen erheblich mehr Platz. Teilweise sind diese Boote daher über 200m lang geraten. Im Vergleich zu den Pendants der Rehanern und den Terranern kommt bei den Booten der Pluto-Klasse noch hinzu, dass sie zudem noch über weitere Waffensysteme, Transportkapazitäten für andere Einheiten und auch über Bunker für Munition und Material zu Versorgungs- und Reparaturzwecken verfügen. Daher besann man sich bald auf alte Entwürfe eines Prätorianer-U-Boots, welches für seine Größe und Schlagkraft regelrecht berüchtigt gewesen war und die geforderten Eigenschaften zum Großteil schon beinhaltete.
 
@@ -19,55 +19,55 @@ Die Plutos haben in ihrer langen Laufbahn innerhalb des chromonischen Militärs b
 Aufgrund dieser Änderungen sind die Torpedos, sowie die Luftabwehrraketen daher eher als Sekundär-, bzw. reine Defensivbewaffnung anzusehen. Wesentlich wichtiger hingegen sind die konventionellen Kurzstreckenraketen und Marschflugkörper, welche eine erhebliche Reichweite und Durchschlagskraft aufweisen. Somit stellt das Pluto eindeutig eine strategische Waffe dar und sollte auch aufgrund der hohen Baukosten niemals ungeschützt oder in vorderster Front operieren, solange der Gegner noch über eigene Anti-U-Boot-Waffen verfügt.
 ]
 
-   Armor += 500
-   View += 10
-   Features += self_repairing Repair_Facility moveduringreactionfire
-   SelfRepairRate = 10
-   Weight += 500
+	Armor += 500
+	View += 10
+	Features += self_repairing Repair_Facility moveduringreactionfire
+	SelfRepairRate = 10
+	Weight += 500
 
-   Transportation ->* VehicleType.TransSubTrooper 
-   Transportation.MaxLoadableUnits = 3
-   Transportation.MaxLoadableUnitSize = 30
-   Transportation.MaxLoadableMass = 90
-   Transportation.CategoriesNOT = hoovercraft medium_tracked_vehicle heavy_tracked_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle rail_vehicle medium_aircraft medium_ship building|turret|object light_aircraft heavy_aircraft light_ship heavy_ship 
+	Transportation ->* VehicleType.TransSubTrooper 
+	Transportation.MaxLoadableUnits = 3
+	Transportation.MaxLoadableUnitSize = 30
+	Transportation.MaxLoadableMass = 90
+	Transportation.CategoriesNOT = hoovercraft medium_tracked_vehicle heavy_tracked_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle rail_vehicle medium_aircraft medium_ship building|turret|object light_aircraft heavy_aircraft light_ship heavy_ship 
 
-   Tank { 
-      Material = 10000
-      fuel = 20000
-   } Tank
-   Movement = 55 55 52 0 0 0 0 0 
+	Tank { 
+		Material = 10000
+		fuel = 20000
+	} Tank
+	Movement = 55 55 52 0 0 0 0 0 
 
-   WaitForAttack = true
-   Weapons { 
-      Number = 6
-      Weapon0 ->* VehicleType.UTorp 
-      Weapon0.Ammo = 30
-	  Weapon0.Punch@MinRange = 120
-	  Weapon0.Punch@MaxRange = 120
-      Weapon0.MaxRange = 30
+	WaitForAttack = true
+	Weapons { 
+		Number = 6
+		Weapon0 ->* VehicleType.UTorp 
+		Weapon0.Ammo = 30
+		Weapon0.Punch@MinRange = 125
+		Weapon0.Punch@MaxRange = 125
+		Weapon0.MaxRange = 30
 	  
-      Weapon1 ->* VehicleType.CMU 
-      Weapon1.Ammo = 6
+		Weapon1 ->* VehicleType.CMU 
+		Weapon1.Ammo = 6
 
-      Weapon2 ->* VehicleType.ShM 
-      Weapon2.MaxRange = 70
-      Weapon2.MinRange = 30
-      Weapon2.Ammo = 8
-      Weapon2.Punch@MaxRange = 95
-      Weapon2.Punch@MinRange = 95
-      Weapon2.ReactionFireShots = 0
+		Weapon2 ->* VehicleType.ShM 
+		Weapon2.MaxRange = 70
+		Weapon2.MinRange = 30
+		Weapon2.Ammo = 8
+		Weapon2.Punch@MaxRange = 95
+		Weapon2.Punch@MinRange = 95
+		Weapon2.ReactionFireShots = 0
+	
+		Weapon3 ->* VehicleType.SAMH 
+		Weapon3.shotFrom = submerged floating 
+		Weapon3.MaxRange = 30
+		Weapon3.Ammo = 15
+		Weapon3.ReactionFireShots = 1
+		Weapon3.Punch@MaxRange = 80
+		Weapon3.Punch@MinRange = 80
 
-      Weapon3 ->* VehicleType.SAMH 
-      Weapon3.shotFrom = submerged floating 
-      Weapon3.MaxRange = 30
-      Weapon3.Ammo = 15
-      Weapon3.ReactionFireShots = 1
-      Weapon3.Punch@MaxRange = 80
-      Weapon3.Punch@MinRange = 80
-
-      Weapon4 ->* VehicleType.AmmoMG
-      Weapon4.Ammo = 100
-      Weapon5 ->* VehicleType.AmmoBomb
-      Weapon5.Ammo = 30
-   } Weapons
+		Weapon4 ->* VehicleType.AmmoMG
+		Weapon4.Ammo = 100
+		Weapon5 ->* VehicleType.AmmoBomb
+		Weapon5.Ammo = 30
+	} Weapons
 } VehicleType

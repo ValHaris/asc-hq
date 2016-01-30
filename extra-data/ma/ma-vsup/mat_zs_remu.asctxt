@@ -25,7 +25,7 @@ Der ZS REMU ist darüber hinaus recht schnell unterwegs, was ihm ermöglicht, in F
    Movement += 0 0 0 20 0 0 0 0 
 
    Weapons { 
-      Number = 5
+      Number = 6
       Weapon0 ->* VehicleType.Def_MG
       Weapon0.Ammo = 120
       Weapon1 ->* VehicleType.ServiceGround
@@ -35,5 +35,7 @@ Der ZS REMU ist darüber hinaus recht schnell unterwegs, was ihm ermöglicht, in F
       Weapon3.Ammo = 150
       Weapon4 ->* VehicleType.AmmoTorp 
       Weapon4.Ammo = 90
+      Weapon5 ->* VehicleType.AmmoSM 
+      Weapon5.Ammo = 90
    } Weapons
 } VehicleType
