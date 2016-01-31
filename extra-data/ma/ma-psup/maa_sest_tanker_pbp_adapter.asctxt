@@ -1,5 +1,0 @@
-Techadapter {
-   ; Tanksenkrechtstarter
-   Name = 22517
-   TechnologiesRequired = 22517
-} TechAdapter

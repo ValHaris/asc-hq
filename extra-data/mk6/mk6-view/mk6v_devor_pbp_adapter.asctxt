@@ -1,5 +1,0 @@
-Techadapter {
-   Name = 15242
-   ;Bezeichnung der verknüpften Technologie: Devo R
-   TechnologiesRequired = 15242
-} TechAdapter

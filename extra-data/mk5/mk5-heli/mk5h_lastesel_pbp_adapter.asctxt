@@ -1,5 +1,0 @@
-Techadapter {
-   Name = 1450
-   ;Bezeichnung der verknüpften Technologie: Lastesel
-   TechnologiesRequired = 1450
-} TechAdapter

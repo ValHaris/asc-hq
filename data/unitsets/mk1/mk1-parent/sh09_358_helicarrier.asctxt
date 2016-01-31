@@ -1,47 +1,46 @@
 VehicleType { 
-   abstract = true 
-   parent = 400 401 402
-   ID = 358
+	Abstract = true 
+	parent = 400 401 402
+	ID = 358
 
-   Name = helicopter carrier
-   Description = helicopter carrier
-   Infotext = []
-   WreckageObject = 441
-   GuideSortHelp = 520 358 0 0 0 0 0 0 0 0
+	Name = helicopter carrier
+	Description = helicopter carrier
+	WreckageObject = 441
+	GuideSortHelp = 520 358 0 0 0 0 0 0 0 0
+	InfoText = []
 
+	Armor = 1300
+	View = 70
+	Jamming = 0
+	Features = MoveDuringReactionFire Repair_Facility
+	Category = heavy_ship
+	minFieldRepairDamage = 10
+	MaxSurvivableStorm = 240
+	ResourceDrillingRange = 0
+	SelfRepairRate = 0
+	Weight = 2000
+	Transportation ->* Vehicletype.TransHeliCarrier 
 
-   Armor = 1300
-   View = 70
-   Jamming = 0
-   WaitForAttack = false
-   Features = MoveDuringReactionFire Repair_Facility
-   Category = heavy_ship
-   MaxSurvivableStorm = 240
-   ResourceDrillingRange = 0
-   SelfRepairRate = 0
-   Weight = 2000
-   Transportation ->* Vehicletype.TransHeliCarrier 
+	Height = floating 
+	Tank { 
+		Energy = 0
+		Material = 30000
+		fuel = 100000
+	} Tank
+	FuelConsumption = 32
+	Movement = 0 0 70 0 0 0 0 0 
+	TerrainAccess ->* VehicleType.mediumship_terrain
+	MovementSound = med_ship_a_s.ogg
 
-   Height = floating 
-   Tank { 
-      Energy = 0
-      Material = 30000
-      fuel = 100000
-   } Tank
-   FuelConsumption = 32
-   Movement = 0 0 70 0 0 0 0 0 
-   TerrainAccess ->* VehicleType.mediumship_terrain
-   MovementSound = med_ship_a_s.ogg
+	Construction { 
+		Buildings = 
+		Vehicles = 
+		Objects = 
+	} Construction
 
-   Construction { 
-      Buildings = 
-      Vehicles = 
-      Objects = 
-   } Construction
-
-   Weapons { 
-      Initiative = 0
-      Number = 0
-   } Weapons
+	WaitForAttack = false
+	Weapons { 
+		Number = 0
+	} Weapons
 
 } VehicleType

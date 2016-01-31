@@ -1,46 +1,46 @@
 VehicleType { 
-   abstract = true 
-   parent = 400 401 402 491
-   ID = 367
+	Abstract = true 
+	parent = 400 401 402 491
+	ID = 367
 
-   Name = speedship
-   Description = speedship
-   Infotext = []
-   GuideSortHelp = 518 367 0 0 0 0 0 0 0 0
+	Name = Speedship
+	Description = Speedship
+	GuideSortHelp = 518 367 0 0 0 0 0 0 0 0
+	InfoText = []
 
+	Armor = 700
+	View = 30
+	Jamming = 29
+	Features = move_after_attack jam_only_own_field
+	Category = light_ship
+	minFieldRepairDamage = 10
+	MaxSurvivableStorm = 170
+	ResourceDrillingRange = 0
+	SelfRepairRate = 0
+	Weight = 400
 
-   Armor = 700
-   View = 30
-   Jamming = 29
-   WaitForAttack = false
-   Features = move_after_attack jam_only_own_field
-   Category = light_ship
-   MaxSurvivableStorm = 170
-   ResourceDrillingRange = 0
-   SelfRepairRate = 0
-   Weight = 400
-   Transportation ->* VehicleType.TransLowTrooper
+	Transportation ->* VehicleType.TransLowTrooper
 
-   Height = floating ground_level
-   Tank { 
-      Energy = 0
-      Material = 0
-      fuel = 2500
-   } Tank
-   FuelConsumption = 25
-   Movement = 0 0 75 120 0 0 0 0  
-   TerrainAccess ->* VehicleType.smallship_terrain 
-   MovementSound = hovercraft_s.ogg
+	Height = floating ground_level
+	Tank { 
+		Energy = 0
+		Material = 0
+		fuel = 2500
+	} Tank
+	FuelConsumption = 25
+	Movement = 0 0 75 120 0 0 0 0  
+	TerrainAccess ->* VehicleType.smallship_terrain 
+	MovementSound = hovercraft_s.ogg
 
-   Construction { 
-      Buildings = 
-      Vehicles = 
-      Objects = 
-   } Construction
+	Construction { 
+		Buildings = 
+		Vehicles = 
+		Objects = 
+	} Construction
 
-   Weapons { 
-      Initiative = 0
-      Number = 0
-   } Weapons
+	WaitForAttack = false
+	Weapons { 
+		Number = 0
+	} Weapons
 
 } VehicleType

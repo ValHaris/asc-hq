@@ -1,28 +1,27 @@
 VehicleType { 
-   Name = Victoria
-   parent = 364 
-   ID = 611
-   WreckageObject = 15611
+	Name = Victoria
+	parent = 364 
+	ID = 611
    
-   picture = mk3s_victoria.png
-   InfoImage = mk3s_victoria.jpg
-   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
+	Picture = mk3s_victoria.png
+	InfoImage = mk3s_victoria.jpg
+	WreckageObject = 15611
+	GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
 
-   Armor -= 100
+	Armor -= 100
 
-   Movement += 0 11 0 0 0 0 0 0 
+	Movement += 0 11 0 0 0 0 0 0 
 
-   Weapons { 
-      Initiative = 0
-      Number = 2
-      Weapon0 ->* VehicleType.UTorp 
-      Weapon0.Ammo = 8
-      Weapon0.Punch@MaxRange = 110
-      Weapon0.Punch@MinRange = 110
+	Weapons { 
+		Number = 2
+		Weapon0 ->* VehicleType.UTorp 
+		Weapon0.Ammo = 8
+		Weapon0.Punch@MaxRange = 115
+		Weapon0.Punch@MinRange = 115
 
-      Weapon1 ->* VehicleType.UTorp 
-      Weapon1.Ammo = 3
-      Weapon1.Punch@MaxRange = 125
-      Weapon1.Punch@MinRange = 125
-   } Weapons
+		Weapon1 ->* VehicleType.UTorp 
+		Weapon1.Ammo = 3
+		Weapon1.Punch@MaxRange = 130
+		Weapon1.Punch@MinRange = 130
+	} Weapons
 } VehicleType

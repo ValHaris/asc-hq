@@ -1,76 +1,72 @@
 VehicleType { 
-   Name = HOOVER
-   parent = 400 401 402 409
-   ID = 1410
+	Name = HOOVER
+	parent = 400 401 402 409
+	ID = 1410
 
-   Description = Seekampfhubschrauber
-   Picture = mk5h_hoover.pcx
-   WreckageObject = 1410
-   Infotext = []
+	Description = Seekampfhubschrauber
+	Picture = mk5h_hoover.pcx
+	WreckageObject = 1410
+	InfoText = []
    
-   Armor = 320
-   Weight = 45
-   Transportation ->* VehicleType.TransHeliTrooper 
-   Transportation.MaxLoadableUnitSize = 65
-   Transportation.MaxLoadableMass = 65
-   Transportation.CategoriesNOT = default light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle light_aircraft medium_aircraft heavy_aircraft medium_ship heavy_ship building|turret|object helicopter hoovercraft
-   Transportation.CargoMovementDivisor = 1.8
-   Transportation.EntranceSystemNum = 4
-   Transportation.EntranceSystem2.DisableAttack = false
-   Transportation.EntranceSystem3 ->* VehicleType.ParaDevice
-   Features += sonar
+	Features += sonar
+	Armor = 320
+	Weight = 45
 
-   Tank { 
-      Energy = 0
-      Material = 5000
-      fuel = 6000
-   } Tank
-   FuelConsumption = 20
+	Transportation ->* VehicleType.TransHeliTrooper 
+	Transportation.MaxLoadableUnitSize = 65
+	Transportation.MaxLoadableMass = 65
+	Transportation.CategoriesNOT = default light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle light_aircraft medium_aircraft heavy_aircraft medium_ship heavy_ship building|turret|object helicopter hoovercraft
+	Transportation.CargoMovementDivisor = 1.8
+	Transportation.EntranceSystemNum = 4
+	Transportation.EntranceSystem2.DisableAttack = false
+	Transportation.EntranceSystem3 ->* VehicleType.ParaDevice
 
-   TerrainAccess { 
-      terrain_any += Shallow_water Water Very_shallow_water 
-      terrain_all = 
-      terrain_not = deep_snow
-      terrain_kill = Lava deep_water
-   } TerrainAccess
-   MovementSound = jet_pass.ogg
+	Tank { 
+		Energy = 0
+		Material = 5000
+		fuel = 6000
+	} Tank
+	FuelConsumption = 20
 
-   Weapons { 
-      Number = 5
-      Weapon0 ->* VehicleType.Air_MG 
-      Weapon0.Ammo = 15
-      Weapon0.Punch@MaxRange = 45
-      Weapon0.Punch@MinRange = 45
+	TerrainAccess { 
+		terrain_any += Shallow_water Water Very_shallow_water 
+		terrain_all = 
+		terrain_not = deep_snow
+		terrain_kill = Lava deep_water
+	} TerrainAccess
+	MovementSound = jet_pass.ogg
 
-      Weapon1 ->* VehicleType.medBomb 
-      Weapon1.Ammo = 1
-      Weapon1.Punch@MaxRange = 95
-      Weapon1.Punch@MinRange = 95
+	Weapons { 
+		Number = 5
+		Weapon0 ->* VehicleType.Air_MG 
+		Weapon0.Ammo = 15
+		Weapon0.Punch@MaxRange = 45
+		Weapon0.Punch@MinRange = 45
+
+		Weapon1 ->* VehicleType.medBomb 
+		Weapon1.Ammo = 1
+		Weapon1.Punch@MaxRange = 95
+		Weapon1.Punch@MinRange = 95
       
-      Weapon2 ->* VehicleType.ATorp 
-      Weapon2.targets = submerged floating 
-      Weapon2.shotFrom = ground_level low_level_flight 
-      Weapon2.MaxRange = 20
-      Weapon2.Ammo = 2
-      Weapon2.Punch@MaxRange = 100
-      Weapon2.Punch@MinRange = 100
-      Weapon2.HitAccuracy.d2 = 100
+		Weapon2 ->* VehicleType.AUTorp 
+		Weapon2.shotFrom = ground_level low_level_flight 
+		Weapon2.Ammo = 2
 
-      Weapon3 ->* VehicleType.DCA
-      Weapon3.Ammo = 4
-      Weapon3.Punch@MaxRange = 120
-      Weapon3.Punch@MinRange = 120
+		Weapon3 ->* VehicleType.DCA
+		Weapon3.Ammo = 4
+		Weapon3.Punch@MaxRange = 120
+		Weapon3.Punch@MinRange = 120
+
+		Weapon4 ->* VehicleType.ServiceGround
       
-      Weapon4 ->* VehicleType.ServiceGround
-      
-      Weapon5 ->* VehicleType.AmmoMG
-      Weapon5.Ammo = 40 
+		Weapon5 ->* VehicleType.AmmoMG
+		Weapon5.Ammo = 40 
 
-      Weapon6 ->* VehicleType.AmmoBomb
-      Weapon6.Ammo = 40 
+		Weapon6 ->* VehicleType.AmmoBomb
+		Weapon6.Ammo = 40 
 
-      Weapon7 ->* VehicleType.AmmoSM
-      Weapon7.Ammo = 40 
+		Weapon7 ->* VehicleType.AmmoSM
+		Weapon7.Ammo = 40 
 
-   } Weapons
+	} Weapons
 } VehicleType

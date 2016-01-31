@@ -1,44 +1,41 @@
 VehicleType { 
-   Name = TUBL
-   parent = 359 493
-   ID = 22703
+	Name = TUBL
+	parent = 359 493
+	ID = 22703
    
-   Description = carrier submarine
-   Infotext = [Traegersystem für Senkrechtstarter auf See]
-   Picture = mas_tubl.pcx
-   WreckageObject = 436
+	Description = carrier submarine
+	InfoText = [Traegersystem für Senkrechtstarter auf See]
+	Picture = mas_tubl.pcx
+	WreckageObject = 436
    
-   Transportation.RequireUnitFunction = cruiserlanding
+	Transportation.RequireUnitFunction = cruiserlanding
 
-   Armor -= 200
-   View -= 10
+	Armor -= 200
+	View -= 10
 
-   Height = deep_submerged submerged floating
-   Movement = 66 66 70 0 0 0 0 0 
+	Height = deep_submerged submerged floating
+	Movement = 66 66 70 0 0 0 0 0 
 
-   Weapons { 
-      Number = 5
-      Weapon0 ->* VehicleType.UTorp 
-      Weapon0.Type = torpedo ammo_transfer shootable 
-      Weapon0.Ammo = 50
-      Weapon0.Punch@MaxRange = 90
-      Weapon0.Punch@MinRange = 90
-      Weapon0.MaxRange = 10
+	Weapons { 
+		Number = 5
+		Weapon0 ->* VehicleType.UTorp 
+		Weapon0.Ammo = 50
+		Weapon0.MaxRange = 10
 
-      Weapon1 ->* VehicleType.Ship_Flak
-	  Weapon1.targets = low_level_flight medium_level_flight high_level_flight
-      Weapon1.Punch@MaxRange = 75
-      Weapon1.MaxRange = 30
-      Weapon1.Ammo = 80
-      Weapon1.ReactionFireShots = 1
+		Weapon1 ->* VehicleType.Ship_Flak
+		Weapon1.targets = low_level_flight medium_level_flight high_level_flight
+		Weapon1.Punch@MaxRange = 75
+		Weapon1.MaxRange = 30
+		Weapon1.Ammo = 80
+		Weapon1.ReactionFireShots = 1
 
-      Weapon2 ->* VehicleType.Ship_Flak
-      Weapon2.MaxRange = 40
-      Weapon2.Ammo = 10
+		Weapon2 ->* VehicleType.Ship_Flak
+		Weapon2.MaxRange = 40
+		Weapon2.Ammo = 10
 
-      Weapon3 ->* vehicleType.AmmoMG 
-      Weapon3.Ammo = 40
-      Weapon4 ->* VehicleType.AmmoBomb 
-      Weapon4.Ammo = 40
-   } Weapons
+		Weapon3 ->* VehicleType.AmmoMG 
+		Weapon3.Ammo = 40
+		Weapon4 ->* VehicleType.AmmoBomb 
+		Weapon4.Ammo = 40
+	} Weapons
 } VehicleType

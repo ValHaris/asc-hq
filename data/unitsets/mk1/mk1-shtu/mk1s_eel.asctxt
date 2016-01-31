@@ -1,10 +1,13 @@
 VehicleType { 
-   Name = Eel
-   parent = 364 
-   ID = 34
+	Name = Eel
+	parent = 364 
+	ID = 34
 
-   Description = submarine
-   Infotext = [#font2#submarine#font1##crt##crt#A submarine is a self-propelled
+	Description = submarine
+	Picture = MK1s_eel.pcx
+	WreckageObject = 434
+	GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+	InfoText = [#font2#submarine#font1##crt##crt#A submarine is a self-propelled
               vessel capable of operating underwater. The submarines that
               were used in the two world wars could remain underwater for
               only a few hours at a time. They functioned at the surface for
@@ -194,21 +197,17 @@ VehicleType {
               include those carrying the POSEIDON missile and a growing new
               fleet of TRIDENT submarines, which were first launched in the
               early 1980s.#crt#]
-   picture = MK1s_eel.pcx
-   WreckageObject = 434
-   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
 
-   Armor += 100
+	Armor += 100
 
-   Weapons { 
-      Initiative = 0
-      Number = 2
-      Weapon0 ->* VehicleType.UTorp 
-      Weapon0.Ammo = 10
-      Weapon0.Punch@MaxRange = 110
-      Weapon0.Punch@MinRange = 110
+	Weapons { 
+		Number = 2
+		Weapon0 ->* VehicleType.UTorp 
+		Weapon0.Ammo = 10
+		Weapon0.Punch@MaxRange = 115
+		Weapon0.Punch@MinRange = 115
 
-      Weapon1 ->* VehicleType.Ship_MG 
-      Weapon1.Ammo = 10
-   } Weapons
+		Weapon1 ->* VehicleType.Ship_MG 
+		Weapon1.Ammo = 10
+	} Weapons
 } VehicleType

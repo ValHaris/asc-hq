@@ -1,20 +1,20 @@
 package {
-   Name = PBPdata
-   Description = Optionales Unit-Set Paket. Beinhaltet die zusaetzlichen Rassen: Cromoner, Outlaw, Teccnols, Malaner und SY. Sowie die ISG-Einheiten und personalUnits der Spieler. Website: www.battle-planet.de
-   version = 127.1
+	Name = PBPdata
+	Description = Optionales Unit-Set Paket. Beinhaltet die zusaetzlichen alt-ASC/PBP Rassen: Cromoner, Outlaw, Teccnols, Malaner und SY. Sowie die ISG-Einheiten und personalUnits der Spieler. Die Sets werden in v2 Version umgewandelt.
+	version = 141.2
 
-   DependencyCount = 3 
-   Dependency0 {
-      package = ASC 
-      version = 2.7.127.0 
-   } Dependency0 
-   Dependency1 { 
-      package = ASCdata
-      version = 2.7.127.0
-   } Dependency1
-   Dependency2 { 
-      package = PBPdata
-      version = 127.1
-   } Dependency2
+	DependencyCount = 3 
+	Dependency0 {
+		package = ASC 
+		version = 2.7.127.0 
+	} Dependency0 
+	Dependency1 { 
+		package = ASCdata
+		version = 2.7.141.2
+	} Dependency1
+	Dependency2 { 
+		package = PBPdata
+		version = 141.2
+	} Dependency2
 } package
 

@@ -1,5 +1,0 @@
-Techadapter {
-   Name = 1430
-   ;Bezeichnung der verknüpften Technologie: PRD 2
-   TechnologiesRequired = 1430
-} TechAdapter

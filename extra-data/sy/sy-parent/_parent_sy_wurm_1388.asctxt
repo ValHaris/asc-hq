@@ -1,0 +1,41 @@
+VehicleType { 
+	Name = Parent SY Wurm
+	Abstract = true
+	ID = 1388
+	parent = 1394 1395
+
+	Description = Wurm
+	WreckageObject = 1308
+
+	Category = building|turret|object
+	Features = self_repairing jam_only_own_field
+	Jamming = 39
+	View = 0
+	Weight = 5000
+	minFieldRepairDamage = 0
+	MaxSurvivableStorm = 255
+	ResourceDrillingRange = 0
+	SelfRepairRate = 10
+
+	Height = ground_level
+	Tank { 
+		Energy = 0
+		Material = 5000
+		fuel = 10000
+	} Tank
+	FuelConsumption = 0
+	Movement = 0 0 0 10 0 0 0 0 
+	MovementSound = 
+	TerrainAccess ->* VehicleType.SY_worm
+	
+	JumpDrive ->* VehicleType.SY_worm_jump
+
+	WaitForAttack = true
+
+	Construction { 
+		Buildings = 
+		Vehicles = 
+		Objects = 
+		ObjectsRemovable = 
+	} Construction
+} VehicleType

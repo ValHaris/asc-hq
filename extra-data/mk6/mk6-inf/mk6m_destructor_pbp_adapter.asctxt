@@ -1,5 +1,0 @@
-Techadapter {
-   Name = 15209
-   ;Bezeichnung der verknüpften Technologie: Destructor
-   TechnologiesRequired = 15209
-} TechAdapter

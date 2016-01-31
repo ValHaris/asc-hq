@@ -26,6 +26,18 @@ BuildingType {
 		MaxLoadableUnitSize = 2000
 		MaxLoadableMass = 20000
 		CategoriesNOT = hoovercraft Medium_tracked_vehicle Heavy_tracked_vehicle light_wheeled_vehicle Medium_wheeled_vehicle Heavy_wheeled_vehicle Light_ship Medium_ship Heavy_Ship Rail_vehicle building|turret|object
+		EntranceSystemNum = 2
+		EntranceSystem1 {
+			Mode = in out
+			UnitHeightAbs = low_level_flight
+			UnitHeightRel = -100
+			ContainerHeight = ground_level
+			MoveCost = 20 
+			CategoriesNOT = trooper light_wheeled_vehicle medium_wheeled_vehicle heavy_wheeled_vehicle light_tracked_vehicle medium_tracked_vehicle heavy_tracked_vehicle rail_vehicle medium_aircraft heavy_aircraft helicopter light_ship medium_ship heavy_ship building|turret|object hoovercraft default
+			DockingHeightAbs = 
+			DockingHeightRel = -100 
+			RequireUnitFunction = paratrooper
+		} EntranceSystem1
 	} Transportation
 	CategoriesProduceable = default
 

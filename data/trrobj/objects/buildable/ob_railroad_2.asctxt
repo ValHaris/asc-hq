@@ -1,28 +1,35 @@
 ObjectType { 
-   Name = Railroad
-   ID = 2
-   groupid = 3
-   canExistBeneathBuildings = true
-   Weather = dry much_snow
-   visible_in_fogOfWar = false
-   LinkableObjects = 999 995 991 992 980
-   Armor = 400
-   ;                def lTr mTr hvT lWh mWh hWh tro rlv mAC mSh BTO lAC hAC lSh hSh Hli hov
-   Movemalus_plus = 10  7   7   7   10  10  10  3   0   20  10  0   20  20  10  10  20  10
-   Movemalus_abs =  
-   AttackBonus_abs = -1
-   AttackBonus_plus = 0
-   DefenseBonus_abs = -1
-   DefenseBonus_plus = 0
-   Jamming_abs = -1
-   Jammming_plus = 0
-   Height = 99
-   ConstructionCost { 
-      Energy = 0
-      Material = 200
-      fuel = 80
-      Movement = 20
-   } ConstructionCost
+	Name = Railroad
+	ID = 2
+	GroupID = 3
+	canExistBeneathBuildings = true
+	Weather = dry much_snow
+	visible_in_fogOfWar = false
+	;   2	280002	Schiene
+	; 991	280991	Schnellbauschine
+	; 992	280992	Panzerschiene
+	; 980	-		Eisenbahnbrücke FIX
+	; 995	280995	Eisenbahnbrücke gross
+	; 999	280998	Eisenbahnbrücke
+	;2692	-		MIX Brücke FIX
+	LinkableObjects = 2 980 991 992 995 999 2692 280002 280991 280992 280995 280999 282692 299998
+	Armor = 400
+	;                def lTr mTr hvT lWh mWh hWh tro rlv mAC mSh BTO lAC hAC lSh hSh Hli hov
+	Movemalus_plus = 10  7   7   7   10  10  10  3   0   20  10  0   20  20  10  10  20  10
+	Movemalus_abs =  
+	AttackBonus_abs = -1
+	AttackBonus_plus = 0
+	DefenseBonus_abs = -1
+	DefenseBonus_plus = 0
+	Jamming_abs = -1
+	Jammming_plus = 0
+	Height = 99
+	ConstructionCost { 
+		Energy = 0
+		Material = 200
+		fuel = 80
+		Movement = 20
+	} ConstructionCost
    RemovalCost { 
       Energy = 0
       Material = -100

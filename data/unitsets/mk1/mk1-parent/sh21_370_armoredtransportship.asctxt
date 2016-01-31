@@ -1,72 +1,72 @@
 VehicleType { 
-   abstract = true 
-   parent = 400 401 402
-   ID = 370
+	Abstract = true 
+	parent = 400 401 402
+	ID = 370
 
-   Name = transport ship
-   Description = transport ship
-   Infotext = []
-   WreckageObject = 424
-   GuideSortHelp = 0 370 550 551 0 0 0 0 0 0
+	Name = transport ship
+	Description = transport ship
+	WreckageObject = 424
+	GuideSortHelp = 0 370 550 551 0 0 0 0 0 0
+	InfoText = []
 
+	Armor = 1500
+	View = 30
+	Jamming = 0
+	Features = ExternalFuelTransfer ExternalMaterialTransfer ExternalAmmoTransfer moveduringreactionfire icebreaker
+	Category = heavy_ship
+	minFieldRepairDamage = 15
+	MaxSurvivableStorm = 255
+	ResourceDrillingRange = 0
+	SelfRepairRate = 0
+	Weight = 3500
+	Transportation ->* VehicleType.TransShipArmor 
 
-   Armor = 1500
-   View = 30
-   Jamming = 0
-   WaitForAttack = false
-   Features = ExternalFuelTransfer ExternalMaterialTransfer ExternalAmmoTransfer moveduringreactionfire icebreaker
-   Category = heavy_ship
-   MaxSurvivableStorm = 255
-   ResourceDrillingRange = 0
-   SelfRepairRate = 0
-   Weight = 3500
-   Transportation ->* VehicleType.TransShipArmor 
+	Height = floating 
+	Tank { 
+		Energy = 0
+		Material = 30000
+		fuel = 50000
+	} Tank
+	FuelConsumption = 40
+	Movement = 0 0 60 0 0 0 0 0 
+	TerrainAccess ->* VehicleType.very_bigship_terrain 
+	TerrainAccess.terrain_not = forest small_rocks large_rocks
+	MovementSound = med_ship_a_s.ogg
 
-   Height = floating 
-   Tank { 
-      Energy = 0
-      Material = 30000
-      fuel = 50000
-   } Tank
-   FuelConsumption = 40
-   Movement = 0 0 60 0 0 0 0 0 
-   TerrainAccess ->* VehicleType.very_bigship_terrain 
-   TerrainAccess.terrain_not = forest small_rocks large_rocks
-   MovementSound = med_ship_a_s.ogg
+	Construction { 
+		Buildings = 
+		Vehicles = 
+		Objects = 
+	} Construction
 
-   Construction { 
-      Buildings = 
-      Vehicles = 
-      Objects = 
-   } Construction
+	WaitForAttack = false
+	Weapons { 
+		Number = 9
+		Weapon0 ->* VehicleType.ServiceGround 
 
-   Weapons { 
-      Number = 9
-      Weapon0 ->* VehicleType.ServiceGround 
+		Weapon1 ->* VehicleType.MiniGun
+		Weapon1.Ammo = 200
 
-      Weapon1 ->* VehicleType.MiniGun
-      Weapon1.Ammo = 200
+		Weapon2 ->* VehicleType.AmmoLM 
+		Weapon2.Ammo = 100
 
-      Weapon2 ->* VehicleType.AmmoLM 
-      Weapon2.Ammo = 100
+		Weapon3 ->* VehicleType.AmmoSM 
+		Weapon3.Ammo = 100
 
-      Weapon3 ->* VehicleType.AmmoSM 
-      Weapon3.Ammo = 100
+		Weapon4 ->* VehicleType.AmmoTorp 
+		Weapon4.Ammo = 50
 
-      Weapon4 ->* VehicleType.AmmoTorp 
-      Weapon4.Ammo = 50
+		Weapon5 ->* VehicleType.AmmoCannon 
+		Weapon5.Ammo = 200
 
-      Weapon5 ->* VehicleType.AmmoCannon 
-      Weapon5.Ammo = 200
+		Weapon6 ->* VehicleType.AmmoBomb 
+		Weapon6.Ammo = 100
 
-      Weapon6 ->* VehicleType.AmmoBomb 
-      Weapon6.Ammo = 100
+		Weapon7 ->* VehicleType.AmmoMine 
+		Weapon7.Ammo = 100
 
-      Weapon7 ->* VehicleType.AmmoMine 
-      Weapon7.Ammo = 100
-
-      Weapon8 ->* VehicleType.AmmoCM 
-      Weapon8.Ammo = 10
-   } Weapons
+		Weapon8 ->* VehicleType.AmmoCM 
+		Weapon8.Ammo = 10
+	} Weapons
 
 } VehicleType

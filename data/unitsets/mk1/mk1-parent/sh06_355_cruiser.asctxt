@@ -1,51 +1,51 @@
 VehicleType {
-   abstract = true 
-   parent = 400 401 402
-   ID = 355
+	Abstract = true 
+	parent = 400 401 402
+	ID = 355
 
-   Name = cruiser
-   Description = cruiser
-   Infotext = [When two armies clash at sea, the Cruiser is one of the most
+	Name = cruiser
+	Description = cruiser
+	WreckageObject = 441
+	GuideSortHelp = 0 355 565 0 0 0 0 0 0 0
+	InfoText = [When two armies clash at sea, the Cruiser is one of the most
               common units around. They are the most efficient form of naval
               battlepower. Significantly improved over the cheaper Destroyer,
               Cruisers pack a punch, and can take considerable abuse before
               being neutralized. They even have a potent defense against enemy
               submarines. A truly deadly adversary.]
-   WreckageObject = 441
-   GuideSortHelp = 0 355 565 0 0 0 0 0 0 0
 
 
-   Armor = 1400
-   View = 50
-   Jamming = 0
-   WaitForAttack = false
-   Features = MoveDuringReactionFire Repair_Facility
-   Category = heavy_ship
-   MaxSurvivableStorm = 230
-   ResourceDrillingRange = 0
-   SelfRepairRate = 0
-   Weight = 2300
-   Transportation ->* VehicleType.TransCruiser
+	Armor = 1400
+	View = 50
+	Jamming = 0
+	Features = MoveDuringReactionFire Repair_Facility
+	Category = heavy_ship
+	minFieldRepairDamage = 15
+	MaxSurvivableStorm = 230
+	ResourceDrillingRange = 0
+	SelfRepairRate = 0
+	Weight = 2300
+	Transportation ->* VehicleType.TransCruiser
 
-   Height = floating 
-   Tank { 
-      Energy = 0
-      Material = 5000
-      fuel = 11000
-   } Tank
-   FuelConsumption = 28
-   Movement = 0 0 71 0 0 0 0 0 
-   TerrainAccess ->* VehicleType.bigship_terrain
-   MovementSound = med_ship_a_s.ogg
+	Height = floating 
+	Tank { 
+		Energy = 0
+		Material = 5000
+		fuel = 11000
+	} Tank
+	FuelConsumption = 28
+	Movement = 0 0 71 0 0 0 0 0 
+	TerrainAccess ->* VehicleType.bigship_terrain
+	MovementSound = med_ship_a_s.ogg
 
-   Construction { 
-      Buildings = 
-      Vehicles = 
-      Objects = 
-   } Construction
+	Construction { 
+		Buildings = 
+		Vehicles = 
+		Objects = 
+	} Construction
 
-   Weapons { 
-      Initiative = 0
-      Number = 0
-   } Weapons
+	WaitForAttack = false
+	Weapons { 
+		Number = 0
+	} Weapons
 } VehicleType

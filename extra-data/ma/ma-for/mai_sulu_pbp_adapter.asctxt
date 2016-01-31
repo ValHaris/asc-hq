@@ -1,0 +1,5 @@
+Techadapter {
+   ; Sulu
+   Name = 207201
+   TechnologiesRequired = 22307
+} TechAdapter

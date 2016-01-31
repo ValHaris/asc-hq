@@ -3,7 +3,7 @@ VehicleType {
 	ID = 15357
 	parent = 357 493 15000
 
-	picture = mk6s_mbc30.png
+	Picture = mk6s_mbc30.png
 	WreckageObject = 437
 	GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
 	Description = Schlachtschiff
@@ -30,7 +30,7 @@ VehicleType {
 	View += 19
 
 	Tank.fuel += 2000
-	Tank.material += 2000
+	Tank.Material += 2000
 	Height = floating submerged
 	Movement += 0 27 0 0 0 0 0 0 
 

@@ -12,7 +12,7 @@ VehicleType {
 		Den größten Platz beansprucht die gigantische Ortungsanlage, welche sogar im getauchten Zustand eine Satellitenaufklaerung ermoeglicht. Das urspruenglich grosszuegig geplante Flug-Deck mußte dadurch deutlich kleiner ausfallen. Der Hangar fasst nun 4 Flugzeuge vom Delta-Typ. Der Clou der Delta Katapultanlage konnte allerdings erhalten bleiben. Zum Start muß der MCC-38 nur dicht unter die Wasseroberfläche steigen und feuert die Deltas in einer Gasblase an die Oberfläche. Zum Einfangen der Deltas muß der BigEye allerdings auftauchen.
 	]
 
-	Features += sonar satelliteview
+	Features += Sonar satelliteview Repair_Facility
 	ConstructionCost ->* VehicleType.cc5000
 	Armor += 300
 	View += 59
@@ -31,8 +31,8 @@ VehicleType {
 
 	Height = floating submerged
 	Movement += 0 27 0 0 0 0 0 0 
-	Tank.fuel += 15000
-	Tank.material += 5000
+	Tank.Fuel += 20000
+	Tank.Material += 10000
 
 	HeightChangeMethodNum = 2
 	HeightChangeMethod0 {
@@ -63,7 +63,7 @@ VehicleType {
 		Weapon1.MinRange = 20
 		Weapon1.Ammo = 100
 		Weapon1.ReactionFireShots = 1
-		Weapon1.Punch@MaxRange = 120
+		Weapon1.Punch@MaxRange = 125
 		Weapon1.Punch@MinRange = 135
 
 		Weapon2 ->* VehicleType.DLS

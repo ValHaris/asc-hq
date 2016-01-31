@@ -1,5 +1,0 @@
-Techadapter {
-   Name = 15208
-   ;Bezeichnung der verknüpften Technologie: Eneg
-   TechnologiesRequired = 15208
-} TechAdapter

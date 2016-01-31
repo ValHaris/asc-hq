@@ -1,0 +1,5 @@
+Techadapter {
+   Name = 205201
+   ;Bezeichnung der verknüpften Technologie: Legionaer
+   TechnologiesRequired = 1400
+} TechAdapter

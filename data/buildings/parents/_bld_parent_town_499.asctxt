@@ -33,8 +33,8 @@ BuildingType {
    TerrainAccess { 
       terrain_any = Lowland Hard_sand Soft_sand  
       terrain_all = 
-      terrain_not = railroad large_rocks swamp
-      terrain_kill = shallow_water lava water deep_water river
+      terrain_not = Large_rocks Swamp Installation
+      terrain_kill = Shallow_water Lava Water Deep_water River
    } TerrainAccess
    ConstructionCost { 
       Energy = 0

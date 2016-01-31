@@ -1,10 +1,13 @@
 VehicleType {
-   ID = 1289
-   Name = Marauder
-   parent = 367
+	ID = 1289
+	Name = Marauder
+	parent = 367
 
-   Description = Torpedoschnellboot
-   Infotext = [Der Marauder ist das schnellste Schiff konventioneller Bauart innerhalb des cromonischen Militärs. Obwohl er eine Höchstgeschwindigkeit erreicht, mit welcher er selbst mit einer Moewe 2 mithalten kann, basiert er weder auf der Tragflügel-, noch auf der cromonischen Wasserskitechnologie, sondern ist nichts anderes, als ein hochgezüchtetes Speedboat.
+	Description = Torpedoschnellboot
+	Picture = mk4s_marauder.png
+	WreckageObject = 14289
+	GuideSortHelp = 518 420 0 0 4 601 0 0 0 0
+	InfoText = [Der Marauder ist das schnellste Schiff konventioneller Bauart innerhalb des cromonischen Militärs. Obwohl er eine Höchstgeschwindigkeit erreicht, mit welcher er selbst mit einer Moewe 2 mithalten kann, basiert er weder auf der Tragflügel-, noch auf der cromonischen Wasserskitechnologie, sondern ist nichts anderes, als ein hochgezüchtetes Speedboat.
 
 Das Ursprungsmodell des Marauders fand bereits vor vielen Jahren als Schnellboot in der cromonischen Marine Verwendung. Da er zeitweise jedoch ausgemustert worden war, nahmen sich einige ehemalige Militärangehörige - allesamt Liebhaber und Bastler - der verbliebenen Marauder-Schiffe an und modifizierten sie ganz nach ihren persönlichen Vorlieben. Es wurden später sogar richtige Rennen mit den getunten Schiffen veranstaltet. Mehrmaliger Sieger war das Boot des berühmten Flottenadmirals a.D., Korum Grangale. Dieses Schiff zeichnete sich selbst bei Höchstgeschwindigkeit und stärkerem Wellengang durch eine besonders stabile Lage auf dem Wasser aus, wodurch es ihm regelmäßig gelang, die Boote der Konkurrenz weit hinter sich zu lassen.
 
@@ -19,26 +22,23 @@ Aufgrund einer neuen Legierung, die von Admiral a.D. Grangale extra für seinen M
 Als weitere Zugabe erhielt der Marauder auch noch den zusätzlichen Laderaum der Moewe 2. Der Marauder ist hochseetauglich, verfügt jedoch nicht über ein MdRF-Gerät. Lediglich ein kleines RF-Gerät konnte noch in seinem Rumpf integriert werden. Damit ist es dem Marauder möglich, sich an unübersichtlichen Stellen auf die Lauer zu legen, um kleineren gegnerischen Schiffen, die sich zu weit von ihrer Hauptflotte entfernt haben, einen heißen Empfang zu bereiten. Allerdings muss das Boot dafür komplett zum Stillstand kommen und benötigt anschließend wieder eine gewisse Zeit, um erneut Fahrt aufnehmen zu können. Daher sollte der Einsatz des RF-Geräts sehr wohl durchdacht sein, wenn man den Marauder nicht als Komplettverlust verbuchen will.
 
 Im Zusammenarbeit mit den beiden Varianten der Moewe-Reihe, stellt der Marauder eine wertvolle Ergänzung leichter und beweglicher Flottillen dar. Während die Moewe 2 sich um Land-, See- und Luftziele kümmert, kann sich der Marauder mit den Unterwassereinheiten des Gegners befassen. Da kaum ein feindlicher Schiffskommandant diese verhältnismäßig kleinen Schnellboote ernstzunehmen pflegt, ist die Überraschung meist umso größer (und übler), wenn mehrere Marauder plötzlich ihre Torpedos abfeuern und sich anschließend schon wieder auf dem Rückzug befinden, noch ehe die gegnerischen Kanoniere überhaupt ihren Feuerbefehl erhalten haben.]
-   picture = mk4s_marauder.png
-   wreckageobject = 14289
-   GuideSortHelp = 518 420 0 0 4 601 0 0 0 0
 
-   Weapons { 
-      Number = 3
-      Weapon0 ->* VehicleType.STorp 
-      Weapon0.shotFrom = floating ground_level
-      Weapon0.MaxRange = 30
-      Weapon0.Ammo = 4
-      Weapon0.Punch@MaxRange = 115
-      Weapon0.Punch@MinRange = 120
+	Weapons { 
+		Number = 3
+		Weapon0 ->* VehicleType.STorp 
+		Weapon0.shotFrom = floating ground_level
+		Weapon0.MaxRange = 30
+		Weapon0.Ammo = 4
+		Weapon0.Punch@MaxRange = 120
+		Weapon0.Punch@MinRange = 125
 
-      Weapon1 ->* vehicleType.MG40med
-      Weapon1.Ammo = 6
+		Weapon1 ->* vehicleType.MG40med
+		Weapon1.Ammo = 6
 
-      Weapon2 ->* VehicleType.SUSTorp 
-      Weapon2.shotFrom = floating ground_level
-      Weapon2.Ammo = 2
+		Weapon2 ->* VehicleType.SUSTorp 
+		Weapon2.shotFrom = floating ground_level
+		Weapon2.Ammo = 2
 
-   } Weapons
+	} Weapons
 } VehicleType
 

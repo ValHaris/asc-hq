@@ -1,47 +1,45 @@
 VehicleType { 
-   abstract = true 
-   parent = 400 401 402
-   ID = 360
+	Abstract = true 
+	parent = 400 401 402
+	ID = 360
 
-   Name = medium aircraft carrier
-   Description = medium aircraft carrier
-   Infotext = []
-   WreckageObject = 414
-   GuideSortHelp = 520 360 0 0 0 0 0 0 0 0
+	Name = medium aircraft carrier
+	Description = medium aircraft carrier
+	WreckageObject = 414
+	GuideSortHelp = 520 360 0 0 0 0 0 0 0 0
+	InfoText = []
 
+	Armor = 1700
+	View = 69
+	Jamming = 0
+	Features = MoveDuringReactionFire Repair_Facility self_repairing
+	Category = heavy_ship
+	MaxSurvivableStorm = 250
+	ResourceDrillingRange = 0
+	SelfRepairRate = 5
+	Weight = 3500
+	Transportation ->* Vehicletype.TransMedCarrier 
+	MovementSound = med_ship_a_s.ogg
 
-   Armor = 1700
-   View = 69
-   Jamming = 0
-   WaitForAttack = false
-   Features = MoveDuringReactionFire Repair_Facility self_repairing
-   Category = heavy_ship
-   MaxSurvivableStorm = 250
-   ResourceDrillingRange = 0
-   SelfRepairRate = 5
-   Weight = 3500
-   Transportation ->* Vehicletype.TransMedCarrier 
-   MovementSound = med_ship_a_s.ogg
+	Height = floating 
+	Tank { 
+		Energy = 0
+		Material = 60000
+		fuel = 120000
+	} Tank
+	FuelConsumption = 40
+	Movement = 0 0 61 0 0 0 0 0 
+	TerrainAccess ->* VehicleType.bigship_terrain
 
-   Height = floating 
-   Tank { 
-      Energy = 0
-      Material = 60000
-      fuel = 120000
-   } Tank
-   FuelConsumption = 40
-   Movement = 0 0 61 0 0 0 0 0 
-   TerrainAccess ->* VehicleType.bigship_terrain
+	Construction { 
+		Buildings = 
+		Vehicles = 
+		Objects = 
+	} Construction
 
-   Construction { 
-      Buildings = 
-      Vehicles = 
-      Objects = 
-   } Construction
-
-   Weapons { 
-      Initiative = 0
-      Number = 0
-   } Weapons
+	WaitForAttack = false
+	Weapons { 
+		Number = 0
+	} Weapons
 
 } VehicleType

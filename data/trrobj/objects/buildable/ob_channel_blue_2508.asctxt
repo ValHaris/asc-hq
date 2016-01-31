@@ -1,5 +1,5 @@
 ObjectType { 
-   Name = Channel
+   Name = Channel blue
 
    Parent = 525
    ID = 2508

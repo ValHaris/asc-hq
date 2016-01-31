@@ -23,8 +23,8 @@ BuildingType {
    Entry = A2
    ConstructionCost { 
       Energy = 0
-      Material = 10500
-      fuel = 10500
+      Material = 15000
+      fuel = 1500
    } ConstructionCost
 
    MaxResourceProduction { 

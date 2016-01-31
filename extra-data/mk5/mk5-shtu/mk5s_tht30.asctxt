@@ -1,103 +1,104 @@
 VehicleType { 
-   Name = THT 30
-   parent = 400 401 402 493
-   ID = 1421
+	Name = THT 30
+	parent = 400 401 402 493
+	ID = 1421
 
-   Description = Langstreckentorpedo
-   Infotext = []
-   Picture = MK5s_THT30.pcx
+	Description = Langstreckentorpedo
+	Picture = MK5s_THT30.pcx
+	InfoText = []
 
-   Armor = 150
-   Weight = 10
-   View = 60
-   Jamming = 0
-   Features = sonar immune_to_mines kamikaze_only
-   Category = default
-   MaxSurvivableStorm = 100
-   ResourceDrillingRange = 0
-   SelfRepairRate = 0
+	Armor = 150
+	Weight = 10
+	View = 60
+	Jamming = 0
+	Features = sonar immune_to_mines kamikaze_only
+	Category = default
+	MaxSurvivableStorm = 100
+	ResourceDrillingRange = 0
+	SelfRepairRate = 0
 
-   Height = submerged floating
-   Tank { 
-      Energy = 0
-      Material = 0
-      fuel = 500
-   } Tank
-   FuelConsumption = 10
-   MovementSound =
+	Height = submerged floating
+	Tank { 
+		Energy = 0
+		Material = 0
+		fuel = 500
+	} Tank
+	FuelConsumption = 10
+	MovementSound =
 
-   WaitForAttack = false
-   Movement = 110 110 69 0 0 0 0 
-   TerrainAccess { 
-      terrain_any = Shallow_water Water Deep_water River
-      terrain_all = 
-      terrain_not = large_rocks pack_ice frozen_water
-      terrain_kill = Lowland Forest High_mountains Hard_sand Soft_sand Small_rocks Mountains Large_rocks Lava Ditch Hillside Turret_foundation Installation Pack_ice Frozen_water 
-   } TerrainAccess
-   Construction { 
-      Buildings = 
-      Vehicles = 
-      Objects = 
-   } Construction
-   Weapons { 
-      Initiative = 120
-      Number = 1
-      Weapon0 { 
-         Type = Laser shootable
-         LaserRechargeRate = 1
-         LaserRechargeCost {
-            energy = 0
-            material = 0
-            fuel = 0
-         } LaserRechargeCost
-         Name = Rammsporn 
-         targets = deep_submerged submerged floating ground_level
-         shotFrom = deep_submerged submerged floating
-         MaxRange = 10
-         MinRange = 10
-         Ammo = 1
-         ReactionFireShots = 0
-         Punch@MaxRange = 100
-         Punch@MinRange = 100
-         HitAccuracy { 
-            d6 = 
-            d5 = 
-            d4 = 
-            d3 = 
-            d2 = 
-            d1 = 100
-            0 = 100
-            u1 = 100
-            u2 = 
-            u3 = 
-            u4 = 
-            u5 = 
-            u6 = 
-         } HitAccuracy
-      WeaponEffectiveness {      
-         default = 100
-         trooper = 150
-         rail_vehicle = 0
-         building|turret|object = 0
-         hoovercraft = 0
-         helicopter = 0
+	Movement = 110 110 69 0 0 0 0 
+	TerrainAccess { 
+		terrain_any = Shallow_water Water Deep_water River
+		terrain_all = 
+		terrain_not = large_rocks pack_ice frozen_water
+		terrain_kill = Lowland Forest High_mountains Hard_sand Soft_sand Small_rocks Mountains Large_rocks Lava Ditch Hillside Turret_foundation Installation Pack_ice Frozen_water 
+	} TerrainAccess
 
-         light_tracked_vehicle = 100
-         medium_tracked_vehicle = 0
-         heavy_tracked_vehicle = 0
+	Construction { 
+		Buildings = 
+		Vehicles = 
+		Objects = 
+	} Construction
 
-         light_wheeled_vehicle = 0
-         medium_wheeled_vehicle = 0
-         heavy_wheeled_vehicle = 0
+	WaitForAttack = false
+	Weapons { 
+		Number = 1
+		Weapon0 { 
+			Type = Laser shootable
+			LaserRechargeRate = 1
+			LaserRechargeCost {
+				Energy = 0
+				Material = 0
+				Fuel = 0
+			} LaserRechargeCost
+			Name = Rammsporn 
+			targets = deep_submerged submerged floating ground_level
+			shotFrom = deep_submerged submerged floating
+			MaxRange = 10
+			MinRange = 10
+			Ammo = 1
+			ReactionFireShots = 0
+			Punch@MaxRange = 150
+			Punch@MinRange = 150
+			HitAccuracy { 
+				d6 = 
+				d5 = 
+				d4 = 
+				d3 = 
+				d2 = 
+				d1 = 100
+				0 = 100
+				u1 = 100
+				u2 = 
+				u3 = 
+				u4 = 
+				u5 = 
+				u6 = 
+			} HitAccuracy
+			WeaponEffectiveness {      
+				default = 100
+				trooper = 100
+				rail_vehicle = 0
+				building|turret|object = 0
+				hoovercraft = 0
+				helicopter = 0
+
+				light_tracked_vehicle = 100
+				medium_tracked_vehicle = 0
+				heavy_tracked_vehicle = 0
+
+				light_wheeled_vehicle = 0
+				medium_wheeled_vehicle = 0
+				heavy_wheeled_vehicle = 0
          
-         light_ship = 0
-         medium_ship  = 0
-         heavy_ship = 0
+				light_ship = 0
+				medium_ship  = 0
+				heavy_ship = 0
 
-         light_aircraft = 0
-         medium_aircraft  = 0
-         heavy_aircraft = 0
-      } WeaponEffectiveness
-      } Weapon0
-   } Weapons
+				light_aircraft = 0
+				medium_aircraft  = 0
+				heavy_aircraft = 0
+			} WeaponEffectiveness
+		} Weapon0
+	} Weapons
 } VehicleType

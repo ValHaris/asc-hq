@@ -43,8 +43,8 @@ VehicleType {
 		Weapon0 ->* VehicleType.SUSTorp
         Weapon0.shotFrom = submerged floating ground_level
 		Weapon0.MaxRange = 30
-		Weapon0.Punch@MaxRange = 125
-		Weapon0.Punch@MinRange = 125
+		Weapon0.Punch@MaxRange = 130
+		Weapon0.Punch@MinRange = 130
 		Weapon0.HitAccuracy.d1 = 100
 		Weapon0.HitAccuracy.u1 = 100
 		Weapon0.Ammo = 4

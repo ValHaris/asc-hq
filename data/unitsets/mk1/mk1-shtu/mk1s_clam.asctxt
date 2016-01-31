@@ -1,49 +1,47 @@
 VehicleType { 
-   Name = Clam
-   parent = 363
-   ID = 36
+	Name = Clam
+	parent = 363
+	ID = 36
 
-   Description = transport submarine
-   Infotext = [Transport Submarines, if handled properly, can surprise the enemy in a nasty way. Since they travel below the waves, their chances of being intercepted are reduced. It will not be the first time if a submarine surfaces in a harbor and ejects a squad of troopers. Transport Submarines are also able to capture submerged bases.]
-   picture = MK1s_clam.pcx
-   WreckageObject = 436
-   GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+	Description = transport submarine
+	Picture = MK1s_clam.pcx
+	WreckageObject = 436
+	GuideSortHelp += 0 0 0 0 1 0 0 0 0 0
+	InfoText = [Transport Submarines, if handled properly, can surprise the enemy in a nasty way. Since they travel below the waves, their chances of being intercepted are reduced. It will not be the first time if a submarine surfaces in a harbor and ejects a squad of troopers. Transport Submarines are also able to capture submerged bases.]
 
-   Armor += 100
-   Transportation ->* VehicleType.TransSubmarine 
-   Features += ExternalMaterialTransfer ExternalFuelTransfer mine_layer mineview ExternalAmmoTransfer
+	Armor += 100
+	Transportation ->* VehicleType.TransSubmarine 
+	Features += ExternalMaterialTransfer ExternalFuelTransfer mine_layer mineview ExternalAmmoTransfer
 
-   Tank { 
-      Energy = 0
-      Material = 10000
-      fuel = 30000
-   } Tank
+	Tank { 
+		Energy = 0
+		Material = 10000
+		fuel = 30000
+	} Tank
 
-   Weapons { 
-      Initiative = 0
-      Number = 7
-      Weapon0 ->* VehicleType.MineSea 
-      Weapon0.Ammo = 4
-      Weapon0.Punch@MaxRange = 140
-      Weapon0.Punch@MinRange = 140
+	Weapons { 
+		Number = 7
+		Weapon0 ->* VehicleType.MineSea 
+		Weapon0.Ammo = 4
+		Weapon0.Punch@MaxRange = 140
+		Weapon0.Punch@MinRange = 140
 
-      Weapon1 ->* VehicleType.UTorp 
-      Weapon1.Ammo = 20
+		Weapon1 ->* VehicleType.UTorp 
+		Weapon1.Ammo = 20
 
-      Weapon2 ->* VehicleType.ServiceGround 
+		Weapon2 ->* VehicleType.ServiceGround 
 
-      Weapon3 ->* VehicleType.AmmoCM 
-      Weapon3.Ammo = 6
+		Weapon3 ->* VehicleType.AmmoCM 
+		Weapon3.Ammo = 6
 
-      Weapon4 ->* VehicleType.AmmoLM 
-      Weapon4.Ammo = 10
+		Weapon4 ->* VehicleType.AmmoLM 
+		Weapon4.Ammo = 10
 
-      Weapon5 ->* VehicleType.AmmoCannon
-      Weapon5.Ammo = 30
+		Weapon5 ->* VehicleType.AmmoCannon
+		Weapon5.Ammo = 30
 
-      Weapon6 ->* VehicleType.AmmoBomb
-      Weapon6.Ammo = 20
+		Weapon6 ->* VehicleType.AmmoBomb
+		Weapon6.Ammo = 20
 
-
-   } Weapons
+	} Weapons
 } VehicleType

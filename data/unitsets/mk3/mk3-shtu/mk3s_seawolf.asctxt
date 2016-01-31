@@ -1,45 +1,46 @@
 VehicleType { 
-   Name = Seawolf
-   parent = 365
-   ID = 612
-   WreckageObject = 15612
-   Description = nuclear submarine
-   Infotext = [The Seawolf does not have any external weapons. The submarine is armed with both the land-attack and anti-ship 
-   missile. The anti-ship missile is equipped with an inertial guidance and an active radar and anti-radiation homing head. 
-   ] 
-   picture = mk3s_seawolf.png
-   InfoImage = mk3s_seawolf.jpg
-   GuideSortHelp += 0 0 0 0 3 600 0 0 0 0
+	Name = Seawolf
+	parent = 365
+	ID = 612
 
-   Armor -= 100
-   Movement += 11 11 10 0 0 0 0 0 
+	Description = nuclear submarine
+	Picture = mk3s_seawolf.png
+	InfoImage = mk3s_seawolf.jpg
+	WreckageObject = 15612
+	GuideSortHelp += 0 0 0 0 3 600 0 0 0 0
+	InfoText = [The Seawolf does not have any external weapons. The submarine is armed with both the land-attack and anti-ship 
+				missile. The anti-ship missile is equipped with an inertial guidance and an active radar and anti-radiation homing head. 
+				] 
 
-   Weapons { 
-      Initiative = 40
-      Number = 4
-      Weapon0 ->* VehicleType.UTorp 
-      Weapon0.Ammo = 6
-      Weapon0.Punch@MaxRange = 105
-      Weapon0.Punch@MinRange = 110
+	Armor -= 100
+	Movement += 11 11 10 0 0 0 0 0 
 
-      Weapon1 ->* VehicleType.SgM 
-      Weapon1.MaxRange = 70
-      Weapon1.Ammo = 3
-      Weapon1.Punch@MaxRange = 90
-      Weapon1.Punch@MinRange = 90
-      Weapon1.ReactionFireShots = 0
+	Weapons { 
+		Number = 4
+		Weapon0 ->* VehicleType.UTorp 
+		Weapon0.Ammo = 8
+		Weapon0.Punch@MaxRange = 115
+		Weapon0.Punch@MinRange = 115
+		Weapon0.ReactionFireShots = 2
 
-      Weapon2 ->* VehicleType.ShM 
-      Weapon2.MaxRange = 50
-      Weapon2.Ammo = 3
-      Weapon2.Punch@MaxRange = 100
-      Weapon2.Punch@MinRange = 100
-      Weapon2.ReactionFireShots = 0
+		Weapon1 ->* VehicleType.SgM 
+		Weapon1.MaxRange = 70
+		Weapon1.Ammo = 3
+		Weapon1.Punch@MaxRange = 90
+		Weapon1.Punch@MinRange = 90
+		Weapon1.ReactionFireShots = 0
 
-      Weapon3 ->* VehicleType.SOM 
-      Weapon3.MaxRange = 60
-      Weapon3.MinRange = 20
-      Weapon3.Ammo = 2
+		Weapon2 ->* VehicleType.ShM 
+		Weapon2.MaxRange = 50
+		Weapon2.Ammo = 3
+		Weapon2.Punch@MaxRange = 100
+		Weapon2.Punch@MinRange = 100
+		Weapon2.ReactionFireShots = 0
 
-   } Weapons
+		Weapon3 ->* VehicleType.SOM 
+		Weapon3.MaxRange = 60
+		Weapon3.MinRange = 20
+		Weapon3.Ammo = 2
+
+	} Weapons
 } VehicleType

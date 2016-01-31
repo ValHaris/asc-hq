@@ -1,45 +1,44 @@
 VehicleType { 
-   abstract = true 
-   parent = 400 401 402 493
-   ID = 364
+	Abstract = true 
+	parent = 400 401 402 493
+	ID = 364
 
-   Name = fight submarine
-   Description = fight sumarine
-   Infotext = []
-   WreckageObject = 434
-   GuideSortHelp = 519 364 0 0 0 0 0 0 0 0
+	Name = fight submarine
+	Description = fight sumarine
+	WreckageObject = 434
+	GuideSortHelp = 519 364 0 0 0 0 0 0 0 0
+	InfoText = []
 
+	Armor = 1100
+	View = 30
+	Jamming = 0
+	Features = Sonar move_after_attack
+	Category = medium_ship
+	minFieldRepairDamage = 10
+	MaxSurvivableStorm = 210
+	ResourceDrillingRange = 0
+	SelfRepairRate = 0
+	Weight = 1000
 
-   Armor = 1100
-   View = 30
-   Jamming = 0
-   WaitForAttack = false
-   Features = sonar move_after_attack
-   Category = medium_ship
-   MaxSurvivableStorm = 210
-   ResourceDrillingRange = 0
-   SelfRepairRate = 0
-   Weight = 1000
+	Height = deep_submerged submerged floating 
+	Tank { 
+		Energy = 0
+		Material = 0
+		fuel = 6000
+	} Tank
+	FuelConsumption = 30
+	Movement = 88 88 80 0 0 0 0 0 
+	TerrainAccess ->* VehicleType.mediumship_terrain
 
-   Height = deep_submerged submerged floating 
-   Tank { 
-      Energy = 0
-      Material = 0
-      fuel = 6000
-   } Tank
-   FuelConsumption = 30
-   Movement = 88 88 80 0 0 0 0 0 
-   TerrainAccess ->* VehicleType.mediumship_terrain
+	Construction { 
+		Buildings = 
+		Vehicles = 
+		Objects = 
+	} Construction
 
-   Construction { 
-      Buildings = 
-      Vehicles = 
-      Objects = 
-   } Construction
-
-   Weapons { 
-      Initiative = 0
-      Number = 0
-   } Weapons
+	WaitForAttack = false
+	Weapons { 
+		Number = 0
+	} Weapons
 
 } VehicleType

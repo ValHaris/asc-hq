@@ -1,10 +1,11 @@
 ObjectType { 
    Name = Bridge
    ID = 1000
+   parent = 1
    GroupID = 2
    Weather = dry 
    visible_in_fogOfWar = false
-   LinkableObjects = 1 997 981
+;   LinkableObjects = 1 997 981
    Armor = 800
    ;                def lTr mTr hvT lWh mWh hWh tro rlv mAC mSh BTO lAC hAC lSh hSh Hli hov
    Movemalus_plus = 

@@ -1,33 +1,32 @@
 VehicleType { 
-   Parent = 277
-   ID = 1286
+	Name = Condor
+	parent = 277
+	ID = 1286
 
-   Name = Condor
-   Description = Medium Bomber
-   Picture = mk4a_condor.png
-   wreckageobject = 1286 14886
-   Infotext = [
+	Description = Medium Bomber
+	Picture = mk4a_condor.png
+	WreckageObject = 1286 14886
+	GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+	InfoText = [
 Der Condor ist ein taktischer Bomber mit großen Offensivkräften. Die Bewaffnung ist durchweg auf die Bekaempfung von 
 Boden- und Seezielen ausgerichtet. Gegen feindliche Abfangjaeger zeichnet sich die gegen Bodenangriffe ausgerichtete 
 Panzerung nicht besonders aus. Bemerkenswert sind die mitgefuehrten moderen Luft-Boden-Raketen, die den Angriff auf 
 feindliche Stellungen schon aus grosser Entfernung erlauben.
-]
-   GuideSortHelp += 0 0 0 0 4 0 0 0 0 0
+		]
 
-   Armor += 20
-   Weight += 30
+	Armor += 20
+	Weight += 25
 
-   Tank.Fuel += 100
+	Tank.Fuel += 100
 
-   Weapons { 
-      Initiative = 0
-      Number = 3
+	Weapons { 
+		Number = 3
 
-      Weapon2 ->* VehicleType.ASM 
-      Weapon2.MaxRange = 20
-      Weapon2.Ammo = 4
-      Weapon2.Punch@MaxRange = 85
-      Weapon2.Punch@MinRange = 85
-   } Weapons
+		Weapon2 ->* VehicleType.ASM 
+		Weapon2.MaxRange = 20
+		Weapon2.Ammo = 4
+		Weapon2.Punch@MaxRange = 85
+		Weapon2.Punch@MinRange = 85
+	} Weapons
 
 } VehicleType

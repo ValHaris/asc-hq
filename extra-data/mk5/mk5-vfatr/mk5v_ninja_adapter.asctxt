@@ -1,5 +1,0 @@
-Techadapter {
-   Name = 1434
-   ;Bezeichnung der verknüpften Technologie: Ninja
-   TechnologiesRequired = 1434
-} TechAdapter

@@ -1,43 +1,34 @@
 VehicleType { 
 	Name = TAS
 	ID = 1349
-	parent = 223 1395 1394
+	parent = 1388 223 1395 1394
 
 	Description = Luftabwehrwurm
 	WreckageObject = 1308
-	picture = syb_tas.png
+	Picture = syb_tas.png
 ;   GuideSortHelp += 0 0 0 0 3 0 0 0 0 0
-	Infotext = []
+	InfoText = []
+
+	ConstructionCost.CalculationMethod = add
+	ConstructionCost.Material = 5000
 
 	Armor = 700
-	Weight = 5000
-	Jamming = 39
-	View = 0
-	Features = MoveDuringReactionFire jam_only_own_field self_repairing
-	SelfRepairRate = 10
-
-	TerrainAccess ->* VehicleType.SY_worm 
-	Tank.Fuel = 10000
-	Tank.Material = 5000
-	Movement = 0 0 0 10 0 0 0 0 
-;   ObjectsLayedByMovement = 1301
-
-	JumpDrive ->* VehicleType.SY_worm_jump 
+	Features += MoveDuringReactionFire
 
 	Weapons { 
 		Number = 2
 
 		Weapon0 ->* VehicleType.type_laser
-		Weapon0.name = Drohnenschacht 
+		Weapon0.Name = Drohnenschacht 
 		Weapon0.Sound = canon_s.ogg
 		Weapon0.Punch@MaxRange -= 5
 		Weapon0.Punch@MinRange -= 5
 		Weapon0.LaserRechargeRate = 1
 		Weapon0.ReactionFireShots = 2
 		Weapon0.Ammo = 4
-		Weapon0.LaserRechargeCost.energy = 0
-		Weapon0.LaserRechargeCost.material = 200
-		Weapon0.LaserRechargeCost.fuel = 400
+		Weapon0.LaserRechargeCost.Energy = 0
+		Weapon0.LaserRechargeCost.Material = 200
+		Weapon0.LaserRechargeCost.Fuel = 400
 
 		Weapon1 ->* VehicleType.SY_WormMD
 

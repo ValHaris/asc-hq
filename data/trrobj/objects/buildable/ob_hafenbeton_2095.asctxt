@@ -1,55 +1,55 @@
 ObjectType { 
-   ID = 2095
-   parent = 500
-   Weather = dry much_snow snow_and_ice
-   Name = Beton Land
-   TechAdapterRequired = o2095
+	ID = 2095
+	parent = 500
+	Weather = dry much_snow snow_and_ice
+	Name = Beton Land
+	TechAdapterRequired = o2095
 
 ;                         ISG-Beton
-   LinkableObjects = 2092 2094 12012
-   LinkableTerrain = 10
-   NetBehaviour = NetToSelf AutoBorder NetToBorder
-   Height = 87
+	LinkableObjects = 2092 2094 12012
+	LinkableTerrain = 10
+	NetBehaviour = NetToSelf AutoBorder NetToBorder
+	Height = 87
 
-   TerrainAccess.terrain_any = Lowland Hard_sand Soft_sand Very_shallow_water
-   TerrainAccess.terrain_not = large_rocks installation
-   TerrainAccess.terrain_kill = river water deep_water lava
+	TerrainAccess.terrain_any = Lowland Hard_sand Soft_sand Very_shallow_water swamp
+	TerrainAccess.terrain_not = large_rocks installation
+	TerrainAccess.terrain_kill = river water deep_water lava
 
-   Armor = 1000
-   ConstructionCost { 
-      Energy = 0
-      Material = 10000
-      fuel = 6000
-      Movement = 50
-   } ConstructionCost
-   RemovalCost { 
-      Energy = 0
-      Material = -300
-      fuel = 60
-      Movement = 45
-   } RemovalCost
+	Armor = 1000
+	ConstructionCost { 
+		Energy = 0
+		Material = 10000
+		fuel = 6000
+		Movement = 50
+	} ConstructionCost
+	RemovalCost { 
+		Energy = 0
+		Material = -300
+		fuel = 60
+		Movement = 45
+	} RemovalCost
 
-   dry { 
-      UseGFXpics = false
-      picture = ob_hafenbeton_2095.png 65
-      TerrainAccess.terrain_any = Lowland Hard_sand Soft_sand Very_shallow_water
-      TerrainAccess.terrain_not = forest large_rocks installation
-      TerrainAccess.terrain_kill = river water deep_water lava
-   } dry
-   much_Snow { 
-      UseGFXpics = false
-      picture = ob_hafenbeton_2095.png 65
-      GraphicOperations = Snow
-      TerrainAccess.terrain_any = Lowland Hard_sand Soft_sand Very_shallow_water
-      TerrainAccess.terrain_not = forest large_rocks installation
-      TerrainAccess.terrain_kill = river water deep_water lava
-   } much_Snow
-   snow_And_ice { 
-      UseGFXpics = false
-      picture = ob_hafenbeton_2095.png 65
-      GraphicOperations = Snow
-      TerrainAccess.terrain_any = Lowland Hard_sand Soft_sand Very_shallow_water
-      TerrainAccess.terrain_not = forest large_rocks installation
-      TerrainAccess.terrain_kill = river water deep_water lava
-   } snow_and_ice
+	dry { 
+		UseGFXpics = false
+		picture = ob_hafenbeton_2095.png 65
+		TerrainAccess.terrain_any = Lowland Hard_sand Soft_sand Very_shallow_water
+		TerrainAccess.terrain_not = large_rocks installation
+		TerrainAccess.terrain_kill = river water deep_water lava
+	} dry
+	much_Snow { 
+		UseGFXpics = false
+		picture = ob_hafenbeton_2095.png 65
+		GraphicOperations = Snow
+		TerrainAccess.terrain_any = Lowland Hard_sand Soft_sand Very_shallow_water
+		TerrainAccess.terrain_not = large_rocks installation
+		TerrainAccess.terrain_kill = river water deep_water lava
+	} much_Snow
+	snow_And_ice { 
+		UseGFXpics = false
+		picture = ob_hafenbeton_2095.png 65
+		GraphicOperations = Snow
+		TerrainAccess.terrain_any = Lowland Hard_sand Soft_sand Very_shallow_water
+		TerrainAccess.terrain_not = large_rocks installation
+		TerrainAccess.terrain_kill = river water deep_water lava
+	} snow_and_ice
 } ObjectType

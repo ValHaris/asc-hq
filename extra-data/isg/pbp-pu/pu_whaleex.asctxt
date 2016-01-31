@@ -1,0 +1,217 @@
+﻿VehicleType { 
+;  creation: 2014-10-12 by Snake
+;  version 1.0  2014-10-12 "initial"
+;  version 1.1  2014-10-24 "PBP-Treffen Berlin"
+
+   Name = Whale Mk. II
+   
+;  Parent ist der normale Whale
+   parent = 14018
+   
+;  Eine ID habe ich fuer Tests einfach so vergeben, bitte anpassen
+   ID = 12597
+
+   Description = Experimental-Hovercraft 
+   
+   Infotext = [Der Whale Mk. II ist ein von der Delta Inc. entwickeltes Experimental-Hovercraft. Als Basis diente das sehr voluminoese Transportluftkissenboot Whale, welches durch die Ingenieure der Delta Inc. stark modifiziert wurde. Der Laderaum wurde drastisch verringert und bietet ausschliesslich noch Platz fuer die kleinen Thunder Drohnen. Der dafuer frei verfuegbare Platz wurde genutzt, um einerseits mittels Tiefseekristallen die Panzerung zu erhoehen und um andererseits Miniatur-Raketenwerfer der neuesten Generation zu montieren.
+   
+   
+   Die sogenannten "MicroMissiles" (MiMi) wurden durch die Delta Inc. auf Ocean im System Zonas entwickelt. Subventionen wurden unter anderem durch den IV HiGG bereitgestellt, um die immensen Kosten stemmen zu koennen. Im Zyklus 127 wurde der Durchbruch erzielt und die Serienfertigung in den DbD-Fabriken auf Ceta Prime konnte beginnen. Die MiMi sind leicht zu modifizieren, daher existieren sie bereits in diversen Varianten. Trotz ihrer geringen Abmessungen verfuegen die MiMi ueber eine ungeheure Genauigkeit, eine betraechtliche Wirkungskraft und eine formidable Reichweite. Die Durchschlagkraft nimmt mit zunehmender Entfernung respektive zunehmender Marschgeschwindigkeit der MiMi gar immer weiter zu.
+   
+   
+   Im Gegensatz zu den meisten Raketen sind MiMi-Steuermodule - bis auf die Flak-Variante zur Selbstverteidigung - nicht mit RF-Funktionen ausgestattet. Auch ist eine Einheit mit MiMi nicht in der Lage, sich nach einem Angriff zurueckzuziehen. Die MiMi haben zudem einen weiteren Nachteil: Der Grund ist bislang unbekannt, jedoch scheint eine Mindestreichweite zu existieren, ab denen die MiMi eine notwendige Geschwindigkeit erreicht haben, um eine Wirkung herbeizufuehren. Auf geringe Entfernung sind die MiMi somit praktisch wirkungslos. Der Whale Mk. II wird daher eher als Kommando-Einheit denn als Einheit der vordersten Front verwendet.
+   
+   
+   Der Whale Mk. II verfuegt derzeit ueber MiMi mit Napalmladungen, MiMi mit Luftabwehr-Funktion als Flak-Ersatz sowie weitere MiMi gegen Boden-, Luft und Orbitalziele. Durch diese Bewaffnung, das gute Radarmodul, die Drohnen-Reparatureinheit und die Kommandostation ist der Whale Mk. II trotz fehlender Nahkampf- und Verteidigungsmoeglichkeiten eine sinnvolle Ergaenzung der Streitkraefte.]
+
+;  neues Bild   
+   Picture = pu_whaleex.png
+
+;  fuer Armor siehe Gewicht
+   Armor += 450
+   
+;  Sicht erhoeht, da Kommando-Einheit
+   View = 70
+   
+;  Gewicht 200, damit trainierbar. Wenn nicht trainierbar, sollte die Panzerung erhoeht werden, da keine Waffe fuer Nahkampf (Def-Erfahrung kann nicht aktiv gesammelt werden). Balancing nach oben bezueglich Waffenpunch sollte bei fehlender Trainierbarkeit eventuell ebenso erfolgen, siehe Waffen.
+   Weight = 200
+
+;  Aenderung Transport von Whale-Klasse auf Drohnencarrier wie Hydra DX
+   Transportation ->* VehicleType.TransDroneDestroyer
+   Transportation {
+;  3 Drohnenstellplaetze sind bei diesem Typ standard - eventuell sogar nur 2 oder 1 geben? Nur ein Stellplatz wuerde RP-technisch auch gut passen :) Was meint ihr?
+;      MaxLoadableUnits = x
+;  Maximales Einheitengewicht reduziert, so dass wirklich nur Thunder Drohnen reinpassen, keine Delta o.aehnl.
+      MaxLoadableUnitSize = 20
+;  derzeit fuer 3 Thunder Drohnen ausgelegt
+      MaxLoadableMass = 60
+;  Entrance-Movementkosten fuer Drohnen gegenueber Hydra DX reduziert (ist ein Vorschlag)
+      EntranceSystem1.MoveCost = 25
+   } Transportation
+
+;  Movement des Whale Mk. II bei 60 belassen? Erst Mal mit 60 testen (daher "auskommentiert")
+;   Movement += 0 0 0 0 0 0 0 0
+
+;  erhoehte Tank-Kapazitaet fuer Reparatur der Drohne(n)
+   Tank { 
+      Energy = 0
+      Material = 10000
+      Fuel = 15000
+   } Tank
+
+;  Features einer Kommandoeinheit: Reparatureinrichtung fuer Drohne(n), Satview
+   Features += Repair_Facility satelliteview
+
+   Weapons {
+      Number = 9
+	  
+	  ; Waffe 0 (Whale MG) wird "MicroMissile" (= MiMi) mit der Wirkung einer Brandbombe
+	  ; ausschliesslich gegen Trooper (jedoch bis Orbit) - kein RF, Maxrange 4
+	  ; Bezueglich Punch Balancing siehe Gewicht. Bezueglich Punch-Unterschied Max-Min siehe Beschreibung der Einheit.
+	  Weapon0 ->* VehicleType.smMSM
+	  Weapon0.Name = MiMi type N
+      Weapon0.Punch@MaxRange = 115
+      Weapon0.Punch@MinRange = 1
+	  Weapon0.MinRange = 10
+      Weapon0.MaxRange = 40
+	  ; groesserer Vorrat, falls spaeter Drohnen mit MicroMissiles existieren, da immer aus erstem Slot genommen wird
+	  Weapon0.Ammo = 18
+      Weapon0.ReactionFireShots = 0
+	  Weapon0.Targets = floating ground_level low_level_flight medium_level_flight high_level_flight orbit
+	  Weapon0.HitAccuracy.U1 = 100
+	  Weapon0.HitAccuracy.U2 = 100
+	  Weapon0.HitAccuracy.U3 = 100
+	  Weapon0.HitAccuracy.U4 = 100
+	  Weapon0.WeaponEffectiveness {
+         trooper = 100
+         rail_vehicle = 0
+         building|turret|object = 0
+         hoovercraft = 0
+         helicopter = 0
+
+         light_tracked_vehicle = 0
+         medium_tracked_vehicle = 0
+         heavy_tracked_vehicle = 0
+
+         light_wheeled_vehicle = 0
+         medium_wheeled_vehicle = 0
+         heavy_wheeled_vehicle = 0
+         
+         light_ship = 0
+         medium_ship  = 0
+         heavy_ship = 0
+
+         light_aircraft = 0
+         medium_aircraft  = 0
+         heavy_aircraft = 0
+	 } Weapon0.WeaponEffectiveness
+	  
+	  ; Waffe 1 (Whale Flak) wird MiMi in Flak-Variante - Maxrange 4
+	  ; einzige MiMi mit RF, daher schwaecher ausgelegt als MiMis ohne RF
+	  Weapon1.Name = MiMi type AD
+      Weapon1.Punch@MaxRange = 75
+      Weapon1.Punch@MinRange = 1
+	  Weapon1.Sound = groundmissile_s.ogg
+	  Weapon1.Type = ground_missile shootable
+	  Weapon1.MinRange = 10
+	  Weapon1.MaxRange = 40
+	  Weapon1.Ammo = 12
+      Weapon1.ReactionFireShots = 3
+	  ; Mid Air Effektivitaet 100 statt 95
+	  Weapon1.HitAccuracy.U2 = 100
+	  
+	  ; Waffe 2 = MiMi gegen Boden - kein RF, Maxrange 6
+      Weapon2 ->* VehicleType.smMSM
+	  Weapon2.Name = MiMi type G
+      Weapon2.Punch@MaxRange = 100
+      Weapon2.Punch@MinRange = 1
+	  Weapon2.MinRange = 10
+      Weapon2.MaxRange = 60
+	  Weapon2.Ammo = 6
+      Weapon2.ReactionFireShots = 0
+	  Weapon2.Targets = floating ground_level
+	  Weapon2.HitAccuracy.U1 = 0
+	  Weapon2.HitAccuracy.U2 = 0
+	  
+	  ; Waffe 3 = MiMi gegen low_air und mid_air - kein RF, Maxrange 5
+      Weapon3 ->* VehicleType.smMSM
+	  Weapon3.Name = MiMi type A
+      Weapon3.Punch@MaxRange = 85
+      Weapon3.Punch@MinRange = 1
+	  Weapon3.MinRange = 10
+      Weapon3.MaxRange = 50
+	  Weapon3.Ammo = 6
+      Weapon3.ReactionFireShots = 0
+	  Weapon3.Targets = low_level_flight medium_level_flight
+	  Weapon3.HitAccuracy.0 = 0
+	  Weapon3.HitAccuracy.U2 = 100
+	  
+	  ; Waffe 4 = MiMi gegen high_air und orbit - kein RF, Maxrange 6
+	  Weapon4 ->* VehicleType.smMSM
+	  Weapon4.Name = MiMi type H/O
+      Weapon4.Punch@MaxRange = 95
+      Weapon4.Punch@MinRange = 1
+	  Weapon4.MinRange = 10
+      Weapon4.MaxRange = 60
+	  Weapon4.Ammo = 6
+      Weapon4.ReactionFireShots = 0
+	  Weapon4.targets = high_level_flight orbit
+	  Weapon4.HitAccuracy.0 = 0
+	  Weapon4.HitAccuracy.U1 = 0
+	  Weapon4.HitAccuracy.U2 = 0
+      Weapon4.HitAccuracy.U3 = 100
+      Weapon4.HitAccuracy.U4 = 100
+
+	  ; Waffe 5 = MiMi nur gegen TBO - kein RF, Maxrange 7
+	  Weapon5 ->* VehicleType.smMSM
+	  Weapon5.Name = MiMi type B
+      Weapon5.Punch@MaxRange = 120
+      Weapon5.Punch@MinRange = 1
+	  Weapon5.MinRange = 10
+      Weapon5.MaxRange = 70
+	  Weapon5.Ammo = 3
+      Weapon5.ReactionFireShots = 0
+	  Weapon5.Targets = floating ground_level
+	  Weapon5.HitAccuracy.U1 = 0
+	  Weapon5.HitAccuracy.U2 = 0
+	  Weapon5.WeaponEffectiveness {
+         trooper = 0
+         rail_vehicle = 0
+         building|turret|object = 100
+         hoovercraft = 0
+         helicopter = 0
+
+         light_tracked_vehicle = 0
+         medium_tracked_vehicle = 0
+         heavy_tracked_vehicle = 0
+
+         light_wheeled_vehicle = 0
+         medium_wheeled_vehicle = 0
+         heavy_wheeled_vehicle = 0
+         
+         light_ship = 0
+         medium_ship  = 0
+         heavy_ship = 0
+
+         light_aircraft = 0
+         medium_aircraft  = 0
+         heavy_aircraft = 0
+	 } Weapon5.WeaponEffectiveness
+	 
+	  ; Munition fuer Drohne(n)
+	  Weapon6 ->* VehicleType.AmmoBomb
+	  Weapon6.Name = Ammo (bomb)
+      Weapon6.Ammo = 8
+
+	  ; Munition fuer Drohne(n)
+      Weapon7 ->* VehicleType.AmmoLM
+	  Weapon7.Name = Ammo (LM)
+      Weapon7.Ammo = 12
+
+	  ; Munition fuer Drohne(n)
+      Weapon8 ->* VehicleType.AmmoTorp
+	  Weapon8.Name = Ammo (torp)
+      Weapon8.Ammo = 8
+   } Weapons
+   
+} VehicleType

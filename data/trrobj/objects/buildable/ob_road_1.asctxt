@@ -1,21 +1,26 @@
 ObjectType { 
    Name = Road
    ID = 1
-   groupid = 1
+   GroupID = 1
    canExistBeneathBuildings = true
    Weather = dry 
    visible_in_fogOfWar = false
-   LinkableObjects = 1000 997 981
-   Armor = 1100
+	;   1	280001	Strasse
+	; 981	-		Brücke FIX
+	; 997	280997	Brücke gross
+	;1000	281000	Brücke
+	;   -	288001	MIX Brücke FIX
+   LinkableObjects = 1 1000 997 981 2692 280001 280997 281000 288001 282692 299998
+   Armor = 600
    ;                def lTr mTr hvT lWh mWh hWh tro rlv mAC mSh BTO lAC hAC lSh hSh Hli hov
    Movemalus_plus = 
-   Movemalus_abs =  10  10  10  10  10  10  10  10  12  19  20  10  19  19  20  20  19  10
+   Movemalus_abs =  10  10  10  10  10  10  10  10  11  19  20  10  19  19  20  20  19  10
    AttackBonus_abs = -1
    AttackBonus_plus = 0
    DefenseBonus_abs = -1
    DefenseBonus_plus = 0
    Jamming_abs = -1
-   Jammming_plus = 0
+   Jamming_plus = 0
    Height = 97
    ConstructionCost { 
       Energy = 0

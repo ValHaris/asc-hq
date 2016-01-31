@@ -1,24 +1,24 @@
 VehicleType { 
-   Name = WATCHER
-   parent =  360 493
-   ID = 1474
+	Name = WATCHER
+	parent =  360 493
+	ID = 1474
 
-   Description =  aircraft carrier submarine
-   Infotext = []
-   Picture = mk5s_watcher.pcx
-   GuideSortHelp += 0 0 0 0 5 0 0 0 0 0
+	Description =  aircraft carrier submarine
+	Picture = mk5s_watcher.pcx
+	GuideSortHelp += 0 0 0 0 5 0 0 0 0 0
+	InfoText = [Der Watcher ist ein Hybrid aus mehreren alten Wafensystemen. Ein älteres großes TransportUboot wurde mit zwei großen Kettenantrieben von ausrangierten GigantPanzern ausgestattet. Auf dem Oberdeck wurden großflächig Stahlpatten aufgeschweisst und en Flugzeugen eine Landebahn zu schaffen. Der Watscher ist schwehrfällig und nicht sonderlich stark gepanzert. Durch seine Vielseitigkeit bietert er den Outlaw-Truppen aber umfangreiche Einsatzmöglichkeiten.]
 
-   Armor -= 500
-   Transportation.EntranceSystemNum = 4
-   Transportation.CategoriesNOT = heavy_aircraft building|turret|object medium_ship heavy_ship heavy_tracked_vehicle heavy_wheeled_vehicle rail_vehicle
-   Transportation.EntranceSystem2 ->* VehicleType.GrIO
-   Transportation.EntranceSystem2.mode = in out
-   Transportation.EntranceSystem3 ->* VehicleType.SubIO
-   Features += sonar icebreaker
+	Armor -= 400
+	Transportation.EntranceSystemNum = 4
+	Transportation.CategoriesNOT = heavy_aircraft building|turret|object medium_ship heavy_ship heavy_tracked_vehicle heavy_wheeled_vehicle rail_vehicle
+	Transportation.EntranceSystem2 ->* VehicleType.GrIO
+	Transportation.EntranceSystem2.mode = in out
+	Transportation.EntranceSystem3 ->* VehicleType.SubIO
+	Features += sonar icebreaker
 
-   Height = deep_submerged submerged floating ground_level
-   Movement = 55 55 55 50 0 0 0 0 
-   TerrainAccess ->* VehicleType.hooverfull_terrain 
+	Height = deep_submerged submerged floating ground_level
+	Movement = 55 55 55 50 0 0 0 0 
+	TerrainAccess ->* VehicleType.hooverfull_terrain 
 
 ;   Construction {
 ;      VehiclesInternally = 1470 1452
@@ -27,26 +27,32 @@ VehicleType {
 ;                                 0   0   1 ]
 ;   } Construction 
 
-   Weapons { 
-      Number = 6
-      Weapon0 ->* vehicleType.UTorp
-      Weapon0.Ammo = 100
+	Weapons { 
+		Number = 6
+		Weapon0 ->* VehicleType.UTorp
+		Weapon0.MaxRange = 30
+		Weapon0.Ammo = 100
+		Weapon0.ReactionFireShots = 2
 
-      Weapon1 ->* vehicleType.SAMH 
-      Weapon1.Ammo = 100
-      Weapon1.ShotFrom = submerged floating ground_level
+		Weapon1 ->* VehicleType.SAMH 
+		Weapon1.Ammo = 100
+		Weapon1.shotFrom = submerged floating ground_level
+		Weapon1.MaxRange = 50
 
-      Weapon2 ->* vehicleType.AmmoCannon 
-      Weapon2.Ammo = 100
+		Weapon2 ->* VehicleType.Flak 
+		Weapon2.Ammo = 100
 
-      Weapon3 ->* VehicleType.AmmoGM 
-      Weapon3.Ammo = 100
+		Weapon3 ->* VehicleType.smSSM
+		Weapon3.MaxRange = 40
+		Weapon3.Punch@MinRange = 80
+		Weapon3.Punch@MaxRange = 80
+		Weapon3.Ammo = 100
 
-      Weapon4 ->* VehicleType.AmmoBomb 
-      Weapon4.Ammo = 100
+		Weapon4 ->* VehicleType.AmmoBomb 
+		Weapon4.Ammo = 100
 
-      Weapon5 ->* vehicleType.AmmoMG 
-      Weapon5.Ammo = 100
+		Weapon5 ->* VehicleType.AmmoMG 
+		Weapon5.Ammo = 100
       
-   } Weapons
+	} Weapons
 } VehicleType

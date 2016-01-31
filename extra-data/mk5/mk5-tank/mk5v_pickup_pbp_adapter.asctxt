@@ -1,5 +1,0 @@
-Techadapter {
-   Name = 1435
-   ;Bezeichnung der verknüpften Technologie: Picup
-   TechnologiesRequired = 1435
-} TechAdapter

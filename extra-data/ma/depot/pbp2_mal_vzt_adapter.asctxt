@@ -1,0 +1,5 @@
+TechAdapter {
+	; VZT
+	Name = 207661
+	TechnologiesRequired = 207000 200082
+} TechAdapter

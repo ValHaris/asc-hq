@@ -1,77 +1,77 @@
 VehicleType { 
-   Name = JUB
-   parent = 364
-   ID = 22705
+	Name = JUB
+	parent = 364
+	ID = 22705
 
-   Description = submarine
-   Picture = mas_jub.pcx
-   WreckageObject = 434
-   Infotext = [Das JUB ist das Standardjagduboot der Malaner. Ausgerüstet mit außerordentlich explosiven Torpedos sowie einem starken Antrieb ist es eines der gefährlichsten U-Boote und bei allen Völkern gefürchtet. Die Spezialpanzerung ist dazu um einiges widerstandsfähiger als die Panzerung bei vergleichbaren Booten anderer Rassen. Zusätzlich verfügt das JUB über einen Unterwasserspeziallaser, mit welchem es beispielsweise Taucher auch auf größere Entfernung sehr effektiv bekämpfen kann. Dies stellt normalerweise ein großes Problem für U-Boote da. Hier wurde eine geniale Lösung konstruiert. Der Laser arbeitet auf der Basis von blauem Licht, welches den von Wasser üblicherweise am wenigsten absorbierten blauen Lichtbereich nutzt, um ein Verdampfen des Wassers zu verhindern und die geballte Energie des Lasers am Ziel wirksam werden zu lassen. Die für den Laser benutzte Substanz ist geheim und eines der bestgehüteten Geheimnisse des malanischen Flottenbaus.
-Aufgrund seiner Parameter ist das JUB universell einsetzbar und daher bei den malanischen Völkern in großer Zahl in Gebrauch.
-   ]
+	Description = submarine
+	Picture = mas_jub.pcx
+	WreckageObject = 434
+	InfoText = [Das JUB ist das Standardjagduboot der Malaner. Ausgerüstet mit außerordentlich explosiven Torpedos sowie einem starken Antrieb ist es eines der gefährlichsten U-Boote und bei allen Völkern gefürchtet. Die Spezialpanzerung ist dazu um einiges widerstandsfähiger als die Panzerung bei vergleichbaren Booten anderer Rassen. Zusätzlich verfügt das JUB über einen Unterwasserspeziallaser, mit welchem es beispielsweise Taucher auch auf größere Entfernung sehr effektiv bekämpfen kann. Dies stellt normalerweise ein großes Problem für U-Boote da. Hier wurde eine geniale Lösung konstruiert. Der Laser arbeitet auf der Basis von blauem Licht, welches den von Wasser üblicherweise am wenigsten absorbierten blauen Lichtbereich nutzt, um ein Verdampfen des Wassers zu verhindern und die geballte Energie des Lasers am Ziel wirksam werden zu lassen. Die für den Laser benutzte Substanz ist geheim und eines der bestgehüteten Geheimnisse des malanischen Flottenbaus.
+		Aufgrund seiner Parameter ist das JUB universell einsetzbar und daher bei den malanischen Völkern in großer Zahl in Gebrauch.
+		]
 
-   Armor += 100
+	Armor += 100
 
-   Weapons { 
-      Number = 2
-      Weapon0 ->* VehicleType.UTorp 
-      Weapon0.Ammo = 10
-      Weapon0.Punch@MaxRange = 120
-      Weapon0.Punch@MinRange = 125
+	Weapons { 
+		Number = 2
+		Weapon0 ->* VehicleType.UTorp 
+		Weapon0.Ammo = 10
+		Weapon0.Punch@MaxRange = 125
+		Weapon0.Punch@MinRange = 125
       
-      Weapon1 { 
-         Type = laser shootable
-         targets = deep_submerged submerged
-         shotFrom = deep_submerged submerged
-         MaxRange = 20
-         MinRange = 10
-         Ammo = 1
-         Punch@MaxRange = 90
-         Punch@MinRange = 90
-         LaserRechargeRate = 1
-         LaserRechargeCost {
-            energy = 0
-            material = 0
-            fuel = 400
-         } LaserRechargeCost
-         HitAccuracy { 
-            d6 = 0
-            d5 = 0
-            d4 = 0
-            d3 = 0
-            d2 = 0
-            d1 = 0
-            0 = 100
-            u1 = 0
-            u2 = 0
-            u3 = 0
-            u4 = 0
-            u5 = 0
-            u6 = 0
-         } HitAccuracy
-      WeaponEffectiveness {      
-         trooper = 100
-         rail_vehicle = 60
-         building|turret|object = 50
-         hoovercraft = 90
-         helicopter = 90
+		Weapon1 { 
+			Type = laser shootable
+			targets = deep_submerged submerged
+			shotFrom = deep_submerged submerged
+			MaxRange = 20
+			MinRange = 10
+			Ammo = 1
+			Punch@MaxRange = 90
+			Punch@MinRange = 90
+			LaserRechargeRate = 1
+			LaserRechargeCost {
+				Energy = 0
+				Material = 0
+				fuel = 400
+			} LaserRechargeCost
+			HitAccuracy { 
+				d6 = 0
+				d5 = 0
+				d4 = 0
+				d3 = 0
+				d2 = 0
+				d1 = 0
+				0 = 100
+				u1 = 0
+				u2 = 0
+				u3 = 0
+				u4 = 0
+				u5 = 0
+				u6 = 0
+			} HitAccuracy
+			WeaponEffectiveness {      
+				trooper = 100
+				rail_vehicle = 60
+				building|turret|object = 50
+				hoovercraft = 90
+				helicopter = 90
 
-         light_tracked_vehicle = 100
-         medium_tracked_vehicle = 65
-         heavy_tracked_vehicle = 50
+				light_tracked_vehicle = 100
+				medium_tracked_vehicle = 65
+				heavy_tracked_vehicle = 50
 
-         light_wheeled_vehicle = 100
-         medium_wheeled_vehicle = 90
-         heavy_wheeled_vehicle = 80
-         
-         light_ship = 90
-         medium_ship  = 60
-         heavy_ship = 50
+				light_wheeled_vehicle = 100
+				medium_wheeled_vehicle = 90
+				heavy_wheeled_vehicle = 80
 
-         light_aircraft = 100
-         medium_aircraft  = 90
-         heavy_aircraft = 80
-      } WeaponEffectiveness
-      } Weapon1
-   } Weapons
+				light_ship = 90
+				medium_ship  = 60
+				heavy_ship = 50
+
+				light_aircraft = 100
+				medium_aircraft  = 90
+				heavy_aircraft = 80
+			} WeaponEffectiveness
+		} Weapon1
+	} Weapons
 } VehicleType
