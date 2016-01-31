@@ -230,7 +230,7 @@ Resources PBPUnitCostCalculator :: productionCost( const VehicleType* vehicle )
    // Kostenbegrenzung
    // Waffenreichweitenzuschlag Kurzstrecke
    if (maxweaponrange > 19 ) {
-		weaponcostm += 2000*unitfactor/10
+		weaponcostm += 2000*unitfactor/10;
 		weaponcostm += (maxweaponrange-10)*70;
    }
    // Waffenreichweitenzuschlag Mittelstrecke
