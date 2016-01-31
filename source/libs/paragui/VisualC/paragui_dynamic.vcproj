@@ -134,7 +134,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/vmg /MP"
-				Optimization="1"
+				Optimization="3"
 				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories="&quot;$(physfs)&quot;;../src/core;../include;../src/themes;&quot;$(libsigcpp2)&quot;"
 				PreprocessorDefinitions="ZLIB_DLL;WIN32;NDEBUG;_WINDOWS;_USRDLL;PARAGUI_EXPORTS;PHYSFS_SUPPORTS_ZIP"
