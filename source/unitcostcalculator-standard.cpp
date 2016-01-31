@@ -450,16 +450,16 @@ Resources StandardUnitCostCalculator :: productionCost( const VehicleType* vehic
    }
 
    // low movement
-   if (maxmoverange < 20 ) {
-      res.energy -= typecoste/4;
-      res.material -= typecostm/4;
-   }
+   //if (maxmoverange < 20 ) {
+   //   res.energy -= typecoste/4;
+   //   res.material -= typecostm/4;
+   //}
 
    // low movement
-   if (maxmoverange < 10 ) {
-      res.energy -= typecoste/4;
-      res.material -= typecostm/4;
-   }
+   //if (maxmoverange < 10 ) {
+   //   res.energy -= typecoste/4;
+   //   res.material -= typecostm/4;
+   //}
    // Part VIII Abschluss
 
    return res;

@@ -198,27 +198,27 @@ Resources PBPUnitCostCalculator :: productionCost( const VehicleType* vehicle )
   
    // Zuschlag fuer Triebwerke
    if (maxmoverange > 40 ) {
-      typecostm += (maxmoverange-40)*unitfactor*0.6;
+      typecostm += (maxmoverange-40)*unitfactor*0.5;
    }
    // Zuschlag fuer Triebwerke
    if (maxmoverange > 80 ) {
-      typecostm += (maxmoverange-80)*unitfactor*0.6;
+      typecostm += (maxmoverange-80)*unitfactor*0.5;
    }
    // Zuschlag fuer Triebwerke 2
    if (maxmoverange > 120 ) {
-      typecostm += (maxmoverange-120)*unitfactor*0.6;
+      typecostm += (maxmoverange-120)*unitfactor*0.5;
    }
    // Zuschlag fuer Triebwerke 3
    if (maxmoverange > 160 ) {
-      typecostm += (maxmoverange-160)*unitfactor*0.6;
+      typecostm += (maxmoverange-160)*unitfactor*0.5;
    }
    // Zuschlag fuer Triebwerke 4
    if (maxmoverange > 200 ) {
-      typecostm += (maxmoverange-200)*unitfactor*0.6;
+      typecostm += (maxmoverange-200)*unitfactor*0.5;
    }
    // Zuschlag fuer Triebwerke 5
    if (maxmoverange > 240 ) {
-      typecostm += (maxmoverange-240)*unitfactor*0.6;
+      typecostm += (maxmoverange-240)*unitfactor*0.5;
    }
 
 
@@ -228,24 +228,22 @@ Resources PBPUnitCostCalculator :: productionCost( const VehicleType* vehicle )
    // generelle Waffenreichweite, einmaliger Zuschlag
    
    // Kostenbegrenzung
-   if (maxweaponrange > 200 ) {
-      maxweaponrange = 200;
-   }
    // Waffenreichweitenzuschlag Kurzstrecke
    if (maxweaponrange > 19 ) {
-      weaponcostm += (maxweaponrange-10)*80;
+		weaponcostm += 2000*unitfactor/10
+		weaponcostm += (maxweaponrange-10)*70;
    }
    // Waffenreichweitenzuschlag Mittelstrecke
    if (maxweaponrange > 69 ) {
-      weaponcostm += (maxweaponrange-60)*140;
+      weaponcostm += (maxweaponrange-60)*70;
    }
    // Waffenreichweitenzuschlag Langstrecke
    if (maxweaponrange > 99 ) {
-      weaponcostm += (maxweaponrange-90)*200;
+      weaponcostm += (maxweaponrange-90)*70;
    }
-   // Waffenreichweitenzuschlag Interkontinental
+   // Waffenreichweitenzuschlag Kontinental
    if (maxweaponrange > 129 ) {
-      weaponcostm += (maxweaponrange-120)*250;
+      weaponcostm += (maxweaponrange-120)*70;
    }
 
 
@@ -268,7 +266,7 @@ Resources PBPUnitCostCalculator :: productionCost( const VehicleType* vehicle )
          }
          if (vehicle->weapons.weapon[W].getScalarWeaponType() == cwlargemissilen || vehicle->weapons.weapon[W].getScalarWeaponType() == cwtorpedon) {
             if ( vehicle->weapons.weapon[W].shootable() ) {
-               weaponsinglecostm += vehicle->weapons.weapon[W].maxstrength*unitfactor/10*10;
+               weaponsinglecostm += vehicle->weapons.weapon[W].maxstrength*unitfactor/10*7;
             } else {
                weaponsinglecostm += 100;
             }
@@ -438,16 +436,16 @@ Resources PBPUnitCostCalculator :: productionCost( const VehicleType* vehicle )
    }
 
    // low movement
-   if (maxmoverange < 20 ) {
-      res.material -= int(typecostm/4);
-   }
+   //if (maxmoverange < 30 ) {
+   //   res.material -= int(typecostm/4);
+   //}
 
    // low movement
-   if (maxmoverange < 11 ) {
+   if (maxmoverange < 15 ) {
       res.material -= int(typecostm/4);
       res.energy = res.material/20;
    } else {
-      res.energy = res.material/2;
+      res.energy = res.material/4;
    }
    // Part VIII Abschluss
 
