@@ -2,6 +2,21 @@
 set -e
 set -x
 
+
+# the repository containing the compiled executables from windows
+svnbasepath=~/asc/svn-exe/
+
+if hg summary | grep "branch: default"; then
+   export "INSTPATH=--with-win32-DLL-path=$svnbasepath/trunk/dll --with-win32-build-path=$svnbasepath/trunk/main"
+   echo Old Attack
+elif hg summary | grep "branch: newattack"; then
+   export "INSTPATH=--with-win32-DLL-path=$svnbasepath/trunk/dll --with-win32-build-path=$svnbasepath/newattack/"
+   echo New Attack
+else
+   echo Unknown branch
+   exit 1
+fi
+
 if test "X$1" = X--speed; then
    export CXXFLAGS="-O3 -g -Wall -Wextra -Wno-unused-parameter -ansi "
 #-floop-interchange -floop-strip-mine -floop-block
@@ -22,11 +37,4 @@ if test "X$1" = X--coverage; then
    export PARAM=
 fi
 
-
-if hg summary | grep "branch: newattack"; then
-   exepath=/home/martin/asc/svn-exe/newattack
-else
-   exepath=/home/martin/asc/svn-exe/trunk/exe
-fi
-
-./configure --enable-unittestcoverage --enable-extradata --prefix=/home/martin/.asc/ --with-win32-DLL-path=/home/martin/asc/svn-exe/trunk/dll --with-win32-build-path=$exepath  $PARAM
+./configure --enable-unittestcoverage --enable-extradata --prefix=/home/martin/.asc/ $INSTPATH $PARAM
