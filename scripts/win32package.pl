@@ -14,6 +14,7 @@ GetOptions ("test" => \$testVersion,
 
 
 my $version = `perl getversion ../source/strtmesg.cpp`;
+die "error obtaining version" if $?;
 chomp $version;
 
 

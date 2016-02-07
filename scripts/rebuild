@@ -21,4 +21,12 @@ if test "X$1" = X--coverage; then
    export CFLAGS="$CFLAGS   -fprofile-arcs -ftest-coverage "
    export PARAM=
 fi
-./configure --enable-unittestcoverage --enable-extradata --prefix=/home/martin/.asc/ $PARAM
+
+
+if hg summary | grep "branch: newattack"; then
+   exepath=/home/martin/asc/svn-exe/newattack
+else
+   exepath=/home/martin/asc/svn-exe/trunk/exe
+fi
+
+./configure --enable-unittestcoverage --enable-extradata --prefix=/home/martin/.asc/ --with-win32-DLL-path=/home/martin/asc/svn-exe/trunk/dll --with-win32-build-path=$exepath  $PARAM

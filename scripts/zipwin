@@ -1,0 +1,49 @@
+#!/usr/bin/python3
+
+import argparse
+import subprocess
+import os
+
+parser = argparse.ArgumentParser(description='Creates zip file of ASC for Windows with full data.')
+parser.add_argument('exe', help='directory containing the exe files')
+parser.add_argument('dll', help='directory containing the DLL files')
+parser.add_argument('version', help='verison of ASC')
+args = parser.parse_args()
+
+
+dlls = [ os.path.join( args.dll, file) for file in 
+        ["dbghelp.dll", 
+         "jpeg.dll", 
+         "msvcp90.dll", 
+         "msvcr90.dll",
+         "ogg.dll",
+         "SDL_mixer.dll",
+         "smpeg.dll",
+         "zlib1.dll",
+         "libexpat.dll",
+         "libpng13.dll",
+         "libpng12-0.dll",
+         "libtiff-3.dll",
+         "SDL.dll",
+         "README-SDL.txt",
+         "vorbis.dll",
+         "libFLAC.dll",
+         "SDL_image.dll",
+         "sdl_sound.dll",
+         "sigc-vc90-2_0.dll",
+         "vorbisfile.dll",
+         "libmikmod-2.dll",
+         "libcurl.dll",
+         "libeay32.dll", 
+         "ssleay32.dll",
+         "xvidcore.dll",
+         "Microsoft.VC90.CRT.manifest" ]]
+        
+exes = [ os.path.join( args.exe, file) for file in 
+        [ "ASC2.exe",
+          "mapeditor2.exe" ]]
+
+datas = [ "data/main.ascdat" , "extra-data/pbp.ascdat", "data/dialog/asc2_dlg.zip", "COPYING" ]
+
+subprocess.check_call( ["zip", "-j", "asc-full-" + args.version + ".zip"] + dlls + exes + datas)
+  
