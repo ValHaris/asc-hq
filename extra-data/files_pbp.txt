@@ -26,7 +26,6 @@ mk4/mk4-parent/*.*
 isg/pbp-bld/*.*
 isg/pbp-for/*.*
 isg/pbp-isg/*.*
-isg/pbp-bugs/*.*
 isg/pbp-obj/*.*
 isg/pbp-pu/*.*
 isg/pu-air/*.*
@@ -111,7 +110,6 @@ sy/sy-psup/*.*
 sy/sy-sta/*.*
 sy/sy-tank/*.*
 sy/sy-vad/*.*
-sy/sy-vari/*.*
 sy/sy-vfatr/*.*
 sy/sy-view/*.*
 sy/sy-parent/*.*
