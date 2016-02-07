@@ -975,6 +975,9 @@ dist-hook:
 	rm -rf `find $(distdir)/data/music -name "*.ogg" `
 	chmod ugo-x doc/manpages/*.6 doc/unitguide/output/*.gif doc/unitguide/output/*.html doc/unitguide/output/*.txt
 
+zipwin: 
+	scripts/zipwin @inst_win32_build_dir@ @inst_win32_DLL_dir@ `scripts/getversion source/strtmesg.cpp` 
+
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

@@ -43,3 +43,7 @@ glob:source/win32/msvc/**/*.dep
 glob:*.exe.embed.manifest
 glob:source/libs/loki-0.1.6/**/*.dep
 glob:source/win32/msvc/Release/**/*.zip
+glob:installer/asc.nsi
+glob:unittester/unittest-data/asc2.cache
+glob:unittester/unittest-data/asc2_dlg.zip
+glob:asc-full-*.zip
