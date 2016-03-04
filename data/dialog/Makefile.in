@@ -552,7 +552,7 @@ uninstall-am: uninstall-pkgdataDATA
 
 
 asc2_dlg.zip: $(srcdir)/asc2_dlg.theme $(srcdir)/asc/*.bmp $(srcdir)/asc/*.ttf $(srcdir)/asc/*.png
-	cd $(srcdir) && zip -9 -r @abs_builddir@/asc2_dlg.zip asc2_dlg.theme ./asc/* -i *.png *.bmp *.ttf *.theme
+	cd $(srcdir) && zip -X -9 -r @abs_builddir@/asc2_dlg.zip asc2_dlg.theme ./asc/* -i *.png *.bmp *.ttf *.theme
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
