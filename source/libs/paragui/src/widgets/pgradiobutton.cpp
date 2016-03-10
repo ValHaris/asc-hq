@@ -169,7 +169,7 @@ void PG_RadioButton::SetPressed() {
 	Update();
 
 	// Notify parent
-	sigClick(this, true);
+	sigClick(true);
 }
 
 bool PG_RadioButton::GetPressed() {

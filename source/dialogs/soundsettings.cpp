@@ -33,7 +33,8 @@ class SoundSettings : public ASC_PG_Dialog
       static void soundSettings(PG_MessageObject* caller);      
    protected:
 
-      bool radioButtonEvent( PG_RadioButton* button, bool state);
+      bool toggleMusic( bool state);
+      bool toggleSound( bool state);
       bool buttonEvent( );
       bool eventScrollTrack_sound(long data);
       bool eventScrollTrack_music(long data);
@@ -54,7 +55,7 @@ SoundSettings::SoundSettings(PG_Widget* parent, const PG_Rect& r, PG_MessageObje
    sSettings = CGameOptions::Instance()->sound;
 
    PG_CheckButton* musb = new PG_CheckButton(this, PG_Rect( 30, 50, 200, 20 ), "Enable Music", 1 );
-   musb->sigClick.connect( sigc::mem_fun( *this, &SoundSettings::radioButtonEvent ));
+   musb->sigClick.connect( sigc::mem_fun( *this, &SoundSettings::toggleMusic ));
    new PG_Label ( this, PG_Rect(30, 80, 150, 20), "Music Volume" );
    PG_Slider* mus = new PG_Slider(this, PG_Rect(180, 80, 200, 20), PG_Slider::HORIZONTAL, 21);
    mus->SetRange(0,100);
@@ -68,7 +69,7 @@ SoundSettings::SoundSettings(PG_Widget* parent, const PG_Rect& r, PG_MessageObje
 
 
    PG_CheckButton* sndb = new PG_CheckButton(this, PG_Rect( 30, 150, 200, 20 ), "Enable Sound", 2 );
-   sndb->sigClick.connect( sigc::mem_fun( *this, &SoundSettings::radioButtonEvent ));
+   sndb->sigClick.connect( sigc::mem_fun( *this, &SoundSettings::toggleSound ));
    new PG_Label ( this, PG_Rect(30, 180, 150, 20), "Sound Volume" );
    PG_Slider* snd = new PG_Slider(this, PG_Rect(180, 180, 200, 20), PG_Slider::HORIZONTAL, 31);
    snd->SetRange(0,100);
@@ -109,12 +110,16 @@ void SoundSettings::updateSettings()
 
 }
 
-bool SoundSettings::radioButtonEvent( PG_RadioButton* button, bool state)
+bool SoundSettings::toggleMusic( bool state)
 {
-   if ( button->GetID() == 1 )
-      CGameOptions::Instance()->sound.muteMusic = !state;
-   if ( button->GetID() == 2 )
-      CGameOptions::Instance()->sound.muteEffects = !state;
+    CGameOptions::Instance()->sound.muteMusic = !state;
+    updateSettings();
+    return true;
+}
+
+bool SoundSettings::toggleSound( bool state)
+{
+   CGameOptions::Instance()->sound.muteEffects = !state;
    updateSettings();
    return true;
 }

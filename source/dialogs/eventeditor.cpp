@@ -111,7 +111,7 @@ class EventEditor : public ASC_PG_Dialog {
          }
       }
       
-      bool invertTrigger( PG_Widget* w, bool invert, int e )
+      bool invertTrigger( bool invert, int e )
       {
          if ( event->trigger.size() > e ) {
             event->trigger[e]->invert = invert;

@@ -52,10 +52,10 @@ class ActionSelectionWidget: public ActionWidget
          if ( actions.isActive_req( &action ) )
             check->SetPressed();
          
-         check->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &ActionSelectionWidget::click )));
+         check->sigClick.connect( sigc::mem_fun( *this, &ActionSelectionWidget::click ));
       }
    protected:
-      bool click( PG_RadioButton* button )
+      bool click( bool b )
       {
          actions.setActive( &act, check->GetPressed() );
          return true;

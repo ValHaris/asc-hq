@@ -316,7 +316,7 @@ class ChooseTech : public ASC_PG_Dialog
          factory->techSelected.connect( sigc::mem_fun( *this, &ChooseTech::techSelected ));
          itemSelector = new ItemSelectorWidget( this, PG_Rect( 10, 40, 400, Height() - 80 ), factory );
 
-         (allTechsCheckButton = new PG_CheckButton( this, PG_Rect( 10, Height() - 40, 300, 25 ), "Show ~A~ll Technologies"))->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &ChooseTech::changeTechView)));
+         (allTechsCheckButton = new PG_CheckButton( this, PG_Rect( 10, Height() - 40, 300, 25 ), "Show ~A~ll Technologies"))->sigClick.connect( sigc::mem_fun( *this, &ChooseTech::changeTechView));
          techList = new PG_MultiLineEdit( this, PG_Rect ( 450, 40, 300, 200 ));
          techList->SetEditable(false);
          pointsLabel = new PG_Label( this, PG_Rect( 450, 250, 300, 25 ));

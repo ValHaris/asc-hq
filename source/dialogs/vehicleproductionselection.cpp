@@ -234,12 +234,12 @@ VehicleProduction_SelectionWindow::VehicleProduction_SelectionWindow( PG_Widget 
       PG_CheckButton* fillRes = new PG_CheckButton( this, PG_Rect( 10, y + 2, r.Width() / 2 - 50, 20), "Fill with Resources" );
       if ( factory->getResourceFilling() )
          fillRes->SetPressed();
-      fillRes->sigClick.connect( sigc::hide( sigc::mem_fun( *factory, &VehicleProduction_SelectionItemFactory::setResourceFilling )));
+      fillRes->sigClick.connect( sigc::mem_fun( *factory, &VehicleProduction_SelectionItemFactory::setResourceFilling ));
       if ( plant->baseType->hasFunction(ContainerBaseType::AmmoProduction)) {
          PG_CheckButton* fillAmmo = new PG_CheckButton( this, PG_Rect( 10, y + 20, r.Width() / 2 - 50, 20), "Fill with Ammo" );
          if ( factory->getAmmoFilling() )
             fillAmmo->SetPressed();
-         fillAmmo->sigClick.connect( sigc::hide( sigc::mem_fun( *factory, &VehicleProduction_SelectionItemFactory::setAmmoFilling )));
+         fillAmmo->sigClick.connect( sigc::mem_fun( *factory, &VehicleProduction_SelectionItemFactory::setAmmoFilling ));
       } else
          factory->setAmmoFilling( false );
          
