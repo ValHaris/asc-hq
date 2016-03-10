@@ -45,7 +45,7 @@ class PG_PropertyField_Checkbox : public PG_PropertyEditor::PG_PropertyEditorFie
 	PG_CheckButton* checkbox;
 	bool switchInverted;
 
-	bool click( const PG_Widget* button, bool b) {
+	bool click( bool b) {
 		sigValueChanged(this,b);
 		return true;
 	}

@@ -59,5 +59,5 @@ void PG_CheckButton::SetUnpressed() {
 	Update();
 
 	// Notify parent
-	sigClick(this, false);
+	sigClick(false);
 }

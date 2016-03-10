@@ -250,7 +250,7 @@ StartMultiplayerGame::StartMultiplayerGame(PG_MessageObject* c): ConfigurableWin
          supervisor->SetPressed();
        else
           supervisor->SetUnpressed();
-       supervisor->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &StartMultiplayerGame::togglesupervisor )));
+       supervisor->sigClick.connect( sigc::mem_fun( *this, &StartMultiplayerGame::togglesupervisor ));
     }
 
     PG_LineEdit* s1 = dynamic_cast<PG_LineEdit*>( FindChild( "SupervisorPlain", true ));

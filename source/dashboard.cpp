@@ -921,7 +921,7 @@ bool MapInfoPanel::scrollTrack( long pos )
    return true;
 }
 
-bool MapInfoPanel::checkBox( PG_Widget* w, bool state, const char* name )
+bool MapInfoPanel::checkBox( bool state, const char* name )
 {
    changeActive = true;
    mapDisplay->activateMapLayer( name, state );
