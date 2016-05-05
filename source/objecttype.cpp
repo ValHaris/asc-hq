@@ -595,27 +595,20 @@ class Smoothing {
 
          void smooth ( int what, ObjectType* woodObj )
          {
-           int ShowAgain = 0;
            if ( what & 2 ) {
-             if ( SmoothIt( NULL, UnSmoothBanksData) )
-                ShowAgain = 1;
-             if ( SmoothIt( NULL, UnSmoothDarkBanksData) )
-                ShowAgain = 1;
-             if ( SmoothIt( NULL, SmoothBanksData) )
-                ShowAgain = 1;
-             if ( SmoothIt( NULL, SmoothDarkBanksData) )
-                ShowAgain = 1;
+             SmoothIt( NULL, UnSmoothBanksData);
+             SmoothIt( NULL, UnSmoothDarkBanksData);
+             SmoothIt( NULL, SmoothBanksData);
+             SmoothIt( NULL, SmoothDarkBanksData);
            }
 
            if ( what & 1 ) {
               if ( woodObj  ) {
                 int count = 0;
                 while ( SmoothIt ( woodObj, SmoothTreesData0 ) && count < 20 ) {
-                   ShowAgain = 1;
                    count++;
                 }
-                if  ( SmoothIt ( woodObj, SmoothTreesData) )
-                   ShowAgain = 1;
+                SmoothIt ( woodObj, SmoothTreesData);
               }
            }
          /*    while SmoothIt(1, SmoothDarkTreesData0) do ShowAgain:= true;
