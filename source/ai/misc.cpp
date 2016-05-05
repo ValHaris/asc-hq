@@ -765,10 +765,10 @@ void AI::production()
       inc = 1;
    */
 
-   UnitDistribution currentUnitDistribution = calcUnitDistribution();
+   //   UnitDistribution currentUnitDistribution = calcUnitDistribution();
 
    // we can't have enough attacking units
-   currentUnitDistribution.group[ UnitDistribution::attack ] = 0;
+   //   currentUnitDistribution.group[ UnitDistribution::attack ] = 0;
    
    displaymessage2("producing units ... ");
 
