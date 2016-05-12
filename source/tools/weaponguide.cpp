@@ -96,6 +96,7 @@ int main(int argc, char *argv[] )
       printf(".");
         
 
+      /*
       const char* wildcard;
 
       if ( cl.next_param() < argc ) {
@@ -106,7 +107,7 @@ int main(int argc, char *argv[] )
          wildcard =  "*";
          // else use all verhicles
       }
-
+      */
 
 
       BuildingGuideGen gen(prefixDir, cl.m(), cl.s(),  cl.t(), cl.roottech(), cl.i(), cl.l(), !cl.b(), !cl.writeall());
