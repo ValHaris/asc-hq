@@ -143,7 +143,8 @@ void ResourceGraphLayer::paintSingleField( const MapRenderer::FieldRenderInfo& f
       bool visible = false;
 
       if ( fieldInfo.playerView == -1 )
-         visible = true;
+         if ( fieldInfo.fld->resourceview )
+            visible = true;
 
       if ( fieldInfo.playerView >= 0 )
          if ( fieldInfo.fld->resourceview && (fieldInfo.fld->resourceview->visible & ( 1 << fieldInfo.playerView) ) )
