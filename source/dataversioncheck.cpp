@@ -29,12 +29,12 @@ void checkDataFileVersion()
    if ( !main )
       throw ASCmsgException("No package description found for ASCdata");
    
-   VersionIdentifier mainRequired("2.7.128.1");
+   VersionIdentifier mainRequired("2.7.149.0");
    if( main->version < mainRequired )
       throw ASCmsgException("Package ASCmain is outdated.\nYou need at least version " + mainRequired.toString() + "\n" + main->location + "\n\n" + main->description) ;
       
    const Package* pbp = packageRepository.getPackage("pbp");
-   ASCString pbpversion = "2.7.241.3";
+   ASCString pbpversion = "2.7.149.0";
    if ( pbp && pbp->version < VersionIdentifier(pbpversion) )
       throw ASCmsgException("Package PBP is outdated. You need at least version " +  pbpversion + "\n" + main->location +  "\n\n" + pbp->description) ;
    
