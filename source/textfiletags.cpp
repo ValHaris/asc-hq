@@ -67,7 +67,8 @@ const char*  terrainProperties[terrainPropertyNum]
         "lava_barrier",
         "spaceport",
         "beacon",
-        "fire"};
+        "fire",
+        "concrete" };
 
  const char* heightTags[choehenstufennum]
     = { "deep_submerged",
