@@ -66,7 +66,8 @@ const char*  ccontainerfunctions[ContainerBaseType::functionNum+1]  =
                "AutoHarvestObjects",
                "No customization of production",
                "Manual self-destruct",
-               "No removal of mines", 
+               "No removal of mines",
+               "No rotation of image",
                NULL };
 
 

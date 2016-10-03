@@ -73,10 +73,11 @@ class ContainerBaseType: public MapItemType, public LoadableItemType, public Mem
         AutoHarvestObjects,
         NoProductionCustomization,
         ManualSelfDestruct,
-        NoMineRemoval };
+        NoMineRemoval,
+        NoImageRotation };
 
      
-     static const int functionNum = 44;
+     static const int functionNum = 45;
 
      bool hasFunction( ContainerFunctions function ) const;
      bool hasAnyFunction( std::bitset<64> functions ) const;

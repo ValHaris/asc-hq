@@ -1687,12 +1687,20 @@ void Vehicle::paint ( Surface& s, SPoint pos, int shadowDist ) const
    bool shaded = 0;
   #endif
 
-   paintField( typ->getImage(), s, pos, direction, shaded, shadowDist );
+   int dir = direction;
+   if ( typ->hasFunction(ContainerBaseType::NoImageRotation) )
+       dir = 0;
+
+   paintField( typ->getImage(), s, pos, dir, shaded, shadowDist );
 }
 
 void Vehicle::paint ( Surface& s, SPoint pos, bool shaded, int shadowDist ) const
 {
-   paintField( typ->getImage(), s, pos, direction, shaded, shadowDist );
+   int dir = direction;
+   if ( typ->hasFunction(ContainerBaseType::NoImageRotation) )
+      dir = 0;
+
+   paintField( typ->getImage(), s, pos, dir, shaded, shadowDist );
 }
 
 Surface Vehicle::getImage() const

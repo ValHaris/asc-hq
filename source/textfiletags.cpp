@@ -220,7 +220,8 @@ const char*  buildingFunctionTags[24]  =
    "AutoHarvestObjects",
    "NoProductionCustomization",
    "ManualSelfDestruct",
-   "NoMineRemoval"
+   "NoMineRemoval",
+   "NoImageRotation"
    };
    
    
