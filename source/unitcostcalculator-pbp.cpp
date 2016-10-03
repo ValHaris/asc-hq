@@ -53,6 +53,13 @@ Resources PBPUnitCostCalculator :: productionCost( const VehicleType* vehicle )
    int maxmoverange = 0;
    int maxweaponrange = 0;
    int unitfactor = 0;
+   int tech = 0;
+   
+   // Check guideSortHelp auf Technologie
+   // ACHTUNG dieser Wert kann nicht definiert sein (guideSortHelp leer) Fehlermeldung abfangen !
+   if ( vehicle->guideSortHelp.size() > 9 && vehicle->guideSortHelp[9] > 0) {
+	   tech = vehicle->guideSortHelp[9];
+   }
 
    // Check Flugzeugtraeger
    bool carrierCharge = false;
@@ -83,7 +90,7 @@ Resources PBPUnitCostCalculator :: productionCost( const VehicleType* vehicle )
 	// Setzen der Typfaktoren
    if ( vehicle->movemalustyp == MoveMalusType::trooper) {
 	// Soldaten
-      unitfactor = 4;
+      unitfactor = 5;
    } else if ( vehicle->movemalustyp == MoveMalusType::light_wheeled_vehicle ) {
 	// Bugies, Trikes, Motorraeder, Jeeps
       unitfactor = 7;
@@ -116,14 +123,14 @@ Resources PBPUnitCostCalculator :: productionCost( const VehicleType* vehicle )
       unitfactor = 13;
    } else if ( vehicle->movemalustyp == MoveMalusType::helicopter ) {
         // Rotorgetriebene Luftfahrzeuge
-      unitfactor = 15;
+      unitfactor = 14;
    } else if ( vehicle->movemalustyp == MoveMalusType::light_aircraft ) {
    	// kleine Flugzeuge ( Drohnen, Satelliten )
       unitfactor = 14;
    } else if ( vehicle->movemalustyp == MoveMalusType::medium_aircraft ) {
-      unitfactor = 16;
+      unitfactor = 15;
    } else if ( vehicle->movemalustyp == MoveMalusType::heavy_aircraft ) {
-      unitfactor = 17;
+      unitfactor = 16;
    } else if ( vehicle->movemalustyp == MoveMalusType::rail_vehicle ) {
 	// Schienenfahrzeuge
       unitfactor = 9;
@@ -198,27 +205,27 @@ Resources PBPUnitCostCalculator :: productionCost( const VehicleType* vehicle )
   
    // Zuschlag fuer Triebwerke
    if (maxmoverange > 40 ) {
-      typecostm += (maxmoverange-40)*unitfactor*0.5;
+      typecostm += (maxmoverange-40)*unitfactor*0.6;
    }
    // Zuschlag fuer Triebwerke
    if (maxmoverange > 80 ) {
-      typecostm += (maxmoverange-80)*unitfactor*0.5;
+      typecostm += (maxmoverange-80)*unitfactor*0.6;
    }
    // Zuschlag fuer Triebwerke 2
    if (maxmoverange > 120 ) {
-      typecostm += (maxmoverange-120)*unitfactor*0.5;
+      typecostm += (maxmoverange-120)*unitfactor*0.6;
    }
    // Zuschlag fuer Triebwerke 3
    if (maxmoverange > 160 ) {
-      typecostm += (maxmoverange-160)*unitfactor*0.5;
+      typecostm += (maxmoverange-160)*unitfactor*0.6;
    }
    // Zuschlag fuer Triebwerke 4
    if (maxmoverange > 200 ) {
-      typecostm += (maxmoverange-200)*unitfactor*0.5;
+      typecostm += (maxmoverange-200)*unitfactor*0.6;
    }
    // Zuschlag fuer Triebwerke 5
    if (maxmoverange > 240 ) {
-      typecostm += (maxmoverange-240)*unitfactor*0.5;
+      typecostm += (maxmoverange-240)*unitfactor*0.6;
    }
 
 
@@ -231,7 +238,7 @@ Resources PBPUnitCostCalculator :: productionCost( const VehicleType* vehicle )
    // Waffenreichweitenzuschlag Kurzstrecke
    if (maxweaponrange > 19 ) {
 		weaponcostm += 2000*unitfactor/10;
-		weaponcostm += (maxweaponrange-10)*70;
+		weaponcostm += (maxweaponrange-10)*60;
    }
    // Waffenreichweitenzuschlag Mittelstrecke
    if (maxweaponrange > 69 ) {
@@ -239,11 +246,11 @@ Resources PBPUnitCostCalculator :: productionCost( const VehicleType* vehicle )
    }
    // Waffenreichweitenzuschlag Langstrecke
    if (maxweaponrange > 99 ) {
-      weaponcostm += (maxweaponrange-90)*70;
+      weaponcostm += (maxweaponrange-90)*80;
    }
    // Waffenreichweitenzuschlag Kontinental
    if (maxweaponrange > 129 ) {
-      weaponcostm += (maxweaponrange-120)*70;
+      weaponcostm += (maxweaponrange-120)*90;
    }
 
 
@@ -364,10 +371,10 @@ Resources PBPUnitCostCalculator :: productionCost( const VehicleType* vehicle )
 
    // Baufunktionen
    if ( vehicle->hasFunction( ContainerBaseType::ConstructBuildings )) {
-      specialcostm += 1000;
+      specialcostm += 5000;
    }
    if ( vehicle->hasFunction( ContainerBaseType::InternalVehicleProduction ) || vehicle->hasFunction( ContainerBaseType::ExternalVehicleProduction )) {
-      specialcostm += 1000;
+      specialcostm += 5000;
    }
    if ( vehicle->objectsBuildable.size() > 0 ||vehicle-> objectGroupsBuildable.size() > 0 ) {
       specialcostm += 1000;
@@ -378,7 +385,7 @@ Resources PBPUnitCostCalculator :: productionCost( const VehicleType* vehicle )
    }
    // Generator
    if ( vehicle->hasFunction( ContainerBaseType::MatterConverter) ) {
-      specialcostm += 1000;
+      specialcostm += 5000;
    }
    //ParaTrooper
    if ( vehicle->hasFunction( ContainerBaseType::Paratrooper ) ) {
@@ -393,7 +400,7 @@ Resources PBPUnitCostCalculator :: productionCost( const VehicleType* vehicle )
       specialcostm += vehicle->autorepairrate*vehicle->armor*unitfactor/10 / 15;
    }
    // Radar
-   if ( vehicle->view > 41 ) {
+   if ( vehicle->view > 51 ) {
       specialcostm += (vehicle->view-40)*90;
       specialcostm += maxmoverange*(vehicle->view)/4;
    }
@@ -436,18 +443,23 @@ Resources PBPUnitCostCalculator :: productionCost( const VehicleType* vehicle )
    }
 
    // low movement
-   //if (maxmoverange < 30 ) {
-   //   res.material -= int(typecostm/4);
-   //}
-
-   // low movement
-   if (maxmoverange < 15 ) {
+   if ( maxmoverange < 19 ) {
       res.material -= int(typecostm/4);
+   }
+
+   // Part VIII Technologiekorrektur
+   if ( tech > 0 ) {
+	   res.material += tech * 1000;
+	   if ( res.material > tech * 10000 ) {
+		   res.material -= (res.material - tech * 10000) / 2;
+	   }
+   }
+   // Energiekosten
+   if (maxmoverange < 20 ) {
       res.energy = res.material/20;
    } else {
       res.energy = res.material/4;
    }
-   // Part VIII Abschluss
 
    return res;
 }
