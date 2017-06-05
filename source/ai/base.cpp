@@ -207,9 +207,17 @@ class AI_KeyboardWatcher : public sigc::trackable {
 
 void AI :: checkGameEvents()
 {
-   while ( getMap()->player[ getMap()->actplayer ].queuedEvents )
+   while ( getMap()->player[ getMap()->actplayer ].queuedEvents ) {
       if ( !checkevents( getMap(), mapDisplay ))
          return ;
+
+      for ( Player::VehicleList::iterator vi = getPlayer().vehicleList.begin(); vi != getPlayer().vehicleList.end(); vi++ ) {
+         Vehicle* veh = *vi;
+         if ( !veh->aiparam[ getPlayerNum() ] )
+            calculateThreat ( veh );
+      }
+
+   }
 
    checktimedevents( getMap(), mapDisplay );
 }
