@@ -52,12 +52,11 @@ void BarGraphWidget::eventBlit (SDL_Surface *surface, const PG_Rect &src, const 
    Uint32 c = color.MapRGBA( PG_Application::GetScreen()->format, 255-GetTransparency());
    for ( Colors::iterator i = colors.begin(); i != colors.end(); ++i)
       if ( fraction < i->first ) {
-      PG_Color col = i->second;
-      c = col.MapRGBA( PG_Application::GetScreen()->format, 255-GetTransparency());
+         PG_Color col = i->second;
+         c = col.MapRGBA( PG_Application::GetScreen()->format, 255-GetTransparency());
       }
 
-
-      SDL_FillRect(PG_Application::GetScreen(), &d, c);
+   SDL_FillRect(PG_Application::GetScreen(), &d, c);
 
 }
 

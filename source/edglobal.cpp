@@ -890,7 +890,7 @@ void execaction_pg(int code)
                actmap->getField(x,y)->fuel = 0;
                actmap->getField(x,y)->material = 0;
             }
-            repaintMap();
+         repaintMap();
       }
       case act_dumpBuilding: 
          if ( getactfield() && getactfield()->building ) {

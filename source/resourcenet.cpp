@@ -68,37 +68,37 @@ void MapNetwork :: searchfield ( int x, int y, int dir )
       while (olddir >= sidenum ) 
          olddir -= sidenum; 
 
-         int r = 0; 
-         for (s = 0; s < sidenum; s++) { 
-            if ( (d & (1 << s))  &&  ( s != olddir )) {
-               arr[ r ] = s; 
-               r++;
-            } 
+      int r = 0; 
+      for (s = 0; s < sidenum; s++) { 
+         if ( (d & (1 << s))  &&  ( s != olddir )) {
+            arr[ r ] = s; 
+            r++;
          } 
+      } 
 
 
-         if (r > 1) {      // Kreuzungsstelle 
-            for ( s = 0; s < r; s++) { 
-               int nx = x;
-               int ny = y;
-               int direc = arr[s];
-               nx += getnextdx ( direc, ny );
-               ny += getnextdy ( direc );
-               searchfield( nx, ny, direc );
-               if ( searchfinished() )
-                  return ;
-            } 
-            return;
-         } else  
-            if ( r == 1 ) {
-               dir = arr[0];
-               x += getnextdx ( dir, y );
-               y += getnextdy ( dir );
-               fld = actmap->getField( x, y ); 
-               if ( !fld )
-                  return;
-            } else
+      if (r > 1) {      // Kreuzungsstelle 
+         for ( s = 0; s < r; s++) { 
+            int nx = x;
+            int ny = y;
+            int direc = arr[s];
+            nx += getnextdx ( direc, ny );
+            ny += getnextdy ( direc );
+            searchfield( nx, ny, direc );
+            if ( searchfinished() )
+               return ;
+         } 
+         return;
+      } else  
+         if ( r == 1 ) {
+            dir = arr[0];
+            x += getnextdx ( dir, y );
+            y += getnextdy ( dir );
+            fld = actmap->getField( x, y ); 
+            if ( !fld )
                return;
+         } else
+            return;
    }  while ( 1 ); 
 
 }
@@ -842,23 +842,23 @@ bool compareMapResources( GameMap* currentMap, GameMap* replaymap, int player, A
                   mismatch = true;
             }
 
-            for ( int j = 0; j < b2->getProduction().size(); ++j )
-               if ( b2->getProduction()[j] ) {
-                  bool found = false;
-                  for ( int i = 0; i < b1->getProduction().size(); ++i)
-                     if ( b1->getProduction()[i] == b2->getProduction()[j] )
-                        found = true;
-                  if ( !found)
-                     mismatch = true;
-               }
+         for ( int j = 0; j < b2->getProduction().size(); ++j )
+            if ( b2->getProduction()[j] ) {
+               bool found = false;
+               for ( int i = 0; i < b1->getProduction().size(); ++i)
+                  if ( b1->getProduction()[i] == b2->getProduction()[j] )
+                     found = true;
+               if ( !found)
+                  mismatch = true;
+            }
 
-               if ( mismatch ) {
-                  diff = true;
-                  if ( log ) {
-                     s.format ( "Building (%d,%d) production line mismatch !\n", b1->getPosition().x, b1->getPosition().y );
-                     *log += s;
-                  }
-               }
+         if ( mismatch ) {
+            diff = true;
+            if ( log ) {
+               s.format ( "Building (%d,%d) production line mismatch !\n", b1->getPosition().x, b1->getPosition().y );
+               *log += s;
+            }
+         }
       }
    }
 

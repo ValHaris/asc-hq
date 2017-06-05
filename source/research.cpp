@@ -107,7 +107,7 @@ bool TechDependency::eventually_available( const Research& res, list<const Techn
             if ( !eventually_available_single( res, dependencies, stack, k ))
                return false;
          
-         return true;
+      return true;
    } else {
       for ( RequiredTechnologies::const_iterator j = requiredTechnologies.begin(); j != requiredTechnologies.end(); ++j )
          for ( int k = j->from; k <= j->to; ++k ) 

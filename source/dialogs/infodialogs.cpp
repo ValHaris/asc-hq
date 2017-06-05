@@ -334,14 +334,14 @@ void viewMiningPower()
          info[(*i)->baseType] += txt;
       }
 
-      ASCString fullText = "Mining Station Statistics\n\n";
-      for ( InfoMap::iterator i = info.begin(); i != info.end(); ++i )
-         fullText += i->second;
+   ASCString fullText = "Mining Station Statistics\n\n";
+   for ( InfoMap::iterator i = info.begin(); i != info.end(); ++i )
+      fullText += i->second;
 
 
-      ViewFormattedText vft("Mining Stations", fullText, PG_Rect( -1, -1, 750, 550 ));
-      vft.Show();
-      vft.RunModal();
+   ViewFormattedText vft("Mining Stations", fullText, PG_Rect( -1, -1, 750, 550 ));
+   vft.Show();
+   vft.RunModal();
 
 }
 
