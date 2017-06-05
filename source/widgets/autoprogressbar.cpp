@@ -30,11 +30,11 @@ void AutoProgressBar :: tick()
       } else
          p = counter / 100;
 
-         if ( p > 99 )
-            p = 99;
+      if ( p > 99 )
+         p = 99;
 
-         SetProgress( p );
-         lastdisplaytime = ticker;
+      SetProgress( p );
+      lastdisplaytime = ticker;
    }
 
    ++counter;

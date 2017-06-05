@@ -36,10 +36,10 @@
 #pragma pack(1)
 
 struct tpcxheader{
-	       Uint8     manufacturer;
-	       Uint8     version     ;
-	       Uint8     encoding    ;
-	       Uint8     bitsperpixel;
+           Uint8     manufacturer;
+           Uint8     version     ;
+           Uint8     encoding    ;
+           Uint8     bitsperpixel;
            Uint16     xmin,ymin   ;
            Uint16     xmax,ymax   ;
            Uint16     hdpi,vdpi   ;
@@ -344,7 +344,7 @@ void writepcx ( const ASCString& name, int x1, int y1, int x2, int y2, dacpalett
       }
 
    if ( header.nplanes == 1 ) {
-	  Uint8 d = 12;
+      Uint8 d = 12;
       stream.writeUint8 ( d );
       fsize += sizeof ( d );
 
@@ -417,7 +417,7 @@ void writepcx ( const ASCString& name, const Surface& s, const SDLmm::SRect& rec
          int lastbyte = -1;
          int count = 0;
          for ( int x = x1; x < x1 + header.bytesperline; x++ ) {
-        	Uint8 c = (s.GetPixel( x, y ) >> shift[plane]) & 0xff;
+            Uint8 c = (s.GetPixel( x, y ) >> shift[plane]) & 0xff;
    
             if ( (lastbyte == c && count < 63) || lastbyte == -1 ) {
                count ++;
@@ -438,31 +438,30 @@ void writepcx ( const ASCString& name, const Surface& s, const SDLmm::SRect& rec
                
          }
          if ( count > 1 || lastbyte >= 192 ) {
-        	Uint8 d = 192 + count;
+            Uint8 d = 192 + count;
             stream.writeUint8 ( d );
             fsize += sizeof ( d );
          }
          Uint8 lstbyte = lastbyte;
          stream.writeUint8 ( lstbyte );
          fsize += sizeof ( lstbyte );
-      
       }
 
-      if ( header.nplanes == 1 ) {
-    	 Uint8 d = 12;
-         stream.writeUint8 ( d );
-         fsize += sizeof ( d );
+   if ( header.nplanes == 1 ) {
+      Uint8 d = 12;
+      stream.writeUint8 ( d );
+      fsize += sizeof ( d );
 
-         dacpalette256 pal2;
+      dacpalette256 pal2;
 
-         for ( int i = 0; i < 3; i++ )
-            for ( int j = 0; j < 256; j++ )
-               pal2[j][i] = pal[j][i] << 2;
+      for ( int i = 0; i < 3; i++ )
+      for ( int j = 0; j < 256; j++ )
+          pal2[j][i] = pal[j][i] << 2;
 
-         stream.writedata ( &pal2, 768 ); // endian ok !!!
-         fsize += 768 ;
-      }
-      stream.seek ( 0 );
-      header.size = fsize;
-      header.write ( &stream );
+      stream.writedata ( &pal2, 768 ); // endian ok !!!
+      fsize += 768 ;
+   }
+   stream.seek ( 0 );
+   header.size = fsize;
+   header.write ( &stream );
 }

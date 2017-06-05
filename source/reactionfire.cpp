@@ -111,9 +111,10 @@ void tsearchreactionfireingunits :: findOffensiveUnits( Vehicle* vehicle, int he
                            addunit ( eht );
 
       }
-      if ( gamemap->getField(vehicle->xpos, vehicle->ypos)->vehicle == vehicle )
-         for ( int i = 0; i < rfPlayerCount; i++ )
-            if ( fieldvisiblenow ( gamemap->getField ( vehicle->xpos, vehicle->ypos ), i )) {
+      
+   if ( gamemap->getField(vehicle->xpos, vehicle->ypos)->vehicle == vehicle )
+      for ( int i = 0; i < rfPlayerCount; i++ )
+         if ( fieldvisiblenow ( gamemap->getField ( vehicle->xpos, vehicle->ypos ), i )) {
             punitlist ul  = unitlist[i];
             while ( ul ) {
                punitlist next = ul->next;
@@ -226,46 +227,46 @@ int tsearchreactionfireingunits :: attack( Vehicle* attacker, Vehicle* target, c
                   num = j;
                }
 
-               if ( num >= 0 ) {
+         if ( num >= 0 ) {
 
-                  int visibility = 0;
-                  if ( context.display ) {
-                     MessagingHub::Instance().statusInformation( "attacking with weapon " + ASCString::toString( atw->num[num] ));
+            int visibility = 0;
+            if ( context.display ) {
+               MessagingHub::Instance().statusInformation( "attacking with weapon " + ASCString::toString( atw->num[num] ));
 
-                     if ( fieldvisiblenow ( gamemap->getField (attacker->xpos, attacker->ypos ), gamemap->getPlayerView())) {
-                        ++visibility;
-                        context.display->cursor_goto( attacker->getPosition() );
-                        int t = ticker;
-                        while ( t + 15 > ticker )
-                           releasetimeslice();
-                     }
-
-                     if ( fieldvisiblenow ( fld, target, gamemap->getPlayerView() )) {
-                        ++visibility;
-                        context.display->cursor_goto( target->getPosition() );
-                        int t = ticker;
-                        while ( t + 15 > ticker )
-                           releasetimeslice();
-                     }
-                  }
-
-                  tunitattacksunit battle ( attacker, target, false, atw->num[num], true );
-                  // int nwid = target->networkid;
-
-                  if ( context.display && visibility)
-                     context.display->showBattle( battle ); 
-                  else
-                     battle.calc();
-
-                  if ( battle.dv.damage >= 100 )
-                     result = 2;
-                  else
-                     result = 1;
-
-                  battle.setresult( context );
-
-                  updateFieldInfo();
+               if ( fieldvisiblenow ( gamemap->getField (attacker->xpos, attacker->ypos ), gamemap->getPlayerView())) {
+                  ++visibility;
+                  context.display->cursor_goto( attacker->getPosition() );
+                  int t = ticker;
+                  while ( t + 15 > ticker )
+                     releasetimeslice();
                }
+
+               if ( fieldvisiblenow ( fld, target, gamemap->getPlayerView() )) {
+                  ++visibility;
+                  context.display->cursor_goto( target->getPosition() );
+                  int t = ticker;
+                  while ( t + 15 > ticker )
+                     releasetimeslice();
+               }
+            }
+
+            tunitattacksunit battle ( attacker, target, false, atw->num[num], true );
+            // int nwid = target->networkid;
+
+            if ( context.display && visibility)
+               context.display->showBattle( battle ); 
+            else
+               battle.calc();
+
+            if ( battle.dv.damage >= 100 )
+               result = 2;
+            else
+               result = 1;
+
+            battle.setresult( context );
+
+            updateFieldInfo();
+         }
       }
       delete atw;
    }
