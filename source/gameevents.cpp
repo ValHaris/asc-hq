@@ -1820,9 +1820,10 @@ void Reinforcements :: setup ()
 
 class FindUnitPlacementPos : public SearchFields {
       Vehicle* vehicle;
+      bool placed;
    public:
       FindUnitPlacementPos ( GameMap* gamemap, Vehicle* veh )
-        : SearchFields ( gamemap ), vehicle(veh)
+        : SearchFields ( gamemap ), vehicle(veh), placed(false)
         {
            initsearch(MapCoordinate(veh->xpos, veh->ypos),0,10);
            startsearch();
@@ -1837,9 +1838,14 @@ class FindUnitPlacementPos : public SearchFields {
                fld->vehicle->setnewposition ( pos );
                fld->vehicle->addview();
                cancelSearch = true;
+               placed = true;
             }
          }
       };
+
+      bool success() {
+         return placed;
+      }
 };
 
 
@@ -1853,6 +1859,8 @@ void Reinforcements :: execute( MapDisplayInterface* md )
          try {
             Vehicle* veh = Vehicle::newFromStream( gamemap, stream, gamemap->idManager.getNewNetworkID() );
             FindUnitPlacementPos fupp( gamemap, veh );
+            if ( !fupp.success() )
+               delete veh;
          } 
          catch ( InvalidID err ) {
             displaymessage( "Error executing event 'Reinforcements'\n" +  err.getMessage(), 1);
