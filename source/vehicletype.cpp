@@ -1086,16 +1086,6 @@ void VehicleType::runTextIO ( PropertyContainer& pc )
 
    pc.addString( "Calculator", costCalculator, "standard" );
    
-   if ( costCalcMethod == 1 )
-      productionCost = calcProductionCost();
-   
-   if ( costCalcMethod == 2 )
-      productionCost += calcProductionCost();
-
-   if ( costCalcMethod != 0 ) {
-      displayLogMessage ( 4, "unit %s id %d has a production cost of %d E; %d M;  %d F \n", name.c_str(), id, productionCost.energy, productionCost.material, productionCost.fuel );
-   }
-
    pc.closeBracket ();
 
    if ( pc.find( "guideSortHelp") || !pc.isReading() )
@@ -1144,6 +1134,15 @@ void VehicleType::runTextIO ( PropertyContainer& pc )
       objectLayedByMovement.push_back ( 7 );
 
 
+   if ( costCalcMethod == 1 )
+      productionCost = calcProductionCost();
+
+   if ( costCalcMethod == 2 )
+      productionCost += calcProductionCost();
+
+   if ( costCalcMethod != 0 ) {
+      displayLogMessage ( 4, "unit %s id %d has a production cost of %d E; %d M;  %d F \n", name.c_str(), id, productionCost.energy, productionCost.material, productionCost.fuel );
+   }
 }
 
 BitSet VehicleType::convertOldFunctions( int abilities, const ASCString& location )
