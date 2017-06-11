@@ -263,20 +263,20 @@ void ItemSelectorWidget::reLoad( bool show )
    while ( (w = factory->spawnNextItem( scrollWidget, PG_Point(x,y))) ) {
    
       if ( columnCount < 0 )
-         columnCount = scrollWidget->Width() / (w->Width() + gapWidth);
+         columnCount = scrollWidget->Width() / (w->Width() + w->gap());
 
       if ( visibleRowCount < 0 )
-         visibleRowCount = scrollWidget->Height() / (w->Height() + gapWidth);
+         visibleRowCount = scrollWidget->Height() / (w->Height() + w->gap());
 
       w->itemSelected.connect( sigc::bind( sigc::mem_fun( *this, &ItemSelectorWidget::itemSelected ), true ));
       w->itemMarked.connect( sigc::mem_fun( *this, &ItemSelectorWidget::markItem ));
       w->setSelectionCallback( &selectionCallBack );
       widgets.push_back ( w );
       
-      x += w->Width() + gapWidth;
-      if ( x + w->Width() + gapWidth >= scrollWidget->Width() ) {
+      x += w->Width() + w->gap();
+      if ( x + w->Width() + w->gap() >= scrollWidget->Width() ) {
          x = 0; 
-         y += w->Height() + gapWidth;
+         y += w->Height() + w->gap();
       }
    }
 

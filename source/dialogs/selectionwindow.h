@@ -61,6 +61,7 @@ class SelectionWidget : public PG_Widget {
       sigc::signal<void,const SelectionWidget*> itemSelected;
       sigc::signal<void,const SelectionWidget*> itemMarked;
                  
+      virtual int gap() { return 5; };
    protected:
       
       bool eventMouseButtonUp (const SDL_MouseButtonEvent *button);
@@ -94,7 +95,6 @@ class ItemSelectorWidget : public PG_Widget {
       
       int rowCount;
       PG_ScrollWidget* scrollWidget;
-      static const int gapWidth = 5;
       
       PG_LineEdit* nameSearch;
       const SelectionWidget* selectedItem;
