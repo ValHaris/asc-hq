@@ -339,6 +339,30 @@ class SmallButtonHolder : public SpecialInputWidget {
 
 };
 
+int NewGuiHost::gapSize(int num ) {
+   if ( num > 0 )
+      return (num-1)*smallGuiIconSpace;
+   else
+      return 0;
+}
+
+void NewGuiHost::reflowSmallIcons( const SPoint& pos, int count ) {
+   int maxx = 0;
+   int x = 0;
+   int y = 0;
+   for ( int i = 0; i < count; ++i ) {
+      if ( pos.x + (x+1) * smallGuiIconSizeX + gapSize(x+1) > PG_Application::GetScreenWidth() ) {
+         x  = 0;
+         y += 1;
+      }
+      getSmallButton(i)->MoveWidget(x*smallGuiIconSizeX + gapSize(x), y*smallGuiIconSizeY + gapSize(y), false );
+      x++;
+      if ( x > maxx)
+         maxx = x;
+
+   }
+   smallButtonHolder->MoveWidget( PG_Rect( pos.x, pos.y, maxx * smallGuiIconSizeX + gapSize(maxx), (y+1) * smallGuiIconSizeY + gapSize(y+1) ), false );
+}
 
 
 SmallButtonHolder* NewGuiHost :: smallButtonHolder = NULL;
@@ -527,7 +551,7 @@ bool NewGuiHost::showSmallIcons( PG_Widget* parent, const SPoint& pos, bool curs
             smallButtonHolder = new SmallButtonHolder ( NULL, PG_Rect::null );
          
 
-         smallButtonHolder->MoveWidget( PG_Rect( pos.x, pos.y, count * smallGuiIconSizeX + (count-1)*smallGuiIconSpace, smallGuiIconSizeY ), false );
+         reflowSmallIcons( pos, count );
 
          for ( int j = 0; j < buttons.size(); ++j) {
             GuiButton* b = getButton(j);
