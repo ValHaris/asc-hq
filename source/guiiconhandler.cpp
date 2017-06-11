@@ -452,6 +452,8 @@ GuiButton* NewGuiHost::getButton( int i )
       GuiButton* b = new GuiButton ( this, PG_Rect( guiIconSpace + i%3 * (w + guiIconSpace), 10 + guiIconSpace + i/3 * (guiIconSpace + guiIconSizeY), guiIconSizeX, guiIconSizeY));
       buttons.push_back ( b );
       b->Hide();
+      if ( b->y - y + b->Height() > Height() )
+         SizeWidget( Width(), b->y - y + b->Height(), false );
    }
    return buttons[i];
 }
