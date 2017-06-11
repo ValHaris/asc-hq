@@ -39,10 +39,10 @@ class TechAdapterWidget: public SelectionWidget
 {
       ASCString name;
    public:
-      TechAdapterWidget( PG_Widget* parent, const PG_Point& pos, int width, const ASCString& adapterName ) : SelectionWidget( parent, PG_Rect( pos.x, pos.y, width, 18 )), name(adapterName)
+      TechAdapterWidget( PG_Widget* parent, const PG_Point& pos, int width, const ASCString& adapterName ) : SelectionWidget( parent, PG_Rect( pos.x, pos.y, width, 10 )), name(adapterName)
       {
          PG_Label* lbl1 = new PG_Label( this, PG_Rect( 5, 0, width - 10, Height() ), name );
-         lbl1->SetFontSize( lbl1->GetFontSize() -1 );
+         lbl1->SetFontSize( lbl1->GetFontSize() -3 );
 
          SetTransparency( 255 );
       };
@@ -51,6 +51,10 @@ class TechAdapterWidget: public SelectionWidget
       {
          return name;
       };
+
+      int gap() {
+         return 2;
+      }
 
    protected:
 
@@ -121,16 +125,8 @@ class TechAdapterWidget: public SelectionWidget
       items.clear();
       
       if ( !adapterForPlayer ) {
-         
-         for ( int i = 0; i < vehicleTypeRepository.getNum(); ++i )
-            add( items, vehicleTypeRepository.getObject_byPos(i)->techDependency );
-      
-         for ( int i = 0; i < buildingTypeRepository.getNum(); ++i )
-            add( items, buildingTypeRepository.getObject_byPos(i)->techDependency );
-         
-         for ( int i = 0; i < objectTypeRepository.getNum(); ++i )
-            add( items, objectTypeRepository.getObject_byPos(i)->techDependency );
-         
+         for ( TechAdapterContainer::iterator i = techAdapterContainer.begin(); i != techAdapterContainer.end(); ++i )
+            items.insert( (*i)->getName() );
       } else {
          items = *adapterForPlayer;
       }
