@@ -173,6 +173,9 @@ class NewGuiHost : public DashboardPanel {
         SmallButtons smallButtons;
 
         SmallGuiButton* getSmallButton( int i );
+        int gapSize(int num );
+        void reflowSmallIcons(const SPoint& pos, int count);
+
         
         
         static SmallButtonHolder* smallButtonHolder;
