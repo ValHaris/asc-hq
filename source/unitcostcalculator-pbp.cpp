@@ -90,7 +90,7 @@ Resources PBPUnitCostCalculator :: productionCost( const VehicleType* vehicle )
 	// Setzen der Typfaktoren
    if ( vehicle->movemalustyp == MoveMalusType::trooper) {
 	// Soldaten
-      unitfactor = 5;
+      unitfactor = 6;
    } else if ( vehicle->movemalustyp == MoveMalusType::light_wheeled_vehicle ) {
 	// Bugies, Trikes, Motorraeder, Jeeps
       unitfactor = 7;
@@ -123,24 +123,24 @@ Resources PBPUnitCostCalculator :: productionCost( const VehicleType* vehicle )
       unitfactor = 13;
    } else if ( vehicle->movemalustyp == MoveMalusType::helicopter ) {
         // Rotorgetriebene Luftfahrzeuge
-      unitfactor = 14;
+      unitfactor = 13;
    } else if ( vehicle->movemalustyp == MoveMalusType::light_aircraft ) {
    	// kleine Flugzeuge ( Drohnen, Satelliten )
-      unitfactor = 14;
+      unitfactor = 13;
    } else if ( vehicle->movemalustyp == MoveMalusType::medium_aircraft ) {
-      unitfactor = 15;
+      unitfactor = 14;
    } else if ( vehicle->movemalustyp == MoveMalusType::heavy_aircraft ) {
-      unitfactor = 16;
+      unitfactor = 15;
    } else if ( vehicle->movemalustyp == MoveMalusType::rail_vehicle ) {
 	// Schienenfahrzeuge
-      unitfactor = 9;
+      unitfactor = 10;
    } else if ( vehicle->movemalustyp == MoveMalusType::structure) {
 	// Gebaeude, Bunker, Geschuetztuerme
-      unitfactor = 9;
+      unitfactor = 10;
 
    } else {
 	// Geraete und andere
-      unitfactor = 6;
+      unitfactor = 7;
    }
 
    // Basiskosten Chassis
@@ -230,72 +230,78 @@ Resources PBPUnitCostCalculator :: productionCost( const VehicleType* vehicle )
 
 
 
-   // Part IV - weaponcost
+	// Part IV - weaponcost
 
-   // generelle Waffenreichweite, einmaliger Zuschlag
+	// generelle Waffenreichweite, einmaliger Zuschlag
    
-   // Kostenbegrenzung
-   // Waffenreichweitenzuschlag Kurzstrecke
-   if (maxweaponrange > 19 ) {
-		weaponcostm += 2000*unitfactor/10;
-		weaponcostm += (maxweaponrange-10)*60;
-   }
-   // Waffenreichweitenzuschlag Mittelstrecke
-   if (maxweaponrange > 69 ) {
-      weaponcostm += (maxweaponrange-60)*70;
-   }
-   // Waffenreichweitenzuschlag Langstrecke
-   if (maxweaponrange > 99 ) {
-      weaponcostm += (maxweaponrange-90)*80;
-   }
-   // Waffenreichweitenzuschlag Kontinental
-   if (maxweaponrange > 129 ) {
-      weaponcostm += (maxweaponrange-120)*90;
-   }
+	// Kostenbegrenzung
+	// Waffenreichweitenzuschlag Kurzstrecke
+	if (maxweaponrange > 19 ) {
+		weaponcostm += maxweaponrange*70;
+	}
+	// Waffenreichweitenzuschlag Mittelstrecke
+	   if (maxweaponrange > 39 ) {
+		weaponcostm += 1000*unitfactor/10;
+		weaponcostm += (maxweaponrange-40)*80;
+	}
+	// Waffenreichweitenzuschlag Langstrecke
+	if (maxweaponrange > 69 ) {
+		weaponcostm += (maxweaponrange-70)*80;
+	}
+	// Waffenreichweitenzuschlag Kontinental
+	if (maxweaponrange > 109 ) {
+		weaponcostm += (maxweaponrange-110)*90;
+	}
 
 
-   if ( vehicle->weapons.count > 0 ) {
-      for ( int W=0; W < vehicle->weapons.count; ++W ) {
-         int weaponsinglecostm = 0;
-         if (vehicle->weapons.weapon[W].getScalarWeaponType() == cwminen) {
-            if ( vehicle->weapons.weapon[W].shootable() ) {
-               weaponsinglecostm += vehicle->weapons.weapon[W].maxstrength*unitfactor/10;
-            } else {
-               weaponsinglecostm += 100;
-            }
-         }
-         if (vehicle->weapons.weapon[W].getScalarWeaponType() == cwmachinegunn || vehicle->weapons.weapon[W].getScalarWeaponType() == cwsmallmissilen || vehicle->weapons.weapon[W].getScalarWeaponType() == cwbombn) {
-            if ( vehicle->weapons.weapon[W].shootable() ) {
-               weaponsinglecostm += vehicle->weapons.weapon[W].maxstrength*unitfactor/10*5;
-            } else {
-               weaponsinglecostm += 100;
-            }
-         }
-         if (vehicle->weapons.weapon[W].getScalarWeaponType() == cwlargemissilen || vehicle->weapons.weapon[W].getScalarWeaponType() == cwtorpedon) {
-            if ( vehicle->weapons.weapon[W].shootable() ) {
-               weaponsinglecostm += vehicle->weapons.weapon[W].maxstrength*unitfactor/10*7;
-            } else {
-               weaponsinglecostm += 100;
-            }
-         }
-         if (vehicle->weapons.weapon[W].getScalarWeaponType() == cwcannonn || vehicle->weapons.weapon[W].getScalarWeaponType() == cwcruisemissile) {
-            if ( vehicle->weapons.weapon[W].shootable() ) {
-               weaponsinglecostm += vehicle->weapons.weapon[W].maxstrength*unitfactor/10*15;
-            } else {
-               weaponsinglecostm += 100;
-            }
-         }
-         if (vehicle->weapons.weapon[W].getScalarWeaponType() == cwlasern && vehicle->weapons.weapon[W].shootable() ) {
-            weaponsinglecostm += vehicle->weapons.weapon[W].maxstrength*unitfactor/10*12;
-         }
-         if (vehicle->weapons.weapon[W].service() ) {
-            weaponsinglecostm += 1000;
-         }
-         // Waffenreichweitenzuschlag
-         weaponsinglecostm += vehicle->weapons.weapon[W].maxdistance*unitfactor/2;
-         //Move during reaction fire(MDRF) - Move After Attack(MAM) - No Attack After Move(NAAM) - ReactionFire(RF)
-         int weaponspecial = 0;
-         int weaponRF = vehicle->weapons.weapon[W].reactionFireShots*weaponsinglecostm/2;
+	if ( vehicle->weapons.count > 0 ) {
+		for ( int W=0; W < vehicle->weapons.count; ++W ) {
+			int weaponsinglecostm = 0;
+			if (vehicle->weapons.weapon[W].getScalarWeaponType() == cwminen) {
+				if ( vehicle->weapons.weapon[W].shootable() ) {
+					weaponsinglecostm += vehicle->weapons.weapon[W].maxstrength*unitfactor/10;
+				} else {
+					weaponsinglecostm += 100;
+				}
+			}
+			if (vehicle->weapons.weapon[W].getScalarWeaponType() == cwmachinegunn || vehicle->weapons.weapon[W].getScalarWeaponType() == cwsmallmissilen || vehicle->weapons.weapon[W].getScalarWeaponType() == cwbombn) {
+				if ( vehicle->weapons.weapon[W].shootable() ) {
+					weaponsinglecostm += vehicle->weapons.weapon[W].maxstrength*unitfactor/10*5;
+				} else {
+					weaponsinglecostm += 100;
+				}
+			}
+			if (vehicle->weapons.weapon[W].getScalarWeaponType() == cwlargemissilen || vehicle->weapons.weapon[W].getScalarWeaponType() == cwtorpedon) {
+				if ( vehicle->weapons.weapon[W].shootable() ) {
+					weaponsinglecostm += vehicle->weapons.weapon[W].maxstrength*unitfactor/10*7;
+				} else {
+					weaponsinglecostm += 100;
+				}
+			}
+			if (vehicle->weapons.weapon[W].getScalarWeaponType() == cwcannonn || vehicle->weapons.weapon[W].getScalarWeaponType() == cwcruisemissile) {
+				if ( vehicle->weapons.weapon[W].shootable() ) {
+					weaponsinglecostm += vehicle->weapons.weapon[W].maxstrength*unitfactor/10*15;
+				} else {
+					weaponsinglecostm += 100;
+				}
+			}
+			if (vehicle->weapons.weapon[W].getScalarWeaponType() == cwlasern && vehicle->weapons.weapon[W].shootable() ) {
+				weaponsinglecostm += vehicle->weapons.weapon[W].maxstrength*unitfactor/10*12;
+			}
+			if (vehicle->weapons.weapon[W].service() ) {
+				weaponsinglecostm += 1000;
+			}
+			
+			// Waffenreichweitenzuschlag
+			if (vehicle->weapons.weapon[W].getScalarWeaponType() == cwmachinegunn) {
+				weaponsinglecostm += vehicle->weapons.weapon[W].maxdistance*unitfactor/4;
+			} else {
+				weaponsinglecostm += vehicle->weapons.weapon[W].maxdistance*unitfactor/2;
+				
+			}
+			//Move during reaction fire(MDRF) - Move After Attack(MAM) - No Attack After Move(NAAM) - ReactionFire(RF)
+			int weaponspecial = 0;
+			int weaponRF = vehicle->weapons.weapon[W].reactionFireShots*weaponsinglecostm/2;
          int weaponMAM = maxmoverange*weaponsinglecostm/150;
          int weaponNAAM = weaponsinglecostm/2;
          int weaponMDRF = vehicle->weapons.weapon[W].reactionFireShots*maxmoverange/100;
@@ -437,13 +443,9 @@ Resources PBPUnitCostCalculator :: productionCost( const VehicleType* vehicle )
       res.material -= int(typecostm/7);
    }
 
-   // Kamikazeeinheiten
-   if ( vehicle->hasFunction( ContainerBaseType::KamikazeOnly )) {
-      res.material -= int((typecostm+weaponcostm)/2);
-   }
 
    // low movement
-   if ( maxmoverange < 19 ) {
+   if ( maxmoverange < 12 ) {
       res.material -= int(typecostm/4);
    }
 
@@ -453,6 +455,12 @@ Resources PBPUnitCostCalculator :: productionCost( const VehicleType* vehicle )
 	   if ( res.material > tech * 10000 ) {
 		   res.material -= (res.material - tech * 10000) / 2;
 	   }
+   }
+	// Kamikazeeinheiten
+	if ( vehicle->hasFunction( ContainerBaseType::KamikazeOnly )) {
+		if (res.material > 5000) {
+			res.material -= int((res.material - 5000)/2);
+		}
    }
    // Energiekosten
    if (maxmoverange < 20 ) {
