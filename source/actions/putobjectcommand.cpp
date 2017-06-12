@@ -57,21 +57,21 @@ PutObjectCommand :: PutObjectCommand ( Vehicle* unit )
 vector<MapCoordinate> PutObjectCommand::getFields()
 {
    vector<MapCoordinate> fields;
-   for ( map<MapCoordinate,vector<int> > ::iterator i = objectsCreatable.begin(); i != objectsCreatable.end(); ++i )
+   for ( map<MapCoordinate,set<int> > ::iterator i = objectsCreatable.begin(); i != objectsCreatable.end(); ++i )
       fields.push_back ( i->first );
    
-   for ( map<MapCoordinate,vector<int> > ::iterator i = objectsRemovable.begin(); i != objectsRemovable.end(); ++i )
+   for ( map<MapCoordinate,set<int> > ::iterator i = objectsRemovable.begin(); i != objectsRemovable.end(); ++i )
       if ( find(fields.begin(), fields.end(), i->first) == fields.end() )
          fields.push_back ( i->first );
    return fields;
 }
 
-const vector<int>& PutObjectCommand::getCreatableObjects( const MapCoordinate& pos )
+const set<int>& PutObjectCommand::getCreatableObjects( const MapCoordinate& pos )
 {
-   return objectsCreatable[pos];   
+   return objectsCreatable[pos];
 }
 
-const vector<int>& PutObjectCommand::getRemovableObjects( const MapCoordinate& pos )
+const set<int>& PutObjectCommand::getRemovableObjects( const MapCoordinate& pos )
 {
    return objectsRemovable[pos];
 }
@@ -140,9 +140,11 @@ void PutObjectCommand :: fieldChecker( const MapCoordinate& pos )
       Vehicle* veh = getUnit();
       
       for ( int i = 0; i < veh->typ->objectsBuildable.size(); i++ )
-         for ( int j = veh->typ->objectsBuildable[i].from; j <= veh->typ->objectsBuildable[i].to; j++ )
-            if ( checkObject( fld, getMap()->getobjecttype_byid ( j ), Build ))
-               objectsCreatable[pos].push_back( j );
+         for ( int j = veh->typ->objectsBuildable[i].from; j <= veh->typ->objectsBuildable[i].to; j++ ) {
+            ObjectType* objType = getMap()->getobjecttype_byid ( j );
+            if ( checkObject( fld, objType, Build ))
+               objectsCreatable[pos].insert( objType->id );
+         }
 
 
       for ( int i = 0; i < veh->typ->objectGroupsBuildable.size(); i++ )
@@ -152,13 +154,15 @@ void PutObjectCommand :: fieldChecker( const MapCoordinate& pos )
                if ( objtype->groupID == j )
                   if ( checkObject( fld, objtype, Build ))
                      if ( find ( objectsCreatable[pos].begin(), objectsCreatable[pos].end(), objtype->id) == objectsCreatable[pos].end() )
-                        objectsCreatable[pos].push_back( objtype->id );
+                        objectsCreatable[pos].insert( objtype->id );
             }
 
       for ( int i = 0; i < veh->typ->objectsRemovable.size(); i++ )
-         for ( int j = veh->typ->objectsRemovable[i].from; j <= veh->typ->objectsRemovable[i].to; j++ )
-            if ( checkObject( fld, getMap()->getobjecttype_byid ( j ), Remove ))
-               objectsRemovable[pos].push_back( j );
+         for ( int j = veh->typ->objectsRemovable[i].from; j <= veh->typ->objectsRemovable[i].to; j++ ) {
+            ObjectType* objType = getMap()->getobjecttype_byid ( j );
+            if ( checkObject( fld, objType, Remove ))
+               objectsRemovable[pos].insert( objType->id );
+         }
 
 
       for ( int i = 0; i < veh->typ->objectGroupsRemovable.size(); i++ )
@@ -168,7 +172,7 @@ void PutObjectCommand :: fieldChecker( const MapCoordinate& pos )
                if ( objtype->groupID == j )
                   if ( checkObject( fld, objtype, Remove ))
                      if ( find ( objectsRemovable[pos].begin(), objectsRemovable[pos].end(), objtype->id) == objectsRemovable[pos].end() )
-                        objectsRemovable[pos].push_back( objtype->id );
+                        objectsRemovable[pos].insert( objtype->id );
             }
 
    }
@@ -212,7 +216,7 @@ ActionResult PutObjectCommand::go ( const Context& context )
    
    searchFields();
 
-   vector<int>* objects;
+   set<int>* objects;
    if ( mode == Build ) {
       objects = &objectsCreatable[target];
    } else {

@@ -1568,14 +1568,14 @@ void ObjectBuildingGui::eval( const MapCoordinate& mc, ContainerBase* subject )
 
     if ( poc ) {
         int num = 0;
-        const vector<int>& creatable = poc->getCreatableObjects( mc );
-        for ( vector<int>::const_iterator i = creatable.begin(); i != creatable.end(); ++i ) {
+        const set<int>& creatable = poc->getCreatableObjects( mc );
+        for ( set<int>::const_iterator i = creatable.begin(); i != creatable.end(); ++i ) {
             addButton(num, mc, veh, *i);
         }
 
 
-        const vector<int>& removable = poc->getRemovableObjects( mc );
-        for ( vector<int>::const_iterator i = removable.begin(); i != removable.end(); ++i ) {
+        const set<int>& removable = poc->getRemovableObjects( mc );
+        for ( set<int>::const_iterator i = removable.begin(); i != removable.end(); ++i ) {
             addButton(num, mc, veh, -(*i));
         }
 
