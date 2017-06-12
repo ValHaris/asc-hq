@@ -42,8 +42,8 @@ class PutObjectCommand : public UnitCommand {
       
       void fieldChecker( const MapCoordinate& pos );
       
-      map<MapCoordinate,vector<int> > objectsCreatable;
-      map<MapCoordinate,vector<int> > objectsRemovable;
+      map<MapCoordinate,set<int> > objectsCreatable;
+      map<MapCoordinate,set<int> > objectsRemovable;
       
       bool checkObject( MapField* fld, ObjectType* objtype, Mode mode );
       
@@ -68,8 +68,8 @@ class PutObjectCommand : public UnitCommand {
       ActionResult go ( const Context& context ); 
       ASCString getCommandString() const;
       
-      const vector<int>& getCreatableObjects( const MapCoordinate& pos );
-      const vector<int>& getRemovableObjects( const MapCoordinate& pos ); 
+      const set<int>& getCreatableObjects( const MapCoordinate& pos );
+      const set<int>& getRemovableObjects( const MapCoordinate& pos );
       
       vector<MapCoordinate> getFields();
 };
