@@ -901,7 +901,7 @@ ASCString SingleWeapon::getName ( void ) const
 ASCString    SingleWeapon::getIconFileName( int numerical )
 {
    switch ( numerical ) {
-      case cwcruisemissile:
+      case cwcruisemissilen:
          return "weap-cruisemissile";
       case cwbombn:
          return "weap-bomb";

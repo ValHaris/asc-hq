@@ -647,7 +647,7 @@ class CargoDialog : public Panel
       }
 
       void showAmmo() {
-         setLabelText( "cmmun", container->getAmmo( cwcruisemissile, maxint, true ));
+         setLabelText( "cmmun", container->getAmmo( cwcruisemissilen, maxint, true ));
          setLabelText( "minemun", container->getAmmo( cwminen, maxint, true ));
          setLabelText( "bombmun", container->getAmmo( cwbombn, maxint, true ));
          setLabelText( "lmmun", container->getAmmo( cwlargemissilen, maxint, true ));

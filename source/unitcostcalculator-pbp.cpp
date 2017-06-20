@@ -278,7 +278,7 @@ Resources PBPUnitCostCalculator :: productionCost( const VehicleType* vehicle )
 					weaponsinglecostm += 100;
 				}
 			}
-			if (vehicle->weapons.weapon[W].getScalarWeaponType() == cwcannonn || vehicle->weapons.weapon[W].getScalarWeaponType() == cwcruisemissile) {
+			if (vehicle->weapons.weapon[W].getScalarWeaponType() == cwcannonn || vehicle->weapons.weapon[W].getScalarWeaponType() == cwcruisemissilen) {
 				if ( vehicle->weapons.weapon[W].shootable() ) {
 					weaponsinglecostm += vehicle->weapons.weapon[W].maxstrength*unitfactor/10*15;
 				} else {

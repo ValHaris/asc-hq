@@ -899,7 +899,7 @@ AttackWeap*  attackpossible( const Vehicle*     attacker, int x, int y)
                   if (attacker->typ->weapons.weapon[i].shootable() )
                      if ( attacker->typ->weapons.weapon[i].getScalarWeaponType() == cwcannonn ||
                           attacker->typ->weapons.weapon[i].getScalarWeaponType() == cwlasern ||
-                          attacker->typ->weapons.weapon[i].getScalarWeaponType() == cwcruisemissile ||
+                          attacker->typ->weapons.weapon[i].getScalarWeaponType() == cwcruisemissilen ||
                           attacker->typ->weapons.weapon[i].getScalarWeaponType() == cwlargemissilen ||
                           attacker->typ->weapons.weapon[i].getScalarWeaponType() == cwsmallmissilen ||
                           attacker->typ->weapons.weapon[i].getScalarWeaponType() == cwtorpedon ||
