@@ -226,7 +226,7 @@ Resources StandardUnitCostCalculator :: productionCost( const VehicleType* vehic
                weaponsinglecostm += 50;
             }
          }
-         if (vehicle->weapons.weapon[W].getScalarWeaponType() == cwcannonn || vehicle->weapons.weapon[W].getScalarWeaponType() == cwcruisemissile) {
+         if (vehicle->weapons.weapon[W].getScalarWeaponType() == cwcannonn || vehicle->weapons.weapon[W].getScalarWeaponType() == cwcruisemissilen) {
             if ( vehicle->weapons.weapon[W].shootable() ) {
                weaponsinglecoste += vehicle->weapons.weapon[W].maxstrength*15;
                weaponsinglecostm += vehicle->weapons.weapon[W].maxstrength*15;

@@ -62,8 +62,8 @@ extern const char*  cvehiclefunctions[];
 
 #define weaponTypeNum 13
  extern const char*  cwaffentypen[weaponTypeNum] ;
- #define cwcruisemissile 0
- #define cwcruisemissileb ( 1 << cwcruisemissile )
+ #define cwcruisemissilen 0
+ #define cwcruisemissileb ( 1 << cwcruisemissilen )
  #define cwminen 1
  #define cwmineb ( 1 << cwminen   )
  #define cwbombn 2
