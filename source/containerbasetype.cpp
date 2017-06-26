@@ -204,6 +204,13 @@ void ContainerBaseType :: runTextIO ( PropertyContainer& pc )
    pc.addString( "InfoImage", infoImageFilename, "" );
    pc.addString( "InfoImageSmall", infoImageSmallFilename, "" );
 
+   if ( infoImageFilename.find_first_of("\n\r") != ASCString::npos )
+      fatalError ( "Invalid InfoImage filaname in file: " + pc.getFileName() );
+
+   if ( infoImageSmallFilename.find_first_of("\n\r") != ASCString::npos )
+      fatalError ( "Invalid InfoImageSmall filaname in file: " + pc.getFileName() );
+
+
    pc.openBracket ( "MaxResourceProduction" );
    maxplus.runTextIO ( pc, Resources(0,0,0) );
    pc.closeBracket ();
@@ -309,7 +316,7 @@ void ContainerBaseType :: read ( tnstream& stream )
       entranceSystems[i].read( stream );
 
    if ( version >= 2 )
-      infoImageFilename = stream.readString();
+      infoImageFilename = stream.readString(true);
 
    if ( version >= 3 )
       stream.readBitset( features );
