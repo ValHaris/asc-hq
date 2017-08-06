@@ -1,1 +1,1 @@
-sudo apt-get install g++ libsdl1.2-dev libsdl-mixer1.2-dev libsdl-image1.2-dev libsdl-sound1.2-dev libbz2-dev libphysfs-dev libexpat1-dev libboost-all-dev libsigc++-2.0-dev libfreetype6-dev libloki-dev liblua5.1-0-dev libwxgtk2.8-dev
+sudo apt-get install g++ libsdl1.2-dev libsdl-mixer1.2-dev libsdl-image1.2-dev libsdl-sound1.2-dev libbz2-dev libphysfs-dev libexpat1-dev libboost-all-dev libsigc++-2.0-dev libfreetype6-dev libloki-dev liblua5.1-0-dev libwxgtk3.0-dev
