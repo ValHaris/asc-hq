@@ -23,7 +23,7 @@ if test "X$1" = X--speed; then
    export CFLAGS="-O3 -g -Wall -Wextra -Wno-unused-parameter"
    export PARAM=
 else
-   export CXXFLAGS="-O0 -g -Wall -Wextra -Wno-unused-parameter -ansi"
+   export CXXFLAGS="-O0 -g -Wall -Wextra -Wno-unused-parameter -ansi -std=c++11 -Werror=terminate -Wno-deprecated-declarations"
    export CFLAGS="-O0 -g -Wall -Wextra -Wno-unused-parameter"
    export PARAM=$*
 fi
