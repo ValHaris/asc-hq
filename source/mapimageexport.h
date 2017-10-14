@@ -25,6 +25,8 @@
 
 class WholeMapRenderer : public MapRenderer {
       GameMap* gamemap;
+      int xsize;
+      int ysize;
    public:
       Surface surface;
       WholeMapRenderer( GameMap* actmap );

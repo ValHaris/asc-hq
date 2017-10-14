@@ -27,15 +27,26 @@
 
 WholeMapRenderer :: WholeMapRenderer ( GameMap* actmap ) : gamemap ( actmap )
 {
-   int bufsizex = actmap->xsize * fielddistx + 200 ;
-   int bufsizey = actmap->ysize * fielddisty + 200 ;
+   if ( actmap->xsize > (16300 - 200) / fielddistx )
+      xsize = (16300 - 200) / fielddistx;
+   else
+      xsize = actmap->xsize;
+
+   if ( actmap->ysize > (16300 - 200) / fielddisty )
+      ysize = (16300 - 200) / fielddisty;
+   else
+      ysize = actmap->ysize;
+
+
+   int bufsizex = xsize * fielddistx + 200 ;
+   int bufsizey = ysize * fielddisty + 200 ;
    surface = Surface::createSurface( bufsizex, bufsizey, 32, Surface::transparent << 24 );
 }
 
 
 void WholeMapRenderer::render()
 {
-   paintTerrain( surface, gamemap, gamemap->getPlayerView(), ViewPort( 0, 0, gamemap->xsize, gamemap->ysize ), MapCoordinate( 0, 0 ) );
+   paintTerrain( surface, gamemap, gamemap->getPlayerView(), ViewPort( 0, 0, xsize, ysize ), MapCoordinate( 0, 0 ) );
    // renderVisibility();
 }
 
@@ -47,8 +58,8 @@ void WholeMapRenderer::renderVisibility()
    PutPixel<4, ColorMerger_AlphaMerge > pp(surface);
 
    Surface& mask = IconRepository::getIcon("largehex.pcx");
-   for ( int y = 0; y < gamemap->ysize; ++y )
-      for ( int x = 0; x < gamemap->xsize; ++x )
+   for ( int y = 0; y < ysize; ++y )
+      for ( int x = 0; x < xsize; ++x )
          if ( fieldvisiblenow( gamemap->getField(x,y), gamemap->getPlayerView() )) {
             int view = -1;
             int maxview = 0;
@@ -69,12 +80,12 @@ void WholeMapRenderer::renderVisibility()
 
 void WholeMapRenderer::writePCX( const ASCString& filename )
 {
-   writepcx( filename, surface, SDLmm::SRect( SPoint( surfaceBorder, surfaceBorder), (gamemap->xsize-1) * fielddistx + fielddisthalfx + fieldsizex, (gamemap->ysize - 1) * fielddisty + fieldysize ) );
+   writepcx( filename, surface, SDLmm::SRect( SPoint( surfaceBorder, surfaceBorder), (xsize-1) * fielddistx + fielddisthalfx + fieldsizex, (ysize - 1) * fielddisty + fieldysize ) );
 }
 
 void WholeMapRenderer::writePNG( const ASCString& filename )
 {
-   ::writePNG( constructFileName(0,"",filename), surface, SDLmm::SRect( SPoint( surfaceBorder, surfaceBorder), (gamemap->xsize-1) * fielddistx + fielddisthalfx + fieldsizex, (gamemap->ysize - 1) * fielddisty + fieldysize ) );
+   ::writePNG( constructFileName(0,"",filename), surface, SDLmm::SRect( SPoint( surfaceBorder, surfaceBorder), (xsize-1) * fielddistx + fielddisthalfx + fieldsizex, (ysize - 1) * fielddisty + fieldysize ) );
 }
 
 void writemaptopcx ( GameMap* gamemap, bool addview )
