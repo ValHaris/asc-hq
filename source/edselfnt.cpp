@@ -61,7 +61,7 @@ bool objectComp( const ObjectType* v1, const ObjectType* v2 )
 bool terrainComp( const TerrainType* v1, const TerrainType* v2 )
 {
    if (  v1->weather[0] && v2->weather[0] )
-      return v1->weather[0]->art.to_ulong()  < v2->weather[0]->art.to_ulong();
+      return v1->weather[0]->art.to_string()  < v2->weather[0]->art.to_string();
    else
       return v1->name < v2->name;
 }
