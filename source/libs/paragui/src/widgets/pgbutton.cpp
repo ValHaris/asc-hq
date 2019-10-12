@@ -102,31 +102,31 @@ void PG_Button::LoadThemeStyle(const std::string& widgettype, const std::string&
 	SetFontColor(fontcolor);
 
 	switch (GetID()) {
-		case OK:
+		case int(OK):
 			SetIcon(t->FindSurface(widgettype, objectname, "ok_icon"));
 			break;
 
-		case YES:
+		case int(YES):
 			SetIcon(t->FindSurface(widgettype, objectname, "yes_icon"));
 			break;
 
-		case NO:
+		case int(NO):
 			SetIcon(t->FindSurface(widgettype, objectname, "no_icon"));
 			break;
 
-		case APPLY:
+		case int(APPLY):
 			SetIcon(t->FindSurface(widgettype, objectname, "apply_icon"));
 			break;
 
-		case CANCEL:
+		case int (CANCEL):
 			SetIcon(t->FindSurface(widgettype, objectname, "cancel_icon"));
 			break;
 
-		case CLOSE:
+		case int (CLOSE):
 			SetIcon(t->FindSurface(widgettype, objectname, "close_icon"));
 			break;
 
-		case HELP:
+		case int (HELP):
 			SetIcon(t->FindSurface(widgettype, objectname, "help_icon"));
 			break;
 
