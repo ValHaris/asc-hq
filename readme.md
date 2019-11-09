@@ -2,7 +2,7 @@
 
 A turn based strategy game in the tradition of Battle Isle
 
-It can be player
+It can be played
  - as single player game against the computer, offering several campaigns
  - sequential multiplayer, either hot-seat of play-by-email
  - in the multi-player universe [Project Battle Planets](http://www.battle-planet.de) (German language community)
