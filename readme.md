@@ -25,7 +25,7 @@ ASC 2.6 (on Git ` master` branch) is the traditional game engine, for which the 
 
 ### ASC 2.8
 
-ASC 2.8 (on Git `newattach` branch) has a couple of changes to the game mechanics that were made for [Project Battle Planets](http://www.battle-planet.de). This changes broke the campaigns and nobody bothered to adjust them so far. For that reason, this version is recommended for participants of [Project Battle Planets](http://www.battle-planet.de) only.
+ASC 2.8 (on Git `newattack` branch) has a couple of changes to the game mechanics that were made for [Project Battle Planets](http://www.battle-planet.de). These changes broke the campaigns and nobody bothered to fix them so far. For that reason, this version is recommended for participants of [Project Battle Planets](http://www.battle-planet.de) only.
 
 
 ## Downloading binaries
