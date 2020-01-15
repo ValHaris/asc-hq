@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(asc,2.6.1.0)
+AC_INIT(asc,2.6.2.0)
 
 AM_CONFIG_HEADER(config.h)
 AM_INIT_AUTOMAKE
@@ -688,11 +688,11 @@ AC_ARG_ENABLE( extradata, AS_HELP_STRING([--enable-extradata], [Build extra data
 
 AC_MSG_NOTICE( Creating Makefile for main.ascdat )
 mkdir -p data
-perl -e 'print "main.d: "; @a=<>; chomp @a; print join(" ", map ( $_ = "\$(srcdir)/" . $_ , @a )); print "\n\ttouch main.d\n"; ' < $srcdir/data/files.txt > data/main.mak
+perl -e 'print "main.d: "; foreach(<>) { chomp; @a = glob("'$srcdir/data/'$_"); $l=@a; print "\$(srcdir)/$_ " if ($l > 0 ) ; }  print "\n\ttouch main.d\n"; '< $srcdir/data/files.txt > data/main.mak
 
 if test x$extradata = xyes ; then 
    mkdir -p extra-data
-   perl -e 'print "pbp.d: "; @a=<>; chomp @a; print join(" ", map ( $_ = "\$(srcdir)/" . $_ , @a )); print "\n\ttouch pbp.d\n"; ' < $srcdir/extra-data/files_pbp.txt > extra-data/pbp.mak
+   perl -e 'print "pbp.d: "; foreach(<>) { chomp; @a = glob("'$srcdir/data/'$_"); $l=@a; print "\$(srcdir)/$_ " if ($l > 0 ) ; }  print "\n\ttouch pbp.d\n"; '< $srcdir/extra-data/files_pbp.txt > extra-data/pbp.mak
 
    extradatadir=extra-data
 fi
