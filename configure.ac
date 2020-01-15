@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(asc,2.8.0.2)
+AC_INIT(asc,2.8.1.0)
 
 AM_CONFIG_HEADER(config.h)
 AM_INIT_AUTOMAKE
