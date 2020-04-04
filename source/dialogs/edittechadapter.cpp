@@ -28,6 +28,7 @@
 #include "../itemrepository.h"
 #include "../iconrepository.h"
 #include "../vehicletype.h"
+#include "../dialog.h"
 #include "unitinfodialog.h"
 
 #include "selectionwindow.h"
@@ -242,7 +243,20 @@ class EditTechAdapter : public ASC_PG_Dialog
          playerItemSelector->reLoad( true );
          return true;  
       }
-      
+
+      bool addRange()
+      {
+         int min = 0;
+         int max = 100;
+         min = editInt("Minimum ID", 0, 0, maxint);
+         max = editInt("Maximum ID", 200, 0, maxint );
+         for ( int i = min; i <= max; ++i )
+            playerAdapter.insert( ASCString::toString(i) );
+         playerItemSelector->reLoad( true );
+
+         return true;
+      }
+
       bool remove()
       {
          set<ASCString>::iterator i = playerAdapter.find( playerFactory->getSelected());
@@ -291,6 +305,7 @@ class EditTechAdapter : public ASC_PG_Dialog
          
          (new PG_Button(this, PG_Rect( left.x + left.Width() + 10, left.y, right.x - left.x - left.Width() - 20,  30), "Add >>" ))->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &EditTechAdapter::add)));
          (new PG_Button(this, PG_Rect( left.x + left.Width() + 10, left.y + 40, right.x - left.x - left.Width() - 20,  30), "Remove <<" ))->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &EditTechAdapter::remove)));
+         (new PG_Button(this, PG_Rect( left.x + left.Width() + 10, left.y + 80, right.x - left.x - left.Width() - 20,  30), "Add Range" ))->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &EditTechAdapter::addRange)));
          
          Emboss* deps = new Emboss(this, PG_Rect ( 10, Height() - 160, 330, 120 ), true);
          objectList = new TextRenderer( deps, PG_Rect(1,1,deps->Width() - 2, deps->Height() - 2) );
