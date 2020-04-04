@@ -6,7 +6,7 @@ set -x
 # the repository containing the compiled executables from windows
 svnbasepath=~/asc/svn-exe/
 
-if hg summary | grep "branch: default"; then
+if git rev-parse --abbrev-ref HEAD | grep "master"; then
    export "INSTPATH=--with-win32-DLL-path=$svnbasepath/trunk/dll --with-win32-build-path=$svnbasepath/trunk/main"
    echo Old Attack
 elif hg summary | grep "branch: newattack"; then
