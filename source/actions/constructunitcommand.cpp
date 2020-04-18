@@ -253,7 +253,7 @@ ActionResult ConstructUnitCommand::go ( const Context& context )
             return res;
       }
    } else {
-      SpawnUnit* spawnUnit  = new SpawnUnit(getMap(), getContainer(), vehicleTypeID );
+      SpawnUnit* spawnUnit  = new SpawnUnit(getMap(), getContainer(), vehicleTypeID, newUnitID );
       ActionResult res = spawnUnit->execute( context );
       if ( !res.successful() )
          return res;

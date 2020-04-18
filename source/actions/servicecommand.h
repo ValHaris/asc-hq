@@ -50,6 +50,7 @@ class ServiceCommand : public ContainerCommand {
       bool destinationSpecified;
       int destinationContainerID;
       
+      const ContainerBase* getDestination() const;
       ContainerBase* getDestination();
       
    protected:
