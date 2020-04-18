@@ -28,19 +28,22 @@
 #include "../gamemap.h"
 #include "../viewcalculation.h"
      
-SpawnUnit::SpawnUnit( GameMap* gamemap, const MapCoordinate3D& position, int vehicleTypeID, int owner )
+SpawnUnit::SpawnUnit( GameMap* gamemap, const MapCoordinate3D& position, int vehicleTypeID, int owner, int unitID )
    : GameAction( gamemap ), pos(position), networkid(-1), carrierID(0), carrier( false ), mapNetworkIdCounterBefore(0), mapNetworkIdCounterAfter(0)
 {
    this->vehicleTypeID = vehicleTypeID;
    this->owner = owner;
-   
+   if ( unitID > 0 )
+      networkid = unitID;
 }
             
-SpawnUnit::SpawnUnit( GameMap* gamemap, const ContainerBase* carrier, int vehicleTypeID )
+SpawnUnit::SpawnUnit( GameMap* gamemap, const ContainerBase* carrier, int vehicleTypeID, int unitID )
    : GameAction( gamemap ), pos( carrier->getPosition() ), networkid(-1), carrierID( carrier->getIdentification() ), carrier(true), mapNetworkIdCounterBefore(0), mapNetworkIdCounterAfter(0)
 {
    this->vehicleTypeID = vehicleTypeID;
    this->owner = carrier->getOwner();
+   if ( unitID > 0 )
+      networkid = unitID;
 }
             
             
@@ -121,7 +124,13 @@ ActionResult SpawnUnit::runAction( const Context& context )
    mapNetworkIdCounterBefore = getMap()->idManager.unitnetworkid;
 
    Vehicle* v = new Vehicle( vehicleType, getMap(), owner );
-   networkid= v->networkid;
+   if ( networkid > 0 ) {
+      // this is redo
+      v->networkid = networkid;
+      getMap()->idManager.registerUnitNetworkID(v);
+   } else {
+      networkid= v->networkid;
+   }
    
    mapNetworkIdCounterAfter = getMap()->idManager.unitnetworkid;
    

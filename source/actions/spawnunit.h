@@ -43,8 +43,8 @@ class SpawnUnit : public GameAction {
       template<class Child> friend GameAction* GameActionCreator( GameMap* map);
 
    public:
-      SpawnUnit( GameMap* gamemap, const MapCoordinate3D& position, int vehicleTypeID, int owner );
-      SpawnUnit( GameMap* gamemap, const ContainerBase* carrier, int vehicleTypeID );
+      SpawnUnit( GameMap* gamemap, const MapCoordinate3D& position, int vehicleTypeID, int owner, int unitID = 0 );
+      SpawnUnit( GameMap* gamemap, const ContainerBase* carrier, int vehicleTypeID, int unitID = 0 );
       
       ASCString getDescription() const;
       

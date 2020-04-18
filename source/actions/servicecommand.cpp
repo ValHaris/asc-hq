@@ -83,11 +83,20 @@ void ServiceCommand::setDestination( ContainerBase* destination )
  
 ContainerBase* ServiceCommand::getDestination()
 {
+   if ( !destinationSpecified )
+      return NULL;
+
+   return getMap()->getContainer( destinationContainerID );
+}
+
+const ContainerBase* ServiceCommand::getDestination() const
+{
    if ( !destinationSpecified )  
       return NULL;
    
    return getMap()->getContainer( destinationContainerID );
 }
+
 
  
 TransferHandler& ServiceCommand::getTransferHandler()
@@ -95,7 +104,7 @@ TransferHandler& ServiceCommand::getTransferHandler()
    delete transferHandler;
    transferHandler = NULL;
    if ( !getDestination() ) 
-      throw ActionResult( 22002 );
+      throw ActionResult( 22002 , "At " + getDescription());
       
    transferHandler = new TransferHandler( getContainer(), getDestination() );
    
@@ -239,6 +248,11 @@ ASCString ServiceCommand::getDescription() const
    if ( getContainer(true) ) {
       s += " by " + getContainer()->getName();
    }
+
+   if ( getDestination() ) {
+      s += " for " + getDestination()->getName();
+   }
+
    return s;
 }
 
