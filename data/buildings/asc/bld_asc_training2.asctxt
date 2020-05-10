@@ -1,0 +1,8 @@
+BuildingType { 
+   parent = 23
+   ID = 42
+   Pictures { 
+      dry = bld_asc_training2.png
+   } Pictures
+   Entry = A2
+} BuildingType
