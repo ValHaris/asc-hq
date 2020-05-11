@@ -1,6 +1,6 @@
 BuildingType { 
    parent = 23
-   ID = 42
+   ID = 44
    Pictures { 
       dry = bld_asc_training2.png
    } Pictures
