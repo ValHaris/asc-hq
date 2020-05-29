@@ -406,21 +406,26 @@ if test "$ft2test" = "yes"; then
       FREETYPE_CFLAGS="`$ac_cv_path_freetype_config --cflags`"
       FREETYPE_LIBS="`$ac_cv_path_freetype_config --libs`"
    else
-      AC_CHECK_LIB(freetype,FT_Init_FreeType,have_freetype=yes)
-      AC_CHECK_HEADER(ft2build.h,have_ft2build=yes)
-      if test "$have_ft2build" != "yes"; then
-         have_freetype="no"
-      elif test "$have_freetype" = "yes"; then
-         FREETYPE_LIBS="-lfreetype"
-         ft2inc="no"
-         AC_MSG_CHECKING(freetype2 include directory)
-         if test -d /usr/local/include/freetype2; then
-            ft2inc="/usr/local/include/freetype2"
-         elif test -d /usr/include/freetype2; then
-            ft2inc="/usr/include/freetype2"
+      PKG_CHECK_MODULES([FREETYPE],freetype2,have_freetype=yes)
+      
+      if test "$have_freetype" != "yes"; then
+         
+         AC_CHECK_LIB(freetype,FT_Init_FreeType,have_freetype=yes)
+         AC_CHECK_HEADER(freetype/ft2build.h,have_ft2build=yes)
+         if test "$have_ft2build" != "yes"; then
+            have_freetype="no"
+         elif test "$have_freetype" = "yes"; then
+            FREETYPE_LIBS="-lfreetype"
+            ft2inc="no"
+            AC_MSG_CHECKING(freetype2 include directory)
+            if test -d /usr/local/include/freetype2; then
+               ft2inc="/usr/local/include/freetype2"
+            elif test -d /usr/include/freetype2; then
+               ft2inc="/usr/include/freetype2"
+            fi
+            AC_MSG_RESULT($ft2inc)
+            FREETYPE_CFLAGS="-I$ft2inc"
          fi
-         AC_MSG_RESULT($ft2inc)
-         FREETYPE_CFLAGS="-I$ft2inc"
       fi
    fi
 
