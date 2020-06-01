@@ -458,9 +458,9 @@ bool AStar3D::findPath( const vector<MapCoordinate3D>& B ) {
 
            if ( !operationLimiter || operationLimiter->allowMovement() ) {
 
-              // this check is actually only necessary for the very first field in which the unit starts.
+              // this check is only necessary for the very first field (gval==0) in which the unit starts.
               // The unit may not be able to leave it, for example if a ship is frozen in ice
-              if ( terrainaccessible ( oldFld, veh) || veh->getMap()->getgameparameter(cgp_movefrominvalidfields)) {
+              if ( terrainaccessible ( oldFld, veh) || veh->getMap()->getgameparameter(cgp_movefrominvalidfields) || N_ptr->gval > 0) {
 
                  for( int dci = 0; dci < 6; dci++ ) {
                     HexDirection dir = HexDirection(directions[dci]);
