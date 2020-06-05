@@ -262,7 +262,7 @@ GameActionID PutMineCommand::getID() const
 
 ASCString PutMineCommand::getDescription() const
 {
-   ASCString s = "Put Mine"; 
+   ASCString s = (mode == Build) ? "Put Mine" : "Remove Mine";
    if ( getUnit() ) {
       s += " by " + getUnit()->getName();
    }
