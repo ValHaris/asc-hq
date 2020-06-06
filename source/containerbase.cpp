@@ -539,6 +539,31 @@ int  ContainerBase :: vehicleDocking ( const Vehicle* vehicle, bool out ) const
    return height;
 }
 
+const ContainerBaseType::TransportationIO*  ContainerBase :: getDockingSystem ( const Vehicle* vehicle, int receipientHeight ) const
+{
+   if ( vehicle == this )
+      return NULL;
+
+   if ( baseType->vehicleFit ( vehicle->typ ) )
+      for ( ContainerBaseType::EntranceSystems::const_iterator i = baseType->entranceSystems.begin(); i != baseType->entranceSystems.end(); i++ )
+         if ( i->mode & ContainerBaseType::TransportationIO::Docking )
+            if ( (i->container_height & getPosition().getBitmappedHeight()) || (i->container_height == 0))
+               if ( i->vehicleCategoriesLoadable & (1<<vehicle->typ->movemalustyp)) {
+                  int height = 0;
+                  if ( i->dockingHeight_abs != 0 && i->dockingHeight_rel != -100 )
+                     height |= i->dockingHeight_abs & (1 << (getPosition().getNumericalHeight() + i->dockingHeight_rel ));
+                  else
+                     if ( i->dockingHeight_rel != -100 )
+                        height |= 1 << (getPosition().getNumericalHeight() + i->dockingHeight_rel) ;
+                     else
+                        height |= i->dockingHeight_abs ;
+                  if ( height & receipientHeight )
+                     return &(*i);
+               }
+   return NULL;
+}
+
+
 const ContainerBase::Production& ContainerBase::getProduction() const
 {
    if ( productionCache.empty() && !internalUnitProduction.empty() ) {
