@@ -429,17 +429,23 @@ bool AStar3D::findPath( const vector<MapCoordinate3D>& B ) {
                 if ( dock ) {
                    MapCoordinate3D pos = getNeighbouringFieldCoordinate ( N_ptr->h, dir );
                    MapField* fld = actmap->getField( pos );
-                   if ( fld && fld->getContainer() && ( fld->getContainer() != oldFld->getContainer() ))
-                      if ( fld->getContainer()->vehicleDocking(veh, false ) & dock )
+                   if ( fld && fld->getContainer() && ( fld->getContainer() != oldFld->getContainer() )) {
+                      int receivingHeight = fld->getContainer()->vehicleDocking(veh, false );
+                      if ( receivingHeight & dock )
                          if ( fld->getContainer()->getOwner() == oldFld->getContainer()->getOwner() 
                               && veh->getMap()->getPlayer(veh).diplomacy.isAllied( fld->getContainer() ))
                             if ( !fld->building || (fld->bdt & getTerrainBitType(cbbuildingentry) ).any()) {
                                pos.setNumericalHeight(-1);
                                Node N2 = Node();
-                               if ( !initNode(N2, N_ptr, pos, B, false, false, true) )
+
+                               auto dockingSystem = oldFld->getContainer()->getDockingSystem(veh, receivingHeight);
+                               bool inhibitAttack = dockingSystem!=NULL? dockingSystem->disableAttack : false;
+
+                               if ( !initNode(N2, N_ptr, pos, B, inhibitAttack, false, true) )
                                   continue;
                                open.pushOrUpdate ( N2 );
                             }
+                   }
                 }
              }
           }
