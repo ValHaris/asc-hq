@@ -438,7 +438,7 @@ bool AStar3D::findPath( const vector<MapCoordinate3D>& B ) {
                                pos.setNumericalHeight(-1);
                                Node N2 = Node();
 
-                               auto dockingSystem = oldFld->getContainer()->getDockingSystem(veh, receivingHeight);
+                               const ContainerBaseType::TransportationIO* dockingSystem = oldFld->getContainer()->getDockingSystem(veh, receivingHeight);
                                bool inhibitAttack = dockingSystem!=NULL? dockingSystem->disableAttack : false;
 
                                if ( !initNode(N2, N_ptr, pos, B, inhibitAttack, false, true) )
