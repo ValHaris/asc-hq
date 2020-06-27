@@ -144,6 +144,7 @@
 #include "soundList.h"
 #include "turncontrol.h"
 #include "networksupervisor.h"
+#include "packagerepository.h"
 
 #include "dialogs/newgame.h"
 #include "dialogs/soundsettings.h"
@@ -1653,6 +1654,8 @@ ScreenResolutionSetup::ScreenResolutionSetup( Cmdline& commandLine ) : cli( comm
 int main(int argc, char *argv[] )
 { 
    assert ( sizeof(PointerSizedInt) == sizeof(int*));
+
+   packageRepository.addProgramPackage(argv[0]);
 
    // we should think about replacing clparser with libpopt
    Cmdline* cl = NULL;

@@ -47,6 +47,7 @@
 #include "spfst-legacy.h"
 #include "dataversioncheck.h"
 #include "tasks/taskhibernatingcontainer.h"
+#include "packagerepository.h"
 
 #ifdef WIN32
 # include "win32/win32-errormsg.h"
@@ -192,8 +193,8 @@ void setSaveNotification()
 
 int main(int argc, char *argv[] )
 {
- 
    StdIoErrorHandler stdIoErrorHandler(false);
+   packageRepository.addProgramPackage(argv[0]);
    
    putenv(const_cast<char*>("SDL_VIDEO_CENTERED=1")) ;
 
