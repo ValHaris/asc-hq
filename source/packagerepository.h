@@ -27,9 +27,9 @@
 class PackageData;
 
 class PackageRepository : public TextFileDataLoader, public deallocating_vector<Package*>  {
-      void addProgramPackage();
       Package* _getPackage( const ASCString& name );
    public:
+      void addProgramPackage( const char* program );
       void readTextFiles( PropertyReadingContainer& prc, const ASCString& fileName, const ASCString& location );
       void read ( tnstream& stream );
       void write ( tnstream& stream );

@@ -25,13 +25,15 @@
 
 PackageRepository packageRepository;
 
-void PackageRepository ::addProgramPackage()
+void PackageRepository ::addProgramPackage(const char* program)
 {
    Package* prog = _getPackage( "ASC");
    if ( !prog ) {
       prog = new Package();
       packageRepository.push_back( prog );
       prog->name = "ASC";
+      if ( program )
+         prog->location = program;
    }
    prog->version.fromString( getVersionString() );
 }
@@ -63,7 +65,7 @@ sigc::signal<void> PackageRepository::packgeDescriptionLoaded;
 
 void PackageRepository :: postChecks() 
 {
-   addProgramPackage();
+   addProgramPackage(NULL);
    for ( PackageRepository::iterator i = packageRepository.begin(); i != packageRepository.end(); ++i ) {
       checkPackageDependency( *i );
    }
@@ -76,8 +78,8 @@ void PackageRepository::checkPackageDependency( const Package* pack, const Packa
       const Package* p = getPackage( dep->name );
       if ( p ) {
          if ( p->version < dep->version ) {
-            ASCString s = "The package " +  dep->name + " on your system is outdated.\n"
-                  + "Package " + pack->name + " requires at least " + dep->version.toString() + "\n";
+            ASCString s = "The package " +  dep->name + " (" + p->location + ") on your system is outdated.\n"
+                  + "Package " + pack->name + " (" + pack->location + ") requires at least " + dep->name + " " + dep->version.toString() + "\n";
             
             if ( !p->description.empty() )
                 s += "\nPackage Info:\n" + p->description ;
@@ -92,6 +94,8 @@ void PackageRepository::checkPackageDependency( const Package* pack, const Packa
                      s += "\nPackage Info:\n" + ref->second->description ;
                         
          }
+         s += "\nIt is needed by " + pack->name + " (" + pack->location + ")";
+
          throw ASCmsgException( s );
       }
 
