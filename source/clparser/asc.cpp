@@ -69,7 +69,7 @@ Cmdline::Cmdline(int argc, char *argv[]) throw (string)
           if (_x < 800)
             {
               string s;
-              s += "parameter range error: x must be >= 640";
+              s += "parameter range error: x must be >= 800";
               throw(s);
             }
           break;
@@ -79,7 +79,7 @@ Cmdline::Cmdline(int argc, char *argv[]) throw (string)
           if (_y < 600)
             {
               string s;
-              s += "parameter range error: y must be >= 480";
+              s += "parameter range error: y must be >= 600";
               throw(s);
             }
           break;
