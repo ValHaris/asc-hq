@@ -43,6 +43,8 @@ $(top_builddir)/source/graphics/libgraphics.la $(top_builddir)/source/dialogs/li
 $(top_builddir)/source/dialogs/libmapeddialogs.la  $(top_builddir)/source/widgets/libwidgets.la \
 $(top_builddir)/source/libs/paragui/src/libparagui.la \
 $(top_builddir)/source/tasks/libtaskcore.la \
-$(top_builddir)/source/lua/libluainterfacemaped.la $(LOKI_LIBS) $(SDL_LIBS) $(FREETYPE_LIBS) $(BOOST_LIBS) $(WX_LIBS)
+$(top_builddir)/source/lua/libluainterfacemaped.la \
+$(top_builddir)/source/network/libnetwork.la \
+$(LOKI_LIBS) $(SDL_LIBS) $(FREETYPE_LIBS) $(BOOST_LIBS) $(WX_LIBS)
 
 

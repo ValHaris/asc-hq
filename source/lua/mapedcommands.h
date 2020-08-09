@@ -46,4 +46,6 @@ class EditingEnvironment {
 
 extern EditingEnvironment getEditingEnvironment();
       
+extern GameMap* superviseGame(const std::string& filename, const std::string& password );
+
 #endif

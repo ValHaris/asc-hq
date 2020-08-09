@@ -49,6 +49,8 @@
 #include "dialogs/fieldmarker.h"
 #include "dialogs/newmap.h"
 #include "stack.h"
+#include "soundList.h"
+#include "cannedmessages.h"
 
 #include "unitset.h"
 #include "maped-mainscreen.h"
@@ -62,10 +64,41 @@
 #include "lua/luarunner.h"
 #include "lua/luastate.h"
 #include "widgets/multilistbox.h"
+#include "tasks/taskhibernatingcontainer.h"
 
 bool       mapsaved;
 
+pfont load_font(const char* name)
+{
+   tnfilestream stream ( name, tnstream::reading );
+   return loadfont ( &stream );
+}
 
+
+void loadEditordata( void )
+{
+   loadmessages();
+
+   dataLoaderTicker();
+
+   GraphicSetManager::Instance().loadData();
+
+   registerDataLoader ( new PlayListLoader() );
+   registerDataLoader ( new BI3TranslationTableLoader() );
+
+   loadAllData();
+
+   dataLoaderTicker();
+
+   loadUnitSets();
+
+   schriften.smallarial = load_font("smalaril.fnt");
+   schriften.large = load_font("usablack.fnt");
+   schriften.arial8 = load_font("arial8.fnt");
+   schriften.smallsystem = load_font("msystem.fnt");
+   schriften.monogui = load_font("monogui.fnt");
+   TaskHibernatingContainer::registerHooks();
+}
 
 void placeCurrentItem()
 {
@@ -600,6 +633,20 @@ void cdplayer( void )
 }
 
 */
+
+Password locateSupervisorPassword( GameMap* actmap ) {
+   Password pwd;
+   for ( int i = 0; i < actmap->getPlayerCount(); ++i )
+      if ( actmap->getPlayer(i).stat == Player::supervisor )
+         if ( !actmap->getPlayer(i).passwordcrc.empty() ) {
+            pwd = actmap->getPlayer(i).passwordcrc;
+            break;
+         }
+
+   if ( pwd.empty() )
+      pwd = actmap->supervisorpasswordcrc;
+   return pwd;
+}
 
 
 #ifndef pbpeditor

@@ -8,6 +8,7 @@
 #include "../gamemap.h"
 #include "../mapalgorithms.h"
 #include "../util/messaginghub.h"
+#include "../mapimageexport.h"
 %}
 
 %include "common.i"
@@ -48,4 +49,7 @@ class EditingEnvironment {
 };
 
 extern EditingEnvironment getEditingEnvironment();
+
+extern void writeMapImageToFile ( GameMap* gamemap, const std::string& filename, bool addview );
+extern GameMap* superviseGame(const std::string& filename, const std::string& password );
 

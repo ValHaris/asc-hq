@@ -18,6 +18,7 @@
      Boston, MA  02111-1307  USA
 */
 
+
 #ifndef hibernatingtaskcontainerH
 #define hibernatingtaskcontainerH
 
@@ -28,6 +29,7 @@ class GameMap;
 class tnstream;
 class MemoryStreamStorage;
 
+//! Used for loading and storing serialized tasks without knowing what they actually are. Needed by editors
 class TaskHibernatingContainer : public AbstractTaskContainer {
       typedef deallocating_vector<MemoryStreamStorage*> Buffer;
       Buffer buffer;

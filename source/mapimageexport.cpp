@@ -88,6 +88,17 @@ void WholeMapRenderer::writePNG( const ASCString& filename )
    ::writePNG( constructFileName(0,"",filename), surface, SDLmm::SRect( SPoint( surfaceBorder, surfaceBorder), (xsize-1) * fielddistx + fielddisthalfx + fieldsizex, (ysize - 1) * fielddisty + fieldysize ) );
 }
 
+void writeMapImageToFile ( GameMap* gamemap, const std::string& filename, bool addview )
+{
+   WholeMapRenderer wmr( gamemap );
+   wmr.render();
+   if ( addview )
+      wmr.renderVisibility();
+
+   wmr.writePNG( filename );
+}
+
+
 void writemaptopcx ( GameMap* gamemap, bool addview )
 {
    ASCString name = selectFile( "*.png", false );
@@ -95,12 +106,7 @@ void writemaptopcx ( GameMap* gamemap, bool addview )
    StatusMessageWindowHolder smw = MessagingHub::Instance().infoMessageWindow( "writing map to " + name );
 
    if ( !name.empty() ) {
-      WholeMapRenderer wmr( gamemap );
-      wmr.render();
-      if ( addview )
-         wmr.renderVisibility();
-
-      wmr.writePNG( name );
+      writeMapImageToFile( gamemap, name, addview);
    }
 }
 

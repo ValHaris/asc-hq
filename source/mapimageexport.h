@@ -40,4 +40,6 @@ class WholeMapRenderer : public MapRenderer {
 extern void writemaptopcx ( GameMap* gamemap, bool addview = false );
 extern void writemaptostream ( GameMap* gamemap, int width, int height, tnstream& stream  );
 extern Surface loadmapfromstream ( tnstream& stream  );
+extern void writeMapImageToFile ( GameMap* gamemap, const std::string& filename, bool addview );
+
 #endif

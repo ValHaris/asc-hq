@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(asc,2.8.1.0)
+AC_INIT(asc,2.8.2.0)
 
 AM_CONFIG_HEADER(config.h)
 AM_INIT_AUTOMAKE
@@ -732,6 +732,7 @@ AC_CONFIG_FILES( [ Makefile \
        source/video/Makefile \
        source/lua/Makefile \
        source/unittests/Makefile \
+       source/scriptrunner/Makefile \
        source/doc/Makefile \
        source/libs/Makefile \
        source/libs/sdlmm/Makefile \

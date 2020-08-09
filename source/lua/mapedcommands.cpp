@@ -14,7 +14,8 @@
 #include "../ed_mapcomponent.h"
 #include "../dialogs/fieldmarker.h"
 #include "../edglobal.h"
-         
+#include "../network/simple_file_transfer.h"
+#include "../edmisc.h"
          
          
          
@@ -190,4 +191,21 @@ int EditingEnvironment :: getBrushSize() const
 EditingEnvironment getEditingEnvironment() 
 {
    return EditingEnvironment();
+}
+
+GameMap* superviseGame(const std::string& filename, const std::string& password ) {
+   FileTransfer ft;
+   GameMap* map ( ft.loadPBEMFile(filename));
+   if ( !map  )
+      throw ASCmsgException("Could not load map " + filename);
+
+   auto_ptr<GameMap> holder ( map );
+
+   Password provided;
+   provided.setUnencoded(password);
+   Password pwd = locateSupervisorPassword( map );
+   if ( pwd != provided )
+      throw ASCmsgException("Wrong password");
+
+   return holder.release();
 }

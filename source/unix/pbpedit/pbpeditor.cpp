@@ -38,16 +38,7 @@ void         k_loadmap(void)
       auto_ptr<GameMap> oldMap ( actmap );
       actmap =  mp;
 
-      Password pwd;
-      for ( int i = 0; i < actmap->getPlayerCount(); ++i )
-         if ( actmap->getPlayer(i).stat == Player::supervisor ) 
-            if ( !actmap->getPlayer(i).passwordcrc.empty() ) {
-               pwd = actmap->getPlayer(i).passwordcrc;
-               break;
-            }
-     
-      if ( pwd.empty() ) 
-         pwd = actmap->supervisorpasswordcrc;
+      Password pwd = locateSupervisorPassword(actmap);
 
       if ( !pwd.empty()  && (actmap->getgameparameter(cgp_superVisorCanSaveMap) > 0) ) {
          tlockdispspfld ldsf;

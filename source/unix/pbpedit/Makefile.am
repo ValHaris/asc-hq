@@ -7,8 +7,10 @@ AM_CPPFLAGS		= -I$(top_srcdir) -I$(top_srcdir)/source -I$(top_srcdir)/source/lib
 AM_CXXFLAGS 		= $(SDL_CFLAGS) -Dkarteneditor -Dpbpeditor $(SIGC_CFLAGS)
 
 bin_PROGRAMS 		= asc_pbpedit
+noinst_PROGRAMS   = asc_scriptrunner
 
-nodist_asc_pbpedit_SOURCES 	= edgen.cpp edglobal.cpp edmain.cpp \
+
+commonSources 	= edgen.cpp edglobal.cpp \
 edselfnt.cpp edmisc.cpp typen.cpp strtmesg.cpp stack.cpp \
 spfst.cpp sgstream.cpp palette.cpp newfont.cpp misc.cpp loadpcxc.cpp \
 loaders.cpp loadbi3.cpp dlg_box.cpp dialog.cpp basestrm.cpp basegfx.cpp \
@@ -31,7 +33,9 @@ packagemanager.cpp packagerepository.cpp dataversioncheck.cpp i18n.cpp \
 accessconstraints-editor.cpp unitcostcalculator-standard.cpp weaponrangelayer.cpp \
 unitcostcalculator-pbp.cpp
 
-asc_pbpedit_LDADD   	= $(top_builddir)/source/sdl/libsdl.la \
+nodist_asc_pbpedit_SOURCES = $(commonSources) edmain.cpp 
+
+commonLibs   	= $(top_builddir)/source/sdl/libsdl.la \
 $(top_builddir)/source/libs/triangul/libtriangul.la $(BZIP2_LIBS) \
 $(SIGC_LIBS) $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
 $(top_builddir)/source/util/libutil.la  \
@@ -46,7 +50,11 @@ $(top_builddir)/source/lua/libluainterfacemaped.la \
 $(top_builddir)/source/tasks/libtaskcore.la \
 $(LOKI_LIBS) $(SDL_LIBS) $(FREETYPE_LIBS) $(BOOST_LIBS) $(WX_LIBS)
 
+asc_pbpedit_LDADD   	= $(commonLibs) 
 
+
+nodist_asc_scriptrunner_SOURCES  = autotraining.cpp $(commonSources) 
+asc_scriptrunner_LDADD = $(top_builddir)/source/scriptrunner/libscriptrunner.la  $(commonLibs) 
 
 
 

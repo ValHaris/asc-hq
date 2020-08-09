@@ -60,38 +60,6 @@
 // #define MEMCHK
 #include "memorycheck.cpp"
 
-pfont load_font(const char* name)
-{
-   tnfilestream stream ( name, tnstream::reading );
-   return loadfont ( &stream );
-}
-
-
-void loadEditordata( void ) 
-{
-   loadmessages();
-
-   dataLoaderTicker();
-
-   GraphicSetManager::Instance().loadData();
-      
-   registerDataLoader ( new PlayListLoader() );
-   registerDataLoader ( new BI3TranslationTableLoader() );
-
-   loadAllData();
-
-   dataLoaderTicker();
-
-   loadUnitSets();
-
-   schriften.smallarial = load_font("smalaril.fnt");
-   schriften.large = load_font("usablack.fnt");
-   schriften.arial8 = load_font("arial8.fnt");
-   schriften.smallsystem = load_font("msystem.fnt");
-   schriften.monogui = load_font("monogui.fnt");
-
-   uselessCallToTextRenderAddons();
-}
 
 void buildemptymap ( void )
 {
@@ -114,6 +82,7 @@ int mapeditorMainThread ( void* _mapname )
       
       GraphicSetManager::Instance().loadData();
       loadEditordata();
+      uselessCallToTextRenderAddons();
 
       if ( mapname && mapname[0] ) {
          /*
@@ -256,11 +225,11 @@ int main(int argc, char *argv[] )
    PG_FileArchive archive( argv[0] );
 
    ASC_PG_App app ( "asc2_dlg" );
-   
+
    int flags = SDL_SWSURFACE;
    if ( fullscreen )
       flags |= SDL_FULLSCREEN;
-   
+
    #ifdef pbpeditor
    app.setIcon( "pbpeditor-icon.png" );
    #else

@@ -89,6 +89,7 @@ POST_UNINSTALL = :
 build_triplet = @build@
 host_triplet = @host@
 bin_PROGRAMS = asc_pbpedit$(EXEEXT)
+noinst_PROGRAMS = asc_scriptrunner$(EXEEXT)
 subdir = source/unix/pbpedit
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/libtool.m4 \
@@ -103,15 +104,14 @@ CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
-PROGRAMS = $(bin_PROGRAMS)
-nodist_asc_pbpedit_OBJECTS = edgen.$(OBJEXT) edglobal.$(OBJEXT) \
-	edmain.$(OBJEXT) edselfnt.$(OBJEXT) edmisc.$(OBJEXT) \
-	typen.$(OBJEXT) strtmesg.$(OBJEXT) stack.$(OBJEXT) \
-	spfst.$(OBJEXT) sgstream.$(OBJEXT) palette.$(OBJEXT) \
-	newfont.$(OBJEXT) misc.$(OBJEXT) loadpcxc.$(OBJEXT) \
-	loaders.$(OBJEXT) loadbi3.$(OBJEXT) dlg_box.$(OBJEXT) \
-	dialog.$(OBJEXT) basestrm.$(OBJEXT) basegfx.$(OBJEXT) \
-	attack.$(OBJEXT) gameoptions.$(OBJEXT) \
+PROGRAMS = $(bin_PROGRAMS) $(noinst_PROGRAMS)
+am__objects_1 = edgen.$(OBJEXT) edglobal.$(OBJEXT) edselfnt.$(OBJEXT) \
+	edmisc.$(OBJEXT) typen.$(OBJEXT) strtmesg.$(OBJEXT) \
+	stack.$(OBJEXT) spfst.$(OBJEXT) sgstream.$(OBJEXT) \
+	palette.$(OBJEXT) newfont.$(OBJEXT) misc.$(OBJEXT) \
+	loadpcxc.$(OBJEXT) loaders.$(OBJEXT) loadbi3.$(OBJEXT) \
+	dlg_box.$(OBJEXT) dialog.$(OBJEXT) basestrm.$(OBJEXT) \
+	basegfx.$(OBJEXT) attack.$(OBJEXT) gameoptions.$(OBJEXT) \
 	maped-mainscreen.$(OBJEXT) stdio-errorhandler.$(OBJEXT) \
 	buildingtype.$(OBJEXT) vehicletype.$(OBJEXT) \
 	containerbase.$(OBJEXT) ed_mapcomponent.$(OBJEXT) \
@@ -145,9 +145,10 @@ nodist_asc_pbpedit_OBJECTS = edgen.$(OBJEXT) edglobal.$(OBJEXT) \
 	accessconstraints-editor.$(OBJEXT) \
 	unitcostcalculator-standard.$(OBJEXT) \
 	weaponrangelayer.$(OBJEXT) unitcostcalculator-pbp.$(OBJEXT)
+nodist_asc_pbpedit_OBJECTS = $(am__objects_1) edmain.$(OBJEXT)
 asc_pbpedit_OBJECTS = $(nodist_asc_pbpedit_OBJECTS)
 am__DEPENDENCIES_1 =
-asc_pbpedit_DEPENDENCIES = $(top_builddir)/source/sdl/libsdl.la \
+am__DEPENDENCIES_2 = $(top_builddir)/source/sdl/libsdl.la \
 	$(top_builddir)/source/libs/triangul/libtriangul.la \
 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
 	$(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
@@ -167,10 +168,17 @@ asc_pbpedit_DEPENDENCIES = $(top_builddir)/source/sdl/libsdl.la \
 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
 	$(am__DEPENDENCIES_1)
+asc_pbpedit_DEPENDENCIES = $(am__DEPENDENCIES_2)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
 am__v_lt_1 = 
+nodist_asc_scriptrunner_OBJECTS = autotraining.$(OBJEXT) \
+	$(am__objects_1)
+asc_scriptrunner_OBJECTS = $(nodist_asc_scriptrunner_OBJECTS)
+asc_scriptrunner_DEPENDENCIES =  \
+	$(top_builddir)/source/scriptrunner/libscriptrunner.la \
+	$(am__DEPENDENCIES_2)
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -188,8 +196,9 @@ depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
 am__depfiles_remade = ./$(DEPDIR)/accessconstraints-editor.Po \
 	./$(DEPDIR)/ascstring.Po ./$(DEPDIR)/attack.Po \
-	./$(DEPDIR)/basegfx.Po ./$(DEPDIR)/basestrm.Po \
-	./$(DEPDIR)/buildings.Po ./$(DEPDIR)/buildingtype.Po \
+	./$(DEPDIR)/autotraining.Po ./$(DEPDIR)/basegfx.Po \
+	./$(DEPDIR)/basestrm.Po ./$(DEPDIR)/buildings.Po \
+	./$(DEPDIR)/buildingtype.Po \
 	./$(DEPDIR)/campaignactionrecorder.Po \
 	./$(DEPDIR)/cannedmessages.Po ./$(DEPDIR)/clipboard.Po \
 	./$(DEPDIR)/containerbase.Po ./$(DEPDIR)/containerbasetype.Po \
@@ -255,7 +264,8 @@ AM_V_CXXLD = $(am__v_CXXLD_@AM_V@)
 am__v_CXXLD_ = $(am__v_CXXLD_@AM_DEFAULT_V@)
 am__v_CXXLD_0 = @echo "  CXXLD   " $@;
 am__v_CXXLD_1 = 
-SOURCES = $(nodist_asc_pbpedit_SOURCES)
+SOURCES = $(nodist_asc_pbpedit_SOURCES) \
+	$(nodist_asc_scriptrunner_SOURCES)
 DIST_SOURCES =
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
@@ -480,7 +490,7 @@ zipfound = @zipfound@
 MAINTAINERCLEANFILES = Makefile.in
 AM_CPPFLAGS = -I$(top_srcdir) -I$(top_srcdir)/source -I$(top_srcdir)/source/libs/paragui/include @LokiInclude@
 AM_CXXFLAGS = $(SDL_CFLAGS) -Dkarteneditor -Dpbpeditor $(SIGC_CFLAGS)
-nodist_asc_pbpedit_SOURCES = edgen.cpp edglobal.cpp edmain.cpp \
+commonSources = edgen.cpp edglobal.cpp \
 edselfnt.cpp edmisc.cpp typen.cpp strtmesg.cpp stack.cpp \
 spfst.cpp sgstream.cpp palette.cpp newfont.cpp misc.cpp loadpcxc.cpp \
 loaders.cpp loadbi3.cpp dlg_box.cpp dialog.cpp basestrm.cpp basegfx.cpp \
@@ -503,7 +513,8 @@ packagemanager.cpp packagerepository.cpp dataversioncheck.cpp i18n.cpp \
 accessconstraints-editor.cpp unitcostcalculator-standard.cpp weaponrangelayer.cpp \
 unitcostcalculator-pbp.cpp
 
-asc_pbpedit_LDADD = $(top_builddir)/source/sdl/libsdl.la \
+nodist_asc_pbpedit_SOURCES = $(commonSources) edmain.cpp 
+commonLibs = $(top_builddir)/source/sdl/libsdl.la \
 $(top_builddir)/source/libs/triangul/libtriangul.la $(BZIP2_LIBS) \
 $(SIGC_LIBS) $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
 $(top_builddir)/source/util/libutil.la  \
@@ -518,6 +529,9 @@ $(top_builddir)/source/lua/libluainterfacemaped.la \
 $(top_builddir)/source/tasks/libtaskcore.la \
 $(LOKI_LIBS) $(SDL_LIBS) $(FREETYPE_LIBS) $(BOOST_LIBS) $(WX_LIBS)
 
+asc_pbpedit_LDADD = $(commonLibs) 
+nodist_asc_scriptrunner_SOURCES = autotraining.cpp $(commonSources) 
+asc_scriptrunner_LDADD = $(top_builddir)/source/scriptrunner/libscriptrunner.la  $(commonLibs) 
 all: all-am
 
 .SUFFIXES:
@@ -601,9 +615,22 @@ clean-binPROGRAMS:
 	echo " rm -f" $$list; \
 	rm -f $$list
 
+clean-noinstPROGRAMS:
+	@list='$(noinst_PROGRAMS)'; test -n "$$list" || exit 0; \
+	echo " rm -f" $$list; \
+	rm -f $$list || exit $$?; \
+	test -n "$(EXEEXT)" || exit 0; \
+	list=`for p in $$list; do echo "$$p"; done | sed 's/$(EXEEXT)$$//'`; \
+	echo " rm -f" $$list; \
+	rm -f $$list
+
 asc_pbpedit$(EXEEXT): $(asc_pbpedit_OBJECTS) $(asc_pbpedit_DEPENDENCIES) $(EXTRA_asc_pbpedit_DEPENDENCIES) 
 	@rm -f asc_pbpedit$(EXEEXT)
 	$(AM_V_CXXLD)$(CXXLINK) $(asc_pbpedit_OBJECTS) $(asc_pbpedit_LDADD) $(LIBS)
+
+asc_scriptrunner$(EXEEXT): $(asc_scriptrunner_OBJECTS) $(asc_scriptrunner_DEPENDENCIES) $(EXTRA_asc_scriptrunner_DEPENDENCIES) 
+	@rm -f asc_scriptrunner$(EXEEXT)
+	$(AM_V_CXXLD)$(CXXLINK) $(asc_scriptrunner_OBJECTS) $(asc_scriptrunner_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -614,6 +641,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/accessconstraints-editor.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ascstring.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/attack.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/autotraining.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/basegfx.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/basestrm.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/buildings.Po@am__quote@ # am--include-marker
@@ -860,12 +888,14 @@ maintainer-clean-generic:
 	-test -z "$(MAINTAINERCLEANFILES)" || rm -f $(MAINTAINERCLEANFILES)
 clean: clean-am
 
-clean-am: clean-binPROGRAMS clean-generic clean-libtool mostlyclean-am
+clean-am: clean-binPROGRAMS clean-generic clean-libtool \
+	clean-noinstPROGRAMS mostlyclean-am
 
 distclean: distclean-am
 		-rm -f ./$(DEPDIR)/accessconstraints-editor.Po
 	-rm -f ./$(DEPDIR)/ascstring.Po
 	-rm -f ./$(DEPDIR)/attack.Po
+	-rm -f ./$(DEPDIR)/autotraining.Po
 	-rm -f ./$(DEPDIR)/basegfx.Po
 	-rm -f ./$(DEPDIR)/basestrm.Po
 	-rm -f ./$(DEPDIR)/buildings.Po
@@ -1001,6 +1031,7 @@ maintainer-clean: maintainer-clean-am
 		-rm -f ./$(DEPDIR)/accessconstraints-editor.Po
 	-rm -f ./$(DEPDIR)/ascstring.Po
 	-rm -f ./$(DEPDIR)/attack.Po
+	-rm -f ./$(DEPDIR)/autotraining.Po
 	-rm -f ./$(DEPDIR)/basegfx.Po
 	-rm -f ./$(DEPDIR)/basestrm.Po
 	-rm -f ./$(DEPDIR)/buildings.Po
@@ -1109,15 +1140,16 @@ uninstall-am: uninstall-binPROGRAMS
 .MAKE: install-am install-strip
 
 .PHONY: CTAGS GTAGS TAGS all all-am am--depfiles check check-am clean \
-	clean-binPROGRAMS clean-generic clean-libtool cscopelist-am \
-	ctags ctags-am distclean distclean-compile distclean-generic \
-	distclean-libtool distclean-tags distdir dvi dvi-am html \
-	html-am info info-am install install-am install-binPROGRAMS \
-	install-data install-data-am install-dvi install-dvi-am \
-	install-exec install-exec-am install-html install-html-am \
-	install-info install-info-am install-man install-pdf \
-	install-pdf-am install-ps install-ps-am install-strip \
-	installcheck installcheck-am installdirs maintainer-clean \
+	clean-binPROGRAMS clean-generic clean-libtool \
+	clean-noinstPROGRAMS cscopelist-am ctags ctags-am distclean \
+	distclean-compile distclean-generic distclean-libtool \
+	distclean-tags distdir dvi dvi-am html html-am info info-am \
+	install install-am install-binPROGRAMS install-data \
+	install-data-am install-dvi install-dvi-am install-exec \
+	install-exec-am install-html install-html-am install-info \
+	install-info-am install-man install-pdf install-pdf-am \
+	install-ps install-ps-am install-strip installcheck \
+	installcheck-am installdirs maintainer-clean \
 	maintainer-clean-generic mostlyclean mostlyclean-compile \
 	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
 	tags tags-am uninstall uninstall-am uninstall-binPROGRAMS

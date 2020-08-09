@@ -27,6 +27,7 @@ source/unix/asc/asc
 source/unix/asc/unittester
 source/unix/mapeditor/asc_mapedit
 source/unix/pbpedit/asc_pbpedit
+source/unix/pbpedit/asc_scriptrunner
 stamp-h1
 *.obj
 *.lib

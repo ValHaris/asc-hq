@@ -153,5 +153,7 @@ extern void pasteArea();
 extern void testDebugFunction();
 
 extern void selectAndRunLuaScript( const ASCString& filenamewildcard );
+extern Password locateSupervisorPassword( GameMap* actmap );
+extern void loadEditordata( void );
 
 #endif
