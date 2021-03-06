@@ -376,7 +376,7 @@ GameMap* continueNetworkGame ( const ASCString& filename )
 
 void  checkforvictory ( GameMap* gamemap, bool hasTurnControl )
 {
-   if ( !gamemap->continueplaying ) {
+   if ( !gamemap->continueplaying && gamemap->state == GameMap::State::Normal) {
       int plnum = 0;
       for ( int i = 0; i < 8; i++ )
          if ( !gamemap->player[i].exist() && gamemap->player[i].existanceAtBeginOfTurn ) {
@@ -388,8 +388,8 @@ void  checkforvictory ( GameMap* gamemap, bool hasTurnControl )
 
             if ( !gamemap->campaign.avail ) {
                const char* sp = getmessage( 10010 ); // Message "player has been terminated"
-			   ASCString txt;
-			   txt.format( sp, gamemap->player[i].getName().c_str() );
+               ASCString txt;
+               txt.format( sp, gamemap->player[i].getName().c_str() );
                new Message ( txt, gamemap, to  );
             } 
 
