@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(asc,2.8.1.0)
+AC_INIT(asc,2.8.3.0)
 
 AM_CONFIG_HEADER(config.h)
 AM_INIT_AUTOMAKE
@@ -134,14 +134,8 @@ SAVE_CFLAGS=$CFLAGS
 SAVE_LIBS=$LIBS
 
 
-
-AC_ARG_ENABLE( serverinterface, AS_HELP_STRING([--enable-serverinterface],[enables usage of the server interface (experimental)]), SERVERINTERFACE=1 )
-if test "X$SERVERINTERFACE" = "X1"; then
- LIBCURL_CHECK_CONFIG(yes,7.10.0,,AC_LIB_MISSING( curl, [http://curl.haxx.se/libcurl/] ))
-else
- LIBCURL=""
- LIBCURL_CPPFLAGS=""
-fi
+LIBCURL=""
+LIBCURL_CPPFLAGS=""
 
 AM_CONDITIONAL( [CURLCLIENT], [test "X$SERVERINTERFACE" = "X1"] )
 

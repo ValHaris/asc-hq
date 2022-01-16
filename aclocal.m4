@@ -1,6 +1,6 @@
-# generated automatically by aclocal 1.16.1 -*- Autoconf -*-
+# generated automatically by aclocal 1.16.4 -*- Autoconf -*-
 
-# Copyright (C) 1996-2018 Free Software Foundation, Inc.
+# Copyright (C) 1996-2021 Free Software Foundation, Inc.
 
 # This file is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
@@ -19,278 +19,6 @@ m4_if(m4_defn([AC_AUTOCONF_VERSION]), [2.69],,
 You have another version of autoconf.  It may work, but is not guaranteed to.
 If you have problems, you may need to regenerate the build system entirely.
 To do so, use the procedure documented by the package, typically 'autoreconf'.])])
-
-#***************************************************************************
-#                                  _   _ ____  _
-#  Project                     ___| | | |  _ \| |
-#                             / __| | | | |_) | |
-#                            | (__| |_| |  _ <| |___
-#                             \___|\___/|_| \_\_____|
-#
-# Copyright (C) 2006, David Shaw <dshaw@jabberwocky.com>
-#
-# This software is licensed as described in the file COPYING, which
-# you should have received as part of this distribution. The terms
-# are also available at https://curl.haxx.se/docs/copyright.html.
-#
-# You may opt to use, copy, modify, merge, publish, distribute and/or sell
-# copies of the Software, and permit persons to whom the Software is
-# furnished to do so, under the terms of the COPYING file.
-#
-# This software is distributed on an "AS IS" basis, WITHOUT WARRANTY OF ANY
-# KIND, either express or implied.
-#
-# LIBCURL_CHECK_CONFIG ([DEFAULT-ACTION], [MINIMUM-VERSION],
-#                       [ACTION-IF-YES], [ACTION-IF-NO])
-# ----------------------------------------------------------
-#      David Shaw <dshaw@jabberwocky.com>   May-09-2006
-#
-# Checks for libcurl.  DEFAULT-ACTION is the string yes or no to
-# specify whether to default to --with-libcurl or --without-libcurl.
-# If not supplied, DEFAULT-ACTION is yes.  MINIMUM-VERSION is the
-# minimum version of libcurl to accept.  Pass the version as a regular
-# version number like 7.10.1. If not supplied, any version is
-# accepted.  ACTION-IF-YES is a list of shell commands to run if
-# libcurl was successfully found and passed the various tests.
-# ACTION-IF-NO is a list of shell commands that are run otherwise.
-# Note that using --without-libcurl does run ACTION-IF-NO.
-#
-# This macro #defines HAVE_LIBCURL if a working libcurl setup is
-# found, and sets @LIBCURL@ and @LIBCURL_CPPFLAGS@ to the necessary
-# values.  Other useful defines are LIBCURL_FEATURE_xxx where xxx are
-# the various features supported by libcurl, and LIBCURL_PROTOCOL_yyy
-# where yyy are the various protocols supported by libcurl.  Both xxx
-# and yyy are capitalized.  See the list of AH_TEMPLATEs at the top of
-# the macro for the complete list of possible defines.  Shell
-# variables $libcurl_feature_xxx and $libcurl_protocol_yyy are also
-# defined to 'yes' for those features and protocols that were found.
-# Note that xxx and yyy keep the same capitalization as in the
-# curl-config list (e.g. it's "HTTP" and not "http").
-#
-# Users may override the detected values by doing something like:
-# LIBCURL="-lcurl" LIBCURL_CPPFLAGS="-I/usr/myinclude" ./configure
-#
-# For the sake of sanity, this macro assumes that any libcurl that is
-# found is after version 7.7.2, the first version that included the
-# curl-config script.  Note that it is very important for people
-# packaging binary versions of libcurl to include this script!
-# Without curl-config, we can only guess what protocols are available,
-# or use curl_version_info to figure it out at runtime.
-
-AC_DEFUN([LIBCURL_CHECK_CONFIG],
-[
-  AH_TEMPLATE([LIBCURL_FEATURE_SSL],[Defined if libcurl supports SSL])
-  AH_TEMPLATE([LIBCURL_FEATURE_KRB4],[Defined if libcurl supports KRB4])
-  AH_TEMPLATE([LIBCURL_FEATURE_IPV6],[Defined if libcurl supports IPv6])
-  AH_TEMPLATE([LIBCURL_FEATURE_LIBZ],[Defined if libcurl supports libz])
-  AH_TEMPLATE([LIBCURL_FEATURE_ASYNCHDNS],[Defined if libcurl supports AsynchDNS])
-  AH_TEMPLATE([LIBCURL_FEATURE_IDN],[Defined if libcurl supports IDN])
-  AH_TEMPLATE([LIBCURL_FEATURE_SSPI],[Defined if libcurl supports SSPI])
-  AH_TEMPLATE([LIBCURL_FEATURE_NTLM],[Defined if libcurl supports NTLM])
-
-  AH_TEMPLATE([LIBCURL_PROTOCOL_HTTP],[Defined if libcurl supports HTTP])
-  AH_TEMPLATE([LIBCURL_PROTOCOL_HTTPS],[Defined if libcurl supports HTTPS])
-  AH_TEMPLATE([LIBCURL_PROTOCOL_FTP],[Defined if libcurl supports FTP])
-  AH_TEMPLATE([LIBCURL_PROTOCOL_FTPS],[Defined if libcurl supports FTPS])
-  AH_TEMPLATE([LIBCURL_PROTOCOL_FILE],[Defined if libcurl supports FILE])
-  AH_TEMPLATE([LIBCURL_PROTOCOL_TELNET],[Defined if libcurl supports TELNET])
-  AH_TEMPLATE([LIBCURL_PROTOCOL_LDAP],[Defined if libcurl supports LDAP])
-  AH_TEMPLATE([LIBCURL_PROTOCOL_DICT],[Defined if libcurl supports DICT])
-  AH_TEMPLATE([LIBCURL_PROTOCOL_TFTP],[Defined if libcurl supports TFTP])
-  AH_TEMPLATE([LIBCURL_PROTOCOL_RTSP],[Defined if libcurl supports RTSP])
-  AH_TEMPLATE([LIBCURL_PROTOCOL_POP3],[Defined if libcurl supports POP3])
-  AH_TEMPLATE([LIBCURL_PROTOCOL_IMAP],[Defined if libcurl supports IMAP])
-  AH_TEMPLATE([LIBCURL_PROTOCOL_SMTP],[Defined if libcurl supports SMTP])
-
-  AC_ARG_WITH(libcurl,
-     AS_HELP_STRING([--with-libcurl=PREFIX],[look for the curl library in PREFIX/lib and headers in PREFIX/include]),
-     [_libcurl_with=$withval],[_libcurl_with=ifelse([$1],,[yes],[$1])])
-
-  if test "$_libcurl_with" != "no" ; then
-
-     AC_PROG_AWK
-
-     _libcurl_version_parse="eval $AWK '{split(\$NF,A,\".\"); X=256*256*A[[1]]+256*A[[2]]+A[[3]]; print X;}'"
-
-     _libcurl_try_link=yes
-
-     if test -d "$_libcurl_with" ; then
-        LIBCURL_CPPFLAGS="-I$withval/include"
-        _libcurl_ldflags="-L$withval/lib"
-        AC_PATH_PROG([_libcurl_config],[curl-config],[],
-                     ["$withval/bin"])
-     else
-        AC_PATH_PROG([_libcurl_config],[curl-config],[],[$PATH])
-     fi
-
-     if test x$_libcurl_config != "x" ; then
-        AC_CACHE_CHECK([for the version of libcurl],
-           [libcurl_cv_lib_curl_version],
-           [libcurl_cv_lib_curl_version=`$_libcurl_config --version | $AWK '{print $[]2}'`])
-
-        _libcurl_version=`echo $libcurl_cv_lib_curl_version | $_libcurl_version_parse`
-        _libcurl_wanted=`echo ifelse([$2],,[0],[$2]) | $_libcurl_version_parse`
-
-        if test $_libcurl_wanted -gt 0 ; then
-           AC_CACHE_CHECK([for libcurl >= version $2],
-              [libcurl_cv_lib_version_ok],
-              [
-              if test $_libcurl_version -ge $_libcurl_wanted ; then
-                 libcurl_cv_lib_version_ok=yes
-              else
-                 libcurl_cv_lib_version_ok=no
-              fi
-              ])
-        fi
-
-        if test $_libcurl_wanted -eq 0 || test x$libcurl_cv_lib_version_ok = xyes ; then
-           if test x"$LIBCURL_CPPFLAGS" = "x" ; then
-              LIBCURL_CPPFLAGS=`$_libcurl_config --cflags`
-           fi
-           if test x"$LIBCURL" = "x" ; then
-              LIBCURL=`$_libcurl_config --libs`
-
-              # This is so silly, but Apple actually has a bug in their
-              # curl-config script.  Fixed in Tiger, but there are still
-              # lots of Panther installs around.
-              case "${host}" in
-                 powerpc-apple-darwin7*)
-                    LIBCURL=`echo $LIBCURL | sed -e 's|-arch i386||g'`
-                 ;;
-              esac
-           fi
-
-           # All curl-config scripts support --feature
-           _libcurl_features=`$_libcurl_config --feature`
-
-           # Is it modern enough to have --protocols? (7.12.4)
-           if test $_libcurl_version -ge 461828 ; then
-              _libcurl_protocols=`$_libcurl_config --protocols`
-           fi
-        else
-           _libcurl_try_link=no
-        fi
-
-        unset _libcurl_wanted
-     fi
-
-     if test $_libcurl_try_link = yes ; then
-
-        # we didn't find curl-config, so let's see if the user-supplied
-        # link line (or failing that, "-lcurl") is enough.
-        LIBCURL=${LIBCURL-"$_libcurl_ldflags -lcurl"}
-
-        AC_CACHE_CHECK([whether libcurl is usable],
-           [libcurl_cv_lib_curl_usable],
-           [
-           _libcurl_save_cppflags=$CPPFLAGS
-           CPPFLAGS="$LIBCURL_CPPFLAGS $CPPFLAGS"
-           _libcurl_save_libs=$LIBS
-           LIBS="$LIBCURL $LIBS"
-
-           AC_LINK_IFELSE([AC_LANG_PROGRAM([[#include <curl/curl.h>]],[[
-/* Try and use a few common options to force a failure if we are
-   missing symbols or can't link. */
-int x;
-curl_easy_setopt(NULL,CURLOPT_URL,NULL);
-x=CURL_ERROR_SIZE;
-x=CURLOPT_WRITEFUNCTION;
-x=CURLOPT_WRITEDATA;
-x=CURLOPT_ERRORBUFFER;
-x=CURLOPT_STDERR;
-x=CURLOPT_VERBOSE;
-if (x) {;}
-]])],libcurl_cv_lib_curl_usable=yes,libcurl_cv_lib_curl_usable=no)
-
-           CPPFLAGS=$_libcurl_save_cppflags
-           LIBS=$_libcurl_save_libs
-           unset _libcurl_save_cppflags
-           unset _libcurl_save_libs
-           ])
-
-        if test $libcurl_cv_lib_curl_usable = yes ; then
-
-           # Does curl_free() exist in this version of libcurl?
-           # If not, fake it with free()
-
-           _libcurl_save_cppflags=$CPPFLAGS
-           CPPFLAGS="$CPPFLAGS $LIBCURL_CPPFLAGS"
-           _libcurl_save_libs=$LIBS
-           LIBS="$LIBS $LIBCURL"
-
-           AC_CHECK_FUNC(curl_free,,
-              AC_DEFINE(curl_free,free,
-                [Define curl_free() as free() if our version of curl lacks curl_free.]))
-
-           CPPFLAGS=$_libcurl_save_cppflags
-           LIBS=$_libcurl_save_libs
-           unset _libcurl_save_cppflags
-           unset _libcurl_save_libs
-
-           AC_DEFINE(HAVE_LIBCURL,1,
-             [Define to 1 if you have a functional curl library.])
-           AC_SUBST(LIBCURL_CPPFLAGS)
-           AC_SUBST(LIBCURL)
-
-           for _libcurl_feature in $_libcurl_features ; do
-              AC_DEFINE_UNQUOTED(AS_TR_CPP(libcurl_feature_$_libcurl_feature),[1])
-              eval AS_TR_SH(libcurl_feature_$_libcurl_feature)=yes
-           done
-
-           if test "x$_libcurl_protocols" = "x" ; then
-
-              # We don't have --protocols, so just assume that all
-              # protocols are available
-              _libcurl_protocols="HTTP FTP FILE TELNET LDAP DICT TFTP"
-
-              if test x$libcurl_feature_SSL = xyes ; then
-                 _libcurl_protocols="$_libcurl_protocols HTTPS"
-
-                 # FTPS wasn't standards-compliant until version
-                 # 7.11.0 (0x070b00 == 461568)
-                 if test $_libcurl_version -ge 461568; then
-                    _libcurl_protocols="$_libcurl_protocols FTPS"
-                 fi
-              fi
-
-              # RTSP, IMAP, POP3 and SMTP were added in
-              # 7.20.0 (0x071400 == 463872)
-              if test $_libcurl_version -ge 463872; then
-                 _libcurl_protocols="$_libcurl_protocols RTSP IMAP POP3 SMTP"
-              fi
-           fi
-
-           for _libcurl_protocol in $_libcurl_protocols ; do
-              AC_DEFINE_UNQUOTED(AS_TR_CPP(libcurl_protocol_$_libcurl_protocol),[1])
-              eval AS_TR_SH(libcurl_protocol_$_libcurl_protocol)=yes
-           done
-        else
-           unset LIBCURL
-           unset LIBCURL_CPPFLAGS
-        fi
-     fi
-
-     unset _libcurl_try_link
-     unset _libcurl_version_parse
-     unset _libcurl_config
-     unset _libcurl_feature
-     unset _libcurl_features
-     unset _libcurl_protocol
-     unset _libcurl_protocols
-     unset _libcurl_version
-     unset _libcurl_ldflags
-  fi
-
-  if test x$_libcurl_with = xno || test x$libcurl_cv_lib_curl_usable != xyes ; then
-     # This is the IF-NO path
-     ifelse([$4],,:,[$4])
-  else
-     # This is the IF-YES path
-     ifelse([$3],,:,[$3])
-  fi
-
-  unset _libcurl_with
-])dnl
 
 # Configure paths for libogg
 # Jack Moffitt <jack@icecast.org> 10-21-2000
@@ -409,9 +137,9 @@ int main ()
   rm -f conf.oggtest
 ])
 
-dnl pkg.m4 - Macros to locate and utilise pkg-config.   -*- Autoconf -*-
-dnl serial 11 (pkg-config-0.29.1)
-dnl
+# pkg.m4 - Macros to locate and utilise pkg-config.   -*- Autoconf -*-
+# serial 12 (pkg-config-0.29.2)
+
 dnl Copyright © 2004 Scott James Remnant <scott@netsplit.com>.
 dnl Copyright © 2012-2015 Dan Nicholson <dbn.lists@gmail.com>
 dnl
@@ -452,7 +180,7 @@ dnl
 dnl See the "Since" comment for each macro you use to see what version
 dnl of the macros you require.
 m4_defun([PKG_PREREQ],
-[m4_define([PKG_MACROS_VERSION], [0.29.1])
+[m4_define([PKG_MACROS_VERSION], [0.29.2])
 m4_if(m4_version_compare(PKG_MACROS_VERSION, [$1]), -1,
     [m4_fatal([pkg.m4 version $1 or higher is required but ]PKG_MACROS_VERSION[ found])])
 ])dnl PKG_PREREQ
@@ -553,7 +281,7 @@ AC_ARG_VAR([$1][_CFLAGS], [C compiler flags for $1, overriding pkg-config])dnl
 AC_ARG_VAR([$1][_LIBS], [linker flags for $1, overriding pkg-config])dnl
 
 pkg_failed=no
-AC_MSG_CHECKING([for $1])
+AC_MSG_CHECKING([for $2])
 
 _PKG_CONFIG([$1][_CFLAGS], [cflags], [$2])
 _PKG_CONFIG([$1][_LIBS], [libs], [$2])
@@ -563,11 +291,11 @@ and $1[]_LIBS to avoid the need to call pkg-config.
 See the pkg-config man page for more details.])
 
 if test $pkg_failed = yes; then
-   	AC_MSG_RESULT([no])
+        AC_MSG_RESULT([no])
         _PKG_SHORT_ERRORS_SUPPORTED
         if test $_pkg_short_errors_supported = yes; then
 	        $1[]_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "$2" 2>&1`
-        else 
+        else
 	        $1[]_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "$2" 2>&1`
         fi
 	# Put the nasty error message in config.log where it belongs
@@ -584,7 +312,7 @@ installed software in a non-standard prefix.
 _PKG_TEXT])[]dnl
         ])
 elif test $pkg_failed = untried; then
-     	AC_MSG_RESULT([no])
+        AC_MSG_RESULT([no])
 	m4_default([$4], [AC_MSG_FAILURE(
 [The pkg-config script could not be found or is too old.  Make sure it
 is in your PATH or set the PKG_CONFIG environment variable to the full
@@ -1882,7 +1610,7 @@ AC_DEFUN([AM_PATH_WXCONFIG], [
 ])
 AC_DEFUN([AM_PATH_WXRC], [WXRC_CHECK([$1],[$2])])
 
-# Copyright (C) 2002-2018 Free Software Foundation, Inc.
+# Copyright (C) 2002-2021 Free Software Foundation, Inc.
 #
 # This file is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
@@ -1897,7 +1625,7 @@ AC_DEFUN([AM_AUTOMAKE_VERSION],
 [am__api_version='1.16'
 dnl Some users find AM_AUTOMAKE_VERSION and mistake it for a way to
 dnl require some minimum version.  Point them to the right macro.
-m4_if([$1], [1.16.1], [],
+m4_if([$1], [1.16.4], [],
       [AC_FATAL([Do not call $0, use AM_INIT_AUTOMAKE([$1]).])])dnl
 ])
 
@@ -1913,14 +1641,14 @@ m4_define([_AM_AUTOCONF_VERSION], [])
 # Call AM_AUTOMAKE_VERSION and AM_AUTOMAKE_VERSION so they can be traced.
 # This function is AC_REQUIREd by AM_INIT_AUTOMAKE.
 AC_DEFUN([AM_SET_CURRENT_AUTOMAKE_VERSION],
-[AM_AUTOMAKE_VERSION([1.16.1])dnl
+[AM_AUTOMAKE_VERSION([1.16.4])dnl
 m4_ifndef([AC_AUTOCONF_VERSION],
   [m4_copy([m4_PACKAGE_VERSION], [AC_AUTOCONF_VERSION])])dnl
 _AM_AUTOCONF_VERSION(m4_defn([AC_AUTOCONF_VERSION]))])
 
 # AM_AUX_DIR_EXPAND                                         -*- Autoconf -*-
 
-# Copyright (C) 2001-2018 Free Software Foundation, Inc.
+# Copyright (C) 2001-2021 Free Software Foundation, Inc.
 #
 # This file is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
@@ -1972,7 +1700,7 @@ am_aux_dir=`cd "$ac_aux_dir" && pwd`
 
 # AM_CONDITIONAL                                            -*- Autoconf -*-
 
-# Copyright (C) 1997-2018 Free Software Foundation, Inc.
+# Copyright (C) 1997-2021 Free Software Foundation, Inc.
 #
 # This file is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
@@ -2003,7 +1731,7 @@ AC_CONFIG_COMMANDS_PRE(
 Usually this means the macro was only invoked conditionally.]])
 fi])])
 
-# Copyright (C) 1999-2018 Free Software Foundation, Inc.
+# Copyright (C) 1999-2021 Free Software Foundation, Inc.
 #
 # This file is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
@@ -2194,7 +1922,7 @@ _AM_SUBST_NOTMAKE([am__nodep])dnl
 
 # Generate code to set up dependency tracking.              -*- Autoconf -*-
 
-# Copyright (C) 1999-2018 Free Software Foundation, Inc.
+# Copyright (C) 1999-2021 Free Software Foundation, Inc.
 #
 # This file is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
@@ -2233,7 +1961,9 @@ AC_DEFUN([_AM_OUTPUT_DEPENDENCY_COMMANDS],
   done
   if test $am_rc -ne 0; then
     AC_MSG_FAILURE([Something went wrong bootstrapping makefile fragments
-    for automatic dependency tracking.  Try re-running configure with the
+    for automatic dependency tracking.  If GNU make was not used, consider
+    re-running the configure script with MAKE="gmake" (or whatever is
+    necessary).  You can also try re-running configure with the
     '--disable-dependency-tracking' option to at least be able to build
     the package (albeit without support for automatic dependency tracking).])
   fi
@@ -2260,7 +1990,7 @@ AC_DEFUN([AM_OUTPUT_DEPENDENCY_COMMANDS],
 
 # Do all the work for Automake.                             -*- Autoconf -*-
 
-# Copyright (C) 1996-2018 Free Software Foundation, Inc.
+# Copyright (C) 1996-2021 Free Software Foundation, Inc.
 #
 # This file is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
@@ -2324,7 +2054,7 @@ m4_ifval([$3], [_AM_SET_OPTION([no-define])])dnl
 [_AM_SET_OPTIONS([$1])dnl
 dnl Diagnose old-style AC_INIT with new-style AM_AUTOMAKE_INIT.
 m4_if(
-  m4_ifdef([AC_PACKAGE_NAME], [ok]):m4_ifdef([AC_PACKAGE_VERSION], [ok]),
+  m4_ifset([AC_PACKAGE_NAME], [ok]):m4_ifset([AC_PACKAGE_VERSION], [ok]),
   [ok:ok],,
   [m4_fatal([AC_INIT should be called with package and version arguments])])dnl
  AC_SUBST([PACKAGE], ['AC_PACKAGE_TARNAME'])dnl
@@ -2376,6 +2106,20 @@ AC_PROVIDE_IFELSE([AC_PROG_OBJCXX],
 		  [m4_define([AC_PROG_OBJCXX],
 			     m4_defn([AC_PROG_OBJCXX])[_AM_DEPENDENCIES([OBJCXX])])])dnl
 ])
+# Variables for tags utilities; see am/tags.am
+if test -z "$CTAGS"; then
+  CTAGS=ctags
+fi
+AC_SUBST([CTAGS])
+if test -z "$ETAGS"; then
+  ETAGS=etags
+fi
+AC_SUBST([ETAGS])
+if test -z "$CSCOPE"; then
+  CSCOPE=cscope
+fi
+AC_SUBST([CSCOPE])
+
 AC_REQUIRE([AM_SILENT_RULES])dnl
 dnl The testsuite driver may need to know about EXEEXT, so add the
 dnl 'am__EXEEXT' conditional if _AM_COMPILER_EXEEXT was seen.  This
@@ -2457,7 +2201,7 @@ for _am_header in $config_headers :; do
 done
 echo "timestamp for $_am_arg" >`AS_DIRNAME(["$_am_arg"])`/stamp-h[]$_am_stamp_count])
 
-# Copyright (C) 2001-2018 Free Software Foundation, Inc.
+# Copyright (C) 2001-2021 Free Software Foundation, Inc.
 #
 # This file is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
@@ -2478,7 +2222,7 @@ if test x"${install_sh+set}" != xset; then
 fi
 AC_SUBST([install_sh])])
 
-# Copyright (C) 2003-2018 Free Software Foundation, Inc.
+# Copyright (C) 2003-2021 Free Software Foundation, Inc.
 #
 # This file is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
@@ -2500,7 +2244,7 @@ AC_SUBST([am__leading_dot])])
 # Add --enable-maintainer-mode option to configure.         -*- Autoconf -*-
 # From Jim Meyering
 
-# Copyright (C) 1996-2018 Free Software Foundation, Inc.
+# Copyright (C) 1996-2021 Free Software Foundation, Inc.
 #
 # This file is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
@@ -2535,7 +2279,7 @@ AC_MSG_CHECKING([whether to enable maintainer-specific portions of Makefiles])
 
 # Check to see how 'make' treats includes.	            -*- Autoconf -*-
 
-# Copyright (C) 2001-2018 Free Software Foundation, Inc.
+# Copyright (C) 2001-2021 Free Software Foundation, Inc.
 #
 # This file is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
@@ -2578,7 +2322,7 @@ AC_SUBST([am__quote])])
 
 # Fake the existence of programs that GNU maintainers use.  -*- Autoconf -*-
 
-# Copyright (C) 1997-2018 Free Software Foundation, Inc.
+# Copyright (C) 1997-2021 Free Software Foundation, Inc.
 #
 # This file is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
@@ -2599,12 +2343,7 @@ AC_DEFUN([AM_MISSING_HAS_RUN],
 [AC_REQUIRE([AM_AUX_DIR_EXPAND])dnl
 AC_REQUIRE_AUX_FILE([missing])dnl
 if test x"${MISSING+set}" != xset; then
-  case $am_aux_dir in
-  *\ * | *\	*)
-    MISSING="\${SHELL} \"$am_aux_dir/missing\"" ;;
-  *)
-    MISSING="\${SHELL} $am_aux_dir/missing" ;;
-  esac
+  MISSING="\${SHELL} '$am_aux_dir/missing'"
 fi
 # Use eval to expand $SHELL
 if eval "$MISSING --is-lightweight"; then
@@ -2619,7 +2358,7 @@ fi
 # Obsolete and "removed" macros, that must however still report explicit
 # error messages when used, to smooth transition.
 #
-# Copyright (C) 1996-2018 Free Software Foundation, Inc.
+# Copyright (C) 1996-2021 Free Software Foundation, Inc.
 #
 # This file is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
@@ -2646,7 +2385,7 @@ AU_DEFUN([fp_C_PROTOTYPES], [AM_C_PROTOTYPES])
 
 # Helper functions for option handling.                     -*- Autoconf -*-
 
-# Copyright (C) 2001-2018 Free Software Foundation, Inc.
+# Copyright (C) 2001-2021 Free Software Foundation, Inc.
 #
 # This file is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
@@ -2675,7 +2414,7 @@ AC_DEFUN([_AM_SET_OPTIONS],
 AC_DEFUN([_AM_IF_OPTION],
 [m4_ifset(_AM_MANGLE_OPTION([$1]), [$2], [$3])])
 
-# Copyright (C) 1999-2018 Free Software Foundation, Inc.
+# Copyright (C) 1999-2021 Free Software Foundation, Inc.
 #
 # This file is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
@@ -2722,7 +2461,7 @@ AC_LANG_POP([C])])
 # For backward compatibility.
 AC_DEFUN_ONCE([AM_PROG_CC_C_O], [AC_REQUIRE([AC_PROG_CC])])
 
-# Copyright (C) 2001-2018 Free Software Foundation, Inc.
+# Copyright (C) 2001-2021 Free Software Foundation, Inc.
 #
 # This file is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
@@ -2741,7 +2480,7 @@ AC_DEFUN([AM_RUN_LOG],
 
 # Check to make sure that the build environment is sane.    -*- Autoconf -*-
 
-# Copyright (C) 1996-2018 Free Software Foundation, Inc.
+# Copyright (C) 1996-2021 Free Software Foundation, Inc.
 #
 # This file is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
@@ -2822,7 +2561,7 @@ AC_CONFIG_COMMANDS_PRE(
 rm -f conftest.file
 ])
 
-# Copyright (C) 2009-2018 Free Software Foundation, Inc.
+# Copyright (C) 2009-2021 Free Software Foundation, Inc.
 #
 # This file is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
@@ -2882,7 +2621,7 @@ AC_SUBST([AM_BACKSLASH])dnl
 _AM_SUBST_NOTMAKE([AM_BACKSLASH])dnl
 ])
 
-# Copyright (C) 2001-2018 Free Software Foundation, Inc.
+# Copyright (C) 2001-2021 Free Software Foundation, Inc.
 #
 # This file is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
@@ -2910,7 +2649,7 @@ fi
 INSTALL_STRIP_PROGRAM="\$(install_sh) -c -s"
 AC_SUBST([INSTALL_STRIP_PROGRAM])])
 
-# Copyright (C) 2006-2018 Free Software Foundation, Inc.
+# Copyright (C) 2006-2021 Free Software Foundation, Inc.
 #
 # This file is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
@@ -2929,7 +2668,7 @@ AC_DEFUN([AM_SUBST_NOTMAKE], [_AM_SUBST_NOTMAKE($@)])
 
 # Check how to create a tarball.                            -*- Autoconf -*-
 
-# Copyright (C) 2004-2018 Free Software Foundation, Inc.
+# Copyright (C) 2004-2021 Free Software Foundation, Inc.
 #
 # This file is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
