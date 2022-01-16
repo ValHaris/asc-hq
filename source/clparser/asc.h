@@ -49,7 +49,7 @@ private:
 
 public:
   /* constructor and destructor */
-  Cmdline(int, char **) throw(string);
+  Cmdline(int, char **) ;
   ~Cmdline(){}
 
   /* usage function */

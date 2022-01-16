@@ -67,7 +67,7 @@ public:
   * }
   *@endcode
   */
-  virtual void addEntry(AbstractEntry* entry) throw (ASCmsgException) = 0;  
+  virtual void addEntry(AbstractEntry* entry) = 0;
   /**
   *@brief Removes the AbstractEntry (if it is a sub-entry)
   */
@@ -166,7 +166,7 @@ public:
   * }
   *@endcode
   */
-  virtual void addEntry(AbstractEntry* entry) throw (ASCmsgException);
+  virtual void addEntry(AbstractEntry* entry);
 
   virtual void removeEntry(AbstractEntry* entry);
   /**
@@ -236,7 +236,7 @@ public:
   * }
   *@endcode
   */
-  virtual void addEntry(AbstractEntry* entry) throw (ASCmsgException) {
+  virtual void addEntry(AbstractEntry* entry) {
     throw ASCmsgException("Exception: Trying to add an entry to a CategoryMember");
   } //Exception
   

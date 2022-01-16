@@ -113,7 +113,7 @@ AbstractEntry* Category::clone() {
 }
 
 
-void Category::addEntry(AbstractEntry* entry) throw (ASCmsgException) {
+void Category::addEntry(AbstractEntry* entry) {
   AbstractEntry* current = this;
   while(current != 0) {
     if( entry == current) {
