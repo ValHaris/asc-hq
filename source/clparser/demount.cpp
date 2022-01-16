@@ -26,7 +26,7 @@
 **
 **--------------------------------------------------------------------------*/
 
-Cmdline::Cmdline(int argc, char *argv[]) throw (string)
+Cmdline::Cmdline(int argc, char *argv[])
 {
   extern int optind;
   int option_index = 0;
