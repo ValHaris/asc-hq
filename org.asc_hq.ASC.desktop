@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Comment=Advanced Strategic Command
+Name=ASC
+GenericName=Turn-Based Strategy Game
+Exec=asc
+Icon=org.asc_hq.ASC
+Categories=Game;StrategyGame;
