@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<application>
-    <id type="desktop">asc.desktop</id>
-    <licence>CC0</licence>
+<component type="desktop">
+    <id>org.asc_hq.ASC</id>
+    <metadata_license>CC0-1.0</metadata_license>
+    <project_license>GPL-2.0-or-later</project_license>
+    <name>Advanced Strategic Command</name>
+    <summary>Turn-based strategy game</summary>
     <description>
         <p>
             Advanced Strategic Command is a free, turn based strategy game. It is designed in the tradition of the Battle Isle series from Bluebyte and is currently available for Windows and Linux.
@@ -10,12 +13,22 @@
             ASC can be played both against the AI and against other human players, using hotseat or PlayByMail. It is also used to run the multiplayer universe Project Battle Planets.
         </p>
     </description>
+    <content_rating type="oars-1.1">
+        <content_attribute id="violence-fantasy">moderate</content_attribute>
+    </content_rating>
     <url type="homepage">http://www.asc-hq.org/</url>
+    <url type="bugtracker">https://sourceforge.net/p/asc-hq/bugs/</url>
+    <url type="vcs-browser"> https://github.com/ValHaris/asc-hq/</url>
     <screenshots>
         <screenshot type="default">http://www.asc-hq.org/screenshots/screen05.jpg</screenshot>
         <screenshot>http://www.asc-hq.org/screenshots/screen06.jpg</screenshot>
         <screenshot>http://www.asc-hq.org/screenshots/screen07.jpg</screenshot>
         <screenshot>http://www.asc-hq.org/screenshots/screen08.jpg</screenshot>
     </screenshots>
+    <releases>
+        <release version="2.6.1" date="2015-12-06" type="stable"/>
+        <release version="2.6.0" date="2013-12-28" type="stable"/>
+        <release version="2.4.0" date="2009-12-21" type="stable"/>
+    </releases>
     <updatecontact>bickel@asc-hq.org</updatecontact>
-</application>
+</component>
