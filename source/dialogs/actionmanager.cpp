@@ -36,6 +36,7 @@
 #include "../mainscreenwidget.h"
 #include "../spfst.h"
 #include "actionwidget.h"
+#include "loki/Functor.h"
 
 
 class ActionSelectionWidget: public ActionWidget
@@ -128,6 +129,19 @@ class ActionManager : public ASC_PG_Dialog {
       
       ItemSelectorWidget* selection;
       
+
+      bool isAtCursor(SelectionWidget* widget) {
+          const ActionSelectionWidget* asw = dynamic_cast<const ActionSelectionWidget*>( widget );
+          if ( asw )  {
+			 vector<MapCoordinate>  pos = asw->getCoordinates();
+			 if ( pos.size() > 0 ) {
+				return pos[0] == gamemap->getCursor();
+			 }
+          }
+          return false;
+      }
+
+
    public:   
       ActionManager( GameMap* map ) : ASC_PG_Dialog( NULL, PG_Rect( -1, -1, 400, 550 ), "Manage Actions" ), gamemap( map ) 
       {
@@ -135,8 +149,19 @@ class ActionManager : public ASC_PG_Dialog {
          AddStandardButton("Close")->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &ActionManager::ok )));
          AddStandardButton("Run")->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &ActionManager::run )));
          selection = new ItemSelectorWidget( this, PG_Rect( 5, 20, Width()-10, Height() - 70 ), new ActionFactory( map ));
+
+         findUnitAtCursor();
       }
    
+
+
+      void findUnitAtCursor() {
+    	  if ( gamemap->getCursor().valid()) {
+    		  selection->selectItem(Loki::Functor<bool, LOKI_TYPELIST_1(SelectionWidget*)>(this, &ActionManager::isAtCursor), false);
+    	  }
+
+      }
+
 };
 
 

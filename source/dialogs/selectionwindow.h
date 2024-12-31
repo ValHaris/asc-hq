@@ -124,6 +124,8 @@ class ItemSelectorWidget : public PG_Widget {
       
       void constrainNames( bool constrain );
       int getItemNum() const { return widgets.size(); };
+
+      void selectItem(Loki::Functor<bool, LOKI_TYPELIST_1(SelectionWidget*)> predicate, bool fromTop = true );
             
       void reLoad( bool show = false );
       void resetNamesearch();

@@ -337,3 +337,25 @@ void ItemSelectorWindow::reLoad()
 {
    itemSelector->reLoad();
 }
+
+void ItemSelectorWidget::selectItem(Loki::Functor<bool, LOKI_TYPELIST_1(SelectionWidget*)> predicate, bool fromTop )
+{
+	if ( fromTop ) {
+		for ( WidgetList::const_iterator i = widgets.begin(); i != widgets.end(); ++i) {
+			if ( predicate(*i) ) {
+				markItem(*i);
+		        scrollWidget->ScrollToWidget( *i );
+				return;
+			}
+		}
+	} else {
+		for ( WidgetList::const_reverse_iterator i = widgets.rbegin(); i != widgets.rend(); ++i) {
+			if ( predicate(*i) ) {
+				markItem(*i);
+		        scrollWidget->ScrollToWidget( *i );
+				return;
+			}
+		}
+	}
+}
+
