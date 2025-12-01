@@ -909,21 +909,22 @@ void executeUserAction ( tuseractions action )
          showSDLInfo();
          break;
 
+      case ua_unitMovementInfo:
+    	  showUnitMovementInfo();
+    	  break;
+
       case ua_toggleunitshading: 
          {
-            CGameOptions::Instance()->units_gray_after_move = !CGameOptions::Instance()->units_gray_after_move;
+            CGameOptions::Instance()->units_gray_after_move += 1;
+            if ( CGameOptions::Instance()->units_gray_after_move > 2 )
+            	CGameOptions::Instance()->units_gray_after_move = 0;
             CGameOptions::Instance()->setChanged();
+
             displaymap();
             while ( mouseparams.taste )
                releasetimeslice();
 
-            ASCString condition;
-            if ( CGameOptions::Instance()->units_gray_after_move )
-               condition = "- thay can't move";
-            else
-               condition = "- thay can't move AND\n- thay can't shoot";
-
-            infoMessage ("units that now displayed shaded when:\n" + condition);
+            infoMessage (ASCString("units will be displayed shaded:\n") + unitShadingStates[CGameOptions::Instance()->units_gray_after_move]);
          }
 
          break;

@@ -23,6 +23,9 @@
 #include "basestrm.h"
 
 
+const char* unitShadingStates[] = { "After Move", "After Attack", "After Attack & Move", NULL };
+
+
 CGameOptions* pStaticGameOptions=NULL;
 
 class Destroyer
@@ -112,7 +115,7 @@ void CGameOptions::runTextIO ( PropertyContainer& pc )
    pc.addInteger("MovementSpeed", movespeed, movespeed );
    pc.addInteger("ReplayMoveSpeedFactor", replayMoveSpeedFactor, replayMoveSpeedFactor );
    pc.addBool("EndTurnPrompt", endturnquestion, endturnquestion );
-   pc.addBool("UnitsGrayAfterMove", units_gray_after_move, units_gray_after_move );
+   pc.addInteger("UnitsGrayedOut", units_gray_after_move, units_gray_after_move );
    pc.addInteger( "MapZoom", mapzoom, mapzoom);
    pc.addInteger( "MapZoomEditor", mapzoomeditor, mapzoomeditor );
    pc.addInteger( "AttackSpeed1", attackspeed1, 30 );
@@ -268,7 +271,7 @@ void CGameOptions::setDefaults ( void )
    movespeed=15;
    endturnquestion=false;
    // smallmapactive=1;
-   units_gray_after_move=false;
+   units_gray_after_move=2;
    mapzoom=100;
    mapzoomeditor=60;
    // startupcount=0;

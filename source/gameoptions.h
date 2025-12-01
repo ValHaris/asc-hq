@@ -69,7 +69,7 @@ class CGameOptions
       bool endturnquestion;
 
       //! are units that cannot move but shoot displayed in gray ?
-      bool  units_gray_after_move;
+      int  units_gray_after_move;
 
       //! the zoom of the map display in ASC
       int mapzoom;
@@ -261,6 +261,9 @@ class CGameOptions
    private:
       bool _changed;
 };
+
+extern const char* unitShadingStates[];
+
 
 inline
 bool CGameOptions::isChanged()

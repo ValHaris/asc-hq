@@ -362,6 +362,7 @@ class UnitHooveringLogic {
 
 
   private:
+    bool shallDisplayShaded(int criteria) const;
     void readData ( tnstream& stream );
   public:
 
