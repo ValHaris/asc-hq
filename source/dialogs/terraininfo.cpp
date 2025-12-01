@@ -134,6 +134,7 @@ void viewterraininfo ( GameMap* gamemap, const MapCoordinate& pos, bool fullVisi
       text += "\n";
 
       text += "Unit ID: " + ASCString::toString( typ->id ) + "\n";
+      text += "Unit Owner: " + fld->vehicle->getOwningPlayer().getName() + "\n";
       text += "Internal Unit Identification: " + ASCString::toString( fld->vehicle->networkid ) + "\n";
 
       if ( !typ->filename.empty() )
