@@ -267,6 +267,7 @@ void Menu::setup()
    addbutton ( "unit AI properties", ua_unitAiOptions );
    currentMenu->addSeparator();
    addbutton ( "show packages used by map", ua_showUsedPackages );
+   addbutton ( "show unit movement info", ua_unitMovementInfo );
    // addbutton ( "test memory integrity", ua_heapcheck );
 
    addfield ( "~H~elp" );

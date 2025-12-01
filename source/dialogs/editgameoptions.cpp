@@ -264,7 +264,7 @@ class EditGameOptions : public ASC_PG_Dialog {
          new PG_PropertyField_Checkbox<bool>( propertyEditor, "Direct Movement", &o->fastmove );
          new PG_PropertyField_Integer<int>( propertyEditor , "Movement Speed (1/100 sec)", &o->movespeed );
          new PG_PropertyField_Checkbox<bool>( propertyEditor, "Confirm EndOfTurn", &o->endturnquestion );
-         new PG_PropertyField_Checkbox<bool>( propertyEditor, "Units shaded after movement", &o->units_gray_after_move );
+         new PG_PropertyField_IntDropDown<int>( propertyEditor, "Units shaded", &o->units_gray_after_move, unitShadingStates );
          new PG_PropertyField_Integer<int>( propertyEditor , "Attack Dialog PreWait (1/100 sec)", &o->attackspeed1 );
          new PG_PropertyField_Integer<int>( propertyEditor , "Attack Dialog Animate (1/100 sec)", &o->attackspeed2 );
          new PG_PropertyField_Integer<int>( propertyEditor , "Attack Dialog PostWait 3 (1/100 sec)", &o->attackspeed3 );

@@ -782,6 +782,23 @@ ASCString VehicleType::getName( ) const
       return description;
 }
 
+
+bool VehicleType::canBuild( const ObjectType* obj) const
+{
+    for ( int i = 0; i < objectsBuildable.size(); i++ )
+        for ( int j = objectsBuildable[i].from; j <= objectsBuildable[i].to; j++ )
+            if (obj->id == j )
+                return true;
+
+
+    for ( int i = 0; i < objectGroupsBuildable.size(); i++ )
+        for ( int j = objectGroupsBuildable[i].from; j <= objectGroupsBuildable[i].to; j++ )
+            if (obj->groupID == j)
+                return true;
+    return false;
+}
+
+
 int VehicleType :: maxSpeed ( ) const
 {
    int maxUnitMovement = 0;

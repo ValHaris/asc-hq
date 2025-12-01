@@ -21,6 +21,9 @@
 
 #include "../textfiletags.h"
 #include "../windowing.h"
+#include "../itemrepository.h"
+#include "../widgets/textrenderer.h"
+
 
 void assignWeaponInfo ( Panel* panel, PG_Widget* widget, const SingleWeapon& weapon )
 {
@@ -544,3 +547,45 @@ void unitInfoDialog( const VehicleType* vt )
   }
 }
 
+
+void showUnitMovementInfo(const VehicleType* vt)
+{
+    if ( vt == NULL ) {
+        MapField* fld = actmap->getField( actmap->getCursor() );
+        if ( fld && fld->vehicle )
+            vt = fld->vehicle->getType();
+    }
+    ASCString s = "The following object types allow the unit to move on:\n";
+
+    if ( vt == NULL )
+        return;
+
+
+    for ( int k = 0; k < objectTypeRepository.getNum(); k++ ) {
+        const ObjectType* objtype = objectTypeRepository.getObject_byPos ( k );
+        if ( vt->terrainaccess.accessible( objtype->fieldModification[0].terrain_or ) == 1) {
+            ASCString s2 = " - " + objtype->name + "(" + objtype->buildcost.toString() +")\n";
+            int totalUnitCount = 0;
+
+            for ( int v = 0; v < vehicleTypeRepository.getNum(); v++ ) {
+                const VehicleType* vehtype = vehicleTypeRepository.getObject_byPos ( v );
+                if ( vehtype->canBuild(objtype)) {
+                    int count = 0;
+                    for ( Player::VehicleList::iterator i = actmap->getCurrentPlayer().vehicleList.begin(); i != actmap->getCurrentPlayer().vehicleList.end(); ++i)
+                        if ((*i)->getType() == vehtype)
+                            count++;
+                    if ( count )
+                        s2 += "#eeinzug15#" + vehtype->name + " (" + ASCString::toString(count) + ")#eeinzug0#\n";
+                    totalUnitCount += count;
+                }
+            }
+            if ( totalUnitCount > 0 )
+               s += s2;
+        }
+    }
+
+    ViewFormattedText vat ( "Unit Movement Info", s, PG_Rect( 20, -1 , 450, 480 ));
+    vat.Show();
+    vat.RunModal();
+
+}

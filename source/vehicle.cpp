@@ -1677,12 +1677,24 @@ int Vehicle::getArmor() const
    return typ->armor;
 }
 
+bool Vehicle::shallDisplayShaded(int criteria) const {
+   bool secondUnit = gamemap->getField ( getPosition() )->secondvehicle == this;
+   if ( getOwner() != gamemap->actplayer )
+	   return false;
+
+   switch ( criteria ) {
+   	   case 0: return !canMove() && !secondUnit;
+   	   case 1: return attacked || !typ->weapons.count;
+   	   case 2: return shallDisplayShaded(0) && shallDisplayShaded(1);
+   	   default: return false;
+   }
+}
+
 
 void Vehicle::paint ( Surface& s, SPoint pos, int shadowDist ) const
 {
   #ifdef sgmain
-   bool secondUnit = gamemap->getField ( getPosition() )->secondvehicle == this;
-   bool shaded = (!canMove() && !secondUnit) && maxMovement() && ( color == gamemap->actplayer*8) && (attacked || !typ->weapons.count || CGameOptions::Instance()->units_gray_after_move );
+   bool shaded = shallDisplayShaded( CGameOptions::Instance()->units_gray_after_move );
   #else
    bool shaded = 0;
   #endif

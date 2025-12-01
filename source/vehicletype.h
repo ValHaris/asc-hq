@@ -244,6 +244,8 @@ extern const char*  cvehiclefunctions[];
         //! the IDs of objects that are automatically layed by moving the movement
         vector<IntRange> objectLayedByMovement;
 
+        bool canBuild( const ObjectType* obj) const;
+
         //! The weapons
         UnitWeapon   weapons;
 
