@@ -203,7 +203,7 @@ bool ItemSelectorWidget::nameMatch( const SelectionWidget* selection, const ASCS
    a.toLower();
    ASCString b = selection->getName().toLower();
    if ( a.length() > 0 && b.length() > 0 )
-      if ( b.find ( a ) == 0 ) 
+      if ( b.find ( a ) == 0 || ( searchWithinNames && b.find(a) != string::npos))
          return true;
    return false;
 };   
@@ -223,7 +223,7 @@ class NonEditableLineEdit : public    PG_LineEdit {
 };
 
 ItemSelectorWidget::ItemSelectorWidget( PG_Widget *parent, const PG_Rect &r , SelectionItemFactory* itemFactory ) 
-   : PG_Widget( parent,r ), namesConstrained(true), rowCount(0), scrollWidget( NULL), nameSearch(NULL), selectedItem(NULL), factory( itemFactory ), columnCount(-1), visibleRowCount(-1), selectionCallBack( this, &ItemSelectorWidget::isItemMarked ) {
+   : PG_Widget( parent,r ), namesConstrained(true), rowCount(0), scrollWidget( NULL), nameSearch(NULL), selectedItem(NULL), factory( itemFactory ), columnCount(-1), visibleRowCount(-1), selectionCallBack( this, &ItemSelectorWidget::isItemMarked ), searchWithinNames (false) {
    SetTransparency(255);
    reLoad();
 
@@ -236,6 +236,10 @@ ItemSelectorWidget::ItemSelectorWidget( PG_Widget *parent, const PG_Rect &r , Se
    // nameSearch = new PG_Label ( this, PG_Rect( 5, Height() - 25, Width() - 10, 20 ));
 };
 
+void ItemSelectorWidget::setSearchWithinNames(bool within)
+{
+    searchWithinNames = within;
+}
 
 void ItemSelectorWidget::constrainNames( bool constrain )
 {

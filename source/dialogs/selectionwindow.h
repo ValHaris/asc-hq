@@ -105,6 +105,8 @@ class ItemSelectorWidget : public PG_Widget {
       
       SelectionWidget::SelectionCallBack selectionCallBack;
       
+      bool searchWithinNames;
+
    protected:   
       bool moveSelection( int amount ) ;
       bool eventKeyDown(const SDL_KeyboardEvent* key);
@@ -127,6 +129,7 @@ class ItemSelectorWidget : public PG_Widget {
             
       void reLoad( bool show = false );
       void resetNamesearch();
+      void setSearchWithinNames(bool within);
       ~ItemSelectorWidget();
 };
 
@@ -140,6 +143,7 @@ class ItemSelectorWindow: public ASC_PG_Dialog {
    public:
       // the ItemSelectorWindow will take ownership over the itemFactory
       ItemSelectorWindow( PG_Widget *parent, const PG_Rect &r , const ASCString& title, SelectionItemFactory* itemFactory ) ;
+      void setSearchWithinNames(bool within) { itemSelector->setSearchWithinNames(within);};
      
       int RunModal();
       void reLoad();
