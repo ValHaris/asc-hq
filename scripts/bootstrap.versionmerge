@@ -15,7 +15,7 @@ die "version not found in input file" unless $version;
 my $replaceCount = 0;
 
 while(<>) {
-   if ( s/^(AC_INIT\(asc,)(\d+\.\d+\.\d+\.\d+)?\s*(\).*)/$1$version$3/) {
+   if ( s/^(AC_INIT\(\[asc\],)\[(\d+\.\d+\.\d+\.\d+)\]?\s*(\).*)/$1\[$version\]$3/) {
       ++$replaceCount;
    }
    print;

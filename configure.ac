@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT(asc,2.8.3.0)
+AC_INIT([asc],[2.8.3.1])
 
 AM_CONFIG_HEADER(config.h)
 AM_INIT_AUTOMAKE
@@ -27,8 +27,8 @@ dnl ac_version=`cat $(as_top_srcdir)/source/strtmesg.cpp | awk -F\" '/asc_releas
 
 
 AC_DISABLE_SHARED
-AC_PROG_LIBTOOL
-AM_PROG_LIBTOOL
+LT_INIT
+LT_INIT
 
 dnl *************************************************************************
 dnl Checks for programs.
@@ -75,11 +75,11 @@ AC_SUBST(top_builddir)
 AC_SUBST(top_srcdir)
 
 AC_LANG_SAVE
-AC_LANG_CPLUSPLUS
+AC_LANG([C++])
 
 
 AC_MSG_CHECKING(for working C++ compiler)
-AC_TRY_COMPILE( , [ return 0; ],, compilerBroken=yes)
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[]], [[ return 0; ]])],[],[compilerBroken=yes])
 
 if test "x$compilerBroken" = xyes ; then
   AC_MSG_RESULT(no)
@@ -152,11 +152,11 @@ AC_CHECK_LIB( xvidcore,xvid_encore,,XVIDAVAIL=0)
 
 if test "x$XVIDAVAIL" = x1; then 
    AC_MSG_CHECKING(XviD usage)
-   AC_TRY_COMPILE( [#include <stdio.h>
-                  #include <xvid.h> ], [
+   AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <stdio.h>
+                  #include <xvid.h> ]], [[
       void *m_xvidEncoderHandle;
       xvid_encore(m_xvidEncoderHandle, XVID_ENC_DESTROY, NULL, NULL);
-   ],, XVIDAVAIL=0)
+   ]])],[],[XVIDAVAIL=0])
 fi
 
 
@@ -174,12 +174,11 @@ AC_CHECK_LIB( SDL_image,
               AC_LIB_MISSING( SDL_image, http://www.libsdl.org/projects/SDL_image/ )) 
 
 #AC_MSG_CHECKING("SDL_image.h")
-#AC_TRY_COMPILE( [#include <SDL_image.h>],[return 0;],
-#	      AC_MSG_ERROR([[ 
+#AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <SDL_image.h>]], [[return 0;]])],[#	      AC_MSG_ERROR([ 
 #ASC requires the SDL_image library. If you have a distribution supplied 
 #SDL_image.RPM installed, perhaps the SDL_image-devel.RPM is missing. 
 #If your distribution does not include the SDL_image library, you can get it 
-#from http://www.libsdl.org/projects/SDL_image/ ]]) )
+#from http://www.libsdl.org/projects/SDL_image/ ]) ],[])
 #AC_MSG_RESULT("yes")
 
 
@@ -310,12 +309,11 @@ CPPFLAGS=$OLDCPPFLAGS
 
 
 #AC_MSG_CHECKING("SDL_mixer.h")
-#AC_TRY_COMPILE( [#include <SDL_mixer.h>],[return 0;],
-#	      AC_MSG_ERROR( [[
+#AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <SDL_mixer.h>]], [[return 0;]])],[#	      AC_MSG_ERROR( [
 #ASC requires the SDL_mixer library. If you have a distribution supplied 
 #SDL_mixer.RPM installed, perhaps the SDL_mixer-devel.RPM is missing. 
 #If your distribution does not include the SDL_mixer library, you can get it 
-#from http://www.libsdl.org/projects/SDL_mixer/ ]]))
+#from http://www.libsdl.org/projects/SDL_mixer/ ])],[])
 #AC_MSG_RESULT("yes")
 
 
@@ -330,16 +328,15 @@ CPPFLAGS=$OLDCPPFLAGS
 #AC_SUBST(SDL_TTF_LDADD)
 
 #AC_MSG_CHECKING("SDL_ttf.h")
-#AC_TRY_COMPILE( [#include <SDL_ttf.h>],[return 0;],
-#	      AC_MSG_ERROR( [[
+#AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <SDL_ttf.h>]], [[return 0;]])],[#	      AC_MSG_ERROR( [
 #ASC requires the SDL_ttf library. If you have a distribution supplied 
 #SDL_ttf.RPM installed, perhaps the SDL_ttf-devel.RPM is missing. 
 #If your distribution does not include the SDL_ttf library, you can get it 
-#from http://www.libsdl.org/projects/SDL_ttf/ ]]))
+#from http://www.libsdl.org/projects/SDL_ttf/ ])],[])
 #AC_MSG_RESULT("yes")
 
 
-AC_LANG_CPLUSPLUS
+AC_LANG([C++])
 
 AC_CHECK_HEADERS([boost/heap/pairing_heap.hpp],,AC_LIB_MISSING( Boost version >= 1.49, http://www.boost.org/, [(which may be splitted into several distinct libraries)]))
 
@@ -514,7 +511,20 @@ AC_CHECK_HEADERS( exception limits )
 
 dnl Checks for other header files.
 AC_HEADER_DIRENT
-AC_HEADER_TIME
+m4_warn([obsolete],
+[Update your code to rely only on HAVE_SYS_TIME_H,
+then remove this warning and the obsolete code below it.
+All current systems provide time.h; it need not be checked for.
+Not all systems provide sys/time.h, but those that do, all allow
+you to include it and time.h simultaneously.])dnl
+AC_CHECK_HEADERS_ONCE([sys/time.h])
+# Obsolete code to be removed.
+if test $ac_cv_header_sys_time_h = yes; then
+  AC_DEFINE([TIME_WITH_SYS_TIME],[1],[Define to 1 if you can safely include both <sys/time.h>
+	     and <time.h>.  This macro is obsolete.])
+fi
+# End of obsolete code.
+
 
 
 AC_DEFUN([AC_DEFINE_DIR], [
@@ -544,7 +554,20 @@ dnl to #include more headers.  Our macro is defined in "aclocal.m4".
 dnl
 AC_C_CONST
 AC_TYPE_SIZE_T
-AC_HEADER_TIME
+m4_warn([obsolete],
+[Update your code to rely only on HAVE_SYS_TIME_H,
+then remove this warning and the obsolete code below it.
+All current systems provide time.h; it need not be checked for.
+Not all systems provide sys/time.h, but those that do, all allow
+you to include it and time.h simultaneously.])dnl
+AC_CHECK_HEADERS_ONCE([sys/time.h])
+# Obsolete code to be removed.
+if test $ac_cv_header_sys_time_h = yes; then
+  AC_DEFINE([TIME_WITH_SYS_TIME],[1],[Define to 1 if you can safely include both <sys/time.h>
+	     and <time.h>.  This macro is obsolete.])
+fi
+# End of obsolete code.
+
 
 dnl *************************************************************************
 dnl Checks for library functions.
@@ -553,15 +576,15 @@ AC_CHECK_FUNCS(itoa)
 AC_CHECK_FUNCS(stricmp)
 
 dnl c++ tests
-AC_LANG_CPLUSPLUS
+AC_LANG([C++])
 
 dnl GCC 2.95.3 came with a broken standard library
 
 AC_MSG_CHECKING(broken std::string compare)
-AC_TRY_COMPILE( [#include <string>], [
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <string>]], [[
       std::string s = "Hello World";
       s.compare  ( 0, 0, "Hello");
-],, string_compare_broken=yes)
+]])],[],[string_compare_broken=yes])
 
 if test "x$string_compare_broken" = x ; then
   AC_MSG_RESULT(no)
@@ -571,10 +594,10 @@ else
 fi
 
 AC_MSG_CHECKING(broken c_str Unicode support)
-AC_TRY_COMPILE( [#include <string>], [
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <string>]], [[
    std::basic_string<wchar_t> test;
    test.c_str();
-],, Unicode_broken=yes)
+]])],[],[Unicode_broken=yes])
 
 if test "x$Unicode_broken" = x ; then
   AC_MSG_RESULT(no)
@@ -585,11 +608,11 @@ fi
 
 
 AC_MSG_CHECKING(broken std::vector)
-AC_TRY_COMPILE( [#include <vector>], [
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <vector>]], [[
       std::vector<int> s;
       s.push_back(1);
       s.at(0);
-],, stdvector_broken=yes)
+]])],[],[stdvector_broken=yes])
 
 if test "x$stdvector_broken" = x ; then
   AC_MSG_RESULT(no)

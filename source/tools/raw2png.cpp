@@ -23,6 +23,8 @@
 #include "../sgstream.h"
 #include "../palette.h"
 #include "../basegfx.h"
+#include "../graphics/surface.h"
+#include "../graphics/surface2png.h"
 
 
 
@@ -37,19 +39,11 @@ int main(int argc, char *argv[], char *envp[])
    initFileIO( "" );
    loadpalette();
 
-   int w,h;
-   void* pic;
-   {
-      tnfilestream s ( argv[1], tnstream::reading );
-      s.readrlepict ( &pic, false, &w);
-   }
+   tnfilestream fs ( argv[1], tnstream::reading );
+   Surface s;
+   s.read( fs );
 
-   getpicsize( pic, w, h );
-   
-   tvirtualdisplay vd ( w+20, h+20,  255 );
-   putimage ( 10, 10, pic );
-   
-   writepcx ( ASCString(argv[1])+".pcx", 10, 10, w+10, h+10, pal );
+   writePNG( ASCString(argv[1])+".png", s );
    
    return 0;
 

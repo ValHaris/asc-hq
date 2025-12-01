@@ -1,4 +1,4 @@
-# generated automatically by aclocal 1.16.4 -*- Autoconf -*-
+# generated automatically by aclocal 1.16.5 -*- Autoconf -*-
 
 # Copyright (C) 1996-2021 Free Software Foundation, Inc.
 
@@ -14,8 +14,8 @@
 m4_ifndef([AC_CONFIG_MACRO_DIRS], [m4_defun([_AM_CONFIG_MACRO_DIRS], [])m4_defun([AC_CONFIG_MACRO_DIRS], [_AM_CONFIG_MACRO_DIRS($@)])])
 m4_ifndef([AC_AUTOCONF_VERSION],
   [m4_copy([m4_PACKAGE_VERSION], [AC_AUTOCONF_VERSION])])dnl
-m4_if(m4_defn([AC_AUTOCONF_VERSION]), [2.69],,
-[m4_warning([this file was generated for autoconf 2.69.
+m4_if(m4_defn([AC_AUTOCONF_VERSION]), [2.71],,
+[m4_warning([this file was generated for autoconf 2.71.
 You have another version of autoconf.  It may work, but is not guaranteed to.
 If you have problems, you may need to regenerate the build system entirely.
 To do so, use the procedure documented by the package, typically 'autoreconf'.])])
@@ -137,7 +137,7 @@ int main ()
   rm -f conf.oggtest
 ])
 
-# pkg.m4 - Macros to locate and utilise pkg-config.   -*- Autoconf -*-
+# pkg.m4 - Macros to locate and use pkg-config.   -*- Autoconf -*-
 # serial 12 (pkg-config-0.29.2)
 
 dnl Copyright © 2004 Scott James Remnant <scott@netsplit.com>.
@@ -225,7 +225,7 @@ dnl Check to see whether a particular set of modules exists. Similar to
 dnl PKG_CHECK_MODULES(), but does not set variables or print errors.
 dnl
 dnl Please remember that m4 expands AC_REQUIRE([PKG_PROG_PKG_CONFIG])
-dnl only at the first occurence in configure.ac, so if the first place
+dnl only at the first occurrence in configure.ac, so if the first place
 dnl it's called might be skipped (such as if it is within an "if", you
 dnl have to call PKG_CHECK_EXISTS manually
 AC_DEFUN([PKG_CHECK_EXISTS],
@@ -294,14 +294,14 @@ if test $pkg_failed = yes; then
         AC_MSG_RESULT([no])
         _PKG_SHORT_ERRORS_SUPPORTED
         if test $_pkg_short_errors_supported = yes; then
-	        $1[]_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "$2" 2>&1`
+                $1[]_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "$2" 2>&1`
         else
-	        $1[]_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "$2" 2>&1`
+                $1[]_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "$2" 2>&1`
         fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$$1[]_PKG_ERRORS" >&AS_MESSAGE_LOG_FD
+        # Put the nasty error message in config.log where it belongs
+        echo "$$1[]_PKG_ERRORS" >&AS_MESSAGE_LOG_FD
 
-	m4_default([$4], [AC_MSG_ERROR(
+        m4_default([$4], [AC_MSG_ERROR(
 [Package requirements ($2) were not met:
 
 $$1_PKG_ERRORS
@@ -313,7 +313,7 @@ _PKG_TEXT])[]dnl
         ])
 elif test $pkg_failed = untried; then
         AC_MSG_RESULT([no])
-	m4_default([$4], [AC_MSG_FAILURE(
+        m4_default([$4], [AC_MSG_FAILURE(
 [The pkg-config script could not be found or is too old.  Make sure it
 is in your PATH or set the PKG_CONFIG environment variable to the full
 path to pkg-config.
@@ -323,10 +323,10 @@ _PKG_TEXT
 To get pkg-config, see <http://pkg-config.freedesktop.org/>.])[]dnl
         ])
 else
-	$1[]_CFLAGS=$pkg_cv_[]$1[]_CFLAGS
-	$1[]_LIBS=$pkg_cv_[]$1[]_LIBS
+        $1[]_CFLAGS=$pkg_cv_[]$1[]_CFLAGS
+        $1[]_LIBS=$pkg_cv_[]$1[]_LIBS
         AC_MSG_RESULT([yes])
-	$3
+        $3
 fi[]dnl
 ])dnl PKG_CHECK_MODULES
 
@@ -412,6 +412,74 @@ AS_VAR_COPY([$1], [pkg_cv_][$1])
 
 AS_VAR_IF([$1], [""], [$5], [$4])dnl
 ])dnl PKG_CHECK_VAR
+
+dnl PKG_WITH_MODULES(VARIABLE-PREFIX, MODULES,
+dnl   [ACTION-IF-FOUND],[ACTION-IF-NOT-FOUND],
+dnl   [DESCRIPTION], [DEFAULT])
+dnl ------------------------------------------
+dnl
+dnl Prepare a "--with-" configure option using the lowercase
+dnl [VARIABLE-PREFIX] name, merging the behaviour of AC_ARG_WITH and
+dnl PKG_CHECK_MODULES in a single macro.
+AC_DEFUN([PKG_WITH_MODULES],
+[
+m4_pushdef([with_arg], m4_tolower([$1]))
+
+m4_pushdef([description],
+           [m4_default([$5], [build with ]with_arg[ support])])
+
+m4_pushdef([def_arg], [m4_default([$6], [auto])])
+m4_pushdef([def_action_if_found], [AS_TR_SH([with_]with_arg)=yes])
+m4_pushdef([def_action_if_not_found], [AS_TR_SH([with_]with_arg)=no])
+
+m4_case(def_arg,
+            [yes],[m4_pushdef([with_without], [--without-]with_arg)],
+            [m4_pushdef([with_without],[--with-]with_arg)])
+
+AC_ARG_WITH(with_arg,
+     AS_HELP_STRING(with_without, description[ @<:@default=]def_arg[@:>@]),,
+    [AS_TR_SH([with_]with_arg)=def_arg])
+
+AS_CASE([$AS_TR_SH([with_]with_arg)],
+            [yes],[PKG_CHECK_MODULES([$1],[$2],$3,$4)],
+            [auto],[PKG_CHECK_MODULES([$1],[$2],
+                                        [m4_n([def_action_if_found]) $3],
+                                        [m4_n([def_action_if_not_found]) $4])])
+
+m4_popdef([with_arg])
+m4_popdef([description])
+m4_popdef([def_arg])
+
+])dnl PKG_WITH_MODULES
+
+dnl PKG_HAVE_WITH_MODULES(VARIABLE-PREFIX, MODULES,
+dnl   [DESCRIPTION], [DEFAULT])
+dnl -----------------------------------------------
+dnl
+dnl Convenience macro to trigger AM_CONDITIONAL after PKG_WITH_MODULES
+dnl check._[VARIABLE-PREFIX] is exported as make variable.
+AC_DEFUN([PKG_HAVE_WITH_MODULES],
+[
+PKG_WITH_MODULES([$1],[$2],,,[$3],[$4])
+
+AM_CONDITIONAL([HAVE_][$1],
+               [test "$AS_TR_SH([with_]m4_tolower([$1]))" = "yes"])
+])dnl PKG_HAVE_WITH_MODULES
+
+dnl PKG_HAVE_DEFINE_WITH_MODULES(VARIABLE-PREFIX, MODULES,
+dnl   [DESCRIPTION], [DEFAULT])
+dnl ------------------------------------------------------
+dnl
+dnl Convenience macro to run AM_CONDITIONAL and AC_DEFINE after
+dnl PKG_WITH_MODULES check. HAVE_[VARIABLE-PREFIX] is exported as make
+dnl and preprocessor variable.
+AC_DEFUN([PKG_HAVE_DEFINE_WITH_MODULES],
+[
+PKG_HAVE_WITH_MODULES([$1],[$2],[$3],[$4])
+
+AS_IF([test "$AS_TR_SH([with_]m4_tolower([$1]))" = "yes"],
+        [AC_DEFINE([HAVE_][$1], 1, [Enable ]m4_tolower([$1])[ support])])
+])dnl PKG_HAVE_DEFINE_WITH_MODULES
 
 # Configure paths for libvorbis
 # Jack Moffitt <jack@icecast.org> 10-21-2000
@@ -557,6 +625,9 @@ dnl                  Bob McCown (Mac-testing)
 dnl Creation date:   24/11/2001
 dnl ---------------------------------------------------------------------------
 
+dnl Increment this when changing this file.
+# serial 42
+
 dnl ===========================================================================
 dnl Table of Contents of this macro file:
 dnl -------------------------------------
@@ -616,7 +687,7 @@ dnl If you want to support standard --enable-debug/unicode/shared options, you
 dnl may do the following:
 dnl
 dnl     ...
-dnl     AC_CANONICAL_SYSTEM
+dnl     AC_CANONICAL_TARGET
 dnl
 dnl     # define configure options
 dnl     WX_CONFIG_OPTIONS
@@ -694,7 +765,8 @@ AC_DEFUN([_WX_PRIVATE_CHECK_VERSION],
 
 dnl ---------------------------------------------------------------------------
 dnl WX_CONFIG_CHECK(VERSION, [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND
-dnl                  [, WX-LIBS [, ADDITIONAL-WX-CONFIG-FLAGS]]]])
+dnl                  [, WX-LIBS [, ADDITIONAL-WX-CONFIG-FLAGS
+dnl                  [, WX-OPTIONAL-LIBS]]]]])
 dnl
 dnl Test for wxWidgets, and define WX_C*FLAGS, WX_LIBS and WX_LIBS_STATIC
 dnl (the latter is for static linking against wxWidgets). Set WX_CONFIG_NAME
@@ -710,6 +782,10 @@ dnl
 dnl Optional ADDITIONAL-WX-CONFIG-FLAGS argument is appended to wx-config
 dnl invocation command in present. It can be used to fine-tune lookup of
 dnl best wxWidgets build available.
+dnl
+dnl Optional WX-OPTIONAL-LIBS argument contains comma- or space-separated list
+dnl of wxWidgets libraries to link against if they are available.
+dnl WX-OPTIONAL-LIBS is supported on version 2.9.0 and later.
 dnl
 dnl Example use:
 dnl   WX_CONFIG_CHECK([2.6.0], [wxWin=1], [wxWin=0], [html,core,net]
@@ -762,8 +838,8 @@ AC_DEFUN([WX_CONFIG_CHECK],
       AC_MSG_CHECKING([for wxWidgets version >= $min_wx_version ($5)])
     fi
 
-    dnl don't add the libraries ($4) to this variable as this would result in
-    dnl an error when it's used with --version below
+    dnl don't add the libraries (4th argument) to this variable as this would
+    dnl result in an error when it's used with --version below
     WX_CONFIG_WITH_ARGS="$WX_CONFIG_PATH $wx_config_args $5"
 
     WX_VERSION=`$WX_CONFIG_WITH_ARGS --version 2>/dev/null`
@@ -787,14 +863,20 @@ AC_DEFUN([WX_CONFIG_CHECK],
 
     if test -n "$wx_ver_ok"; then
       AC_MSG_RESULT(yes (version $WX_VERSION))
-      WX_LIBS=`$WX_CONFIG_WITH_ARGS --libs $4`
+
+      wx_optional_libs=""
+      _WX_PRIVATE_CHECK_VERSION(2,9,0)
+      if test -n "$wx_ver_ok" -a -n "$6"; then
+        wx_optional_libs="--optional-libs $6"
+      fi
+      WX_LIBS=`$WX_CONFIG_WITH_ARGS --libs $4 $wx_optional_libs`
 
       dnl is this even still appropriate?  --static is a real option now
       dnl and WX_CONFIG_WITH_ARGS is likely to contain it if that is
       dnl what the user actually wants, making this redundant at best.
       dnl For now keep it in case anyone actually used it in the past.
       AC_MSG_CHECKING([for wxWidgets static library])
-      WX_LIBS_STATIC=`$WX_CONFIG_WITH_ARGS --static --libs $4 2>/dev/null`
+      WX_LIBS_STATIC=`$WX_CONFIG_WITH_ARGS --static --libs $4 $wx_optional_libs 2>/dev/null`
       if test "x$WX_LIBS_STATIC" = "x"; then
         AC_MSG_RESULT(no)
       else
@@ -1057,7 +1139,7 @@ dnl $5 = additional action to do in case option is given with "yes" value
 dnl ---------------------------------------------------------------------------
 AC_DEFUN([WX_ARG_ENABLE_YESNOAUTO],
          [AC_ARG_ENABLE($1,
-            AC_HELP_STRING([--enable-$1], [$3 (default is $4)]),
+            AS_HELP_STRING([--enable-$1],[$3 (default is $4)]),
             [], [enableval="$4"])
 
             dnl Show a message to the user about this option
@@ -1071,7 +1153,7 @@ AC_DEFUN([WX_ARG_ENABLE_YESNOAUTO],
                 $2=0
             elif test "$enableval" = "auto" ; then
                 AC_MSG_RESULT([will be automatically detected])
-                $2="auto"
+                $2=""
             else
                 AC_MSG_ERROR([
     Unrecognized option value (allowed values: yes, no, auto)
@@ -1081,7 +1163,7 @@ AC_DEFUN([WX_ARG_ENABLE_YESNOAUTO],
 
 AC_DEFUN([WX_ARG_WITH_YESNOAUTO],
          [AC_ARG_WITH($1,
-            AC_HELP_STRING([--with-$1], [$3 (default is $4)]),
+            AS_HELP_STRING([--with-$1],[$3 (default is $4)]),
             [], [withval="$4"])
 
             dnl Show a message to the user about this option
@@ -1097,7 +1179,7 @@ AC_DEFUN([WX_ARG_WITH_YESNOAUTO],
                 $2=0
             elif test "$withval" = "auto" ; then
                 AC_MSG_RESULT([will be automatically detected])
-                $2="auto"
+                $2=""
             else
                 AC_MSG_ERROR([
     Unrecognized option value (allowed values: yes, auto)
@@ -1141,25 +1223,24 @@ AC_DEFUN([WX_STANDARD_OPTIONS],
         ifelse(index([$1], [toolkit]), [-1],,
                [
                 AC_ARG_WITH([toolkit],
-                            AC_HELP_STRING([--with-toolkit],
-                                           [Build against a specific wxWidgets toolkit (default is auto)]),
+                            AS_HELP_STRING([--with-toolkit],[Build against a specific wxWidgets toolkit (default is auto)]),
                             [], [withval="auto"])
 
                 dnl Show a message to the user about this option
                 AC_MSG_CHECKING([for the --with-toolkit option])
                 if test "$withval" = "auto" ; then
                     AC_MSG_RESULT([will be automatically detected])
-                    TOOLKIT="auto"
+                    TOOLKIT=""
                 else
                     TOOLKIT="$withval"
 
                     dnl PORT must be one of the allowed values
-                    if test "$TOOLKIT" != "gtk1" -a "$TOOLKIT" != "gtk2" -a \
+                    if test "$TOOLKIT" != "gtk1" -a "$TOOLKIT" != "gtk2" -a "$TOOLKIT" != "gtk3" -a \
                             "$TOOLKIT" != "msw" -a "$TOOLKIT" != "motif" -a \
                             "$TOOLKIT" != "osx_carbon" -a "$TOOLKIT" != "osx_cocoa" -a \
-                            "$TOOLKIT" != "dfb" -a "$TOOLKIT" != "x11"; then
+                            "$TOOLKIT" != "dfb" -a "$TOOLKIT" != "x11" -a "$TOOLKIT" != "base"; then
                         AC_MSG_ERROR([
-    Unrecognized option value (allowed values: auto, gtk1, gtk2, msw, motif, osx_carbon, osx_cocoa, dfb, x11)
+    Unrecognized option value (allowed values: auto, gtk1, gtk2, gtk3, msw, motif, osx_carbon, osx_cocoa, dfb, x11, base)
                         ])
                     fi
 
@@ -1215,15 +1296,14 @@ AC_DEFUN([WX_STANDARD_OPTIONS],
         ifelse(index([$1], [wxversion]), [-1],,
                [
                 AC_ARG_WITH([wxversion],
-                            AC_HELP_STRING([--with-wxversion],
-                                           [Build against a specific version of wxWidgets (default is auto)]),
+                            AS_HELP_STRING([--with-wxversion],[Build against a specific version of wxWidgets (default is auto)]),
                             [], [withval="auto"])
 
                 dnl Show a message to the user about this option
                 AC_MSG_CHECKING([for the --with-wxversion option])
                 if test "$withval" = "auto" ; then
                     AC_MSG_RESULT([will be automatically detected])
-                    WX_RELEASE="auto"
+                    WX_RELEASE=""
                 else
 
                     wx_requested_major_version=`echo $withval | \
@@ -1258,7 +1338,7 @@ dnl ---------------------------------------------------------------------------
 dnl WX_CONVERT_STANDARD_OPTIONS_TO_WXCONFIG_FLAGS
 dnl
 dnl Sets the WXCONFIG_FLAGS string using the SHARED,DEBUG,UNICODE variable values
-dnl which are different from "auto".
+dnl which were specified.
 dnl Thus this macro needs to be called only once all options have been set.
 dnl ---------------------------------------------------------------------------
 AC_DEFUN([WX_CONVERT_STANDARD_OPTIONS_TO_WXCONFIG_FLAGS],
@@ -1282,11 +1362,11 @@ AC_DEFUN([WX_CONVERT_STANDARD_OPTIONS_TO_WXCONFIG_FLAGS],
             WXCONFIG_FLAGS="$WXCONFIG_FLAGS""--unicode=no "
         fi
 
-        if test "$TOOLKIT" != "auto" ; then
+        if test -n "$TOOLKIT" ; then
             WXCONFIG_FLAGS="$WXCONFIG_FLAGS""--toolkit=$TOOLKIT "
         fi
 
-        if test "$WX_RELEASE" != "auto" ; then
+        if test -n "$WX_RELEASE" ; then
             WXCONFIG_FLAGS="$WXCONFIG_FLAGS""--version=$WX_RELEASE "
         fi
 
@@ -1300,16 +1380,16 @@ AC_DEFUN([WX_CONVERT_STANDARD_OPTIONS_TO_WXCONFIG_FLAGS],
 
 
 dnl ---------------------------------------------------------------------------
-dnl _WX_SELECTEDCONFIG_CHECKFOR([RESULTVAR], [STRING], [MSG]
-dnl                             [, ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]])
+dnl _WX_SELECTEDCONFIG_CHECKFOR([RESULTVAR], [STRING], [MSG])
 dnl
-dnl Outputs the given MSG. Then searches the given STRING in the wxWidgets
-dnl additional CPP flags and put the result of the search in WX_$RESULTVAR
-dnl also adding the "yes" or "no" message result to MSG.
+dnl Sets WX_$RESULTVAR to the value of $RESULTVAR if it's defined. Otherwise,
+dnl auto-detect the value by checking for the presence of STRING in
+dnl $WX_SELECTEDCONFIG (which is supposed to be set by caller) and set
+dnl WX_$RESULTVAR to either 0 or 1, also outputting "yes" or "no" after MSG.
 dnl ---------------------------------------------------------------------------
 AC_DEFUN([_WX_SELECTEDCONFIG_CHECKFOR],
         [
-        if test "$$1" = "auto" ; then
+        if test -z "$$1" ; then
 
             dnl The user does not have particular preferences for this option;
             dnl so we will detect the wxWidgets relative build setting and use it
@@ -1324,11 +1404,9 @@ AC_DEFUN([_WX_SELECTEDCONFIG_CHECKFOR],
             if test "$WX_$1" != "0"; then
                 WX_$1=1
                 AC_MSG_RESULT([yes])
-                ifelse([$4], , :, [$4])
             else
                 WX_$1=0
                 AC_MSG_RESULT([no])
-                ifelse([$5], , :, [$5])
             fi
         else
 
@@ -1375,19 +1453,16 @@ AC_DEFUN([WX_DETECT_STANDARD_OPTION_VALUES],
             echo "[[dbg]] WX_SELECTEDCONFIG: $WX_SELECTEDCONFIG"
         fi
 
-
         dnl we could test directly for WX_SHARED with a line like:
         dnl    _WX_SELECTEDCONFIG_CHECKFOR([SHARED], [shared],
         dnl                                [if wxWidgets was built in SHARED mode])
         dnl but wx-config --selected-config DOES NOT outputs the 'shared'
         dnl word when wx was built in shared mode; it rather outputs the
         dnl 'static' word when built in static mode.
-        if test $WX_SHARED = "1"; then
+        if test "$WX_SHARED" = "1"; then
             STATIC=0
-        elif test $WX_SHARED = "0"; then
+        elif test "$WX_SHARED" = "0"; then
             STATIC=1
-        elif test $WX_SHARED = "auto"; then
-            STATIC="auto"
         fi
 
         dnl Now set the WX_UNICODE, WX_DEBUG, WX_STATIC variables
@@ -1410,7 +1485,7 @@ AC_DEFUN([WX_DETECT_STANDARD_OPTION_VALUES],
         AC_SUBST(WX_SHARED)
 
         dnl detect the WX_PORT to use
-        if test "$TOOLKIT" = "auto" ; then
+        if test -z "$TOOLKIT" ; then
 
             dnl The user does not have particular preferences for this option;
             dnl so we will detect the wxWidgets relative build setting and use it
@@ -1418,22 +1493,26 @@ AC_DEFUN([WX_DETECT_STANDARD_OPTION_VALUES],
 
             WX_GTKPORT1=$(expr "$WX_SELECTEDCONFIG" : ".*gtk1.*")
             WX_GTKPORT2=$(expr "$WX_SELECTEDCONFIG" : ".*gtk2.*")
+            WX_GTKPORT3=$(expr "$WX_SELECTEDCONFIG" : ".*gtk3.*")
             WX_MSWPORT=$(expr "$WX_SELECTEDCONFIG" : ".*msw.*")
             WX_MOTIFPORT=$(expr "$WX_SELECTEDCONFIG" : ".*motif.*")
             WX_OSXCOCOAPORT=$(expr "$WX_SELECTEDCONFIG" : ".*osx_cocoa.*")
             WX_OSXCARBONPORT=$(expr "$WX_SELECTEDCONFIG" : ".*osx_carbon.*")
             WX_X11PORT=$(expr "$WX_SELECTEDCONFIG" : ".*x11.*")
             WX_DFBPORT=$(expr "$WX_SELECTEDCONFIG" : ".*dfb.*")
+            WX_BASEPORT=$(expr "$WX_SELECTEDCONFIG" : ".*base.*")
 
             WX_PORT="unknown"
             if test "$WX_GTKPORT1" != "0"; then WX_PORT="gtk1"; fi
             if test "$WX_GTKPORT2" != "0"; then WX_PORT="gtk2"; fi
+            if test "$WX_GTKPORT3" != "0"; then WX_PORT="gtk3"; fi
             if test "$WX_MSWPORT" != "0"; then WX_PORT="msw"; fi
             if test "$WX_MOTIFPORT" != "0"; then WX_PORT="motif"; fi
             if test "$WX_OSXCOCOAPORT" != "0"; then WX_PORT="osx_cocoa"; fi
             if test "$WX_OSXCARBONPORT" != "0"; then WX_PORT="osx_carbon"; fi
             if test "$WX_X11PORT" != "0"; then WX_PORT="x11"; fi
             if test "$WX_DFBPORT" != "0"; then WX_PORT="dfb"; fi
+            if test "$WX_BASEPORT" != "0"; then WX_PORT="base"; fi
 
             dnl NOTE: backward-compatible check for wx2.8; in wx2.9 the mac
             dnl       ports are called 'osx_cocoa' and 'osx_carbon' (see above)
@@ -1451,14 +1530,8 @@ AC_DEFUN([WX_DETECT_STANDARD_OPTION_VALUES],
 
             AC_MSG_RESULT([$WX_PORT])
         else
-
             dnl Use the setting given by the user
-            if test -z "$TOOLKIT" ; then
-                WX_PORT=$TOOLKIT
-            else
-                dnl try with PORT
-                WX_PORT=$PORT
-            fi
+            WX_PORT=$TOOLKIT
         fi
 
         AC_SUBST(WX_PORT)
@@ -1489,35 +1562,29 @@ AC_DEFUN([WX_DETECT_STANDARD_OPTION_VALUES],
                          ])
         fi
 
-        dnl now we can finally update the DEBUG,UNICODE,SHARED options
-        dnl to their final values if they were set to 'auto'
-        if test "$DEBUG" = "auto"; then
-            DEBUG=$WX_DEBUG
-        fi
-        if test "$UNICODE" = "auto"; then
+        dnl now we can finally update the options to their final values if they
+        dnl were not already set
+        if test -z "$UNICODE" ; then
             UNICODE=$WX_UNICODE
         fi
-        if test "$SHARED" = "auto"; then
+        if test -z "$SHARED" ; then
             SHARED=$WX_SHARED
         fi
-        if test "$TOOLKIT" = "auto"; then
+        if test -z "$TOOLKIT" ; then
             TOOLKIT=$WX_PORT
         fi
 
-        dnl in case the user needs a BUILD=debug/release var...
-        if test "$DEBUG" = "1"; then
-            BUILD="debug"
-        elif test "$DEBUG" = "0" -o "$DEBUG" = ""; then
-            BUILD="release"
-        fi
-
-        dnl respect the DEBUG variable adding the optimize/debug flags
+        dnl respect the DEBUG variable adding the optimize/debug flags and also
+        dnl define a BUILD variable in case the user wants to use it
+        dnl
         dnl NOTE: the CXXFLAGS are merged together with the CPPFLAGS so we
         dnl       don't need to set them, too
         if test "$DEBUG" = "1"; then
+            BUILD="debug"
             CXXFLAGS="$CXXFLAGS -g -O0"
             CFLAGS="$CFLAGS -g -O0"
-        else
+        elif test "$DEBUG" = "0"; then
+            BUILD="release"
             CXXFLAGS="$CXXFLAGS -O2"
             CFLAGS="$CFLAGS -O2"
         fi
@@ -1625,7 +1692,7 @@ AC_DEFUN([AM_AUTOMAKE_VERSION],
 [am__api_version='1.16'
 dnl Some users find AM_AUTOMAKE_VERSION and mistake it for a way to
 dnl require some minimum version.  Point them to the right macro.
-m4_if([$1], [1.16.4], [],
+m4_if([$1], [1.16.5], [],
       [AC_FATAL([Do not call $0, use AM_INIT_AUTOMAKE([$1]).])])dnl
 ])
 
@@ -1641,7 +1708,7 @@ m4_define([_AM_AUTOCONF_VERSION], [])
 # Call AM_AUTOMAKE_VERSION and AM_AUTOMAKE_VERSION so they can be traced.
 # This function is AC_REQUIREd by AM_INIT_AUTOMAKE.
 AC_DEFUN([AM_SET_CURRENT_AUTOMAKE_VERSION],
-[AM_AUTOMAKE_VERSION([1.16.4])dnl
+[AM_AUTOMAKE_VERSION([1.16.5])dnl
 m4_ifndef([AC_AUTOCONF_VERSION],
   [m4_copy([m4_PACKAGE_VERSION], [AC_AUTOCONF_VERSION])])dnl
 _AM_AUTOCONF_VERSION(m4_defn([AC_AUTOCONF_VERSION]))])
@@ -2018,6 +2085,10 @@ m4_defn([AC_PROG_CC])
 # release and drop the old call support.
 AC_DEFUN([AM_INIT_AUTOMAKE],
 [AC_PREREQ([2.65])dnl
+m4_ifdef([_$0_ALREADY_INIT],
+  [m4_fatal([$0 expanded multiple times
+]m4_defn([_$0_ALREADY_INIT]))],
+  [m4_define([_$0_ALREADY_INIT], m4_expansion_stack)])dnl
 dnl Autoconf wants to disallow AM_ names.  We explicitly allow
 dnl the ones we care about.
 m4_pattern_allow([^AM_[A-Z]+FLAGS$])dnl
