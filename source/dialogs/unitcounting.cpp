@@ -200,7 +200,9 @@ private:
     }
 
 public:
-    UnitSummaryWindow ( PG_Widget *parent, const PG_Rect &r , const ASCString& title, VehicleCounterFactory* itemFactory, GameMap* actmap ) : ItemSelectorWindow( parent, r, title, itemFactory ), gamemap( actmap ), factory( itemFactory ) {};
+    UnitSummaryWindow ( PG_Widget *parent, const PG_Rect &r , const ASCString& title, VehicleCounterFactory* itemFactory, GameMap* actmap ) : ItemSelectorWindow( parent, r, title, itemFactory ), gamemap( actmap ), factory( itemFactory ) {
+        setSearchWithinNames(true);
+    };
 };
 
 
