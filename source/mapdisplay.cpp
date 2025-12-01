@@ -702,8 +702,8 @@ void MapDisplayPG::readData()
 
 void MapDisplayPG::setNewZoom( int zoom )
 {
-   if ( zoom > 100 )
-      zoom = 100;
+   if ( zoom > 200 )
+      zoom = 200;
    if ( zoom < 20 )
       zoom = 20;
 
@@ -777,7 +777,7 @@ void MapDisplayPG::checkViewPosition( MapCoordinate& offset )
 
 
 template<int pixelSize>
-class PixSel : public SourcePixelSelector_CacheZoom<pixelSize, SourcePixelSelector_DirectRectangle<pixelSize> >
+class PixSel : public SourcePixelSelector_Zoom<pixelSize, SourcePixelSelector_DirectRectangle<pixelSize> >
 {}
 ;
 
@@ -978,11 +978,11 @@ void MapDisplayPG::redrawMapAtCursor ( const MapCoordinate& oldpos )
 {
    if ( oldpos.valid() ) {
       SPoint p = internal2widget( mapGlobalPos2internalPos( oldpos ));
-      UpdateRect( PG_Rect( p.x, p.y, fieldsizex, fieldsizey ) );
+      UpdateRect( PG_Rect( p.x, p.y, fieldsizex * zoom / 100, fieldsizey * zoom / 100 ) );
    }
          
    SPoint p = internal2widget( mapGlobalPos2internalPos( cursor.pos() ));
-   UpdateRect( PG_Rect( p.x, p.y, fieldsizex, fieldsizey ) );
+   UpdateRect( PG_Rect( p.x, p.y, fieldsizex * zoom / 100, fieldsizey * zoom / 100 ) );
 }
 
 
@@ -1284,7 +1284,7 @@ class SourcePixelSelector_DirectSubRectangle
 };
 
 template<int pixelSize>
-class MovePixSel : public SourcePixelSelector_CacheZoom<pixelSize, SourcePixelSelector_DirectSubRectangle<pixelSize> >
+class MovePixSel : public SourcePixelSelector_Zoom<pixelSize, SourcePixelSelector_DirectSubRectangle<pixelSize> >
 {}
 ;
 
