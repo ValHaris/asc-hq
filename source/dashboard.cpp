@@ -876,10 +876,10 @@ MapInfoPanel::MapInfoPanel (PG_Widget *parent, const PG_Rect &r, MapDisplayPG* m
 
    zoomSlider = dynamic_cast<PG_Slider*>( FindChild( "zoomscroller", true ) );
    if ( zoomSlider ) {
-      zoomSlider->SetRange(0,75); // results in zoomlevels from 100 - 25
+      zoomSlider->SetRange(0,175); // results in zoomlevels from 200 - 25
       zoomSlider->sigSlide.connect( sigc::mem_fun( *this, &MapInfoPanel::scrollTrack ));
       mapDisplay->newZoom.connect( sigc::mem_fun( *this, &MapInfoPanel::zoomChanged ));
-      zoomSlider->SetPosition( 100 - mapDisplay->getZoom() );
+      zoomSlider->SetPosition( 200 - mapDisplay->getZoom() );
    }
 
    const int labelnum = 5;
@@ -933,13 +933,13 @@ void MapInfoPanel::zoomChanged( int zoom )
 {
    if ( !changeActive )
       if ( zoomSlider )
-         zoomSlider->SetPosition( 100 - zoom );
+         zoomSlider->SetPosition( 200 - zoom );
 }
 
 bool MapInfoPanel::scrollTrack( long pos )
 {
    changeActive = true;
-   mapDisplay->setNewZoom( 100 - pos );
+   mapDisplay->setNewZoom( 200 - pos );
    repaintMap();
    changeActive = false;
    return true;
