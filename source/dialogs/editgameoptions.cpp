@@ -39,6 +39,7 @@
 #include "../textfile_evaluation.h"
 
 #include "editgameoptions.h"
+#include <source/dialog.h>
 
 
 bool GetVideoModes::comparator( const ModeRes& a, const ModeRes& b )
@@ -230,17 +231,21 @@ class EditGameOptions : public ASC_PG_Dialog {
             if ( getPGApplication().isFullscreen() != fullscreen ) 
                getPGApplication().toggleFullscreen();
             
-            
-            CGameOptions::Instance()->setChanged();
-            if ( !defaultPassword.empty() && defaultPassword.find_first_not_of('*') != ASCString::npos ) {
-               Password p;
-               p.setUnencoded ( defaultPassword );
-               CGameOptions::Instance()->defaultPassword = p.toString();
-            }
-            
-            quitModalLoop(0);
+            if (choice_dlg("Confirm Settings Change?","~y~es","~n~o") == 1)
+            {
+               CGameOptions::Instance()->setChanged();
+               if ( !defaultPassword.empty() && defaultPassword.find_first_not_of('*') != ASCString::npos ) {
+                  Password p;
+                  p.setUnencoded ( defaultPassword );
+                  CGameOptions::Instance()->defaultPassword = p.toString();
+               }
+               
+               quitModalLoop(0);
 
-            return true;
+               return true;
+            }
+            else
+               return false;
          } else
             return false;
       }
