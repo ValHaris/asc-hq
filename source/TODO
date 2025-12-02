@@ -60,7 +60,6 @@ Requested features:
 -  A result screen in multiplayergames (who list how many units until now,
     lost buildings, gained resources, ... )
 
--  A confirmation setting screen 
 
 -  map parameter: increased airplane fuel usage to allow realistic maps
    where airplanes can't 'stand' in midair for longer periods of time
@@ -83,7 +82,7 @@ Requested features:
   screen
   
 >Zu den baubaren/abreissbaren objekten Objekten. Jedes baubare oder
->abreissbare Objekt erh„lt optional eine "Scrap-ID". zb. Straáe=1 , Brcke=2,
+>abreissbare Objekt erhï¿½lt optional eine "Scrap-ID". zb. Straï¿½e=1 , Brï¿½cke=2,
 >Wald=3, Felsen=10 ....
 
 - BI1 Blocking  
