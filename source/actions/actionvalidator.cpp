@@ -43,7 +43,6 @@ bool validateActionStack( GameMap* map, bool createSavegame, const ActionContain
    if ( !map->replayinfo )
        return true;
 
-
    if ( createSavegame ) {
        const ASCString filename("_actiondebug.sav");
        StatusMessageWindowHolder smw = MessagingHub::Instance().infoMessageWindow( "saving " + filename);
@@ -61,6 +60,8 @@ bool validateActionStack( GameMap* map, bool createSavegame, const ActionContain
                   << "\n";
        }
    }
+
+   ASCString failure_message ("**ACTION VALIDATION FAILED! This is a bug! Please send _actiondebug.* files to bugs@asc-hq.org!\nActionCounter=");
 
    auto_ptr<GameMap> validationMap ( loadreplay( map->replayinfo->map[map->getCurrentPlayer().getPosition()] ));
    SuppressTechPresentation stp;
@@ -99,11 +100,11 @@ bool validateActionStack( GameMap* map, bool createSavegame, const ActionContain
               try {
                   ActionResult res = a->redo( context );
                   if ( !res.successful() ) {
-                      errorMessage(ASCString("action ") + ASCString::toString(counter) + ": " + a->getDescription() + " failed\n" + getmessage(res.getCode()));
+                      errorMessage(failure_message + ASCString::toString(counter) + ": " + a->getDescription() + " failed\n" + getmessage(res.getCode()));
                       return false;
                   }
               } catch ( const ActionResult & res ) {
-                  errorMessage(ASCString("action ") + ASCString::toString(counter) + ": " + a->getDescription() + " failed\n" + getmessage(res.getCode()));
+                  errorMessage(failure_message + ASCString::toString(counter) + ": " + a->getDescription() + " failed\n" + getmessage(res.getCode()));
                  throw res;
               }
 
