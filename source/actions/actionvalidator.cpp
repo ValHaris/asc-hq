@@ -48,7 +48,7 @@ bool validateActionStack( GameMap* map, bool createSavegame, const ActionContain
        const ASCString filename("_actiondebug.sav");
        StatusMessageWindowHolder smw = MessagingHub::Instance().infoMessageWindow( "saving " + filename);
        savegame(filename, map);
-       std::ofstream myfile(constructFileName(0, "", "_actiondebug.sav.actions" ));
+       std::ofstream myfile(constructFileName(0, "", "_actiondebug.sav.actions" ).c_str());
        int counter = 0;
        for ( ActionContainer::Actions::const_iterator i = actions.begin(); i != actions.end(); ++i) {
            myfile << counter++
