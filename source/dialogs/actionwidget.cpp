@@ -23,7 +23,9 @@
 
 #include "../gamemap.h"
 #include "../actions/unitcommand.h"
+#include "../actions/containercommand.h"
 #include "../itemrepository.h"
+#include "../widgets/textrenderer.h"
 
 
 ActionWidget::ActionWidget( PG_Widget* parent, const PG_Point& pos, int width, const Command& action, GameMap* map )
@@ -33,18 +35,39 @@ ActionWidget::ActionWidget( PG_Widget* parent, const PG_Point& pos, int width, c
     int offset = 0;
 
     const UnitCommand* uc = dynamic_cast<const UnitCommand*>(&action);
-    if ( uc != NULL && uc->getUnitTypeID() > 0 ) {
-        VehicleType* vt = vehicleTypeRepository.getObject_byID( uc->getUnitTypeID() );
-        if ( vt ) {
-            PG_Widget* w = new VehicleTypeImage( this, PG_Point( 25, 0), vt, map->getCurrentPlayer() );
-            offset += w->Width() + 5;
-        }
+    const VehicleType* vt = getVehicleType();
+    if ( vt ) {
+        PG_Widget* w = new VehicleTypeImage( this, PG_Point( 25, 0), vt, map->getCurrentPlayer() );
+        offset += w->Width() + 5;
     }
-    PG_Label* lbl1 = new PG_Label( this, PG_Rect( 25 + offset, 0, Width()-30, Height() ), action.getDescription() );
+
+    TextRenderer* lbl1 = new TextRenderer( this, PG_Rect( 25 + offset, 0, Width()-30, Height() ), action.getDescription() );
     lbl1->SetFontSize( lbl1->GetFontSize() -2 );
 
     SetTransparency( 255 );
 };
+
+const VehicleType* ActionWidget::getVehicleType() const
+{
+    const UnitCommand* uc = dynamic_cast<const UnitCommand*>(&act);
+    if ( uc != NULL && uc->getUnitTypeID() > 0 ) {
+        VehicleType* vt = vehicleTypeRepository.getObject_byID( uc->getUnitTypeID() );
+        if ( vt )
+           return vt;
+    }
+
+    const ContainerCommand* cc = dynamic_cast<const ContainerCommand*>(&act);
+    if (cc ) {
+        const ContainerBase* container = cc->getContainer(true);
+        if ( container ) {
+            const Vehicle* veh = dynamic_cast<const Vehicle*>(container);
+            if ( veh )
+                return veh->getType();
+        }
+    }
+    return NULL;
+}
+
 
 ASCString ActionWidget::getName() const
 {

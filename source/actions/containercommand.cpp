@@ -35,8 +35,17 @@ ContainerCommand::ContainerCommand( GameMap* map )
 {
    this->containerID = -1;
 }
- 
-      
+
+
+vector<MapCoordinate> ContainerCommand::getCoordinates() const
+{
+    vector<MapCoordinate> v = Command::getCoordinates();
+    const ContainerBase* c = getContainer(true);
+    if ( c )
+       v.push_back( c->getPosition() );
+    return v;
+}
+
       
 ContainerBase* ContainerCommand::getContainer( bool dontThrow )
 {

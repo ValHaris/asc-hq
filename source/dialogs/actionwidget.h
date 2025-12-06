@@ -25,10 +25,11 @@
 
 class Command;
 class GameMap;
+class VehicleType;
 
 class ActionWidget: public SelectionWidget
 {
-      
+      const VehicleType* getVehicleType() const;
    public:
       ActionWidget( PG_Widget* parent, const PG_Point& pos, int width, const Command& action, GameMap* map );
       
