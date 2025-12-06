@@ -173,6 +173,7 @@
 #include "loggingoutput.h"
 #include "contextutils.h"
 #include "actions/taskinterface.h"
+#include "actions/actionvalidator.h"
 #include "tasks/taskcontainer.h"
 #include "dialogs/taskmanager.h"
 #include "autotraining.h"
@@ -1716,6 +1717,7 @@ int main(int argc, char *argv[] )
    app.sigAppIdle.connect ( sigc::ptr_fun( &mainloopidle ));
 
    cursorMoved.connect( updateFieldInfo.make_slot() );
+   registerActionValidator();
 
    
    ScreenResolutionSetup screenResolutionSetup ( *cl );

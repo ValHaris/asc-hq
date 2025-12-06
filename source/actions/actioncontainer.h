@@ -61,6 +61,7 @@ class ActionContainer {
       void setActive( const Command* action, bool active );
       
       const Actions& getActions() const { return actions; };
+      Actions getActiveActions() const;
       
       //! does a single undo step
       ActionResult undo( const Context& context );
@@ -89,6 +90,14 @@ class ActionContainer {
       static sigc::signal<void,GameMap*,Command&> commitCommand;
       
       static sigc::signal<void,GameMap*> actionListChanged;
+      /**
+       * Validates that the action stack is correct.
+       * This is a debugging tool and should not be necessary for normal operations.
+       *
+       * Parameters: GameMap map, bool createSavegame, Actions& listOfactions
+       *
+       */
+      static sigc::signal<bool,GameMap*,bool, const Actions&> validateActionStack;
       
       ~ActionContainer();
 };

@@ -21,14 +21,14 @@
 
 #include "actioncontainer.h"
 #include "../gamemap.h"
-
 #include "../util/messaginghub.h"
 #include "../basestrm.h"
-#include "../util/messaginghub.h"
+#include "../gameoptions.h"
 
 sigc::signal<void,GameMap*,const Command&> ActionContainer::postActionExecution;
 sigc::signal<void,GameMap*,Command&> ActionContainer::commitCommand;
 sigc::signal<void,GameMap*> ActionContainer::actionListChanged;
+sigc::signal<bool,GameMap*, bool, const ActionContainer::Actions&> ActionContainer::validateActionStack;
 
 
 ActionContainer::ActionContainer( GameMap* gamemap )
@@ -210,10 +210,22 @@ bool ActionContainer::isActive_req( const Command* action )
    }
 }
 
+ActionContainer::Actions ActionContainer::getActiveActions() const
+{
+    Actions filteredActions;
+    for (Actions::const_iterator i = actions.begin(); i != actions.end(); ++i)
+        if ( isActive_map(*i))
+            filteredActions.push_back(*i);
+    return filteredActions;
+}
 
 ActionResult ActionContainer::rerun( const Context& context )
 {
+   if ( CGameOptions::Instance()->validateActions ) {
+       validateActionStack(map, true, getActiveActions());
+   }
    
+
    Actions::iterator firstDelta = currentPos;
    Actions::iterator i = currentPos;
    while ( i != actions.begin() ) {
@@ -250,7 +262,9 @@ ActionResult ActionContainer::rerun( const Context& context )
       ++currentPos;
    }
    
-   
+   if ( CGameOptions::Instance()->validateActions ) {
+       validateActionStack(map, false, getActiveActions());
+   }
    
    return ActionResult(0);
 }

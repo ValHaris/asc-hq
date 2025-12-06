@@ -133,7 +133,7 @@ am_libdirectunitactions_la_OBJECTS = inflictdamage.lo \
 	constructunitcommand.lo spawnunit.lo cargomovecommand.lo \
 	diplomacycommand.lo changediplomaticstate.lo \
 	internalammotransfercommand.lo actionavailability.lo \
-	renamecontainercommand.lo
+	renamecontainercommand.lo actionvalidator.lo
 libdirectunitactions_la_OBJECTS =  \
 	$(am_libdirectunitactions_la_OBJECTS)
 libmapactions_la_DEPENDENCIES =
@@ -159,7 +159,7 @@ am__maybe_remake_depfiles = depfiles
 am__depfiles_remade = ./$(DEPDIR)/action.Plo \
 	./$(DEPDIR)/actionavailability.Plo \
 	./$(DEPDIR)/actioncontainer.Plo ./$(DEPDIR)/actionresult.Plo \
-	./$(DEPDIR)/attackcommand.Plo \
+	./$(DEPDIR)/actionvalidator.Plo ./$(DEPDIR)/attackcommand.Plo \
 	./$(DEPDIR)/buildproductionlinecommand.Plo \
 	./$(DEPDIR)/cancelresearchcommand.Plo \
 	./$(DEPDIR)/cargomovecommand.Plo \
@@ -463,7 +463,8 @@ libdirectunitactions_la_SOURCES = inflictdamage.cpp destructcontainer.cpp constr
                           containeraction.cpp recycleunitcommand.cpp consumeresource.cpp vehicleattack.cpp moveunit.cpp discoverresources.cpp \
                           unitcommand.cpp attackcommand.cpp moveunitcommand.cpp convertcontainer.cpp containercommand.cpp \
                           constructunitcommand.cpp spawnunit.cpp cargomovecommand.cpp diplomacycommand.cpp changediplomaticstate.cpp \
-                          internalammotransfercommand.cpp actionavailability.cpp renamecontainercommand.cpp
+                          internalammotransfercommand.cpp actionavailability.cpp renamecontainercommand.cpp \
+                          actionvalidator.cpp
 
 libdirectunitactions_la_LIBADD = @SDL_LIBS@
 
@@ -535,6 +536,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/actionavailability.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/actioncontainer.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/actionresult.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/actionvalidator.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/attackcommand.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/buildproductionlinecommand.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cancelresearchcommand.Plo@am__quote@ # am--include-marker
@@ -754,6 +756,7 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/actionavailability.Plo
 	-rm -f ./$(DEPDIR)/actioncontainer.Plo
 	-rm -f ./$(DEPDIR)/actionresult.Plo
+	-rm -f ./$(DEPDIR)/actionvalidator.Plo
 	-rm -f ./$(DEPDIR)/attackcommand.Plo
 	-rm -f ./$(DEPDIR)/buildproductionlinecommand.Plo
 	-rm -f ./$(DEPDIR)/cancelresearchcommand.Plo
@@ -859,6 +862,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/actionavailability.Plo
 	-rm -f ./$(DEPDIR)/actioncontainer.Plo
 	-rm -f ./$(DEPDIR)/actionresult.Plo
+	-rm -f ./$(DEPDIR)/actionvalidator.Plo
 	-rm -f ./$(DEPDIR)/attackcommand.Plo
 	-rm -f ./$(DEPDIR)/buildproductionlinecommand.Plo
 	-rm -f ./$(DEPDIR)/cancelresearchcommand.Plo

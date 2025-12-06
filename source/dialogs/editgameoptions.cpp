@@ -322,10 +322,12 @@ class EditGameOptions : public ASC_PG_Dialog {
             new PG_PropertyField_Checkbox<bool>( propertyEditor, "Log kills to console", &o->logKillsToConsole );
          }
          
-         (new PG_PropertyField_String<ASCString>( propertyEditor , "Language Override", &o->languageOverride ));
+         new PG_PropertyField_String<ASCString>( propertyEditor , "Language Override", &o->languageOverride );
          
          if ( !mainApp )
             new PG_PropertyField_Checkbox<bool>( propertyEditor, "DEV: Save event message separately", &o->saveEventMessagesExternal );
+
+         new PG_PropertyField_Checkbox<bool>( propertyEditor , "Validate Action Management", &o->validateActions );
 
         
          PG_Button* ok = new PG_Button( this, PG_Rect( Width() - 100, Height() - 40, 90, 30), "OK" );

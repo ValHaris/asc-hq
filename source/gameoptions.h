@@ -258,6 +258,8 @@ class CGameOptions
       
       bool logKillsToConsole;
       
+      bool validateActions;
+
    private:
       bool _changed;
 };

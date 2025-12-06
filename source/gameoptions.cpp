@@ -253,6 +253,8 @@ void CGameOptions::runTextIO ( PropertyContainer& pc )
    pc.addString("LanguageOverride", languageOverride, "" );
    
    pc.addBool("LogKillsToConsole", logKillsToConsole, false );
+
+   pc.addBool("ValidateActions", validateActions, false);
 }
 
 CGameOptions::CGameOptions()
@@ -352,6 +354,8 @@ void CGameOptions::setDefaults ( void )
    
    logKillsToConsole = false;
    
+   validateActions = false;
+
    setChanged();
 }
 
