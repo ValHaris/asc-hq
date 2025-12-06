@@ -639,12 +639,22 @@ void selectAndRunLuaScript()
 {
    ASCString file = selectFile( "*.lua", true );
    if ( file.size() ) {
+
+      if ( CGameOptions::Instance()->validateActions ) {
+          ActionContainer::validateActionStack(actmap, true, actmap->actions.getActiveActions());
+      }
+
       LuaState state;
       LuaRunner runner( state );
       runner.runFile( file );
       if ( !runner.getErrors().empty() )
          errorMessage( runner.getErrors() );
       updateFieldInfo();
+
+      if ( CGameOptions::Instance()->validateActions ) {
+          ActionContainer::validateActionStack(actmap, false, actmap->actions.getActiveActions());
+      }
+
    }
 }
 
