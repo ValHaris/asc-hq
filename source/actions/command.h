@@ -37,15 +37,15 @@
   Other items (like #Vehicle, #Building) will definitly be changed. But this should not be done through write access to 
   these instances, but rather through the classes derived from #Command . This is the classic Command design pattern.
 
-  The commands ensure that all modifications are recorded in the gamemap, which servers several purposes:
+  The commands ensure that all modifications are recorded in the gamemap, which serves several purposes:
   \li the player can undo and redo these modifications
   \li the replay is based on these commands to show your moves to the other players (well, only the moves that happen in 
       their radar coverage, of course)
-  \li the replay is also the ensurance against illegal modifcations for cheating. Running the same Commands on the other 
+  \li the replay is also the ensurance against illegal modifications for cheating. Running the same Commands on the other
       player's computers must result in exactly the same modifications to the map
 
   \section history History  
-  The introduction of the Command pattern is a relatively new addition the ASC engine. Not all modifications are have been converted
+  The introduction of the Command pattern is a relatively new addition the ASC engine. Not all modifications have been converted
   to Command classes. This is an ongoing effort.
   If you are writing new code that modifies the map, you should either use existing Commands (see the descends of the #Command class) 
   or write new child-Command classes.
@@ -54,7 +54,7 @@
   While #Command derives from #GameAction, there is a very severe distinction between #Command and non-command #GameAction
 
   A Command is a top level command from the user to some building, vehicle of something. A user never issues normal #GameAction
-  The Command may need to do some lower-level modifications of the map, which are governed by the game machanis.
+  The Command may need to do some lower-level modifications of the map, which are governed by the game mechanics.
 
   Here is a (simplified) example, showing what happens if the user wants to move a tank from one field to a neighbouring field.
   A #MoveUnitCommand object is created, which will then create lots of child #GameAction objects, breaking all the map modifications
@@ -97,7 +97,7 @@
     If a #Command does NOT complete successfully, it must be manually disposed 
     (auto_ptr is very useful to do that reliably).
 
-    Typcial usage pattern of a command is:
+    Typical usage pattern of a command is:
     \code
       auto_ptr<DoSomethingCommand> command ( new DoSomethingCommand( subject ));
       command->prepareCommand( whatEverInput );

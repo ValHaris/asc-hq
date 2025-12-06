@@ -47,10 +47,10 @@ extern const char* tournamentextension;
 
 
 
-//! saves the map located in #actmap to the map file name
+//! saves the gamemap to the map file name
 extern void  savemap( const ASCString& name, GameMap* gamemap );
 
-//! saves the game located in #actmap to the savegame file name
+//! saves the game to the savegame file name
 extern void  savegame( const ASCString& name, GameMap* gamemap);
 
 
@@ -61,7 +61,7 @@ extern GameMap* mapLoadingExceptionChecker( const ASCString& filename, MapLoadin
 
 extern GameMap*  loadreplay( MemoryStreamStorage* streambuf );
 
-//! writes all replay relevant map information of player num to the replay variable of #actmap
+//! writes all replay relevant map information of player num to the replay variable of gamemap
 extern void  savereplay( GameMap* gamemap, int num );
 
 
