@@ -294,6 +294,8 @@ Destination not available
 Unit already there
 22004
 Unit cannot move
+22005
+Target cannot be serviced
 22100
 Unit for destruction not available
 22101
