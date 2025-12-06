@@ -21,6 +21,8 @@
 #include "sigc++/retype_return.h"
 #include "selectionwindow.h"
 #include "../paradialog.h"
+#include <pgtooltiphelp.h>
+
 
 bool SelectionWidget::eventMouseButtonUp (const SDL_MouseButtonEvent *button) 
 {
@@ -152,8 +154,15 @@ bool ItemSelectorWidget::eventKeyDown(const SDL_KeyboardEvent* key)
       }
    } 
 
-      
-            
+
+   int mod = SDL_GetModState() & ~(KMOD_NUM | KMOD_CAPS | KMOD_MODE);
+
+   if ( mod & KMOD_CTRL )
+       if ( key->keysym.sym == SDLK_w) {
+           searchWithinNames = !searchWithinNames;
+           // messag(ASCString("Search within names: ") + searchWithinNames?"enabled":"disabled",3);
+       }
+
    if ( key->keysym.unicode <= 255 && key->keysym.unicode >= 0x20 ) {
       ASCString newtext = nameSearch->GetText() + char ( key->keysym.unicode );
       if ( locateObject( newtext ) || !namesConstrained ) 
@@ -231,6 +240,8 @@ ItemSelectorWidget::ItemSelectorWidget( PG_Widget *parent, const PG_Rect &r , Se
    int bottom = 0; // itemFactory->getBottomLineHeight();
    Emboss* e = new Emboss( this, PG_Rect( 1, Height() - 26 - bottom, Width()-20, 22), true );
    nameSearch = new NonEditableLineEdit ( e, PG_Rect( 4,1, e->Width()-4 , e->Height()-2 ));
+
+   new PG_ToolTipHelp(nameSearch, "press ctrl-w to toggle substring search");
 
    // factory->spawnBottonWidgets( this, PG_Rect( 1, Height() - bottom, Width()-20, bottom-1));
    // nameSearch = new PG_Label ( this, PG_Rect( 5, Height() - 25, Width() - 10, 20 ));
