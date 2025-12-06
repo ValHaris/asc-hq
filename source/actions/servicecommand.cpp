@@ -54,6 +54,7 @@ bool ServiceCommand :: avail ( ContainerBase* source, ContainerBase* target )
       ServiceTargetSearcher sts( source, ServiceTargetSearcher::checkAmmo + ServiceTargetSearcher::checkResources );
       if ( !sts.externallyAvailable())
          return false;
+      sts.startSearch();
       
       return find( sts.getTargets().begin(), sts.getTargets().end(), target ) != sts.getTargets().end();
    }
@@ -135,6 +136,9 @@ ActionResult ServiceCommand::go ( const Context& context )
       return ActionResult(22000);
 
    
+   if ( !avail(getContainer(), getDestination()))
+       return ActionResult( 22005, getDestination()->getName() );
+
    TransferHandler& handler = getTransferHandler();
    
    for ( Values::iterator i = values.begin(); i != values.end(); ++i ) {

@@ -479,20 +479,16 @@ ResourceTransferrable::ResourceTransferrable( int resource, ResourceWatch& src, 
             executeTransfer( to, from, -amount, context );
          else 
             if ( amount > 0 ) {
-               auto_ptr<ConsumeAmmo> ca1 ( new ConsumeAmmo( from, ammoType, -1, amount ));
+               ConsumeAmmo* ca1 = new ConsumeAmmo( from, ammoType, -1, amount );
                ca1->setAmmoProduction( allowAmmoProduction );
                
                ActionResult res = ca1->execute( context );
-               if( res.successful() )
-                  ca1.release();
-               else
+               if( !res.successful() )
                   throw res;
                
-               auto_ptr<ConsumeAmmo> ca2 ( new ConsumeAmmo( to, ammoType, -1, -amount ));
+               ConsumeAmmo* ca2 = new ConsumeAmmo( to, ammoType, -1, -amount );
                res = ca2->execute( context );
-               if( res.successful() )
-                  ca2.release();
-               else
+               if( !res.successful() )
                   throw res;
             }
       }
