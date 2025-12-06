@@ -30,13 +30,16 @@ class ContainerCommand : public Command {
       int containerID;
    protected:
       ContainerBase* getContainer( bool dontThrow = false );
-      const ContainerBase* getContainer( bool dontThrow = false ) const ;
       int getContainerID() const { return containerID; };
       void readData ( tnstream& stream );
       void writeData ( tnstream& stream ) const;
       ContainerCommand( ContainerBase* container );
       ContainerCommand( GameMap* map );
       ActionResult checkExecutionPrecondition() const;
+   public:
+      const ContainerBase* getContainer( bool dontThrow = false ) const ;
+      vector<MapCoordinate> getCoordinates() const;
+
 };
 
 #endif
