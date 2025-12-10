@@ -49,7 +49,7 @@ bool validateActionStack( GameMap* map, bool createSavegame, const ActionContain
        savegame(filename, map);
        std::ofstream myfile(constructFileName(0, "", "_actiondebug.sav.actions" ).c_str());
        int counter = 0;
-       for ( ActionContainer::Actions::const_iterator i = actions.begin(); i != actions.end(); ++i) {
+       for ( ActionContainer::Actions::const_iterator i = map->actions.getActions().begin(); i != map->actions.getActions().end(); ++i) {
            myfile << counter++
                   << ";"
                   << map->actions.isActive_map( *i )

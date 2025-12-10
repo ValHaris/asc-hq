@@ -277,6 +277,12 @@ void ItemSelectorWidget::reLoad( bool show )
    SelectionWidget* w; 
    while ( (w = factory->spawnNextItem( scrollWidget, PG_Point(x,y))) ) {
    
+       if ( w->y + w->Height() < w->y || w->y < 0 ) {
+           // detect overflow
+           delete w;
+           break;
+       }
+
       if ( columnCount < 0 )
          columnCount = scrollWidget->Width() / (w->Width() + w->gap());
 
