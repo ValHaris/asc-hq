@@ -18,6 +18,7 @@
 #include "ai_common.h"
 #include "../actions/attackcommand.h"
 #include "../actions/moveunitcommand.h"
+#include "../actions/cargomovecommand.h"
 
 const int attack_unitdestroyed_bonus = 90;
 
@@ -650,7 +651,7 @@ AI::AiResult AI::tactics( void )
                
                if ( !getMap()->getUnit(*i) )
                   continue;
-               
+
                if ( stat == -1 ) { // couldn't change height due to blocked way or something similar
                   veh->aiparam[ getPlayerNum() ]->setTask( AiParameter::tsk_wait );
                   result.unitsWaiting++;
@@ -697,6 +698,15 @@ AI::AiResult AI::tactics( void )
                         VisibilityStates org_vision = getVision();
                         setVision(visible_all);
    
+                        unpackUnit(veh);
+
+                        if ( !veh->canMove() && !getMap()->getField(veh->getPosition())->unitHere(veh)) {
+                            // the unit is nested inside a container and cannot be moved out
+                            i = tactVehicles.erase ( i );
+                            continue;
+                        }
+
+
                         AiResult res = executeMoveAttack ( veh, tv );
                         i = tactVehicles.erase ( i );
    
@@ -911,6 +921,21 @@ AI::AiResult AI::tactics( void )
    displaymessage2("tactics completed ... ");
 
    return result;
+}
+
+AI::AiResult AI::unpackUnit(Vehicle* ve)
+{
+    AI::AiResult result;
+    while ( CargoMoveCommand::moveOutAvail(ve)) {
+        auto_ptr<CargoMoveCommand> cmc ( new CargoMoveCommand( ve ));
+        cmc->setMode(CargoMoveCommand::moveOutwards);
+        ActionResult res = cmc->execute( getContext() );
+        if ( !res.successful() )
+            return result;
+        cmc.release();
+        result.unitsMoved += 1;
+    }
+    return result;
 }
 
 void AI :: tactics_findBestAttackOrder ( Vehicle** units, int* attackOrder, Vehicle* enemy, int depth, int damage, int& finalDamage, int* finalOrder, int& finalAttackNum )
