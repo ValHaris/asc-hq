@@ -416,6 +416,7 @@
             AiResult  transports ( int process );
             AiResult  container ( ContainerBase* cb );
             AiResult  executeServices ();
+            AiResult  unpackUnit(Vehicle* veh);
             void      setup();
 
             void reset();
