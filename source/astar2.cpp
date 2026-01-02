@@ -192,10 +192,11 @@ AStar3D::DistanceType AStar3D::dist( const MapCoordinate3D& a, const MapCoordina
    DistanceType dist;
    if ( b.valid() ) {
       if  ( wind && ((b.getBitmappedHeight() | a.getBitmappedHeight()) & ( chtieffliegend | chfliegend | chhochfliegend ))) {
-         dist = windbeeline(a, b, wind ) + heightDiff;
+         dist = windbeeline(a, b, wind );
       } else {
-         dist = beeline ( a, b ) + heightDiff;
+         dist = beeline ( a, b );
       }
+      // removed: dist += heightDiff
    } else {
       dist = 0;
    }
