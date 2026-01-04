@@ -14,7 +14,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: install libs
-      run: sudo apt-get update && scripts/getUbuntuPackages-2019-10
+      run: sudo apt-get update && scripts/getUbuntuPackages-2024-04
     - name: configure
       run: ./configure
     - name: make
