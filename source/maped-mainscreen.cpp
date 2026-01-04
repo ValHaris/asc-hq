@@ -801,7 +801,11 @@ bool Maped_MainScreenWidget::eventKeyDown(const PG_MessageObject* o, const SDL_K
                         
          default:;
    
-       } 
+      }
+
+      // I don't know any more what exactly made me switch to this approach
+      // But it was done very deliberately, see commit abc0b6ab
+      // However, it doesn't work with sdl12_compat any more, that why we try again with the key->keysym.sym method
       switch ( key->keysym.unicode ) {
          case 1:  // A
             execaction_ev(act_setupalliances);
@@ -876,6 +880,84 @@ bool Maped_MainScreenWidget::eventKeyDown(const PG_MessageObject* o, const SDL_K
             return true;
 
          case 24: // X
+            execaction_ev(act_cutToClipboard);
+            return true;
+      }
+      // see comment above
+      switch ( key->keysym.sym ) {
+         case SDLK_a:
+            execaction_ev(act_setupalliances);
+            return true;
+
+         case SDLK_b:
+            execaction_ev(act_toggleresourcemode);
+            return true;
+
+         case SDLK_c:
+            execaction_ev(act_copyToClipboard);
+            return true;
+
+         case SDLK_f:
+            execaction_ev(act_createresources);
+            return true;
+
+         case SDLK_g:
+            execaction_ev(act_maptopcx);
+            return true;
+
+         case SDLK_h:
+            execaction_ev(act_setunitfilter);
+            return true;
+
+         case SDLK_i:
+            execaction_ev (act_import_bi_map );
+            return true;
+
+         case SDLK_l:
+            execaction_ev(act_loadmap);
+            return true;
+
+         case SDLK_m:
+            execaction_ev(act_changemapvals);
+            return true;
+
+         case SDLK_n:
+            execaction_ev(act_newmap);
+            return true;
+
+         case SDLK_o:
+            execaction_ev(act_polymode);
+            return true;
+
+         case SDLK_p:
+            execaction_ev(act_changeproduction);
+            return true;
+
+         case SDLK_q:
+            execaction_ev(act_end);
+            return true;
+
+         case SDLK_r:
+            execaction_ev(act_showweapnrange);
+            return true;
+
+         case SDLK_s :
+            execaction_ev(act_savemap);
+            return true;
+
+         case SDLK_u:
+            execaction_ev(act_unitinfo);
+            return true;
+
+         case SDLK_v:
+            execaction_ev(act_pasteFromClipboard);
+            return true;
+
+         case SDLK_w:
+            execaction_ev(act_setactweatherglobal);
+            return true;
+
+         case SDLK_x:
             execaction_ev(act_cutToClipboard);
             return true;
 
