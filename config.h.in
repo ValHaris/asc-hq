@@ -28,9 +28,6 @@
 /* Define to 1 if you have the `bz2' library (-lbz2). */
 #undef HAVE_LIBBZ2
 
-/* Define to 1 if you have a functional curl library. */
-#undef HAVE_LIBCURL
-
 /* Define to 1 if you have the `physfs' library (-lphysfs). */
 #undef HAVE_LIBPHYSFS
 
@@ -52,9 +49,6 @@
 /* Define to 1 if you have the <limits> header file. */
 #undef HAVE_LIMITS
 
-/* Define to 1 if you have the <memory.h> header file. */
-#undef HAVE_MEMORY_H
-
 /* Define to 1 if you have the <ndir.h> header file, and it defines `DIR'. */
 #undef HAVE_NDIR_H
 
@@ -63,6 +57,9 @@
 
 /* Define to 1 if you have the <stdint.h> header file. */
 #undef HAVE_STDINT_H
+
+/* Define to 1 if you have the <stdio.h> header file. */
+#undef HAVE_STDIO_H
 
 /* Define to 1 if you have the <stdlib.h> header file. */
 #undef HAVE_STDLIB_H
@@ -87,74 +84,14 @@
 /* Define to 1 if you have the <sys/stat.h> header file. */
 #undef HAVE_SYS_STAT_H
 
+/* Define to 1 if you have the <sys/time.h> header file. */
+#undef HAVE_SYS_TIME_H
+
 /* Define to 1 if you have the <sys/types.h> header file. */
 #undef HAVE_SYS_TYPES_H
 
 /* Define to 1 if you have the <unistd.h> header file. */
 #undef HAVE_UNISTD_H
-
-/* Defined if libcurl supports AsynchDNS */
-#undef LIBCURL_FEATURE_ASYNCHDNS
-
-/* Defined if libcurl supports IDN */
-#undef LIBCURL_FEATURE_IDN
-
-/* Defined if libcurl supports IPv6 */
-#undef LIBCURL_FEATURE_IPV6
-
-/* Defined if libcurl supports KRB4 */
-#undef LIBCURL_FEATURE_KRB4
-
-/* Defined if libcurl supports libz */
-#undef LIBCURL_FEATURE_LIBZ
-
-/* Defined if libcurl supports NTLM */
-#undef LIBCURL_FEATURE_NTLM
-
-/* Defined if libcurl supports SSL */
-#undef LIBCURL_FEATURE_SSL
-
-/* Defined if libcurl supports SSPI */
-#undef LIBCURL_FEATURE_SSPI
-
-/* Defined if libcurl supports DICT */
-#undef LIBCURL_PROTOCOL_DICT
-
-/* Defined if libcurl supports FILE */
-#undef LIBCURL_PROTOCOL_FILE
-
-/* Defined if libcurl supports FTP */
-#undef LIBCURL_PROTOCOL_FTP
-
-/* Defined if libcurl supports FTPS */
-#undef LIBCURL_PROTOCOL_FTPS
-
-/* Defined if libcurl supports HTTP */
-#undef LIBCURL_PROTOCOL_HTTP
-
-/* Defined if libcurl supports HTTPS */
-#undef LIBCURL_PROTOCOL_HTTPS
-
-/* Defined if libcurl supports IMAP */
-#undef LIBCURL_PROTOCOL_IMAP
-
-/* Defined if libcurl supports LDAP */
-#undef LIBCURL_PROTOCOL_LDAP
-
-/* Defined if libcurl supports POP3 */
-#undef LIBCURL_PROTOCOL_POP3
-
-/* Defined if libcurl supports RTSP */
-#undef LIBCURL_PROTOCOL_RTSP
-
-/* Defined if libcurl supports SMTP */
-#undef LIBCURL_PROTOCOL_SMTP
-
-/* Defined if libcurl supports TELNET */
-#undef LIBCURL_PROTOCOL_TELNET
-
-/* Defined if libcurl supports TFTP */
-#undef LIBCURL_PROTOCOL_TFTP
 
 /* Define to the sub-directory where libtool stores uninstalled libraries. */
 #undef LT_OBJDIR
@@ -180,10 +117,13 @@
 /* Define to the version of this package. */
 #undef PACKAGE_VERSION
 
-/* Define to 1 if you have the ANSI C header files. */
+/* Define to 1 if all of the C90 standard headers exist (not just the ones
+   required in a freestanding environment). This macro is provided for
+   backward compatibility; new code need not use it. */
 #undef STDC_HEADERS
 
-/* Define to 1 if you can safely include both <sys/time.h> and <time.h>. */
+/* Define to 1 if you can safely include both <sys/time.h> and <time.h>. This
+   macro is obsolete. */
 #undef TIME_WITH_SYS_TIME
 
 /* Version number of package */
@@ -191,9 +131,6 @@
 
 /* Define to empty if `const' does not conform to ANSI C. */
 #undef const
-
-/* Define curl_free() as free() if our version of curl lacks curl_free. */
-#undef curl_free
 
 /* Define to `unsigned int' if <sys/types.h> does not define. */
 #undef size_t
