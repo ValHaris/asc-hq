@@ -373,8 +373,8 @@ class CargoDialog : public Panel
          }
 
          if ( (mod & KMOD_SHIFT) && (mod & KMOD_CTRL)) {
-            switch ( key->keysym.unicode ) {
-               case 26: // Z
+            // see comment in ASC_MainScreenWidget::eventKeyDown
+             if ( key->keysym.unicode == 26 || key->keysym.sym == SDLK_z) {
                   getContainer()->getMap()->actions.redo( createContext( getContainer()->getMap() ) );
                   cargoChanged();
                   return true;
@@ -382,8 +382,8 @@ class CargoDialog : public Panel
          }
 
          if ( (mod & KMOD_CTRL) &&  !(mod & KMOD_SHIFT)) {
-            switch ( key->keysym.unicode ) {
-               case 26: // Z
+            // see comment in ASC_MainScreenWidget::eventKeyDown
+            if ( key->keysym.unicode == 26 || key->keysym.sym == SDLK_z) {
                   getContainer()->getMap()->actions.undo( createContext( getContainer()->getMap() ) );
                   if ( shutdownImmediately ) {
                      QuitModal();

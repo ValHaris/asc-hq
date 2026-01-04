@@ -776,7 +776,7 @@ bool ASC_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
             case SDLK_F10: {
                return true;
             }
-         case SDLK_l:
+            case SDLK_l:
                executeUserAction ( ua_loadrecentgame );
                return true;
 
@@ -786,6 +786,10 @@ bool ASC_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
 
             case SDLK_RIGHT:
                executeUserAction( ua_turnUnitRight );
+               return true;
+
+            case SDLK_z:
+               executeUserAction( ua_redo );
                return true;
 
             default:;
@@ -825,6 +829,10 @@ bool ASC_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
             
             default:;
       }
+
+      // I don't know any more what exactly made me switch to this approach
+      // But it was done very deliberately, see commit abc0b6ab
+      // However, it doesn't work with sdl12_compat any more, that why we try again with the key->keysym.sym method
       switch ( key->keysym.unicode ) {
             case 3: // C
                executeUserAction ( ua_cargosummary );
@@ -863,6 +871,48 @@ bool ASC_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
                return true;
                
             case 26: // Z
+               executeUserAction( ua_undo );
+               return true;
+      }
+      // see comment above
+      switch ( key->keysym.sym ) {
+            case SDLK_c:
+               executeUserAction ( ua_cargosummary );
+               return true;
+
+            case SDLK_f:
+               executeUserAction ( ua_unitsummary );
+               return true;
+
+            case SDLK_g:
+               executeUserAction( ua_gotoPosition );
+               return true;
+
+            case SDLK_l:
+               executeUserAction ( ua_loadgame );
+               return true;
+
+            case SDLK_n:
+               executeUserAction ( ua_newGame );
+               return true;
+
+            case SDLK_q:
+               executeUserAction ( ua_exitgame );
+               return true;
+
+            case SDLK_r:
+               executeUserAction( ua_createReminder );
+               return true;
+
+            case SDLK_s:
+               executeUserAction ( ua_savegame );
+               return true;
+
+            case SDLK_t:
+               executeUserAction ( ua_runOpenTasks );
+               return true;
+
+            case SDLK_z:
                executeUserAction( ua_undo );
                return true;
 
