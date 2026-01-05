@@ -156,6 +156,7 @@
 #include "dialogs/editplayerdata.h"
 #include "dialogs/locatefile.h"
 #include "dialogs/infodialogs.h"
+#include "dialogs/researchinfo.h"
 #include "stdio-errorhandler.h"
 #include "widgets/textrenderer.h"
 #include "dialogs/productionanalysis.h"
@@ -1178,7 +1179,7 @@ void executeUserAction ( tuseractions action )
          displaymap();
          break;
       case ua_researchinfo:
-         researchinfo ();
+         researchinfo (actmap->getCurrentPlayer());
          break;
       case ua_viewPipeNet:
          mainScreenWidget->getMapDisplay()->toggleMapLayer("pipes");

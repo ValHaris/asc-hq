@@ -1,6 +1,6 @@
 /*
     This file is part of Advanced Strategic Command; http://www.asc-hq.de
-    Copyright (C) 1994-2010  Martin Bickel  and  Marc Schellenberger
+    Copyright (C) 1994-2010  Martin Bickel
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,35 +16,13 @@
     along with this program; see the file COPYING. If not, write to the
     Free Software Foundation, Inc., 59 Temple Place, Suite 330,
     Boston, MA  02111-1307  USA
-
-*/
-#ifndef  gamedlgH
-#define  gamedlgH
-
-
-/*! \file gamedlg.h
-   A lot of dialog boxes that are only used by both ASC.
 */
 
-class GameMap;
+#ifndef researchinfoH
+#define researchinfoH
 
-extern void  settributepayments ( void );
+class Player;
 
-extern void choosetechlevel ( void );
+extern void researchinfo ( const Player& player );
 
-
-class MapField;
-class Context;
-
-extern void giveunitaway ( MapField* fld, const Context& context );
-
-extern void showGameParameters ( void );
-
-extern void showPlayerTime();
-extern void displaywindspeed();
-
-
-extern void sendGameParameterAsMail ( GameMap* actmap );
-
-#endif  // ifndef gamedlg_h
-
+#endif
