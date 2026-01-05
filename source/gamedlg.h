@@ -30,8 +30,6 @@ class GameMap;
 
 extern void  settributepayments ( void );
 
-extern void choosetechlevel ( void );
-
 
 class MapField;
 class Context;

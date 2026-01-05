@@ -38,7 +38,7 @@ enum tuseractions { ua_repainthard,     ua_repaint, ua_help, ua_mainmenu, ua_mnt
                     ua_viewsentmessages, ua_viewreceivedmessages, ua_viewjournal, ua_editjournal, ua_viewaboutmessage, ua_continuenetworkgame,
                     ua_toggleunitshading, ua_computerturn, ua_setupnetwork, ua_howtostartpbem, ua_howtocontinuepbem, 
                     ua_selectgraphicset, ua_UnitSetInfo, ua_GameParameterInfo, ua_GameStatus, ua_viewunitweaponrange, ua_viewunitmovementrange,
-                    ua_aibench, ua_networksupervisor, ua_selectPlayList, ua_soundDialog, ua_reloadDlgTheme, ua_showPlayerSpeed, 
+                    ua_aibench, ua_networksupervisor, ua_soundDialog, ua_reloadDlgTheme, ua_showPlayerSpeed,
                     ua_statisticdialog, ua_viewPipeNet, ua_cancelResearch, ua_showResearchStatus, ua_exportUnitToFile, ua_viewButtonPanel,
                     ua_viewWindPanel, ua_clearImageCache, ua_viewUnitInfoPanel, ua_cargosummary, ua_viewUnitInfoDialog, ua_showsearchdirs, ua_viewOverviewMapPanel, ua_weathercast,
                     ua_newGame, ua_testMessages, ua_viewMapControlPanel, ua_unitsummary, ua_togglesound, ua_increase_zoom, ua_decrease_zoom, ua_editPlayerData,
