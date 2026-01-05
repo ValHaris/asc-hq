@@ -992,9 +992,6 @@ void executeUserAction ( tuseractions action )
          }
          break;
 
-      case ua_selectPlayList:
-         selectPlayList();
-         break;
       case ua_statisticdialog:
          statisticDialog();
          break;

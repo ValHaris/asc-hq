@@ -263,69 +263,6 @@ void settributepayments ( void )
 
 
 
-
-class tchoosetechlevel : public tdialogbox {
-             protected:
-                int techlevel; 
-                int ok;
-             public: 
-                void init ( void );
-                void buttonpressed ( int id );
-                void run ( void );
-         };
-
-void tchoosetechlevel :: init ( void )
-{
-   tdialogbox :: init ( );
-   title = "choose techlevel";
-   xsize = 200;
-   ysize = 150;
-   techlevel = 0;
-   ok = 0;
-
-   addbutton ( "~O~k", 10, ysize - 30, xsize - 10, ysize - 10 , 0, 1, 1, true );
-   addkey ( 1, ct_enter );
-
-   addbutton ( "", 10, 60, xsize - 10, 85                     , 2, 1, 2, true );
-   addeingabe ( 2, &techlevel, 0, 255 );
-   addkey ( 1, ct_space );
-
-   buildgraphics();
-}
-
-void tchoosetechlevel :: buttonpressed ( int id )
-{
-   tdialogbox:: buttonpressed ( id );
-   if ( id == 1 )
-      ok = 1;
-}
-
-void tchoosetechlevel :: run ( void )
-{
-   mousevisible ( true );
-   do {
-      tdialogbox::run();
-   } while ( !ok ); 
-   if ( techlevel > 0 )
-      for ( int i = 0; i < 8; i++ )
-         actmap->player[i].research.settechlevel ( techlevel );
-
-};
-
-void choosetechlevel ( void )
-{
-   tchoosetechlevel ctl;
-   ctl.init();
-   ctl.run();
-   ctl.done();
-}
-
-
-
-#undef linelength
-
-
-
 ASCString writeGameParametersToString ( GameMap* actmap )
 {
    ASCString s = "The game has been set up with the following game parameters:\n";

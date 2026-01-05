@@ -59,9 +59,4 @@ class PlayListLoader : public TextFileDataLoader {
 extern void startMusic ();
 
 
-
-
-//! opens a dialog to select a playlist
-extern void selectPlayList( );
-
 #endif
