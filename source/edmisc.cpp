@@ -62,6 +62,7 @@
 #include "lua/luarunner.h"
 #include "lua/luastate.h"
 #include "widgets/multilistbox.h"
+#include "pgpropertyfield_integer.h"
 
 bool       mapsaved;
 
@@ -229,80 +230,6 @@ void lines(int x1,int y1,int x2,int y2)
 }
 
 
-
-
-// � PlayerChange
-
-/* class   tcolorsel : public tstringselect {
-           public :
-                 virtual void setup(void);
-                 virtual void buttonpressed(int id);
-                 virtual void run(void);
-                 virtual void get_text(int nr);
-                 };
-
-void         tcolorsel::setup(void)
-{
-
-   action = 0;
-   title = "Select Color";
-   numberoflines = 9;
-   xsize = 250;
-   ex = xsize - 100;
-   ey = ysize - 60;
-   addbutton("~D~one",20,ysize - 40,120,ysize - 20,0,1,2,true);
-   addkey(2,ct_enter);
-   addbutton("~C~ancel",130,ysize - 40,230,ysize - 20,0,1,3,true);
-}
-
-
-void         tcolorsel::buttonpressed(int         id)
-{
-   tstringselect::buttonpressed(id);
-   switch (id) {
-
-      case 2:
-      case 3:   action = id;
-   break;
-   }
-}
-
-
-void         tcolorsel::get_text(int nr)
-{
-   if (nr == 8) strcpy(txt,"Neutral");
-   else {
-      if ((nr>=0) && (nr<=7)) {
-         strcpy(txt,"Color ");
-         strcat(txt,strrr(nr+1));
-      } else {
-         strcpy(txt,"");
-      }
-   }
-}
-
-
-void         tcolorsel::run(void)
-{
-   mousevisible(false);
-   for (i=0;i<=8 ;i++ ) bar(x1 + 160,y1 + 52 + i*21 ,x1 + 190 ,y1 + 62 + i * 21,20 + i * 8);
-   mousevisible(true);
-   do {
-      tstringselect::run();
-   }  while ( ! ( (taste == ct_esc) || ( (action == 2) || (action == 3) ) || (msel == 1)) );
-   if ( (action == 3) || (taste == ct_esc) ) redline = 255;
-}
-
-
-int         colorselect(void)
-{
-  tcolorsel  sm;
-
-   sm.init();
-   sm.run();
-   sm.done();
-   return sm.redline;
-} */
 
 
 class  tplayerchange : public tdialogbox {
@@ -505,101 +432,6 @@ void         exchg(int *       a1,
     *a2 = ex;
 }
 
-
-
-
-// � TCDPlayer
-
-/*
-
-class   tcdplayer : public tstringselect {
-           public :
-                 virtual void setup(void);
-                 virtual void buttonpressed(int id);
-                 virtual void run(void);
-                 virtual void get_text(int nr);
-                 };
-
-void         tcdplayer ::setup(void)
-{
-
-   action = 0;
-   xsize = 400;
-   ysize = 400;
-   x1 = 100;
-   title = "CD- Player";
-   numberoflines = cdrom.cdinfo.lasttrack;
-   ey = ysize - 60;
-   ex = xsize - 120;
-   addbutton("~R~CD",320,50,390,70,0,1,11,true);
-   addbutton("~P~lay",320,90,390,110,0,1,12,true);
-   addbutton("~S~top",320,130,390,150,0,1,13,true);
-   addbutton("E~x~it",10,ysize - 40,290,ysize - 20,0,1,10,true);
-}
-
-
-void         tcdplayer ::buttonpressed(int         id)
-{
-   tstringselect::buttonpressed(id);
-   switch (id) {
-
-   case 10:   action = 3;
-      break;
-   case 11:  {
-      cdrom.readcdinfo();
-      redline = 0;
-      firstvisibleline = 0;
-      numberoflines = cdrom.cdinfo.lasttrack;
-      viewtext();
-      }
-      break;
-   case 12: {
-         cdrom.playtrack(redline);
-      }
-      break;
-   case  13: cdrom.stopaudio ();
-      break;
-   }
-}
-
-
-void         tcdplayer ::get_text(int nr)
-{
-    if (cdrom.cdinfo.track[nr]->type > 3) {
-       strcpy(txt,"Data Track ");
-       strcat(txt,strrr(nr+1));
-    } else {
-       strcpy(txt,"");
-       strcat(txt,strrr(cdrom.cdinfo.track[nr]->min));
-       strcat(txt," : ");
-       strcat(txt,strrr(cdrom.cdinfo.track[nr]->sec));
-       strcat(txt," : ");
-       strcat(txt,strrr(cdrom.cdinfo.track[nr]->frame));
-       strcat(txt,"   Track ");
-       strcat(txt,strrr(nr+1));
-    }
-}
-
-
-void         tcdplayer ::run(void)
-{
-   do {
-      tstringselect::run();
-      if ( (msel == 1)  || ( taste == ct_enter ) ) cdrom.playtrack(redline);
-   }  while ( ! ( (taste == ct_esc) || (action == 3) ) );
-}
-
-
-void cdplayer( void )
-{
-   tcdplayer cd;
-
-   cd.init();
-   cd.run();
-   cd.done();
-}
-
-*/
 
 
 #ifndef pbpeditor
@@ -1148,146 +980,6 @@ void         changebuildingvalues( Building& b )
     displaymap();
 }
 
-// � Class-Change
-
-
-// � Polygon-Management
-/*
-class tpolygon_managementbox: public tstringselect {
-              public:
-                 ppolygon poly;
-                 virtual void setup(void);
-                 virtual void buttonpressed(int id);
-                 virtual void run(void);
-                 virtual void get_text(int nr);
-                 };
-
-
-tpolygon_management::tpolygon_management(void)
-{
-   polygonanz = 0;
-   lastpolygon = firstpolygon;
-}
-
-void         tpolygon_managementbox::setup(void)
-{
-   action = 0;
-   title = "Choose Polygon";
-
-   x1 = 70;
-   y1 = 40;
-   xsize = 500;
-   ysize = 400;
-   lnshown = 10;
-   numberoflines = polymanage.polygonanz;
-   activefontsettings.length = xsize - 30;
-   addbutton("~D~one",20,ysize - 40,170,ysize - 20,0,1,1,true);
-   addkey(1,ct_enter);
-   addbutton("~C~ancel",190,ysize - 40,340,ysize - 20,0,1,2,true);
-}
-
-
-void         tpolygon_managementbox::buttonpressed(int         id)
-{
-   tstringselect::buttonpressed(id);
-   switch (id) {
-      case 1:
-      case 2:   action = id;
-   break;
-   }
-}
-
-
-void         tpolygon_managementbox::get_text(int nr)
-{
-   char s[200];
-   ppolystructure pps;
-   int i,vn;
-
-   const int showmaxvertex = 5;
-
-   pps = polymanage.firstpolygon;
-   for (i=0 ;i<nr; i++ )
-       pps =pps->next;
-   strcpy(s,"");
-   if ( pps->poly->vertexnum> showmaxvertex ) vn=5;
-   else vn = pps->poly->vertexnum;
-   switch (pps->place) {
-   case 0: {
-      strcat(s,"Events: ");
-      strcat(s,ceventactions[pps->id]);
-      }
-      break;
-   }
-   for (i=0;i <= vn-1;i++ ) {
-       strcat(s,"(");
-       strcat(s,strrr(pps->poly->vertex[i].x));
-       strcat(s,"/");
-       strcat(s,strrr(pps->poly->vertex[i].y));
-       strcat(s,") ");
-   }
-   if (vn < pps->poly->vertexnum )  strcat(s,"...");
-   strcpy(txt,s);
-}
-
-
-void         tpolygon_managementbox::run(void)
-{
-   do {
-      tstringselect::run();
-      if (taste ==ct_f1) help (1030);
-   }  while ( ! ( (taste == ct_enter ) || (taste == ct_esc) || ( (action == 1) || (action == 2) ) ) );
-   if ( ( ( taste == ct_enter ) || (action == 1 ) ) && (redline != 255 ) ) {
-      ppolystructure pps;
-
-      pps = polymanage.firstpolygon;
-      for (i=0 ;i<redline; i++ ) pps =pps->next;
-      poly = pps->poly;
-   }
-}
-
-void tpolygon_management::addpolygon(ppolygon *poly, int place, int id)
-{
-   (*poly) = new(tpolygon);
-
-   (*poly)->vertexnum = 0;
-   (*poly)->vertex    = (tpunkt*) malloc ( 1 * sizeof ( (*poly)->vertex[0] ) );
-   if (polygonanz == 0 ) {
-      lastpolygon = new ( tpolystructure );
-      firstpolygon = lastpolygon;
-   }
-   else {
-      lastpolygon->next = new ( tpolystructure );
-      lastpolygon = lastpolygon->next;
-   }
-   lastpolygon->poly = (*poly);
-   lastpolygon->id = id;
-   lastpolygon->place = place;
-   polygonanz++;
-}
-
-void tpolygon_management::deletepolygon(ppolygon *poly)
-{
-   asc_free( (*poly)->vertex );
-   asc_free(*poly);
-}
-
-
-int        getpolygon(ppolygon *poly) //return Fehlerstatus
-{
-   tpolygon_managementbox polymanagebox;
-
-   polymanagebox.poly = (*poly);
-   polymanagebox.init();
-   polymanagebox.run();
-   polymanagebox.done();
-   (*poly) = polymanagebox.poly;
-   if ( (polymanagebox.action == 2) || (polymanagebox.taste == ct_esc ) ) return 1;
-   else return 0;
-}
-*/
-// � Unit-Values
-
 
 class   StringSelector : public tstringselect {
     const char** text;
@@ -1558,90 +1250,75 @@ void         tres::buttonpressed(int         id)
 }
 
 
-void         changeresource(void)
-{
-    tres         resource;
+class FieldResourceEditor : public ASC_PG_Dialog {
+   private:
+      PG_PropertyEditor* editor;
+      MapField* field;
+      int material;
+      int fuel;
 
-    resource.init();
-    resource.run();
-    resource.done();
-}
+      bool ok() {
+          editor->Apply();
+          field->material = material;
+          field->fuel = fuel;
+          QuitModal();
+          return true;
+      }
 
-//* � MineStrength
+   public:
+      FieldResourceEditor( MapField* mapfield) : ASC_PG_Dialog(NULL, PG_Rect(-1, -1, 300,200), "Edit Mineral Resources" ), field(mapfield), material(mapfield->material), fuel(mapfield->fuel)
+      {
+          StandardButtonDirection(Horizontal);
+          editor = new PG_PropertyEditor(this, PG_Rect(20, 40, Width()-40, Height()-60));
 
-class tminestrength: public tdialogbox {
-    MapField* pf2;
-public :
-    int action;
-    int strength;
-    void init(void);
-    virtual void run(void);
-    virtual void buttonpressed(int id);
+          // PG_PropertyField_Integer doesn't work on bytes, hence the copy
+          new PG_PropertyField_Integer(editor, "Material", &material);
+          new PG_PropertyField_Integer(editor, "Fuel", &fuel);
+
+          AddStandardButton("Cancel")->sigClick.connect(sigc::hide( sigc::mem_fun( *this, &FieldResourceEditor::QuitModal )));
+          AddStandardButton("OK")->sigClick.connect(sigc::hide( sigc::mem_fun( *this, &FieldResourceEditor::ok )));
+      }
 };
 
-
-
-void         tminestrength::init(void)
+void         changeresource(void)
 {
-    int w;
-
-    tdialogbox::init();
-    action = 0;
-    title = "Minestrength";
-    x1 = 170;
-    xsize = 200;
-    y1 = 70;
-    ysize = 160;
-    w = (xsize - 60) / 2;
-    action = 0;
-    pf2 = getactfield();
-    strength = pf2->mines.begin()->strength;
-
-    windowstyle = windowstyle ^ dlg_in3d;
-
-    activefontsettings.length = 200;
-
-    addbutton("~S~trength (0-255)",30,70,170,90,2,1,1,true);
-    addeingabe(1,&strength,0,255);
-
-    addbutton("~S~et Vals",20,ysize - 40,20 + w,ysize - 10,0,1,7,true);
-    addkey(7,ct_enter);
-    addbutton("~C~ancel",40 + w,ysize - 40,40 + 2 * w,ysize - 10,0,1,8,true);
-
-    buildgraphics();
-
-    mousevisible(true);
+    FieldResourceEditor fre( getactfield());
+    fre.Show();
+    fre.RunModal();
 }
 
+class MineStrenghEditor : public ASC_PG_Dialog {
+   private:
+      PG_PropertyEditor* editor;
 
-void         tminestrength::run(void)
-{
-    do {
-        tdialogbox::run();
-    }  while (!((taste == ct_esc) || (action == 1)));
-}
+      bool ok() {
+          editor->Apply();
+          QuitModal();
+          return true;
+      }
 
+   public:
+      MineStrenghEditor( MapField* mapfield) : ASC_PG_Dialog(NULL, PG_Rect(-1, -1, 300,200), "Edit Mine Punch" )
+      {
+          StandardButtonDirection(Horizontal);
+          editor = new PG_PropertyEditor(this, PG_Rect(20, 40, Width()-40, Height()-60));
 
-void         tminestrength::buttonpressed(int         id)
-{
-    if (id == 7) {
-        mapsaved = false;
-        action = 1;
-        pf2->mines.begin()->strength = strength;
-    }
-    if (id == 8) action = 1;
-}
+          for ( MapField::MineContainer::iterator i = mapfield->mines.begin(); i != mapfield->mines.end(); ++i )
+              new PG_PropertyField_Integer(editor, MineType(i->type).getName(), &i->strength);
 
+          AddStandardButton("Cancel")->sigClick.connect(sigc::hide( sigc::mem_fun( *this, &MineStrenghEditor::QuitModal )));
+          AddStandardButton("OK")->sigClick.connect(sigc::hide( sigc::mem_fun( *this, &MineStrenghEditor::ok )));
+      }
+};
 
 void         changeminestrength(void)
 {
     if ( getactfield()->mines.empty() )
         return;
 
-    tminestrength  ms;
-    ms.init();
-    ms.run();
-    ms.done();
+    MineStrenghEditor ms(getactfield());
+    ms.Show();
+    ms.RunModal();
 }
 
 
