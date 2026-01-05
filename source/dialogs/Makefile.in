@@ -122,7 +122,7 @@ am_libgamedialogs_la_OBJECTS = cargodialog.lo unitcounting.lo \
 	internalAmmoTransferDialog.lo replayrecorder.lo \
 	mailoptionseditor.lo vehicleproductionselection.lo \
 	infodialogs.lo actionmanager.lo gotoposition.lo taskmanager.lo \
-	actionwidget.lo unitnaming.lo eventinfo.lo
+	actionwidget.lo unitnaming.lo eventinfo.lo researchinfo.lo
 libgamedialogs_la_OBJECTS = $(am_libgamedialogs_la_OBJECTS)
 libmapeddialogs_la_DEPENDENCIES =
 am_libmapeddialogs_la_OBJECTS = cargoeditor.lo cargowidget.lo \
@@ -164,10 +164,11 @@ am__depfiles_remade = ./$(DEPDIR)/actionmanager.Plo \
 	./$(DEPDIR)/newmap.Plo ./$(DEPDIR)/nextcampaignmap.Plo \
 	./$(DEPDIR)/playersetup.Plo ./$(DEPDIR)/productionanalysis.Plo \
 	./$(DEPDIR)/pwd_dlg.Plo ./$(DEPDIR)/replayrecorder.Plo \
-	./$(DEPDIR)/selectionwindow.Plo ./$(DEPDIR)/soundsettings.Plo \
-	./$(DEPDIR)/taskmanager.Plo ./$(DEPDIR)/terraininfo.Plo \
-	./$(DEPDIR)/unitcounting.Plo ./$(DEPDIR)/unitguidedialog.Plo \
-	./$(DEPDIR)/unitinfodialog.Plo ./$(DEPDIR)/unitnaming.Plo \
+	./$(DEPDIR)/researchinfo.Plo ./$(DEPDIR)/selectionwindow.Plo \
+	./$(DEPDIR)/soundsettings.Plo ./$(DEPDIR)/taskmanager.Plo \
+	./$(DEPDIR)/terraininfo.Plo ./$(DEPDIR)/unitcounting.Plo \
+	./$(DEPDIR)/unitguidedialog.Plo ./$(DEPDIR)/unitinfodialog.Plo \
+	./$(DEPDIR)/unitnaming.Plo \
 	./$(DEPDIR)/vehicleproductionselection.Plo \
 	./$(DEPDIR)/vehiclepropertyeditor.Plo \
 	./$(DEPDIR)/vehicletypeselector.Plo
@@ -426,7 +427,7 @@ libdialogs_la_LIBADD = @SDL_LIBS@
 libgamedialogs_la_SOURCES = cargodialog.cpp unitcounting.cpp cargowidget.cpp ammotransferdialog.cpp attackpanel.cpp vehicletypeselector.cpp nextcampaignmap.cpp \
                               editplayerdata.cpp buildingtypeselector.cpp choosetech.cpp productionanalysis.cpp internalAmmoTransferDialog.cpp replayrecorder.cpp \
                               mailoptionseditor.cpp vehicleproductionselection.cpp infodialogs.cpp actionmanager.cpp gotoposition.cpp taskmanager.cpp \
-                              actionwidget.cpp unitnaming.cpp eventinfo.cpp
+                              actionwidget.cpp unitnaming.cpp eventinfo.cpp researchinfo.cpp
 
 libgamedialogs_la_LIBADD = @SDL_LIBS@ 
 libmapeddialogs_la_SOURCES = cargoeditor.cpp cargowidget.cpp eventeditor.cpp newmap.cpp exchangegraphics.cpp importbi3map.cpp edittechadapter.cpp \
@@ -529,6 +530,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/productionanalysis.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pwd_dlg.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/replayrecorder.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/researchinfo.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/selectionwindow.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/soundsettings.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/taskmanager.Plo@am__quote@ # am--include-marker
@@ -734,6 +736,7 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/productionanalysis.Plo
 	-rm -f ./$(DEPDIR)/pwd_dlg.Plo
 	-rm -f ./$(DEPDIR)/replayrecorder.Plo
+	-rm -f ./$(DEPDIR)/researchinfo.Plo
 	-rm -f ./$(DEPDIR)/selectionwindow.Plo
 	-rm -f ./$(DEPDIR)/soundsettings.Plo
 	-rm -f ./$(DEPDIR)/taskmanager.Plo
@@ -825,6 +828,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/productionanalysis.Plo
 	-rm -f ./$(DEPDIR)/pwd_dlg.Plo
 	-rm -f ./$(DEPDIR)/replayrecorder.Plo
+	-rm -f ./$(DEPDIR)/researchinfo.Plo
 	-rm -f ./$(DEPDIR)/selectionwindow.Plo
 	-rm -f ./$(DEPDIR)/soundsettings.Plo
 	-rm -f ./$(DEPDIR)/taskmanager.Plo
