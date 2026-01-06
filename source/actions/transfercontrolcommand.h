@@ -33,6 +33,9 @@ class TransferControlCommand : public ContainerCommand {
    
    public:
       static bool avail ( const ContainerBase* item );
+
+      //! a value > 0 indicates the the reason why it's not available, 0 means it is available. See message1.txt
+      static int not_avail_reason ( const ContainerBase* item );
       typedef vector<const Player*> Receivers;
    private:
       TransferControlCommand( GameMap* map ) : ContainerCommand( map ), receivingPlayer( -1 ) {};

@@ -92,6 +92,10 @@ There are no vehicles standing next to the entrance
 No unit or building selected
 451
 You can only transfer control to your own units or buildings
+452
+You can only transfer control to allies, and you don't have any.
+453
+The function was disabled when starting the game.
 500
 Not enough resources
 501

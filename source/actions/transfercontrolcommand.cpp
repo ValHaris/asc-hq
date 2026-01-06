@@ -36,17 +36,23 @@
 
 bool TransferControlCommand :: avail ( const ContainerBase* item )
 {
-   if ( !item  )
-      return false;
-   
-   if ( item->getMap()->getgameparameter( cgp_disableUnitTransfer ))
-      return false;
-   
-   Receivers rec = getReceivers( item->getMap(), item->getOwner(), item->getCarrier() );
-   
-   return rec.size() > 0 ;
+    return not_avail_reason(item)==0;
 }
 
+int TransferControlCommand :: not_avail_reason ( const ContainerBase* item ) {
+    if ( !item )
+       return 450;
+
+    if ( item->getMap()->getgameparameter( cgp_disableUnitTransfer ))
+       return 453;
+
+    Receivers rec = getReceivers( item->getMap(), item->getOwner(), item->getCarrier() );
+
+    if ( rec.size() == 0 )
+        return 452;
+
+    return 0;
+}
 
 TransferControlCommand::Receivers TransferControlCommand::getReceivers( GameMap* map, int currentPlayer, bool isInCarrier )
 {
