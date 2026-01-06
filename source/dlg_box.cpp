@@ -54,39 +54,11 @@
 
 char strrstring[200];
 
-void  strrd8d(int  l, char* s)
-{ 
-  itoa ( l / minmalq, s, 10);
-} 
-
-void  strrd8u(int  l, char* s)
-{ 
-  itoa ( (l + minmalq - 1) / minmalq, s, 10);
-} 
-
-void  strrd8n(int  l, char* s)
-{ 
-  itoa ( (l + minmalq/2) / minmalq, s, 10);
-} 
 
 
 char*  strrrd8d(int  l)
 { 
  itoa ( l / minmalq, strrstring, 10);
-
- return strrstring;
-} 
-
-char*  strrrd8u(int  l)
-{ 
-  itoa ( (l + minmalq - 1) / minmalq, strrstring, 10);
-
- return strrstring;
-} 
-
-char*  strrrd8n(int  l)
-{ 
- itoa ( (l + minmalq/2) / minmalq, strrstring, 10);
 
  return strrstring;
 } 
