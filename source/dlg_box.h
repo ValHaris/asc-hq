@@ -397,12 +397,7 @@ class tvirtualscreenbuf {
 extern tvirtualscreenbuf virtualscreenbuf; 
 extern int getplayercolor ( int i );
 
-extern void   strrd8u(int  l, char* s);   // aufrunden
-extern void   strrd8d(int  l, char* s);   // abrunden
-extern void   strrd8n(int  l, char* s);   // mathematisch korrekt runden
-extern char*  strrrd8u(int  l);           // aufrunden
 extern char*  strrrd8d(int  l);           // abrunden
-extern char*  strrrd8n(int  l);           // mathematisch korrekt runden
 
 
 /** returns the message with the given ID from the message system. This system spans
