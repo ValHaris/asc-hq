@@ -11,16 +11,21 @@
 #include "playerselector.h"
 
 
-PlayerSelector :: PlayerSelector (PG_Widget *parent, const PG_Rect &r, GameMap* map, bool multiselect, int suppress ) : MultiListBox( parent, r), gamemap ( map ), suppressPlayers(suppress)
+PlayerSelector :: PlayerSelector (PG_Widget *parent, const PG_Rect &r, GameMap* map, bool multiselect, int suppress, int extra_spacing ) : MultiListBox( parent, r, multiselect), gamemap ( map ), suppressPlayers(suppress)
 {
-   setup();
+   for ( int i = 0; i < gamemap->getPlayerCount(); ++i) {
+       Surface s = Surface::createSurface(15,15,8,20+i*8);
+       s.assignDefaultPalette();
+       icons.push_back( s );
+   }
+   setup(extra_spacing);
 };
 
-void PlayerSelector :: setup()
+void PlayerSelector :: setup(int extra_spacing)
 {
    for ( int i = 0; i < gamemap->getPlayerCount(); ++i )
       if ( gamemap->getPlayer(i).exist() && !(suppressPlayers & (1<<i)) )
-         new Item( getListBox(), 15, gamemap->getPlayer(i).getName(), i );
+         new Item( getListBox(), 15 + extra_spacing, gamemap->getPlayer(i).getName(), i, icons.at(i).GetSurface() );
 }
 
 

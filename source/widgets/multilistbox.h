@@ -37,10 +37,12 @@ class PG_ListBoxDataItem : public PG_ListBoxItem {
 class MultiListBox : public PG_Widget {
       PG_ListBox* listbox;
    public:
-      MultiListBox (PG_Widget *parent, const PG_Rect &r );
+      MultiListBox (PG_Widget *parent, const PG_Rect &r, bool multi_select = true );
       PG_ListBox* getListBox() { return listbox; };
       bool all();
       bool none();
+
+      PG_ListBox::SignalSelectItem sigSelectItem;
 };
 
 

@@ -57,207 +57,118 @@
 #include "dialog.h"
 #include "actions/transfercontrolcommand.h"
 #include "widgets/textrenderer.h"
+#include "widgets/playerselector.h"
 #include "sg.h"
 #include "spfst-legacy.h"
+#include "pglabel.h"
 
+class ResourceBlock : public PG_Widget {
+    PG_Widget* label[Resources::count];
+    bool editable;
+public:
+    ResourceBlock(PG_Widget* parent, const PG_Rect& size, Resources resources, bool editable = false, const ASCString& postfix = "") : PG_Widget(parent, size), editable(editable) {
+        const int height = 22;
+        const int border = 2;
+        const int left = Width() * 33 / 100;
+        const int right = Width() * 66 / 100;
+        ASCString p = postfix.length()? ASCString(" " + postfix) : "";
+        for ( int i = 0; i < Resources::count; ++i) {
+            int y = border + i * (height + border);
+            if ( editable ) {
+                PG_LineEdit* l = new PG_LineEdit(this, PG_Rect(border, y, left-2*border, height));
+                l->SetText(ASCString::toString(resources.resource(i)));
+                l->SetValidKeys("0123456789");
+                label[i] = l;
+            } else {
+                PG_Label* l = new PG_Label(this, PG_Rect(border, y, left-2*border, height), ASCString::toString(resources.resource(i)));
+                l->SetAlignment(PG_Label::RIGHT);
+                label[i] = l;
+            }
+            new PG_Label(this, PG_Rect(left+border, y, right-2*border, height ), Resources::name(i) + p);
+        }
+    }
 
-     class ttributepayments : public tdialogbox {
-                       GameMap::ResourceTribute trib;
-                       int oldplayer;
-                       int player;
-                       void paintactplayer ( void );
-                       void paintvalues ( void );
-                       int status;
-                       int players[8];
-                       int wind1y, wind2y ;
-                       int wind1x, wind2x ;
+    Resources get() {
+        Resources r;
+        if ( editable )
+            for ( int i = 0; i < Resources::count; ++i) {
+                char* p;
+                ASCString text = label[i]->GetText();
+                if ( text.length( )) {
+                    long converted = strtol(text.c_str(), &p, 10);
+                    if (!*p)
+                        r.resource(i) = converted;
+                }
+            }
+        return r;
+    }
 
-                    public:
-                       void init ( void );
-                       void buttonpressed ( int id );
-                       void run ( void );
-               };
+    void update(const Resources& res) {
+        for ( int i = 0; i < Resources::count; ++i)
+            label[i]->SetText(ASCString::toString(res.resource(i)));
+    }
+};
 
+class TributePayments : public ASC_PG_Dialog {
+    GameMap* gameMap;
+    ResourceBlock* outgoingTransferred;
+    ResourceBlock* incomingDue;
+    ResourceBlock* incomingTransferred;
+    ResourceBlock* outgoingOpen[GameMap::maxTotalPlayers];
 
-void  ttributepayments :: init ( void )
-{
-  int i;
+    bool apply() {
+        for ( int p = 0; p < GameMap::maxTotalPlayers; ++p)
+            gameMap->tribute.avail[gameMap->actplayer][p] = outgoingOpen[p]->get();
+        QuitModal();
+        return true;
+    }
 
-   tdialogbox::init();
-   oldplayer = -1;
-   player = 0;
-   status = 0;
-   xsize = 550;
-   ysize = 400;
-   title = "transfer resources";
+    bool selectPlayer(PG_ListBoxBaseItem* item ) {
+        PlayerSelector::Item* i = dynamic_cast<PlayerSelector::Item*>(item);
+        if ( i ) {
+            int player = i->getData();
+            outgoingTransferred->update(gameMap->tribute.paid[player][gameMap->actplayer]);
+            incomingDue->update(gameMap->tribute.avail[player][gameMap->actplayer]);
+            incomingTransferred->update(gameMap->tribute.paid[gameMap->actplayer][player]);
+            for ( int p = 0; p< GameMap::maxTotalPlayers; ++p)
+                if (p != player)
+                    outgoingOpen[p]->Hide();
+            outgoingOpen[player]->Show();
+        }
+        return true;
+    }
 
-   trib = actmap->tribute;
+public:
+    TributePayments (GameMap* gamemap) : ASC_PG_Dialog(NULL, PG_Rect(-1, -1, 640, 430), "Transfer Resources"), gameMap(gamemap)
+    {
+        PlayerSelector* selector = new PlayerSelector(this, PG_Rect(10, 30, 170, 300), gamemap, false, 1 <<gamemap->actplayer, 5 );
+        selector->sigSelectItem.connect( sigc::mem_fun(*this, &TributePayments::selectPlayer));
 
-   memset ( &players, -1, sizeof( players ));
+        Emboss* outgoing = new Emboss(this, PG_Rect(190, 30, 430, 150), true);
+        new PG_Label(outgoing, PG_Rect(5,5,100,20), "Outgoing");
+        for ( int i = 0; i < GameMap::maxTotalPlayers; ++i) {
+            outgoingOpen[i] = new ResourceBlock(outgoing, PG_Rect(  5, 30,180,100),gamemap->tribute.avail[gamemap->actplayer][i], true);
+            outgoingOpen[i]->Hide();
+        }
+        outgoingTransferred = new ResourceBlock(outgoing, PG_Rect(190, 30,230,100),Resources(), false, "transferred");
 
-   windowstyle &= ~dlg_in3d;
+        Emboss* incoming = new Emboss(this, PG_Rect(190, 220, 430, 150), true);
+        new PG_Label(incoming, PG_Rect(5,5,100,20), "Incoming");
+        incomingDue         = new ResourceBlock(incoming, PG_Rect(  5,30,180,100),Resources(), false, "due");
+        incomingTransferred = new ResourceBlock(incoming, PG_Rect(190,30,230,100),Resources(), false, "transferred");
 
-   addbutton ( "~O~k",     10,          ysize - 40, xsize/2 - 5,  ysize - 10, 0, 1, 1, true );
-   addkey ( 1, ct_enter );
+        StandardButtonDirection(Horizontal);
+        AddStandardButton("Cancel")->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &TributePayments::QuitModal )));
+        AddStandardButton("OK")->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &TributePayments::apply )));
+    }
+};
 
-   addbutton ( "~C~ancel", xsize/2 + 5, ysize - 40, xsize-10 - 5, ysize - 10, 0, 1, 2, true );
-   addkey ( 2, ct_esc );
-
-   wind1y = starty + 10;
-
-
-
-   buildgraphics();
-
-   for (i = 0; i < 3; i++) 
-      addbutton ( NULL, 250, wind1y + 15 + i * 40, 350, wind1y + 32 + i * 40, 2, 1, 3 + i, true );
-
-   int pos = 0;
-   for ( i = 0; i < 8; i++ )
-      if ( actmap->player[i].exist() )
-         if ( i != actmap->actplayer )
-            players[pos++] = i;
-
-
-   activefontsettings.font = schriften.smallarial;
-   activefontsettings.color = black;
-   activefontsettings.length = 145 - 55;
-   activefontsettings.justify = lefttext;
-   activefontsettings.height = 0;
-
-   for ( i = 0; i < pos; i++) {
-      bar ( x1 + 30, y1 + starty + 30 + i * 30, x1 + 50, y1 + starty + 50 + i * 30, 20 + players[i] * 8 );
-      showtext2 ( actmap->player[players[i]].getName().c_str(), x1 + 55, y1 + starty + 30 + i * 30 );
-   }
-
-   wind2y = starty + ( ysize - starty - 60 ) /2 + 5;
-
-   wind1x = 255 ;
-   wind2x = 375 ;
-
-   rahmen ( true,      x1 + 10,  y1 + starty,      x1 + xsize - 10, y1 + ysize - 50 );
-   rahmen3 ( "player", x1 + 20,  y1 + starty + 10, x1 + 150,        y1 + ysize - 60, 1 );
-
-   rahmen3 ( "you send",            x1 + 160, y1 + wind1y,      x1 + wind2x - 10, y1 + wind2y - 10, 1 );
-   rahmen3 ( "you still have outstanding",    x1 + 160, y1 + wind2y,      x1 + wind2x - 10, y1 + ysize - 60 , 1 );
-
-   rahmen3 ( "you have sent",    x1 + wind2x - 5, y1 + wind1y,      x1 + xsize - 20, y1 + wind2y - 10, 1 );
-   rahmen3 ( "you got",     x1 + wind2x - 5, y1 + wind2y,      x1 + xsize - 20, y1 + ysize - 60 , 1 );
-
-
-   activefontsettings.font = schriften.smallarial;
-   activefontsettings.color = textcolor;
-   activefontsettings.length = 0;
-   activefontsettings.justify = lefttext;
-   activefontsettings.height = 0;
-
-   for ( i = 0; i < 3; i++) {
-      showtext2 ( resourceNames[i], x1 + 170, y1 + wind1y + 15 + i * 40 );
-      showtext2 ( resourceNames[i], x1 + 170, y1 + wind2y + 15 + i * 40 );
-
-      rectangle ( x1 + wind2x, y1 + wind1y + 15 + i * 40, x1 + xsize - 30 , y1 + wind1y + 32 + i * 40, black );
-      rectangle ( x1 + wind1x, y1 + wind2y + 15 + i * 40, x1 + wind2x - 15, y1 + wind2y + 32 + i * 40, black );
-      rectangle ( x1 + wind2x, y1 + wind2y + 15 + i * 40, x1 + xsize - 30 , y1 + wind2y + 32 + i * 40, black );
-   } /* endfor */
-
-   paintactplayer();
-   paintvalues();
-}
-
-void  ttributepayments :: paintactplayer ( void )
-{
-   int xx1 = x1 + 25;
-   int xx2 = x1 + 145;
-   int yy1 = y1 + starty + 25 + oldplayer * 30;
-   int yy2 = yy1 + 30;
-   if ( oldplayer != -1 )  
-      xorrectangle ( xx1, yy1, xx2, yy2, 14 );
-
-   yy1 = y1 + starty + 25 + player * 30;
-   yy2 = yy1 + 30;
-   if ( player != -1 )
-      xorrectangle ( xx1, yy1, xx2, yy2, 14 );
-
-   oldplayer = player;
-}
-
-void  ttributepayments :: paintvalues ( void )
-{
-   activefontsettings.font = schriften.smallarial;
-   activefontsettings.color = textcolor;
-   activefontsettings.justify = lefttext;
-   activefontsettings.height = 0;
-   activefontsettings.background = dblue;
-
-   for ( int i = 0; i < 3; i++) {
-      addeingabe ( 3+i, &trib.avail[actmap->actplayer][players[player]].resource(i), 0, maxint );
-      enablebutton ( 3+i );
-
-      activefontsettings.length = xsize - 40 - wind2x;
-      showtext2 ( strrr ( trib.paid[actmap->actplayer][players[player]].resource(i)), x1 + wind2x + 5, y1 + wind2y + 16 + i * 40 );
-      showtext2 ( strrr ( trib.paid[players[player]][actmap->actplayer].resource(i)), x1 + wind2x + 5, y1 + wind1y + 16 + i * 40 );
-
-      activefontsettings.length = wind2x - wind1x - 35;
-      showtext2 ( strrr ( trib.avail[players[player]][actmap->actplayer].resource(i)), x1 + wind1x + 5, y1 + wind2y + 16 + i * 40 );
-   } /* endfor */
-}
-
-
-void  ttributepayments :: buttonpressed( int id )
-{
-   tdialogbox::buttonpressed( id );
-   if ( id == 1 )
-      status = 11;
-   if ( id == 2 )
-      status = 10;
-}
-     
-void  ttributepayments :: run ( void )
-{
-   mousevisible(true);
-   do {
-      tdialogbox::run();
-      if ( taste == ct_down ) {
-         player++;
-         if ( players[ player ] == -1 )
-            player = 0;
-      }
-      if ( taste == ct_up ) {
-         player--;
-         if ( player < 0 )
-            player = 7;
-         while ( players[ player] == -1 )
-            player--;
-      }
-      if ( mouseparams.taste & 1 )
-         for (int i = 0; i < 8; i++) {
-            if ( (mouseparams.x >= x1 + 25) && 
-                 (mouseparams.y >= y1 + starty + 25 + i * 30) &&
-                 (mouseparams.x <= x1 + 145) &&
-                 (mouseparams.y <= y1 + starty + 55 + i * 30 ) )
-                   if ( players[i] != -1 )
-                     player = i;
-
-         } /* endfor */
-
-      if ( player != oldplayer ) {
-         paintactplayer();
-         paintvalues();
-      }
-
-   } while ( status < 10 ); /* enddo */
-
-   if ( status >= 11 )
-      actmap->tribute = trib;
-}
-   
 
 void settributepayments ( void )
 {
-   ttributepayments tpm;
-   tpm.init();
-   tpm.run();
-   tpm.done();
+    TributePayments tp(actmap);
+    tp.Show();
+    tp.RunModal();
 }
 
 
