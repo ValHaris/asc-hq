@@ -218,166 +218,74 @@ void showGameParameters ( void )
 }
 
 
+class TransferControlDialog : public ASC_PG_Dialog {
 
-class tgiveunitawaydlg : public tdialogbox {
-             int markedplayer;
-             int status;
-             void paintplayer ( int i );
-             MapField* fld ;
-             int xs;
-             TransferControlCommand::Receivers receivers;
-           public:
-             void init ( MapField* fld );
-             void run ( const Context& context );
-             void buttonpressed ( int id );
-       };
+    ContainerBase* unit;
+    int receiving_player;
+    const Context& context;
 
+    bool apply() {
+        if ( receiving_player >= 0) {
 
-void tgiveunitawaydlg :: paintplayer ( int i )
-{
-   if ( i < 0 ) 
-      return;
+            auto_ptr<TransferControlCommand> tcc ( new TransferControlCommand( unit ));
+                 tcc->setReceiver( &unit->getMap()->getPlayer(receiving_player) );
+                 ActionResult res = tcc->execute( context );
+                 if ( res.successful() ) {
+                    tcc.release();
+                    QuitModal();
+                 } else {
+                    displayActionError(res );
+                 }
+        }
+        return true;
+    }
 
-   if ( i == markedplayer ) {
-      bar ( x1 + 20, y1 + starty + xs + i * 40, x1 + xsize - 20, y1 + starty + 60 + i * 40, 20 + receivers[i]->getPosition() * 8 );
-   } else {
-      bar ( x1 + 20, y1 + starty + xs + i * 40, x1 + xsize - 20, y1 + starty + 60 + i * 40, dblue );
-   } /* endif */
+    bool selectPlayer(PG_ListBoxBaseItem* item ) {
+        PlayerSelector::Item* i = dynamic_cast<PlayerSelector::Item*>(item);
+        if ( i )
+            receiving_player = i->getData();
 
-   activefontsettings.color = black;
-   activefontsettings.font = schriften.smallarial;
-   activefontsettings.length = 0;
+        return true;
+    }
 
-   if ( receivers[i]->getPosition() < 8 )
-      showtext2 ( receivers[i]->getName().c_str(), x1 + 60, y1 + starty + xs+17 + i * 40 - activefontsettings.font->height / 2 );
-   else
-      showtext2 ( "neutral", x1 + 60, y1 + starty + xs+17 + i * 40 - activefontsettings.font->height / 2 );
-}
+public:
+    TransferControlDialog (ContainerBase* unit, const Context& context) : ASC_PG_Dialog(NULL, PG_Rect(-1, -1, 250, 300), "Transfer Resources"), unit(unit), receiving_player(-1), context(context)
+    {
+        TransferControlCommand tcc( unit );
+        TransferControlCommand::Receivers receivers = tcc.getReceivers();
+        Uint8 allowed_players = 0;
+        for ( TransferControlCommand::Receivers::iterator i = receivers.begin(); i != receivers.end();++i )
+            allowed_players |= 1 << (*i)->getPosition();
 
-void         tgiveunitawaydlg :: init( MapField* fld )
-{ 
-   this->fld = fld;
+        PlayerSelector* selector = new PlayerSelector(this, PG_Rect(10, 30, Width()-20, Height() - 80), unit->getMap(), false, 0xff ^ allowed_players, 5 );
+        selector->sigSelectItem.connect( sigc::mem_fun(*this, &TransferControlDialog::selectPlayer));
 
-   xs = 15;
-
-   
-   TransferControlCommand tcc( fld->getContainer() );
-         
-   receivers = tcc.getReceivers();
-   
-   tdialogbox::init();
-
-   xsize = 250;
-   ysize = 110 + receivers.size() * 40;
-
-   if ( fld->vehicle )
-      title = "give unit to";
-   else if ( fld->building )
-      title = "give building to";
-
-   addbutton ( "~O~k", 10, ysize - 30, xsize/2 - 5, ysize - 10 , 0, 1, 1, true );
-   addkey ( 1, ct_enter );
-   addbutton ( "~C~ancel", xsize/2 + 5, ysize - 30, xsize-10 - 5, ysize - 10 , 0, 1, 2, true );
-   addkey ( 2, ct_esc );
+        StandardButtonDirection(Horizontal);
+        AddStandardButton("Cancel")->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &TransferControlDialog::QuitModal )));
+        AddStandardButton("OK")->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &TransferControlDialog::apply )));
+    }
+};
 
 
-   if ( receivers.size() == 1 )
-      markedplayer = 0;
-   else
-      markedplayer = -1;
-
-   status = 0;
-
-
-   buildgraphics(); 
-
-
-   for ( int j = 0; j < receivers.size(); j++ )
-      paintplayer( j );
-
-} 
-
-void         tgiveunitawaydlg :: buttonpressed ( int id )
-{
-   if ( id == 1 ) {
-      if ( markedplayer >= 0 )
-         status = 12;
-      else
-         displaymessage ( "please select the player you want to give your unit to",1);
-   }
-   
-   if ( id == 2 )
-      status = 10;
-}
-
-
-void tgiveunitawaydlg :: run ( const Context& context )
-{
-   if ( !receivers.size() ) 
-      return;
-
-   while ( mouseparams.taste )
-      releasetimeslice();
-
-   mousevisible ( true );
-   do {
-      tdialogbox :: run ( );
-
-      int old = markedplayer;
-      if ( taste == ct_up  && markedplayer > 0 ) 
-         markedplayer --;
-
-      if ( taste == ct_down  && markedplayer < receivers.size()-1 ) 
-         markedplayer ++;
-      
-      if ( mouseparams.taste == 1 )
-         for ( int i = 0; i < receivers.size(); i++ )
-            if ( mouseinrect ( x1 + 20, y1 + starty + xs + i * 40, x1 + xsize - 20, y1 + starty + 60 + i * 40 ) ) 
-               markedplayer = i;
-
-
-      if ( old != markedplayer ) {
-         paintplayer ( markedplayer );
-         paintplayer ( old );
-      }
-   } while ( status < 10 ); /* enddo */
-
-   if ( status == 12 ) {
-      auto_ptr<TransferControlCommand> tcc ( new TransferControlCommand( fld->getContainer() ));
-      tcc->setReceiver( receivers[markedplayer] );
-      ActionResult res = tcc->execute( context );
-      if ( res.successful() )
-         tcc.release();
-      else {
-         displayActionError(res );
-      }
-   }
-}
 
 void giveunitaway ( MapField* fld, const Context& context )
 {
    ContainerBase* c = fld->getContainer();
-   if ( !c ) {
-      dispmessage2( 450, NULL );
-      return;
-   }
-   
+
+   int not_avail = TransferControlCommand::not_avail_reason( c );
+
    if ( c->getOwner() != c->getMap()->actplayer ) {
       dispmessage2( 451, NULL );
       return;
    }
-   
-   if ( TransferControlCommand::avail( c ) ) {
-      tgiveunitawaydlg gua;
-      gua.init ( fld );
-      gua.run ( context );
-      gua.done ();
-   } else {
-      dispmessage2( 450, NULL );
-      while ( mouseparams.taste )
-         releasetimeslice();
-
+   if ( not_avail > 0 ) {
+      dispmessage2( not_avail, NULL );
+      return;
    }
+
+   TransferControlDialog tcd(c, context);
+   tcd.Show();
+   tcd.RunModal();
 }
 
 void showPlayerTime()
