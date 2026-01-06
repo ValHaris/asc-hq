@@ -22,11 +22,12 @@
 
 class PlayerSelector : public MultiListBox {
       GameMap* gamemap;
-      typedef PG_ListBoxDataItem<int> Item;
-      void setup();
+      vector<Surface> icons;
+      void setup(int extra_spacing);
       int suppressPlayers;
    public:
-      PlayerSelector (PG_Widget *parent, const PG_Rect &r, GameMap* map, bool multiselect = true, int suppress = 0 );
+      typedef PG_ListBoxDataItem<int> Item;
+      PlayerSelector (PG_Widget *parent, const PG_Rect &r, GameMap* map, bool multiselect = true, int suppress = 0, int extra_spacing = 0 );
       int getSelectedPlayers();
       void setSelection( int s );
 };
