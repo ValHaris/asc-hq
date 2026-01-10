@@ -195,7 +195,8 @@ bool PG_LineEdit::eventKeyDown(const SDL_KeyboardEvent* key) {
    
 
 	SDL_KeyboardEvent key_copy = *key; // copy key structure
-	PG_Application::TranslateNumpadKeys(&key_copy);
+	//PG_Application::TranslateNumpadKeys(&key_copy);
+
 	// from now, we use key_copy which was copied or translated from key
 
 	//
@@ -203,7 +204,7 @@ bool PG_LineEdit::eventKeyDown(const SDL_KeyboardEvent* key) {
 	// bindings as well?
 	//  /grendel, Nov 06
 	//
-	if( (key_copy.keysym.mod & KMOD_CTRL) && !(key_copy.keysym.mod & (KMOD_ALT | KMOD_SHIFT | KMOD_META  ) ) ) {
+	if( (key_copy.keysym.mod & KMOD_CTRL) && !(key_copy.keysym.mod & (KMOD_ALT | KMOD_SHIFT) ) ) {
 		// Handle std emacs bindings
 		switch(key_copy.keysym.sym) {
 			case SDLK_a: // Beginning of Line
@@ -267,7 +268,7 @@ bool PG_LineEdit::eventKeyDown(const SDL_KeyboardEvent* key) {
 			default:
 				return false;
 		}
-	} else if(key_copy.keysym.mod & (KMOD_ALT | KMOD_META)) {
+	} else if(key_copy.keysym.mod & (KMOD_ALT)) {
 
 		// Handle std emacs bindings
 		switch(key_copy.keysym.sym) {
@@ -336,42 +337,20 @@ bool PG_LineEdit::eventKeyDown(const SDL_KeyboardEvent* key) {
 
 		default:
 handleModKeys:
-			if(!my_isEditable) {
-				return false;
-			}
-
-			if(key_copy.keysym.unicode == 0) {
-				return false;
-			}
-
-			if(eventFilterKey(key)) {
-				return false;
-			}
-
-			if ((key_copy.keysym.unicode & 0xFF80) == 0) {
-				c = key_copy.keysym.unicode & 0x7F;
-
-				if(!IsValidKey(c)) {
-					return false;
-				}
-
-				InsertChar(c);
-				return true;
-			} else {
-				c = (PG_Char)key_copy.keysym.unicode;
-
-				if(!IsValidKey(c)) {
-					return false;
-				}
-
-				InsertChar(c);
-				return true;
-			}
-
 			return false;
 	}
 
 	return false;
+}
+
+bool PG_LineEdit::eventTextInput(const SDL_TextInputEvent* text)
+{
+	const char* c = text->text;
+	while ( c ) {
+		InsertChar( *c );
+		c++;
+	}
+	return true;
 }
 
 void PG_LineEdit::eventInputFocusLost(PG_MessageObject* newfocus) {

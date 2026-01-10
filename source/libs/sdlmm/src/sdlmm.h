@@ -124,7 +124,6 @@
 #include "sdlmm_color.h"
 #include "sdlmm_basesurface.h"
 #include "sdlmm_surface.h"
-#include "sdlmm_videoinfo.h"
 #include "sdlmm_pixelformat.h"
 #include "sdlmm_display.h"
 #include "sdlmm_eventhandler.h"

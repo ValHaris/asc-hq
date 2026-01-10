@@ -56,12 +56,14 @@ public:
 	/**
 	Signal type declaration
 	**/
-class SignalActive : public sigc::signal<bool, PG_MessageObject*, const SDL_ActiveEvent*> {}
+class SignalWindow : public sigc::signal<bool, PG_MessageObject*, const SDL_WindowEvent*> {}
 	;
 class SignalKeyDown : public sigc::signal<bool, PG_MessageObject*, const SDL_KeyboardEvent*> {}
 	;
 class SignalKeyUp : public sigc::signal<bool, PG_MessageObject*, const SDL_KeyboardEvent*> {}
 	;
+class SignalTextInput : public sigc::signal<bool, const PG_MessageObject*, const SDL_TextInputEvent*> {}
+    ;
 class SignalMouseMotion : public sigc::signal<bool, PG_MessageObject*, const SDL_MouseMotionEvent*> {}
 	;
 class SignalMouseButtonDown : public sigc::signal<bool, PG_MessageObject*, const SDL_MouseButtonEvent*> {}
@@ -71,8 +73,6 @@ class SignalMouseButtonUp : public sigc::signal<bool, PG_MessageObject*, const S
 class SignalQuit : public sigc::signal<bool, PG_MessageObject*> {}
 	;
 class SignalSysWM : public sigc::signal<bool, PG_MessageObject*, const SDL_SysWMEvent*> {}
-	;
-class SignalVideoResize : public sigc::signal<bool, PG_MessageObject*, const SDL_ResizeEvent*> {}
 	;
 class SignalDelete : public sigc::signal<bool, const PG_MessageObject*> {}
 	;
@@ -143,14 +143,14 @@ class SignalDelete : public sigc::signal<bool, const PG_MessageObject*> {}
 	*/
 	virtual bool ProcessEvent(const SDL_Event* event);
 
-	SignalActive sigActive;
+	SignalWindow sigWindow;
 	SignalKeyDown sigKeyDown;
 	SignalKeyUp sigKeyUp;
+	SignalTextInput sigTextInput;
 	SignalMouseMotion sigMouseMotion;
 	SignalMouseButtonDown sigMouseButtonDown;
 	SignalMouseButtonUp sigMouseButtonUp;
 	SignalSysWM sigSysWM;
-	SignalVideoResize sigVideoResize;
 	SignalQuit sigQuit;
 
 	SignalDelete sigDelete;
@@ -164,7 +164,7 @@ protected:
 
 	@return Notifies the message pump if this message is processed by this object or it should be routed to the next message receiver.
 	*/
-	virtual bool eventActive(const SDL_ActiveEvent* active);
+	virtual bool eventWindow(const SDL_WindowEvent* active);
 
 	/**
 	Overridable Eventhandler for a SDL_KeyboardEvent message.
@@ -176,6 +176,8 @@ protected:
 	@return Notifies the message pump if this message is processed by this object or it should be routed to the next message receiver.
 	*/
 	virtual bool eventKeyDown(const SDL_KeyboardEvent* key);
+
+	virtual bool eventTextInput(const SDL_TextInputEvent* text);
 
 	/**
 	Overridable Eventhandler for a SDL_KeyboardEvent message.
@@ -263,7 +265,7 @@ protected:
 
 	@return Notifies the message pump if this message is processed by this object or it should be routed to the next message receiver.
 	*/
-	virtual bool eventResize(const SDL_ResizeEvent* event);
+	virtual bool eventResize(const SDL_WindowEvent* event);
 
 	/**
 	Overridable Eventhandler for a SDL_SysUserEvent message.

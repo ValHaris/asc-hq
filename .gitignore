@@ -5,6 +5,7 @@
 *.Po
 *.Plo
 *.la
+*.Tpo
 Makefile
 asc.appdata.xml
 autom4te.cache/*

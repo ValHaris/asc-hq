@@ -82,7 +82,7 @@ public:
 	std::string name;
 	bool updateOverlappingSiblings;
    int hotkeyModifier;
-   PG_Char hotkey;
+   SDL_Keycode hotkey;
 
 };
 
@@ -939,13 +939,13 @@ void PG_Widget::FadeOut() {
 
 	for(int i=_mid->transparency; i<255; i += d) {
 		RestoreBackground(NULL, true);
-		SDL_SetAlpha(srfFade, SDL_SRCALPHA, 255-i);
+		SDL_SetSurfaceAlphaMod(srfFade, 255-i);
 		SDL_BlitSurface(srfFade, NULL, screen, this);
 		PG_Application::UpdateRects(screen, 1, &_mid->rectClip);
 	}
 
 	RestoreBackground(NULL, true);
-	SDL_SetAlpha(srfFade, SDL_SRCALPHA, 0);
+	SDL_SetSurfaceAlphaMod(srfFade, 0);
 	SDL_BlitSurface(srfFade, NULL, screen, this);
 	SetVisible(false);
 	locker.unlock();
@@ -983,7 +983,7 @@ void PG_Widget::FadeIn() {
 	} // minimum step == 1
 	for(int i=255; i>_mid->transparency; i -= d) {
 		RestoreBackground(NULL, true);
-		SDL_SetAlpha(srfFade, SDL_SRCALPHA, 255-i);
+		SDL_SetSurfaceAlphaMod(srfFade, 255-i);
 		PG_Draw::BlitSurface(srfFade, src, screen, _mid->rectClip);
 		PG_Application::UpdateRects(screen, 1, &_mid->rectClip);
 	}
@@ -1005,7 +1005,7 @@ bool PG_Widget::Action(KeyAction action) {
 
 	switch(action) {
 		case ACT_ACTIVATE:
-			SDL_WarpMouse(x,y);
+//			SDL_WarpMouse(x,y);
 			eventMouseEnter();
 			break;
 
@@ -1571,7 +1571,7 @@ void PG_Widget::eventBlit(SDL_Surface* srf, const PG_Rect& src, const PG_Rect& d
 	// Set alpha
 	Uint8 a = 255-_mid->transparency;
 	if(a != 0) {
-		SDL_SetAlpha(srf, SDL_SRCALPHA, a);
+		SDL_SetSurfaceAlphaMod(srf, a);
 
 		// Blit widget surface to screen
 #ifdef DEBUG
@@ -1965,7 +1965,7 @@ bool PG_Widget::checkForHotkey( const SDL_KeyboardEvent* key )
    int mod = key->keysym.mod & ~( KMOD_NUM | KMOD_CAPS );
 
    if( (mod & _mid->hotkeyModifier) || (mod == _mid->hotkeyModifier) )
-      if( key->keysym.unicode == _mid->hotkey )
+      if( key->keysym.sym == _mid->hotkey )
          return true;
 
    return false;

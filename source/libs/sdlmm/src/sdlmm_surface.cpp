@@ -1,6 +1,6 @@
 /*
  * SDLmm - a C++ wrapper for SDL and related libraries
- * Copyright © 2001 David Hedbor <david@hedbor.org>
+ * Copyright ï¿½ 2001 David Hedbor <david@hedbor.org>
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -27,18 +27,18 @@
 
 namespace SDLmm {
 
-  bool Surface::SetDisplayFormat() {
-    SDL_Surface *tmp = SDL_DisplayFormat(me);
-    if(!tmp) return false;
-    SetSurface(tmp);
-    return true;
-  }
-
-  bool Surface::SetDisplayFormatAlpha() {
-    SDL_Surface *tmp = SDL_DisplayFormatAlpha(me);
-    if(!tmp) return false;
-    SetSurface(tmp);
-    return true;
-  }
+//  bool Surface::SetDisplayFormat() {
+//    SDL_Surface *tmp = SDL_DisplayFormat(me);
+//    if(!tmp) return false;
+//    SetSurface(tmp);
+//    return true;
+//  }
+//
+//  bool Surface::SetDisplayFormatAlpha() {
+//    SDL_Surface *tmp = SDL_DisplayFormatAlpha(me);
+//    if(!tmp) return false;
+//    SetSurface(tmp);
+//    return true;
+//  }
 }
 

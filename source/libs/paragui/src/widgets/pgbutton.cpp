@@ -342,15 +342,15 @@ bool PG_Button::SetIcon(const std::string& filenameup, const std::string& filena
 	}
 
 	if((*_mid)[UNPRESSED].srf_icon != NULL) {
-		SDL_SetColorKey((*_mid)[UNPRESSED].srf_icon, SDL_SRCCOLORKEY, colorkey);
+		SDL_SetColorKey((*_mid)[UNPRESSED].srf_icon, SDL_TRUE, colorkey);
 	}
 
 	if((*_mid)[HIGHLITED].srf_icon != NULL) {
-		SDL_SetColorKey((*_mid)[HIGHLITED].srf_icon, SDL_SRCCOLORKEY, colorkey);
+		SDL_SetColorKey((*_mid)[HIGHLITED].srf_icon, SDL_TRUE, colorkey);
 	}
 
 	if((*_mid)[PRESSED].srf_icon != NULL) {
-		SDL_SetColorKey((*_mid)[PRESSED].srf_icon, SDL_SRCCOLORKEY, colorkey);
+		SDL_SetColorKey((*_mid)[PRESSED].srf_icon, SDL_TRUE, colorkey);
 	}
 
 	return true;
@@ -522,19 +522,19 @@ void PG_Button::eventBlit(SDL_Surface* srf, const PG_Rect& src, const PG_Rect& d
 
 		eventButtonSurface(surface, UNPRESSED, w, h);
 		if(*surface) {
-			SDL_SetAlpha(*surface, SDL_SRCALPHA, 255-(*_mid)[UNPRESSED].transparency);
+			SDL_SetSurfaceAlphaMod(*surface, 255-(*_mid)[UNPRESSED].transparency);
 		}
 
 		surface = &((*_mid)[PRESSED].srf);
 		eventButtonSurface(surface, PRESSED, w, h);
 		if(*surface) {
-			SDL_SetAlpha(*surface, SDL_SRCALPHA, 255-(*_mid)[PRESSED].transparency);
+			SDL_SetSurfaceAlphaMod(*surface, 255-(*_mid)[PRESSED].transparency);
 		}
 
 		surface = &((*_mid)[HIGHLITED].srf);
 		eventButtonSurface(surface, HIGHLITED, w, h);
 		if(*surface) {
-			SDL_SetAlpha(*surface, SDL_SRCALPHA, 255-(*_mid)[HIGHLITED].transparency);
+			SDL_SetSurfaceAlphaMod(*surface, 255-(*_mid)[HIGHLITED].transparency);
 		}
 	}
 
@@ -546,7 +546,7 @@ void PG_Button::eventBlit(SDL_Surface* srf, const PG_Rect& src, const PG_Rect& d
 	PG_Application::ScreenLocker locker(true);
 
 	if(t != 255) {
-		SDL_SetAlpha(srf, SDL_SRCALPHA, 255-t);
+		SDL_SetSurfaceAlphaMod(srf, 255-t);
 		PG_Draw::BlitSurface(srf, src, PG_Application::GetScreen(), dst);
 	}
 

@@ -11,6 +11,6 @@ HDRS=sdlmm_global.h sdlmm_misc.h sdlmm.h sdlmm_spoint.h sdlmm_srect.h sdlmm_colo
 
 libSDLmm_la_SOURCES = sdlmm_global.cpp sdlmm_basesurface.cpp sdlmm_surface.cpp sdlmm_display.cpp sdlmm_pixelformat.cpp \
 	sdlmm_srect.cpp sdlmm_event.cpp sdlmm_audio.cpp sdlmm_timer.cpp \
-	sdlmm_joystick.cpp sdlmm_cd.cpp sdlmm_videoinfo.cpp
+	sdlmm_joystick.cpp sdlmm_cd.cpp 
 	
 EXTRA_DIST=$(srcdir)/*.h

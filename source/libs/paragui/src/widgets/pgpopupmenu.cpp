@@ -733,24 +733,24 @@ bool PG_PopupMenu::eventMouseButtonUp(const SDL_MouseButtonEvent *button) {
 
 bool PG_PopupMenu::eventKeyDown(const SDL_KeyboardEvent *key) {
 	SDL_KeyboardEvent key_copy = *key; // copy key structure
-	PG_Application::TranslateNumpadKeys(&key_copy);
+//	PG_Application::TranslateNumpadKeys(&key_copy);
 	// from now, we use key_copy which was copied or translated from key
    
 
-   if ( key->keysym.unicode )
-   for ( MII i = items.begin(); i != items.end(); ++i ) {
-      if ( *i )
-         if ( extractHotkey( (*i)->getCaption()) == key->keysym.unicode ) {
-            Hide();
-            if ( !(*i)->isDisabled()) {
-                  // call item's callback
-               (*i)->sigSelectMenuItem(selected);
-                  // call general callback (PG_PopupMenu)
-               sigSelectMenuItem((*i));
-               return true;
-            }
-         }
-   }
+   if ( key->keysym.sym )
+	   for ( MII i = items.begin(); i != items.end(); ++i ) {
+		  if ( *i )
+			 if ( extractHotkey( (*i)->getCaption()) == key->keysym.sym ) {
+				Hide();
+				if ( !(*i)->isDisabled()) {
+					  // call item's callback
+				   (*i)->sigSelectMenuItem(selected);
+					  // call general callback (PG_PopupMenu)
+				   sigSelectMenuItem((*i));
+				   return true;
+				}
+			 }
+	   }
    
    
 	switch (key_copy.keysym.sym) {

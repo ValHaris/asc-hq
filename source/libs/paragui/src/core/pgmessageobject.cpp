@@ -105,8 +105,8 @@ bool PG_MessageObject::ProcessEvent(const SDL_Event* event) {
 
 	// dispatch message
 	switch(event->type) {
-		case SDL_ACTIVEEVENT:
-			rc = eventActive(&event->active) || sigActive(this, &event->active);
+		case SDL_WINDOWEVENT:
+			rc = eventWindow(&event->window) || sigWindow(this, &event->window);
 			break;
 
 		case SDL_KEYDOWN:
@@ -115,7 +115,10 @@ bool PG_MessageObject::ProcessEvent(const SDL_Event* event) {
 
 		case SDL_KEYUP:
 			rc = eventKeyUp(&event->key) || sigKeyUp(this, &event->key);
-			;
+			break;
+
+		case SDL_TEXTINPUT:
+			rc = eventTextInput(&event->text) || sigTextInput(this, &event->text);
 			break;
 
 		case SDL_MOUSEMOTION:
@@ -138,10 +141,6 @@ bool PG_MessageObject::ProcessEvent(const SDL_Event* event) {
 			rc = eventSysWM(&event->syswm) || sigSysWM(this, &event->syswm);
 			break;
 
-		case SDL_VIDEORESIZE:
-			rc = eventResize(&event->resize) || sigVideoResize(this, &event->resize);
-			break;
-
 		default:
 			rc = false;
 			break;
@@ -153,7 +152,7 @@ bool PG_MessageObject::ProcessEvent(const SDL_Event* event) {
 
 /** virtual message handlers */
 
-bool PG_MessageObject::eventActive(const SDL_ActiveEvent* active) {
+bool PG_MessageObject::eventWindow(const SDL_WindowEvent* active) {
 	return false;
 }
 
@@ -196,10 +195,6 @@ bool PG_MessageObject::eventSysWM(const SDL_SysWMEvent* syswm) {
 	return false;
 }
 
-
-bool PG_MessageObject::eventResize(const SDL_ResizeEvent* event) {
-	return false;
-}
 
 bool PG_MessageObject::AcceptEvent(const SDL_Event* event) {
 	return true;				// PG_MessageObject accepts all events

@@ -138,8 +138,6 @@ namespace SDLmm {
     */
     const void *pixels() const { return GetSurface()->pixels; }
 
-    //! Returns the hardware-specific surface info.
-    struct private_hwdata *hwdata() const { return GetSurface()->hwdata; }
     //@}
 
     //! Set the pixel to the color

@@ -1,12 +1,10 @@
 noinst_LTLIBRARIES = libpgcore.la
 
 libpgcore_la_SOURCES = \
-	physfsrwops.cpp \
 	missing.cpp \
 	pgdatacontainer.cpp \
 	pgapplication.cpp \
 	pgcolors.cpp \
-	pgfilearchive.cpp \
 	pgfile.cpp \
 	pglog.cpp \
 	pgmain.cpp \
@@ -14,7 +12,6 @@ libpgcore_la_SOURCES = \
 	pgnavigator.cpp \
 	pgrectlist.cpp \
 	pgsurfacecache.cpp \
-	pgtimerobject.cpp \
 	pgcolor.cpp \
 	pgsdleventsupplier.cpp \
 	pgsdlscreenupdater.cpp 

@@ -148,8 +148,8 @@ inline void BlitTemplate(DT pixels, SDL_Surface* Surface, FT_Bitmap *Bitmap, int
 	Uint8 bpp = format->BytesPerPixel;
 	Uint32 pitch = Surface->pitch;
 	Uint32 src_pitch = Bitmap->pitch;
-	register Uint8* src_pixels = Bitmap->buffer + x0 + y0*Bitmap->pitch;
-	register Uint8* dst_pixels = (Uint8*)pixels + (PosX+x0)*bpp + (PosY+y0)*pitch /*+ Surface->offset*/;
+	Uint8* src_pixels = Bitmap->buffer + x0 + y0*Bitmap->pitch;
+	Uint8* dst_pixels = (Uint8*)pixels + (PosX+x0)*bpp + (PosY+y0)*pitch /*+ Surface->offset*/;
 	Uint8* line;
 
 	Uint8 r,g,b,a;
@@ -166,11 +166,11 @@ inline void BlitTemplate(DT pixels, SDL_Surface* Surface, FT_Bitmap *Bitmap, int
 	int alpha = Param->GetAlpha();
 
 	line = dst_pixels;
-	for (register int y = y0; y <y1; y++, src_pixels += src_pitch) {
+	for (int y = y0; y <y1; y++, src_pixels += src_pitch) {
 
 		dst_pixels = line;
 
-		for (register int x = x0; x < x1; x++, dst_pixels += bpp) {
+		for (int x = x0; x < x1; x++, dst_pixels += bpp) {
 
 			// get source pixel value
 			v = *(Uint8 *)(src_pixels++);

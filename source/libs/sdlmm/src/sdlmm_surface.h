@@ -1,6 +1,6 @@
 /*
  * SDmm - a C++ wrapper for SDL and related libraries
- * Copyright © 2001 David Hedbor <david@hedbor.org>
+ * Copyright ï¿½ 2001 David Hedbor <david@hedbor.org>
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -141,8 +141,8 @@ namespace SDLmm {
     }
     
     // Documented in BaseSurface
-    virtual bool SetDisplayFormat();
-    virtual bool SetDisplayFormatAlpha();    
+//    virtual bool SetDisplayFormat();
+//    virtual bool SetDisplayFormatAlpha();
         
     //! Loads a Windows BMP and returns it as a new Surface
     /*!

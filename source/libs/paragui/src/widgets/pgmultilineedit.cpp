@@ -374,7 +374,7 @@ bool PG_MultiLineEdit::eventKeyDown(const SDL_KeyboardEvent* key) {
 	}
 
 	SDL_KeyboardEvent key_copy = *key; // copy key structure
-	PG_Application::TranslateNumpadKeys(&key_copy);
+	// PG_Application::TranslateNumpadKeys(&key_copy);
 
 	if ((key_copy.keysym.mod & KMOD_SHIFT) && my_mark == -1) {
 		my_mark = my_cursorPosition;
@@ -423,7 +423,7 @@ bool PG_MultiLineEdit::eventKeyDown(const SDL_KeyboardEvent* key) {
 			default:
 				break;
 		}
-	} else if(key_copy.keysym.mod & (KMOD_ALT | KMOD_META)) {}
+	} else if(key_copy.keysym.mod & KMOD_ALT) {}
 	else {
 		unsigned int currentPos, line;
 		int x, y;
@@ -542,16 +542,16 @@ bool PG_MultiLineEdit::eventMouseButtonDown(const SDL_MouseButtonEvent* button) 
 	}
 
 	if (button->button == 1) {
-		Uint8* keys = SDL_GetKeyState(NULL);
+		const Uint8* keys = SDL_GetKeyboardState(NULL);
 
-		if (!(keys[SDLK_LSHIFT] || keys[SDLK_RSHIFT])) {
+		if (!(keys[SDL_SCANCODE_LSHIFT] || keys[SDL_SCANCODE_RSHIFT])) {
 			my_mark = -1;
 		}
 
 		unsigned int currentPos, line;
 		GetCursorTextPosFromScreen(button->x, button->y, currentPos, line);
 		SetCursorTextPos(currentPos, line);
-		if (!(keys[SDLK_LSHIFT] || keys[SDLK_RSHIFT])) {
+		if (!(keys[SDL_SCANCODE_LSHIFT] || keys[SDL_SCANCODE_RSHIFT])) {
 			my_mark = my_cursorPosition;
 		}
 	}

@@ -49,7 +49,7 @@ void PG_SDLEventSupplier::CombineMouseMotionEvents(SDL_Event* event) {
 }
 
 bool PG_SDLEventSupplier::PeepEvent(SDL_Event* event) {
-	return SDL_PeepEvents( event, 1, SDL_PEEKEVENT, 0xffffffff ) > 0;
+	return SDL_PeepEvents( event, 1, SDL_PEEKEVENT, SDL_FIRSTEVENT, SDL_LASTEVENT) > 0;
 }
 
 

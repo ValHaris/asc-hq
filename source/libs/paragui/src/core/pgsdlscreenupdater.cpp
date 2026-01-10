@@ -29,14 +29,17 @@
 #include <SDL.h>
 
 #include "pgsdlscreenupdater.h"
+#include "pgrect.h"
+#include "pgapplication.h"
 
 void PG_SDLScreenUpdater::UpdateRect(SDL_Surface *screen, Sint32 x, Sint32 y, Sint32 w, Sint32 h)
 {
-   SDL_UpdateRect( screen, x, y, w, h );
+	PG_Rect r (x,y,w,h);
+	PG_Application::UpdateScreen(&r, 1);
 }
 
 void PG_SDLScreenUpdater::UpdateRects(SDL_Surface *screen, int numrects, SDL_Rect *rects)
 {
-   SDL_UpdateRects( screen, numrects, rects );	
+	PG_Application::UpdateScreen(rects, numrects);
 }
 

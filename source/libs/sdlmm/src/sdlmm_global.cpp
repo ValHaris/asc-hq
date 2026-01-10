@@ -1,6 +1,6 @@
 /*
  * SDLmm - a C++ wrapper for SDL and related libraries
- * Copyright © 2001 David Hedbor <david@hedbor.org>
+ * Copyright ï¿½ 2001 David Hedbor <david@hedbor.org>
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -24,21 +24,4 @@
 
 #include <SDL.h>
 #include "sdlmm_global.h"
-#include "sdlmm_videoinfo.h"
-
-namespace SDLmm {
-  // Init and cleanup functions
-  bool Init(Uint32 flags) {
-    bool res = SDL_Init(flags) == 0;
-    return res;
-  }
-  void Quit() { SDL_Quit(); }
-  Uint32 WasInit(Uint32 flags) { return SDL_WasInit(flags); }
-
-  // Error...
-  const char *GetError() { return SDL_GetError(); }
-
-//  const char *version() { return VERSION; }
-
-}
 

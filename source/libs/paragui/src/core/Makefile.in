@@ -105,11 +105,11 @@ LTLIBRARIES = $(noinst_LTLIBRARIES)
 am__DEPENDENCIES_1 =
 libpgcore_la_DEPENDENCIES = $(am__DEPENDENCIES_1) \
 	$(am__DEPENDENCIES_1)
-am_libpgcore_la_OBJECTS = physfsrwops.lo missing.lo pgdatacontainer.lo \
-	pgapplication.lo pgcolors.lo pgfilearchive.lo pgfile.lo \
-	pglog.lo pgmain.lo pgmessageobject.lo pgnavigator.lo \
-	pgrectlist.lo pgsurfacecache.lo pgtimerobject.lo pgcolor.lo \
-	pgsdleventsupplier.lo pgsdlscreenupdater.lo
+am_libpgcore_la_OBJECTS = missing.lo pgdatacontainer.lo \
+	pgapplication.lo pgcolors.lo pgfile.lo pglog.lo pgmain.lo \
+	pgmessageobject.lo pgnavigator.lo pgrectlist.lo \
+	pgsurfacecache.lo pgcolor.lo pgsdleventsupplier.lo \
+	pgsdlscreenupdater.lo
 libpgcore_la_OBJECTS = $(am_libpgcore_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -133,13 +133,12 @@ am__maybe_remake_depfiles = depfiles
 am__depfiles_remade = ./$(DEPDIR)/missing.Plo \
 	./$(DEPDIR)/pgapplication.Plo ./$(DEPDIR)/pgcolor.Plo \
 	./$(DEPDIR)/pgcolors.Plo ./$(DEPDIR)/pgdatacontainer.Plo \
-	./$(DEPDIR)/pgfile.Plo ./$(DEPDIR)/pgfilearchive.Plo \
-	./$(DEPDIR)/pglog.Plo ./$(DEPDIR)/pgmain.Plo \
-	./$(DEPDIR)/pgmessageobject.Plo ./$(DEPDIR)/pgnavigator.Plo \
-	./$(DEPDIR)/pgrectlist.Plo ./$(DEPDIR)/pgsdleventsupplier.Plo \
+	./$(DEPDIR)/pgfile.Plo ./$(DEPDIR)/pglog.Plo \
+	./$(DEPDIR)/pgmain.Plo ./$(DEPDIR)/pgmessageobject.Plo \
+	./$(DEPDIR)/pgnavigator.Plo ./$(DEPDIR)/pgrectlist.Plo \
+	./$(DEPDIR)/pgsdleventsupplier.Plo \
 	./$(DEPDIR)/pgsdlscreenupdater.Plo \
-	./$(DEPDIR)/pgsurfacecache.Plo ./$(DEPDIR)/pgtimerobject.Plo \
-	./$(DEPDIR)/physfsrwops.Plo
+	./$(DEPDIR)/pgsurfacecache.Plo
 am__mv = mv -f
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
@@ -285,8 +284,9 @@ PKG_CONFIG = @PKG_CONFIG@
 PKG_CONFIG_LIBDIR = @PKG_CONFIG_LIBDIR@
 PKG_CONFIG_PATH = @PKG_CONFIG_PATH@
 RANLIB = @RANLIB@
+SDL2_CONFIG = @SDL2_CONFIG@
+SDL2_FRAMEWORK = @SDL2_FRAMEWORK@
 SDL_CFLAGS = @SDL_CFLAGS@
-SDL_CONFIG = @SDL_CONFIG@
 SDL_LIBS = @SDL_LIBS@
 SDL_SOUND_LIB = @SDL_SOUND_LIB@
 SED = @SED@
@@ -383,12 +383,10 @@ top_srcdir = @top_srcdir@
 zipfound = @zipfound@
 noinst_LTLIBRARIES = libpgcore.la
 libpgcore_la_SOURCES = \
-	physfsrwops.cpp \
 	missing.cpp \
 	pgdatacontainer.cpp \
 	pgapplication.cpp \
 	pgcolors.cpp \
-	pgfilearchive.cpp \
 	pgfile.cpp \
 	pglog.cpp \
 	pgmain.cpp \
@@ -396,7 +394,6 @@ libpgcore_la_SOURCES = \
 	pgnavigator.cpp \
 	pgrectlist.cpp \
 	pgsurfacecache.cpp \
-	pgtimerobject.cpp \
 	pgcolor.cpp \
 	pgsdleventsupplier.cpp \
 	pgsdlscreenupdater.cpp 
@@ -474,7 +471,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pgcolors.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pgdatacontainer.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pgfile.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pgfilearchive.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pglog.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pgmain.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pgmessageobject.Plo@am__quote@ # am--include-marker
@@ -483,8 +479,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pgsdleventsupplier.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pgsdlscreenupdater.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pgsurfacecache.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pgtimerobject.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/physfsrwops.Plo@am__quote@ # am--include-marker
 
 $(am__depfiles_remade):
 	@$(MKDIR_P) $(@D)
@@ -649,7 +643,6 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/pgcolors.Plo
 	-rm -f ./$(DEPDIR)/pgdatacontainer.Plo
 	-rm -f ./$(DEPDIR)/pgfile.Plo
-	-rm -f ./$(DEPDIR)/pgfilearchive.Plo
 	-rm -f ./$(DEPDIR)/pglog.Plo
 	-rm -f ./$(DEPDIR)/pgmain.Plo
 	-rm -f ./$(DEPDIR)/pgmessageobject.Plo
@@ -658,8 +651,6 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/pgsdleventsupplier.Plo
 	-rm -f ./$(DEPDIR)/pgsdlscreenupdater.Plo
 	-rm -f ./$(DEPDIR)/pgsurfacecache.Plo
-	-rm -f ./$(DEPDIR)/pgtimerobject.Plo
-	-rm -f ./$(DEPDIR)/physfsrwops.Plo
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -711,7 +702,6 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/pgcolors.Plo
 	-rm -f ./$(DEPDIR)/pgdatacontainer.Plo
 	-rm -f ./$(DEPDIR)/pgfile.Plo
-	-rm -f ./$(DEPDIR)/pgfilearchive.Plo
 	-rm -f ./$(DEPDIR)/pglog.Plo
 	-rm -f ./$(DEPDIR)/pgmain.Plo
 	-rm -f ./$(DEPDIR)/pgmessageobject.Plo
@@ -720,8 +710,6 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/pgsdleventsupplier.Plo
 	-rm -f ./$(DEPDIR)/pgsdlscreenupdater.Plo
 	-rm -f ./$(DEPDIR)/pgsurfacecache.Plo
-	-rm -f ./$(DEPDIR)/pgtimerobject.Plo
-	-rm -f ./$(DEPDIR)/physfsrwops.Plo
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 

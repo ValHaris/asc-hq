@@ -112,6 +112,7 @@ bool PG_RadioButton::eventMouseButtonUp(const SDL_MouseButtonEvent* my_widgetBut
 	Uint16 my;
 	if(my_groupFirst != NULL) {
 
+		/*
 		if(my_widgetButton->button == 4) {
 			while(list->my_groupNext != NULL) {
 				if(list->my_groupNext == this) {
@@ -137,6 +138,7 @@ bool PG_RadioButton::eventMouseButtonUp(const SDL_MouseButtonEvent* my_widgetBut
 			} while(list != NULL);
 			return true;
 		}
+		*/
 	}
 
 	SetPressed();
