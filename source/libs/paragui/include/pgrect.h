@@ -54,7 +54,7 @@ public:
 
 	Initializes the created PG_Rect object with x/y postions and width/height
 	*/
-	PG_Rect(Sint16 x = 0, Sint16 y = 0, Uint16 w = 0, Uint16 h = 0);
+	PG_Rect(int x = 0, int y = 0, int w = 0, int h = 0);
 
 	/**
 	Create a new PG_Rect from a reference
@@ -82,7 +82,7 @@ public:
 	@param	nh	height
 	Moves the rectangle to the given values
 	*/
-	inline void SetRect(Sint16 nx, Sint16 ny, Uint16 nw, Uint16 nh) {
+	inline void SetRect(int nx, int ny, int nw, int nh) {
 		x = nx;
 		y = ny;
 		w = nw;
@@ -205,13 +205,13 @@ public:
 		return my_prev;
 	}
 
-	Sint16& my_xpos;
+	int& my_xpos;
 
-	Sint16& my_ypos;
+	int& my_ypos;
 
-	Uint16& my_width;
+	int& my_width;
 
-	Uint16& my_height;
+	int& my_height;
 
 	Uint32 index;
 

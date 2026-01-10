@@ -41,7 +41,7 @@
 Uint32 PG_LogMaxMessages = 200;
 int PG_LogMethod = PG_LOGMTH_STDOUT;
 static PG_LOG_LEVEL PG_LogLevel = PG_LOG_DBG;
-static SDLKey PG_LogConsoleKey = SDLK_F12;
+static SDL_KeyCode PG_LogConsoleKey = SDLK_F12;
 
 class PG_LogMessage_t {
 public:
@@ -260,11 +260,11 @@ int PG_LogConsole::GetMethod() {
 	return PG_LogMethod;
 }
 
-void PG_LogConsole::SetConsoleKey(SDLKey key) {
+void PG_LogConsole::SetConsoleKey(SDL_KeyCode key) {
 	PG_LogConsoleKey = key;
 }
 
-SDLKey PG_LogConsole::GetConsoleKey() {
+SDL_KeyCode PG_LogConsole::GetConsoleKey() {
 	return PG_LogConsoleKey;
 }
 

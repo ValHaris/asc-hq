@@ -36,7 +36,6 @@
 #include <map>
 
 #include "pgmessageobject.h"
-#include "pgtimerobject.h"
 #include "pgpoint.h"
 
 class PG_Widget;
@@ -60,35 +59,11 @@ class DECLSPEC PG_ToolTipHelp: public sigc::trackable
 {
 private:
 
-	class Ticker: public PG_TimerObject
-	{
-		volatile Uint32 ticker;
-		Uint32 eventTimer(Uint32 interval)
-		{
-			++ticker;
-			return interval;
-		};
-	public:
-		Ticker( int interval ) : ticker(0)
-		{
-			SetTimer( interval );
-		};
-		Uint32 getTicker()
-		{
-			return ticker;
-		};
-	};
-
-	static Ticker* ticker;
-
-	void startTimer();
-
 	static std::map<const PG_Widget*,PG_ToolTipHelp*> tooltips;
 
 protected:
 	PG_Widget* parentWidget;
-	PG_TimerObject::ID id;
-	Uint32 lastTick;
+	Uint64 lastTick;
 
 	enum { off, counting, shown } status;
 

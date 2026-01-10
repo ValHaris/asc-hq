@@ -37,6 +37,7 @@
 #include <list>
 #include <utility>
 #include <sigc++/sigc++.h>
+#include <SDL.h>
 
 #include "pgmessageobject.h"
 #include "pgscreenupdater.h"
@@ -137,7 +138,7 @@ class SignalAppIdle : public sigc::signal<bool, PG_MessageObject*> {}
 	@param	depth	screendepth in bits per pixel
 	@param	flags	PG_ screen initialization flags
 	*/
-	bool InitScreen(int w, int h, int depth=0, Uint32 flags = SDL_SWSURFACE /* | SDL_FULLSCREEN*/ | SDL_HWPALETTE);
+	bool InitScreen(int w, int h);
 
 	/**
 	Load a widget theme
@@ -172,13 +173,8 @@ class SignalAppIdle : public sigc::signal<bool, PG_MessageObject*> {}
 	 */
 	void Sleep ( int milliSeconds );
 
-	/**
-	Set a custom screen surface
 
-	@param	screen	pointer to a surface
-	@return		pointer the new screen surface
-	*/
-	SDL_Surface* SetScreen(SDL_Surface* screen, bool initialize = true);
+	static void UpdateScreen(const SDL_Rect * srcrect = NULL, int numRects = 0);
 
 	/**
 	Get the current screen surface
@@ -264,11 +260,6 @@ class SignalAppIdle : public sigc::signal<bool, PG_MessageObject*> {}
 	static int GetScreenWidth();
 
 	/**
-	Do a page flip (only for double buffered screens)
-	*/
-	static void FlipPage();
-
-	/**
 	Outputs some information about the current video target (only with
 	DEBUG enabled)
 	*/
@@ -339,23 +330,6 @@ class SignalAppIdle : public sigc::signal<bool, PG_MessageObject*> {}
 	Sets the title-bar and icon name of the display window.
 	*/
 	void SetCaption(const std::string& title, const std::string& icon = PG_NULLSTR);
-
-	/**
-	Get application`s window-manager title and icon name.
-
-	@param title return place for title name pointer
-	@param icon return place for icon name pointer
-	Set pointers to the window title and icon name.
-	*/
-	void GetCaption(std::string& title, std::string& icon);
-
-	/**
-	Iconify/Minimise the window-manager window
-
-	@return   returns non-zero on success or 0 if iconification is not support or was refused by the window manager.
-	If the application is running in a window managed environment Iconify attempts to iconify/minimise it.=20
-	*/
-	int Iconify(void);
 
 	/**
 	Load layout from the XML file
@@ -535,13 +509,6 @@ class SignalAppIdle : public sigc::signal<bool, PG_MessageObject*> {}
 	static void ClearOldMousePosition();
 
 	/**
-	Translates numeric keypad keys into other keys in dependency of NUM_LOCK state.
-	Should be called in eventKeyDown() for proper numeric keypad behaviour.
-	@param key SDL_KeyboardEvent* key to translate
-	 */
-	static void TranslateNumpadKeys(SDL_KeyboardEvent *key);
-
-	/**
 	Sends an event to the global message queue.
 
 	@param event SDL_Event message
@@ -676,9 +643,6 @@ protected:
 	bool eventQuit(int id, PG_MessageObject* widget, unsigned long data);
 
 	/**  */
-	bool eventResize(const SDL_ResizeEvent* event);
-
-	/**  */
 	virtual void eventInit();
 
 	/** */
@@ -706,6 +670,9 @@ private:
 
 	static PG_Application* pGlobalApp;
 	static SDL_Surface* screen;
+	static SDL_Window* mainWindow;
+	static SDL_Renderer* mainWindowRenderer;
+	static SDL_Texture* mainWindowTexture;
 
 	static bool bulkMode;
 	//static bool glMode;

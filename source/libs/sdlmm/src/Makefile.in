@@ -106,7 +106,7 @@ libSDLmm_la_LIBADD =
 am_libSDLmm_la_OBJECTS = sdlmm_global.lo sdlmm_basesurface.lo \
 	sdlmm_surface.lo sdlmm_display.lo sdlmm_pixelformat.lo \
 	sdlmm_srect.lo sdlmm_event.lo sdlmm_audio.lo sdlmm_timer.lo \
-	sdlmm_joystick.lo sdlmm_cd.lo sdlmm_videoinfo.lo
+	sdlmm_joystick.lo sdlmm_cd.lo
 libSDLmm_la_OBJECTS = $(am_libSDLmm_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -132,8 +132,7 @@ am__depfiles_remade = ./$(DEPDIR)/sdlmm_audio.Plo \
 	./$(DEPDIR)/sdlmm_display.Plo ./$(DEPDIR)/sdlmm_event.Plo \
 	./$(DEPDIR)/sdlmm_global.Plo ./$(DEPDIR)/sdlmm_joystick.Plo \
 	./$(DEPDIR)/sdlmm_pixelformat.Plo ./$(DEPDIR)/sdlmm_srect.Plo \
-	./$(DEPDIR)/sdlmm_surface.Plo ./$(DEPDIR)/sdlmm_timer.Plo \
-	./$(DEPDIR)/sdlmm_videoinfo.Plo
+	./$(DEPDIR)/sdlmm_surface.Plo ./$(DEPDIR)/sdlmm_timer.Plo
 am__mv = mv -f
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
@@ -279,8 +278,9 @@ PKG_CONFIG = @PKG_CONFIG@
 PKG_CONFIG_LIBDIR = @PKG_CONFIG_LIBDIR@
 PKG_CONFIG_PATH = @PKG_CONFIG_PATH@
 RANLIB = @RANLIB@
+SDL2_CONFIG = @SDL2_CONFIG@
+SDL2_FRAMEWORK = @SDL2_FRAMEWORK@
 SDL_CFLAGS = @SDL_CFLAGS@
-SDL_CONFIG = @SDL_CONFIG@
 SDL_LIBS = @SDL_LIBS@
 SDL_SOUND_LIB = @SDL_SOUND_LIB@
 SED = @SED@
@@ -385,7 +385,7 @@ HDRS = sdlmm_global.h sdlmm_misc.h sdlmm.h sdlmm_spoint.h sdlmm_srect.h sdlmm_co
 
 libSDLmm_la_SOURCES = sdlmm_global.cpp sdlmm_basesurface.cpp sdlmm_surface.cpp sdlmm_display.cpp sdlmm_pixelformat.cpp \
 	sdlmm_srect.cpp sdlmm_event.cpp sdlmm_audio.cpp sdlmm_timer.cpp \
-	sdlmm_joystick.cpp sdlmm_cd.cpp sdlmm_videoinfo.cpp
+	sdlmm_joystick.cpp sdlmm_cd.cpp 
 
 EXTRA_DIST = $(srcdir)/*.h
 all: all-am
@@ -453,7 +453,6 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sdlmm_srect.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sdlmm_surface.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sdlmm_timer.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sdlmm_videoinfo.Plo@am__quote@ # am--include-marker
 
 $(am__depfiles_remade):
 	@$(MKDIR_P) $(@D)
@@ -623,7 +622,6 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/sdlmm_srect.Plo
 	-rm -f ./$(DEPDIR)/sdlmm_surface.Plo
 	-rm -f ./$(DEPDIR)/sdlmm_timer.Plo
-	-rm -f ./$(DEPDIR)/sdlmm_videoinfo.Plo
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -680,7 +678,6 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/sdlmm_srect.Plo
 	-rm -f ./$(DEPDIR)/sdlmm_surface.Plo
 	-rm -f ./$(DEPDIR)/sdlmm_timer.Plo
-	-rm -f ./$(DEPDIR)/sdlmm_videoinfo.Plo
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 

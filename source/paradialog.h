@@ -95,7 +95,6 @@ class StartupScreen: public sigc::trackable {
        void Quit ();
 
        bool isFullscreen() { return fullScreen; };
-       bool toggleFullscreen();
 
        void setIcon( const ASCString& filename );
        
@@ -105,11 +104,6 @@ class StartupScreen: public sigc::trackable {
        bool queueWidgetForDeletion( PG_Widget* widget );
 
        ~ASC_PG_App();
-
-       void SetNewScreenSurface( SDL_Surface* surface );
-       
-       // sigc::signal<void> sigQuit;
-      // PG_Theme* LoadTheme(const char* xmltheme, bool asDefault = true, const char* searchpath = NULL );
  };
 
  extern ASC_PG_App& getPGApplication();

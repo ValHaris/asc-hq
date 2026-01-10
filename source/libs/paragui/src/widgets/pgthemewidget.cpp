@@ -198,7 +198,7 @@ bool PG_ThemeWidget::SetBackground(const std::string& filename, PG_Draw::BkMode 
 	}
 
 	Uint32 c = colorkey.MapRGB(my_background->format);
-	SDL_SetColorKey(my_background, SDL_SRCCOLORKEY, c);
+	SDL_SetColorKey(my_background, SDL_TRUE, c);
 
 	if(my_srfObject == NULL) {
 		CreateSurface();
@@ -313,7 +313,7 @@ bool PG_ThemeWidget::SetImage(SDL_Surface* image, bool bFreeImage) {
 
 bool PG_ThemeWidget::LoadImage(const std::string& filename, const PG_Color& key) {
 	if(LoadImage(filename)) {
-		SDL_SetColorKey(my_image, SDL_SRCCOLORKEY, key);
+		SDL_SetColorKey(my_image, SDL_TRUE, key);
 		return true;
 	}
 
@@ -449,8 +449,7 @@ SDL_Surface* PG_ThemeWidget::CreateThemedSurface(const PG_Rect& r, PG_Gradient* 
 		}
 	}
 
-	SDL_Surface *surface = SDL_CreateRGBSurface(
-	                           SDL_HWSURFACE,
+	SDL_Surface *surface = SDL_CreateRGBSurface( 0,
 	                           r.my_width,
 	                           r.my_height,
 	                           bpp,
@@ -465,14 +464,11 @@ SDL_Surface* PG_ThemeWidget::CreateThemedSurface(const PG_Rect& r, PG_Gradient* 
 		SDL_LockSurface(surface);
 	}
 
-	if ( bpp == 8 )
-		SDL_SetPalette ( surface, SDL_LOGPAL, screen->format->palette->colors, 0, 256 );
-
 	if(surface) {
 		if(background || gradient) {
 			PG_Draw::DrawThemedSurface(surface, PG_Rect(0, 0, r.my_width, r.my_height), gradient, background, bkmode, blend);
 		} else {
-			SDL_SetColorKey(surface, SDL_SRCCOLORKEY, 0);
+			SDL_SetColorKey(surface, SDL_TRUE, 0);
 		}
 	}
 

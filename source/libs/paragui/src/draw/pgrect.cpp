@@ -30,7 +30,7 @@
 
 PG_Rect PG_Rect::null_rect;
 
-PG_Rect::PG_Rect(Sint16 xv, Sint16 yv, Uint16 wv, Uint16 hv) :
+PG_Rect::PG_Rect(int xv, int yv, int wv, int hv) :
 		my_xpos(x),
 		my_ypos(y),
 		my_width(w),

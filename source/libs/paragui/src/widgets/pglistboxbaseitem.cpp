@@ -101,6 +101,7 @@ void PG_ListBoxBaseItem::eventHide() {
 
 bool PG_ListBoxBaseItem::eventMouseButtonUp(const SDL_MouseButtonEvent* button) {
 
+	/*
 	if(button->button == 4 && this != PG_Label::GetParent()->GetChildList()->first()) {
 		SDL_WarpMouse(button->x, button->y - my_height);
 		return true;
@@ -110,6 +111,7 @@ bool PG_ListBoxBaseItem::eventMouseButtonUp(const SDL_MouseButtonEvent* button) 
 		SDL_WarpMouse(button->x, button->y + my_height);
 		return true;
 	}
+	*/
 
 	if(button->button != 1) {
 		return false;

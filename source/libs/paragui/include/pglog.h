@@ -143,14 +143,14 @@ Set the key to toggle the console (default F12)
 @param	key	the key to toggle the console
 The key will be used by PG_Application to toggle the log console.
 */
-DECLSPEC void SetConsoleKey(SDLKey key);
+DECLSPEC void SetConsoleKey(SDL_KeyCode key);
 
 /**
 Get the current key to toggle console
  
 @return	current key to toggle the console
 */
-DECLSPEC SDLKey GetConsoleKey();
+DECLSPEC SDL_KeyCode GetConsoleKey();
 
 /**
 Set the title of the log console window

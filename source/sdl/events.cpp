@@ -27,7 +27,6 @@
 #include "../stack.h"
 #include "../basegfx.h"
 #include "../global.h"
-// #include "keysymbols.h"
 #include "../errors.h"
 #include "../util/messaginghub.h"
 #include "graphicsqueue.h"
@@ -184,16 +183,12 @@ char  skeypress(tkey keynr)
    return keystate[ keynr ];
 }
 
-bool isKeyPressed(SDLKey key)
+bool isKeyPressed(SDL_Keysym key)
 {
-   Uint8 *keystate = SDL_GetKeyState ( NULL );
+   SDL_Keysym *keystate = SDL_GetKeyState ( NULL );
    return keystate[ key ];
 }
 
-
-
-void wait(void)
-{}
 
 
 
@@ -297,85 +292,12 @@ int processEvents ( )
    SDL_Event event;
    int result;
    if ( SDL_PollEvent ( &event ) == 1) {
-      if ( _fillLegacyEventStructures ) {
-        switch ( event.type ) {
-         case SDL_MOUSEBUTTONUP:
-         case SDL_MOUSEBUTTONDOWN:
-            {
-               int taste = mouseTranslate(event.button.button - 1);
-               int state = event.button.type == SDL_MOUSEBUTTONDOWN;
-               if ( state )
-                  mouseparams.taste |= (1 << taste);
-               else
-                  mouseparams.taste &= ~(1 << taste);
-               mouseparams.x = event.button.x;
-               mouseparams.y = event.button.y;
-            }
-            break;
-
-         case SDL_MOUSEMOTION:
-            {
-               mouseparams.x = event.motion.x;
-               mouseparams.y = event.motion.y;
-               mouseparams.x1 = event.motion.x;
-               mouseparams.y1 = event.motion.y;
-               mouseparams.taste = 0;
-               for ( int i = 0; i < 3; i++ )
-                  if ( event.motion.state & (1 << i) )
-                     mouseparams.taste |= 1 << mouseTranslate(i);
-            }
-            break;
-         case SDL_KEYDOWN:
-            {
-               int r = SDL_mutexP ( keyboardmutex );
-               if ( !r ) {
-                  tkey key = event.key.keysym.sym;
-                  if ( event.key.keysym.mod & KMOD_ALT )
-                     key |= ct_altp;
-                  if ( event.key.keysym.mod & KMOD_CTRL )
-                     key |= ct_stp;
-                  if ( event.key.keysym.mod & KMOD_SHIFT )
-                     key |= ct_shp;
-                  keybuffer_sym.push ( key );
-
-                  int newsym = event.key.keysym.unicode;
-                  for ( int i = 0; i < keyTranslationNum; i++ )
-                     if ( event.key.keysym.unicode == keyTranslation[i][0] )
-                        newsym = keyTranslation[i][1];
-                  keybuffer_prnt.push ( newsym );
-                  r = SDL_mutexV ( keyboardmutex );
-               }
-            }
-            break;
-         case SDL_KEYUP:
-         {}
-            break;
-
-         case SDL_QUIT:
-            exitprogram = 1;
-            break;
-#ifdef _WIN32_
-         case SDL_ACTIVEEVENT: 
-            redrawScreen = true;
-            break;
-#endif
-        } 
-      } else {
-#ifdef _WIN32_
-         if ( event.type  == SDL_ACTIVEEVENT ) {
-            queueOperation( new UpdateRectOp( SDL_GetVideoSurface(), 0,0,0,0), false, true );
-         }
-#endif
-
-      }
       result = 1;
       if ( _queueEvents ) {
          SDL_mutexP( eventQueueMutex );
          eventQueue.push ( event );
          SDL_mutexV( eventQueueMutex );
       }
-
-
    } else
       result = 0;
 
@@ -588,7 +510,6 @@ int initializeEventHandling ( int (*gamethread)(void *) , void *data )
       exit(1);
    }
 
-   SDL_EnableUNICODE ( 1 );
    SDL_EnableKeyRepeat ( 250, 30 );
 
    

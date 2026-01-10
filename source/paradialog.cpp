@@ -249,46 +249,6 @@ void ASC_PG_App::eventIdle()
 
 #include "sdl/graphicsqueue.h"
 
-void ASC_PG_App::SetNewScreenSurface( SDL_Surface* surface )
-{
-   SetScreen(surface, false);
-}
-
-
-bool ASC_PG_App::toggleFullscreen()
-{
-   if ( !GetScreen() )
-      return false;
-
-   int w = GetScreen()->w;
-   int h = GetScreen()->h;
-
-   // queueOperation( new MouseVisibility( false ), true );
-
-   int flags = SDL_SWSURFACE;
-   if ( !fullScreen )
-      flags |= SDL_FULLSCREEN;
-
-   queueOperation( new InitScreenOp( w,h,bitsperpixel,flags, InitScreenOp::ScreenRegistrationFunctor( this, &ASC_PG_App::SetNewScreenSurface )), true );
-   fullScreen = GetScreen()->flags & SDL_FULLSCREEN;
-
-
-/*
-   SDL_Surface* screen = SDL_SetVideoMode(w, h, bitsperpixel, flags);
-   if (screen == NULL) {
-      screen = SDL_SetVideoMode(w, h, bitsperpixel, 0);
-      fullScreen = false;
-   } else
-      fullScreen = !fullScreen;
-   SetScreen(screen);
-*/
-
-   PG_Widget::UpdateScreen();
-
-   // queueOperation( new MouseVisibility( true ), true );
-
-   return true;
-}
 
 
 ASC_PG_App& getPGApplication()

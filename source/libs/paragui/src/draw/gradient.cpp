@@ -148,9 +148,9 @@ void PG_Draw::DrawGradient(SDL_Surface * surface, const PG_Rect& rect, const PG_
 	Uint32 pitch = surface->pitch;
 	Uint8* bits = ((Uint8 *) surface->pixels) + (rect.y + oy)* pitch + (rect.x + ox)* bpp;
 	Uint32 y_pitch = pitch*drawrect.h - bpp;
-	register Uint32 pixel = 0;
+	Uint32 pixel = 0;
 
-	for (register Sint32 x = 0; x < drawrect.w; x++) {
+	for (Sint32 x = 0; x < drawrect.w; x++) {
 
 		yr = (r2 - r1) / h;
 		yg = (g2 - g1) / h;
@@ -163,7 +163,7 @@ void PG_Draw::DrawGradient(SDL_Surface * surface, const PG_Rect& rect, const PG_
 		g += yg * oy;
 		b += yb * oy;
 
-		for (register Sint32 y = 0; y < drawrect.h; y++) {
+		for (Sint32 y = 0; y < drawrect.h; y++) {
 
 			/* Set the pixel */
 			switch (bpp) {

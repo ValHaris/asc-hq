@@ -128,14 +128,13 @@ extern volatile tmousesettings mouseparams;
  extern char  skeypress( tkey keynr);
  extern char *get_key(tkey keynr);
  extern int keypress(void);
- extern void wait(void);
  extern tkey char2key (int ch);
  extern void getkeysyms ( tkey* keysym, int* keyprnt );
 
  extern int exitprogram;
 
 
- extern bool isKeyPressed(SDLKey key);
+ extern bool isKeyPressed(SDL_Keysym key);
 
 /***************************************************************************
  *                                                                         *

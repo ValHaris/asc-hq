@@ -195,6 +195,8 @@ protected:
 	/** */
 	bool eventKeyDown(const SDL_KeyboardEvent* key);
 
+	bool eventTextInput(const SDL_TextInputEvent* text);
+
 	/** */
 	bool eventMouseButtonUp(const SDL_MouseButtonEvent* button);
 

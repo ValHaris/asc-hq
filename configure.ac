@@ -161,8 +161,8 @@ fi
 
 
 dnl check for libSDL
-SDL_VERSION=1.2.2
-AM_PATH_SDL($SDL_VERSION,:, AC_LIB_MISSING( SDL, http://www.libsdl.org/, [ (version >= $SDL_VERSION)])) 
+SDL_VERSION=2.25.0
+AM_PATH_SDL2($SDL_VERSION,:, AC_LIB_MISSING( SDL, http://www.libsdl.org/, [ (version >= $SDL_VERSION)])) 
 
 dnl set up new FLAGS
 CXXFLAGS="$CXXFLAGS $SDL_CFLAGS"

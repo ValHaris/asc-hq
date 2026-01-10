@@ -293,7 +293,6 @@ DECLSPEC void DrawTile(SDL_Surface* surface, const PG_Rect& ref, const PG_Rect& 
 
 #ifndef DOXYGEN_SKIP
 // These will disappear (moved to another lib)
-DECLSPEC void RectStretch(SDL_Surface* src_surface, int xs1, int ys1, int xs2, int ys2, SDL_Surface* dst_surface, int xd1, int yd1, int xd2, int yd2, Uint32* voiLUT);
 DECLSPEC void CreateFilterLUT();
 DECLSPEC void PG_SmoothFast(SDL_Surface* src, SDL_Surface* dst);
 DECLSPEC void InterpolatePixel(SDL_Surface* src, SDL_Surface* dest);

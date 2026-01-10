@@ -55,6 +55,9 @@
 SDL_mutex* PG_Application::mutexScreen = NULL;
 PG_Application* PG_Application::pGlobalApp = NULL;
 SDL_Surface* PG_Application::screen = NULL;
+SDL_Window* PG_Application::mainWindow = NULL;
+SDL_Renderer* PG_Application::mainWindowRenderer = NULL;
+SDL_Texture* PG_Application::mainWindowTexture = NULL;
 //std::string PG_Application::app_path = "";
 PG_Theme* PG_Application::my_Theme = NULL;
 bool PG_Application::bulkMode = false;
@@ -172,34 +175,22 @@ PG_Application::~PG_Application() {
 }
 
 /**  */
-bool PG_Application::InitScreen(int w, int h, int depth, Uint32 flags) {
+bool PG_Application::InitScreen(int w, int h) {
 
-	if(depth == 0) {
-		const SDL_VideoInfo* info = SDL_GetVideoInfo();
-		if ( info->vfmt->BitsPerPixel > 8 ) {
-			depth = info->vfmt->BitsPerPixel;
-		}
-	}
+	SDL_CreateWindowAndRenderer(0, 0, SDL_WINDOW_FULLSCREEN_DESKTOP, &mainWindow, &mainWindowRenderer);
+
+	screen = SDL_CreateRGBSurface(0, w, h, 32,
+					0x00FF0000,
+					0x0000FF00,
+					0x000000FF,
+					0xFF000000);
+
+	mainWindowTexture = SDL_CreateTexture(mainWindowRenderer,
+	                                            SDL_PIXELFORMAT_ARGB8888,
+	                                            SDL_TEXTUREACCESS_STREAMING,
+	                                            w, h);
 
 
-
-	//if(SDL_VideoModeOK(w, h, depth, flags) == 0)
-	//	return false;
-
-    screenInitialized = Trying;
-
-	/* Initialize the display */
-	PG_Application::screen = SDL_SetVideoMode(w, h, depth, flags);
-	if (PG_Application::screen == NULL) {
-		PG_LogERR("Could not set video mode: %s", SDL_GetError());
-		return false;
-	}
-
-#ifdef DEBUG
-	PrintVideoTest();
-#endif // DEBUG
-
-	SetScreen(screen);
 
 	screenInitialized = Finished;
 
@@ -210,6 +201,20 @@ bool PG_Application::InitScreen(int w, int h, int depth, Uint32 flags) {
 
 	return true;
 }
+
+void PG_Application::UpdateScreen(const SDL_Rect * srcrect, int numRects)
+{
+	SDL_UpdateTexture(mainWindowTexture, NULL, screen->pixels, screen->pitch);
+	SDL_RenderClear(mainWindowRenderer);
+	if ( !srcrect || numRects==0 )
+		SDL_RenderCopy(mainWindowRenderer, mainWindowTexture, NULL, NULL);
+	else
+		for (int i = 0; i < numRects; ++i)
+			SDL_RenderCopy(mainWindowRenderer, mainWindowTexture, &srcrect[i], &srcrect[i]);
+
+	SDL_RenderPresent(mainWindowRenderer);
+}
+
 
 /**  */
 void PG_Application::Run() {
@@ -367,7 +372,7 @@ void PG_Application::Quit() {
 
 /**  */
 bool PG_Application::eventKeyDown(const SDL_KeyboardEvent* key) {
-	SDLKey ckey = PG_LogConsole::GetConsoleKey();
+	SDL_KeyCode ckey = PG_LogConsole::GetConsoleKey();
 
 	if(ckey == 0) {
 		return false;
@@ -390,22 +395,6 @@ bool PG_Application::eventKeyUp(const SDL_KeyboardEvent* key) {
 	}
 
 	return false;
-}
-
-bool PG_Application::eventResize(const SDL_ResizeEvent* event) {
-	if (!event)
-		return false;
-
-	screen = SDL_SetVideoMode(
-	             event->w, event->h,
-	             screen->format->BitsPerPixel,
-	             screen->flags);
-
-	PG_Widget::UpdateRect(PG_Rect(0,0,event->w,event->h));
-	UpdateRect(screen,0,0,event->w,event->h);
-	sigVideoResize(this, event);
-
-	return true;
 }
 
 void PG_Application::SetCursor(SDL_Surface *image) {
@@ -470,28 +459,6 @@ void PG_Application::SetScreenUpdater( PG_ScreenUpdater* screenUpdater )
 }
 
 
-
-/**  */
-SDL_Surface* PG_Application::SetScreen(SDL_Surface* surf, bool initialize ) {
-	if (!surf)
-		return PG_Application::screen;
-
-	PG_Application::screen = surf;
-
-   if ( initialize ) {
-
-	//glMode = (surf->flags & SDL_OPENGLBLIT);
-
-      SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
-      SDL_EnableUNICODE(true);
-
-      PG_Widget::UpdateRect(PG_Rect(0,0,screen->w,screen->h));
-      UpdateRect(screen, 0,0,screen->w,screen->h);
-   }
-
-	return PG_Application::screen;
-}
-
 /**  */
 bool PG_Application::SetBackground(const std::string& filename, PG_Draw::BkMode mode) {
 	if (filename.empty()) {
@@ -551,20 +518,16 @@ void PG_Application::RedrawBackground(const PG_Rect& rect) {
 			my_scaled_background = NULL;
 		}
 		if(!my_scaled_background) {
-			SDL_Surface* temp = PG_Draw::ScaleSurface(my_background, static_cast<Uint16>(screen->w), static_cast<Uint16>(screen->h));
-			my_scaled_background = SDL_DisplayFormat(temp);
-			UnloadSurface(temp);
-			/*PG_Draw::ScaleSurface(my_background,
-						      static_cast<Uint16>(screen->w), static_cast<Uint16>(screen->h));*/
+			my_scaled_background = PG_Draw::ScaleSurface(my_background, static_cast<Uint16>(screen->w), static_cast<Uint16>(screen->h));
 		}
 		SDL_GetClipRect(screen, const_cast<PG_Rect*>(&fillrect));
 		SDL_SetClipRect(screen, const_cast<PG_Rect*>(&rect));
-		SDL_SetAlpha(my_scaled_background, 0, 0);
+		SDL_SetSurfaceAlphaMod(my_scaled_background, 0);
 		SDL_BlitSurface(my_scaled_background, const_cast<PG_Rect*>(&rect), screen, const_cast<PG_Rect*>(&rect));
 		SDL_SetClipRect(screen, const_cast<PG_Rect*>(&fillrect));
 
 	} else {
-		SDL_SetAlpha(my_background, 0, 0);
+		SDL_SetSurfaceAlphaMod(my_background, 0);
 		PG_Draw::DrawTile(screen, PG_Rect(0,0,screen->w,screen->h), rect, my_background);
 	}
 }
@@ -578,10 +541,6 @@ const std::string& PG_Application::GetRelativePath(const std::string& file) {
 	}
 
 	return buffer;
-}
-
-void PG_Application::FlipPage() {
-	SDL_Flip(screen);
 }
 
 #ifdef DEBUG
@@ -831,57 +790,19 @@ void PG_Application::SetIcon(const std::string& filename) {
 	}
 
 	// Set the colorkey
-	SDL_SetColorKey(icon, SDL_SRCCOLORKEY, *((Uint8 *)icon->pixels));
-
-	// Create the mask
-	pixels = (Uint8 *)icon->pixels;
-	mlen = icon->w*icon->h;
-	mask =  new Uint8[mlen/8];
-
-	if ( mask == NULL ) {
-		PG_LogWRN("Out of memory when allocating mask for icon !");
-		UnloadSurface(icon);
-		return;
-	}
-
-	memset(mask, 0, mlen/8);
-	for ( i=0; i<mlen; ) {
-		if ( pixels[i] != *pixels ) {
-			mask[i/8] |= 0x01;
-		}
-
-		++i;
-		if ( (i%8) != 0 ) {
-			mask[i/8] <<= 1;
-		}
-	}
+	SDL_SetColorKey(icon, SDL_TRUE, *((Uint8 *)icon->pixels));
 
 	//Set icon
 	if ( icon != NULL ) {
-		SDL_WM_SetIcon(icon, mask);
+		SDL_SetWindowIcon(mainWindow, icon);
 	}
-
-	//Clean up
-	delete[] mask;
 }
 
 void PG_Application::SetCaption(const std::string& title, const std::string& icon) {
-	SDL_WM_SetCaption(title.c_str(), NULL);
+	SDL_SetWindowTitle(mainWindow, title.c_str());
 	if (!icon.empty()) {
 		SetIcon(icon);
 	}
-}
-
-void PG_Application::GetCaption(std::string& title, std::string& icon) {
-	char** t = NULL;
-	char** i = NULL;
-	SDL_WM_GetCaption(t, i);
-	title = *t;
-	icon = *i;
-}
-
-int PG_Application::Iconify(void) {
-	return SDL_WM_IconifyWindow();
 }
 
 
@@ -1068,166 +989,11 @@ void PG_Application::eventIdle() {
 	SDL_Delay(1);
 }
 
-void PG_Application::TranslateNumpadKeys(SDL_KeyboardEvent *key) {
-	// note: works on WIN, test this on other platforms
-
-	// numeric keypad translation
-	if (key->keysym.unicode==0) {	 // just optimalisation
-		if (key->keysym.mod & KMOD_NUM) {
-			// numeric keypad is enabled
-			switch (key->keysym.sym) {
-				case SDLK_KP0       :
-					key->keysym.sym = SDLK_0;
-					key->keysym.unicode = SDLK_0;
-					break;
-				case SDLK_KP1       :
-					key->keysym.sym = SDLK_1;
-					key->keysym.unicode = SDLK_1;
-					break;
-				case SDLK_KP2       :
-					key->keysym.sym = SDLK_2;
-					key->keysym.unicode = SDLK_2;
-					break;
-				case SDLK_KP3       :
-					key->keysym.sym = SDLK_3;
-					key->keysym.unicode = SDLK_3;
-					break;
-				case SDLK_KP4       :
-					key->keysym.sym = SDLK_4;
-					key->keysym.unicode = SDLK_4;
-					break;
-				case SDLK_KP5       :
-					key->keysym.sym = SDLK_5;
-					key->keysym.unicode = SDLK_5;
-					break;
-				case SDLK_KP6       :
-					key->keysym.sym = SDLK_6;
-					key->keysym.unicode = SDLK_6;
-					break;
-				case SDLK_KP7       :
-					key->keysym.sym = SDLK_7;
-					key->keysym.unicode = SDLK_7;
-					break;
-				case SDLK_KP8       :
-					key->keysym.sym = SDLK_8;
-					key->keysym.unicode = SDLK_8;
-					break;
-				case SDLK_KP9       :
-					key->keysym.sym = SDLK_9;
-					key->keysym.unicode = SDLK_9;
-					break;
-				case SDLK_KP_PERIOD :
-					key->keysym.sym = SDLK_PERIOD;
-					key->keysym.unicode = SDLK_PERIOD;
-					break;
-				case SDLK_KP_DIVIDE :
-					key->keysym.sym = SDLK_BACKSLASH;
-					key->keysym.unicode = SDLK_BACKSLASH;
-					break;
-				case SDLK_KP_MULTIPLY:
-					key->keysym.sym = SDLK_ASTERISK;
-					key->keysym.unicode = SDLK_ASTERISK;
-					break;
-				case SDLK_KP_MINUS  :
-					key->keysym.sym = SDLK_MINUS;
-					key->keysym.unicode = SDLK_MINUS;
-					break;
-				case SDLK_KP_PLUS   :
-					key->keysym.sym = SDLK_PLUS;
-					key->keysym.unicode = SDLK_PLUS;
-					break;
-				case SDLK_KP_ENTER  :
-					key->keysym.sym = SDLK_RETURN;
-					key->keysym.unicode = SDLK_RETURN;
-					break;
-				case SDLK_KP_EQUALS :
-					key->keysym.sym = SDLK_EQUALS;
-					key->keysym.unicode = SDLK_EQUALS;
-					break;
-
-				default:
-					break;
-			}
-		} else {
-			// numeric keypad is disabled
-			switch (key->keysym.sym) {
-				case SDLK_KP0       :
-					key->keysym.sym = SDLK_INSERT;
-					key->keysym.unicode = 0;
-					break;
-				case SDLK_KP1       :
-					key->keysym.sym = SDLK_END;
-					key->keysym.unicode = 0;
-					break;
-				case SDLK_KP2       :
-					key->keysym.sym = SDLK_DOWN;
-					key->keysym.unicode = 0;
-					break;
-				case SDLK_KP3       :
-					key->keysym.sym = SDLK_PAGEDOWN;
-					key->keysym.unicode = 0;
-					break;
-				case SDLK_KP4       :
-					key->keysym.sym = SDLK_LEFT;
-					key->keysym.unicode = 0;
-					break;
-				case SDLK_KP6       :
-					key->keysym.sym = SDLK_RIGHT;
-					key->keysym.unicode = 0;
-					break;
-				case SDLK_KP7       :
-					key->keysym.sym = SDLK_HOME;
-					key->keysym.unicode = 0;
-					break;
-				case SDLK_KP8       :
-					key->keysym.sym = SDLK_UP;
-					key->keysym.unicode = 0;
-					break;
-				case SDLK_KP9       :
-					key->keysym.sym = SDLK_PAGEUP;
-					key->keysym.unicode = 0;
-					break;
-				case SDLK_KP_PERIOD :
-					key->keysym.sym = SDLK_DELETE;
-					key->keysym.unicode = 0;
-					break;
-				case SDLK_KP_DIVIDE :
-					key->keysym.sym = SDLK_BACKSLASH;
-					key->keysym.unicode = SDLK_BACKSLASH;
-					break;
-				case SDLK_KP_MULTIPLY:
-					key->keysym.sym = SDLK_ASTERISK;
-					key->keysym.unicode = SDLK_ASTERISK;
-					break;
-				case SDLK_KP_MINUS  :
-					key->keysym.sym = SDLK_MINUS;
-					key->keysym.unicode = SDLK_MINUS;
-					break;
-				case SDLK_KP_PLUS   :
-					key->keysym.sym = SDLK_PLUS;
-					key->keysym.unicode = SDLK_PLUS;
-					break;
-				case SDLK_KP_ENTER  :
-					key->keysym.sym = SDLK_RETURN;
-					key->keysym.unicode = SDLK_RETURN;
-					break;
-				case SDLK_KP_EQUALS :
-					key->keysym.sym = SDLK_EQUALS;
-					key->keysym.unicode = SDLK_EQUALS;
-					break;
-
-				default:
-					break;
-			}
-		}
-	}
-}
-
 bool PG_Application::PumpIntoEventQueue(const SDL_Event* event) {
 	PG_Widget* widget = NULL;
 
 	// do we have a capture hook?
-	if((event->type != SDL_USEREVENT) && (event->type != SDL_VIDEORESIZE)) {
+	if((event->type != SDL_USEREVENT) && (event->type != SDL_WINDOWEVENT)) {
 		if(captureObject) {
 			return captureObject->ProcessEvent(event);
 		}

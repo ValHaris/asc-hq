@@ -71,7 +71,7 @@ template < class ST, class DT >
 inline void StretchTemplateLUT(int x1, int x2, int y1, int y2, int yr, int yw, ST src_pixels, DT dst_pixels, Uint32* lut) {
 	int dx, dy, e, d, dx2;
 
-	register Uint32 p;
+	Uint32 p;
 
 	dx = (x2 - x1);
 	dy = (y2 - y1);
@@ -145,9 +145,9 @@ inline void RectStretchTemplate(SDL_Surface* src_surface, ST src, int xs1, int y
 	SDL_Rect clip;
 	SDL_GetClipRect(dst_surface, &clip);
 
-	register long src_pixels = ((long)src + ys1 * src_pitch + xs1 * src_bpp);
-	register long dst_pixels = ((long)dst + yd1 * dst_pitch + xd1 * dst_bpp);
-	register Uint32* lut = lutVOI;
+	long src_pixels = ((long)src + ys1 * src_pitch + xs1 * src_bpp);
+	long dst_pixels = ((long)dst + yd1 * dst_pitch + xd1 * dst_bpp);
+	Uint32* lut = lutVOI;
 
 	if (lut == NULL) {					// Stretch without lookup table
 		for (d = 0; (d <= dx) && (yd1 < dst_surface->h) && (ys1 < src_surface->h); d++) {
@@ -187,10 +187,10 @@ inline void RectStretchTemplate(SDL_Surface* src_surface, ST src, int xs1, int y
 inline void StretchTemplate24to32(int x1, int x2, int y1, int y2, int yr, int yw, Uint8* src_pixels, Uint32* dst_pixels, Uint32* lut) {
 	int dx, dy, e, d, dx2;
 
-	register Uint8 pr;
-	register Uint8 pg;
-	register Uint8 pb;
-	register Uint32 r;
+	Uint8 pr;
+	Uint8 pg;
+	Uint8 pb;
+	Uint32 r;
 
 	dx = (x2 - x1);
 	dy = (y2 - y1);
@@ -233,9 +233,9 @@ inline void RectStretch24to32(SDL_Surface* src_surface, Uint8* src, int xs1, int
 	SDL_Rect clip;
 	SDL_GetClipRect(dst_surface, &clip);
 
-	register long src_pixels = ((long)src + ys1 * src_pitch + xs1 * src_bpp);
-	register long dst_pixels = ((long)dst + yd1 * dst_pitch + xd1 * dst_bpp);
-	register Uint32* lut = lutVOI;
+	long src_pixels = ((long)src + ys1 * src_pitch + xs1 * src_bpp);
+	long dst_pixels = ((long)dst + yd1 * dst_pitch + xd1 * dst_bpp);
+	Uint32* lut = lutVOI;
 
 	for (d = 0; (d <= dx) && (yd1 < dst_surface->h) && (ys1 < src_surface->h); d++) {
 		StretchTemplate24to32(xd1, xd2, xs1, xs2, ys1, yd1, (Uint8*)src_pixels, (Uint32*)dst_pixels, lut);
@@ -252,63 +252,6 @@ inline void RectStretch24to32(SDL_Surface* src_surface, Uint8* src, int xs1, int
 
 }
 
-void PG_Draw::RectStretch(SDL_Surface* src_surface, int xs1, int ys1, int xs2, int ys2, SDL_Surface* dst_surface, int xd1, int yd1, int xd2, int yd2, Uint32* lutVOI) {
-	int src_bpp = src_surface->format->BytesPerPixel;
-	int dst_bpp = dst_surface->format->BytesPerPixel;
-
-	switch (dst_bpp) {
-
-		case 1:
-			switch (src_bpp) {
-
-				case 1:
-					if(src_surface->format->palette != NULL) {
-						SDL_SetColors(dst_surface, src_surface->format->palette->colors, 0, 256);
-					}
-					RectStretchTemplate(src_surface, (Uint8*)src_surface->pixels, xs1, ys1, xs2, ys2, dst_surface, (Uint8*)dst_surface->pixels, xd1, yd1, xd2, yd2, lutVOI);
-					break;
-
-				case 2:
-					RectStretchTemplate(src_surface, (Uint16*)src_surface->pixels, xs1, ys1, xs2, ys2, dst_surface, (Uint8*)dst_surface->pixels, xd1, yd1, xd2, yd2, lutVOI);
-					break;
-			}
-			break;
-
-		case 2:
-			switch (src_bpp) {
-
-				case 2:
-					RectStretchTemplate(src_surface, (Uint16*)src_surface->pixels, xs1, ys1, xs2, ys2, dst_surface, (Uint16*)dst_surface->pixels, xd1, yd1, xd2, yd2, NULL);
-					break;
-			}
-			break;
-
-		case 4:
-			switch (src_bpp) {
-
-				case 1:
-					RectStretchTemplate(src_surface, (Uint8*)src_surface->pixels, xs1, ys1, xs2, ys2, dst_surface, (Uint32*)dst_surface->pixels, xd1, yd1, xd2, yd2, lutVOI);
-					break;
-
-				case 3:
-					RectStretch24to32(src_surface, (Uint8*)src_surface->pixels, xs1, ys1, xs2, ys2, dst_surface, (Uint32*)dst_surface->pixels, xd1, yd1, xd2, yd2, lutVOI);
-					break;
-
-				case 2:
-					RectStretchTemplate(src_surface, (Uint16*)src_surface->pixels, xs1, ys1, xs2, ys2, dst_surface, (Uint32*)dst_surface->pixels, xd1, yd1, xd2, yd2, lutVOI);
-					break;
-
-				case 4:
-					RectStretchTemplate(src_surface, (Uint32*)src_surface->pixels, xs1, ys1, xs2, ys2, dst_surface, (Uint32*)dst_surface->pixels, xd1, yd1, xd2, yd2, NULL);
-					break;
-
-			}
-			break;
-	}
-
-	// copy the colorkey
-	//SDL_SetColorKey(dst_surface, SDL_SRCCOLORKEY, src_surface->format->colorkey);
-}
 
 
 typedef	Uint8 Pixel;
@@ -336,11 +279,11 @@ inline void get_row(Pixel* row, SDL_Surface* image, int y) {
 }
 
 inline void get_column(Pixel* column, SDL_Surface* image, int x) {
-	register int i, d;
-	register Pixel *p;
+	int i, d;
+	Pixel *p;
 	d = image->pitch;
 
-	register Uint8* pixels = (Uint8*)image->pixels + x;
+	Uint8* pixels = (Uint8*)image->pixels + x;
 
 	for (i = image->h, p = pixels; i-- > 0; p += d) {
 		*column++ = *p;
@@ -499,14 +442,14 @@ typedef double (*filterfunc)(double);
 void zoom(SDL_Surface* dst, SDL_Surface* src, double fwidth) {
 	SDL_Surface *tmp; 			/* intermediate image */
 	double xscale, yscale; 		/* zoom scale factors */
-	register int i, j, k; 			/* loop variables */
+	int i, j, k; 			/* loop variables */
 	double n; 				/* pixel number */
 	double center, left, right; 	/* filter calculation variables */
 	double width, fscale, weight; 	/* filter calculation variables */
 	Pixel *raster; 			/* a row or column of pixels */
-	register Uint8* tmp_pixels;
+	Uint8* tmp_pixels;
 	int tmp_pitch;
-	register double tmp_w, tmp_h, src_w;
+	double tmp_w, tmp_h, src_w;
 
 	if (!src || !dst)
 		return;
@@ -735,10 +678,10 @@ SDL_Surface* PG_CopyRect(SDL_Surface* s, int x, int y, int w, int h) {
 
 void PG_Draw::InterpolatePixel(SDL_Surface* src, SDL_Surface* dest) {
 
-	register Uint16 x;
-	register Uint16 y;
-	register const Uint8 *p;
-	register Uint8 *q;
+	Uint16 x;
+	Uint16 y;
+	const Uint8 *p;
+	Uint8 *q;
 	Uint8 const *sp = NULL;                          // initialization avoids compiler warning
 	Uint8 const *fp;
 	Uint8 *sq;
@@ -765,9 +708,9 @@ void PG_Draw::InterpolatePixel(SDL_Surface* src, SDL_Surface* dest) {
 	for (x = 0; x < Src_X; x++)
 		xvalue[x] = HALFSCALE;
 
-	register unsigned long yfill = SCALE;
-	register unsigned long yleft = syscale;
-	register int yneed = 1;
+	unsigned long yfill = SCALE;
+	unsigned long yleft = syscale;
+	int yneed = 1;
 	int ysrc = 0;
 
 	for (y = 0; y < Dest_Y; y++) {
@@ -802,7 +745,7 @@ void PG_Draw::InterpolatePixel(SDL_Surface* src, SDL_Surface* dest) {
 			}
 
 			for (x = 0, p = sp, q = xtemp; x < Src_X; x++) {
-				register signed long v = xvalue[x] + yfill * (signed long)(*(p++));
+				signed long v = xvalue[x] + yfill * (signed long)(*(p++));
 				v /= SCALE;
 				*(q++) = (unsigned char)v;  //& 0xFF; //(Uint8)((v > 255) ? 255 : v);
 				xvalue[x] = HALFSCALE;
@@ -821,10 +764,10 @@ void PG_Draw::InterpolatePixel(SDL_Surface* src, SDL_Surface* dest) {
 
 			sq += dest->pitch;
 		} else {
-			register signed long v = HALFSCALE;
-			register unsigned long xfill = SCALE;
-			register unsigned long xleft;
-			register int xneed = 0;
+			signed long v = HALFSCALE;
+			unsigned long xfill = SCALE;
+			unsigned long xleft;
+			int xneed = 0;
 			q = sq;
 
 			for (x = 0, p = xtemp; x < Src_X; x++, p++) {

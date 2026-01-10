@@ -1,6 +1,6 @@
 /*
  * SDmm - a C++ wrapper for SDL and related libraries
- * Copyright © 2001 David Hedbor <david@hedbor.org>
+ * Copyright ï¿½ 2001 David Hedbor <david@hedbor.org>
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -72,8 +72,8 @@ namespace SDLmm {
     Uint32 Bmask() const { return me->Bmask; }
     Uint32 Amask() const { return me->Amask; }
 
-    Color colorkey() const { return me->colorkey; }
-    Uint8 alpha() const { return me->alpha; }
+//    Color colorkey() const { return me->colorkey; }
+//    Uint8 alpha() const { return me->alpha; }
     SDL_Palette *palette() const { return me->palette; }
 
     //! Map a RGB color value to a pixel format.
