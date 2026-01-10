@@ -597,24 +597,49 @@ void checkJournal( Player& player )
 void viewjournal ( bool showEmptyDlg )
 {
    if ( !actmap->gameJournal.empty() ) {
-      tviewanytext vat;
-      vat.init ( "journal", actmap->gameJournal.c_str() );
-      vat.run();
-      vat.done();
+       ViewFormattedText vft("journal", actmap->gameJournal, PG_Rect(-1,-1,400, 400));
+       vft.Show();
+       vft.RunModal();
    } else
       if ( showEmptyDlg )
          infoMessage("no entries to journal yet");
 
 }
 
+class EditJournal : public ASC_PG_Dialog {
+    PG_MultiLineEdit* editor ;
+    bool ok() {
+        if ( editor->GetText() != actmap->newJournal )  {
+            actmap->lastjournalchange.set ( actmap->time.turn(), actmap->actplayer );
+            actmap->newJournal = editor->GetText();
+        }
+        QuitModal();
+        return true;
+    }
+public:
+    EditJournal() : ASC_PG_Dialog(NULL, PG_Rect(-1, -1, 450,360), "Add to Journal") {
+        StandardButtonDirection(Horizontal);
+
+        new TextRenderer(this, PG_Rect( 20, 30, Width()-30, 40), "The Journal is a shared space where players weave the game's unfolding story");
+
+        editor = new PG_MultiLineEdit( this, PG_Rect(20, 80, Width() - 30, Height() - 130));
+        editor->SetText( actmap->newJournal );
+        editor->SetInputFocus();
+
+        AddStandardButton("Cancel")->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &EditJournal::QuitModal )));
+        AddStandardButton("OK")->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &EditJournal::ok )));
+
+    }
+};
+
+
+
+
 void editjournal ( void )
 {
-   MultilineEdit ej ( actmap->newJournal, "Journal" );
-   ej.init ();
-   ej.run ();
-   if ( ej.changed() )
-      actmap->lastjournalchange.set ( actmap->time.turn(), actmap->actplayer );
-   ej.done ();
+    EditJournal ej;
+    ej.Show();
+    ej.RunModal();
 }
 
 

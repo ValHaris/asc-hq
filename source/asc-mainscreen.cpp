@@ -208,8 +208,8 @@ void Menu::setup()
    addbutton ( "view ~s~ent messages", ua_viewsentmessages );
    addbutton ( "view ~r~eceived messages", ua_viewreceivedmessages);
    currentMenu->addSeparator();
-   addbutton ( "view ~j~ournal", ua_viewjournal );
-   addbutton ( "~a~ppend to journal", ua_editjournal );
+   addbutton ( "view public ~j~ournal", ua_viewjournal );
+   addbutton ( "~w~rite public journal entry", ua_editjournal );
 
    addfield ( "~T~ools" );
    addbutton ( "save ~M~ap as PNG", ua_writemaptopcx );
