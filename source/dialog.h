@@ -43,20 +43,13 @@ extern void displaymessage2( const char* formatstring, ... );
 //! displays a message in the message line
 extern void  dispmessage2(int id, const char * st = NULL );
 extern void  dispmessage2( const ActionResult& result );
-   
-  
-  
-// extern void  statisticarmies(void);
-   
-// extern void  statisticbuildings(void);
-   
-
 
 extern Uint8 mix3colors ( int p1, int p2, int p3 );
 extern Uint8 mix2colors ( int a, int b );
 extern Uint8 mix4colors ( int a, int b, int c, int d );
 
 
+// depracated, use ViewFormattedText
   class   tviewanytext : public tdialogbox, public tviewtextwithscrolling {
                public:
                    const char                 *txt;
