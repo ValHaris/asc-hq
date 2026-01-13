@@ -63,6 +63,8 @@
 #include "lua/luastate.h"
 #include "widgets/multilistbox.h"
 #include "pgpropertyfield_integer.h"
+#include "dialogs/messagedialog.h"
+#include "widgets/textrenderer.h"
 
 bool       mapsaved;
 
@@ -981,76 +983,22 @@ void         changebuildingvalues( Building& b )
 }
 
 
-class   StringSelector : public tstringselect {
-    const char** text;
-public :
-    int lastchoice;
-    StringSelector ( const char* title_, const char** text_, int itemNum_ ) : text ( text_ )  {
-        lastchoice = 0;
-        numberoflines = itemNum_;
-        title = title_;
-    };
-    virtual void setup(void);
-    virtual void buttonpressed(int id);
-    virtual void run(void);
-    virtual void get_text(int nr);
-};
-
-void         StringSelector ::setup(void)
-{
-    action = 0;
-    ey = ysize - 90;
-    startpos = lastchoice;
-    addbutton("~O~k",20,ysize - 50,xsize-20,ysize - 20,0,1,13,true);
-    addkey ( 13, ct_enter );
-}
-
-
-void         StringSelector ::buttonpressed(int         id)
-{
-    tstringselect::buttonpressed(id);
-    switch (id) {
-
-    case 12:
-        if ( redline >= 0 )
-            action = id-10;
-        break;
-
-    case 13:
-        action = id-10;
-        break;
-    }
-}
-
-
-void         StringSelector ::get_text(int nr)
-{
-    strcpy(txt, text[nr] );
-}
-
-
-void         StringSelector ::run(void)
-{
-    do {
-        tstringselect::run();
-        if ( taste == ct_enter ) {
-            if ( redline >= 0 )
-                action = 2;
-            else
-                action = 3;
-        }
-    }  while ( action == 0 );
-}
-
-
 int selectString( int lc, const char* title, const char** text, int itemNum )
 {
-    StringSelector  ss ( title, text, itemNum );
-    ss.lastchoice = lc;
-    ss.init();
-    ss.run();
-    ss.done();
-    return ss.redline;
+    vector<ASCString> entries;
+    for ( int i = 0; i< itemNum; ++i )
+        entries.push_back(text[i]);
+
+    vector<ASCString> buttons;
+    buttons.push_back("OK");
+    buttons.push_back("Cancel");
+
+    pair<int,int> result = new_chooseString(title,entries,buttons,lc);
+
+    if ( result.first == 0 )
+        return result.second;
+    else
+        return lc;
 }
 
 
@@ -1456,25 +1404,6 @@ void selectunitsetfilter ( void )
 
 class UnitTypeTransformation {
 
-    class   UnitSetSelection : public tstringselect {
-    public :
-        virtual void setup(void);
-        virtual void buttonpressed(int id);
-        virtual void run(void);
-        virtual void get_text(int nr);
-    };
-    class   TranslationTableSelection : public tstringselect {
-        int unitsetnum;
-    public :
-        virtual void setup( void );
-        void setup2 ( int _unitset ) {
-            unitsetnum = _unitset;
-        };
-        virtual void buttonpressed(int id);
-        virtual void run(void);
-        virtual void get_text(int nr);
-    };
-
     int unitstransformed;
     int unitsnottransformed;
 
@@ -1485,84 +1414,6 @@ public:
     void run ( void );
 } ;
 
-
-void         UnitTypeTransformation :: UnitSetSelection::setup(void)
-{
-    action = 0;
-    title = "Select UnitSet";
-    numberoflines = unitSets.size();
-    ey = ysize - 60;
-    addbutton("~D~one",20,ysize - 40,170,ysize - 20,0,1,202,true);
-    addkey(202,ct_enter);
-    addbutton("~C~ancel",190,ysize - 40,340,ysize - 20,0,1,203,true);
-    addkey(203,ct_esc);
-}
-
-void         UnitTypeTransformation :: UnitSetSelection::buttonpressed(int         id)
-{
-    tstringselect::buttonpressed(id);
-    switch (id) {
-    case 202:
-    case 203:
-        action = id - 200;
-        break;
-    }
-}
-
-void         UnitTypeTransformation :: UnitSetSelection::get_text(int nr)
-{
-    strcpy(txt,unitSets[nr]->name.c_str() );
-}
-
-void         UnitTypeTransformation :: UnitSetSelection::run(void)
-{
-    do {
-        tstringselect::run();
-    }  while ( ! ( action > 0 || (msel == 1)) );
-
-    if ( action == 3)
-        redline = -1;
-}
-
-
-
-void         UnitTypeTransformation :: TranslationTableSelection::setup( void )
-{
-    action = 0;
-    title = "Select Transformation Table";
-    numberoflines = unitSets[unitsetnum]->transtab.size();
-    ey = ysize - 60;
-    addbutton("~D~one",20,ysize - 40,170,ysize - 20,0,1,202,true);
-    addkey(202,ct_enter);
-    addbutton("~C~ancel",190,ysize - 40,340,ysize - 20,0,1,203,true);
-    addkey(203,ct_esc);
-}
-
-void         UnitTypeTransformation :: TranslationTableSelection::buttonpressed(int         id)
-{
-    tstringselect::buttonpressed(id);
-    switch (id) {
-    case 202:
-    case 203:
-        action = id-200;
-        break;
-    }
-}
-
-void         UnitTypeTransformation :: TranslationTableSelection::get_text(int nr)
-{
-    strcpy(txt, unitSets[unitsetnum]->transtab[nr]->name.c_str() );
-}
-
-void         UnitTypeTransformation :: TranslationTableSelection::run(void)
-{
-    do {
-        tstringselect::run();
-    }  while ( ! ( action > 0 || (msel == 1)) );
-
-    if ( action == 3)
-        redline = -1;
-}
 
 VehicleType* UnitTypeTransformation :: transformvehicletype ( const VehicleType* type, int unitsetnum, int translationnum )
 {
@@ -1597,24 +1448,36 @@ void  UnitTypeTransformation ::transformvehicle ( Vehicle* veh, int unitsetnum, 
 
 void UnitTypeTransformation :: run ( void )
 {
-    UnitSetSelection uss;
-    uss.init();
-    uss.run();
-    uss.done();
+    vector<ASCString> unitSetNames;
+    for ( UnitSets::iterator i = unitSets.begin(); i != unitSets.end(); ++i)
+        unitSetNames.push_back((*i)->name);
 
-    int unitsetnum = uss.redline;
-    if ( unitsetnum == -1 )
+    vector<ASCString> buttons;
+    buttons.push_back("OK");
+    buttons.push_back("Cancel");
+
+    pair<int,int> unitSetSelection = new_chooseString("Select Unitset", unitSetNames, buttons, 0);
+    if ( unitSetSelection.first == 1)
         return;
 
-    TranslationTableSelection tss;
-    tss.setup2( unitsetnum );
-    tss.init();
-    tss.run();
-    tss.done();
-
-    int translationsetnum = tss.redline;
-    if ( translationsetnum == -1 || translationsetnum == 255 )
+    if ( unitSetSelection.second < 0 || unitSetSelection.second >= unitSets.size() )
         return;
+
+    const SingleUnitSet* unitSet = unitSets[unitSetSelection.second];
+
+    vector<ASCString> translationTableNames;
+    for (std::vector<SingleUnitSet::TranslationTable*>::const_iterator i = unitSet->transtab.begin(); i != unitSet->transtab.end(); ++i)
+        translationTableNames.push_back((*i)->name);
+
+    pair<int,int> translationSelection = new_chooseString("Select Translation", translationTableNames, buttons, 0);
+    if ( translationSelection.first == 1)
+        return;
+
+    if ( translationSelection.second < 0 || translationSelection.second >= unitSet->transtab.size() )
+        return;
+
+    int unitsetnum = unitSetSelection.second;
+    int translationsetnum = translationSelection.second;
 
     unitstransformed = 0;
     unitsnottransformed = 0;
@@ -1660,10 +1523,10 @@ void UnitTypeTransformation :: run ( void )
         s += strrr ( unitsnottransformed );
         s += " units were NOT transformed\n (production included)";
 
-        tviewanytext vat;
-        vat.init ( "warningMessage", s.c_str() );
-        vat.run();
-        vat.done();
+
+        ViewFormattedText vft ( "Warnings", s, PG_Rect(-1, -1, 500, 400) );
+        vft.Show();
+        vft.RunModal();;
     } else
         displaymessage ( "All units were transformed !\ntotal number: %d", 3, unitstransformed );
 
@@ -2351,7 +2214,7 @@ void generateTechTree()
             if ( r.first == 0 ) {
 
 
-                bool reduce = choice_dlg ( "generate sparce tree ?", "~y~es", "~n~o" ) == 1;
+                bool reduce = choice_dlg ( "generate sparse tree ?", "~y~es", "~n~o" ) == 1;
 
                 tn_file_buf_stream f ( filename, tnstream::writing );
 
@@ -3392,7 +3255,8 @@ void CopyMap::fieldOperator( const MapCoordinate& point )
 
         MapField* source = actmap->getField( point );
         MapField* target = map->getField( mapX, mapY );
-
+        if (!source || !target)
+            return;
 
 
         copyFieldStep1( source, target, true, true, true );
@@ -3401,6 +3265,8 @@ void CopyMap::fieldOperator( const MapCoordinate& point )
     {
         MapField* source = actmap->getField( point );
         MapField* target = map->getField( mapX, mapY );
+        if (!source || !target)
+            return;
 
         copyFieldStep2( source, target, map, directionTranslation, playerTranslation, true, true, true, true );
 

@@ -201,10 +201,10 @@ class ContainerBaseType: public MapItemType, public LoadableItemType, public Mem
 
      
 
-        //! currently only used by mining stations: the efficiency of the resource extraction from the ground. Base is 1024
+        //! not used any more - originally: used by mining stations: the efficiency of the resource extraction from the ground. Base is 1024
      int          efficiencyfuel;
 
-        //! currently only used by mining stations: the efficiency of the resource extraction from the ground. Base is 1024
+        //! not used any more - originally: used by mining stations: the efficiency of the resource extraction from the ground. Base is 1024
      int          efficiencymaterial;
 
         //! the maximum number of research points a research center may produce

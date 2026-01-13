@@ -127,7 +127,8 @@ libgamedialogs_la_OBJECTS = $(am_libgamedialogs_la_OBJECTS)
 libmapeddialogs_la_DEPENDENCIES =
 am_libmapeddialogs_la_OBJECTS = cargoeditor.lo cargowidget.lo \
 	eventeditor.lo newmap.lo exchangegraphics.lo importbi3map.lo \
-	edittechadapter.lo vehiclepropertyeditor.lo
+	edittechadapter.lo vehiclepropertyeditor.lo \
+	buildingpropertyeditor.lo
 libmapeddialogs_la_OBJECTS = $(am_libmapeddialogs_la_OBJECTS)
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
@@ -148,6 +149,7 @@ am__depfiles_remade = ./$(DEPDIR)/actionmanager.Plo \
 	./$(DEPDIR)/actionwidget.Plo ./$(DEPDIR)/admingame.Plo \
 	./$(DEPDIR)/alliancesetup.Plo \
 	./$(DEPDIR)/ammotransferdialog.Plo ./$(DEPDIR)/attackpanel.Plo \
+	./$(DEPDIR)/buildingpropertyeditor.Plo \
 	./$(DEPDIR)/buildingtypeselector.Plo \
 	./$(DEPDIR)/cargodialog.Plo ./$(DEPDIR)/cargoeditor.Plo \
 	./$(DEPDIR)/cargowidget.Plo ./$(DEPDIR)/choosetech.Plo \
@@ -431,7 +433,7 @@ libgamedialogs_la_SOURCES = cargodialog.cpp unitcounting.cpp cargowidget.cpp amm
 
 libgamedialogs_la_LIBADD = @SDL_LIBS@ 
 libmapeddialogs_la_SOURCES = cargoeditor.cpp cargowidget.cpp eventeditor.cpp newmap.cpp exchangegraphics.cpp importbi3map.cpp edittechadapter.cpp \
-                               vehiclepropertyeditor.cpp
+                               vehiclepropertyeditor.cpp buildingpropertyeditor.cpp
 
 libmapeddialogs_la_LIBADD = @SDL_LIBS@
 EXTRA_DIST = $(srcdir)/*.h
@@ -501,6 +503,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/alliancesetup.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ammotransferdialog.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/attackpanel.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/buildingpropertyeditor.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/buildingtypeselector.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cargodialog.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/cargoeditor.Plo@am__quote@ # am--include-marker
@@ -707,6 +710,7 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/alliancesetup.Plo
 	-rm -f ./$(DEPDIR)/ammotransferdialog.Plo
 	-rm -f ./$(DEPDIR)/attackpanel.Plo
+	-rm -f ./$(DEPDIR)/buildingpropertyeditor.Plo
 	-rm -f ./$(DEPDIR)/buildingtypeselector.Plo
 	-rm -f ./$(DEPDIR)/cargodialog.Plo
 	-rm -f ./$(DEPDIR)/cargoeditor.Plo
@@ -799,6 +803,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/alliancesetup.Plo
 	-rm -f ./$(DEPDIR)/ammotransferdialog.Plo
 	-rm -f ./$(DEPDIR)/attackpanel.Plo
+	-rm -f ./$(DEPDIR)/buildingpropertyeditor.Plo
 	-rm -f ./$(DEPDIR)/buildingtypeselector.Plo
 	-rm -f ./$(DEPDIR)/cargodialog.Plo
 	-rm -f ./$(DEPDIR)/cargoeditor.Plo

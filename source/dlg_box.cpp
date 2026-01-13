@@ -51,6 +51,9 @@
 #endif
 
 
+#include <pgpropertyeditor.h>
+#include <pgpropertyfield_integer.h>
+
 
 char strrstring[200];
 
@@ -3381,378 +3384,58 @@ int         viewtextquery( int          id,
 tdisplaymessage* messagebox = NULL;
 
 
+class GetInt : public  ASC_PG_Dialog {
+    int value;
+    int originalvalue;
 
+    int minvalue;
+    int maxvalue;
 
+    bool cancel() {
+        if ( onCancel == ReturnZero )
+            value = 0;
+        else
+            value = originalvalue;
+        QuitModal();
+        return true;
+    }
 
-tstringselect :: tstringselect ( )
-{
-   numberoflines = 0;
-   firstvisibleline = 0;
-   redline = 0;
-   startpos = 0;
-}
+    bool ok() {
+        if ( value < minvalue || value > maxvalue) {
+            warningMessage(ASCString("value must be between ") + ASCString::toString(minvalue) + " and " + ASCString::toString(maxvalue));
+            return false;
+        }
+        sigValueSet(value);
+        QuitModal();
+        return true;
+    }
+public:
+    sigc::signal<void,int> sigValueSet;
 
+    int getValue() { return value; };
+    enum CancelMode { ReturnZero, ReturnOriginal } onCancel;
 
-void         tstringselect::init(void)
-{
-   tdialogbox::init();
+    GetInt(const ASCString& title, const ASCString& name, int original, int minvalue, int maxvalue, CancelMode onCancel = ReturnZero )
+    : ASC_PG_Dialog(NULL, PG_Rect(-1, -1, 300, 150), title), value(original), originalvalue(original), minvalue(minvalue), maxvalue(maxvalue), onCancel(onCancel) {
 
-   xsize = 570;
-   ysize = 320;
-   x1 = ( 640 -xsize ) / 2;
-   y1 = ( 480 -ysize ) / 2;
+        ASC_PropertyEditor* propertyEditor = new ASC_PropertyEditor( this, PG_Rect( 10, GetTitlebarHeight(), Width() - 20, Height() - GetTitlebarHeight() - 50 ), "PropertyEditor", name.empty()? 0 : 70 );
 
-   sy = 45;
+        (new PG_PropertyField_Integer<int>( propertyEditor, name, value ))->SetRange(minvalue, maxvalue);
 
-   sx = 20;
-   title = "Text-Box";
-   windowstyle = windowstyle ^ dlg_in3d;
-   lnshown = 10;
-   ey = ysize - 50;
-   ex = xsize - 30;
-   setup();
-
-   if (startpos >= numberoflines ) startpos = numberoflines-1;
-   if (startpos > lnshown -1 ) {
-      firstvisibleline = startpos - ( lnshown - 1 );
-      redline = startpos;
-   } else {
-      redline = startpos;
-   } /* endif */
-
-   dk = 0;
-   action = 0;
-   dx = (ey - sy) / lnshown;
-   if (numberoflines > lnshown) {
-      scrollbarvisible = true;
-      addscrollbar(ex + 10 ,sy ,ex + 20,ey ,&numberoflines,lnshown,&firstvisibleline,1,0);
-   }
-   else scrollbarvisible = false;
-   buildgraphics();
-   rahmen(true,x1 + sx , y1 + sy,x1 + ex,y1 + ey);
-   mousevisible(true);
-   activefontsettings.font = schriften.smallarial;
-   activefontsettings.color = black;
-   activefontsettings.justify = lefttext;
-   activefontsettings.background = lightgray;
-   activefontsettings.height = 15;
-   viewtext();
-}
-
-
-void         tstringselect::setup(void)
-{
-}
-
-
-void         tstringselect::buttonpressed(int         id)
-{
-   tdialogbox::buttonpressed(id);
-   if (id == 1) {
-      if (firstvisibleline > redline) redline = firstvisibleline;
-      if (firstvisibleline + lnshown - 1 < redline) redline = firstvisibleline + lnshown - 1;
-      viewtext();
-   }
-}
-
-
-void         tstringselect::run(void)
-{
-  char      view;
-  int      my;
-  int         ms;
-
-   tdialogbox::run();
-   if (numberoflines > 0) {
-      msel = 0;
-      if (getmousestatus() == 2) {
-         if ((( ms = mouseparams.taste ) == 0) && (dk == 1)) dk = 2;
-         if ((mouseparams.x > x1 + 10) & (mouseparams.x < x1 + xsize - 40) && (ms != 0)) {
-            my = mouseparams.y - y1 - sy;
-            my = my / dx;
-            if ((my >= 0) && (my <= lnshown - 1) && (my <= numberoflines - 1)) {
-               mouseselect = firstvisibleline + my;
-               if ((mouseselect == redline) && (dk == 2)) {
-                  msel = ms;
-                  dk = 0;
-               }
-               else {
-                  redline = mouseselect;
-                  dk = 1;
-                  ms =0;
-                  viewtext();
-               }
-            }
-         }
-      }
-      switch (taste) {
-
-         case ct_up:   {
-                   view = true;
-                   if (redline > 0) redline--;
-                   else view = false;
-                   if ((redline < firstvisibleline) && (firstvisibleline > 0)) {
-                      firstvisibleline--;
-                      showbutton( 1 );
-                   }
-                   if (view) viewtext();
-                }
-         break;
-         case ct_pos1:   {
-                   view = false;
-                   if  ( (redline > 0) || (firstvisibleline > 0) ) {
-                      view = true;
-                      redline = 0;
-                      firstvisibleline = 0;
-                   }
-                   if (view) viewtext();
-                }
-         break;
-
-         case ct_ende:   {
-                   view = false;
-                   if (redline < numberoflines -1 ) {
-                      view = true;
-                      redline = numberoflines -1 ;
-                      firstvisibleline = numberoflines - lnshown;
-                   }
-                   if (view) viewtext();
-                }
-         break;
-
-         case ct_down:   {
-                     view = true;
-                     if (redline < numberoflines - 1) redline++;
-                     else view = false;
-                     if ((redline > firstvisibleline + lnshown - 1) && (firstvisibleline + lnshown - 1 <= numberoflines)) {
-                        firstvisibleline++;
-                        showbutton( 1 );
-                     }
-                     if (view) viewtext();
-                  }
-      break;
-      }
-   }
-   else redline = -1;
-}
-
-
-void         tstringselect::resettextfield(void)
-{
-   bar(x1 + sx,y1 + sy,x1 + ex,y1 + ey,lightgray);
-   rahmen(true,x1 + sx ,y1 + sy,x1 + ex,y1 + ey);
-}
-
-void   tstringselect::get_text(int nr) //gibt in txt den string zur?ck
-{
-  strcpy(txt,"");
-}
-
-void tstringselect::scrollbar_on(void)
-{
-   scrollbarvisible = true;
-   addscrollbar(ex + 10 ,sy - 10,ex + 30,ey + 10,&numberoflines,lnshown,&firstvisibleline,1,0);
-}
-
-
-void         tstringselect::viewtext(void)
-{
-  char         s1[200];
-  Uint16         yp;
-  int      l;
-
-   mousevisible(false);
-   //showbutton(1);
-   npush(activefontsettings.length);
-   activefontsettings.length = ex - sx - 10;
-   yp = y1 + sy + 5;
-   l = firstvisibleline;
-   if (numberoflines > 0) {
-         while ((l<numberoflines) && (l-firstvisibleline < lnshown)) {
-            get_text(l);
-            strcpy(s1,txt);
-            if (l == redline ) activefontsettings.color=red;
-            else activefontsettings.color=lightblue;
-            showtext2(s1,x1+ sx + 5,yp+( l-firstvisibleline ) * dx );
-            l++;
-         } /* endwhile */
-
-   }
-   // else showtext2("No text available !",x1 + 50,yp + 50);
-
-   //rahmen(true,x1  + sx ,y1 + sy,x1  + ex ,y1 + ey );
-   npop(activefontsettings.length);
-   mousevisible(true);
-}
-
-
-void         tstringselect::done(void)
-{
-   tdialogbox::done();
-   while ( mouseparams.taste )
-     releasetimeslice();
-}
-
-
-class  tgetid : public tdialogbox {
-          public :
-              tgetid () { onCancel = ReturnZero; };
-              enum CancelMode { ReturnZero, ReturnOriginal } onCancel;
-              int action;
-              int mid;
-              char nt[200];
-              void init(void);
-              int max,min;
-              virtual void run(void);
-              virtual void buttonpressed(int id);
-          };
-
-void         tgetid::init(void)
-{
-   tdialogbox::init();
-   title = nt;
-   x1 = 200;
-   xsize = 220;
-   y1 = 150;
-   ysize = 140;
-   action = 0;
-
-   if ((mid < min) || (mid > max)) mid = 42;   /* ! */
-
-   windowstyle = windowstyle ^ dlg_in3d;
-
-
-   addbutton("~D~one",20,ysize - 40,100,ysize - 20,0,1,1,true);
-   addkey(1,ct_enter);
-   addbutton("~C~ancel",120,ysize - 40,200,ysize - 20,0,1,2,true);
-   addbutton("",20,60,xsize - 20,80,2,1,3,true);
-   addeingabe(3,&mid,min,max);
-
-   buildgraphics();
-
-   mousevisible(true);
-}
-
-
-void         tgetid::run(void)
-{
-   int orig = mid;
-   tdialogbox::run ();
-   pbutton pb = firstbutton;
-   while ( pb &&  (pb->id != 3))
-      pb = pb->next;
-
-   if ( pb )
-      if ( pb->id == 3 )
-         execbutton( pb , false );
-
-   do {
-      tdialogbox::run();
-   }  while (!((taste == ct_esc) || ((action == 1) || (action == 2))));
-   if ((action == 2) || (taste == ct_esc)){
-       if ( onCancel == ReturnZero )
-          mid = 0;
-       else
-          mid = orig;
-   }
-}
-
-
-void         tgetid::buttonpressed(int         id)
-{
-   tdialogbox::buttonpressed(id);
-   switch (id) {
-
-      case 1:
-      case 2:   action = id;
-   break;
-   }
-}
-
-
-int      getid( const char*  title, int lval,int min,int max)
-
-{ tgetid     gi;
-   gi.onCancel = tgetid::ReturnOriginal;
-
-   strcpy( gi.nt, title );
-   gi.max = max;
-   gi.min = min;
-   gi.mid = lval;
-   gi.init();
-   gi.run();
-   gi.done();
-   return gi.mid;
-}
-
-
-class   ChooseString : public tstringselect {
-   private:
-      const vector<ASCString>& strings;
-      const vector<ASCString>& buttons;
-      char buf[10000];
-   public :
-      ChooseString ( const ASCString& _title, const vector<ASCString>& _strings , const vector<ASCString>& _buttons, int defaultEntry );
-      void setup( );
-      virtual void buttonpressed(int id);
-      void run(void);
-      virtual void get_text(int nr);
+        AddStandardButton("Cancel")->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &GetInt::cancel )));
+        AddStandardButton("OK")->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &GetInt::ok)));
+    }
 };
 
 
 
-ChooseString :: ChooseString ( const ASCString& _title, const vector<ASCString>& _strings, const vector<ASCString>& _buttons, int defaultEntry )
-              : strings ( _strings ), buttons ( _buttons )
+int      getid( const ASCString& title, int lval,int min,int max, const ASCString& valueName)
 {
-   strcpy ( buf, _title.c_str() );
-   startpos = defaultEntry;
+    GetInt editor(title, valueName, lval, min, max, GetInt::ReturnOriginal );
+    editor.Show();
+    editor.RunModal();
+    return editor.getValue();
 }
-
-
-void         ChooseString ::setup( )
-{
-   action = 0;
-   title = buf;
-   numberoflines = strings.size();
-   ey = ysize - 50;
-   if ( buttons.size() > 4 )
-      xsize = 640;
-   int width = (xsize-40)/buttons.size();
-   for ( int i = 0; i< buttons.size(); ++i )
-      addbutton( buttons[i].c_str(),25 + i*width,ysize - 45,15 + (i+1)*width,ysize - 20,0,1,20+i,true);
-}
-
-
-void         ChooseString ::buttonpressed(int         id)
-{
-   tstringselect::buttonpressed(id);
-   if ( id >= 20 )
-      action =id ;
-}
-
-
-void         ChooseString ::get_text(int nr)
-{
-   strcpy ( txt, strings[nr].c_str());
-}
-
-
-void         ChooseString ::run(void)
-{
-   do {
-      tstringselect::run();
-      /*
-      if ( taste == ct_enter )
-         if ( redline >= 0 )
-            action = 2;
-      */
-   }  while ( action == 0 );
-}
-
-
-
-
-
 
 
 
@@ -3770,18 +3453,7 @@ int chooseString ( const ASCString& title, const vector<ASCString>& entries, int
 pair<int,int> chooseString ( const ASCString& title, const vector<ASCString>& entries, const vector<ASCString>& buttons, int defaultEntry  )
 {
 
-   if ( legacyEventSystemActive() ) {
-      ChooseString  gps ( title, entries, buttons, defaultEntry );
-
-      gps.init();
-      gps.run();
-      gps.done();
-      return make_pair(gps.action-20,gps.redline);
-   } else {
-      return new_chooseString ( title, entries, buttons, defaultEntry );
-   }
-   
-
+  return new_chooseString ( title, entries, buttons, defaultEntry );
 }
 
 

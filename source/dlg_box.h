@@ -405,30 +405,7 @@ extern char*  strrrd8d(int  l);           // abrunden
 extern ASCString readtextmessage( int id );
 
 
-
-class   tstringselect : public tdialogbox {
-                public :
-                     char txt[2000];
-                     int  ok;
-                     int sy,ey,sx,ex,action,dx;
-                     int dk;
-                     int msel,mouseselect,redline,lnshown,numberoflines,firstvisibleline,startpos;
-                     int scrollbarvisible;
-                     void init(void);
-                     tstringselect ( );
-                     virtual void setup(void);
-                     virtual void run(void);
-                     virtual void buttonpressed(int id);
-                     void scrollbar_on(void);
-                     void viewtext(void);
-                     virtual void resettextfield(void);
-                     virtual void get_text( int nr);
-                     void done(void);
-                 };
-
-
-                 
-extern int getid( const char* title, int lval, int min, int max );
+extern int getid( const ASCString& title, int lval,int min,int max, const ASCString& valueName = "");
 extern ASCString editString( const ASCString& title, const ASCString& defaultValue = "" );
 
 
