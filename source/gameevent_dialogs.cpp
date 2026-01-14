@@ -48,6 +48,7 @@
 
 #include "dialogs/fieldmarker.h"
 #include "widgets/textrenderer.h"
+#include "widgets/playerselector.h"
 #include "dialogs/selectionwindow.h"
 #include "dialogs/vehicletypeselector.h"
 #include <pgpropertyeditor.h>
@@ -243,116 +244,29 @@ int selectunit ( int unitnetworkid )
 }
 
 
-class  tplayerselall : public tdialogbox {
-          public :
-              int action;
-              int bkgcolor;
-              int playerbit;
-              void init(void);
-              virtual void run(void);
-              virtual void buttonpressed(int id);
-              void anzeige(void);
-              };
+class PlayerMultiSelect : public ASC_PG_Dialog {
+    PlayerSelector* selector;
+    int& players;
 
-
-
-
-void         tplayerselall::init(void)
-{
-   char *s1;
-
-   tdialogbox::init(); 
-   title = "Player Select";
-   x1 = 50;
-   xsize = 370;
-   y1 = 50;
-   ysize = 380;
-   action = 0;
-   bkgcolor = lightgray;
-
-   windowstyle = windowstyle ^ dlg_in3d;
-
-   int i;
-   for (i=0;i<8 ;i++ ) {
-      s1 = new(char[12]);
-      strcpy(s1,"Player ~");
-      strcat(s1,strrr(i+1));
-      strcat(s1,"~");
-      addbutton(s1,20,55+i*30,150,75+i*30,0,1,6+i,true);
-      addkey(1,ct_1+i);
-   }
-
-//   addbutton("~A~ll not allied",20,ysize - 40,170,ysize - 20,0,1,1,true);
-//   addkey(1,ct_enter);
-   addbutton("~O~K",200,ysize - 40,350,ysize - 20,0,1,2,true);
-
-   buildgraphics();
-
-   for ( i=0; i<8 ;i++ )
-      bar(x1 + 170,y1 + 60 + i*30 ,x1 + 190 ,y1 + 70 + i * 30,20 + ( i << 3 ));
-
-   anzeige();
-
-   mousevisible(true);
-}
-
-void         tplayerselall::anzeige(void)
-{
-   mousevisible(false);
-   for (int i=0;i<8 ;i++ ) {
-      if ( playerbit & ( 1 << i ) ) 
-         rectangle (x1 + 16,y1+51+i*30,x1+154,y1+79+i*30, 20 );
-      else
-         rectangle (x1 + 16,y1+51+i*30,x1+154,y1+79+i*30, bkgcolor );
-   }
-   mousevisible(true);
-}
-
-
-void         tplayerselall::run(void)
-{
-
-   do {
-      tdialogbox::run();
-      // if (taste == ct_f1) help ( 1060 );
-   }  while (!((taste == ct_esc) || ((action == 1) || (action ==2))));
-   if ((action == 1) || (taste == ct_esc))
-      playerbit = 1;
-}
-
-
-void         tplayerselall::buttonpressed(int         id)
-{
-   tdialogbox::buttonpressed(id);
-   switch (id) {
-
-      case 1:
-      case 2:   action = id;
-        break;
-      case 6:
-      case 7:
-      case 8:
-      case 9:
-      case 10:
-      case 11:
-      case 12:
-      case 13: {
-            playerbit ^=  1 << ( id-6 ) ;
-         anzeige();
-      }
-   break; 
-   } 
-} 
+    bool apply() {
+        players = selector->getSelectedPlayers();
+        QuitModal();
+        return true;
+    }
+public:
+    PlayerMultiSelect (GameMap* gamemap, int& bitmappedPlayers) : ASC_PG_Dialog(NULL, PG_Rect(-1, -1, 300, 330), "Select Players") , players(bitmappedPlayers) {
+        selector = new PlayerSelector(this, PG_Rect(10, 30, Width()-20, Height()-90), gamemap, true, 0, 3);
+        selector->setSelection(bitmappedPlayers);
+        AddStandardButton("OK")->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &PlayerMultiSelect::apply )));
+    }
+};
 
 
 void playerselall( int *playerbitmap)
-{ tplayerselall       sc;
-
-   sc.playerbit = *playerbitmap;
-   sc.init();
-   sc.run();
-   sc.done();
-   *playerbitmap = sc.playerbit;
+{
+    PlayerMultiSelect pms(actmap, *playerbitmap);
+    pms.Show();
+    pms.RunModal();
 }
 
 
