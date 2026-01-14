@@ -479,9 +479,28 @@ void DiplomaticStateVector::swap( int secondPlayer )
 }
 
 
-void Player::merge ( Player& secondPlayer )
+void Player::mergeFrom( Player& secondPlayer )
 {
+    for ( VehicleList::iterator i = secondPlayer.vehicleList.begin(); i != secondPlayer.vehicleList.end(); ) {
+        (*i)->color = getPosition()*8;
+        vehicleList.push_back ( *i );
+        i = secondPlayer.vehicleList.erase( i );
+    }
 
+    for ( Player::BuildingList::iterator i = secondPlayer.buildingList.begin(); i != secondPlayer.buildingList.end();) {
+        (*i)->color = getPosition()*8;
+        buildingList.push_back(*i);
+        i = secondPlayer.buildingList.erase(i);
+    }
+
+    for ( int x = 0; x < getParentMap()->xsize; ++x) {
+        for ( int y = 0; y < getParentMap()->ysize; ++y) {
+            MapField* fld = getParentMap()->getField(x,y);
+            for ( MapField::MineContainer::iterator i = fld->mines.begin(); i != fld->mines.end(); i++ )
+                if ( i->player == secondPlayer.getPosition() && getPosition() != 8)
+                    i->player = getPosition();
+        }
+    } /* endfor */
 }
 
 

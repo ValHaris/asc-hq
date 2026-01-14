@@ -202,7 +202,7 @@ class ContainerBase {
 	  //! Damage. 0 is no damage, when damage reaches 100 the container is destroyed
       int damage;
       
-	  /** The owner of the container. For historical reasons, this is actually 8 times the player numer
+	  /** The owner of the container. For historical reasons, this is actually 8 times the player number
 	      Use getOwner() instead of directly accesing this variable */
       int color;
 	  

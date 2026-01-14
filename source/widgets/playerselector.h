@@ -28,7 +28,13 @@ class PlayerSelector : public MultiListBox {
    public:
       typedef PG_ListBoxDataItem<int> Item;
       PlayerSelector (PG_Widget *parent, const PG_Rect &r, GameMap* map, bool multiselect = true, int suppress = 0, int extra_spacing = 0 );
+
+      //! this is bitmapped
       int getSelectedPlayers();
+
+      //! this is numerical. Returns -1 is nothing was selected.
+      int getFirstSelectedPlayer();
+
       void setSelection( int s );
 };
 

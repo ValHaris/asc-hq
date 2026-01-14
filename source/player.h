@@ -121,7 +121,7 @@ class Player : public sigc::trackable {
       void swap ( Player& secondPlayer );
 
       //! merges all units, buildings etc from secondplayer to this one
-      void merge( Player& secondPlayer );
+      void mergeFrom( Player& secondPlayer );
 
 
       //! does the player exist at all

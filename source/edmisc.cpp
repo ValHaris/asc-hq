@@ -65,6 +65,7 @@
 #include "pgpropertyfield_integer.h"
 #include "dialogs/messagedialog.h"
 #include "widgets/textrenderer.h"
+#include "widgets/playerselector.h"
 
 bool       mapsaved;
 
@@ -233,206 +234,54 @@ void lines(int x1,int y1,int x2,int y2)
 
 
 
+class PlayerChange : public ASC_PG_Dialog {
+    GameMap* gameMap;
+    PlayerSelector* left;
+    PlayerSelector* right;
+    PG_DropDown* action;
 
-class  tplayerchange : public tdialogbox {
-public :
-    int action;
-    int sel1,sel2;
-    int bkgcolor;
-    void init(void);
-    virtual void run(void);
-    virtual void buttonpressed(int id);
-    void anzeige(void);
-};
+    bool apply() {
+        if ( left->getFirstSelectedPlayer() == right->getFirstSelectedPlayer())
+            return false;
 
+        if (     left->getFirstSelectedPlayer() < 0 ||  left->getFirstSelectedPlayer() >= gameMap->getPlayerCount()
+             || right->getFirstSelectedPlayer() < 0 || right->getFirstSelectedPlayer() >= gameMap->getPlayerCount()
+             || action->GetSelectedItemIndex() < 0 || action->GetSelectedItemIndex() > 1 )
+        return false;
 
-
-
-void         tplayerchange::init(void)
-{
-    char *s1;
-
-    tdialogbox::init();
-    title = "Player Change";
-    x1 = 50;
-    xsize = 370;
-    y1 = 50;
-    ysize = 410;
-    action = 0;
-    sel1 = 255;
-    sel2 = 255;
-    bkgcolor = lightgray;
-
-    windowstyle = windowstyle ^ dlg_in3d;
-
-    for ( int i=0; i<=8 ; i++ ) {
-        s1 = new(char[12]);
-        if (i == 8) {
-            strcpy(s1,"~N~eutral");
+        if ( action->GetSelectedItemIndex() == 0) {
+            gameMap->getPlayer(left->getFirstSelectedPlayer()).swap ( gameMap->getPlayer(right->getFirstSelectedPlayer()) );
         } else {
-            strcpy(s1,"Player ~");
-            strcat(s1,strrr(i+1));
-            strcat(s1,"~");
+            gameMap->getPlayer(right->getFirstSelectedPlayer()).mergeFrom( gameMap->getPlayer(left->getFirstSelectedPlayer()) );
         }
-        addbutton(s1,20,55+i*30,150,75+i*30,0,1,6+i,true);
-        addkey(1,ct_1+i);
+        mapChanged(gameMap);
+        displaymap();
+        return true;
     }
 
-    //addbutton("~C~hange",20,ysize - 70,80,ysize - 50,0,1,3,true);
-    addbutton("X~c~hange",20,ysize - 70,170,ysize - 50,0,1,4,true);
-    addbutton("~M~erge",200,ysize - 70,350,ysize - 50,0,1,5,true);
+public:
+    PlayerChange(GameMap* gameMap) : ASC_PG_Dialog(NULL, PG_Rect(-1, -1, 600, 300), "Exchange Players"), gameMap(gameMap) {
 
-    addbutton("~D~one",20,ysize - 40,170,ysize - 20,0,1,1,true);
-    addkey(1,ct_enter);
-    addbutton("E~x~it",200,ysize - 40,350,ysize - 20,0,1,2,true);
+        left = new PlayerSelector(this, PG_Rect(10, 30, 150, 200), gameMap, false, 0, 2);
+        action = new PG_DropDown(this, PG_Rect(170, 120, 130, 20));
+        action->AddItem("<- exchange ->", NULL);
+        action->AddItem("merge into ->", NULL);
 
-    buildgraphics();
+        right = new PlayerSelector(this, PG_Rect(310, 30, 150, 200), gameMap, false, 0, 2);
+        (new PG_Button(this, PG_Rect(470, 120, 60, 20), "Apply"))->sigClick.connect(sigc::hide( sigc::mem_fun( *this, &PlayerChange::apply )));
 
-    for ( int i=0; i<=8 ; i++ ) bar(x1 + 170,y1 + 60 + i*30 ,x1 + 190 ,y1 + 70 + i * 30,20 + ( i << 3 ));
-
-    anzeige();
-
-    mousevisible(true);
-}
-
-void         tplayerchange::anzeige(void)
-{
-    int e,b,m[9];
-    for ( int i=0; i<=8 ; i++ )
-        m[i] =0;
-
-    for ( int i =0; i < actmap->xsize * actmap->ysize ; i++ ) {
-        int color = actmap->field[i].mineowner();
-        if ( color >= 0 && color < 8 )
-            m[color]++;
+        AddStandardButton("OK")->sigClick.connect(sigc::hide( sigc::mem_fun( *this, &PlayerChange::QuitModal)));
     }
-    activefontsettings.length = 40;
-    activefontsettings.background = lightgray;
-    activefontsettings.color = red;
-    activefontsettings.justify = lefttext;
-    activefontsettings.font = schriften.smallarial;
-    mousevisible(false);
-    showtext2("Units",x1+210,y1+35);
-    showtext2("Build.",x1+260,y1+35);
-    showtext2("Mines",x1+310,y1+35);
-    for ( int i=0; i<=8 ; i++ ) {
-        if (i == sel1 ) rectangle (x1 + 16,y1+51+i*30,x1+154,y1+79+i*30, 20 );
-        else if ( i == sel2 ) rectangle (x1 + 16,y1+51+i*30,x1+154,y1+79+i*30, 28 );
-        else rectangle (x1 + 16,y1+51+i*30,x1+154,y1+79+i*30, bkgcolor );
-        e = actmap->player[i].vehicleList.size();
-        b = actmap->player[i].buildingList.size();
-        activefontsettings.justify = righttext;
-        showtext2(strrr(e),x1+200,y1+56+i*30);
-        showtext2(strrr(b),x1+255,y1+56+i*30);
-        showtext2(strrr(m[i]),x1+310,y1+56+i*30);
-    } /* endfor */
-    mousevisible(true);
-}
-
-
-void         tplayerchange::run(void)
-{
-
-    do {
-        tdialogbox::run();
-        if (taste == ct_f1) help ( 1050 );
-    }  while (!((taste == ct_esc) || ((action == 1) || (action ==2))));
-// ????  if ((action == 2) || (taste == ct_esc)) ;
-}
-
-
-void         tplayerchange::buttonpressed(int         id)
-{
-    tdialogbox::buttonpressed(id);
-    switch (id) {
-
-    case 1:
-    case 2:
-        action = id;
-        break;
-        /*     case 3: {
-                   int sel = colorselect();
-                   if ( ( sel != 255) && ( sel != sel1 ) && ( sel1 != 255 ) &&
-                      ( actmap->player[sel].firstvehicle == NULL ) && ( actmap->player[sel].firstbuilding == NULL )   ) {
-
-                   }
-                }
-                break; */
-    case 4: {
-        if ( ( sel1 != 255) && ( sel2 != sel1 ) && ( sel2 != 255 ) && ( sel1 != 8) && ( sel2 != 8 ) ) {
-            actmap->player[sel1].swap ( actmap->player[sel2] );
-            anzeige();
-        }
-    }
-    break;
-    case 5: {
-        if ( ( sel1 != 255) && ( sel2 != sel1 ) && ( sel2 != 255 ) ) {
-
-            // adding everything from player sel2 to sel1
-
-            if ( sel1 != 8 )
-                for ( Player::VehicleList::iterator i = actmap->player[sel2].vehicleList.begin(); i != actmap->player[sel2].vehicleList.end(); ) {
-                    (*i)->color = sel1*8;
-                    actmap->player[sel1].vehicleList.push_back ( *i );
-                    i = actmap->player[sel2].vehicleList.erase( i );
-                }
-
-            Player::BuildingList bl = actmap->player[sel2].buildingList;
-            for ( Player::BuildingList::iterator i = bl.begin(); i != bl.end(); ++i)
-                (*i)->convert( sel1 );
-
-            for (int i =0; i < actmap->xsize * actmap->ysize ; i++ ) {
-                MapField* fld = &actmap->field[i];
-                for ( MapField::MineContainer::iterator i = fld->mines.begin(); i != fld->mines.end(); i++ )
-                    if ( i->player == sel2 && sel1 != 8)
-                        i->player = sel1;
-
-            } /* endfor */
-            anzeige();
-        }
-    }
-    break;
-    case 6:
-    case 7:
-    case 8:
-    case 9:
-    case 10:
-    case 11:
-    case 12:
-    case 13:
-    case 14:
-        if ( id-6 != sel1 ) {
-            sel2 = sel1;
-            sel1 = id-6;
-            anzeige();
-        }
-        break;
-    }
-}
-
+};
 
 void playerchange(void)
 {
-    tplayerchange       sc;
-
-    sc.init();
-    sc.run();
-    sc.done();
-    mapChanged(actmap);
+    PlayerChange playerChange(actmap);
+    playerChange.Show();
+    playerChange.RunModal();
 }
 
 
-
-
-void         exchg(int *       a1,
-                   int *       a2)
-{
-    int ex;
-
-    ex = *a1;
-    *a1 = *a2;
-    *a2 = ex;
-}
 
 
 
