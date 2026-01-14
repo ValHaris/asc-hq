@@ -40,6 +40,16 @@ int PlayerSelector :: getSelectedPlayers()
     return result;
 }
 
+int PlayerSelector :: getFirstSelectedPlayer()
+{
+   for ( int i = 0; i < getListBox()->GetWidgetCount(); ++i ) {
+      Item* bi = dynamic_cast< Item* >( getListBox()->FindWidget(i) );
+      if ( bi && bi->IsSelected() )
+         return bi->getData();
+    }
+    return -1;
+}
+
 void PlayerSelector :: setSelection( int s )
 {
    for ( int i = 0; i < getListBox()->GetWidgetCount(); ++i ) {
