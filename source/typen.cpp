@@ -76,7 +76,7 @@ const char* cgeneralnetcontrol[4] = {       "store",  "move out", "stop storing"
                                           // Functionen in Gebuden ....
 
 const char*  cwettertypen[cwettertypennum] = {"dry (standard)","light rain", "heavy rain", "few snow", "lot of snow", "lot of snow + ice"};
-const char*  resourceNames[3]  = {"energy", "material", "fuel"};
+const char*  resourceNames[4]  = {"energy", "material", "fuel", NULL};
 
 //! when repairing a unit, the experience of the unit is decreased by one when passing each of these damage levels
 const int experienceDecreaseDamageBoundaries[experienceDecreaseDamageBoundaryNum] = { 80, 60, 40, 20 };

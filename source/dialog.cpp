@@ -590,7 +590,7 @@ int         legacy_choice_dlg( const char *       title,
                         const char *       s1,
                         const char *       s2,
                         ... )
-{ 
+{
 
    va_list paramlist;
    va_start ( paramlist, s2 );
@@ -608,9 +608,9 @@ int         legacy_choice_dlg( const char *       title,
   c.init(tempbuf,s1,s2);
   c.run();
   a = c.result;
-  c.done(); 
+  c.done();
   return a;
-} 
+}
 
 
 int  choice_dlg(const ASCString& title, const ASCString& leftButton, const ASCString& rightButton )
