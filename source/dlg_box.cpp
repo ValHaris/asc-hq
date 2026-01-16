@@ -29,6 +29,7 @@
 #include <ctype.h>
 #include <cstring>
 #include <iostream>
+#include <vector>
 
 #include "typen.h"
 #include "basegfx.h"
@@ -1719,11 +1720,6 @@ void         tdialogbox::rahmen3(const char *       txt,
 } 
 
 
-typedef char* tstringa[30];
-typedef tstringa* pstringa;
-
-
-
 // num   0: Box bleibt aufgeklappt,
 //       1 box wird geschlossen , text rot (Fehler),
 //       2 : Programm wird beendet;
@@ -1737,9 +1733,12 @@ void displaymessage( const char* formatstring, int num, ... )
 
    char tempbuf[1000];
 
-   int lng = vsprintf( tempbuf, formatstring, paramlist );
-   if ( lng >= 1000 )
-      displaymessage ( "dlg_box.cpp / displaymessage:   string to long !\nPlease report this error",1 );
+   int lng = vsnprintf( tempbuf, sizeof(tempbuf), formatstring, paramlist );
+   if ( lng < 0 || (size_t)lng >= sizeof(tempbuf) ) {
+      // Truncated or formatting error; ensure null termination and warn
+      tempbuf[sizeof(tempbuf) - 1] = '\0';
+      displaymessage ( "dlg_box.cpp / displaymessage:   string too long or formatting error!\nPlease report this error", 1 );
+   }
 
    va_end ( paramlist );
 
@@ -1748,31 +1747,19 @@ void displaymessage( const char* formatstring, int num, ... )
 
 void displaymessage( const ASCString& text, int num  )
 {
-   const char* a = text.c_str();
+   std::vector<ASCString> lines;
+   ASCString current;
 
-   tstringa stringtooutput;
-   memset (stringtooutput, 0, sizeof ( stringtooutput ));
-   stringtooutput[0] =  new char[200];
-   stringtooutput[0][0] = 0;
-   char* b = stringtooutput[0];
-
-   int linenum = 0;
-
-   while ( *a ) {
-      if (*a == '\n'&& linenum < 25 ) {
-         *b = 0;
-         linenum++;
-         stringtooutput[linenum] = new char[200];
-         b = stringtooutput[linenum];
-         *b = 0;
+   for (size_t idx = 0; idx < text.size(); ++idx) {
+      char ch = text[idx];
+      if (ch == '\n') {
+         lines.push_back(current);
+         current.clear();
       } else {
-        *b = *a;
-        b++;
+         current.push_back(ch);
       }
-      a++;
    }
-
-   *b = 0;
+   lines.push_back(current);
 
 
    bool displayInternally = true;
@@ -1797,8 +1784,8 @@ void displaymessage( const ASCString& text, int num  )
 
 
    if ( !displayInternally ) {
-      for ( int i=0; i<= linenum ;i++ )
-          fprintf(stderr,"%s\n",stringtooutput[i]);
+      for (size_t i = 0; i < lines.size(); ++i)
+          fprintf(stderr,"%s\n", lines[i].c_str());
       fflush( stderr );
    } else {
       #ifdef _WIN322_
@@ -1820,9 +1807,6 @@ void displaymessage( const ASCString& text, int num  )
       #endif
       exit ( 1 );
    }
-
-   for ( int i=linenum; i>=0 ;i-- )
-      delete[]  stringtooutput[i];
 }
 
 
