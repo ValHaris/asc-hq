@@ -1,6 +1,6 @@
 /*
  * SDLmm - a C++ wrapper for SDL and related libraries
- * Copyright © 2001 David Hedbor <david@hedbor.org>
+ * Copyright ï¿½ 2001 David Hedbor <david@hedbor.org>
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -204,7 +204,7 @@ namespace SDLmm {
   }
   
   bool BaseSurface::SetAlpha(Uint32 flag, Uint8 alpha) {
-    return SDL_SetAlpha(me, flag, alpha) == 0;
+    return SDL_SetSurfaceAlphaMod(me, alpha) == 0;
   }
   
   void BaseSurface::SetClipRect(const SDL_Rect& rect) {

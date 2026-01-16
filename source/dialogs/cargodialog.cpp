@@ -374,7 +374,7 @@ class CargoDialog : public Panel
 
          if ( (mod & KMOD_SHIFT) && (mod & KMOD_CTRL)) {
             // see comment in ASC_MainScreenWidget::eventKeyDown
-             if ( key->keysym.unicode == 26 || key->keysym.sym == SDLK_z) {
+             if ( key->keysym.sym == SDLK_z) {
                   getContainer()->getMap()->actions.redo( createContext( getContainer()->getMap() ) );
                   cargoChanged();
                   return true;
@@ -383,7 +383,7 @@ class CargoDialog : public Panel
 
          if ( (mod & KMOD_CTRL) &&  !(mod & KMOD_SHIFT)) {
             // see comment in ASC_MainScreenWidget::eventKeyDown
-            if ( key->keysym.unicode == 26 || key->keysym.sym == SDLK_z) {
+            if ( key->keysym.sym == SDLK_z) {
                   getContainer()->getMap()->actions.undo( createContext( getContainer()->getMap() ) );
                   if ( shutdownImmediately ) {
                      QuitModal();
@@ -2739,7 +2739,7 @@ Surface& RefuelUnitDialogCommand :: getImage( const MapCoordinate& pos, Containe
 
 bool RefuelUnitDialogCommand :: checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
 {
-   return ( key->keysym.unicode == 'd' );
+   return ( key->keysym.sym == 'd' );
 };
 
 ASCString RefuelUnitDialogCommand :: getName( const MapCoordinate& pos, ContainerBase* subject, int num )
@@ -2781,7 +2781,7 @@ Surface& OpenContainer :: getImage( const MapCoordinate& pos, ContainerBase* sub
 
 bool OpenContainer :: checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
 {
-   return ( key->keysym.unicode == 'l' );
+   return ( key->keysym.sym == '1' );
 };
 
 ASCString OpenContainer :: getName( const MapCoordinate& pos, ContainerBase* subject, int num )

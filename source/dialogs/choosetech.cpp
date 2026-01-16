@@ -300,7 +300,7 @@ class ChooseTech : public ASC_PG_Dialog
          if ( mod & KMOD_CTRL ) {
             // see comment in ASC_MainScreenWidget::eventKeyDown
 
-            if ( key->keysym.unicode == 1 || key->keysym.sym == SDLK_a) {
+            if ( key->keysym.sym == SDLK_a) {
                      toggleAllTechButton();
                      return true;
             };

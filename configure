@@ -18916,14 +18916,14 @@ CXXFLAGS="$CXXFLAGS $SDL_CFLAGS"
 CFLAGS="$CFLAGS $SDL_CFLAGS"
 LIBS="$LIBS $SDL_LIBS"
 
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for IMG_LoadJPG_RW in -lSDL_image" >&5
-printf %s "checking for IMG_LoadJPG_RW in -lSDL_image... " >&6; }
-if test ${ac_cv_lib_SDL_image_IMG_LoadJPG_RW+y}
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for IMG_LoadJPG_RW in -lSDL2_image" >&5
+printf %s "checking for IMG_LoadJPG_RW in -lSDL2_image... " >&6; }
+if test ${ac_cv_lib_SDL2_image_IMG_LoadJPG_RW+y}
 then :
   printf %s "(cached) " >&6
 else $as_nop
   ac_check_lib_save_LIBS=$LIBS
-LIBS="-lSDL_image  $LIBS"
+LIBS="-lSDL2_image  $LIBS"
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
@@ -18941,21 +18941,21 @@ return IMG_LoadJPG_RW ();
 _ACEOF
 if ac_fn_c_try_link "$LINENO"
 then :
-  ac_cv_lib_SDL_image_IMG_LoadJPG_RW=yes
+  ac_cv_lib_SDL2_image_IMG_LoadJPG_RW=yes
 else $as_nop
-  ac_cv_lib_SDL_image_IMG_LoadJPG_RW=no
+  ac_cv_lib_SDL2_image_IMG_LoadJPG_RW=no
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.beam \
     conftest$ac_exeext conftest.$ac_ext
 LIBS=$ac_check_lib_save_LIBS
 fi
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_SDL_image_IMG_LoadJPG_RW" >&5
-printf "%s\n" "$ac_cv_lib_SDL_image_IMG_LoadJPG_RW" >&6; }
-if test "x$ac_cv_lib_SDL_image_IMG_LoadJPG_RW" = xyes
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_SDL2_image_IMG_LoadJPG_RW" >&5
+printf "%s\n" "$ac_cv_lib_SDL2_image_IMG_LoadJPG_RW" >&6; }
+if test "x$ac_cv_lib_SDL2_image_IMG_LoadJPG_RW" = xyes
 then :
-  printf "%s\n" "#define HAVE_LIBSDL_IMAGE 1" >>confdefs.h
+  printf "%s\n" "#define HAVE_LIBSDL2_IMAGE 1" >>confdefs.h
 
-  LIBS="-lSDL_image $LIBS"
+  LIBS="-lSDL2_image $LIBS"
 
 else $as_nop
 
@@ -19241,14 +19241,14 @@ else $as_nop
 fi
 
 
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for Mix_PlayChannelTimed in -lSDL_mixer" >&5
-printf %s "checking for Mix_PlayChannelTimed in -lSDL_mixer... " >&6; }
-if test ${ac_cv_lib_SDL_mixer_Mix_PlayChannelTimed+y}
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for Mix_PlayChannelTimed in -lSDL2_mixer" >&5
+printf %s "checking for Mix_PlayChannelTimed in -lSDL2_mixer... " >&6; }
+if test ${ac_cv_lib_SDL2_mixer_Mix_PlayChannelTimed+y}
 then :
   printf %s "(cached) " >&6
 else $as_nop
   ac_check_lib_save_LIBS=$LIBS
-LIBS="-lSDL_mixer  $LIBS"
+LIBS="-lSDL2_mixer  $LIBS"
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
@@ -19266,28 +19266,28 @@ return Mix_PlayChannelTimed ();
 _ACEOF
 if ac_fn_c_try_link "$LINENO"
 then :
-  ac_cv_lib_SDL_mixer_Mix_PlayChannelTimed=yes
+  ac_cv_lib_SDL2_mixer_Mix_PlayChannelTimed=yes
 else $as_nop
-  ac_cv_lib_SDL_mixer_Mix_PlayChannelTimed=no
+  ac_cv_lib_SDL2_mixer_Mix_PlayChannelTimed=no
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.beam \
     conftest$ac_exeext conftest.$ac_ext
 LIBS=$ac_check_lib_save_LIBS
 fi
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_SDL_mixer_Mix_PlayChannelTimed" >&5
-printf "%s\n" "$ac_cv_lib_SDL_mixer_Mix_PlayChannelTimed" >&6; }
-if test "x$ac_cv_lib_SDL_mixer_Mix_PlayChannelTimed" = xyes
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_SDL2_mixer_Mix_PlayChannelTimed" >&5
+printf "%s\n" "$ac_cv_lib_SDL2_mixer_Mix_PlayChannelTimed" >&6; }
+if test "x$ac_cv_lib_SDL2_mixer_Mix_PlayChannelTimed" = xyes
 then :
-  printf "%s\n" "#define HAVE_LIBSDL_MIXER 1" >>confdefs.h
+  printf "%s\n" "#define HAVE_LIBSDL2_MIXER 1" >>confdefs.h
 
-  LIBS="-lSDL_mixer $LIBS"
+  LIBS="-lSDL2_mixer $LIBS"
 
 else $as_nop
 
-   as_fn_error $? " ASC requires the SDL_mixer library.
-       If you have a distribution supplied SDL_mixer package installed,
-       perhaps the SDL_mixer-devel package is missing.
-       If your distribution does not include the SDL_mixer library, you can get it from
+   as_fn_error $? " ASC requires the SDL2_mixer library.
+       If you have a distribution supplied SDL2_mixer package installed,
+       perhaps the SDL2_mixer-devel package is missing.
+       If your distribution does not include the SDL2_mixer library, you can get it from
        http://www.libsdl.org/projects/SDL_mixer/  " "$LINENO" 5
 
 fi

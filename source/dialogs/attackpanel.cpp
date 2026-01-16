@@ -22,7 +22,6 @@
 #include "../events.h"
 #include "../gameoptions.h"
 #include "../windowing.h"
-#include "../sdl/graphicsqueue.h"
 
 #define USE_COLOR_CONSTANTS
 #include <pgcolors.h>
@@ -278,14 +277,13 @@ void waitWithUpdate( int millisecs )
    else
       frameDelay = 10;
    
-   int t = ticker;
+   int t = SDL_GetTicks();
    do {
-      int t2 = ticker;
+      int t2 = SDL_GetTicks();
       do {
          releasetimeslice();
-      } while ( t2 + frameDelay > ticker );
-      postScreenUpdate( PG_Application::GetScreen() );
-   } while ( t + millisecs/20 > ticker ); 
+      } while ( t2 + frameDelay > SDL_GetTicks() );
+   } while ( t + millisecs/20 > SDL_GetTicks() );
 }
 
 
@@ -359,9 +357,9 @@ void showAttackAnimation( tfight& battle, GameMap* actmap, int ad, int dd )
    float avd2 = float( 100 - battle.av.damage )/100;
    float dvd2 = float( 100 - battle.dv.damage )/100;
 
-   int starttime = ticker;
-   while ( ticker < starttime + time2 ) {
-      float p = float(ticker - starttime ) / time2;
+   int starttime = SDL_GetTicks();
+   while ( SDL_GetTicks() < starttime + time2 ) {
+      float p = float(SDL_GetTicks() - starttime ) / time2;
 
       at->setBarGraphValue( "attacker_unitstatusbar", avd + (avd2-avd) * p );
       at->setBarGraphValue( "defender_unitstatusbar", dvd + (dvd2-dvd) * p );

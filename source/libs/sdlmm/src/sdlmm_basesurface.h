@@ -504,7 +504,7 @@ namespace SDLmm {
 
       \sa SetDisplayFormatAlpha(), SetAlpha(), SetColorKey()
     */
-    virtual bool SetDisplayFormat() = 0;
+    // virtual bool SetDisplayFormat() = 0;
 
     //! Convert the surface to the display format.
     /*!
@@ -526,7 +526,7 @@ namespace SDLmm {
 
       \sa SetDisplayFormat(), SetAlpha(), SetColorKey()
     */
-    virtual bool SetDisplayFormatAlpha() = 0;
+    // virtual bool SetDisplayFormatAlpha() = 0;
 
     //! Save a BaseSurface object as a Windows bitmap file
     /*!

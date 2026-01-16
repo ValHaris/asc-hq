@@ -38,11 +38,12 @@ unitcostcalculator-standard.cpp weaponrangelayer.cpp unitcostcalculator-pbp.cpp
 
 commonLibs =  $(top_builddir)/source/libs/triangul/libtriangul.la \
 $(top_builddir)/source/ai/libai.la $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la \
-$(top_builddir)/source/sdl/libsdl.la  $(LOKI_LIBS) $(LUA_GAME_LIB) \
+$(LOKI_LIBS) $(LUA_GAME_LIB) \
 $(top_builddir)/source/util/libutil.la  \
 $(top_builddir)/source/tasks/libtaskcore.la \
 $(top_builddir)/source/tasks/libtasks.la \
 $(top_builddir)/source/graphics/libgraphics.la $(top_builddir)/source/dialogs/libdialogs.la \
+$(top_builddir)/source/sdl/libsdl.la \
 $(top_builddir)/source/dialogs/libgamedialogs.la $(top_builddir)/source/actions/libactions.la \
 $(top_builddir)/source/libs/paragui/src/libparagui.la $(top_builddir)/source/widgets/libwidgets.la \
 $(top_builddir)/source/sdl/libsdlsnd.la $(top_builddir)/source/network/libnetwork.la  \
@@ -54,8 +55,8 @@ $(top_builddir)/source/lua/libluainterfacegame.la \
 $(BZIP2_LIBS) $(SIGC_LIBS) $(SDL_LIBS) $(FREETYPE_LIBS) $(BOOST_LIBS) $(SDL_SOUND_LIB) $(WX_LIBS)
 
 nodist_asc_SOURCES = $(commonSources) sg.cpp gamedialog.cpp 
-asc_LDADD = $(commonLibs)
+asc_LDADD = $(commonLibs) 
 
 nodist_unittester_SOURCES  =  $(commonSources) 
-unittester_LDADD = $(top_builddir)/source/unittests/libunittests.la  $(commonLibs) 
+unittester_LDADD = $(top_builddir)/source/unittests/libunittests.la  $(commonLibs)  
 

@@ -161,10 +161,7 @@ extern void*     xlatbuffer;
  //! like #putspriteimage, but rotates the image by 270 clock-wise
  extern void putrotspriteimage270(int x1, int y1, void *buffer, int rotationvalue);
 
- //! function not used any more and obsolete. Use #putimageprt instead
- extern void puttexture ( int x1, int y1, int x2, int y2, void *texture );
-
- /** Puts a part of texture on the screen. Texture must be the same size as the screen,
+  /** Puts a part of texture on the screen. Texture must be the same size as the screen,
       so the coordinates x1/y1 and x2/y2 describe the same rectangle on texture and the screen.
       This rectangle is copied from texture to the screen. color #255 is treated as transparent */
  extern void putspritetexture ( int x1, int y1, int x2, int y2, void *texture );
@@ -397,33 +394,12 @@ class fatalgraphicserror {
         fatalgraphicserror ( void );
       };
 
-/** \brief Collects all graphic operations and updates the screen on destruction
-     When porting ASC from DOS to SDL, the problem arose that under DOS all graphic operations
-     directly modified the graphics memory and were directly visible without any overhead. Using
-     SDL, the operations operated on a buffer that had to be copied to display memory in a 
-     seperate operation, which was costly. Updating the screen after every basic graphic operation
-     was too expensive, so I wrote this class that suspended all updates until it was destructed. */
-class collategraphicoperations {
-         int olddirectscreenaccess;
-         int x1, y1, x2, y2;
-         int status;
-       public:
-         collategraphicoperations ( void );
-         collategraphicoperations ( int _x1, int _y1, int _x2, int _y2 );
-         ~collategraphicoperations ();
-         void on ( void );
-         void off ( void );
-};
-
 
 
 #pragma pack()
 
 // this variable determines whether the next call to initgraphics will open a window or a fullscreen session
 // extern int fullscreen;
-
-//! sets the caption of the main window
-extern void setWindowCaption ( const char* s );
 
 #ifdef use_truecolor2pal
 /** converts a SDLmm::Surface to an old style image buffer

@@ -88,6 +88,7 @@
 #include <boost/algorithm/string/classification.hpp>
 
 #include "paradialog.h"
+#include "pgexception.h"
 
 #include "vehicletype.h"
 #include "buildingtype.h"
@@ -531,7 +532,7 @@ void         startnextcampaignmap( int id)
 void benchgame ( bool withViewCalc )
 {
    int t2;
-   int t = ticker;
+   int t = SDL_GetTicks();
    int n = 0;
    do {
       if ( withViewCalc ) 
@@ -540,7 +541,7 @@ void benchgame ( bool withViewCalc )
       repaintMap();
             
       n++;
-      t2 = ticker;
+      t2 = SDL_GetTicks();
    } while ( t + 1000 > t2 ); /* enddo */
    double d = 100 * n;
    d /= (t2-t);
@@ -930,8 +931,6 @@ void executeUserAction ( tuseractions action )
             CGameOptions::Instance()->setChanged();
 
             displaymap();
-            while ( mouseparams.taste )
-               releasetimeslice();
 
             infoMessage (ASCString("units will be displayed shaded:\n") + unitShadingStates[CGameOptions::Instance()->units_gray_after_move]);
          }
@@ -1358,7 +1357,9 @@ void loadLegacyFonts()
 class GameThreadParams: public sigc::trackable
 {
    private:
-      bool exit() { exitMainloop = true; return true; };
+      bool exit() {
+    	  exitMainloop = true; return true;
+      };
    public:   
       ASCString filename;
       ASC_PG_App& application;
@@ -1376,7 +1377,7 @@ void checkGameEvents( GameMap* map,const Command& command )
    checkevents( map, &getDefaultMapDisplay() );
 }
 
-int gamethread ( void* data )
+int gamethread ( GameThreadParams* gtp )
 {
    GameMap::sigMapDeletion.connect( sigc::ptr_fun( &resetActions ));
    GameMap::sigMapDeletion.connect( sigc::ptr_fun( &resetActmap ));
@@ -1384,8 +1385,6 @@ int gamethread ( void* data )
    
    TaskContainer::registerHooks();
    
-   GameThreadParams* gtp = (GameThreadParams*) data;
-
    std::auto_ptr<StartupScreen> startupScreen;
 
    MapTypeLoaded mtl = None;
@@ -1416,6 +1415,10 @@ int gamethread ( void* data )
    }
    catch ( const ASCexception & ) {
       errorMessage ( "loading of game failed" );
+      return -1;
+   }
+   catch ( const PG_Exception & ex ) {
+      errorMessage ( ex.getMessage() );
       return -1;
    }
    catch ( const ThreadExitException & ) {
@@ -1519,6 +1522,11 @@ int gamethread ( void* data )
               }
            }
          }
+      }
+      catch ( const PG_Exception& ex ) {
+          errorMessage(ex.getMessage());
+          delete actmap;
+          actmap = NULL;
       }
    } while ( !gtp->exitMainloop );
    
@@ -1726,24 +1734,9 @@ int main(int argc, char *argv[] )
    ScreenResolutionSetup screenResolutionSetup ( *cl );
    int flags = 0;
 
-   if ( CGameOptions::Instance()->hardwareSurface )
-      flags |= SDL_HWSURFACE;
-   else
-      flags |= SDL_SWSURFACE;
-
-   if ( screenResolutionSetup.isFullscreen() )
-      flags |= SDL_FULLSCREEN;
-
-   app.setIcon( "program-icon.png" );
    bool initialized = false;
-   if ( !app.InitScreen( screenResolutionSetup.getWidth(), screenResolutionSetup.getHeight(), 32, flags)) {
-      if ( flags & SDL_FULLSCREEN ) {
-         GetVideoModes gvm;
-         if ( gvm.getList().size() > 0 ) {
-            if ( app.InitScreen( gvm.getx(0), gvm.gety(0), 32, flags)) 
-               initialized = true;
-         }
-      }
+   if ( !app.InitScreen( screenResolutionSetup.getWidth(), screenResolutionSetup.getHeight(), screenResolutionSetup.isFullscreen())) {
+	   return 1;
    } else
       initialized = true;
 
@@ -1751,11 +1744,13 @@ int main(int argc, char *argv[] )
      fatalError( "Could not initialize video mode");
 
 
+   app.setIcon( "program-icon.png" );
+
 #ifdef WIN32
    delete win32ErrorDialogGenerator;
 #endif
 
-   setWindowCaption ( "Advanced Strategic Command" );
+   app.SetCaption( "Advanced Strategic Command" );
       
    GameThreadParams gtp ( app );
    gtp.filename = cl->l();
@@ -1768,7 +1763,7 @@ int main(int argc, char *argv[] )
    int returncode = 0;
    try {
       // this starts the gamethread procedure, whichs will run the entire game
-      returncode = initializeEventHandling ( gamethread, &gtp );
+      returncode = gamethread ( &gtp );
    }
    catch ( const bad_alloc & ) {
       fatalError ("Out of memory");

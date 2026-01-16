@@ -144,8 +144,8 @@ void ReplayMapDisplay :: displayActionCursor ( int x1, int y1, int x2, int y2, i
 
 void ReplayMapDisplay :: wait ( int minTime )
 {
-   int t = ticker;
-   while ( ticker < t + max ( cursorDelay, minTime ) )
+   int t = SDL_GetTicks();
+   while ( SDL_GetTicks() < t + max ( cursorDelay, minTime ) )
       releasetimeslice();
 }
 

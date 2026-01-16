@@ -483,13 +483,15 @@ bool TextRenderer :: eventKeyDown(const SDL_KeyboardEvent* key)
    }
 
    int keyStateNum;
-   Uint8* keyStates = SDL_GetKeyState ( &keyStateNum );
+   const Uint8* keyStates = SDL_GetKeyboardState ( &keyStateNum );
 
-   if ( (key->keysym.sym == SDLK_UP  && keyStates[SDLK_UP] ) || ( key->keysym.sym == SDLK_KP8  && keyStates[SDLK_KP8] )) {
+   // only scroll as long as the key is pressed. When the key is released, no more scrolling! Don't continue scrolling due to a filled event queue...
+
+   if ( (key->keysym.sym == SDLK_UP  && keyStates[SDLK_UP] ) || ( key->keysym.sym == SDLK_KP_8  && keyStates[SDLK_KP_8] )) {
       ScrollTo( GetScrollPosX (), GetScrollPosY () - scrollsize );
       return true;
    }
-   if ( (key->keysym.sym == SDLK_DOWN  && keyStates[SDLK_DOWN]) || (key->keysym.sym == SDLK_KP2  && keyStates[SDLK_KP2] )) {
+   if ( (key->keysym.sym == SDLK_DOWN  && keyStates[SDLK_DOWN]) || (key->keysym.sym == SDLK_KP_2  && keyStates[SDLK_KP_2] )) {
       ScrollTo( GetScrollPosX (), GetScrollPosY () + scrollsize );
       return true;
    }

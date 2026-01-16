@@ -30,6 +30,7 @@
 #include "pgprogressbar.h"
 #include "pgdraw.h"
 #include "pgtheme.h"
+#include "pgexception.h"
 
 PG_ProgressBar::PG_ProgressBar(PG_Widget* parent, const PG_Rect& r, const std::string& style) : PG_ThemeWidget(parent, r) {
 
@@ -110,18 +111,23 @@ void PG_ProgressBar::eventBlit(SDL_Surface* srf, const PG_Rect& src, const PG_Re
 	// draw our superclass
 	PG_ThemeWidget::eventBlit(srf, src, dst);
 
-	// draw the gradient
-	SDL_Surface* ind = PG_ThemeWidget::CreateThemedSurface(
-	                       pr,
-	                       &my_pbGradient,
-	                       my_pbBackground,			// currently no background
-	                       my_pbBackmode,	// backmode
-	                       my_pbBlend);			// background blend
+	if ( pr.my_width > 0 ) {
+		// draw the gradient
+		SDL_Surface* ind = PG_ThemeWidget::CreateThemedSurface(
+							   pr,
+							   &my_pbGradient,
+							   my_pbBackground,			// currently no background
+							   my_pbBackmode,	// backmode
+							   my_pbBlend);			// background blend
 
-	GetClipRects(my_src, my_dst, pr);
-	PG_Draw::BlitSurface(ind, my_src, PG_Application::GetScreen(), my_dst);
+		if ( !ind )
+			throw PG_Exception("PG_ProgressBar::eventBlit", SDL_GetError());
 
-	PG_ThemeWidget::DeleteThemedSurface(ind);
+		GetClipRects(my_src, my_dst, pr);
+		PG_Draw::BlitSurface(ind, my_src, PG_Application::GetScreen(), my_dst);
+
+		PG_ThemeWidget::DeleteThemedSurface(ind);
+	}
 
 	if(my_drawPercentage) {
 		buf = new char[my_text.length() + 64];

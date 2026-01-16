@@ -100,6 +100,9 @@ class PG_Widget;
 
 class PG_XMLTag;
 
+extern void print(const SDL_Event* event);
+
+
 class DECLSPEC PG_Application : public PG_MessageObject, public PG_FileArchive, public PG_FontEngine  {
 public:
 
@@ -138,7 +141,7 @@ class SignalAppIdle : public sigc::signal<bool, PG_MessageObject*> {}
 	@param	depth	screendepth in bits per pixel
 	@param	flags	PG_ screen initialization flags
 	*/
-	bool InitScreen(int w, int h);
+	bool InitScreen(int w, int h, bool fullscreen);
 
 	/**
 	Load a widget theme
@@ -321,6 +324,7 @@ class SignalAppIdle : public sigc::signal<bool, PG_MessageObject*> {}
 	THIS FUNCTION MUST BE PROCESSED BEFORE PG_Application::InitScreen()
 	*/
 	void SetIcon(const std::string& filename);
+	void SetIcon(SDL_Surface* surface);
 
 	/**
 	Set application`s window-manager title and icon name.
@@ -516,31 +520,12 @@ class SignalAppIdle : public sigc::signal<bool, PG_MessageObject*> {}
 	*/
 	bool PumpIntoEventQueue(const SDL_Event* event);
 
+	bool eventWindow(const SDL_WindowEvent* event);
 
-	/**
-	Registers a new source for obtaining SDL_Event objects from. This source will
-	be used in all event loops in Paragui.
-
-	@param eventSupplier the new event source. 
-	Paragui will not delete this object. If NULL is passed, Paragui will obtain 
-	its events directly from SDL 
-	*/
-	static void SetEventSupplier( PG_EventSupplier* eventSupplier );
-
-
-	/**
-	Registers a new class for handling the screen updates. This source will
-	be used for all screen updates throughout Paragui.
-
-	@param screenUpdater the new updater. 
-	Paragui will not delete this object. If NULL is passed, Paragui will obtain 
-	its events directly from SDL 
-	*/
-	static void SetScreenUpdater( PG_ScreenUpdater* screenUpdater ) ;
 
 	/**
 	Returns the EventSupplier that's currently active. \see SetEventSupplier
-	       
+
 	       @return the active EventSupplier
 	*/
 	static  PG_EventSupplier* GetEventSupplier();

@@ -90,9 +90,6 @@ public:
       void write ( tnstream& stream ) const;
       void strech ( int width, int height );
 
-      void writeDefaultPixelFormat ( tnstream& stream ) ;
-      static void readDefaultPixelFormat ( tnstream& stream );
-
       //! assigns the default ASC palette to the surface (only for 8 Bit surfaces)
       void assignDefaultPalette();
 

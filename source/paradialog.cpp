@@ -63,57 +63,7 @@
 
 #include "util/messaginghub.h"
 
-
-#include "sdl/graphicsqueue.h"
-
-class EventSupplier: public PG_SDLEventSupplier {
-   public:
-
-	/**
-	Polls for currently pending events, and returns true if there are any pending events, or false if there are none available. 
-	If event is not NULL, the next event is removed from the queue and stored in that area.
-
-	@param	event	pointer to an event structure
-	@return		true - events are available
-	*/
-	bool PollEvent(SDL_Event* event) {
-            bool result = getQueuedEvent( *event );
-            if ( result ) 
-               CombineMouseMotionEvents( event );
-            return result;
-        };
-
-	/**
-	Checks if an event is in the queue. If there is, it will be copied into the event structure, 
-	WITHOUT being removed from the event queue. 
-
-	@param event pointer to an event structure
-	@return  true - events are available
-	*/
-	bool PeepEvent(SDL_Event* event) {
-            return peekEvent( *event );
-        }
-        
-	/**
-	Waits indefinitely for the next available event.
-
-	@param event 	pointer to an event structure
-	@return		return 0 if there was an error while waiting for events        
-	*/
-	int WaitEvent(SDL_Event* event)
-        {
-            while ( !getQueuedEvent( *event ))
-               releasetimeslice();
-            CombineMouseMotionEvents( event );
-            return 1;  
-        };
-
-} eventSupplier;
-
-
-
-
-
+sigc::signal<void,const SDL_Surface*> ASC_PG_App::postScreenUpdate;
 
 ASC_PG_App* pgApp = NULL;
 
@@ -124,31 +74,8 @@ void signalQuit( int i )
 }
 
 
-class ASC_PG_ScreenUpdater : public PG_ScreenUpdater {
-   public:
-      void UpdateRect(SDL_Surface *screen, Sint32 x, Sint32 y, Sint32 w, Sint32 h)
-      {
-      #ifdef WIN32
-         queueOperation( new UpdateRectOp( screen, x, y, w, h ));
-      #else
-         SDL_UpdateRect( screen,x,y,w,h);
-         postScreenUpdate(screen);
-      #endif
-      };
 
-      void UpdateRects(SDL_Surface *screen, int numrects, SDL_Rect *rects)
-      {
-      #ifdef WIN32
-         queueOperation( new UpdateRectsOp( screen, numrects, rects ));
-      #else
-         SDL_UpdateRects( screen, numrects, rects );
-         postScreenUpdate(screen);
-      #endif
-      }
-} ascScreenUpdater;
-
-
-ASC_PG_App :: ASC_PG_App ( const ASCString& themeName )  : fullScreen(false), bitsperpixel(0)
+ASC_PG_App :: ASC_PG_App ( const ASCString& themeName )  : fullScreen(false)
 {
    this->themeName = themeName;
    EnableSymlinks(true);
@@ -178,16 +105,12 @@ ASC_PG_App :: ASC_PG_App ( const ASCString& themeName )  : fullScreen(false), bi
    reloadTheme();
 
    pgApp = this;
-   SetEventSupplier ( &eventSupplier );
-   SetScreenUpdater ( &ascScreenUpdater );
    
    signal ( SIGINT, &signalQuit );
    
    PG_LineEdit::SetBlinkingTime( 500 );
 
    SetHighlightingTag( '~' );
-
-   setMouseUpdateFlag( &CGameOptions::Instance()->hideMouseOnScreenUpdates );
 
 }
 
@@ -216,7 +139,7 @@ void ASC_PG_App :: setIcon( const ASCString& filename )
       icn = IMG_Load_RW ( SDL_RWFromStream( &iconl ), 1);
       // SDL_SetColorKey(icn, SDL_SRCCOLORKEY, *((Uint8 *)icn->pixels));
       if ( icn )
-         SDL_WM_SetIcon( icn, NULL );
+         SetIcon( icn );
    } catch ( ... ) {}
 }
 
@@ -235,20 +158,11 @@ bool ASC_PG_App::eventQuit(int id, PG_MessageObject* widget, unsigned long data)
 
 void ASC_PG_App::eventIdle()
 {
-   if ( redrawScreen  ) {
-      PG_Widget::UpdateScreen();
-	   PG_Application::UpdateRect(PG_Application::GetScreen(), 0,0,0,0);
-      redrawScreen = false;
-   }
-
    if ( !deletionQueue.empty() )
       delete deletionQueue.front();
 
    PG_Application::eventIdle();
 }
-
-#include "sdl/graphicsqueue.h"
-
 
 
 ASC_PG_App& getPGApplication()
@@ -308,6 +222,7 @@ StartupScreen::StartupScreen( const ASCString& filename, sigc::signal<void>& tic
       PG_Rect rect ( (PG_Application::GetScreenWidth()-w)/2, (PG_Application::GetScreenHeight()-h)/2, w,h);
       PG_ThemeWidget* image = new PG_ThemeWidget( background, rect );
       image->SetBackground ( fullscreenImage.getBaseSurface(), PG_Draw::STRETCH );
+
    }
 
    SDL_Surface* screen = PG_Application::GetApp()->GetScreen();
@@ -360,16 +275,12 @@ StartupScreen::~StartupScreen()
 
 
 
-bool ASC_PG_App:: InitScreen ( int w, int h, int depth, Uint32 flags )
+bool ASC_PG_App:: InitScreen ( int w, int h, bool fullscreen )
 {
-   bitsperpixel = depth;
-   bool result = PG_Application::InitScreen ( w, h, depth, flags  );
+   bool result = PG_Application::InitScreen ( w, h, fullscreen);
    if ( result ) {
-      initASCGraphicSubsystem ( GetScreen() );
       Surface::SetScreen( GetScreen() );
 
-      fullScreen = flags & SDL_FULLSCREEN;
-      
       MessagingHub::Instance().error.connect( sigc::bind( sigc::mem_fun( *this, &ASC_PG_App:: messageDialog ), MessagingHubBase::Error ));
       MessagingHub::Instance().fatalError.connect( sigc::bind( sigc::mem_fun( *this, &ASC_PG_App:: messageDialog ), MessagingHubBase::FatalError ));
       MessagingHub::Instance().warning.connect(sigc::bind( sigc::mem_fun( *this, &ASC_PG_App:: messageDialog ), MessagingHubBase::Warning ));
@@ -387,11 +298,6 @@ void ASC_PG_App :: reloadTheme()
 }
 
 
-bool ASC_PG_App :: enableLegacyEventHandling( bool use )
-{
-   return !setEventRouting ( !use, use );
-}
-
 
 void ASC_PG_App::processEvent( )
 {
@@ -403,7 +309,6 @@ void ASC_PG_App::processEvent( )
 
 int ASC_PG_App::Run ( )
 {
-   enableLegacyEventHandling ( false );
    PG_Application::Run();
   
    return 0;
@@ -413,8 +318,6 @@ ASC_PG_App :: ~ASC_PG_App()
 {
    while ( !deletionQueue.empty() )
       delete deletionQueue.front();
-   
-   shutdownASCGraphicSubsystem();
 }
 
 

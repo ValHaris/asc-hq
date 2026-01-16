@@ -297,7 +297,7 @@ bool PG_Button::eventMouseButtonUp(const SDL_MouseButtonEvent* button) {
 	}
 
 	//if the user moved the cursor out of the button, ignore the click
-	if (!IsMouseInside()) {
+	if (!IsInside(PG_Point(button->x, button->y))) {
 		if (!_mid->togglemode || !_mid->isPressed) {
 			_mid->state = UNPRESSED;
 		}

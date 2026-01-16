@@ -562,6 +562,10 @@ void MapRenderer::paintTerrain( Surface& surf, GameMap* actmap, int playerView, 
 
    GraphicSetManager::Instance().setActive ( actmap->graphicset );
 
+   // temporary debugging code, to remove
+   Uint32* pix = (Uint32*)surf.getBaseSurface()->pixels;
+   Uint32* startPixel = pix + 66 * surf.w() + 74;
+
    for (int pass = 0; pass <= 18 ;pass++ ) {
       for (int y= viewPort.y1; y < viewPort.y2; ++y )
          for ( int x=viewPort.x1; x < viewPort.x2; ++x ) {
@@ -1140,7 +1144,7 @@ bool MapDisplayPG::fieldInView(const MapCoordinate& mc )
 Surface MapDisplayPG::createMovementBufferSurface()
 {
    Surface s = Surface::createSurface( 2*surfaceBorder + effectiveMovementSurfaceWidth, 2*surfaceBorder + effectiveMovementSurfaceHeight, 8*colorDepth, 0x00ffffff ) ;
-   s.SetColorKey( SDL_SRCCOLORKEY, 0xffffff);
+   s.SetColorKey( SDL_TRUE, 0xffffff);
    return s;
 }
 
@@ -1168,7 +1172,7 @@ void MapDisplayPG::initMovementStructure()
 
          pix.x += fieldsizex/2;
          pix.y += fieldsizey/2;
-         movementMask[dir].mask.SetColorKey( SDL_SRCCOLORKEY, movementMask[dir].mask.GetPixel( pix ) & ~movementMask[dir].mask.GetPixelFormat().Amask());
+         movementMask[dir].mask.SetColorKey( SDL_TRUE, movementMask[dir].mask.GetPixel( pix ) & ~movementMask[dir].mask.GetPixelFormat().Amask());
       }
 }
 
@@ -1187,6 +1191,7 @@ class SourcePixelSelector_DirectSubRectangle
    int pitch;
    int linelength;
    const Surface* surface;
+   Uint32 colorkey;
    protected:
       SourcePixelSelector_DirectSubRectangle() : x(0),y(0),x1(0),y1(0),w(0),h(0),outerwidth(0),pointer(NULL), surface(NULL)
       {}
@@ -1212,6 +1217,8 @@ class SourcePixelSelector_DirectSubRectangle
          x = x1;
          pointer += x1 + y1 * linelength;
          outerwidth = getWidth();
+         colorkey = 0;
+         SDL_GetColorKey(const_cast<SDL_Surface*>(srv.getBaseSurface()), &colorkey);
       };
 
       PixelType getPixel(int x, int y)
@@ -1221,7 +1228,7 @@ class SourcePixelSelector_DirectSubRectangle
          if ( x >= 0 && y >= 0 && x < surface->w() && y < surface->h() )
             return surface->GetPixel(SPoint(x,y));
          else
-            return surface->GetPixelFormat().colorkey();
+            return colorkey;
       };
 
 
@@ -1394,7 +1401,7 @@ void MapDisplayPG::displayUnitMovement( GameMap* actmap, Vehicle* veh, const Map
       // we don't animate a descending or ascending submarine without movement
       return;
 
-   int startTime = ticker;
+   int startTime = SDL_GetTicks();
    int endTime = startTime + duration;
    
    // initialisation that is only executed the first time the code runs here
@@ -1483,8 +1490,8 @@ void MapDisplayPG::displayUnitMovement( GameMap* actmap, Vehicle* veh, const Map
    int loopStartTicker = ticker;
 #endif
 
-   while ( ticker < endTime ) {
-      displayMovementStep( movement, (ticker - startTime) * 100 / duration );
+   while ( SDL_GetTicks() < endTime ) {
+      displayMovementStep( movement, (SDL_GetTicks() - startTime) * 100 / duration );
       ++loopCounter;
    }
 
@@ -1661,7 +1668,7 @@ bool MapDisplayPG::keyboardHandler( PG_MessageObject* o, const SDL_KeyboardEvent
       return false;
 
    int keyStateNum;
-   Uint8* keyStates = SDL_GetKeyState ( &keyStateNum );
+   const Uint8* keyStates = SDL_GetKeyboardState( &keyStateNum );
 
    if ( keyEvent->type == SDL_KEYDOWN ) {
       if ( !disableKeyboardCursorMovement ) {
@@ -1673,35 +1680,35 @@ bool MapDisplayPG::keyboardHandler( PG_MessageObject* o, const SDL_KeyboardEvent
             moveCursor(6, 1);
             return true;
          }
-         if ( (keyEvent->keysym.sym == SDLK_UP  && keyStates[SDLK_UP] ) || ( keyEvent->keysym.sym == SDLK_KP8  && keyStates[SDLK_KP8] )) {
+         if ( (keyEvent->keysym.sym == SDLK_UP  && keyStates[SDLK_UP] ) || ( keyEvent->keysym.sym == SDLK_KP_8  && keyStates[SDLK_KP_8] )) {
             moveCursor(0, 1);
             return true;
          }
-         if ( (keyEvent->keysym.sym == SDLK_DOWN  && keyStates[SDLK_DOWN]) || (keyEvent->keysym.sym == SDLK_KP2  && keyStates[SDLK_KP2] )) {
+         if ( (keyEvent->keysym.sym == SDLK_DOWN  && keyStates[SDLK_DOWN]) || (keyEvent->keysym.sym == SDLK_KP_2  && keyStates[SDLK_KP_2] )) {
             moveCursor(4, 1);
             return true;
          }
-         if ( keyEvent->keysym.sym == SDLK_KP6  && keyStates[SDLK_KP6] ) {
+         if ( keyEvent->keysym.sym == SDLK_KP_6  && keyStates[SDLK_KP_6] ) {
             moveCursor(2, 2);
             return true;
          }
-         if ( keyEvent->keysym.sym == SDLK_KP4 && keyStates[SDLK_KP4] ) {
+         if ( keyEvent->keysym.sym == SDLK_KP_4 && keyStates[SDLK_KP_4] ) {
             moveCursor(6, 2);
             return true;
          }
-         if ( keyEvent->keysym.sym == SDLK_KP7  && keyStates[SDLK_KP7] ) {
+         if ( keyEvent->keysym.sym == SDLK_KP_7  && keyStates[SDLK_KP_7] ) {
             moveCursor(7, 1);
             return true;
          }
-         if ( keyEvent->keysym.sym == SDLK_KP9  && keyStates[SDLK_KP9]) {
+         if ( keyEvent->keysym.sym == SDLK_KP_9  && keyStates[SDLK_KP_9]) {
             moveCursor(1, 1);
             return true;
          }
-         if ( keyEvent->keysym.sym == SDLK_KP1  && keyStates[SDLK_KP1]) {
+         if ( keyEvent->keysym.sym == SDLK_KP_1  && keyStates[SDLK_KP_1]) {
             moveCursor(5, 1);
             return true;
          }
-         if ( keyEvent->keysym.sym == SDLK_KP3  && keyStates[SDLK_KP3]) {
+         if ( keyEvent->keysym.sym == SDLK_KP_3  && keyStates[SDLK_KP_3]) {
             moveCursor(3, 1);
             return true;
          }

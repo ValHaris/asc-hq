@@ -101,6 +101,10 @@ class SignalEditUpdate : public sigc::signal<bool> {}
 	@param	c		the character to insert
 	*/
 	void SendChar(PG_Char c);
+	/**
+	 * @param c  a null terminated string containing a utf-8 character
+	 */
+	void SendChars(const char* c);
 
 	/**
 	Send a 'del' keystroke into the LineEdit widget

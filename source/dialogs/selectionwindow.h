@@ -110,6 +110,7 @@ class ItemSelectorWidget : public PG_Widget {
    protected:   
       bool moveSelection( int amount ) ;
       bool eventKeyDown(const SDL_KeyboardEvent* key);
+  	  bool eventTextInput(const SDL_TextInputEvent* text);
       void itemSelected( const SelectionWidget* w, bool mouse );
       void markItem( const SelectionWidget* w );
       bool isItemMarked( const SelectionWidget* w );

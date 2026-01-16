@@ -236,16 +236,16 @@ int tsearchreactionfireingunits :: attack( Vehicle* attacker, Vehicle* target, c
                if ( fieldvisiblenow ( gamemap->getField (attacker->xpos, attacker->ypos ), gamemap->getPlayerView())) {
                   ++visibility;
                   context.display->cursor_goto( attacker->getPosition() );
-                  int t = ticker;
-                  while ( t + 15 > ticker )
+                  int t = SDL_GetTicks();
+                  while ( t + 15 > SDL_GetTicks() )
                      releasetimeslice();
                }
 
                if ( fieldvisiblenow ( fld, target, gamemap->getPlayerView() )) {
                   ++visibility;
                   context.display->cursor_goto( target->getPosition() );
-                  int t = ticker;
-                  while ( t + 15 > ticker )
+                  int t = SDL_GetTicks();
+                  while ( t + 15 > SDL_GetTicks() )
                      releasetimeslice();
                }
             }

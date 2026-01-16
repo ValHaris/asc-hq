@@ -104,9 +104,8 @@ CONFIG_CLEAN_VPATH_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 libSDLmm_la_LIBADD =
 am_libSDLmm_la_OBJECTS = sdlmm_global.lo sdlmm_basesurface.lo \
-	sdlmm_surface.lo sdlmm_display.lo sdlmm_pixelformat.lo \
-	sdlmm_srect.lo sdlmm_event.lo sdlmm_audio.lo sdlmm_timer.lo \
-	sdlmm_joystick.lo sdlmm_cd.lo
+	sdlmm_surface.lo sdlmm_pixelformat.lo sdlmm_srect.lo \
+	sdlmm_timer.lo
 libSDLmm_la_OBJECTS = $(am_libSDLmm_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -127,12 +126,10 @@ am__v_at_1 =
 DEFAULT_INCLUDES = -I.@am__isrc@ -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
-am__depfiles_remade = ./$(DEPDIR)/sdlmm_audio.Plo \
-	./$(DEPDIR)/sdlmm_basesurface.Plo ./$(DEPDIR)/sdlmm_cd.Plo \
-	./$(DEPDIR)/sdlmm_display.Plo ./$(DEPDIR)/sdlmm_event.Plo \
-	./$(DEPDIR)/sdlmm_global.Plo ./$(DEPDIR)/sdlmm_joystick.Plo \
-	./$(DEPDIR)/sdlmm_pixelformat.Plo ./$(DEPDIR)/sdlmm_srect.Plo \
-	./$(DEPDIR)/sdlmm_surface.Plo ./$(DEPDIR)/sdlmm_timer.Plo
+am__depfiles_remade = ./$(DEPDIR)/sdlmm_basesurface.Plo \
+	./$(DEPDIR)/sdlmm_global.Plo ./$(DEPDIR)/sdlmm_pixelformat.Plo \
+	./$(DEPDIR)/sdlmm_srect.Plo ./$(DEPDIR)/sdlmm_surface.Plo \
+	./$(DEPDIR)/sdlmm_timer.Plo
 am__mv = mv -f
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
@@ -380,12 +377,11 @@ noinst_LTLIBRARIES = libSDLmm.la
 AM_CXXFLAGS = @SDL_CFLAGS@ 
 AM_CFLAGS = @SDL_CFLAGS@ 
 HDRS = sdlmm_global.h sdlmm_misc.h sdlmm.h sdlmm_spoint.h sdlmm_srect.h sdlmm_color.h sdlmm_surface.h sdlmm_videoinfo.h \
-     sdlmm_display.h sdlmm_basesurface.h sdlmm_pixelformat.h sdlmm_event.h sdlmm_eventhandler.h \
+     sdlmm_display.h sdlmm_basesurface.h sdlmm_pixelformat.h \
      sdlmm_audio.h sdlmm_timer.h sdlmm_joystick.h sdlmm_cd.h sdlmm_config.h
 
-libSDLmm_la_SOURCES = sdlmm_global.cpp sdlmm_basesurface.cpp sdlmm_surface.cpp sdlmm_display.cpp sdlmm_pixelformat.cpp \
-	sdlmm_srect.cpp sdlmm_event.cpp sdlmm_audio.cpp sdlmm_timer.cpp \
-	sdlmm_joystick.cpp sdlmm_cd.cpp 
+libSDLmm_la_SOURCES = sdlmm_global.cpp sdlmm_basesurface.cpp sdlmm_surface.cpp sdlmm_pixelformat.cpp \
+	sdlmm_srect.cpp sdlmm_timer.cpp 
 
 EXTRA_DIST = $(srcdir)/*.h
 all: all-am
@@ -442,13 +438,8 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sdlmm_audio.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sdlmm_basesurface.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sdlmm_cd.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sdlmm_display.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sdlmm_event.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sdlmm_global.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sdlmm_joystick.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sdlmm_pixelformat.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sdlmm_srect.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sdlmm_surface.Plo@am__quote@ # am--include-marker
@@ -611,13 +602,8 @@ clean-am: clean-generic clean-libtool clean-noinstLTLIBRARIES \
 	mostlyclean-am
 
 distclean: distclean-am
-		-rm -f ./$(DEPDIR)/sdlmm_audio.Plo
-	-rm -f ./$(DEPDIR)/sdlmm_basesurface.Plo
-	-rm -f ./$(DEPDIR)/sdlmm_cd.Plo
-	-rm -f ./$(DEPDIR)/sdlmm_display.Plo
-	-rm -f ./$(DEPDIR)/sdlmm_event.Plo
+		-rm -f ./$(DEPDIR)/sdlmm_basesurface.Plo
 	-rm -f ./$(DEPDIR)/sdlmm_global.Plo
-	-rm -f ./$(DEPDIR)/sdlmm_joystick.Plo
 	-rm -f ./$(DEPDIR)/sdlmm_pixelformat.Plo
 	-rm -f ./$(DEPDIR)/sdlmm_srect.Plo
 	-rm -f ./$(DEPDIR)/sdlmm_surface.Plo
@@ -667,13 +653,8 @@ install-ps-am:
 installcheck-am:
 
 maintainer-clean: maintainer-clean-am
-		-rm -f ./$(DEPDIR)/sdlmm_audio.Plo
-	-rm -f ./$(DEPDIR)/sdlmm_basesurface.Plo
-	-rm -f ./$(DEPDIR)/sdlmm_cd.Plo
-	-rm -f ./$(DEPDIR)/sdlmm_display.Plo
-	-rm -f ./$(DEPDIR)/sdlmm_event.Plo
+		-rm -f ./$(DEPDIR)/sdlmm_basesurface.Plo
 	-rm -f ./$(DEPDIR)/sdlmm_global.Plo
-	-rm -f ./$(DEPDIR)/sdlmm_joystick.Plo
 	-rm -f ./$(DEPDIR)/sdlmm_pixelformat.Plo
 	-rm -f ./$(DEPDIR)/sdlmm_srect.Plo
 	-rm -f ./$(DEPDIR)/sdlmm_surface.Plo

@@ -1544,6 +1544,7 @@ int PG_Widget::RunModal() {
 			}
 		}
 		PG_Application::ClearOldMousePosition();
+		print(&event);
 		ProcessEvent(&event, true);
 		PG_Application::DrawCursor();
 	}
@@ -1571,7 +1572,8 @@ void PG_Widget::eventBlit(SDL_Surface* srf, const PG_Rect& src, const PG_Rect& d
 	// Set alpha
 	Uint8 a = 255-_mid->transparency;
 	if(a != 0) {
-		SDL_SetSurfaceAlphaMod(srf, a);
+		if ( a != 255 )
+			SDL_SetSurfaceAlphaMod(srf, a);
 
 		// Blit widget surface to screen
 #ifdef DEBUG

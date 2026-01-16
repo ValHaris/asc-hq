@@ -70,7 +70,6 @@ class StartupScreen: public sigc::trackable {
  class ASC_PG_App : public PG_Application {
        ASCString themeName;
        bool fullScreen;
-       int bitsperpixel;
        
        void messageDialog( const ASCString& message, MessagingHubBase::MessageType mt );
 
@@ -88,7 +87,7 @@ class StartupScreen: public sigc::trackable {
        static const int mainScreenID = 1;
     
        ASC_PG_App ( const ASCString& themeName );
-       bool InitScreen ( int w, int h, int depth = 0, Uint32 flags = SDL_SWSURFACE|SDL_HWPALETTE );
+       bool InitScreen ( int w, int h, bool fullscreen );
        
        void reloadTheme();
        int Run ();
@@ -99,9 +98,11 @@ class StartupScreen: public sigc::trackable {
        void setIcon( const ASCString& filename );
        
        void processEvent();
-       bool enableLegacyEventHandling( bool use );
 
        bool queueWidgetForDeletion( PG_Widget* widget );
+
+
+       static sigc::signal<void,const SDL_Surface*> postScreenUpdate;
 
        ~ASC_PG_App();
  };

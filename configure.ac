@@ -169,7 +169,7 @@ CXXFLAGS="$CXXFLAGS $SDL_CFLAGS"
 CFLAGS="$CFLAGS $SDL_CFLAGS"
 LIBS="$LIBS $SDL_LIBS"
 
-AC_CHECK_LIB( SDL_image,
+AC_CHECK_LIB( SDL2_image,
               IMG_LoadJPG_RW,,
               AC_LIB_MISSING( SDL_image, http://www.libsdl.org/projects/SDL_image/ )) 
 
@@ -204,9 +204,9 @@ AC_CHECK_LIB(jpeg,
              jpeg_CreateDecompress,,
              AC_LIB_MISSING( jpeg, http://www.ijg.org/,,[ which is VERY unlikely,]))
 
-AC_CHECK_LIB(SDL_mixer, 
+AC_CHECK_LIB(SDL2_mixer, 
              Mix_PlayChannelTimed,, 
-             AC_LIB_MISSING( SDL_mixer, http://www.libsdl.org/projects/SDL_mixer/ ))
+             AC_LIB_MISSING( SDL2_mixer, http://www.libsdl.org/projects/SDL_mixer/ ))
 
 AC_CHECK_LIB( SDL_sound, Sound_Init,,SDLsoundmissing=y)
 

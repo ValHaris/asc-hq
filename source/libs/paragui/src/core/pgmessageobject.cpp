@@ -195,6 +195,15 @@ bool PG_MessageObject::eventSysWM(const SDL_SysWMEvent* syswm) {
 	return false;
 }
 
+bool PG_MessageObject::eventTextInput(const SDL_TextInputEvent* text) {
+	return false;
+}
+
+
+bool PG_MessageObject::eventResize(const SDL_WindowEvent* event) {
+	return false;
+}
+
 
 bool PG_MessageObject::AcceptEvent(const SDL_Event* event) {
 	return true;				// PG_MessageObject accepts all events

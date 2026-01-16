@@ -35,9 +35,7 @@
 */    
 extern bool setEventRouting( bool queue, bool legacy );
 
-extern bool legacyEventSystemActive();
-
-extern int initializeEventHandling ( int (*fn)(void *) , void *data );
+inline bool legacyEventSystemActive(){}
 
 
 class EventHandlingMutex {
@@ -51,8 +49,6 @@ extern void exit_asc( int returnresult );
 
 class ThreadExitException {};
 
-extern bool redrawScreen;
-
 /***************************************************************************
  *                                                                         *
  *   Mouse handling routines                                               *
@@ -63,12 +59,11 @@ extern bool redrawScreen;
 struct tmouserect {
        int x1, y1;
        int x2, y2;
-       tmouserect operator+ ( const tmouserect& b ) const;
+       tmouserect operator+ ( const tmouserect& b ) const {};
 //       tmouserect ( int _x1, int _y1, int _x2, int _y2 ) : x1(_x1), y1(_y1), x2(_x2), y2(_y2 ) {};
 //       tmouserect(){ x1=0;y1=0;x2=0;y2=0;};
 };
 
-extern void mousevisible( int an );
 extern int getmousestatus ();
 
 extern void setmouseposition ( int x, int y );
@@ -110,10 +105,6 @@ class tmousesettings {
 
 
 
-extern void mouseintproc2( void );
-extern volatile tmousesettings mouseparams;
-
-
 /***************************************************************************
  *                                                                         *
  *   Keyboard handling routines                                            *
@@ -125,16 +116,8 @@ extern volatile tmousesettings mouseparams;
 
  typedef int tkey;
 
- extern char  skeypress( tkey keynr);
- extern char *get_key(tkey keynr);
- extern int keypress(void);
- extern tkey char2key (int ch);
- extern void getkeysyms ( tkey* keysym, int* keyprnt );
 
- extern int exitprogram;
-
-
- extern bool isKeyPressed(SDL_Keysym key);
+ extern bool isKeyPressed(SDL_KeyCode key);
 
 /***************************************************************************
  *                                                                         *
@@ -143,7 +126,6 @@ extern volatile tmousesettings mouseparams;
  ***************************************************************************/
 
 
-    extern volatile int ticker;
     extern void ndelay(int time);
 
     extern void starttimer(void); //resets Timer

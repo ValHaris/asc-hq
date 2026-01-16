@@ -185,8 +185,6 @@ static void DrawTileSurface(SDL_Surface* src, const PG_Rect& r, SDL_Surface* dst
 
 	if(blend > 0) {
 		SDL_SetSurfaceAlphaMod(src, 255-blend);
-	} else {
-		SDL_SetSurfaceAlphaMod(src, 0);
 	}
 
 	srcrect.my_width = src->w;
@@ -346,8 +344,10 @@ void PG_Draw::DrawThemedSurface(SDL_Surface* surface, const PG_Rect& r, PG_Gradi
 	bColorKey = SDL_GetColorKey(background, &colorkey) == 0;
 	Uint8 rc,gc,bc;
 
-	SDL_GetRGB(colorkey, background->format, &rc, &gc, &bc);
-	uColorKey = (Uint32)((rc << 16) | (gc << 8) | bc);
+	if(bColorKey) {
+		SDL_GetRGB(colorkey, background->format, &rc, &gc, &bc);
+		uColorKey = (Uint32)((rc << 16) | (gc << 8) | bc);
+	}
 
 	if(((gradient == NULL) || (blend == 0)) && bColorKey) {
 		SDL_SetColorKey(background, 0, 0);
@@ -383,8 +383,6 @@ void PG_Draw::DrawThemedSurface(SDL_Surface* surface, const PG_Rect& r, PG_Gradi
 			// set per surface alpha
 			if(blend > 0) {
 				SDL_SetSurfaceAlphaMod(temp, 255-blend);
-			} else {
-				SDL_SetSurfaceAlphaMod(temp, 0);
 			}
 
 			// blit it

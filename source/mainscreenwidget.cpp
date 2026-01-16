@@ -132,7 +132,7 @@ void MainScreenWidget :: toggleMapLayer( const ASCString& name )
 
 bool MainScreenWidget :: idleHandler( )
 {
-   if ( ticker > lastMessageTime + 500 ) {
+   if ( SDL_GetTicks() > lastMessageTime + 500 ) {
       displayMessage( "" );
       lastMessageTime = 0xfffffff;
    }
@@ -145,7 +145,7 @@ void MainScreenWidget :: mouseScrollChecker()
 {
    if ( getPGApplication().isFullscreen() && IsMouseInside() ) {
 
-      if ( ticker > lastMouseScrollTime + 30 ) {
+      if ( SDL_GetTicks() > lastMouseScrollTime + 30 ) {
          int x,y;
          SDL_GetMouseState( &x, &y);
    
@@ -266,7 +266,7 @@ void MainScreenWidget::displayMessage( const ASCString& message )
 {
    if ( messageLine ) {
       messageLine->SetText( message );
-      lastMessageTime = ticker;
+      lastMessageTime = SDL_GetTicks();
    }   
 }
 
@@ -276,21 +276,29 @@ void MainScreenWidget::eventBlit (SDL_Surface *surface, const PG_Rect &src, cons
 {
    SDL_Rect dstrect;
    Surface s = Surface::Wrap( PG_Application::GetScreen() );
-   dstrect.x = blitRects[0].x;
-   dstrect.y = blitRects[0].y;
-   s.Blit( backgroundImage, blitRects[0], dstrect );
+   if (src.OverlapRect(blitRects[0])) {
+	   dstrect.x = blitRects[0].x;
+	   dstrect.y = blitRects[0].y;
+	   s.Blit( backgroundImage, blitRects[0], dstrect );
+   }
    
-   dstrect.x = blitRects[1].x;
-   dstrect.y = blitRects[1].y;
-   s.Blit( backgroundImage, blitRects[1], dstrect );
+   if (src.OverlapRect(blitRects[1])) {
+	   dstrect.x = blitRects[1].x;
+	   dstrect.y = blitRects[1].y;
+	   s.Blit( backgroundImage, blitRects[1], dstrect );
+   }
    
-   dstrect.x = blitRects[2].x;
-   dstrect.y = blitRects[2].y;
-   s.Blit( backgroundImage, blitRects[2], dstrect );
+   if (src.OverlapRect(blitRects[2])) {
+	   dstrect.x = blitRects[2].x;
+	   dstrect.y = blitRects[2].y;
+	   s.Blit( backgroundImage, blitRects[2], dstrect );
+   }
    
-   dstrect.x = blitRects[3].x;
-   dstrect.y = blitRects[3].y;
-   s.Blit( backgroundImage, blitRects[3], dstrect );
+   if (src.OverlapRect(blitRects[3])) {
+	   dstrect.x = blitRects[3].x;
+	   dstrect.y = blitRects[3].y;
+	   s.Blit( backgroundImage, blitRects[3], dstrect );
+   }
 }
 
 StatusMessageWindowHolder MainScreenWidget::createStatusWindow( const ASCString& msg )

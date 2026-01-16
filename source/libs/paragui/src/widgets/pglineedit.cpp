@@ -551,6 +551,17 @@ void PG_LineEdit::SendChar(PG_Char c) {
 	InsertChar(c);
 }
 
+void PG_LineEdit::SendChars(const char* c) {
+
+	// this is a dirty hack that only works for single-byte characters
+	if(!IsValidKey(*c)) {
+		return;
+	}
+
+	InsertChar(*c);
+}
+
+
 void PG_LineEdit::SendDel() {
 	DeleteChar(my_cursorPosition);
 	SetCursorPos(my_cursorPosition);

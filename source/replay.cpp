@@ -47,7 +47,6 @@
 #include "actions/jumpdrivecommand.h"
 #include "reactionfire.h"
 #include "gameeventsystem.h"
-#include "sdl/graphicsqueue.h"
 #include "video/videorecorder.h"
 #include "iconrepository.h"
 #include "dialogs/replayrecorder.h"
@@ -177,7 +176,7 @@ class ReplayRecorderWatcherGlobal {
          }
          
          if ( !connection.connected() )
-            connection = postScreenUpdate.connect( sigc::mem_fun( *this, &ReplayRecorder::screenUpdate ));
+            connection = ASC_PG_App::postScreenUpdate.connect( sigc::mem_fun( *this, &ReplayRecorder::screenUpdate ));
       }
       
       void pause()
@@ -271,7 +270,7 @@ class ReplayPlay : public GuiFunction
 
       bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
       {
-         return ( key->keysym.unicode == 'p' );
+         return ( key->keysym.sym == 'p' );
       };
       
 };
@@ -306,7 +305,7 @@ class ReplayPause : public GuiFunction
       
       bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
       {
-         return ( key->keysym.unicode == 'p' );
+         return ( key->keysym.sym == 'p' );
       };
       
 };
@@ -349,7 +348,7 @@ class ReplayFaster : public GuiFunction
 
       bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
       {
-         return ( key->keysym.unicode == '+' || key->keysym.sym == SDLK_KP_PLUS);
+         return ( key->keysym.sym == '+' || key->keysym.sym == SDLK_KP_PLUS);
       };
       
 };
@@ -386,7 +385,7 @@ class ReplaySlower : public GuiFunction
 
       bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
       {
-         return ( key->keysym.unicode == '-' || key->keysym.sym == SDLK_KP_MINUS);
+         return ( key->keysym.sym == '-' || key->keysym.sym == SDLK_KP_MINUS);
       };
       
 };
@@ -421,7 +420,7 @@ class ReplayRewind : public GuiFunction
 
       bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
       {
-         return ( key->keysym.unicode == 'r' );
+         return ( key->keysym.sym == 'r' );
       };
       
 };
@@ -456,7 +455,7 @@ class ReplayExit : public GuiFunction
 
       bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
       {
-         return ( key->keysym.unicode == 'x' );
+         return ( key->keysym.sym == 'x' );
       };
       
 };
@@ -506,7 +505,7 @@ class ReplayRecord : public GuiFunction
 
       bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
       {
-         return ( key->keysym.unicode == 'v' );
+         return ( key->keysym.sym == 'v' );
       };
       
 };
@@ -541,7 +540,7 @@ class ReplayRecordExit : public GuiFunction
 
       bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
       {
-         return ( key->keysym.unicode == 'c' );
+         return ( key->keysym.sym == 'c' );
       };
       
 };
@@ -869,7 +868,7 @@ void trunreplay::error( const ASCString& message )
 void trunreplay :: wait ( int t )
 {
 //   if ( fieldvisiblenow ( getactfield(), actmap->playerView ))
-    while ( ticker < t + CGameOptions::Instance()->replayspeed  && !keypress()) {
+    while ( SDL_GetTicks() < t + CGameOptions::Instance()->replayspeed ) {
        /*
        tkey input;
        while (keypress ()) {
@@ -924,11 +923,11 @@ void trunreplay :: removeActionCursor ( void )
 void trunreplay :: execnextreplaymove ( void )
 {
    
-   static int lastTicker = ticker;
+   static int lastTicker = SDL_GetTicks();
    
-   if ( lastTicker + 10 < ticker ) {
+   if ( lastTicker + 10 < SDL_GetTicks() ) {
       displayLogMessage( 8, "executing replay move %d\n", movenum );
-      lastTicker = ticker;
+      lastTicker = SDL_GetTicks();
    }
 
    if ( !replayRecorder || !replayRecorder->isRunning())
@@ -955,7 +954,7 @@ void trunreplay :: execnextreplaymove ( void )
                            auto_ptr<MoveUnitCommand> muc ( new MoveUnitCommand( eht ));
                            muc->setDestination( MapCoordinate(x2,y2) );
 
-                           int t = ticker;
+                           int t = SDL_GetTicks();
                            wait( MapCoordinate(x1,y1), MapCoordinate(x2,y2), t );
                            
                            ActionResult res = muc->execute( createReplayContext() );
@@ -996,7 +995,7 @@ void trunreplay :: execnextreplaymove ( void )
                         if ( eht ) {
                            auto_ptr<MoveUnitCommand> muc ( new MoveUnitCommand( eht ));
                            
-                           int t = ticker;
+                           int t = SDL_GetTicks();
                            wait( MapCoordinate(x1,y1), MapCoordinate(x2,y2), t );
                            
                            MapCoordinate3D dest ( x2,y2, 0 );

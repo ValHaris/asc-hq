@@ -29,7 +29,7 @@
 
 class ResearchInfo : public ASC_PG_Dialog {
    public:
-       ResearchInfo( const Player& player ) : ASC_PG_Dialog( NULL, PG_Rect(-1, -1, 500,500), "Research Status" )
+       ResearchInfo( const Player& player ) : ASC_PG_Dialog( NULL, PG_Rect(-1, -1, 500,500), "Research Status" ), player(player)
        {
             PG_ProgressBar* progress = new PG_ProgressBar(this, PG_Rect(20, 70, Width()-40, 30));
             progress->SetProgress(0);
@@ -68,9 +68,14 @@ class ResearchInfo : public ASC_PG_Dialog {
 
              PG_Button* ok = new PG_Button( this, PG_Rect( Width() - 100, Height() - 30, 90, 20 ), "OK" );
              ok->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &ResearchInfo::QuitModal )));
+
+             PG_Button* ta = new PG_Button( this, PG_Rect( 30, Height() - 30, 60, 20 ), "TechAdapters" );
+             ta->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &ResearchInfo::ShowAdapters)));
+
           }
 
    private:
+       const Player& player;
        ASCString getTechs(const Research& res) {
            vector<ASCString> sv;
            for ( vector<int>::const_iterator i = res.developedTechnologies.begin(); i != res.developedTechnologies.end(); ++i ) {
@@ -85,22 +90,21 @@ class ResearchInfo : public ASC_PG_Dialog {
               s += *i + "\n";
            return s;
        }
+
+       bool ShowAdapters() {
+		  ASCString s = player.research.listTriggeredTechAdapter();
+		  ViewFormattedText vft ( "Triggered TechAdapter", s, PG_Rect( -1, -1, 500, 500 ));
+		  vft.Show();
+		  vft.RunModal();
+       }
     };
 
 
 
 
 void researchinfo ( const Player& player )
-{  {
-        ResearchInfo ri(player);
-        ri.Show();
-        ri.RunModal();
-   }
-   if ( skeypress(ct_lshift)) {
-      ASCString s = player.research.listTriggeredTechAdapter();
-
-      ViewFormattedText vft ( "Triggered TechAdapter", s, PG_Rect( -1, -1, 500, 500 ));
-      vft.Show();
-      vft.RunModal();
-   }
+{
+	ResearchInfo ri(player);
+	ri.Show();
+	ri.RunModal();
 }
