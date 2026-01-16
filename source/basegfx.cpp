@@ -85,15 +85,7 @@ rahmen(bool invers,
        int x2,
        int y2)
 {
-	collategraphicoperations cgo ( x1, y1, x2, y2 );
-	int col	=	(invers == false)	?	white	:	darkgray;
-
-	line(x1, y1, x1, y2, col);
-	line(x1, y1, x2, y1, col);
 	
-	col	=		(invers == true)	?	white	:	darkgray;
-	line(x2, y1, x2, y2, col);
-	line(x1, y2, x2, y2, col);
 }
 
 void tdrawline :: start ( int x1, int y1, int x2, int y2 )
@@ -184,56 +176,6 @@ line(int  x1,
      int  y2,
      Uint8 actcol)
 {
-   collategraphicoperations cgs ( x1, y1, x2, y2 );
-	float           m, b;
-	int             w;
-	float           yy1, yy2, xx1, xx2;
-
-
-
-    if ( x1 == x2) {
-        for (w=y1;w<=y2 ;w++ ) 
-           putpixel(x1, w, actcol );
-
-    } else {
-       if ( y1 == y2) {
-          for (w=x1;w<=x2 ;w++ ) 
-               putpixel(w, y1, actcol );
-       } else {
-        	yy1 = y1;
-        	yy2 = y2;
-        	xx1 = x1;
-        	xx2 = x2;
-        	m = (yy2 - yy1) / (xx2 - xx1);
-        	b = y1 - m * x1;
-        	if ((m <= 1) && (m >= -1)) {
-        		if (x2 < x1) {
-        			w = x2;
-        			x2 = x1;
-        			x1 = w;
-        			w = y2;
-        			y2 = y1;
-        			y1 = w;
-        		}
-        		for (w = x1; w <= x2; w++) 
-        			putpixel(w, (int) (m * w + b), actcol);
-        		
-        	} else {
-        		if (y2 < y1) {
-        			w = x2;
-        			x2 = x1;
-        			x1 = w;
-        			w = y2;
-        			y2 = y1;
-        			y1 = w;
-        		}
-        		for (w = y1; w <= y2; w++) {
-        			putpixel((int) ((w - b) / m), w, actcol);
-        		}
-        
-        	}
-         } /* endif */
-     }
 
 }
 
@@ -244,50 +186,7 @@ xorline(int  x1,
      int  y2,
      Uint8 actcol)
 {
-   collategraphicoperations cgs ( x1, y1, x2, y2 );
 
-	float           m, b;
-	int             w;
-	float           yy1, yy2, xx1, xx2;
-
-    if ( x1 == x2) {
-        for (w=y1;w<=y2 ;w++ ) {
-		putpixel( x1, w, getpixel ( x1, w ) ^ actcol);
-        } /* endfor */
-    } else {
-	yy1 = y1;
-	yy2 = y2;
-	xx1 = x1;
-	xx2 = x2;
-	m = (yy2 - yy1) / (xx2 - xx1);
-	b = y1 - m * x1;
-	if ((m <= 1) && (m >= -1)) {
-		if (x2 < x1) {
-			w = x2;
-			x2 = x1;
-			x1 = w;
-			w = y2;
-			y2 = y1;
-			y1 = w;
-		}
-		for (w = x1; w <= x2; w++) {
-			putpixel(w, (int) (m * w + b), getpixel( w, (int) (m * w + b) ) ^ actcol);
-		}
-	} else {
-		if (y2 < y1) {
-			w = x2;
-			x2 = x1;
-			x1 = w;
-			w = y2;                  
-			y2 = y1;
-			y1 = w;
-		}
-		for (w = y1; w <= y2; w++) {
-			putpixel((int) ((w - b) / m), w, getpixel ( (int) ((w - b) / m), w ) ^ actcol);             
-		}
-
-	}
-     }
 
 }
 
@@ -300,12 +199,6 @@ rectangle(int x1,
 	  int y2,
 	  Uint8 color)
 {
-   collategraphicoperations cgs ( x1, y1, x2, y2 );
-
-	line(x1, y1, x1, y2, color);
-	line(x1, y1, x2, y1, color);
-	line(x2, y1, x2, y2, color);
-	line(x1, y2, x2, y2, color);
 
 }
 
@@ -316,12 +209,6 @@ void xorrectangle(int x1,
 	     int y2,
 	     Uint8 color)
 {
-   collategraphicoperations cgs ( x1, y1, x2, y2 );
-
-          xorline(x1,y1,x1,y2,color); 
-          xorline(x1,y1,x2,y1,color);
-          xorline(x2,y1,x2,y2,color); 
-          xorline(x1,y2,x2,y2,color);
 
 }
 
@@ -448,57 +335,13 @@ void putshadow ( int x1, int y1, void* ptr, ppixelxlattable xl )
 #endif
 void putpicturemix ( int x1, int y1, void* ptr, int rotation, Uint8* mixbuf )
 {
-   Uint16* w = (Uint16*) ptr;
-   Uint8* c = (Uint8*) ptr + 4;
-   int spacelength = agmp->scanlinelength - *w - 1;
-
-   collategraphicoperations cgo ( x1, y1, x1 + w[0], y1+w[1] );
-   if ( agmp->windowstatus == 100 ) {
-      Uint8* buf = (Uint8*) (agmp->scanlinelength * y1 + x1 + agmp->linearaddress);
-      for ( int y = w[1] + 1; y > 0; y-- ) {
-         for ( int x = w[0]+1; x > 0; x-- ) {
-            if ( *c != 255 ) {
-               int o = *buf << 8;
-               if ( *c >= 16  && *c < 24 )
-                  *buf = mixbuf[o + *c + rotation];
-               else
-                  *buf = mixbuf[o + *c];
-            }
-            buf++;
-            c++;
-         }
-         buf+=spacelength;
-      }
-   }
 
 }
 
 
 void putinterlacedrotimage ( int x1, int y1, void* ptr, int rotation )
 {
-   Uint16* w = (Uint16*) ptr;
-   Uint8* c = (Uint8*) ptr + 4;
-   int spacelength = agmp->scanlinelength - *w - 1;
 
-   collategraphicoperations cgo ( x1, y1, x1 + w[0], y1+w[1] );
-   if ( agmp->windowstatus == 100 ) {
-      Uint8* buf = (Uint8*) (agmp->scanlinelength * y1 + x1 + agmp->linearaddress);
-      for ( int y = w[1] + 1; y > 0; y-- ) {
-         for ( int x = w[0]+1; x > 0; x-- ) {
-            if ( *c != 255 ) {
-               if ( ((PointerSizedInt)(buf+y)) & 1 ) {
-                  if ( *c >= 16  && *c < 24 )
-                     *buf = *c + rotation;
-                  else
-                     *buf = *c;
-               }
-            }
-            buf++;
-            c++;
-         }
-         buf+=spacelength;
-      }
-   }
 
 }
 
@@ -702,9 +545,7 @@ void flippict ( void* s, void* d, int dir )
 
 void putpixel8 ( int x1, int y1, int color )
 {
-    collategraphicoperations cgo ( x1, y1, x1, y1 );
-    Uint8* buf = (Uint8*) (agmp->scanlinelength * y1 + x1 * agmp->byteperpix + agmp->linearaddress);
-    *buf = color;
+
 }
 
 int getpixel8 ( int x1, int y1 )
@@ -716,44 +557,6 @@ int getpixel8 ( int x1, int y1 )
 
 void putpixel(int x1, int y1, int color)
 {
-   collategraphicoperations cgo ( x1, y1, x1, y1 );
-   if ( agmp->byteperpix == 1 )
-      putpixel8 ( x1, y1, color );
-   else {
-      if ( agmp->windowstatus == 100 ) {
-         Uint8* pc = (Uint8*) ( agmp->linearaddress + x1 * agmp->byteperpix + y1 * agmp->scanlinelength );
-         int alpha = color >> 24;
-         if ( alpha == 0 ) {
-            pc[ agmp->redfieldposition/8 ] = color & 0xff;
-            pc[ agmp->greenfieldposition/8 ] = (color >> 8) & 0xff;
-            pc[ agmp->bluefieldposition/8 ] = (color >> 16) & 0xff;
-         } else {
-            pc[ agmp->redfieldposition/8 ] = pc[ agmp->redfieldposition/8 ] * alpha / alphabase + (color & 0xff) * (alphabase - alpha ) / alphabase;
-            pc[ agmp->greenfieldposition/8 ] = pc[ agmp->greenfieldposition/8 ] * alpha / alphabase + ((color >> 8 ) & 0xff) * (alphabase - alpha ) / alphabase;
-            pc[ agmp->bluefieldposition/8 ] = pc[ agmp->bluefieldposition/8 ] * alpha / alphabase + ((color >> 16) & 0xff) * (alphabase - alpha ) / alphabase;
-         }
-      } else {
-        /*
-         int pos = x1 * agmp->byteperpix + y1 * agmp->scanlinelength;
-         int page = pos >> 16;
-         if ( hgmp->actsetpage != page )
-            setvirtualpagepos ( page );
-
-         Uint8* pc = (Uint8*) ( agmp->linearaddress + (pos & 0xffff) );
-
-         int alpha = color >> 24;
-         if ( alpha == 0 ) {
-            pc[ agmp->redfieldposition/8 ] = color & 0xff;
-            pc[ agmp->greenfieldposition/8 ] = (color >> 8) & 0xff;
-            pc[ agmp->bluefieldposition/8 ] = (color >> 16) & 0xff;
-         } else {
-            pc[ agmp->redfieldposition/8 ] = pc[ agmp->redfieldposition/8 ] * alpha / alphabase + (color & 0xff) * (alphabase - alpha ) / alphabase;
-            pc[ agmp->greenfieldposition/8 ] = pc[ agmp->greenfieldposition/8 ] * alpha / alphabase + ((color >> 8 ) & 0xff) * (alphabase - alpha ) / alphabase;
-            pc[ agmp->bluefieldposition/8 ] = pc[ agmp->bluefieldposition/8 ] * alpha / alphabase + ((color >> 16) & 0xff) * (alphabase - alpha ) / alphabase;
-         }
-        */ 
-      }
-   }
 
 }
 
@@ -1042,27 +845,6 @@ void* uncompress_rlepict ( void* pict )
 
 void ellipse ( int x1, int y1, int x2, int y2, int color, float tolerance )
 {
-   collategraphicoperations cgs ( x1, y1, x2, y2 );
-
-   int midx = (x1 + x2) / 2;
-   int midy = (y1 + y2) / 2;
-   float xr = x2 - x1;
-   float yr = y2 - y1;
-
-   tolerance = tolerance / (xr+yr) *  80;
-
-   xr= (xr/2)*(xr/2);
-   yr= (yr/2)*(yr/2);
-
-   for ( int y = y1; y <= y2; y++ )
-      for ( int x = x1; x <= x2; x++ ) {
-         float dx = x - midx;
-         float dy = y - midy;
-         float tmp = dx*dx/xr + dy*dy/yr;
-//         float tmp = dx*dx*yr + dy*dy*xr;
-         if (  tmp <= 1 + tolerance && tmp >= 1 - tolerance )
-            putpixel ( x, y, color );
-      }
 
 }
 
@@ -1152,69 +934,15 @@ tvirtualdisplay :: ~tvirtualdisplay ( )
 }
 
 
-collategraphicoperations :: collategraphicoperations ( void )
-{
-   #ifndef _DOS_
-   status = 1;
-   x1 = -1; y1 = -1;
-   x2 = -1; y2 = -1;
-   olddirectscreenaccess = agmp->directscreenaccess;
-   agmp->directscreenaccess = 1;
-   #endif
-}
-
-collategraphicoperations :: collategraphicoperations ( int _x1, int _y1, int _x2, int _y2 )
-{
-   #ifndef _DOS_
-   status = 1;
-   x1 = _x1; y1 = _y1;
-   x2 = _x2; y2 = _y2;
-   olddirectscreenaccess = agmp->directscreenaccess;
-   agmp->directscreenaccess = 1;
-   #endif
-}
-
-
-void collategraphicoperations :: on ( void )
-{
-   #ifndef _DOS_
-   agmp->directscreenaccess = 1;
-   status = 1;
-   #endif
-}
-
-void collategraphicoperations :: off ( void )
-{
-   #ifndef _DOS_
-   status = 0;
-   agmp->directscreenaccess = 0;
-   if (agmp->directscreenaccess == 0)
-      copy2screen( x1, y1, x2, y2 );
-
-   #endif
-}
-
-collategraphicoperations :: ~collategraphicoperations (  )
-{
-   #ifndef _DOS_
-   if ( status ) {
-      agmp->directscreenaccess = olddirectscreenaccess;
-      if (agmp->directscreenaccess == 0)
-         copy2screen( x1, y1, x2, y2 );
-   }
-   #endif
-}
 
 void copySurface2screen( void )
 {
-   if (agmp->directscreenaccess == 0)
-      copy2screen( -1, -1, -1, -1 );
+
 }
 
 void copySurface2screen( int x1, int y1, int x2, int y2 )
 {
-   if (agmp->directscreenaccess == 0)
-      copy2screen( x1, y1, x2, y2 );
+
 }
 
 
@@ -1238,7 +966,7 @@ void*     xlatbuffer;
 
 void bar(int x1, int y1, int x2, int y2, Uint8 color)
 {
-   collategraphicoperations cgo ( x1, y1, x2, y2 );
+
    if ( agmp->windowstatus == 100 ) {
       int spacelength = agmp->scanlinelength - (x2-x1) - 1;
       Uint8* buf = (Uint8*) (agmp->scanlinelength * y1 + x1 * agmp->byteperpix + agmp->linearaddress);
@@ -1288,43 +1016,9 @@ void putimage ( int x1, int y1, void* img )
    
       if ( hd->id == 16973 ) { 
    
-         collategraphicoperations cgo ( x1, y1, x1+hd->x, y1+hd->y );
 
-         int spacelength = agmp->scanlinelength - hd->x - 1;
-
-         src  += sizeof ( *hd );
-
-         int x = 0;
-         for ( int c = 0; c < hd->size; c++ ) {
-            if ( *src == hd->rle ) {
-               x += src[1];
-               for ( int i = src[1]; i > 0; i-- )
-                  *(buf++) = src[2];
-   
-               src += 3;
-               c+=2;
-
-            } else {
-               *(buf++) = *(src++);
-               x++;
-            }
-
-            if ( x > hd->x ) {
-               buf += spacelength;
-               x = 0;
-            }
-         }
       } else {
-         Uint16* w = (Uint16*) img;
-         collategraphicoperations cgo ( x1, y1, x1+w[0], y1+w[1] );
-         int spacelength = agmp->scanlinelength - *w - 1;
-         src += 4;
-         for ( int y = w[1] + 1; y > 0; y-- ) {
-            for ( int x = w[0]+1; x > 0; x-- ) 
-               *(buf++) = *(src++);
-            
-            buf+=spacelength;
-         }
+
       }
    }
 
@@ -1381,55 +1075,9 @@ void putxlatfilter ( int x1, int y1, void* pic, Uint8* xlattables )
       trleheader*   hd = (trleheader*) pic;
 
       if ( hd->id == 16973 ) {
-         collategraphicoperations cgo ( x1, y1, x1+hd->x, y1+hd->y );
 
-         int spacelength = agmp->scanlinelength - hd->x - 1;
-         src  += sizeof ( *hd );
-
-         int x = 0;
-         for ( int c = 0; c < hd->size; c++ ) {
-            if ( *src == hd->rle ) {
-               x += src[1];
-               for ( int i = src[1]; i > 0; i-- ) {
-                  if ( src[2] != 255 )
-                     *buf = xlattables[ src[2] * 256 + *buf ];
-                  buf++;
-               }
-
-               src += 3;
-               c+=2;
-
-            } else {
-               if ( *src != 255 )
-                  *buf = xlattables[ *(src++) * 256 + *buf ];
-               else
-                  src++;
-               buf++;
-               x++;
-            }
-
-            if ( x > hd->x ) {
-               buf += spacelength;
-               x = 0;
-            }
-         }
       } else {
-         Uint16* w = (Uint16*) pic;
-         collategraphicoperations cgo ( x1, y1, x1+w[0], y1+w[1] );
-         int spacelength = agmp->scanlinelength - *w - 1;
 
-         src += 4;
-         for ( int y = w[1] + 1; y > 0; y-- ) {
-            for ( int x = w[0]+1; x > 0; x-- ) {
-               if ( *src != 255 )
-                  *buf = xlattables[ *(src++) * 256 + *buf ];
-               else
-                  src++;
-               buf++;
-            }
-
-            buf+=spacelength;
-         }
       }
    }
 
@@ -1444,50 +1092,9 @@ void putspriteimage ( int x1, int y1, void* pic )
       trleheader*   hd = (trleheader*) pic;
       Uint8* buf = (Uint8*) (agmp->scanlinelength * y1 + x1 * agmp->byteperpix + agmp->linearaddress);
       if ( hd->id == 16973 ) { 
-         collategraphicoperations cgo ( x1, y1, x1+hd->x, y1+hd->y );
-         int spacelength = agmp->scanlinelength - hd->x - 1;
-         src  += sizeof ( *hd );
 
-         int x = 0;
-         for ( int c = 0; c < hd->size; c++ ) {
-            if ( *src == hd->rle ) {
-               x += src[1];
-               if ( src[2] != 255 ) {
-                  for ( int i = src[1]; i > 0; i-- )
-                     *(buf++) = src[2];
-               } else
-                  buf += src[1];
-               src += 3;
-               c+=2;
-   
-            } else {
-               if ( *src != 255 )
-                  *buf = *src;
-               buf++;
-               src++;
-               x++;
-            }
-
-            if ( x > hd->x ) {
-               buf += spacelength;
-               x = 0;
-            }
-         }
       } else {
-         Uint16* w = (Uint16*) pic;
-         collategraphicoperations cgo ( x1, y1, x1+w[0], y1+w[1] );
-         int spacelength = agmp->scanlinelength - *w - 1;
-         src += 4;
-         for ( int y = w[1] + 1; y > 0; y-- ) {
-            for ( int x = w[0]+1; x > 0; x-- ) {
-            	Uint8 d = *(src++);
-               if ( d != 255 )
-                  *buf = d;
-               buf++;
-            }
-            
-            buf+=spacelength;
-         }
+
       }
    }
 
@@ -1502,7 +1109,6 @@ void putrotspriteimage(int x1, int y1, void *pic, int rotationvalue)
       trleheader*   hd = (trleheader*) pic;
    
       if ( hd->id == 16973 ) { 
-         collategraphicoperations cgo ( x1, y1, x1+hd->x, y1+hd->y );
 
          int spacelength = agmp->scanlinelength - hd->x - 1;
          src  += sizeof ( *hd );
@@ -1542,23 +1148,7 @@ void putrotspriteimage(int x1, int y1, void *pic, int rotationvalue)
          }
       } else {
          Uint16* w = (Uint16*) pic;
-         collategraphicoperations cgo ( x1, y1, x1+w[0], y1+w[1] );
-         int spacelength = agmp->scanlinelength - *w - 1;
-         src += 4;
-         for ( int y = w[1] + 1; y > 0; y-- ) {
-            for ( int x = w[0]+1; x > 0; x-- ) {
-            	Uint8 d = *(src++);
-               if ( d != 255 ) {
-                  if ( d >= 16 && d < 24 )
-                     d += rotationvalue;
-   
-                  *buf = d;
-               }
-               buf++;
-            }
-            
-            buf+=spacelength;
-         }
+
       }
    }
 
@@ -1566,167 +1156,27 @@ void putrotspriteimage(int x1, int y1, void *pic, int rotationvalue)
 
 void putrotspriteimage90(int x1, int y1, void *pic, int rotationvalue)
 {
-   Uint16* w = (Uint16*) pic;
-   // Uint8* c = (Uint8*) pic + 4;
-   int spacelength = agmp->scanlinelength - w[1] - 1;
-   collategraphicoperations cgo ( x1, y1, x1+w[1], y1+w[0] );
 
-   if ( agmp->windowstatus == 100 ) {
-      Uint8* buf = (Uint8*) (agmp->scanlinelength * y1 + x1 * agmp->byteperpix + agmp->linearaddress);
-      for ( int y = 0; y <= w[0] ; y++ ) {
-         for ( int x = 0; x <= w[1]; x++ ) {
-            int d = getpixelfromimage ( pic, y, w[1] - x );
-            if ( d != 255 && d != -1) {
-               if ( d >= 16 && d < 24 )
-                  d += rotationvalue;
-
-               *buf = d;
-            }
-            buf++;
-         }
-         
-         buf+=spacelength;
-      }
-   }
 
 }
 
 void putrotspriteimage180(int x1, int y1, void *pic, int rotationvalue)
 {
-   Uint16* w = (Uint16*) pic;
-   collategraphicoperations cgo ( x1, y1, x1+w[0], y1+w[1] );
-   // Uint8* c = (Uint8*) pic + 4;
-   int spacelength = agmp->scanlinelength - *w - 1;
-
-   if ( agmp->windowstatus == 100 ) {
-      Uint8* buf = (Uint8*) (agmp->scanlinelength * y1 + x1 * agmp->byteperpix + agmp->linearaddress);
-      for ( int y = 0; y <= w[1] ; y++ ) {
-         for ( int x = 0; x <= w[0]; x++ ) {
-            int d = getpixelfromimage ( pic, w[0] - x, w[1] - y );
-            if ( d != 255 && d != -1) {
-               if ( d >= 16 && d < 24 )
-                  d += rotationvalue;
-
-               *buf = d;
-            }
-            buf++;
-         }
-         
-         buf+=spacelength;
-      }
-   }
 
 }
 
 void putrotspriteimage270(int x1, int y1, void *pic, int rotationvalue)
 {
-   Uint16* w = (Uint16*) pic;
-   collategraphicoperations cgo ( x1, y1, x1+w[0], y1+w[1] );
-   // Uint8* c = (Uint8*) pic + 4;
-   int spacelength = agmp->scanlinelength - *w - 1;
-
-   if ( agmp->windowstatus == 100 ) {
-      Uint8* buf = (Uint8*) (agmp->scanlinelength * y1 + x1 * agmp->byteperpix + agmp->linearaddress);
-      for ( int y = 0; y <= w[1] ; y++ ) {
-         for ( int x = 0; x <= w[0]; x++ ) {
-            int d = getpixelfromimage ( pic, w[1] - y, x );
-            if ( d != 255 && d != -1) {
-               if ( d >= 16 && d < 24 )
-                  d += rotationvalue;
-
-               *buf = d;
-            }
-            buf++;
-         }
-         
-         buf+=spacelength;
-      }
-   }
-
-}
-
-void puttexture ( int x1, int y1, int x2, int y2, void *texture )
-{
-   collategraphicoperations cgo ( x1, y1, x2, y2 );
-   Uint8* c = (Uint8*) texture;
-   int spacelength = agmp->scanlinelength - (x2 - x1) - 1;
-
-   if ( agmp->windowstatus == 100 ) {
-      int offset = agmp->scanlinelength * y1 + x1;
-      Uint8* buf = (Uint8*) agmp->linearaddress;
-      for ( int y = y1 ; y <= y2; y++ ) {
-         for ( int x = x1; x <= x2 ; x++ ) {
-            buf[offset] = c[offset];
-            offset++;
-         }
-         
-         offset+=spacelength;
-      }
-   }
-
 }
 
 
-void putspritetexture ( int x1, int y1, int x2, int y2, void *texture )
-{
-   collategraphicoperations cgo ( x1, y1, x2, y2 );
-   Uint8* c = (Uint8*) texture;
-   int spacelength = agmp->scanlinelength - (x2 - x1) - 1;
 
-   if ( agmp->windowstatus == 100 ) {
-      int offset = agmp->scanlinelength * y1 + x1;
-      Uint8* buf = (Uint8*) agmp->linearaddress;
-      for ( int y = y1 ; y <= y2; y++ ) {
-         for ( int x = x1; x <= x2 ; x++ ) {
-        	 Uint8 d = c[offset];
-            if ( d != 255 )
-               buf[offset] = d;
-            offset++;
-         }
-         
-         offset+=spacelength;
-      }
-   }
-
-}
 
 void putimageprt ( int x1, int y1, int x2, int y2, void *texture, int dx, int dy )
 {
-   collategraphicoperations cgo ( x1, y1, x2, y2 );
-   int spacelength = agmp->scanlinelength - (x2-x1) - 1;
-
-   if ( agmp->windowstatus == 100 ) {
-      Uint8* buf = (Uint8*) (agmp->scanlinelength * y1 + x1 * agmp->byteperpix + agmp->linearaddress);
-      for ( int y = y1; y <= y2 ; y++ ) {
-         for ( int x = x1; x <= x2; x++ ) {
-            int p = getpixelfromimage ( texture, x - x1 + dx, y - y1 + dy );
-            if ( p != -1 ) 
-               *buf = p;
-
-            buf++;
-         }
-         buf+=spacelength;
-      }
-      /*
-      for ( int y = 0; y <= w[1] ; y++ ) {
-         for ( int x = 0; x <= w[0]; x++ ) {
-            int p = getpixelfromimage ( texture, x + dx, y + dy );
-            if ( p != -1 )
-               *buf = p;
-
-            buf++;
-         }
-         buf+=spacelength;
-      } */
-   }
 
 }
 
-void copybuf2displaymemory(int size, void *buf)
-{
-   collategraphicoperations cgo ;
-   memcpy ( (void*) agmp->linearaddress, buf, size );
-}
 
 #if 0
 void* xlatpict ( ppixelxlattable xl, void* vbuf )
@@ -1805,149 +1255,6 @@ int loga2 ( int a )
 
 void showtext ( const char* text, int x, int y, int textcol )
 {
-   if ( !activefontsettings.font )
-     return;
-
-   if ( !text )
-     return;
- 
-   Uint8* fb = (Uint8*)(x * agmp->byteperpix + y * agmp->scanlinelength + agmp->linearaddress);
-   int fontheight;
-   int extraheight = 0;
-   if ( activefontsettings.height == 0 )
-      fontheight = activefontsettings.font->height;
-   else
-      if ( activefontsettings.height > activefontsettings.font->height ) {
-         fontheight = activefontsettings.font->height;
-         extraheight = activefontsettings.height - activefontsettings.font->height;
-      } else 
-         fontheight = activefontsettings.height;
-
-    const Uint8* t = (Uint8*) text;
-    int length = 0;
-
-    Uint8* characterpointer[1024];
-    int    characterwidth[1024];
-    int    characterdist[1024];
-    int ps = 0;
-    while ( *t ) {
-       if ( activefontsettings.font->character[int(*t)].width ) {
-          characterwidth[ps] = activefontsettings.font->character[int(*t)].width;
-          characterpointer[ps] = activefontsettings.font->character[int(*t)].memposition + 2;
-          if ( t[1] )
-             characterdist[ps] = activefontsettings.font->kerning[int(t[1])][int(t[0])] + 2;
-          else
-             characterdist[ps] = 0;
-          length +=activefontsettings.font->character[int(*t)].width;
-          length += characterdist[ps];
-          ps++;
-       }
-       t++;
-    }
-    int leftextralength = 0;
-    int rightextralength = 0;
-
-    if ( !activefontsettings.length )
-       leftextralength = rightextralength = 0;
-    else {
-       if ( activefontsettings.justify == 0 ) {
-          leftextralength = 0;
-          if ( activefontsettings.length > length )
-             rightextralength = activefontsettings.length - length;
-          else {
-             rightextralength = 0;
-             length = activefontsettings.length;
-          }
-       } else
-       if ( activefontsettings.justify == 1 ) {
-          if ( activefontsettings.length > length ) {
-             leftextralength = (activefontsettings.length - length+2)/2;
-             rightextralength = activefontsettings.length - length - leftextralength;
-          } else {
-             rightextralength = 0;
-             leftextralength = 0;
-             length = activefontsettings.length;
-          }
-       } else
-       if ( activefontsettings.justify == 2 ) {
-          rightextralength = 0;
-          if ( activefontsettings.length > length )
-             leftextralength = activefontsettings.length - length;
-          else {
-             leftextralength = 0;
-             length = activefontsettings.length;
-          }
-       } 
-       
-    }
-    collategraphicoperations cgo ( x, y, x +length + leftextralength + rightextralength, y + fontheight + extraheight );
-
-    int suppressbkgr = 0;
-    int spacelength = agmp->scanlinelength - (length + leftextralength + rightextralength);
-    if ( activefontsettings.background == 255 ) {
-       spacelength += leftextralength + rightextralength;
-       fb += leftextralength;
-       leftextralength = rightextralength = 0;
-       extraheight = 0;
-    }
-    for ( int yl = 0; yl < fontheight; yl++ ) {
-       if ( leftextralength ) 
-          for ( int i = 0; i < leftextralength; i++ )
-             *(fb++) = activefontsettings.background;
-
-       int x = 0;
-       ps = 0;
-       while ( x < length ) {
-          int cx;
-          for ( cx = characterwidth[ps]; cx > 0 && x < length; cx--) {
-             int pix = *(characterpointer[ps]++);
-             if ( pix ) {
-                if ( textcol != -1 )
-                   *fb = textcol;
-                else
-                   *fb = pix;
-             } else
-                if ( activefontsettings.background != 255 ) {
-                   if ( suppressbkgr )
-                      suppressbkgr--;
-                   else
-                     *fb = activefontsettings.background;
-                }
-             fb++;
-             x++;
-          } /* endfor */
-          if ( x < length ) {
-             if ( characterdist[ps] > 0 ) {
-                for (int i = characterdist[ps]; i && x < length; i-- ) {
-                   if ( activefontsettings.background != 255 )
-                     *fb = activefontsettings.background;
-                   fb++;
-                   x++;
-                } /* endfor */
-             } else {
-                fb += characterdist[ps];
-                x += characterdist[ps];
-                suppressbkgr = -characterdist[ps];
-             }
-          } else {
-             characterpointer[ps] += cx;
-          }
-          ps++;
-       }
-
-       if ( rightextralength )
-          for ( int i = 0; i < rightextralength; i++ )
-             *(fb++) = activefontsettings.background;
-
-       fb += spacelength;
-    }
-    if ( extraheight )
-       for ( int yl = extraheight; yl > 0; yl-- ) {
-          for ( int x = length + leftextralength + rightextralength; x > 0; x-- )
-             *(fb++) = activefontsettings.background;
-          fb += spacelength;
-       }
-
 }
 
 void showtext2 ( const ASCString& text, int x, int y )

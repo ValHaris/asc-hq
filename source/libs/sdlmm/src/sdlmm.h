@@ -126,7 +126,5 @@
 #include "sdlmm_surface.h"
 #include "sdlmm_pixelformat.h"
 #include "sdlmm_display.h"
-#include "sdlmm_eventhandler.h"
-#include "sdlmm_event.h"
 #include "sdlmm_timer.h"
 #endif // SDLMM_H

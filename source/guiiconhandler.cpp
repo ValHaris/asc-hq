@@ -633,18 +633,18 @@ bool NewGuiHost::eventKeyDown(const SDL_KeyboardEvent* key)
    }
 
    if ( enterKeyPressed ) {
-      if ( key->keysym.sym == SDLK_RIGHT  || key->keysym.sym == SDLK_KP6 )
+      if ( key->keysym.sym == SDLK_RIGHT  || key->keysym.sym == SDLK_KP_6 )
          return setNewButtonPressed( keyPressedButton + 1);
 
-      if ( key->keysym.sym == SDLK_LEFT  || key->keysym.sym == SDLK_KP4 )
+      if ( key->keysym.sym == SDLK_LEFT  || key->keysym.sym == SDLK_KP_4 )
          if  ( keyPressedButton > 0 )
             return setNewButtonPressed( keyPressedButton - 1);
 
-      if ( key->keysym.sym == SDLK_UP || key->keysym.sym == SDLK_KP8 )
+      if ( key->keysym.sym == SDLK_UP || key->keysym.sym == SDLK_KP_8 )
          if ( keyPressedButton >= guiIconColumnNum )
             return setNewButtonPressed( keyPressedButton - guiIconColumnNum );
 
-      if ( key->keysym.sym == SDLK_DOWN || key->keysym.sym == SDLK_KP2 )
+      if ( key->keysym.sym == SDLK_DOWN || key->keysym.sym == SDLK_KP_2 )
          return setNewButtonPressed( keyPressedButton + guiIconColumnNum );
          
       if ( key->keysym.sym == SDLK_ESCAPE || key->keysym.sym == SDLK_END ) {

@@ -234,7 +234,7 @@ Surface loadASCFieldImage ( const ASCString& file, bool applyFieldMaskToImage )
          Surface s ( surface );
 
          if ( s.GetPixelFormat().BitsPerPixel() == 8)
-            s.SetColorKey( SDL_SRCCOLORKEY, 255 );
+            s.SetColorKey( SDL_TRUE, 255 );
          /*
          else 
             s.SetColorKey( SDL_SRCCOLORKEY, 0xfefefe );

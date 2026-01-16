@@ -794,7 +794,7 @@ AI::AiResult AI::tactics( void )
                }
                float finalValue = 0;
 
-               tactics_findBestAttackUnits ( attacker, mvci, positions, 0, finalPositions, finalValue, 0, 0, ticker );
+               tactics_findBestAttackUnits ( attacker, mvci, positions, 0, finalPositions, finalValue, 0, 0, SDL_GetTicks() );
 
                if ( finalValue > 0 ) {
                   for ( int i = 0; i < sidenum; i++ )
@@ -1040,7 +1040,7 @@ class UnitAttacksUnit_FakeHemming : public tunitattacksunit {
 
 void AI :: tactics_findBestAttackUnits ( const MoveVariantContainer& mvc, MoveVariantContainer::iterator& m, Vehicle** positions, float value, Vehicle** finalPosition, float& finalValue, int unitsPositioned, int recursionDepth, int startTime )
 {
-   if ( m == mvc.end() || unitsPositioned >= 6 || recursionDepth >= 8 || (startTime + config.maxTactTime < ticker && !benchMark)) {
+   if ( m == mvc.end() || unitsPositioned >= 6 || recursionDepth >= 8 || (startTime + config.maxTactTime < SDL_GetTicks() && !benchMark)) {
       float value = 0;
       Vehicle* target = mvc.begin()->enemy;
       npush ( target->damage );

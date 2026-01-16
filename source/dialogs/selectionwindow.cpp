@@ -163,16 +163,19 @@ bool ItemSelectorWidget::eventKeyDown(const SDL_KeyboardEvent* key)
            // messag(ASCString("Search within names: ") + searchWithinNames?"enabled":"disabled",3);
        }
 
-   if ( key->keysym.unicode <= 255 && key->keysym.unicode >= 0x20 ) {
-      ASCString newtext = nameSearch->GetText() + char ( key->keysym.unicode );
-      if ( locateObject( newtext ) || !namesConstrained ) 
-         nameSearch->SendChar( key->keysym.unicode );
-      
-      return true;
-   }   
    
    return false;
 };
+
+bool ItemSelectorWidget::eventTextInput(const SDL_TextInputEvent* text)
+{
+	  ASCString newtext = nameSearch->GetText() + text->text;
+	  if ( locateObject( newtext ) || !namesConstrained )
+		 nameSearch->SendChars( text->text );
+
+	  return true;
+}
+
 
 void ItemSelectorWidget::itemSelected( const SelectionWidget* w, bool mouse )
 {

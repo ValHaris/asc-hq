@@ -80,7 +80,8 @@ PG_EventSupplier* PG_Application::my_eventSupplier = NULL;
 PG_EventSupplier* PG_Application::my_defaultEventSupplier = NULL;
 bool PG_Application::defaultUpdateOverlappingSiblings = true;
 PG_Char PG_Application::highlightingTag = 0;
-PG_ScreenUpdater* PG_Application::my_ScreenUpdater = NULL;
+PG_SDLScreenUpdater defaultScreenUpdater;
+PG_ScreenUpdater* PG_Application::my_ScreenUpdater = &defaultScreenUpdater;
 PG_Application::ScreenInitialization PG_Application::screenInitialized = PG_Application::None;
 
 /**
@@ -103,7 +104,6 @@ PG_Application::ScreenInitialization PG_Application::isScreenInitialized() {
 }
 
 
-PG_SDLScreenUpdater defaultScreenUpdater;
 
 
 PG_Application::PG_Application()
@@ -175,16 +175,21 @@ PG_Application::~PG_Application() {
 }
 
 /**  */
-bool PG_Application::InitScreen(int w, int h) {
+bool PG_Application::InitScreen(int w, int h, bool fullscreen) {
 
-	SDL_CreateWindowAndRenderer(0, 0, SDL_WINDOW_FULLSCREEN_DESKTOP, &mainWindow, &mainWindowRenderer);
+	if ( fullscreen ) {
+		SDL_CreateWindowAndRenderer(0, 0, SDL_WINDOW_FULLSCREEN_DESKTOP, &mainWindow, &mainWindowRenderer);
+		SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
+		if ( SDL_RenderSetLogicalSize(mainWindowRenderer,w,h) != 0 )
+			throw PG_Exception("PG_Application::InitScreen renderSetLogicalSIze", SDL_GetError());
+	} else {
+		SDL_CreateWindowAndRenderer(w, h, 0, &mainWindow, &mainWindowRenderer);
+	}
+	if ( !mainWindow || !mainWindowRenderer )
+		throw PG_Exception("PG_Application::InitScreen", SDL_GetError());
 
-	screen = SDL_CreateRGBSurface(0, w, h, 32,
-					0x00FF0000,
-					0x0000FF00,
-					0x000000FF,
-					0xFF000000);
 
+	screen = SDL_CreateRGBSurfaceWithFormat(0, w, h, 32, SDL_PIXELFORMAT_ARGB8888);
 	mainWindowTexture = SDL_CreateTexture(mainWindowRenderer,
 	                                            SDL_PIXELFORMAT_ARGB8888,
 	                                            SDL_TEXTUREACCESS_STREAMING,
@@ -205,7 +210,7 @@ bool PG_Application::InitScreen(int w, int h) {
 void PG_Application::UpdateScreen(const SDL_Rect * srcrect, int numRects)
 {
 	SDL_UpdateTexture(mainWindowTexture, NULL, screen->pixels, screen->pitch);
-	SDL_RenderClear(mainWindowRenderer);
+	// SDL_RenderClear(mainWindowRenderer);
 	if ( !srcrect || numRects==0 )
 		SDL_RenderCopy(mainWindowRenderer, mainWindowTexture, NULL, NULL);
 	else
@@ -256,18 +261,6 @@ void PG_Application::RunEventLoop() {
 
 		DrawCursor();
 	}
-}
-
-
-void PG_Application::SetEventSupplier( PG_EventSupplier* eventSupplier ) {
-	if ( eventSupplier )
-		my_eventSupplier = eventSupplier;
-	else
-		my_eventSupplier = my_defaultEventSupplier;
-}
-
-PG_EventSupplier* PG_Application::GetEventSupplier() {
-	return my_eventSupplier;
 }
 
 
@@ -446,16 +439,6 @@ PG_Application::CursorMode PG_Application::ShowCursor(CursorMode mode) {
 	}
 	my_mouse_mode = mode;
 	return orig;
-}
-
-
-
-void PG_Application::SetScreenUpdater( PG_ScreenUpdater* screenUpdater )
-{
-   if ( screenUpdater != NULL )
-      my_ScreenUpdater = screenUpdater;
-   else
-      my_ScreenUpdater = &defaultScreenUpdater;
 }
 
 
@@ -798,6 +781,22 @@ void PG_Application::SetIcon(const std::string& filename) {
 	}
 }
 
+
+PG_SDLEventSupplier sdleventSupplier;
+
+PG_EventSupplier* PG_Application::GetEventSupplier()
+{
+	return &sdleventSupplier;
+}
+
+
+void PG_Application::SetIcon(SDL_Surface* icon) {
+	if ( icon != NULL ) {
+		SDL_SetWindowIcon(mainWindow, icon);
+	}
+}
+
+
 void PG_Application::SetCaption(const std::string& title, const std::string& icon) {
 	SDL_SetWindowTitle(mainWindow, title.c_str());
 	if (!icon.empty()) {
@@ -989,8 +988,29 @@ void PG_Application::eventIdle() {
 	SDL_Delay(1);
 }
 
+void print(const SDL_WindowEvent& event) {
+	std::cout << "Window Event: " << (int)event.event << "\n";
+}
+
+void print(const SDL_MouseButtonEvent& event) {
+	std::cout << "Mouse Button Event: X=" << (int)event.x << " Y=" << (int)event.y << " State=" << (int)event.state << " Button=" << (int)event.button << "\n";
+}
+
+void print(const SDL_Event* event) {
+	switch ( event->type ) {
+	case SDL_WINDOWEVENT:
+		print(event->window);
+		break;
+	case SDL_MOUSEBUTTONDOWN:
+	case SDL_MOUSEBUTTONUP:
+		print(event->button);
+	}
+}
+
 bool PG_Application::PumpIntoEventQueue(const SDL_Event* event) {
 	PG_Widget* widget = NULL;
+
+	print(event);
 
 	// do we have a capture hook?
 	if((event->type != SDL_USEREVENT) && (event->type != SDL_WINDOWEVENT)) {
@@ -1063,6 +1083,18 @@ bool PG_Application::PumpIntoEventQueue(const SDL_Event* event) {
 
 	return processed;
 }
+
+
+bool PG_Application::eventWindow(const SDL_WindowEvent* event)
+{
+	if (event->event == SDL_WINDOWEVENT_EXPOSED) {
+		UpdateScreen(NULL, 0);
+		return true;
+	} else
+		return false;
+
+}
+
 
 void PG_Application::SetUpdateOverlappingSiblings(bool update) {
 	defaultUpdateOverlappingSiblings = update;

@@ -831,8 +831,8 @@ bool   WeaponInfoPanel::eventMouseButtonUp (const SDL_MouseButtonEvent *button)
 
 bool WeaponInfoPanel::eventMouseMotion(const SDL_MouseMotionEvent* motion)
 {
-   for ( int i = 0; i < weaponInfoLines.size();++i )
-      if ( weaponInfoLines[i]->IsMouseInside() )
+   for ( int i = 0; i < weaponInfoLines.size(); ++i )
+      if ( weaponInfoLines[i]->IsInside(PG_Point(motion->x, motion->y)) )
          return weaponInfoLines[i]->activate();
    return false;
 };

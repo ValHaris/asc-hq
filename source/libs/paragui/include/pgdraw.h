@@ -36,6 +36,7 @@
 
 #include "pgrect.h"
 #include "pgcolor.h"
+#include "pgexception.h"
 
 #ifndef M_PI
 /**
@@ -274,7 +275,9 @@ DECLSPEC void SetPixel(int x, int y, const PG_Color& c, SDL_Surface * surface);
 	This function simply replaces SDL_BlitSurface and uses PG_Rect instead of SDL_Rect.
 */
 inline void BlitSurface(SDL_Surface* srf_src, const PG_Rect& rect_src, SDL_Surface* srf_dst, const PG_Rect& rect_dst) {
-	SDL_BlitSurface(srf_src, const_cast<PG_Rect*>(&rect_src), srf_dst, const_cast<PG_Rect*>(&rect_dst));
+	if ( SDL_BlitSurface(srf_src, const_cast<PG_Rect*>(&rect_src), srf_dst, const_cast<PG_Rect*>(&rect_dst)) < 0) {
+		throw PG_Exception(SDL_GetError());
+	}
 }
 
 /**

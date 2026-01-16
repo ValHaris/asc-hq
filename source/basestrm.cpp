@@ -653,7 +653,7 @@ void MemoryStreamCopy :: seek ( int newpos )
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-static int stream_seek( struct SDL_RWops *context, int offset, int whence)
+static Sint64 stream_seek( struct SDL_RWops *context, Sint64 offset, int whence)
 {
 	MemoryStreamCopy* stream = (MemoryStreamCopy*) context->hidden.unknown.data1;
 	if ( whence == SEEK_SET )
@@ -668,7 +668,7 @@ static int stream_seek( struct SDL_RWops *context, int offset, int whence)
 }
 
 
-static int stream_read(SDL_RWops *context, void *ptr, int size, int maxnum)
+static size_t stream_read(SDL_RWops *context, void *ptr, size_t size, size_t maxnum)
 
 {
 	MemoryStreamCopy* stream = (MemoryStreamCopy*) context->hidden.unknown.data1;

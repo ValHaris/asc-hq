@@ -1,6 +1,7 @@
 noinst_LTLIBRARIES = libpgcore.la
 
 libpgcore_la_SOURCES = \
+	physfsrwops.cpp \
 	missing.cpp \
 	pgdatacontainer.cpp \
 	pgapplication.cpp \
@@ -14,7 +15,8 @@ libpgcore_la_SOURCES = \
 	pgsurfacecache.cpp \
 	pgcolor.cpp \
 	pgsdleventsupplier.cpp \
-	pgsdlscreenupdater.cpp 
+	pgsdlscreenupdater.cpp \
+	pgfilearchive.cpp
 
 libpgcore_la_LIBADD = \
 	$(SDL_LIBS) \

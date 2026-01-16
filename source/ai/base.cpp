@@ -252,14 +252,14 @@ void AI:: run ( bool benchMark, MapDisplayInterface* myMapDisplay )
    } else 
       mapDisplay = NULL;
 
-   int startTime = ticker;
+   int startTime = SDL_GetTicks();
    AiResult res;
 
    unitCounter = 0;
    isRunning(true);
    setVision(visible_ago);
 
-   int setupTime = ticker;
+   int setupTime = SDL_GetTicks();
    
    FieldMarkingSuppressor fms( mapDisplay );
    
@@ -276,39 +276,39 @@ void AI:: run ( bool benchMark, MapDisplayInterface* myMapDisplay )
 
    calcReconPositions();
 
-   setupTime = ticker-setupTime;
+   setupTime = SDL_GetTicks()-setupTime;
 
-   int serviceTime = ticker;
+   int serviceTime = SDL_GetTicks();
    issueServices( );
    executeServices();
 
    checkGameEvents();
 
-   serviceTime = ticker-serviceTime;
+   serviceTime = SDL_GetTicks()-serviceTime;
 
-   int conquerTime = ticker;
+   int conquerTime = SDL_GetTicks();
    checkConquer();
-   conquerTime = ticker - conquerTime;
+   conquerTime = SDL_GetTicks() - conquerTime;
 
    runReconUnits ( );
 
-   int containerTime = ticker;
+   int containerTime = SDL_GetTicks();
    buildings( 3 );
    transports ( 3 );
-   containerTime = ticker-containerTime;
+   containerTime = SDL_GetTicks()-containerTime;
 
-   int tacticsTime = ticker;
+   int tacticsTime = SDL_GetTicks();
    do {
       res = tactics();
       checkGameEvents();
    } while ( res.unitsMoved );
-   tacticsTime = ticker - tacticsTime;
+   tacticsTime = SDL_GetTicks() - tacticsTime;
 
-   int strategyTime = ticker;
+   int strategyTime = SDL_GetTicks();
    strategy();
    checkGameEvents();
 
-   strategyTime = ticker - strategyTime;
+   strategyTime = SDL_GetTicks() - strategyTime;
 
    buildings( 1 );
    transports ( 3 );
@@ -320,7 +320,7 @@ void AI:: run ( bool benchMark, MapDisplayInterface* myMapDisplay )
    isRunning(false);
    if ( !mapDisplay )
       repaintMap();
-   int duration = ticker-startTime;
+   int duration = SDL_GetTicks()-startTime;
 
 /*
    if ( getMap()->replayinfo )

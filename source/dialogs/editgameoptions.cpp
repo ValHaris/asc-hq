@@ -90,66 +90,14 @@ bool GetVideoModes::comparator( const ModeRes& a, const ModeRes& b )
 
 GetVideoModes::GetVideoModes() 
 {
-   int i;
+   SDL_DisplayMode mode;
+   if ( SDL_GetDisplayMode(0,0,&mode) != 0 )
+	   throw new ASCString("Couldn't get display modes");
 
-
-   SDL_PixelFormat format;
-   format.palette = NULL;
-   format.BitsPerPixel = 32;
-   format.BytesPerPixel = 4;
-   format.Rloss = format.Gloss = format.Bloss = format.Aloss = 0;
-   format.Rshift = 0;
-   format.Gshift = 8;
-   format.Bshift = 16;
-   format.Ashift = 24;
-   format.Rmask = 0xff;
-   format.Gmask = 0xff00;
-   format.Bmask = 0xff0000;
-   format.Amask = 0xff000000;
-   format.colorkey = 0;
-   format.alpha = 0;
    
-   
-   /* Get available fullscreen/hardware modes */
-   modes=SDL_ListModes(&format, SDL_FULLSCREEN);
-
-
-   listedmodes.push_back( make_pair( 0, 0));
-   
-   /* Check is there are any modes available */
-   if(modes == (SDL_Rect **)0){
-      return;
-   }
-   
-   /* Check if our resolution is restricted */
-   if(modes == (SDL_Rect **)-1){
-      warningMessage("All resolutions available.\n");
-      return;
-   }
-   else{
-      for(i=0;modes[i];++i) {
-
-         if ( find ( listedmodes.begin(), listedmodes.end(), make_pair( int(modes[i]->w), int(modes[i]->h ))) != listedmodes.end() )
-            continue;
-         
-         if ( modes[i]->w >= 800 && modes[i]->h >= 600 ) {
-            listedmodes.push_back( make_pair( int(modes[i]->w), int(modes[i]->h )));
-         }
-      }
-      sort ( listedmodes.begin(), listedmodes.end(), &GetVideoModes::comparator );
-
-      for ( vector <ModeRes > ::iterator i = listedmodes.begin(); i != listedmodes.end(); ++i ) {
-         ASCString s;
-         if (  i->first )
-            s.format( "%d*%d", i->first, i->second );
-         else 
-            s = "graphic mode not listed"; 
-         
-         list.push_back ( s );
-      }
-
-   }
-   return;
+   ASCString s;
+   s.format( "%d*%d", mode.w, mode.h);
+   list.push_back(s);
 };
 
 int GetVideoModes::getx( int index ) {
@@ -227,10 +175,6 @@ class EditGameOptions : public ASC_PG_Dialog {
             if ( warn )
                infoMessage( "The new graphic settings will be active after you restart ASC");
 
-            if ( getPGApplication().isFullscreen() != fullscreen ) 
-               getPGApplication().toggleFullscreen();
-            
-            
             CGameOptions::Instance()->setChanged();
             if ( !defaultPassword.empty() && defaultPassword.find_first_not_of('*') != ASCString::npos ) {
                Password p;

@@ -102,7 +102,7 @@ public:
 
 bool AttackGui :: checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
 {
-    if ( key->keysym.sym == SDLK_ESCAPE || key->keysym.unicode == 'c' ) {
+    if ( key->keysym.sym == SDLK_ESCAPE || key->keysym.sym == 'c' ) {
         // execute( actmap->getCursor(), actmap->getField( actmap->getCursor())->getContainer() , -1 );
         return true;
     }
@@ -286,7 +286,7 @@ void Cancel::execute( const MapCoordinate& pos, ContainerBase* subject, int num 
 
 bool Cancel::checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
 {
-    return ( key->keysym.sym == SDLK_ESCAPE || key->keysym.unicode == 'c' );
+    return ( key->keysym.sym == SDLK_ESCAPE || key->keysym.sym == 'c' );
 };
 
 
@@ -446,7 +446,7 @@ protected:
 public:
     // void execute( const MapCoordinate& pos, ContainerBase* subject, int num );
     bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num ) {
-        return ( key->keysym.unicode == 's' );
+        return ( key->keysym.sym == 's' );
     };
     Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num ) {
         return IconRepository::getIcon("ascend-airplane.png");
@@ -484,7 +484,7 @@ protected:
     };
 public:
     bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num ) {
-        return ( key->keysym.unicode == 'd' );
+        return ( key->keysym.sym == 'd' );
     };
     Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num ) {
         return IconRepository::getIcon("descent-airplane.png");
@@ -516,7 +516,7 @@ public:
     bool available( const MapCoordinate& pos, ContainerBase* subject, int num ) ;
     void execute( const MapCoordinate& pos, ContainerBase* subject, int num );
     bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num ) {
-        return ( key->keysym.unicode == 'e' );
+        return ( key->keysym.sym == 'e' );
     };
     Surface& getImage( const MapCoordinate& po, ContainerBase* subject, int nums ) {
         return IconRepository::getIcon("endturn.png");
@@ -573,7 +573,7 @@ public:
     bool available( const MapCoordinate& pos, ContainerBase* subject, int num ) ;
     void execute( const MapCoordinate& pos, ContainerBase* subject, int num );
     bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num ) {
-        return ( key->keysym.unicode == 'a' );
+        return ( key->keysym.sym == 'a' );
     };
     Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num ) {
         return IconRepository::getIcon("attack.png");
@@ -640,7 +640,7 @@ public:
     };
 
     bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num ) {
-        return ( key->keysym.unicode == 'p' );
+        return ( key->keysym.sym == 'p' );
     };
     void execute( const MapCoordinate& pos, ContainerBase* subject, int num ) {
         auto_ptr<PowerGenerationSwitchCommand> pgsc ( new PowerGenerationSwitchCommand( actmap->getField(pos)->vehicle));
@@ -678,7 +678,7 @@ public:
     PowerOff() : PowerSwitch( false ) {};
 
     bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num ) {
-        return ( key->keysym.unicode == 'p' );
+        return ( key->keysym.sym == 'p' );
     };
 
     Surface& getImage( const MapCoordinate& pos, ContainerBase* subject, int num ) {
@@ -706,7 +706,7 @@ public:
         return "unit ~i~nfo";
     };
     bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num ) {
-        return ( key->keysym.unicode == 'i' );
+        return ( key->keysym.sym == 'i' );
     };
 };
 
@@ -832,7 +832,7 @@ public:
     };
 
     bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num ) {
-        return ( key->keysym.unicode == 'l' );
+        return ( key->keysym.sym == 'l' );
     };
 
     ASCString getName( const MapCoordinate& pos, ContainerBase* subject, int num ) {
@@ -858,7 +858,7 @@ public:
         return false;
     };
     bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num ) {
-        return ( key->keysym.unicode == 'x' );
+        return ( key->keysym.sym == 'x' );
     };
 
     void execute( const MapCoordinate& pos, ContainerBase* subject, int num ) {
@@ -897,7 +897,7 @@ public:
     };
 
     bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num ) {
-        return ( key->keysym.unicode == 'x' );
+        return ( key->keysym.sym == 'x' );
     };
     void execute( const MapCoordinate& pos, ContainerBase* subject, int num ) {
         Vehicle* eht = actmap->getField(pos)->vehicle;
@@ -945,7 +945,7 @@ public:
     };
 
     bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num ) {
-        return ( key->keysym.unicode == 'j' );
+        return ( key->keysym.sym == 'j' );
     };
 
     void execute( const MapCoordinate& pos, ContainerBase* subject, int num ) {
@@ -1022,7 +1022,7 @@ public:
     };
 
     bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num ) {
-        return ( key->keysym.unicode == 'r' );
+        return ( key->keysym.sym == 'r' );
     };
     void execute( const MapCoordinate& pos, ContainerBase* subject, int num ) {
         if ( !commandPending()  ) {
@@ -1109,7 +1109,7 @@ public:
 
     };
     bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num ) {
-        return ( key->keysym.unicode == 'f' );
+        return ( key->keysym.sym == 'f' );
     };
 
     void execute( const MapCoordinate& pos, ContainerBase* subject, int num ) {
@@ -1181,7 +1181,7 @@ public:
         return false;
     };
     bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num ) {
-        return ( key->keysym.unicode == 'f' && (modifier & KMOD_SHIFT)  );
+        return ( key->keysym.sym == 'f' && (modifier & KMOD_SHIFT)  );
     };
 
     void execute( const MapCoordinate& pos, ContainerBase* subject, int num ) {
@@ -1222,7 +1222,7 @@ public:
     };
 
     bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num ) {
-        return ( key->keysym.unicode == 'm' );
+        return ( key->keysym.sym == 'm' );
     };
 
     void execute( const MapCoordinate& pos, ContainerBase* subject, int num ) {
@@ -1508,7 +1508,7 @@ bool ObjectBuildingGui::checkForKey( const SDL_KeyboardEvent* key, int modifier,
     if ( num > 0 )
         return false;
     else
-        return ( key->keysym.sym == SDLK_ESCAPE || key->keysym.unicode == 'c' );
+        return ( key->keysym.sym == SDLK_ESCAPE || key->keysym.sym == 'c' );
 }
 
 Surface& ObjectBuildingGui::getImage( const MapCoordinate& pos, ContainerBase* subject, int num )
@@ -1606,7 +1606,7 @@ public:
         return "~c~onstruct / remove objects";
     };
     bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num ) {
-        return ( key->keysym.unicode == 'c' );
+        return ( key->keysym.sym == 'c' );
     };
 };
 
@@ -1947,7 +1947,7 @@ public:
     };
 
     bool checkForKey( const SDL_KeyboardEvent* key, int modifier, int num ) {
-        return ( key->keysym.unicode == 't' && (modifier & KMOD_SHIFT)  );
+        return ( key->keysym.sym == 't' && (modifier & KMOD_SHIFT)  );
     };
 
     void execute( const MapCoordinate& pos, ContainerBase* subject, int num ) {

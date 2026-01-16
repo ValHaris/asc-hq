@@ -794,13 +794,6 @@ bool ASC_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
 
             default:;
       }
-      switch ( key->keysym.unicode ) {
-            case 26:
-               executeUserAction( ua_redo );
-               return true;
-               
-            default:;
-      }
    }
 
    if ( mod & KMOD_CTRL ) {
@@ -814,67 +807,10 @@ bool ASC_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
 
             case SDLK_2: executeUserAction( ua_viewUnitexperienceOverlay );
               return true;
-
-            case SDLK_F10: {
-               SDL_Surface* s = PG_Application::GetScreen();
-               SDL_LockSurface( s );
-               int* i = (int*) (s->pixels);
-               for ( int x = 0; x < 100; ++x )
-                  i[x * s->pitch/4 + x] = 0xffffff;
-               SDL_UnlockSurface( s );
-               SDL_UpdateRect(s,0,0,0,0);
-               return true;
-            }
-
             
             default:;
       }
 
-      // I don't know any more what exactly made me switch to this approach
-      // But it was done very deliberately, see commit abc0b6ab
-      // However, it doesn't work with sdl12_compat any more, that why we try again with the key->keysym.sym method
-      switch ( key->keysym.unicode ) {
-            case 3: // C
-               executeUserAction ( ua_cargosummary );
-               return true;
-
-            case 6: // F
-               executeUserAction ( ua_unitsummary );
-               return true;
-
-            case 7: // G
-               executeUserAction( ua_gotoPosition );
-               return true;
-
-            case 12: // L
-               executeUserAction ( ua_loadgame );
-               return true;
-
-            case 14: // N
-               executeUserAction ( ua_newGame );
-               return true;
-
-            case 17: // Q
-               executeUserAction ( ua_exitgame );
-               return true;
-
-            case 18: // R
-               executeUserAction( ua_createReminder );
-               return true;
-               
-            case 19: // S
-               executeUserAction ( ua_savegame );
-               return true;
-
-            case 20: // T
-               executeUserAction ( ua_runOpenTasks );
-               return true;
-               
-            case 26: // Z
-               executeUserAction( ua_undo );
-               return true;
-      }
-      // see comment above
       switch ( key->keysym.sym ) {
             case SDLK_c:
                executeUserAction ( ua_cargosummary );
@@ -916,16 +852,6 @@ bool ASC_MainScreenWidget::eventKeyDown(const SDL_KeyboardEvent* key)
                executeUserAction( ua_undo );
                return true;
 
-      }
-   }
-
-   if ( mod & KMOD_ALT ) {
-      switch ( key->keysym.sym ) {
-            case SDLK_RETURN:
-               getPGApplication().toggleFullscreen();
-               return true;
-
-            default:;
       }
    }
 
