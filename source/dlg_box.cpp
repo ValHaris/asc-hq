@@ -3391,6 +3391,8 @@ class GetInt : public  ASC_PG_Dialog {
     int minvalue;
     int maxvalue;
 
+    ASC_PropertyEditor* propertyEditor;
+
     bool cancel() {
         if ( onCancel == ReturnZero )
             value = 0;
@@ -3401,6 +3403,7 @@ class GetInt : public  ASC_PG_Dialog {
     }
 
     bool ok() {
+        propertyEditor->Apply();
         if ( value < minvalue || value > maxvalue) {
             warningMessage(ASCString("value must be between ") + ASCString::toString(minvalue) + " and " + ASCString::toString(maxvalue));
             return false;
@@ -3418,9 +3421,9 @@ public:
     GetInt(const ASCString& title, const ASCString& name, int original, int minvalue, int maxvalue, CancelMode onCancel = ReturnZero )
     : ASC_PG_Dialog(NULL, PG_Rect(-1, -1, 300, 150), title), value(original), originalvalue(original), minvalue(minvalue), maxvalue(maxvalue), onCancel(onCancel) {
 
-        ASC_PropertyEditor* propertyEditor = new ASC_PropertyEditor( this, PG_Rect( 10, GetTitlebarHeight(), Width() - 20, Height() - GetTitlebarHeight() - 50 ), "PropertyEditor", name.empty()? 0 : 70 );
+        propertyEditor = new ASC_PropertyEditor( this, PG_Rect( 10, GetTitlebarHeight(), Width() - 20, Height() - GetTitlebarHeight() - 50 ), "PropertyEditor", name.empty()? 10 : 70 );
 
-        (new PG_PropertyField_Integer<int>( propertyEditor, name, value ))->SetRange(minvalue, maxvalue);
+        (new PG_PropertyField_Integer<int>( propertyEditor, name, &value ))->SetRange(minvalue, maxvalue);
 
         AddStandardButton("Cancel")->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &GetInt::cancel )));
         AddStandardButton("OK")->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &GetInt::ok)));
