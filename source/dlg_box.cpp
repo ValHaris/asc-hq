@@ -1723,98 +1723,6 @@ typedef char* tstringa[30];
 typedef tstringa* pstringa;
 
 
-class tdisplaymessage : public tdialogbox {
-                        Uint8 status;
-                        int  mode;
-                    public:
-                        void init ( tstringa a, int md, int linenum, const char* buttonText = NULL );
-                        virtual void buttonpressed ( int id );
-                        virtual void run ( void );
-                   };
-
-extern tdisplaymessage* messagebox;
-
-
-void tdisplaymessage::init ( tstringa a, int md, int linenum, const char* buttonText )
-{
-   if ( !buttonText )
-      buttonText = "~O~K";
-
-   tdialogbox::init();
-
-   int i,j;
-   int maxlength = 0;
-
-   mode = md;
-
-   for (i=0;i<=linenum ;i++ ) {
-      j = gettextwdth ( a[i], schriften.smallarial );
-      while ( j > agmp->resolutionx ) {
-         a[i][strlen(a[i])-1] = 0;
-         j = gettextwdth ( a[i], schriften.smallarial );
-      }
-      if (maxlength < j)
-         maxlength = j;
-   } /* endfor */
-
-   x1 = 50;
-   y1 = 50;
-   if (maxlength < 150)
-     xsize = 200;
-   else
-     xsize = maxlength + 50;
-
-   if ( maxlength > agmp->resolutionx - 100 )
-      x1 = 0;
-
-   if ( xsize > agmp->resolutionx  )
-      xsize = agmp->resolutionx;
-
-   ysize = 55 + linenum * 20;
-   windowstyle |= dlg_notitle;
-   if (mode != 0) {
-      ysize+=25;
-      addbutton ( buttonText, 10, ysize - 35 , xsize - 10 , ysize -  10 ,0,1,1,true );
-      addkey(1, ct_enter);
-      addkey(1, ct_esc);
-      addkey(1, ct_enterk );
-      addkey(1, ct_space );
-   };
-
-   buildgraphics();
-   activefontsettings.justify = lefttext;
-   if (mode == 1) {
-      activefontsettings.color = lightred;
-   } else {
-      activefontsettings.color = black;
-   } /* endif */
-
-   activefontsettings.font = schriften.smallarial;
-   for (i=0;i <= linenum ;i++ ) {
-      showtext2( a[i], x1+10, y1+20+i*20 );
-   } /* endfor */
-   status = 0;
-   if ( pcgo ) {
-      delete pcgo;
-      pcgo = NULL;
-   }
-}
-
-void tdisplaymessage::buttonpressed ( int id )
-{
-   if ( id == 1) {
-      status = 1;
-   } /* endif */
-}
-
-void tdisplaymessage::run ( void )
-{
-   mousevisible(true);
-   do {
-      tdialogbox::run();
-   } while ( status == 0 ); /* enddo */
-}
-
 
 // num   0: Box bleibt aufgeklappt,
 //       1 box wird geschlossen , text rot (Fehler),
@@ -1851,7 +1759,7 @@ void displaymessage( const ASCString& text, int num  )
    int linenum = 0;
 
    while ( *a ) {
-      if (*a == '\n') {
+      if (*a == '\n'&& linenum < 25 ) {
          *b = 0;
          linenum++;
          stringtooutput[linenum] = new char[200];
@@ -1900,37 +1808,7 @@ void displaymessage( const ASCString& text, int num  )
         }
       #endif
 
-      if ( legacyEventSystemActive() ) {
-         static int messageboxopen = 0;
-         if ( messageboxopen )
-            return;
-   
-         messageboxopen++;
-         if ( messagebox ) {
-            if ( messagebox->boxstatus )
-               messagebox->done();
-            delete messagebox;
-            messagebox = NULL;
-         }
-   
-         messagebox = new tdisplaymessage;
-   
-         if ( num== 2 )
-            messagebox->init( stringtooutput, num, linenum, "~q~uit program");
-         else
-            messagebox->init( stringtooutput, num, linenum);
-   
-         if (num != 0 ) {
-            messagebox->run();
-            messagebox->done();
-            delete messagebox;
-            messagebox = NULL;
-         }
-   
-         messageboxopen--;
-      } else {
-         MessagingHub::Instance().warning( text );
-      }
+     MessagingHub::Instance().warning( text );
    } /* endif */
 
    if ( num == 2 ) {
@@ -1945,18 +1823,6 @@ void displaymessage( const ASCString& text, int num  )
 
    for ( int i=linenum; i>=0 ;i-- )
       delete[]  stringtooutput[i];
-}
-
-
-void removemessage( void )
-{
-   if ( messagebox ) {
-     if ( messagebox->boxstatus == 2) 
-        messagebox->done();
-     delete messagebox;
-     messagebox = NULL;
-
-   }
 }
 
 
@@ -3380,8 +3246,6 @@ int         viewtextquery( int          id,
    }
 } 
 
-
-tdisplaymessage* messagebox = NULL;
 
 
 class GetInt : public  ASC_PG_Dialog {
