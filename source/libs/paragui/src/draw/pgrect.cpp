@@ -28,7 +28,7 @@
 
 #include "pgrect.h"
 
-PG_Rect PG_Rect::null;
+PG_Rect PG_Rect::null_rect;
 
 PG_Rect::PG_Rect(Sint16 xv, Sint16 yv, Uint16 wv, Uint16 hv) :
 		my_xpos(x),

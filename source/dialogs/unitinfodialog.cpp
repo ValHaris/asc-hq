@@ -314,7 +314,7 @@ class UnitInfoDialog : public Panel {
         
         
         UnitInfoDialog (PG_Widget *parent, const Vehicle* vehicle, const VehicleType* vehicleType ) 
-           : Panel( parent, PG_Rect::null, "UnitInfoDialog", false ), veh(vehicle), vt( vehicleType ), weaponGraph(NULL), currentWeapon(-1) {
+           : Panel( parent, PG_Rect::null_rect, "UnitInfoDialog", false ), veh(vehicle), vt( vehicleType ), weaponGraph(NULL), currentWeapon(-1) {
                sigClose.connect( sigc::mem_fun( *this, &UnitInfoDialog::QuitModal ));
 
                if( veh )

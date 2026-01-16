@@ -57,7 +57,7 @@
 #include "dialogs/fileselector.h"
 #include "widgets/textrenderer.h"
 #include "unitset.h"
-
+#include "pgpropertyfield_integer.h"
 #include "spfst-legacy.h"
 
 
@@ -914,203 +914,67 @@ void bi3preferences  ( void )
 
 
 
-class ResizeMap : public tdialogbox {
-                        int status;
-                        int top, bottom, left, right;
+class ResizeMapDialog : public ASC_PG_Dialog {
+    int top, bottom, left, right;
+    PG_PropertyEditor* editor;
 
-                     public:
-                        void init ( void );
-                        void buttonpressed ( int id );
-                        void run ( void );
-                        Uint8 checkvalue( int         id, void*      p);
-                    };
+    bool check() {
+        if ( (top & 1) || (bottom & 1)  ) {
+           warningMessage( "values must be even !" );
+           return false;
+        }
+        if ( (actmap->xsize + left + right < 4 ) || (actmap->ysize + top + bottom < 4 )) {
+            warningMessage( "remaining size too small ! !" );
+            return false;
+        }
+        if ( (top + bottom + actmap->ysize > 32000 ) || (left + right + actmap->xsize > 32000)) {
+            warningMessage ( "new map too large !");
+            return false;
+        }
+        return true;
+    }
 
+    bool apply() {
+        editor->Apply();
+        if ( check() ) {
+            int result = actmap->resize ( top, bottom, left, right );
+            if ( result ) {
+              displaymessage ( "resizing failed" , 1 );
+              return false;
+            }
+            QuitModal();
+            return true;
+        }
+        return false;
+    }
 
-Uint8 ResizeMap :: checkvalue(int         id, void*      p)
-{
-   if ( id >= 3 && id <= 6 ) {
-      int* wp = (int*) p;
+public:
+    ResizeMapDialog() : ASC_PG_Dialog(NULL, PG_Rect(-1, -1, 400, 300), "Resize Map") , top(0), bottom(0), left(0), right(0) {
 
-      if ( id == 3 && id == 6 ) 
-         if ( *wp & 1 ) {
-            displaymessage ( "values must be even !", 1 );
-            return 0;
-         }
-         /*
-      if ( (id == 3   &&  - ( *wp + bottom ) > actmap->ysize - idisplaymap.getscreenysize(1) ) ||
-           (id == 6   &&  - ( top + *wp )    > actmap->ysize - idisplaymap.getscreenysize(1) ) ||
-           (id == 4   &&  - ( *wp + right  ) > actmap->xsize - idisplaymap.getscreenxsize(1) ) ||
-           (id == 5   &&  - ( left + *wp   ) > actmap->xsize - idisplaymap.getscreenxsize(1) ) ) {
-         displaymessage ( "remaining size too small !", 1 );
-         return 0;
-      }    */
+        new PG_Label( this, PG_Rect( 25, 220, 150, 20), "positive values: enlarge map");
+        new PG_Label( this, PG_Rect( 25, 245, 150, 20), "negative values: shrink map");
 
-      if ( (id == 3   &&   ( *wp + bottom ) + actmap->ysize > 32000 ) ||
-           (id == 6   &&   ( top + *wp )    + actmap->ysize > 32000 ) ||
-           (id == 4   &&   ( *wp + right  ) + actmap->xsize > 32000 ) ||
-           (id == 5   &&   ( left + *wp   ) + actmap->xsize > 32000 ) ) {
-         displaymessage ( "new map too large !", 1 );
-         return 0;
-      }
+        AddStandardButton("Apply")->sigClick.connect( sigc::hide( sigc::mem_fun(*this, &ResizeMapDialog::apply )));
+        AddStandardButton("cancel")->sigClick.connect( sigc::hide( sigc::mem_fun(*this, &ResizeMapDialog::QuitModal )));
 
-   }
-   return 1;
-}
-
-void ResizeMap :: init ( void )
-{
-
-   top = 0;
-   bottom = 0;
-   left = 0;
-   right = 0;
-
-   tdialogbox::init();
-   title = "Resize Map";
-
-   xsize = 400;
-   ysize = 300;
-
-   x1 = -1;
-   y1 = -1;
-
-   addbutton ( "~O~K", 10, ysize - 35, xsize / 2 - 5, ysize - 10, 0, 1, 1, true );
-   addkey ( 1, ct_enter );
-
-   addbutton ( "~C~ancel", xsize / 2 + 5, ysize - 35, xsize - 10, ysize - 10, 0, 1, 2, true );
-   addkey ( 2, ct_esc );
-
-   addbutton ( "~T~op", xsize/2 - 30, 70, xsize/2 + 30, 90, 2, 0, 3, true );
-   addeingabe ( 3, &top, -actmap->ysize, 70000 );
-   addkey ( 3, ct_t );
-
-   addbutton ( "~L~eft", 20, 120, 80, 140, 2, 0, 4, true );
-   addeingabe ( 4, &left, -actmap->xsize, 70000 );
-   addkey ( 4, ct_l );
-
-   addbutton ( "~R~ight", xsize - 80, 120, xsize - 20, 140, 2, 0, 5, true );
-   addeingabe ( 5, &right, -actmap->xsize, 70000 );
-   addkey ( 5, ct_r );
-
-   addbutton ( "~B~ottom", xsize/2 - 30, 150, xsize/2 + 30, 170, 2, 0, 6, true );
-   addeingabe ( 6, &bottom, -actmap->ysize, 70000 );
-   addkey ( 6, ct_b );
-
-   buildgraphics(); 
-
-   activefontsettings.font = schriften.smallarial; 
-   activefontsettings.justify = lefttext; 
-   activefontsettings.length = 0;
-   activefontsettings.background = 255;
-
-   showtext2 ( "positive values: enlarge map",   x1 + 25, y1 + 220 );
-   showtext2 ( "negative values: shrink map",   x1 + 25, y1 + 240 );
-
-   status = 0;
-}
-
-void ResizeMap :: buttonpressed ( int id )
-{
-   tdialogbox :: buttonpressed ( id );
-
-   if ( id == 1 ) 
-      status = 12;
-
-   if ( id == 2 ) 
-      status = 10;
-
-}
+        editor = new PG_PropertyEditor(this, PG_Rect(10, 30, Width()-20, 200));
+        (new PG_PropertyField_Integer<int>(editor, "Top", &top))->SetRange(-1000,30000);
+        (new PG_PropertyField_Integer<int>(editor, "Left", &left))->SetRange(-1000,30000);
+        (new PG_PropertyField_Integer<int>(editor, "Right", &right))->SetRange(-1000,30000);
+        (new PG_PropertyField_Integer<int>(editor, "Bottom", &bottom))->SetRange(-1000,30000);
+    }
+};
 
 
-void ResizeMap :: run ( void )
-{
-   mousevisible ( true );
-   do {
-      tdialogbox::run();
-   } while ( status < 10 ); /* enddo */
-   if ( status >= 12 ) {
-      int result = actmap->resize ( top, bottom, left, right );
-      if ( result )
-        displaymessage ( "resizing failed" , 1 );
-   }
-}
 
 void resizemap ( void )
 {
-   ResizeMap rm;
-   rm.init();
-   rm.run();
-   rm.done();
-   displaymap();
+    ResizeMapDialog rmd;
+    rmd.Show();
+    rmd.RunModal();
+    displaymap();
 }
 
-
-
-
-
-
-
-
-class tchoosezoomlevel : public tdialogbox {
-             protected:
-                int zoom;
-                int ok;
-             public:
-                void init ( void );
-                void buttonpressed ( int id );
-                void run ( void );
-         };
-
-void tchoosezoomlevel :: init ( void )
-{
-   tdialogbox :: init ( );
-   title = "choose zoomlevel";
-   xsize = 200;
-   ysize = 150;
-//   zoom = zoomlevel.getzoomlevel();
-   ok = 0;
-
-   addbutton ( "~O~k", 10, ysize - 30, xsize - 10, ysize - 10 , 0, 1, 1, true );
-   addkey ( 1, ct_enter );
-
-   addbutton ( "", 10, 60, xsize - 10, 85                     , 2, 1, 2, true );
-   // addeingabe ( 2, &zoom, zoomlevel.getminzoom(), zoomlevel.getmaxzoom() );
-   addkey ( 1, ct_space );
-
-   buildgraphics();
-}
-
-void tchoosezoomlevel :: buttonpressed ( int id )
-{
-   tdialogbox:: buttonpressed ( id );
-   if ( id == 1 )
-      ok = 1;
-}
-
-void tchoosezoomlevel :: run ( void )
-{
-   if ( pcgo ) {
-      delete pcgo;
-      pcgo = NULL;
-   }
-   editfield ( 2 );
-   ok = 1;
-   mousevisible ( true );
-   do {
-      tdialogbox::run();
-   } while ( !ok ); 
-//   zoomlevel.setzoomlevel ( zoom );
-
-};
-
-void choosezoomlevel ( void )
-{
-   tchoosezoomlevel ctl;
-   ctl.init();
-   ctl.run();
-   ctl.done();
-   displaymap();
-}
 
 
 

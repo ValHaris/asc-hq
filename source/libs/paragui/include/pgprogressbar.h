@@ -50,7 +50,7 @@ class DECLSPEC PG_ProgressBar : public PG_ThemeWidget {
 public:
 
 	/** */
-	PG_ProgressBar(PG_Widget* parent, const PG_Rect& r = PG_Rect::null, const std::string& style="Progressbar");
+	PG_ProgressBar(PG_Widget* parent, const PG_Rect& r = PG_Rect::null_rect, const std::string& style="Progressbar");
 
 	/** */
 	~PG_ProgressBar();

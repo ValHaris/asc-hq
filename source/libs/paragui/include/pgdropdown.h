@@ -72,7 +72,7 @@ class SignalSelectItem : public sigc::signal<bool, PG_ListBoxBaseItem*> {}
 	@param r position of the widget
 	@param style style of the widget (loaded from the theme)
 	*/
-	PG_DropDown(PG_Widget* parent, const PG_Rect& r = PG_Rect::null, int id = -1, const std::string& style="DropDown");
+	PG_DropDown(PG_Widget* parent, const PG_Rect& r = PG_Rect::null_rect, int id = -1, const std::string& style="DropDown");
 
 	/**  */
 	~PG_DropDown();

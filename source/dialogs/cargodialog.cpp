@@ -1770,7 +1770,7 @@ class DamageBarWidget : public PG_ThemeWidget
 
 
 CargoDialog ::CargoDialog (PG_Widget *parent, ContainerBase* cb )
-      : Panel( parent, PG_Rect::null, "cargodialog", false ), container(cb), setupOK(false), cargoWidget(NULL), researchWindow( NULL ), matterWindow(NULL)
+      : Panel( parent, PG_Rect::null_rect, "cargodialog", false ), container(cb), setupOK(false), cargoWidget(NULL), researchWindow( NULL ), matterWindow(NULL)
 {
    shutdownImmediately = false;
 

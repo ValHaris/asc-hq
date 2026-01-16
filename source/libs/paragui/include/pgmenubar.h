@@ -60,7 +60,7 @@ public:
 		The constructor creates a new MenuBar object without any items.
 		Use the Add member function to insert PG_PopupMenu objects.
 	*/
-	PG_MenuBar(PG_Widget* parent, const PG_Rect& rect = PG_Rect::null, const std::string& style = "MenuBar");
+	PG_MenuBar(PG_Widget* parent, const PG_Rect& rect = PG_Rect::null_rect, const std::string& style = "MenuBar");
 
 	/**
 		Destroys the MenuBar object.

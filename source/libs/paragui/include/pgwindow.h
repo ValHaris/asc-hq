@@ -82,7 +82,7 @@ public:
 	@param style themestyle of the window
 	@param heightTitlebar height of the window titlebar
 	*/
-	PG_Window(PG_Widget* parent, const PG_Rect& r = PG_Rect::null, const std::string& windowtext = PG_NULLSTR, WindowFlags flags = DEFAULT, const std::string& style="Window", int heightTitlebar = 25);
+	PG_Window(PG_Widget* parent, const PG_Rect& r = PG_Rect::null_rect, const std::string& windowtext = PG_NULLSTR, WindowFlags flags = DEFAULT, const std::string& style="Window", int heightTitlebar = 25);
 
 	/** */
 	~PG_Window();

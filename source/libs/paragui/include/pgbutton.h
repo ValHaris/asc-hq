@@ -172,7 +172,7 @@ class SignalButtonClick : public sigc::signal<bool, PG_Button*> {}
 	@param text button label
 	@param style themestyle of the button
 	*/
-	PG_Button(PG_Widget* parent, const PG_Rect& r = PG_Rect::null, const std::string& text = PG_NULLSTR, int id = -1, const std::string& style="Button");
+	PG_Button(PG_Widget* parent, const PG_Rect& r = PG_Rect::null_rect, const std::string& text = PG_NULLSTR, int id = -1, const std::string& style="Button");
 
 	/**  */
 	virtual ~PG_Button();

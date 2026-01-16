@@ -220,7 +220,7 @@ bool ItemSelectorWidget::nameMatch( const SelectionWidget* selection, const ASCS
 
 class NonEditableLineEdit : public    PG_LineEdit {
    public:
-      NonEditableLineEdit (PG_Widget *parent, const PG_Rect &r=PG_Rect::null, const std::string &style="LineEdit", int maximumLength=1000000) : PG_LineEdit( parent, r, style, maximumLength)
+      NonEditableLineEdit (PG_Widget *parent, const PG_Rect &r=PG_Rect::null_rect, const std::string &style="LineEdit", int maximumLength=1000000) : PG_LineEdit( parent, r, style, maximumLength)
       {
          EditBegin();
          SetTransparency(255);

@@ -57,7 +57,7 @@ class SignalSelectItem : public sigc::signal<bool, PG_ListBoxBaseItem*> {}
 	;
 
 	/** */
-	PG_ListBox(PG_Widget* parent, const PG_Rect& r = PG_Rect::null, const std::string& style="ListBox");
+	PG_ListBox(PG_Widget* parent, const PG_Rect& r = PG_Rect::null_rect, const std::string& style="ListBox");
 
 	/** */
 	~PG_ListBox();

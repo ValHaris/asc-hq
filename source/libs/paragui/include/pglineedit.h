@@ -64,7 +64,7 @@ class SignalEditUpdate : public sigc::signal<bool> {}
    ;
 
 	/** */
-	PG_LineEdit(PG_Widget* parent, const PG_Rect& r = PG_Rect::null, const std::string& style="LineEdit", int maximumLength = 1000000);
+	PG_LineEdit(PG_Widget* parent, const PG_Rect& r = PG_Rect::null_rect, const std::string& style="LineEdit", int maximumLength = 1000000);
 
 	/** */
 	~PG_LineEdit();

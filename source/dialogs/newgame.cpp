@@ -218,7 +218,7 @@ const char* StartMultiplayerGame::buttonLabels[8] = {
 };
 
 
-StartMultiplayerGame::StartMultiplayerGame(PG_MessageObject* c): ConfigurableWindow( NULL, PG_Rect::null, "newmultiplayergame", false ), startButton(false), success(false), newMap(NULL), page(ModeSelection), mode ( 0 ), replay(true), supervisorEnabled(false),
+StartMultiplayerGame::StartMultiplayerGame(PG_MessageObject* c): ConfigurableWindow( NULL, PG_Rect::null_rect, "newmultiplayergame", false ), startButton(false), success(false), newMap(NULL), page(ModeSelection), mode ( 0 ), replay(true), supervisorEnabled(false),
    mapParameterEditor(NULL), mapParameterEditorParent(NULL),
    allianceSetup(NULL), allianceSetupParent(NULL),
    playerSetup(NULL), playerSetupParent(NULL),

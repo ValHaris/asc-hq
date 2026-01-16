@@ -60,7 +60,7 @@ class SignalAreaChangedWidth : public sigc::signal<bool, PG_ScrollArea*, Uint16>
 	context of an other widget, or NULL if this widget has no parent.
 	@param r position and dimensions of the widget
 	*/
-	PG_ScrollArea(PG_Widget* parent, const PG_Rect& r = PG_Rect::null);
+	PG_ScrollArea(PG_Widget* parent, const PG_Rect& r = PG_Rect::null_rect);
 
 	~PG_ScrollArea();
 

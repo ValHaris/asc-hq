@@ -72,7 +72,7 @@ class SignalSlideEnd : public sigc::signal<bool, long> {}
 	 This constructor creates the slider widget.
 	 * */
 
-	PG_Slider(PG_Widget* parent, const PG_Rect& r = PG_Rect::null, ScrollDirection direction = VERTICAL, int id = -1, const std::string& style="Slider");
+	PG_Slider(PG_Widget* parent, const PG_Rect& r = PG_Rect::null_rect, ScrollDirection direction = VERTICAL, int id = -1, const std::string& style="Slider");
 
 	/** */
 	~PG_Slider();

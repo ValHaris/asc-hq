@@ -77,8 +77,6 @@ extern void bi3preferences  ( void );
 //! a dialog box that lets a user resize the active map. Should only be used in the mapeditor
 extern void resizemap ( void );
 
-extern void choosezoomlevel ( void );
-
 extern void viewUnitSetinfo ( void );
 
 /*! displays a dialog with two buttons, to select one of them

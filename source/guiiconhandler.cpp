@@ -550,7 +550,7 @@ bool NewGuiHost::showSmallIcons( PG_Widget* parent, const SPoint& pos, bool curs
       
       if ( count ) {
          if ( !smallButtonHolder ) 
-            smallButtonHolder = new SmallButtonHolder ( NULL, PG_Rect::null );
+            smallButtonHolder = new SmallButtonHolder ( NULL, PG_Rect::null_rect );
          
 
          reflowSmallIcons( pos, count );

@@ -28,7 +28,7 @@
 
 #include "pgpoint.h"
 
-PG_Point PG_Point::null;
+PG_Point PG_Point::null_point;
 
 PG_Point::PG_Point() : x(0), y(0) {}
 
