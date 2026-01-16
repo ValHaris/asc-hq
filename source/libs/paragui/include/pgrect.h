@@ -215,7 +215,7 @@ public:
 
 	Uint32 index;
 
-	static PG_Rect null;
+	static PG_Rect null_rect;
 
 protected:
 

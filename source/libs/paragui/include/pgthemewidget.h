@@ -92,7 +92,7 @@ public:
 	This constructor creates a themed widget without any drawing surface.
 	All drawing operations can be done via the eventBlit() callback handler.
 	*/
-	PG_ThemeWidget(PG_Widget* parent, const PG_Rect& r = PG_Rect::null, const std::string& style="ThemeWidget");
+	PG_ThemeWidget(PG_Widget* parent, const PG_Rect& r = PG_Rect::null_rect, const std::string& style="ThemeWidget");
 
 	/**
 	Create a new PG_ThemeWidget object

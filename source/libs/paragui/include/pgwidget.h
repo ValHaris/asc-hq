@@ -111,7 +111,7 @@ public:
 	@param rect		initial position for the widget
 	@param bObjectSurface	flag if a surface for the object should be created
 	*/
-	PG_Widget(PG_Widget* parent, const PG_Rect& rect = PG_Rect::null, bool bObjectSurface = false);
+	PG_Widget(PG_Widget* parent, const PG_Rect& rect = PG_Rect::null_rect, bool bObjectSurface = false);
 
 	/**
 	Destroys a PG_Widget

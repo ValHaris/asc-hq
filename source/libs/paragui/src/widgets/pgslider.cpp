@@ -70,8 +70,8 @@ void PG_Slider::LoadThemeStyle(const std::string& widgettype) {
 }
 
 void PG_Slider::RecalcPositions() {
-	position[0] = PG_Rect::null;
-	position[1] = PG_Rect::null;
+	position[0] = PG_Rect::null_rect;
+	position[1] = PG_Rect::null_rect;
 
 	position[2].x = 0;
 	position[2].y = 0;

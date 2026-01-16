@@ -74,7 +74,7 @@ class SignalChange : public sigc::signal<bool, PG_SpinnerBox*, int> {}
 
 	/**
 	*/
-	PG_SpinnerBox(PG_Widget *parent, const PG_Rect& r = PG_Rect::null, const std::string& style = "SpinnerBox");
+	PG_SpinnerBox(PG_Widget *parent, const PG_Rect& r = PG_Rect::null_rect, const std::string& style = "SpinnerBox");
 
 	void SetValue(int value) {
 		m_iValue = value;

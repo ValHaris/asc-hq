@@ -49,7 +49,7 @@ public:
 	/**
 	Constructor of the PG_Widget class
 	*/
-	PG_WidgetList(PG_Widget* parent, const PG_Rect& r = PG_Rect::null, const std::string& style="WidgetList");
+	PG_WidgetList(PG_Widget* parent, const PG_Rect& r = PG_Rect::null_rect, const std::string& style="WidgetList");
 
 	/**
 	Destructor of the PG_Widget class

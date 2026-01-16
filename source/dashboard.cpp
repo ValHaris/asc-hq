@@ -706,7 +706,7 @@ WeaponInfoLine* WeaponInfoLine::displayed = NULL;
 
 
 
-WeaponInfoPanel::WeaponInfoPanel (PG_Widget *parent, const Vehicle* veh, const VehicleType* vt ) : Panel( parent, PG_Rect::null, "WeaponInfo" ), weaponCount(0)
+WeaponInfoPanel::WeaponInfoPanel (PG_Widget *parent, const Vehicle* veh, const VehicleType* vt ) : Panel( parent, PG_Rect::null_rect, "WeaponInfo" ), weaponCount(0)
 {
    SetName(name);
 

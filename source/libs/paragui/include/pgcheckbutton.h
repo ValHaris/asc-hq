@@ -54,7 +54,7 @@ public:
 	@param text inital text of the chekbutton
 	@param style widget style (loaded from theme) to use
 	*/
-	PG_CheckButton(PG_Widget* parent, const PG_Rect& r = PG_Rect::null, const std::string& text = PG_NULLSTR, int id = -1, const std::string& style="CheckButton");
+	PG_CheckButton(PG_Widget* parent, const PG_Rect& r = PG_Rect::null_rect, const std::string& text = PG_NULLSTR, int id = -1, const std::string& style="CheckButton");
 
 	/** */
 	~PG_CheckButton();

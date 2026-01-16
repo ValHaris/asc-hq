@@ -60,7 +60,7 @@ public:
 	@param text				Text displayed by label.
 	@param style			initial widget style (from xml theme)
 	*/
-	PG_Label(PG_Widget* parent, const PG_Rect& r = PG_Rect::null, const std::string& text = PG_NULLSTR, const std::string& style="Label");
+	PG_Label(PG_Widget* parent, const PG_Rect& r = PG_Rect::null_rect, const std::string& text = PG_NULLSTR, const std::string& style="Label");
 
 	/** Only destructor */
 	~PG_Label();

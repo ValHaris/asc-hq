@@ -108,7 +108,7 @@ void MapComponent::displayClip( PG_Widget* parent, SDL_Surface * surface, const 
    
    static PG_ThemeWidget* fontProvidingWidget = NULL;
    if ( !fontProvidingWidget  )
-      fontProvidingWidget = new PG_ThemeWidget( NULL, PG_Rect::null , false, "MapedItemSelector" );
+      fontProvidingWidget = new PG_ThemeWidget( NULL, PG_Rect::null_rect , false, "MapedItemSelector" );
       
    /*
    SDL_Rect      blitRect;

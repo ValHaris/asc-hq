@@ -55,7 +55,7 @@ public:
 	Sint16 x;
 	Sint16 y;
 
-	static PG_Point null;
+	static PG_Point null_point;
 };
 
 #endif // PG_POINT_H

@@ -41,7 +41,7 @@ class DECLSPEC PG_MaskEdit : public PG_LineEdit {
 public:
 
 	/** */
-	PG_MaskEdit(PG_Widget* parent, const PG_Rect& r = PG_Rect::null, const std::string& style="LineEdit");
+	PG_MaskEdit(PG_Widget* parent, const PG_Rect& r = PG_Rect::null_rect, const std::string& style="LineEdit");
 
 	/**
 	Set the text of the maskedit control. The new text is merged with the current mask

@@ -57,7 +57,7 @@ public:
 	/**
 	Constructor of the PG_Widget class
 	*/
-	PG_ScrollWidget(PG_Widget* parent, const PG_Rect& r = PG_Rect::null, const std::string& style="ScrollWidget");
+	PG_ScrollWidget(PG_Widget* parent, const PG_Rect& r = PG_Rect::null_rect, const std::string& style="ScrollWidget");
 
 	/**
 	Destructor of the PG_Widget class

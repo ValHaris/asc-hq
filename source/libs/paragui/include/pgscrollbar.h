@@ -53,7 +53,7 @@ protected:
 class ScrollButton : public PG_Button {
 	public:
 
-		ScrollButton(PG_ScrollBar* parent, const PG_Rect& r = PG_Rect::null);
+		ScrollButton(PG_ScrollBar* parent, const PG_Rect& r = PG_Rect::null_rect);
 		virtual ~ScrollButton();
 
 		void SetTickMode(bool on);
@@ -109,7 +109,7 @@ class SignalScrollTrack : public sigc::signal<bool, long> {}
 	;
 
 	/**  */
-	PG_ScrollBar(PG_Widget* parent, const PG_Rect& r = PG_Rect::null, ScrollDirection direction = VERTICAL, int id = -1, const std::string& style="Scrollbar");
+	PG_ScrollBar(PG_Widget* parent, const PG_Rect& r = PG_Rect::null_rect, ScrollDirection direction = VERTICAL, int id = -1, const std::string& style="Scrollbar");
 
 	/**  */
 	virtual ~PG_ScrollBar();

@@ -669,8 +669,6 @@ void execaction( int code)
    case act_setunitfilter: selectunitsetfilter();
                            filtersChangedSignal(); 
       break;
-   // case act_setzoom : choosezoomlevel();
-   //    break;
    case act_unitsettransformation: unitsettransformation();
       break;
    case act_unitSetInformation: viewUnitSetinfo();

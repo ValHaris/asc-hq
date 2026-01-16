@@ -63,7 +63,7 @@ public:
     class SignalButtonClick : public sigc::signal<bool, bool> {};
 
 	/** */
-	PG_RadioButton(PG_Widget* parent, const PG_Rect& r = PG_Rect::null, const std::string& text = PG_NULLSTR, PG_RadioButton* firstOfGroup = NULL, int id = -1, const std::string& style="RadioButton");
+	PG_RadioButton(PG_Widget* parent, const PG_Rect& r = PG_Rect::null_rect, const std::string& text = PG_NULLSTR, PG_RadioButton* firstOfGroup = NULL, int id = -1, const std::string& style="RadioButton");
 
 	/** */
 	~PG_RadioButton();

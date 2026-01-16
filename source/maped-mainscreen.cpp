@@ -62,7 +62,7 @@ class Menu : public PG_MenuBar {
     Categories categories;
 
    public:
-      Menu ( PG_Widget *parent, const PG_Rect &rect=PG_Rect::null);
+      Menu ( PG_Widget *parent, const PG_Rect &rect=PG_Rect::null_rect);
       
    protected:
       void setup();   

@@ -50,7 +50,7 @@ public:
 	/**
 	Constructor of the PG_WidgetListEx class
 	*/
-	PG_RichEdit(PG_Widget* parent, const PG_Rect& r = PG_Rect::null, bool autoVerticalResize = false, Uint32 linewidth = 0, Uint32 tabSize = 30, Uint32 childsborderwidth = 8, const std::string& style="WidgetList");
+	PG_RichEdit(PG_Widget* parent, const PG_Rect& r = PG_Rect::null_rect, bool autoVerticalResize = false, Uint32 linewidth = 0, Uint32 tabSize = 30, Uint32 childsborderwidth = 8, const std::string& style="WidgetList");
 
 	/**
 	Sets rich text
