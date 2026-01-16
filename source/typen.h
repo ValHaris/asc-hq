@@ -149,7 +149,7 @@ extern Resources operator* ( const Resources& res1, float a );
 extern Resources operator/ ( const Resources& res1, float a );
 
 //! the names of the different resources. Redundent, as we already have #Resources::name
-extern const char*  resourceNames[3];
+extern const char*  resourceNames[4];
 
 
 

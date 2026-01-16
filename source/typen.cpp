@@ -76,7 +76,7 @@ const char* cgeneralnetcontrol[4] = {       "store",  "move out", "stop storing"
                                           // Functionen in Gebuden ....
 
 const char*  cwettertypen[cwettertypennum] = {"dry (standard)","light rain", "heavy rain", "few snow", "lot of snow", "lot of snow + ice"};
-const char*  resourceNames[3]  = {"energy", "material", "fuel"};
+const char*  resourceNames[4]  = {"energy", "material", "fuel", NULL};
 
 const int directionangle [ sidenum ] = 
  { 0, -53, -127, -180, -180 -53 , -180 -127 };

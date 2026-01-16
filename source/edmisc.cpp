@@ -63,6 +63,7 @@
 #include "lua/luastate.h"
 #include "widgets/multilistbox.h"
 #include "pgpropertyfield_integer.h"
+#include "pgpropertyfield_intdropdown.h"
 #include "dialogs/messagedialog.h"
 #include "widgets/textrenderer.h"
 #include "widgets/playerselector.h"
@@ -124,7 +125,7 @@ Uint8 checkobject(MapField* pf)
 
 // � PutResource
 
-void tputresources :: init ( int sx, int sy, int dst, int restype, int resmax, int resmin )
+void tputresources :: run ( int sx, int sy, int dst, int restype, int resmax, int resmin )
 {
     centerPos = MapCoordinate(sx,sy);
     initsearch( centerPos, dst, 0);
@@ -147,77 +148,42 @@ void tputresources :: testfield ( const MapCoordinate& mc )
         fld->fuel = min( 255, fld->fuel + m );
 }
 
-void tputresourcesdlg :: init ( void )
-{
-    resourcetype = 1;
-    restp2 = 0;
-    status = 0;
-    tdialogbox::init();
-    title = "set resources";
-    xsize = 400;
-    ysize = 300;
-    maxresource = 200;
-    minresource = 0;
-    dist = 10;
 
-    addbutton ( "~O~k", 10, ysize - 30, xsize/2 - 5, ysize - 10 , 0, 1, 1, true );
-    addkey ( 1, ct_enter );
-    addbutton ( "~C~ancel", xsize/2 + 5, ysize - 30, xsize-10 - 5, ysize - 10 , 0, 1, 2, true );
-    addkey ( 2, ct_esc );
 
-    addbutton ( "ma~x~ resources ( at center )", xsize/2 + 5, 80, xsize-20 - 5, 100 , 2, 1, 3, true );
-    addeingabe ( 3, &maxresource, 0, 255 );
+class PlaceResources : public ASC_PG_Dialog {
+    int resourcetype;
+    int central_resources;
+    int edge_resources;
+    int distance;
 
-    addbutton ( "mi~n~ resources ", xsize/2 + 5, 120, xsize-20 - 5, 140 , 2, 1, 4, true );
-    addeingabe ( 4, &minresource, 0, 255 );
+    PG_PropertyEditor* editor;
 
-    addbutton ( "max ~d~istance", 20, 120, xsize/2-5, 140 , 2, 1, 5, true );
-    addeingabe ( 5, &dist, 1, 20 );
-
-    addbutton ( "~m~aterial", 20, 160, xsize/2-5, 180, 3, 10, 6, true );
-    addeingabe ( 6, &resourcetype, black, dblue );
-
-    addbutton ( "~f~uel", xsize/2 + 5, 160, xsize - 20, 180, 3, 10, 7, true );
-    addeingabe ( 7, &restp2, black, dblue );
-
-    buildgraphics();
-
-}
-
-void tputresourcesdlg :: buttonpressed ( int id )
-{
-    tdialogbox :: buttonpressed ( id );
-
-    switch ( id ) {
-    case 1:
-        status = 11;
-        break;
-    case 2:
-        status = 10;
-        break;
-    case 6:
-        restp2 = 0;
-        enablebutton ( 7 );
-        break;
-    case 7:
-        resourcetype = 0;
-        enablebutton ( 6 );
-        break;
-    } /* endswitch */
-
-}
-
-void tputresourcesdlg :: run ( void )
-{
-    mousevisible ( true );
-    do {
-        tdialogbox :: run ( );
-    } while ( status < 10 ); /* enddo */
-    if ( status == 11 ) {
+    bool apply() {
+        editor->Apply();
         tputresources pr ( actmap );
-        pr.init ( actmap->getCursor().x, actmap->getCursor().y, dist, resourcetype ? 1 : 2, maxresource, minresource );
+        pr.run ( actmap->getCursor().x, actmap->getCursor().y, distance, resourcetype+1, central_resources, edge_resources );
+        QuitModal();
+        return true;
     }
+
+public:
+    PlaceResources() : ASC_PG_Dialog(NULL, PG_Rect(-1, -1, 400, 300), "Place Resources"), resourcetype(0), central_resources(100), edge_resources(20), distance(5) {
+        editor = new PG_PropertyEditor(this, PG_Rect(10, 30, Width()-20, 200));
+        (new PG_PropertyField_Integer<int>(editor, "Resources at center", &central_resources))->SetRange(0,255);
+        (new PG_PropertyField_Integer<int>(editor, "Resources at edge", &edge_resources))->SetRange(0,255);
+        (new PG_PropertyField_Integer<int>(editor, "Distance from center to edge", &distance))->SetRange(1,10);
+        new PG_PropertyField_IntDropDown<int>(editor, "Resourcetype", &resourcetype, resourceNames+1);
+
+        AddStandardButton("OK")->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &PlaceResources::apply )));
+    }
+};
+
+void placeResources() {
+    PlaceResources pr;
+    pr.Show();
+    pr.RunModal();
 }
+
 
 
 

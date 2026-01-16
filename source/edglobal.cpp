@@ -486,18 +486,13 @@ void execaction( int code)
        break;
     case act_changeresources :   changeresource();
        break;
-    case act_createresources : {
-                           tputresourcesdlg prd;
-                           prd.init();
-                           prd.run();
-                           prd.done();
-                           if ( mainScreenWidget )
-                              mainScreenWidget->activateMapLayer( "resources", true);
-                        
-                           repaintMap();
+    case act_createresources :
+        placeResources();
+        if ( mainScreenWidget )
+          mainScreenWidget->activateMapLayer( "resources", true);
 
-                         }
-       break;
+        repaintMap();
+        break;
        /*
     case act_fillmode :   if ( polyfieldmode == false ) {   
                  if (tfill == true) tfill = false;

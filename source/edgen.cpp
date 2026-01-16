@@ -1083,8 +1083,8 @@ void tplasma::generateplasma(Uint8 resettile)
   #endif
 
    do {
-      for(register int y = 0; y < (maxy_local / blocksize) + 1; y++) {
-         for(register int x = 0; x < (maxx / blocksize) + 1; x++) {
+      for( int y = 0; y < (maxy_local / blocksize) + 1; y++) {
+         for( int x = 0; x < (maxx / blocksize) + 1; x++) {
             /*if(keypress()) {
                r_key();
                return 1;

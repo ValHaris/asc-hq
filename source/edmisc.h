@@ -53,27 +53,15 @@ extern bool mouseDraggedToField( const MapCoordinate& pos, const SPoint& mousePo
                               int maxdst;
                               MapCoordinate centerPos;
                            public:
-                               void            init ( int sx , int sy, int dst, int restype, int resmax, int resmin );
+                               void            run ( int sx , int sy, int dst, int restype, int resmax, int resmin );
                                virtual void    testfield ( const MapCoordinate& mc );
                                tputresources ( GameMap* _gamemap ) : SearchFields ( _gamemap ) {};
                             };
 
-   class tputresourcesdlg : public tdialogbox {
-               int resourcetype;
-               int restp2;
-               int maxresource;
-               int minresource;
-               int dist;
-               int status;
-            public:
-                void init ( void );
-                void run ( void );
-                void buttonpressed ( int id );
-    };
-
-
 
    extern bool mapsaved;
+
+extern void         placeResources();
 
 extern void         setstartvariables(void);
 extern void         exchg(int *a1,int *a2);
