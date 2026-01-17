@@ -67,6 +67,7 @@
 #include "dialogs/messagedialog.h"
 #include "widgets/textrenderer.h"
 #include "widgets/playerselector.h"
+#include <pgmultilineedit.h>
 
 bool       mapsaved;
 
@@ -1321,99 +1322,59 @@ void transformMap ( )
 }
 
 
-class EditArchivalInformation : public tdialogbox {
+class EditArchivalInformationDialog : public ASC_PG_Dialog {
     GameMap* gamemap;
-    char maptitle[10000];
-    char author[10000];
-    ASCString description;
-    char tags[10000];
-    char requirements[10000];
-    int action;
-public:
-    EditArchivalInformation ( GameMap* map );
-    void init();
-    void run();
-    void buttonpressed ( int id );
-};
+    PG_LineEdit* title;
+    PG_LineEdit* author;
+    PG_LineEdit* tags;
+    PG_LineEdit* requirements;
+    PG_MultiLineEdit* description;
 
-
-EditArchivalInformation :: EditArchivalInformation ( GameMap* map ) : gamemap ( map )
-{
-    strcpy ( maptitle, map->maptitle.c_str() );
-    strcpy ( author, map->archivalInformation.author.c_str() );
-    description = map->archivalInformation.description;
-    strcpy ( tags, map->archivalInformation.tags.c_str() );
-    strcpy ( requirements, map->archivalInformation.requirements.c_str() );
-}
-
-void EditArchivalInformation::init()
-{
-    tdialogbox::init();
-    title = "Edit Archival Information";
-    xsize = 600;
-    ysize = 410;
-    action = 0;
-
-
-    addbutton("~T~itle",20,70,xsize - 20,90,1,1,10,true);
-    addeingabe(10,maptitle,0,10000);
-
-    addbutton("~A~uthor",20,120,xsize - 20,140,1,1,11,true);
-    addeingabe(11,author,0,10000);
-
-    addbutton("Ta~g~s",20,170,xsize - 20,190,1,1,12,true);
-    addeingabe(12,tags,0,10000);
-
-    addbutton("~R~equirements ( see http://asc-hq.sf.net/req.php for possible values)",20,220,xsize - 20,240,1,1,13,true);
-    addeingabe(13,requirements,0,10000);
-
-
-    addbutton("Edit ~D~escription",20,ysize - 70,170,ysize - 50,0,1,14,true);
-
-    addbutton("~O~k",20,ysize - 40,xsize/2-10,ysize - 20,0,1,1,true);
-    addkey(1,ct_enter);
-    addbutton("~C~ancel",xsize/2+10,ysize - 40,xsize-20,ysize - 20,0,1,2,true);
-    addkey(2,ct_esc);
-
-    buildgraphics();
-}
-
-void EditArchivalInformation :: buttonpressed ( int id )
-{
-    switch ( id ) {
-    case 14: {
-        MultilineEdit mle ( description, "Map Description" );
-        mle.init();
-        mle.run();
-        mle.done();
-        break;
-    }
-    case 1:
-        gamemap->archivalInformation.author = author;
-        gamemap->archivalInformation.tags   = tags;
-        gamemap->archivalInformation.requirements   = requirements;
-        gamemap->archivalInformation.description   = description;
-        gamemap->maptitle = maptitle;
+    bool ok() {
+        gamemap->maptitle = title->GetText();
+        gamemap->archivalInformation.author = author->GetText();
+        gamemap->archivalInformation.tags = tags->GetText();
+        gamemap->archivalInformation.requirements = requirements->GetText();
+        gamemap->archivalInformation.description = description->GetText();
         mapsaved = false;
-    case 2:
-        action = id;
+        QuitModal();
+        return true;
     }
-}
+public:
+    EditArchivalInformationDialog(GameMap* gamemap) : ASC_PG_Dialog(NULL, PG_Rect(-1, -1, 600, 420), "Edit Map Archival Information"), gamemap(gamemap)
+    {
+        new PG_Label(this, PG_Rect(10, 30, Width()-20, 20), "Title");
+        title = new PG_LineEdit(this, PG_Rect(10, 55, Width()-20, 20));
+        title->SetText(gamemap->maptitle);
 
-void EditArchivalInformation :: run ()
-{
-    do {
-        tdialogbox::run();
-    } while ( action == 0);
-}
+        new PG_Label(this, PG_Rect(10, 85, Width()-20, 20), "Author");
+        author = new PG_LineEdit(this, PG_Rect(10, 110, Width()-20, 20));
+        author->SetText(gamemap->archivalInformation.author);
 
+        new PG_Label(this, PG_Rect(10, 140, Width()-20, 20), "Tags");
+        tags = new PG_LineEdit(this, PG_Rect(10, 165, Width()-20, 20));
+        tags->SetText(gamemap->archivalInformation.tags);
+
+        new PG_Label(this, PG_Rect(10, 195, Width()-20, 20), "Extra Data Requirements");
+        requirements = new PG_LineEdit(this, PG_Rect(10, 220, Width()-20, 20));
+        requirements->SetText(gamemap->archivalInformation.requirements);
+
+        new PG_Label(this, PG_Rect(10, 250, Width()-20, 20), "Description");
+        description = new PG_MultiLineEdit(this, PG_Rect(10, 275, Width()-20, 80));
+        description->SetText(gamemap->archivalInformation.description);
+
+
+        StandardButtonDirection(Horizontal);
+        AddStandardButton("Cancel")->sigClick.connect( sigc::hide( sigc::mem_fun(*this, &EditArchivalInformationDialog::QuitModal )));
+        AddStandardButton("Apply")->sigClick.connect( sigc::hide( sigc::mem_fun(*this, &EditArchivalInformationDialog::ok )));
+    }
+};
 
 void editArchivalInformation()
 {
-    EditArchivalInformation eai ( actmap );
-    eai.init();
-    eai.run();
-    eai.done();
+    EditArchivalInformationDialog eai ( actmap );
+    eai.Show();
+    eai.RunModal();
 }
 
 void resourceComparison ( )

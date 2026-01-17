@@ -642,16 +642,7 @@ void execaction( int code)
        ViewFormattedText vft( "About", s, PG_Rect(-1,-1,450,550));
        vft.Show();
        vft.RunModal();
-       
-       /*
-         help(1020);
-         tviewanytext vat;
-         ASCString msg = kgetstartupmessage();
-         vat.init ( "about", msg.c_str() );
-         vat.run();
-         vat.done();
-       */
-      }
+       }
       break;
    case act_smoothcoasts : {
             ForestCalculation::smooth ( 6, actmap, NULL );

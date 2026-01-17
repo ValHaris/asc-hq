@@ -48,28 +48,6 @@ extern Uint8 mix3colors ( int p1, int p2, int p3 );
 extern Uint8 mix2colors ( int a, int b );
 extern Uint8 mix4colors ( int a, int b, int c, int d );
 
-
-// depracated, use ViewFormattedText
-  class   tviewanytext : public tdialogbox, public tviewtextwithscrolling {
-               public:
-                   const char                 *txt;
-                   int              ok;
-                    
-                   int              scrollbarvisible;
-                   int                 action;
-                   
-                   // int                  textsizey, textsizeycomplete;
-                   int                  textstart;
-                   int                  rightspace;
-
-                   void                 init( const char* title, const char* text , int xx1 = 50, int yy1 = 50 , int xxsize = 360, int yysize = 360 );
-                   virtual void         run ( void );
-                   virtual void         buttonpressed( int id);
-                   void                 redraw ( void );
-                   int                  getcapabilities ( void ) { return 1; };
-                   void                 repaintscrollbar ( void );
-                };
-
 //! the dialog box for setting up how to load bi3 graphics and maps. Since ASC now uses its own graphics, this dialog is not used any more.
 extern void bi3preferences  ( void );
 
@@ -89,98 +67,6 @@ extern void viewUnitSetinfo ( void );
 extern int   choice_dlg(const ASCString& title,
                         const ASCString& leftButton,
                         const ASCString& rightButton );
-
-
-
-typedef class tparagraph* pparagraph;
-class  tparagraph {
-        public:
-          tparagraph ( void );
-          tparagraph ( pparagraph prv );   // f?gt einen neuen paragraph hinter prv an
-
-          void join ( void );   // returnvalue : paragraph to delete;
-          void changesize ( int newsize );
-
-          void addchar ( char c );
-          pparagraph erasechar ( int c );
-          void checkcursor ( void );
-          pparagraph movecursor ( int dx, int dy );
-          pparagraph cut ( void );
-
-          int  reflow( int all = 1 );
-          void display ( void );
-
-          void checkscrollup ( void );
-          void checkscrolldown ( void );
-          int  checkcursorpos ( void );
-
-          void addtext ( const ASCString& txt );
-          ~tparagraph ();
-
-          void setpos ( int x1, int y1, int y2, int linepos, int linenum );
-
-          void displaycursor ( void );
-          int cursor;
-          int cursorstat;
-          int cursorx;
-          int normcursorx;
-          int cursory;
-          int searchcursorpos;
-          static int maxlinenum;
-
-          int size;
-          int allocated;
-          char* text;
-
-          static int winy1;
-          static int winy2;
-          static int winx1;
-          struct {
-             int line1num;
-          } ps;
-
-          dynamic_array<char*> linestart;
-          dynamic_array<int>   linelength;
-
-          int   linenum;
-
-          pparagraph next;
-          pparagraph prev;
-      };
-
-
-class tmessagedlg : public tdialogbox {
-           protected:
-               int to[8];
-
-                pparagraph firstparagraph;
-                pparagraph actparagraph;
-
-                int tx1, ty1, tx2, ty2,ok;
-                int lastcursortick;
-                int blinkspeed;
-
-            public:
-                tmessagedlg ( void );
-                virtual void setup ( void );
-                void inserttext ( const ASCString& txt );
-                void run ( void );
-                ASCString extracttext ();
-                ~tmessagedlg();
-         };
-
-class MultilineEdit : public tmessagedlg  {
-               ASCString& text;
-               ASCString dlg_title;
-               bool textchanged;
-            public:
-               MultilineEdit ( ASCString& txt, const ASCString& title ) : text ( txt ), dlg_title ( title ), textchanged ( false ) {};
-               void init ( void );
-               void setup ( void );
-               void buttonpressed ( int id );
-               void run ( void );
-               bool changed ( ) { return textchanged; };
-       };
 
 extern void selectgraphicset ( void );
 

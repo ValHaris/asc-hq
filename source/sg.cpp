@@ -1051,10 +1051,9 @@ void executeUserAction ( tuseractions action )
                   s += t->name + "\n";
             }
 
-            tviewanytext vat ;
-            vat.init ( "Research Status", s.c_str(), 20, -1 , 450, 480 );
-            vat.run();
-            vat.done();
+            ViewFormattedText vat ( "Research Status", s, PG_Rect(-1, -1, 450, 480 ));
+            vat.Show();
+            vat.RunModal();
          }
          break;
       case ua_exportUnitToFile:
