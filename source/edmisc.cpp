@@ -507,6 +507,7 @@ int selectString( int lc, const char* title, const char** text, int itemNum )
         return lc;
 }
 
+#if 0
 
 class EditAiParam : public tdialogbox {
     Vehicle* unit;
@@ -632,7 +633,7 @@ void unitAiProperties( Vehicle* veh )
     eap.run();
 }
 
-
+#endif
 
 
 
