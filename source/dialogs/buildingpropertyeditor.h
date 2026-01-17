@@ -18,10 +18,10 @@
      Boston, MA  02111-1307  USA
 */
 
-#ifndef vehiclePropertyEditorH
-#define vehiclePropertyEditorH
+#ifndef buildingPropertyEditorH
+#define buildingPropertyEditorH
 
-class Vehicle;
+class Building;
 extern void changeBuildingPropertyDialog(Building* ae);
 
 #endif

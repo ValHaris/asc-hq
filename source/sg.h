@@ -32,7 +32,7 @@ class ASCString;
 enum tuseractions { ua_repainthard,     ua_repaint, ua_help, ua_mainmenu, ua_mntnc_morefog,
                     ua_mntnc_lessfog,   ua_mntnc_morewind,   ua_mntnc_lesswind, ua_mntnc_rotatewind, ua_changeresourceview,
                     ua_benchgamewv,     ua_benchgamewov,     ua_viewterraininfo, ua_unitweightinfo,  ua_writemaptopcx,  ua_writescreentopcx,
-                    ua_changepassword, ua_gamepreferences, ua_bi3preferences,
+                    ua_changepassword, ua_gamepreferences,
                     ua_exitgame,        ua_loadgame,  ua_savegame, ua_setupalliances, ua_settribute, ua_giveunitaway,
                     ua_vehicleinfo,     ua_researchinfo,     ua_newmessage, ua_viewqueuedmessages,
                     ua_viewsentmessages, ua_viewreceivedmessages, ua_viewjournal, ua_editjournal, ua_viewaboutmessage, ua_continuenetworkgame,
