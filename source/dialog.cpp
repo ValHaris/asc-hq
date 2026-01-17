@@ -422,8 +422,8 @@ class ResizeMapDialog : public ASC_PG_Dialog {
 public:
     ResizeMapDialog() : ASC_PG_Dialog(NULL, PG_Rect(-1, -1, 400, 300), "Resize Map") , top(0), bottom(0), left(0), right(0) {
 
-        new PG_Label( this, PG_Rect( 25, 220, 150, 20), "positive values: enlarge map");
-        new PG_Label( this, PG_Rect( 25, 245, 150, 20), "negative values: shrink map");
+        new PG_Label( this, PG_Rect( 25, 220, 200, 20), "positive values: enlarge map");
+        new PG_Label( this, PG_Rect( 25, 245, 200, 20), "negative values: shrink map");
 
         AddStandardButton("Apply")->sigClick.connect( sigc::hide( sigc::mem_fun(*this, &ResizeMapDialog::apply )));
         AddStandardButton("cancel")->sigClick.connect( sigc::hide( sigc::mem_fun(*this, &ResizeMapDialog::QuitModal )));

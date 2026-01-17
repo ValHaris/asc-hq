@@ -232,6 +232,7 @@ public:
         action = new PG_DropDown(this, PG_Rect(170, 120, 130, 20));
         action->AddItem("<- exchange ->", NULL);
         action->AddItem("merge into ->", NULL);
+        action->SetEditable(false);
 
         right = new PlayerSelector(this, PG_Rect(310, 30, 150, 200), gameMap, false, 0, 2);
         (new PG_Button(this, PG_Rect(470, 120, 60, 20), "Apply"))->sigClick.connect(sigc::hide( sigc::mem_fun( *this, &PlayerChange::apply )));
@@ -1915,7 +1916,7 @@ void copyBuildingData( Building* source, Building* target, GameMap* targetMap, i
 
 }
 
-void copyFieldStep1( MapField* sourceField, MapField* targetField, bool mirrorTerrain, bool mirrorResources, bool mirrorWeather )
+void copyFieldStep1( MapField* sourceField, MapField* targetField, bool mirrorTerrain=true, bool mirrorResources=true, bool mirrorWeather=true )
 {
     targetField->deleteeverything();
     while ( targetField->objects.size() > 0 )
@@ -1935,7 +1936,7 @@ void copyFieldStep1( MapField* sourceField, MapField* targetField, bool mirrorTe
     if ( mirrorWeather ) targetField->setWeather( sourceField->getWeather() );
 }
 
-void copyFieldStep2( MapField* sourceField, MapField* targetField, GameMap* targetMap, int *directionTranslation, int *playerTranslation, bool mirrorObjects, bool mirrorBuildings, bool mirrorUnits, bool mirrorMines )
+void copyFieldStep2( MapField* sourceField, MapField* targetField, GameMap* targetMap, int *directionTranslation, int *playerTranslation, bool mirrorObjects=true, bool mirrorBuildings=true, bool mirrorUnits=true, bool mirrorMines=true )
 {
     if ( mirrorObjects )
     {
@@ -1975,245 +1976,198 @@ void copyFieldStep2( MapField* sourceField, MapField* targetField, GameMap* targ
     }
 }
 
-class MirrorMap : public tdialogbox
-{
-    int mirrorUnits;
-    int mirrorBuildings;
-    int mirrorObjects;
-    int mirrorMines;
-    int mirrorResources;
-    int mirrorWeather;
 
-    int playerTranslation[ 9 ];
-
-    bool doneMirrorMap;
-
+class MirrorMap {
 public:
-    void init( void );
-    void buttonpressed ( int id );
-    void run ( void );
-    Uint8 checkvalue( int id, void* p );
+    void mirrorX(int* playerTranslation) {
+        if ( actmap->xsize % 2 == 1 ) actmap->resize ( 0, 0, 0, 1 );
+        int maxX = actmap->xsize/2;
+        int xOffset = 2;
+        int directionTranslation[ 6 ] = { 0, 5, 4, 3, 2, 1 };
 
-protected:
+        // run 1: object removal and terrain copy
+        for ( int x=0; x<maxX; x++ )
+        {
+            for ( int y=0; y<actmap->ysize; y++ )
+            {
+                int targetX = actmap->xsize - x - xOffset;
+                if ( y%2 == 0 ) targetX++;
+                if ( targetX >= actmap->xsize || targetX == x ) continue;
 
+                MapField *targetField = actmap->getField( targetX, y );
+                MapField *sourceField = actmap->getField( x, y );
 
-    void mirrorX();
-    void mirrorY();
+                copyFieldStep1( sourceField, targetField );
+            }
+        }
+
+        // run 2: object copy
+        for ( int x=0; x<maxX; x++ )
+        {
+            for ( int y=0; y<actmap->ysize; y++ )
+            {
+                int targetX = actmap->xsize - x - xOffset;
+                if ( y%2 == 0 ) targetX++;
+                if ( targetX >= actmap->xsize || targetX == x ) continue;
+
+                MapField *targetField = actmap->getField( targetX, y );
+                MapField *sourceField = actmap->getField( x, y );
+
+                copyFieldStep2( sourceField, targetField, actmap, directionTranslation, playerTranslation );
+            }
+        }
+    }
+
+    void mirrorY(int* playerTranslation) {
+        int yOffset = 2;
+        int maxY = actmap->ysize/2;
+        int directionTranslation[ 6 ] = { 3, 2, 1, 0, 5, 4 };
+
+        // run 1: object removal and terrain copy
+        for ( int x=0; x<actmap->xsize; x++ )
+        {
+            for ( int y=0; y<maxY; y++ )
+            {
+                int targetY = actmap->ysize - y - yOffset;
+
+                MapField *targetField = actmap->getField( x, targetY );
+                MapField *sourceField = actmap->getField( x, y );
+
+                copyFieldStep1( sourceField, targetField );
+            }
+        }
+
+        // run 2: object copy
+        for ( int x=0; x<actmap->xsize; x++ )
+        {
+            for ( int y=0; y<maxY; y++ )
+            {
+                int targetY = actmap->ysize - y - yOffset;
+
+                MapField *targetField = actmap->getField( x, targetY );
+                MapField *sourceField = actmap->getField( x, y );
+
+                copyFieldStep2( sourceField, targetField, actmap, directionTranslation, playerTranslation);
+            }
+        }
+    }
 };
 
-Uint8 MirrorMap::checkvalue( int id, void* p )
+
+const char* mirrorInfoText = "Warning:\n"
+        "Right&lower border might have to be manually fixed\n"
+        "Mountains, battle isle graphics coasts and similar terrain needs manual adaption\n"
+        "Building directions might be weird, resulting in:\n"
+        "- pipeline net might be broken due to building directions\n"
+        "- buildings might be missing due to terrain\n"
+        "- units might be missing due to building locations";
+
+class MirrorMapDialog : public ASC_PG_Dialog
 {
-    return 1;
-}
+    bool mirrorUnits;
+    bool mirrorBuildings;
+    bool mirrorObjects;
+    bool mirrorMines;
+    bool mirrorResources;
+    bool mirrorWeather;
 
-void MirrorMap::buttonpressed( int id )
-{
-    tdialogbox::buttonpressed( id );
+    int playerTranslation[ 9 ];
+    PG_DropDown* extendMap;
+    PG_DropDown* direction;
+    GameMap* gamemap;
 
-    if ( id == 1 )
-        doneMirrorMap = true;
+    PlayerSelector* player_from;
+    PlayerSelector* player_to;
 
-    if ( id == 2 )
-    {
-        mirrorX();
-        doneMirrorMap = true;
-    }
+    int playerMapping[9];
 
-    if ( id == 3 )
-    {
-        mirrorY();
-        doneMirrorMap = true;
-    }
-
-}
-
-void MirrorMap::init( void )
-{
-    doneMirrorMap = false;
-
-    mirrorUnits = true;
-    mirrorBuildings = true;
-    mirrorObjects = true;
-    mirrorMines = true;
-    mirrorResources = true;
-    mirrorWeather = true;
-    for ( int i=0; i<8; i++ )
-        playerTranslation[ i ] = 7-i;
-    playerTranslation[ 8 ] = 8;
-
-    tdialogbox::init();
-    title = "Mirror Map";
-
-    xsize = 400;
-    ysize = 450;
-
-    x1 = -1;
-    y1 = -1;
-
-    addbutton( "~C~ancel", 10, ysize - 35, xsize / 3 - 5, ysize - 10, 0, 1, 1, true );
-    addkey ( 1, ct_esc );
-
-    addbutton( "Mirror ~X~", xsize / 3 + 5, ysize - 35, xsize / 3 * 2 - 5, ysize - 10, 0, 1, 2, true );
-    addkey ( 2, ct_x );
-
-    addbutton ( "Mirror ~Y~", xsize / 3 * 2 + 5, ysize - 35, xsize - 10, ysize - 10, 0, 1, 3, true );
-    addkey ( 3, ct_y );
-
-    addbutton( "~O~bjects", xsize - 100, 50, xsize - 10, 65, 3, 0, 4, true );
-    addeingabe( 4, &mirrorObjects, 0, lightgray );
-    addkey ( 4, ct_o );
-
-    addbutton( "~U~nits", xsize - 100, 70, xsize - 10, 85, 3, 0, 5, true );
-    addeingabe( 5, &mirrorUnits, 0, lightgray );
-    addkey ( 5, ct_u );
-
-    addbutton( "~B~uildings", xsize - 100, 90, xsize - 10, 105, 3, 0, 6, true );
-    addeingabe( 6, &mirrorBuildings, 0, lightgray );
-    addkey ( 6, ct_b );
-
-    addbutton( "~M~ines", xsize - 100, 110, xsize - 10, 125, 3, 0, 7, true );
-    addeingabe( 7, &mirrorMines, 0, lightgray );
-    addkey ( 7, ct_m );
-
-    addbutton( "~R~esources", xsize - 100, 130, xsize - 10, 145, 3, 0, 8, true );
-    addeingabe( 8, &mirrorResources, 0, lightgray );
-    addkey ( 8, ct_r );
-
-    addbutton( "~W~eather", xsize - 100, 150, xsize - 10, 165, 3, 0, 9, true );
-    addeingabe( 9, &mirrorWeather, 0, lightgray );
-    addkey ( 9, ct_w );
-
-    addbutton( "Player Conversions:", 30, 50, xsize - 120, 70, 0, 0, 10, true );
-    addbutton( "Player 0:", 30, 80, 130, 95, 2, 0, 12, true );
-    addeingabe( 12, &playerTranslation[ 0 ], 0, 8 );
-    addbutton( "Player 1:", 30, 110, 130, 125, 2, 0, 13, true );
-    addeingabe( 13, &playerTranslation[ 1 ], 0, 8 );
-    addbutton( "Player 2:", 30, 140, 130, 155, 2, 0, 14, true );
-    addeingabe( 14, &playerTranslation[ 2 ], 0, 8 );
-    addbutton( "Player 3:", 30, 170, 130, 185, 2, 0, 15, true );
-    addeingabe( 15, &playerTranslation[ 3 ], 0, 8 );
-    addbutton( "Player 4:", 30, 200, 130, 215, 2, 0, 16, true );
-    addeingabe( 16, &playerTranslation[ 4 ], 0, 8 );
-    addbutton( "Player 5:", 150, 80, xsize - 120, 95, 2, 0, 17, true );
-    addeingabe( 17, &playerTranslation[ 5 ], 0, 8 );
-    addbutton( "Player 6:", 150, 110, xsize - 120, 125, 2, 0, 18, true );
-    addeingabe( 18, &playerTranslation[ 6 ], 0, 8 );
-    addbutton( "Player 7:", 150, 140, xsize - 120, 155, 2, 0, 19, true );
-    addeingabe( 19, &playerTranslation[ 7 ], 0, 8 );
-    addbutton( "Player 8:", 150, 170, xsize - 120, 185, 2, 0, 20, true );
-    addeingabe( 20, &playerTranslation[ 8 ], 0, 8 );
-
-    buildgraphics();
-
-    activefontsettings.font = schriften.smallarial;
-    activefontsettings.justify = lefttext;
-    activefontsettings.length = 0;
-    activefontsettings.background = 255;
-
-    showtext2( "Warnings:",   x1 + 25, y1 + 220 );
-    showtext2( "right&lower border might have to be manually fixed", x1 + 25, y1 + 260 );
-    showtext2( "mountains, battle isle graphics coasts and similar", x1 + 25, y1 + 280 );
-    showtext2( "terrain needs manual adaption", x1 + 25, y1 + 300 );
-    showtext2( "building directions might be weird, resulting in:", x1 + 25, y1 + 330 );
-    showtext2( "- pipeline net might be broken due to building directions", x1 + 25, y1 + 350 );
-    showtext2( "- buildings might be missing due to terrain", x1 + 25, y1 + 370 );
-    showtext2( "- units might be missing due to building locations", x1 + 25, y1 + 390 );
-
-}
-
-
-void MirrorMap::run ( void )
-{
-    mousevisible ( true );
-    do {
-        tdialogbox::run();
-    } while ( !doneMirrorMap ); /* enddo */
-}
-
-
-void MirrorMap::mirrorX()
-{
-    if ( actmap->xsize % 2 == 1 ) actmap->resize ( 0, 0, 0, 1 );
-    int maxX = actmap->xsize/2;
-    int xOffset = 2;
-    int directionTranslation[ 6 ] = { 0, 5, 4, 3, 2, 1 };
-
-    // run 1: object removal and terrain copy
-    for ( int x=0; x<maxX; x++ )
-    {
-        for ( int y=0; y<actmap->ysize; y++ )
-        {
-            int targetX = actmap->xsize - x - xOffset;
-            if ( y%2 == 0 ) targetX++;
-            if ( targetX >= actmap->xsize || targetX == x ) continue;
-
-            MapField *targetField = actmap->getField( targetX, y );
-            MapField *sourceField = actmap->getField( x, y );
-
-            copyFieldStep1( sourceField, targetField, true, mirrorResources, mirrorWeather );
+    bool apply() {
+        Hide();
+        StatusMessageWindowHolder smw = MessagingHub::Instance().infoMessageWindow( "reworking map, please be patient..." );
+        MirrorMap mm;
+        if ( direction->GetSelectedItemIndex() == 0 ) {
+            if ( extendMap->GetSelectedItemIndex() == 1)
+                gamemap->resize(0,0,0,gamemap->xsize);
+            mm.mirrorX(playerMapping);
+        } else {
+            if ( extendMap->GetSelectedItemIndex() == 1)
+                gamemap->resize(0,gamemap->ysize, 0, 0);
+            mm.mirrorY(playerMapping);
         }
+
+        QuitModal();
+        return true;
     }
 
-    // run 2: object copy
-    for ( int x=0; x<maxX; x++ )
-    {
-        for ( int y=0; y<actmap->ysize; y++ )
-        {
-            int targetX = actmap->xsize - x - xOffset;
-            if ( y%2 == 0 ) targetX++;
-            if ( targetX >= actmap->xsize || targetX == x ) continue;
-
-            MapField *targetField = actmap->getField( targetX, y );
-            MapField *sourceField = actmap->getField( x, y );
-
-            copyFieldStep2( sourceField, targetField, actmap, directionTranslation, playerTranslation, mirrorObjects, mirrorBuildings, mirrorUnits, mirrorMines );
+    bool sourcePlayerSelected(PG_ListBoxBaseItem* player) {
+        PG_ListBoxDataItem<int>* item = dynamic_cast<PG_ListBoxDataItem<int>*>(player);
+        if ( item ) {
+            int mapped_to = playerMapping[item->getData()];
+            if ( mapped_to != -1 )
+                player_to->setSelection(1<<mapped_to);
         }
+        return true;
     }
-    doneMirrorMap = true;
-}
 
-void MirrorMap::mirrorY()
-{
-    int yOffset = 2;
-    int maxY = actmap->ysize/2;
-    int directionTranslation[ 6 ] = { 3, 2, 1, 0, 5, 4 };
-
-    // run 1: object removal and terrain copy
-    for ( int x=0; x<actmap->xsize; x++ )
-    {
-        for ( int y=0; y<maxY; y++ )
-        {
-            int targetY = actmap->ysize - y - yOffset;
-
-            MapField *targetField = actmap->getField( x, targetY );
-            MapField *sourceField = actmap->getField( x, y );
-
-            copyFieldStep1( sourceField, targetField, true, mirrorResources, mirrorWeather );
+    bool targetPlayerSelected(PG_ListBoxBaseItem* player) {
+        PG_ListBoxDataItem<int>* item = dynamic_cast<PG_ListBoxDataItem<int>*>(player);
+        if ( item ) {
+            if ( player_from->getFirstSelectedPlayer() >= 0 ) {
+                playerMapping[player_from->getFirstSelectedPlayer()] = item->getData();
+            }
         }
+        return true;
     }
 
-    // run 2: object copy
-    for ( int x=0; x<actmap->xsize; x++ )
-    {
-        for ( int y=0; y<maxY; y++ )
-        {
-            int targetY = actmap->ysize - y - yOffset;
+public:
+    MirrorMapDialog(GameMap* gamemap) : ASC_PG_Dialog(NULL, PG_Rect(-1, -1, 640, 600), "Mirror Map") , gamemap(gamemap) {
+        extendMap = new PG_DropDown(this, PG_Rect(10, 30, Width()-20, 20));
+        extendMap->AddItem("Keep map size, overwriting parts of it");
+        extendMap->AddItem("Extend map size");
+        extendMap->SelectFirstItem();
+        extendMap->SetEditable(false);
 
-            MapField *targetField = actmap->getField( x, targetY );
-            MapField *sourceField = actmap->getField( x, y );
+        direction = new PG_DropDown(this, PG_Rect(10, 60, Width()-20, 20));
+        direction->AddItem("Copy Left to Right");
+        direction->AddItem("Copy Top to Bottom");
+        direction->SelectFirstItem();
+        direction->SetEditable(false);
 
-            copyFieldStep2( sourceField, targetField, actmap, directionTranslation, playerTranslation, mirrorObjects, mirrorBuildings, mirrorUnits, mirrorMines );
+        new PG_Label(this, PG_Rect( 10, 100, Width()-20, 20), "Player Mapping: Left player will be mirrored to Right Player");
+
+        for ( int p = 0; p<8; ++p)
+            playerMapping[p] = 8-p;
+        playerMapping[8] = 8;
+
+        int nextEmptySlot = 0;
+        for ( int p = 0; p<8; ++p) {
+            if (gamemap->getPlayer(p).exist()) {
+                while ( gamemap->getPlayer(nextEmptySlot).exist() && nextEmptySlot < 8)
+                    nextEmptySlot++;
+                if ( nextEmptySlot == 8 )
+                    playerMapping[p] = 8-p;
+                else
+                    playerMapping[p] = nextEmptySlot++;
+            }
         }
+
+        player_from = new PlayerSelector(this, PG_Rect(10, 130, Width()/2 -20, 180), gamemap, false, new PlayerSelector_ExistingExcept());
+        player_from->sigSelectItem.connect(sigc::mem_fun(*this, &MirrorMapDialog::sourcePlayerSelected));
+        player_to = new PlayerSelector(this, PG_Rect(Width()/2+10, 130, Width()/2 -20, 180), gamemap, false, new PlayerSelector_AllExcept());
+        player_to->sigSelectItem.connect(sigc::mem_fun(*this, &MirrorMapDialog::targetPlayerSelected));
+
+        new TextRenderer(this, PG_Rect(10, 330, Width()-20, 130), mirrorInfoText);
+
+        AddStandardButton("Run")->sigClick.connect(sigc::hide( sigc::mem_fun( *this, &MirrorMapDialog::apply )));
     }
-    doneMirrorMap = true;
-}
+};
+
 
 void mirrorMap()
 {
-    MirrorMap mm;
-    mm.init();
-    mm.run();
-    mm.done();
+    MirrorMapDialog mmd(actmap);
+    mmd.Show();
+    mmd.RunModal();
     mapChanged( actmap );
     displaymap();
 }

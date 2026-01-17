@@ -139,12 +139,12 @@ NewMessage :: NewMessage ( GameMap* gamemap, Message* msg, bool reminder ) : ASC
    
    if ( !reminder )  {
       new PG_Label ( this, PG_Rect( 20, 30, 30, 20 ), "TO:");
-      to = new PlayerSelector ( this, PG_Rect( 50, 30, 150, 150 ), gamemap, true, 1 << gamemap->actplayer );
+      to = new PlayerSelector ( this, PG_Rect( 50, 30, 150, 150 ), gamemap, true, new PlayerSelector_ExistingExceptCurrent() );
       if ( msg )
          to->setSelection( msg->to );
       
       new PG_Label ( this, PG_Rect( 210, 30, 30, 20 ), "CC:" );
-      cc = new PlayerSelector ( this, PG_Rect( 240, 30, 150, 150 ), gamemap, true, 1 << gamemap->actplayer );
+      cc = new PlayerSelector ( this, PG_Rect( 240, 30, 150, 150 ), gamemap, true, new PlayerSelector_ExistingExceptCurrent() );
       if ( msg )
          cc->setSelection( msg->cc );
       

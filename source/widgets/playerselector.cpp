@@ -11,7 +11,7 @@
 #include "playerselector.h"
 
 
-PlayerSelector :: PlayerSelector (PG_Widget *parent, const PG_Rect &r, GameMap* map, bool multiselect, int suppress, int extra_spacing ) : MultiListBox( parent, r, multiselect), gamemap ( map ), suppressPlayers(suppress)
+PlayerSelector :: PlayerSelector (PG_Widget *parent, const PG_Rect &r, GameMap* map, bool multiselect, const PlayerAvailability* playerAvailability, int extra_spacing ) : MultiListBox( parent, r, multiselect), gamemap ( map ), playerAvailability(playerAvailability)
 {
    for ( int i = 0; i < gamemap->getPlayerCount(); ++i) {
        Surface s = Surface::createSurface(15,15,8,20+i*8);
@@ -24,7 +24,7 @@ PlayerSelector :: PlayerSelector (PG_Widget *parent, const PG_Rect &r, GameMap* 
 void PlayerSelector :: setup(int extra_spacing)
 {
    for ( int i = 0; i < gamemap->getPlayerCount(); ++i )
-      if ( gamemap->getPlayer(i).exist() && !(suppressPlayers & (1<<i)) )
+      if ( playerAvailability->showPlayer(gamemap, i) )
          new Item( getListBox(), 15 + extra_spacing, gamemap->getPlayer(i).getName(), i, icons.at(i).GetSurface() );
 }
 
@@ -60,5 +60,31 @@ void PlayerSelector :: setSelection( int s )
     }
 }
 
+PlayerSelector::~PlayerSelector()
+{
+    delete playerAvailability;
+}
 
 
+PlayerSelector_ExistingExcept::PlayerSelector_ExistingExcept(int except) : except(except)
+{
+}
+
+bool PlayerSelector_ExistingExcept::showPlayer(GameMap* gamemap, int p) const
+{
+    return gamemap->getPlayer(p).exist() && !(except & (1<<p));
+}
+
+
+PlayerSelector_AllExcept::PlayerSelector_AllExcept(int except) : except(except)
+{
+}
+
+bool PlayerSelector_AllExcept::showPlayer(GameMap* gamemap, int p) const
+{
+    return !(except & (1<<p));
+}
+
+bool PlayerSelector_ExistingExceptCurrent::showPlayer(GameMap* gamemap, int p) const {
+    return gamemap->getPlayer(p).exist() && p != gamemap->actplayer;
+}

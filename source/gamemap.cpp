@@ -174,6 +174,7 @@ bool OverviewMapHolder::init()
 void OverviewMapHolder::resetSize()
 {
    initialized = false;
+   startUpdate();
 }
 
 
@@ -1726,8 +1727,6 @@ int  GameMap::resize( int top, int bottom, int left, int right )  // positive: l
      for ( int x = 0; x < newx; x++ )
         newfield[ x + y * newx ].typ = getterraintype_byid ( 30 )->weather[0];
 
-  calculateallobjects( this );
-
   for ( int p = 0; p < newx*newy; p++ )
      newfield[p].setparams();
 
@@ -1750,7 +1749,7 @@ int  GameMap::resize( int top, int bottom, int left, int right )  // positive: l
         MapCoordinate mc = (*i)->getEntry();
         mc.x += left;
         mc.y += top;
-        (*i)->chainbuildingtofield ( mc );
+        (*i)->chainbuildingtofield ( mc, false );
      }
 
   for (int s = 0; s < 9; s++)
@@ -1758,6 +1757,8 @@ int  GameMap::resize( int top, int bottom, int left, int right )  // positive: l
         (*i)->xpos += left;
         (*i)->ypos += top;
      }
+
+  calculateallobjects( this );
 
 
   /*

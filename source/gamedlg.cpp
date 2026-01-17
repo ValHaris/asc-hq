@@ -141,7 +141,7 @@ class TributePayments : public ASC_PG_Dialog {
 public:
     TributePayments (GameMap* gamemap) : ASC_PG_Dialog(NULL, PG_Rect(-1, -1, 640, 430), "Transfer Resources"), gameMap(gamemap)
     {
-        PlayerSelector* selector = new PlayerSelector(this, PG_Rect(10, 30, 170, 300), gamemap, false, 1 <<gamemap->actplayer, 5 );
+        PlayerSelector* selector = new PlayerSelector(this, PG_Rect(10, 30, 170, 300), gamemap, false, new PlayerSelector_ExistingExceptCurrent(), 5 );
         selector->sigSelectItem.connect( sigc::mem_fun(*this, &TributePayments::selectPlayer));
 
         Emboss* outgoing = new Emboss(this, PG_Rect(190, 30, 430, 150), true);
@@ -257,7 +257,7 @@ public:
         for ( TransferControlCommand::Receivers::iterator i = receivers.begin(); i != receivers.end();++i )
             allowed_players |= 1 << (*i)->getPosition();
 
-        PlayerSelector* selector = new PlayerSelector(this, PG_Rect(10, 30, Width()-20, Height() - 80), unit->getMap(), false, 0xff ^ allowed_players, 5 );
+        PlayerSelector* selector = new PlayerSelector(this, PG_Rect(10, 30, Width()-20, Height() - 80), unit->getMap(), false, new PlayerSelector_ExistingExcept(0xff ^ allowed_players), 5 );
         selector->sigSelectItem.connect( sigc::mem_fun(*this, &TransferControlDialog::selectPlayer));
 
         StandardButtonDirection(Horizontal);

@@ -46,6 +46,8 @@ my_EditBox(NULL), my_DropButton(NULL), my_DropList(NULL) {
 	my_EditBox->sigEditBegin.connect( sigEditBegin.make_slot() );
 	my_EditBox->sigEditEnd.connect( sigEditEnd.make_slot() );
 	my_EditBox->sigEditReturn.connect( sigEditReturn.make_slot() );
+	my_EditBox->SetID(IDEDIT_BOX);
+	my_EditBox->sigMouseButtonDown.connect(sigc::mem_fun(*this, &PG_DropDown::handleButtonOnEditField));
 
 	PG_Rect rbutton(abs(r.my_width - r.my_height), 0, r.my_height, r.my_height);
 	my_DropButton = new PG_Button(this, rbutton, PG_NULLSTR, -1, style);
@@ -124,6 +126,13 @@ void PG_DropDown::eventShow() {
 void PG_DropDown::eventHide() {
 	if ( my_DropList )
 		my_DropList->Hide();
+}
+
+bool PG_DropDown::handleButtonOnEditField(PG_MessageObject* message, const SDL_MouseButtonEvent*) {
+    if ( my_EditBox->GetEditable())
+        return false;
+
+    return handleButtonClick(my_DropButton);
 }
 
 bool PG_DropDown::handleButtonClick(PG_Button* button) {

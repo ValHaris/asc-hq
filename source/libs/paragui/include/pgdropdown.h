@@ -62,7 +62,8 @@ class SignalSelectItem : public sigc::signal<bool, PG_ListBoxBaseItem*> {}
 	;
 
 	enum {
-	    IDDROPDOWN_BOX = PG_WIDGETID_INTERNAL + 11
+	    IDDROPDOWN_BOX = PG_WIDGETID_INTERNAL + 11,
+        IDEDIT_BOX = PG_WIDGETID_INTERNAL + 12
 	};
 
 	/**
@@ -198,6 +199,8 @@ protected:
 
 	/** */
 	void eventMoveWidget(int x, int y);
+
+	bool handleButtonOnEditField(PG_MessageObject* message, const SDL_MouseButtonEvent*);
 
 	/** */
 	virtual bool eventSelectItem(PG_ListBoxBaseItem* item);
