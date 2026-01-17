@@ -487,20 +487,20 @@ bool TextRenderer :: eventKeyDown(const SDL_KeyboardEvent* key)
 
    // only scroll as long as the key is pressed. When the key is released, no more scrolling! Don't continue scrolling due to a filled event queue...
 
-   if ( (key->keysym.sym == SDLK_UP  && keyStates[SDLK_UP] ) || ( key->keysym.sym == SDLK_KP_8  && keyStates[SDLK_KP_8] )) {
+   if ( (key->keysym.sym == SDLK_UP  && keyStates[SDL_SCANCODE_UP] ) || ( key->keysym.sym == SDLK_KP_8  && keyStates[SDL_SCANCODE_KP_8] )) {
       ScrollTo( GetScrollPosX (), GetScrollPosY () - scrollsize );
       return true;
    }
-   if ( (key->keysym.sym == SDLK_DOWN  && keyStates[SDLK_DOWN]) || (key->keysym.sym == SDLK_KP_2  && keyStates[SDLK_KP_2] )) {
+   if ( (key->keysym.sym == SDLK_DOWN  && keyStates[SDL_SCANCODE_DOWN]) || (key->keysym.sym == SDLK_KP_2  && keyStates[SDL_SCANCODE_KP_2] )) {
       ScrollTo( GetScrollPosX (), GetScrollPosY () + scrollsize );
       return true;
    }
 
-   if ( key->keysym.sym == SDLK_PAGEUP  && keyStates[SDLK_PAGEUP] ) {
+   if ( key->keysym.sym == SDLK_PAGEUP  && keyStates[SDL_SCANCODE_PAGEUP] ) {
       ScrollTo( GetScrollPosX (), GetScrollPosY() - (Height() - 10) );
       return true;
    }
-   if ( key->keysym.sym == SDLK_PAGEDOWN  && keyStates[SDLK_PAGEDOWN] ) {
+   if ( key->keysym.sym == SDLK_PAGEDOWN  && keyStates[SDL_SCANCODE_PAGEDOWN] ) {
       ScrollTo( GetScrollPosX (), GetScrollPosY () + (Height() - 10) );
       return true;
    }

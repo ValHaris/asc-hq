@@ -1622,37 +1622,31 @@ ScreenResolutionSetup::ScreenResolutionSetup( Cmdline& commandLine ) : cli( comm
       yr = cli.y();
 
    
-   GetVideoModes gvm;
    
-   GetVideoModes::ModeRes best = gvm.getBest();
-   if ( xr == -1 ) {
-      if ( fullscreen )
-         xr = best.first;
-      else
-         xr = best.first - 100;
-   }
+   SDL_DisplayMode desktop;
+   if ( SDL_GetDesktopDisplayMode(0, &desktop) < 0 )
+	   throw PG_Exception("ScreenResolutionSetup::ScreenResolutionSetup : SDL_GetDesktopDisplayMode", SDL_GetError());
    
-   if ( yr == -1 ) {
-      if ( fullscreen ) 
-         yr = best.second;
-      else
-         yr = best.second - 100;
-   }
+   float scale = 1;
    
-   
-   if ( CGameOptions::Instance()->graphicsDriver.compare_ci("default") != 0 ) {
-      static char buf[100];
-      strcpy(buf, "SDL_VIDEODRIVER=" );
-      strncat( buf, CGameOptions::Instance()->graphicsDriver.c_str(), 100 - strlen(buf));
-      buf[99] = 0;
-      putenv( buf );
-   }
+   if ( desktop.h < 1080 )
+	   scale = 1;
+   else if (desktop.h <= 1200)
+	   scale = 1.25;
+   else if (desktop.h <= 1600)
+	   scale = 1.5;
+   else
+	   scale = 2;
 
-   if ( xr == -1 )
-      xr = 1024;
-   
-   if ( yr == -1 )
-      yr = 768;
+   if ( fullscreen ) {
+	   xr = desktop.w / scale;
+	   yr = desktop.h / scale;
+   } else {
+	   if ( xr != -1 )
+		   xr = desktop.w / scale - 100;
+	   if ( yr != -1 )
+		   yr = desktop.h / scale - 100;
+   }
    
    x = xr;
    y = yr;

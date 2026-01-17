@@ -346,7 +346,7 @@ handleModKeys:
 bool PG_LineEdit::eventTextInput(const SDL_TextInputEvent* text)
 {
 	const char* c = text->text;
-	while ( c ) {
+	while ( *c ) {
 		InsertChar( *c );
 		c++;
 	}

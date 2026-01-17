@@ -992,6 +992,10 @@ void print(const SDL_WindowEvent& event) {
 	std::cout << "Window Event: " << (int)event.event << "\n";
 }
 
+void print(const SDL_TextInputEvent& event) {
+	std::cout << "Text Input: " << event.text << "\n";
+}
+
 void print(const SDL_MouseButtonEvent& event) {
 	std::cout << "Mouse Button Event: X=" << (int)event.x << " Y=" << (int)event.y << " State=" << (int)event.state << " Button=" << (int)event.button << "\n";
 }
@@ -1000,6 +1004,9 @@ void print(const SDL_Event* event) {
 	switch ( event->type ) {
 	case SDL_WINDOWEVENT:
 		print(event->window);
+		break;
+	case SDL_TEXTINPUT:
+		print(event->text);
 		break;
 	case SDL_MOUSEBUTTONDOWN:
 	case SDL_MOUSEBUTTONUP:

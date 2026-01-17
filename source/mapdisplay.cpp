@@ -1672,43 +1672,43 @@ bool MapDisplayPG::keyboardHandler( PG_MessageObject* o, const SDL_KeyboardEvent
 
    if ( keyEvent->type == SDL_KEYDOWN ) {
       if ( !disableKeyboardCursorMovement ) {
-         if ( keyEvent->keysym.sym == SDLK_RIGHT && keyStates[SDLK_RIGHT] ) {
+         if ( keyEvent->keysym.sym == SDLK_RIGHT && keyStates[SDL_SCANCODE_RIGHT] ) {
             moveCursor(2, 1);
             return true;
          }
-         if ( keyEvent->keysym.sym == SDLK_LEFT  && keyStates[SDLK_LEFT]  ) {
+         if ( keyEvent->keysym.sym == SDLK_LEFT  && keyStates[SDL_SCANCODE_LEFT]  ) {
             moveCursor(6, 1);
             return true;
          }
-         if ( (keyEvent->keysym.sym == SDLK_UP  && keyStates[SDLK_UP] ) || ( keyEvent->keysym.sym == SDLK_KP_8  && keyStates[SDLK_KP_8] )) {
+         if ( (keyEvent->keysym.sym == SDLK_UP  && keyStates[SDL_SCANCODE_UP] ) || ( keyEvent->keysym.sym == SDLK_KP_8  && keyStates[SDL_SCANCODE_KP_8] )) {
             moveCursor(0, 1);
             return true;
          }
-         if ( (keyEvent->keysym.sym == SDLK_DOWN  && keyStates[SDLK_DOWN]) || (keyEvent->keysym.sym == SDLK_KP_2  && keyStates[SDLK_KP_2] )) {
+         if ( (keyEvent->keysym.sym == SDLK_DOWN  && keyStates[SDL_SCANCODE_DOWN]) || (keyEvent->keysym.sym == SDLK_KP_2  && keyStates[SDL_SCANCODE_KP_2] )) {
             moveCursor(4, 1);
             return true;
          }
-         if ( keyEvent->keysym.sym == SDLK_KP_6  && keyStates[SDLK_KP_6] ) {
+         if ( keyEvent->keysym.sym == SDLK_KP_6  && keyStates[SDL_SCANCODE_KP_6] ) {
             moveCursor(2, 2);
             return true;
          }
-         if ( keyEvent->keysym.sym == SDLK_KP_4 && keyStates[SDLK_KP_4] ) {
+         if ( keyEvent->keysym.sym == SDLK_KP_4 && keyStates[SDL_SCANCODE_KP_4] ) {
             moveCursor(6, 2);
             return true;
          }
-         if ( keyEvent->keysym.sym == SDLK_KP_7  && keyStates[SDLK_KP_7] ) {
+         if ( keyEvent->keysym.sym == SDLK_KP_7  && keyStates[SDL_SCANCODE_KP_7] ) {
             moveCursor(7, 1);
             return true;
          }
-         if ( keyEvent->keysym.sym == SDLK_KP_9  && keyStates[SDLK_KP_9]) {
+         if ( keyEvent->keysym.sym == SDLK_KP_9  && keyStates[SDL_SCANCODE_KP_9]) {
             moveCursor(1, 1);
             return true;
          }
-         if ( keyEvent->keysym.sym == SDLK_KP_1  && keyStates[SDLK_KP_1]) {
+         if ( keyEvent->keysym.sym == SDLK_KP_1  && keyStates[SDL_SCANCODE_KP_1]) {
             moveCursor(5, 1);
             return true;
          }
-         if ( keyEvent->keysym.sym == SDLK_KP_3  && keyStates[SDLK_KP_3]) {
+         if ( keyEvent->keysym.sym == SDLK_KP_3  && keyStates[SDL_SCANCODE_KP_3]) {
             moveCursor(3, 1);
             return true;
          }
