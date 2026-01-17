@@ -39,6 +39,7 @@
 #include "dialog.h"
 #include "itemrepository.h"
 #include "textfile_evaluation.h"
+#include "widgets/textrenderer.h"
 
 /*#ifdef convert/er
   #error The small editors should not need to use LoadBi3
@@ -1644,10 +1645,9 @@ void tloadBImap :: LoadFromFile( const char* path, const char* AFileName, Terrai
       if ( errorOutput )
          (*errorOutput)=missing;
       else {
-         tviewanytext vat;
-         vat.init ( "warning", missing );
-         vat.run();
-         vat.done();
+         ViewFormattedText vat( "warning", missing, PG_Rect(-1, -1, 300, 400) );
+         vat.Show();
+         vat.RunModal();
       }
     }
 
