@@ -237,11 +237,6 @@ extern void xorline( int x1, int y1, int x2, int y2, Uint8 color );
 //! draws a simple rectangl
 extern void rectangle(int x1, int y1, int x2, int y2, Uint8 color );
 
-/** draws a simple rectangle on the screen, but performs a XOR operation between the pixel already
-     on screen and color. Thus the rectangle will always have a color different then the one
-     that was previously there. And it can be undone by displaying it a second time. */
-extern void  xorrectangle(int x1, int y1, int x2, int y2, Uint8 color) ;
-
 //! obsolete. not used any more. can be removed.
 void putinterlacedrotimage ( int x1, int y1, void* ptr, int rotation );
 

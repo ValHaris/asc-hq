@@ -202,25 +202,6 @@ rectangle(int x1,
 
 }
 
-
-void xorrectangle(int x1,
-	     int y1,
-	     int x2,
-	     int y2,
-	     Uint8 color)
-{
-
-}
-
-/*
-void         xorrectangle( tmouserect r, byte         color)
-{
-   xorrectangle ( r.x1, r.y1, r.x2, r.y2, color );
-}
-
-  */
-
-
 void* halfpict ( void* vbuf )
 {
    Uint8* buf = (Uint8*) vbuf;

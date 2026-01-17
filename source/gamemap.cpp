@@ -87,8 +87,8 @@ sigc::signal<void> OverviewMapHolder::generationComplete;
 
 bool OverviewMapHolder :: idleHandler( )
 {
-   int t = SDL_GetTicks();
-   while ( !completed && (t + 5 > SDL_GetTicks() ))
+   int t = ASC_GetTicks();
+   while ( !completed && (t + 5 > ASC_GetTicks() ))
       drawNextField( true );
    return true;
 }

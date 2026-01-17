@@ -868,7 +868,7 @@ void trunreplay::error( const ASCString& message )
 void trunreplay :: wait ( int t )
 {
 //   if ( fieldvisiblenow ( getactfield(), actmap->playerView ))
-    while ( SDL_GetTicks() < t + CGameOptions::Instance()->replayspeed ) {
+    while ( ASC_GetTicks() < t + CGameOptions::Instance()->replayspeed ) {
        /*
        tkey input;
        while (keypress ()) {
@@ -923,11 +923,11 @@ void trunreplay :: removeActionCursor ( void )
 void trunreplay :: execnextreplaymove ( void )
 {
    
-   static int lastTicker = SDL_GetTicks();
+   static int lastTicker = ASC_GetTicks();
    
-   if ( lastTicker + 10 < SDL_GetTicks() ) {
+   if ( lastTicker + 10 < ASC_GetTicks() ) {
       displayLogMessage( 8, "executing replay move %d\n", movenum );
-      lastTicker = SDL_GetTicks();
+      lastTicker = ASC_GetTicks();
    }
 
    if ( !replayRecorder || !replayRecorder->isRunning())
@@ -954,7 +954,7 @@ void trunreplay :: execnextreplaymove ( void )
                            auto_ptr<MoveUnitCommand> muc ( new MoveUnitCommand( eht ));
                            muc->setDestination( MapCoordinate(x2,y2) );
 
-                           int t = SDL_GetTicks();
+                           int t = ASC_GetTicks();
                            wait( MapCoordinate(x1,y1), MapCoordinate(x2,y2), t );
                            
                            ActionResult res = muc->execute( createReplayContext() );
@@ -995,7 +995,7 @@ void trunreplay :: execnextreplaymove ( void )
                         if ( eht ) {
                            auto_ptr<MoveUnitCommand> muc ( new MoveUnitCommand( eht ));
                            
-                           int t = SDL_GetTicks();
+                           int t = ASC_GetTicks();
                            wait( MapCoordinate(x1,y1), MapCoordinate(x2,y2), t );
                            
                            MapCoordinate3D dest ( x2,y2, 0 );

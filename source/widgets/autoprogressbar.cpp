@@ -18,10 +18,10 @@
 void AutoProgressBar :: tick()
 {
 
-   newTickTimes.push_back ( SDL_GetTicks() - starttime );
+   newTickTimes.push_back ( ASC_GetTicks() - starttime );
 
    // limit to 25 Hz to reduce graphic updates
-   if ( lastdisplaytime + 4 < SDL_GetTicks() ) {
+   if ( lastdisplaytime + 4 < ASC_GetTicks() ) {
       double p;
       // double p = double(ticker - starttime) * 100  / time;
       if ( counter < prevTickTimes.size() && time ) {
@@ -34,18 +34,18 @@ void AutoProgressBar :: tick()
          p = 99;
 
       SetProgress( p );
-      lastdisplaytime = SDL_GetTicks();
+      lastdisplaytime = ASC_GetTicks();
    }
 
    ++counter;
 
 
-   lastticktime = SDL_GetTicks();
+   lastticktime = ASC_GetTicks();
 };
 
 AutoProgressBar :: AutoProgressBar( sigc::signal<void>& tickSignal, PG_Widget *parent, const PG_Rect &r, const std::string &style ) : PG_ProgressBar( parent, r, style ), lastticktime(-1), counter(0)
 {
-   lastdisplaytime = starttime = SDL_GetTicks();
+   lastdisplaytime = starttime = ASC_GetTicks();
 
    tickSignal.connect( sigc::mem_fun( *this, &AutoProgressBar::tick ));
 
