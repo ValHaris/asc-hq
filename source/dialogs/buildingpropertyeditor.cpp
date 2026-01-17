@@ -24,10 +24,12 @@
 #include <pgpropertyfield_intdropdown.h>
 #include <pgpropertyfield_string.h>
 #include <pgpropertyfield_checkbox.h>
+#include <pgpropertyfield_separator.h>
 
 #include "../gamemap.h"
 #include "../paradialog.h"
 #include "../edmisc.h"
+#include "../spfst.h"
 
 #include "buildingpropertyeditor.h"
 
@@ -37,32 +39,40 @@ class BuildingPropertyEditor : public ASC_PG_Dialog {
       PG_PropertyEditor* propertyEditor;
       Building* bld;
       int owner;
-      ASCString playerNames[8];
-      const char* cplayerNames[9];
+      ASCString playerNames[9];
+      const char* cplayerNames[10];
       int experienceOffensive;
       int experienceDefensive;
       Resources tank;
+
+      void checkLimit( int& value, int boundary ) {
+          if ( abs(value) > abs(boundary))
+              value = boundary;
+      }
 
       bool ok()
       {
          if ( propertyEditor->Apply() ) {
             mapsaved = false;
 
+            for ( int r = 0; r < resourceTypeNum; ++r)
+                checkLimit(bld->plus.resource(r), bld->maxplus.resource(r));
+
             if ( owner != bld->getOwner() ) {
                 bld->convert(owner, true);
             }
 
-            quitModalLoop(0);
-
             bld->researchpoints = min(bld->researchpoints, bld->maxresearchpoints);
 
+            mapChanged(bld->getMap());
+            quitModalLoop(0);
             return true;
          } else
             return false;
       }
 
    public:
-      BuildingPropertyEditor( PG_Widget* parent, Building* bld) : ASC_PG_Dialog( parent, PG_Rect( 50, 50, 500, 550 ), "Edit Unit Properties"), bld(bld)
+      BuildingPropertyEditor( PG_Widget* parent, Building* bld) : ASC_PG_Dialog( parent, PG_Rect( 50, 50, 500, 550 ), "Edit Building Properties"), bld(bld)
       {
          propertyEditor = new ASC_PropertyEditor( this, PG_Rect( 10, GetTitlebarHeight(), Width() - 20, Height() - GetTitlebarHeight() - 50 ), "PropertyEditor", 70 );
 
@@ -70,10 +80,12 @@ class BuildingPropertyEditor : public ASC_PG_Dialog {
          new PG_PropertyField_Integer<int>( propertyEditor , "Damage", &bld->damage );
          new PG_PropertyField_Checkbox( propertyEditor , "Visible", &bld->visible );
 
+         new PG_PropertyField_Separator(propertyEditor);
          (new PG_PropertyField_Integer<int>( propertyEditor , "Energy stored", &bld->actstorage.energy ))->SetRange(0, bld->getStorageCapacity().energy);
          (new PG_PropertyField_Integer<int>( propertyEditor , "Material stored", &bld->actstorage.material ))->SetRange(0, bld->getStorageCapacity().material);
          (new PG_PropertyField_Integer<int>( propertyEditor , "Fuel stored", &bld->actstorage.fuel ))->SetRange(0, bld->getStorageCapacity().fuel);
 
+         new PG_PropertyField_Separator(propertyEditor);
          new PG_PropertyField_Integer<int>( propertyEditor , "BI Energy plus", &bld->bi_resourceplus.energy );
          new PG_PropertyField_Integer<int>( propertyEditor , "BI Material plus", &bld->bi_resourceplus.material );
          new PG_PropertyField_Integer<int>( propertyEditor , "BI Fuel plus", &bld->bi_resourceplus.fuel );
@@ -84,31 +96,41 @@ class BuildingPropertyEditor : public ASC_PG_Dialog {
                  bld->typ->hasFunction( ContainerBaseType::MiningStation  ) ||
                  bld->typ->hasFunction( ContainerBaseType::ResourceSink  )) {
 
-             (new PG_PropertyField_Integer<int>( propertyEditor , "Energy max plus", &bld->maxplus.energy ))->SetRange(0, bld->typ->maxplus.energy);
-             (new PG_PropertyField_Integer<int>( propertyEditor , "Material max plus", &bld->maxplus.material ))->SetRange(0, bld->typ->maxplus.material);
-             (new PG_PropertyField_Integer<int>( propertyEditor , "Fuel max plus", &bld->maxplus.fuel ))->SetRange(0, bld->typ->maxplus.fuel);
+             new PG_PropertyField_Separator(propertyEditor);
+             new PG_PropertyField_Integer<int>( propertyEditor , "Energy max plus", &bld->maxplus.energy );
+             new PG_PropertyField_Integer<int>( propertyEditor , "Material max plus", &bld->maxplus.material );
+             new PG_PropertyField_Integer<int>( propertyEditor , "Fuel max plus", &bld->maxplus.fuel );
 
+             new PG_PropertyField_Separator(propertyEditor);
+             new PG_PropertyField_Integer<int>( propertyEditor , "Energy plus", &bld->plus.energy );
+             new PG_PropertyField_Integer<int>( propertyEditor , "Material plus", &bld->plus.material );
+             new PG_PropertyField_Integer<int>( propertyEditor , "Fuel plus", &bld->plus.fuel );
          }
 
          if ( bld->typ->hasFunction(ContainerBaseType::Research)) {
+             new PG_PropertyField_Separator(propertyEditor);
              (new PG_PropertyField_Integer<int>( propertyEditor , "Research output (points)", &bld->researchpoints ))->SetRange(0, bld->maxresearchpoints);
              (new PG_PropertyField_Integer<int>( propertyEditor , "Max. Research output (points)", &bld->maxresearchpoints ))->SetRange(0, bld->typ->maxresearchpoints);
          }
 
 
+         new PG_PropertyField_Separator(propertyEditor);
          for ( int i = 0; i < 8; ++i) {
              playerNames[i] = ASCString("(") + ASCString::toString(i) + ") " + bld->getMap()->player[i].getName();
              cplayerNames[i] = playerNames[i].c_str();
          }
-         cplayerNames[8] = NULL;
+         cplayerNames[8] = "Neutral";
+         cplayerNames[9] = NULL;
+
          owner = bld->getOwner();
          new PG_PropertyField_IntDropDown<int>( propertyEditor, "Owner", &owner, cplayerNames  );
 
+         new PG_PropertyField_Separator(propertyEditor);
          for ( int w =0; w < waffenanzahl; w++)
              (new PG_PropertyField_Integer<int>( propertyEditor , "Ammo for " + ASCString(cwaffentypen[w]), &bld->ammo[w] ))
                      ->SetRange( 0, 10000 );
 
-         PG_Button* ok = new PG_Button( this, PG_Rect( Width() - 100, Height() - 40, 90, 30), "OK" );
+         PG_Button* ok = new PG_Button( this, PG_Rect( Width() - 100, Height() - 40, 90, 30), "Apply" );
          ok->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &BuildingPropertyEditor::ok )));
       };
 

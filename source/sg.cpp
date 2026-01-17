@@ -859,10 +859,6 @@ void executeUserAction ( tuseractions action )
          }
          break;
 
-      case ua_bi3preferences:
-         bi3preferences();
-         break;
-
       case ua_settribute :
          settributepayments ();
          break;

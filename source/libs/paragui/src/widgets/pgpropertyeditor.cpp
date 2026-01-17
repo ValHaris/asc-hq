@@ -78,10 +78,12 @@ PG_Rect PG_PropertyEditor :: RegisterProperty( const std::string& name, PG_Prope
    
 	int w = Width() - my_widthScrollbar - 2 * lineSpacing;
 
-   PG_Label* label = new PG_Label( this, PG_Rect( 0, ypos, w * labelWidth / 100 - 1, height), name );
-	label->LoadThemeStyle( styleName, "Label" );
-   PG_Rect r  ( w * labelWidth / 100 , ypos, w * ( 100 - labelWidth ) / 100  - 1, height );
-   ypos += height + lineSpacing;
+	if ( name.length()) {
+	    PG_Label* label = new PG_Label( this, PG_Rect( 0, ypos, w * labelWidth / 100 - 1, height), name );
+	    label->LoadThemeStyle( styleName, "Label" );
+	}
+    PG_Rect r  ( w * labelWidth / 100 , ypos, w * ( 100 - labelWidth ) / 100  - 1, height );
+    ypos += height + lineSpacing;
 	return r;
 };
 

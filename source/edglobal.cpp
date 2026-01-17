@@ -62,6 +62,7 @@
 #include "dialogs/unitguidedialog.h"
 #include "dialogs/fileselector.h"
 #include "dialogs/vehiclepropertyeditor.h"
+#include "dialogs/buildingpropertyeditor.h"
 #include "stack.h"
 
    
@@ -590,7 +591,7 @@ void execaction( int code)
                        displaymap();
                     }
                     else if ( pf2->building ) {
-                       changebuildingvalues(*pf2->building);
+                        changeBuildingPropertyDialog(pf2->building);
                     } /* endif */
                  } /* endif */
               } 
