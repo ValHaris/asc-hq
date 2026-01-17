@@ -34,6 +34,7 @@
 #define centerlayer 65000
 #define maxoverwrite 5
 
+#if 0
   class tmapgenerator : public tdialogbox {
         public :
                int action;
@@ -1128,4 +1129,12 @@ void tplasma::generateplasma(Uint8 resettile)
 
 
    //showmemory();
+}
+
+#endif
+
+int         mapgenerator(void)
+{
+    infoMessage("Sorry, this function has been removed");
+    return 0;
 }
