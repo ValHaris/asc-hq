@@ -1401,7 +1401,7 @@ void MapDisplayPG::displayUnitMovement( GameMap* actmap, Vehicle* veh, const Map
       // we don't animate a descending or ascending submarine without movement
       return;
 
-   int startTime = SDL_GetTicks();
+   int startTime = ASC_GetTicks();
    int endTime = startTime + duration;
    
    // initialisation that is only executed the first time the code runs here
@@ -1490,8 +1490,8 @@ void MapDisplayPG::displayUnitMovement( GameMap* actmap, Vehicle* veh, const Map
    int loopStartTicker = ticker;
 #endif
 
-   while ( SDL_GetTicks() < endTime ) {
-      displayMovementStep( movement, (SDL_GetTicks() - startTime) * 100 / duration );
+   while ( ASC_GetTicks() < endTime ) {
+      displayMovementStep( movement, (ASC_GetTicks() - startTime) * 100 / duration );
       ++loopCounter;
    }
 

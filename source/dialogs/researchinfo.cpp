@@ -96,6 +96,7 @@ class ResearchInfo : public ASC_PG_Dialog {
 		  ViewFormattedText vft ( "Triggered TechAdapter", s, PG_Rect( -1, -1, 500, 500 ));
 		  vft.Show();
 		  vft.RunModal();
+		  return true;
        }
     };
 

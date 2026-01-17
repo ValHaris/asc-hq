@@ -575,7 +575,6 @@ bool viewmessage ( const Message& message )
    if ( PG_Application::GetScreen()==NULL )
       return false;
    
-   assert( !legacyEventSystemActive() );
    IngameMessageViewer igm( "incoming message...", message );
    igm.Show();
    igm.RunModal();

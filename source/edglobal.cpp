@@ -279,7 +279,7 @@ int infomessage( char* formatstring, ... )
    if ( formatstring == NULL  ||  formatstring[0] == 0 )
       lastdisplayedmessageticker = 0xffffff;
    else
-      lastdisplayedmessageticker = ticker;
+      lastdisplayedmessageticker = ASC_GetTicks();
 
    return ++actdisplayedmessage;
 }
@@ -339,7 +339,7 @@ class PlayerColorPanel : public PG_Widget {
 
       void Show( bool fade = false )
       {
-         openTime = ticker;
+         openTime = ASC_GetTicks();
          PG_Widget::Show(fade);
       }
 
@@ -368,7 +368,7 @@ class PlayerColorPanel : public PG_Widget {
          if ( !openTime )
             return false;
 
-         if ( ticker > openTime + 200 ) {
+         if ( ASC_GetTicks() > openTime + 200 ) {
             Hide();
             return true;
          } else
@@ -467,9 +467,6 @@ void execaction( int code)
        */
     case act_viewmap :  
              {
-             while (mouseparams.taste != 0)
-                releasetimeslice();
-             // showmap ();
              displaymap();
              }
        break;

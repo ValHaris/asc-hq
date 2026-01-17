@@ -277,13 +277,13 @@ void waitWithUpdate( int millisecs )
    else
       frameDelay = 10;
    
-   int t = SDL_GetTicks();
+   int t = ASC_GetTicks();
    do {
-      int t2 = SDL_GetTicks();
+      int t2 = ASC_GetTicks();
       do {
          releasetimeslice();
-      } while ( t2 + frameDelay > SDL_GetTicks() );
-   } while ( t + millisecs/20 > SDL_GetTicks() );
+      } while ( t2 + frameDelay > ASC_GetTicks() );
+   } while ( t + millisecs/20 > ASC_GetTicks() );
 }
 
 
@@ -357,9 +357,9 @@ void showAttackAnimation( tfight& battle, GameMap* actmap, int ad, int dd )
    float avd2 = float( 100 - battle.av.damage )/100;
    float dvd2 = float( 100 - battle.dv.damage )/100;
 
-   int starttime = SDL_GetTicks();
-   while ( SDL_GetTicks() < starttime + time2 ) {
-      float p = float(SDL_GetTicks() - starttime ) / time2;
+   int starttime = ASC_GetTicks();
+   while ( ASC_GetTicks() < starttime + time2 ) {
+      float p = float(ASC_GetTicks() - starttime ) / time2;
 
       at->setBarGraphValue( "attacker_unitstatusbar", avd + (avd2-avd) * p );
       at->setBarGraphValue( "defender_unitstatusbar", dvd + (dvd2-dvd) * p );

@@ -803,87 +803,6 @@ bool Maped_MainScreenWidget::eventKeyDown(const PG_MessageObject* o, const SDL_K
    
       }
 
-      // I don't know any more what exactly made me switch to this approach
-      // But it was done very deliberately, see commit abc0b6ab
-      // However, it doesn't work with sdl12_compat any more, that why we try again with the key->keysym.sym method
-      switch ( key->keysym.unicode ) {
-         case 1:  // A
-            execaction_ev(act_setupalliances);
-            return true;
-   
-         case 2:  // B
-            execaction_ev(act_toggleresourcemode);
-            return true;
-   
-         case 3:  // C
-            execaction_ev(act_copyToClipboard);
-            return true;
-
-         case 6: // F
-            execaction_ev(act_createresources);
-            return true;
-   
-         case 7: //G
-            execaction_ev(act_maptopcx);
-            return true;
-   
-         case 8:  // H
-            execaction_ev(act_setunitfilter);
-            return true;
-   
-         case 9:  // I
-            execaction_ev (act_import_bi_map );
-            return true;
-   
-         case 12:  // L
-            execaction_ev(act_loadmap);
-            return true;
-   
-         case 13:  // M
-            execaction_ev(act_changemapvals);
-            return true;
-   
-         case 14:  // N
-            execaction_ev(act_newmap);
-            return true;
-   
-         case 15:  // O
-            execaction_ev(act_polymode);
-            return true;
-   
-         case 16:  // P
-            execaction_ev(act_changeproduction);
-            return true;
-   
-         case 17:  // Q
-            execaction_ev(act_end);
-            return true;
-                        
-         case 18: // R
-            execaction_ev(act_showweapnrange);
-            return true;
-   
-         case 19 :  // S
-            execaction_ev(act_savemap);
-            return true;
-
-         case 21: // U
-            execaction_ev(act_unitinfo);
-            return true;
-   
-         case 22:  // V
-            execaction_ev(act_pasteFromClipboard);
-            return true;
-   
-         case 23: // W
-            execaction_ev(act_setactweatherglobal);
-            return true;
-
-         case 24: // X
-            execaction_ev(act_cutToClipboard);
-            return true;
-      }
-      // see comment above
       switch ( key->keysym.sym ) {
          case SDLK_a:
             execaction_ev(act_setupalliances);
@@ -979,9 +898,11 @@ bool Maped_MainScreenWidget::eventKeyDown(const PG_MessageObject* o, const SDL_K
 
    if ( mod & KMOD_ALT ) {
       switch ( key->keysym.sym ) {
+      /*
             case SDLK_RETURN:
                getPGApplication().toggleFullscreen();
                return true;
+               */
 
          case SDLK_F11:
                /*

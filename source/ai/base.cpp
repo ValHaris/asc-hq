@@ -252,14 +252,14 @@ void AI:: run ( bool benchMark, MapDisplayInterface* myMapDisplay )
    } else 
       mapDisplay = NULL;
 
-   int startTime = SDL_GetTicks();
+   int startTime = ASC_GetTicks();
    AiResult res;
 
    unitCounter = 0;
    isRunning(true);
    setVision(visible_ago);
 
-   int setupTime = SDL_GetTicks();
+   int setupTime = ASC_GetTicks();
    
    FieldMarkingSuppressor fms( mapDisplay );
    
@@ -276,39 +276,39 @@ void AI:: run ( bool benchMark, MapDisplayInterface* myMapDisplay )
 
    calcReconPositions();
 
-   setupTime = SDL_GetTicks()-setupTime;
+   setupTime = ASC_GetTicks()-setupTime;
 
-   int serviceTime = SDL_GetTicks();
+   int serviceTime = ASC_GetTicks();
    issueServices( );
    executeServices();
 
    checkGameEvents();
 
-   serviceTime = SDL_GetTicks()-serviceTime;
+   serviceTime = ASC_GetTicks()-serviceTime;
 
-   int conquerTime = SDL_GetTicks();
+   int conquerTime = ASC_GetTicks();
    checkConquer();
-   conquerTime = SDL_GetTicks() - conquerTime;
+   conquerTime = ASC_GetTicks() - conquerTime;
 
    runReconUnits ( );
 
-   int containerTime = SDL_GetTicks();
+   int containerTime = ASC_GetTicks();
    buildings( 3 );
    transports ( 3 );
-   containerTime = SDL_GetTicks()-containerTime;
+   containerTime = ASC_GetTicks()-containerTime;
 
-   int tacticsTime = SDL_GetTicks();
+   int tacticsTime = ASC_GetTicks();
    do {
       res = tactics();
       checkGameEvents();
    } while ( res.unitsMoved );
-   tacticsTime = SDL_GetTicks() - tacticsTime;
+   tacticsTime = ASC_GetTicks() - tacticsTime;
 
-   int strategyTime = SDL_GetTicks();
+   int strategyTime = ASC_GetTicks();
    strategy();
    checkGameEvents();
 
-   strategyTime = SDL_GetTicks() - strategyTime;
+   strategyTime = ASC_GetTicks() - strategyTime;
 
    buildings( 1 );
    transports ( 3 );
@@ -320,7 +320,7 @@ void AI:: run ( bool benchMark, MapDisplayInterface* myMapDisplay )
    isRunning(false);
    if ( !mapDisplay )
       repaintMap();
-   int duration = SDL_GetTicks()-startTime;
+   int duration = ASC_GetTicks()-startTime;
 
 /*
    if ( getMap()->replayinfo )

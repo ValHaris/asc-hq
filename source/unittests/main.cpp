@@ -124,10 +124,6 @@ int runTester ( )
       errorMessage ( "loading of game failed" );
       return -1;
    }
-   catch ( ThreadExitException& ) {
-      displayLogMessage(0, "caught thread exiting exception, shutting down");
-      return -1;
-   }
 
 #ifndef _WIN32_
    // Windows/MSVC will catch access violations with this, which we don't want to, because it makes our dump files useless.

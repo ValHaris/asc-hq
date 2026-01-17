@@ -38,9 +38,9 @@ class trunreplay {
             void execnextreplaymove ( void );
             GameMap* orgmap;
             MemoryStream* stream;
-            void wait ( int t = SDL_GetTicks() );
-            void wait ( MapCoordinate pos, int t = SDL_GetTicks() );
-            void wait ( MapCoordinate pos1, MapCoordinate pos2, int t = SDL_GetTicks() );
+            void wait ( int t = ASC_GetTicks() );
+            void wait ( MapCoordinate pos, int t = ASC_GetTicks() );
+            void wait ( MapCoordinate pos1, MapCoordinate pos2, int t = ASC_GetTicks() );
             int actplayer;
 
             void error( const char* message, ... );

@@ -532,7 +532,7 @@ void         startnextcampaignmap( int id)
 void benchgame ( bool withViewCalc )
 {
    int t2;
-   int t = SDL_GetTicks();
+   int t = ASC_GetTicks();
    int n = 0;
    do {
       if ( withViewCalc ) 
@@ -541,7 +541,7 @@ void benchgame ( bool withViewCalc )
       repaintMap();
             
       n++;
-      t2 = SDL_GetTicks();
+      t2 = ASC_GetTicks();
    } while ( t + 1000 > t2 ); /* enddo */
    double d = 100 * n;
    d /= (t2-t);
@@ -1419,10 +1419,6 @@ int gamethread ( GameThreadParams* gtp )
    }
    catch ( const PG_Exception & ex ) {
       errorMessage ( ex.getMessage() );
-      return -1;
-   }
-   catch ( const ThreadExitException & ) {
-      displayLogMessage(0, "caught thread exiting exception, shutting down");
       return -1;
    }
 

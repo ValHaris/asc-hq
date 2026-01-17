@@ -132,7 +132,7 @@ void MainScreenWidget :: toggleMapLayer( const ASCString& name )
 
 bool MainScreenWidget :: idleHandler( )
 {
-   if ( SDL_GetTicks() > lastMessageTime + 500 ) {
+   if ( ASC_GetTicks() > lastMessageTime + 500 ) {
       displayMessage( "" );
       lastMessageTime = 0xfffffff;
    }
@@ -145,7 +145,7 @@ void MainScreenWidget :: mouseScrollChecker()
 {
    if ( getPGApplication().isFullscreen() && IsMouseInside() ) {
 
-      if ( SDL_GetTicks() > lastMouseScrollTime + 30 ) {
+      if ( ASC_GetTicks() > lastMouseScrollTime + 30 ) {
          int x,y;
          SDL_GetMouseState( &x, &y);
    
@@ -266,7 +266,7 @@ void MainScreenWidget::displayMessage( const ASCString& message )
 {
    if ( messageLine ) {
       messageLine->SetText( message );
-      lastMessageTime = SDL_GetTicks();
+      lastMessageTime = ASC_GetTicks();
    }   
 }
 

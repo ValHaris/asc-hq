@@ -35,6 +35,9 @@ int  releasetimeslice( void )
    return 0;
 }
 
+int ASC_GetTicks() {
+	return SDL_GetTicks()/10;
+}
 
 void exit_asc( int returnresult )
 {

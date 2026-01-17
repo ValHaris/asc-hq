@@ -264,7 +264,6 @@ bool ConfirmExitDialog::closeWindow() {
 }
 
 bool ConfirmExitDialog::exitGame(PG_Button* button) {
-    // throw ThreadExitException();
     quitModalLoop(1);
     getPGApplication().Quit();
     return true;
