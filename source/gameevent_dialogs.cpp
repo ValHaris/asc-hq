@@ -255,7 +255,7 @@ class PlayerMultiSelect : public ASC_PG_Dialog {
     }
 public:
     PlayerMultiSelect (GameMap* gamemap, int& bitmappedPlayers) : ASC_PG_Dialog(NULL, PG_Rect(-1, -1, 300, 330), "Select Players") , players(bitmappedPlayers) {
-        selector = new PlayerSelector(this, PG_Rect(10, 30, Width()-20, Height()-90), gamemap, true, 0, 3);
+        selector = new PlayerSelector(this, PG_Rect(10, 30, Width()-20, Height()-90), gamemap, true, new PlayerSelector_ExistingExcept(), 3);
         selector->setSelection(bitmappedPlayers);
         AddStandardButton("OK")->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &PlayerMultiSelect::apply )));
     }

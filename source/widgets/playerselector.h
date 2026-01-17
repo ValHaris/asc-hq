@@ -24,10 +24,23 @@ class PlayerSelector : public MultiListBox {
       GameMap* gamemap;
       vector<Surface> icons;
       void setup(int extra_spacing);
-      int suppressPlayers;
    public:
+
+      class PlayerAvailability {
+      public:
+          virtual bool showPlayer(GameMap* gamemap, int p) const =0;
+          virtual ~PlayerAvailability() {};
+      };
+
+   private:
+      const PlayerAvailability* playerAvailability;
+
+   public:
+
       typedef PG_ListBoxDataItem<int> Item;
-      PlayerSelector (PG_Widget *parent, const PG_Rect &r, GameMap* map, bool multiselect = true, int suppress = 0, int extra_spacing = 0 );
+
+      // Will take ownership of playerAvailability and delete it
+      PlayerSelector (PG_Widget *parent, const PG_Rect &r, GameMap* map, bool multiselect = true, const PlayerAvailability* playerAvailability = NULL, int extra_spacing = 0 );
 
       //! this is bitmapped
       int getSelectedPlayers();
@@ -36,7 +49,27 @@ class PlayerSelector : public MultiListBox {
       int getFirstSelectedPlayer();
 
       void setSelection( int s );
+
+      ~PlayerSelector();
 };
 
+class PlayerSelector_ExistingExcept: public PlayerSelector::PlayerAvailability {
+    int except;
+public:
+    PlayerSelector_ExistingExcept(int except=0);
+    bool showPlayer(GameMap* gamemap, int p) const;
+};
+
+class PlayerSelector_ExistingExceptCurrent: public PlayerSelector::PlayerAvailability {
+public:
+    bool showPlayer(GameMap* gamemap, int p) const;
+};
+
+class PlayerSelector_AllExcept: public PlayerSelector::PlayerAvailability {
+    int except;
+public:
+    PlayerSelector_AllExcept(int except=0);
+    bool showPlayer(GameMap* gamemap, int p) const;
+};
 
 #endif
