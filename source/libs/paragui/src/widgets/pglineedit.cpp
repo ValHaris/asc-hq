@@ -345,6 +345,11 @@ handleModKeys:
 
 bool PG_LineEdit::eventTextInput(const SDL_TextInputEvent* text)
 {
+
+   if(!my_isCursorVisible) {
+       return false;
+   }
+
 	const char* c = text->text;
 	while ( *c ) {
 		InsertChar( *c );

@@ -1089,7 +1089,7 @@ class SourcePixelSelector_CacheRotation : public RotationCache
       int pitch;
       int* cacheIndex;
       int x,y,w,h;
-      Uint32 colorkey;
+      Uint32 fully_transparent;
    protected:
 
       void init ( const Surface& srv )
@@ -1104,7 +1104,8 @@ class SourcePixelSelector_CacheRotation : public RotationCache
          pitch = srv.pitch()/sizeof(PixelType) - srv.w();
          w = srv.w();
          h = srv.h();
-         SDL_GetColorKey(const_cast<SDL_Surface*>(srv.getBaseSurface()), &colorkey);
+         if ( SDL_GetColorKey(const_cast<SDL_Surface*>(srv.getBaseSurface()), &fully_transparent) != 0 )
+            fully_transparent = 0; //whereever alpha-mask is, 0 is maximum transparency
       }
 
       PixelType nextPixel()
@@ -1117,7 +1118,7 @@ class SourcePixelSelector_CacheRotation : public RotationCache
             if ( index >= 0 )
                return pixelStart[index];
             else
-               return colorkey;
+               return fully_transparent;
          } else {
             if ( degrees == 0 ) {
                ++tableIndex;
@@ -1163,7 +1164,7 @@ class SourcePixelSelector_CacheRotation : public RotationCache
          if ( x >= 0 && y >= 0 && x < surface->w() && y < surface->h() )
             return surface->GetPixel(SPoint(x,y));
          else
-            return colorkey;
+            return fully_transparent;
       };
 
 

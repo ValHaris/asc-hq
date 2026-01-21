@@ -252,6 +252,7 @@ void Menu::setup()
    currentMenu->addSeparator();
    addbutton ( "clear image cache", ua_clearImageCache );
    addbutton ( "reload dialog theme", ua_reloadDlgTheme );
+   addbutton ( "Repaint display", ua_repaint );
    currentMenu->addSeparator();
    addbutton ( "resource analysis", ua_resourceAnalysis );
    addbutton ( "show techadapter", ua_showTechAdapter );

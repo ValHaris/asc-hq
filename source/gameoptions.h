@@ -104,6 +104,9 @@ class CGameOptions
       //! force the mapeditor to run in fullscreen mode (and not windowed, which is default)
       bool mapeditWindowedMode;
 
+      int displayScalingMode;
+      int getDisplayScalingPercentage();
+
       //! the horizontal resolution ASC uses
       int xresolution;
 

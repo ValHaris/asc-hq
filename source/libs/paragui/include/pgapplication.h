@@ -664,8 +664,6 @@ private:
 	bool emergencyQuit;
 	static bool enableBackground;
 	bool enableAppIdleCalls;
-	static PG_EventSupplier* my_eventSupplier;
-	static PG_EventSupplier* my_defaultEventSupplier;
 
 	static PG_ScreenUpdater* my_ScreenUpdater;
 
