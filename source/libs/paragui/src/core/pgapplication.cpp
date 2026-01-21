@@ -76,8 +76,6 @@ PG_Color PG_Application::my_backcolor;
 PG_Draw::BkMode PG_Application::my_backmode = PG_Draw::TILE;
 bool PG_Application::disableDirtyUpdates = false;
 //bool PG_Application::my_quitEventLoop = false;
-PG_EventSupplier* PG_Application::my_eventSupplier = NULL;
-PG_EventSupplier* PG_Application::my_defaultEventSupplier = NULL;
 bool PG_Application::defaultUpdateOverlappingSiblings = true;
 PG_Char PG_Application::highlightingTag = 0;
 PG_SDLScreenUpdater defaultScreenUpdater;
@@ -150,8 +148,6 @@ PG_Application::PG_Application()
 	my_background = NULL;
 	my_freeBackground = false;
 	my_backmode = PG_Draw::TILE;
-	my_defaultEventSupplier = new PG_SDLEventSupplier;
-	my_eventSupplier = my_defaultEventSupplier;
 
 	// add our base dir to the searchpath
 	AddArchive(GetBaseDir());
@@ -165,8 +161,6 @@ PG_Application::~PG_Application() {
 	Shutdown();
 
 	pGlobalApp = NULL;
-	delete my_defaultEventSupplier;
-	my_defaultEventSupplier = NULL;
 
 	// remove all archives from PG_FileArchive
 	PG_FileArchive::RemoveAllArchives();
@@ -246,13 +240,13 @@ void PG_Application::RunEventLoop() {
 		ClearOldMousePosition();
 
 		if(enableAppIdleCalls) {
-			if ( my_eventSupplier->PollEvent(&event) == 0) {
+			if ( GetEventSupplier()->PollEvent(&event) == 0) {
 				eventIdle();
 			} else {
 				PumpIntoEventQueue(&event);
 			}
 		} else {
-			if(my_eventSupplier->WaitEvent(&event) != 1) {
+			if( GetEventSupplier()->WaitEvent(&event) != 1) {
 				SDL_Delay(10);
 				continue;
 			}
@@ -290,7 +284,7 @@ void PG_Application::DrawCursor(bool update) {
 		SDL_ShowCursor(SDL_DISABLE);
 	}
 
-	my_eventSupplier->GetMouseState(x, y);
+	GetEventSupplier()->GetMouseState(x, y);
 
 	Sint16 dx = x - my_mouse_position.my_xpos;
 	Sint16 dy = y - my_mouse_position.my_ypos;
@@ -976,7 +970,7 @@ PG_Application* PG_Application::GetApp() {
 void PG_Application::FlushEventQueue() {
 	SDL_Event event;
 
-	while(my_eventSupplier->PollEvent(&event)) {
+	while(GetEventSupplier()->PollEvent(&event)) {
 		/*if(event.type == SDL_USEREVENT) {
 			delete (MSG_MESSAGE*)(event.user.data1);
 		}*/
@@ -1000,6 +994,11 @@ void print(const SDL_MouseButtonEvent& event) {
 	std::cout << "Mouse Button Event: X=" << (int)event.x << " Y=" << (int)event.y << " State=" << (int)event.state << " Button=" << (int)event.button << "\n";
 }
 
+void print(const SDL_MouseMotionEvent& event) {
+    std::cout << "Mouse Motion Event: X=" << (int)event.x << " Y=" << (int)event.y << "\n";
+}
+
+
 void print(const SDL_Event* event) {
 	switch ( event->type ) {
 	case SDL_WINDOWEVENT:
@@ -1011,6 +1010,10 @@ void print(const SDL_Event* event) {
 	case SDL_MOUSEBUTTONDOWN:
 	case SDL_MOUSEBUTTONUP:
 		print(event->button);
+		break;
+	case SDL_MOUSEMOTION:
+	   print(event->motion);
+	   break;
 	}
 }
 
@@ -1028,6 +1031,7 @@ bool PG_Application::PumpIntoEventQueue(const SDL_Event* event) {
 
 	switch(event->type) {
 
+	    case SDL_TEXTINPUT:
 		case SDL_KEYDOWN:
 		case SDL_KEYUP:
 			if(inputFocusObject) {

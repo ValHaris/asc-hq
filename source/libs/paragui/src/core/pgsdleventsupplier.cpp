@@ -48,6 +48,17 @@ void PG_SDLEventSupplier::CombineMouseMotionEvents(SDL_Event* event) {
 	}
 }
 
+void PG_SDLEventSupplier::evaluateMouseEvents(SDL_Event* event) {
+   if ( event->type == SDL_MOUSEMOTION ) {
+      mousex = event->motion.x;
+      mousey = event->motion.y;
+   } else if (event->type == SDL_MOUSEBUTTONDOWN || event->type == SDL_MOUSEBUTTONUP ) {
+      mousex = event->button.x;
+      mousey = event->button.y;
+   }
+}
+
+
 bool PG_SDLEventSupplier::PeepEvent(SDL_Event* event) {
 	return SDL_PeepEvents( event, 1, SDL_PEEKEVENT, SDL_FIRSTEVENT, SDL_LASTEVENT) > 0;
 }
@@ -55,8 +66,10 @@ bool PG_SDLEventSupplier::PeepEvent(SDL_Event* event) {
 
 bool PG_SDLEventSupplier::PollEvent(SDL_Event* event) {
 	bool eventAvail = SDL_PollEvent( event ) > 0;
-	if ( eventAvail )
+	if ( eventAvail ) {
 		CombineMouseMotionEvents( event );
+		evaluateMouseEvents( event );
+	}
 	return eventAvail;
 }
 
@@ -64,9 +77,14 @@ bool PG_SDLEventSupplier::PollEvent(SDL_Event* event) {
 int PG_SDLEventSupplier::WaitEvent(SDL_Event* event) {
 	int res = SDL_WaitEvent( event );
 	CombineMouseMotionEvents( event );
+	evaluateMouseEvents( event );
 	return res;
 }
 
 int  PG_SDLEventSupplier::GetMouseState(int& x, int& y) {
-	return SDL_GetMouseState(&x, &y);
+    // the mouse coordinates return by SDL_GetMouseState are not adjusted to the display scaling, unlike the events.
+    x = mousex;
+    y = mousey;
+    printf("query Mousex = %d, mousey = %d\n", mousex, mousey);
+	return SDL_GetMouseState(NULL, NULL);
 }

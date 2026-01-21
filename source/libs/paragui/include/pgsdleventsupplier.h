@@ -46,6 +46,8 @@
 
 class DECLSPEC PG_SDLEventSupplier : public PG_EventSupplier {
 
+   int mousex;
+   int mousey;
 protected:
 	/**
 	Mouse motion events can fill the event queue and should also be processed without much delay.
@@ -57,8 +59,11 @@ protected:
 	*/
 	void CombineMouseMotionEvents(SDL_Event* event);
 
-public:
+	// monitors mouse events to keep track of its position
+	void evaluateMouseEvents(SDL_Event* event);
 
+public:
+	PG_SDLEventSupplier() : mousex(0), mousey(0) {};
 
 	/**
 	Polls for currently pending events, and returns true if there are any pending events, or false if there are none available. 

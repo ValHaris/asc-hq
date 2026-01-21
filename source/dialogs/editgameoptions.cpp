@@ -127,7 +127,7 @@ GetVideoModes::ModeRes GetVideoModes::getBest()
    return res;
 }      
 
-
+const char* displayScaling[] = { "Auto", "100%", "125%", "150%", "175%", "200%", NULL };
 
 const char* mouseButtonNames[] = { "None", "Left", "Center", "Right", "4", "5", NULL };
 
@@ -137,38 +137,35 @@ class EditGameOptions : public ASC_PG_Dialog {
    private:
       PG_PropertyEditor* propertyEditor;
       
-      GetVideoModes vmodes;
       ASCString defaultPassword;
       
       int videoMode;
       bool ascmain;
+      int old_scaling;
       
       bool ok()
       {
          if ( propertyEditor->Apply() ) {
 
-            int x = vmodes.getx( videoMode );
-            int y = vmodes.gety( videoMode );
-
             bool warn = false;
             bool fullscreen;
             
+
+            if ( old_scaling != CGameOptions::Instance()->displayScalingMode )
+               warn = true;
             
             if ( ascmain ) {
-               if ( (x != CGameOptions::Instance()->xresolution || y != CGameOptions::Instance()->yresolution) && x && y  ) {
-                  warn = true;
-                  CGameOptions::Instance()->xresolution = x;
-                  CGameOptions::Instance()->yresolution = y;
-               }
 
                fullscreen = !CGameOptions::Instance()->forceWindowedMode;
 
             } else {
+               /*
                if ( (x != CGameOptions::Instance()->mapeditor_xresolution || y != CGameOptions::Instance()->mapeditor_yresolution) && x && y ) {
                   warn = true;
                   CGameOptions::Instance()->mapeditor_xresolution = x;
                   CGameOptions::Instance()->mapeditor_yresolution = y;
                }
+               */
                fullscreen = !CGameOptions::Instance()->mapeditWindowedMode;
             }
 
@@ -190,19 +187,15 @@ class EditGameOptions : public ASC_PG_Dialog {
       }
 
    public:
-      EditGameOptions( PG_Widget* parent, bool mainApp ) : ASC_PG_Dialog( parent, PG_Rect( 50, 50, 500, 550 ), "Edit Map Parameters"), videoMode(0), ascmain( mainApp )
+      EditGameOptions( PG_Widget* parent, bool mainApp ) : ASC_PG_Dialog( parent, PG_Rect( 50, 50, 500, 550 ), "Edit Preferences"), videoMode(0), ascmain( mainApp )
       {
          CGameOptions* o = CGameOptions::Instance();
 
          if ( !o->defaultPassword.empty() )
             defaultPassword = "******";
 
-         
-         if ( mainApp ) 
-            videoMode = vmodes.findmodenum( CGameOptions::Instance()->xresolution, CGameOptions::Instance()->yresolution );
-         else
-            videoMode = vmodes.findmodenum( CGameOptions::Instance()->mapeditor_xresolution, CGameOptions::Instance()->mapeditor_yresolution );
-            
+         old_scaling = o->displayScalingMode;
+
          propertyEditor = new ASC_PropertyEditor( this, PG_Rect( 10, GetTitlebarHeight(), Width() - 20, Height() - GetTitlebarHeight() - 50 ), "PropertyEditor", 70 );
 
          new PG_PropertyField_Checkbox<bool>( propertyEditor, "Direct Movement", &o->fastmove );
@@ -229,8 +222,9 @@ class EditGameOptions : public ASC_PG_Dialog {
 
 
             
-         new PG_PropertyField_IntDropDown<int, GetVideoModes::VList::iterator>( propertyEditor, "Video Mode", &videoMode, vmodes.getList().begin(), vmodes.getList().end() );
          
+         new PG_PropertyField_IntDropDown<int>( propertyEditor, "Scaling", &o->displayScalingMode, displayScaling);
+
          new PG_PropertyField_Checkbox<bool>( propertyEditor, "Automatic Training", &o->automaticTraining );
 
          new PG_PropertyField_IntDropDown<int>( propertyEditor, "Mouse: Field Select", &o->mouse.fieldmarkbutton, mouseButtonNames );
