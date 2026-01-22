@@ -26,7 +26,7 @@
 class OpaqueLocaleData;
 
 class Locale {
-      OpaqueLocaleData* data;
+      static OpaqueLocaleData* data;
    public:
       Locale();
       ASCString getLang();

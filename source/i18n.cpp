@@ -18,7 +18,7 @@
      Boston, MA  02111-1307  USA
 */
 
-#include <wx/intl.h>
+#include <SDL.h>
 #include <iostream>
 
 #include "i18n.h"
@@ -29,14 +29,24 @@ class OpaqueLocaleData {
       ASCString canonicalName;  
 };
 
+OpaqueLocaleData* Locale::data = NULL;
+
 Locale::Locale()
 {
+   if ( data )
+      return;
+
    data = new OpaqueLocaleData();
-   const wxLanguageInfo* lanInfo = wxLocale::GetLanguageInfo( wxLocale::GetSystemLanguage() );
-   if ( lanInfo ) {
-      data->canonicalName = ASCString( lanInfo->CanonicalName.mb_str() );
+   SDL_Locale* locales = SDL_GetPreferredLocales();
+   if ( locales ) {
+      if ( locales[0].language ) {
+         ASCString l = locales[0].language;
+         if ( locales[0].country )
+            l += ASCString("_") + locales[0].country;
+         data->canonicalName = l;
+      }
    }
-   
+   SDL_free(locales);
 }
 
 
