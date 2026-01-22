@@ -85,6 +85,5 @@ int  PG_SDLEventSupplier::GetMouseState(int& x, int& y) {
     // the mouse coordinates return by SDL_GetMouseState are not adjusted to the display scaling, unlike the events.
     x = mousex;
     y = mousey;
-    printf("query Mousex = %d, mousey = %d\n", mousex, mousey);
 	return SDL_GetMouseState(NULL, NULL);
 }

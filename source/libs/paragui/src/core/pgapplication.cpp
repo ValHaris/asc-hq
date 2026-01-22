@@ -995,7 +995,7 @@ void print(const SDL_MouseButtonEvent& event) {
 }
 
 void print(const SDL_MouseMotionEvent& event) {
-    std::cout << "Mouse Motion Event: X=" << (int)event.x << " Y=" << (int)event.y << "\n";
+//    std::cout << "Mouse Motion Event: X=" << (int)event.x << " Y=" << (int)event.y << "\n";
 }
 
 
