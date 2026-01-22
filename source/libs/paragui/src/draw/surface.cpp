@@ -183,9 +183,14 @@ static void DrawTileSurface(SDL_Surface* src, const PG_Rect& r, SDL_Surface* dst
 	int yc = (r.my_height / src->h) +1;
 	int xc = (r.my_width / src->w) +1;
 
-	if(blend > 0) {
-		SDL_SetSurfaceAlphaMod(src, 255-blend);
+	SDL_SetSurfaceAlphaMod(src, 255-blend);
+	if ( src->format->BytesPerPixel == 1 ) {
+	    if(blend > 0)
+	       SDL_SetSurfaceBlendMode(src, SDL_BLENDMODE_BLEND);
+	    else
+	       SDL_SetSurfaceBlendMode(src, SDL_BLENDMODE_NONE);
 	}
+
 
 	srcrect.my_width = src->w;
 	srcrect.my_height = src->h;
