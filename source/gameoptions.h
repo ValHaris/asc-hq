@@ -261,6 +261,11 @@ class CGameOptions
       
       bool logKillsToConsole;
       
+      bool validateActions;
+
+      vector<ASCString> tipsDismissed;
+
+
    private:
       bool _changed;
 };

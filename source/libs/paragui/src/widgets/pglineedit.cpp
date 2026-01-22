@@ -26,15 +26,64 @@
     Status:           $State: Exp $
 */
 
-#if 0
-#include <wx/dataobj.h>
-#include <wx/clipbrd.h>
-#endif
 
 #include "pglineedit.h"
 #include "pgapplication.h"
 #include "pgtheme.h"
 
+
+
+std::string UTF8toISO8859_1(const char * in)
+{
+    std::string out;
+    if (in == NULL)
+        return out;
+
+    unsigned int codepoint;
+    while (*in != 0)
+    {
+        unsigned char ch = static_cast<unsigned char>(*in);
+        if (ch <= 0x7f)
+            codepoint = ch;
+        else if (ch <= 0xbf)
+            codepoint = (codepoint << 6) | (ch & 0x3f);
+        else if (ch <= 0xdf)
+            codepoint = ch & 0x1f;
+        else if (ch <= 0xef)
+            codepoint = ch & 0x0f;
+        else
+            codepoint = ch & 0x07;
+        ++in;
+        if (((*in & 0xc0) != 0x80) && (codepoint <= 0x10ffff))
+        {
+            if (codepoint <= 255)
+            {
+                out.append(1, static_cast<char>(codepoint));
+            }
+            else
+            {
+                // do whatever you want for out-of-bounds characters
+            }
+        }
+    }
+    return out;
+}
+
+std::string ISO8859_1toUTF8(const std::string& str ){
+    std::string strOut;
+    for (std::string::const_iterator it = str.begin(); it != str.end(); ++it)
+    {
+        Uint8 ch = *it;
+        if (ch < 0x80) {
+            strOut.push_back(ch);
+        }
+        else {
+            strOut.push_back(0xc0 | ch >> 6);
+            strOut.push_back(0x80 | (ch & 0x3f));
+        }
+    }
+    return strOut;
+}
 
 PG_LineEdit::PG_LineEdit(PG_Widget* parent, const PG_Rect& r, const std::string& style, int _my_maximumLength) : PG_ThemeWidget(parent, r, style) {
 
@@ -211,6 +260,10 @@ bool PG_LineEdit::eventKeyDown(const SDL_KeyboardEvent* key) {
 				SetCursorPos(0);
 				return true;
 
+            case SDLK_c: // copy
+               CopyTextToClipboard(false);
+               return true;
+
 			case SDLK_e: // End of Line
 				SetCursorPos(my_text.length());
 				return true;
@@ -350,7 +403,9 @@ bool PG_LineEdit::eventTextInput(const SDL_TextInputEvent* text)
        return false;
    }
 
-	const char* c = text->text;
+	std::string input = UTF8toISO8859_1(text->text);
+	const char* c = input.c_str();
+
 	while ( *c ) {
 		InsertChar( *c );
 		c++;
@@ -436,6 +491,11 @@ void PG_LineEdit::EndMark(Uint16 pos) {
 	my_endMark = pos;
 }
 
+void PG_LineEdit::CopyTextToClipboard(bool del)
+{
+   CopyText(del);
+}
+
 /** */
 void PG_LineEdit::CopyText(bool del) {
 	int start, len;
@@ -456,14 +516,6 @@ void PG_LineEdit::CopyText(bool del) {
 	}
 	my_buffer = my_text.substr(start, len);
 
-#if 0
-	if (wxTheClipboard->Open()) {
-	    wxString clipString(my_buffer.c_str(), wxConvISO8859_1);
-	    wxTheClipboard->SetData( new wxTextDataObject( clipString ) );
-	    wxTheClipboard->Close();
-	}
-#endif
-
 	if(del) {
 		my_text.erase(start, len);
 		SetCursorPos(my_cursorPosition); // If end was > start
@@ -483,27 +535,29 @@ void PG_LineEdit::PasteText(Uint16 pos) {
 	Update();
 }
 
+std::string PG_LineEdit::GetClipboardContent()
+{
+   if ( SDL_HasClipboardText() ) {
+      char* text = SDL_GetClipboardText();
+
+      std::string buffer = UTF8toISO8859_1(text);
+      SDL_free(text);
+      return buffer;
+   } else
+      return "";
+}
+
+
 void PG_LineEdit::PasteFromClipBoard(Uint16 pos)
 {
-#if 0
-   if (wxTheClipboard->Open()) {
-      std::string my_buffer;
-      if (wxTheClipboard->IsSupported(wxDF_TEXT)) {
-         wxTextDataObject data;
-         wxTheClipboard->GetData(data);
-         my_buffer = std::string( data.GetText().mb_str() );
-      }
-      wxTheClipboard->Close();
-
-      if(!my_buffer.length()) {
-          return;
-      }
-      my_text.insert(pos, my_buffer);
-      my_cursorPosition += my_buffer.length();
-      my_startMark = my_endMark = -1;
-      Update();
+   my_buffer = GetClipboardContent();
+   if(!my_buffer.length()) {
+       return;
    }
-#endif
+   my_text.insert(pos, my_buffer);
+   my_cursorPosition += my_buffer.length();
+   my_startMark = my_endMark = -1;
+   Update();
 }
 
 

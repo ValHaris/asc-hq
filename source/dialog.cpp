@@ -324,5 +324,36 @@ void displayActionError( const ActionResult& result, const ASCString& additional
 
 
 
+class TipDialog : public ASC_PG_Dialog {
+   PG_CheckButton* dismissed;
+   const ASCString& key;
+
+   bool ok() {
+      if ( dismissed->GetPressed())
+         CGameOptions::Instance()->tipsDismissed.push_back(key);
+      QuitModal();
+      return true;
+   }
+
+public:
+   TipDialog(const ASCString& text, const ASCString& key) : ASC_PG_Dialog(NULL, PG_Rect(-1,-1, 400, 300), "Tip"), key(key) {
+      new TextRenderer(this, PG_Rect(10, 30, Width()-20, Height() - 80), text);
+      dismissed = new PG_CheckButton(this, PG_Rect(10, Height()-60, 200, 20), "Don't show again");
+      AddStandardButton("OK")->sigClick.connect( sigc::hide( sigc::mem_fun( *this, &TipDialog::ok)));
+   }
+};
+
+void showTipDialog(const ASCString& text, const ASCString& key) {
+
+   vector<ASCString>& dt = CGameOptions::Instance()->tipsDismissed;
+   if ( std::find( dt.begin(), dt.end(), key ) != dt.end() )
+      return;
+
+   TipDialog td(text, key);
+   td.Show();
+   td.RunModal();
+}
+
+
 
 

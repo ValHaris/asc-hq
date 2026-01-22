@@ -1350,8 +1350,28 @@ void loadLegacyFonts()
    
 }
 
+class Cmdline;
 
+const ASCString getScalingExplanation(int scale) {
+   return ASCString("This new version of ASC allows running the entire game at different display scalings to suite the resolution of your monitor."
+         "This will zoom not only the map, but everything on the ASC screen. \nCurrently, the scale is ")
+         + ASCString::toString(scale) + "%. \nYou can change this setting in the global options.";
+}
 
+class ScreenResolutionSetup {
+      Cmdline& cli;
+      int x,y;
+      bool fullscreen;
+      float scale;
+   public:
+      ScreenResolutionSetup( Cmdline& commandLine );
+
+      int getScale() const { return int(scale*100);};
+      int getWidth() { return x; };
+      int getHeight() { return y; };
+      bool isFullscreen() { return fullscreen; };
+
+};
 
 
 class GameThreadParams: public sigc::trackable
@@ -1364,7 +1384,8 @@ class GameThreadParams: public sigc::trackable
       ASCString filename;
       ASC_PG_App& application;
       bool exitMainloop;
-      GameThreadParams( ASC_PG_App& app ) : application ( app ), exitMainloop(false) 
+      const ScreenResolutionSetup& srs;
+      GameThreadParams( ASC_PG_App& app, const ScreenResolutionSetup& srs ) : application ( app ), exitMainloop(false), srs(srs)
       {
          app.sigQuit.connect( sigc::hide( sigc::mem_fun( *this, &GameThreadParams::exit )));
       };
@@ -1468,6 +1489,7 @@ int gamethread ( GameThreadParams* gtp )
             mtl = None;
          } else {
             mainScreenWidget->Show();
+            showTipDialog(getScalingExplanation(gtp->srs.getScale()), "scaling");
             startupScreen.reset();
             
             if ( actmap->actplayer == -1 ) {
@@ -1576,18 +1598,6 @@ class ResourceLogger: public sigc::trackable {
 };
 
 
-class ScreenResolutionSetup {
-      Cmdline& cli;
-      int x,y;
-      bool fullscreen;
-   public:
-      ScreenResolutionSetup( Cmdline& commandLine );
-      
-      int getWidth() { return x; };
-      int getHeight() { return y; };
-      bool isFullscreen() { return fullscreen; };
-   
-};
 
 ScreenResolutionSetup::ScreenResolutionSetup( Cmdline& commandLine ) : cli( commandLine )
 {
@@ -1629,7 +1639,6 @@ ScreenResolutionSetup::ScreenResolutionSetup( Cmdline& commandLine ) : cli( comm
    
    int scalingSettings = CGameOptions::Instance()->getDisplayScalingPercentage();
 
-   float scale;
    if ( scalingSettings == -1 ) {
       if ( desktop.h < 1080 )
          scale = 1;
@@ -1745,7 +1754,7 @@ int main(int argc, char *argv[] )
 
    app.SetCaption( "Advanced Strategic Command" );
       
-   GameThreadParams gtp ( app );
+   GameThreadParams gtp ( app, screenResolutionSetup );
    gtp.filename = cl->l();
 
    if ( cl->next_param() < argc )

@@ -27,6 +27,7 @@
 #include "dialog.h"
 #include "dlg_box.h"
 #include "spfst.h"
+#include "gamedialog.h"
 
 #include "widgets/textrenderer.h"
 
@@ -343,6 +344,9 @@ void newmessage()
         
    NewMessage  nm ( actmap );
    nm.Show();
+
+   showTipDialog("ASC now supports Copy&Paste with your operating system's clipboard! Simpliy use ctrl-c and ctrl-v to copy and paste text!", "copypaste");
+
    nm.RunModal();
 }
 

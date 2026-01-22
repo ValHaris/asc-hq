@@ -205,7 +205,9 @@ void PG_Application::UpdateScreen(const SDL_Rect * srcrect, int numRects)
 {
 	SDL_UpdateTexture(mainWindowTexture, NULL, screen->pixels, screen->pitch);
 	// SDL_RenderClear(mainWindowRenderer);
-	if ( !srcrect || numRects==0 )
+	if ( !srcrect || numRects==0
+	      || true // we are currently always updating the entire screen due to artifacts appearing on odd zoom levels, probably due to coordinate rounding errors.
+	      )
 		SDL_RenderCopy(mainWindowRenderer, mainWindowTexture, NULL, NULL);
 	else
 		for (int i = 0; i < numRects; ++i)
