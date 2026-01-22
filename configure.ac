@@ -211,38 +211,6 @@ AC_CHECK_LIB(SDL2_mixer,
 AC_CHECK_LIB( SDL_sound, Sound_Init,,SDLsoundmissing=y)
 
 
-dnl checking for wxwidgets
-
-AM_OPTIONS_WXCONFIG
-reqwx=2.4.0
-AM_PATH_WXCONFIG($reqwx, wxWin=1)
-if test "$wxWin" != 1; then
-	AC_MSG_ERROR([
-		wxWidgets $reqwx or later must be installed on your system.
-		
-		If you have a distribution supplied wxWidgets package installed,
-		perhaps the wxWidgets-devel package is missing. 
-		
-		The wxWidgets packages are sometimes also called wxGTK, if you can't
-		find wxWidgets packages in your distribution, search for wxGTK 
-		
-		If your distribution really does not contain the wxWidgets library,
-		you can download it from www.wxwidgets.org
- 
-		If you have it installed, but it isn't working, check that wx-config is in path, 
-		the directory where wxWidgets libraries are installed (returned by
-		'wx-config --libs' or 'wx-config --static --libs' command)
-		is in LD_LIBRARY_PATH or equivalent variable and
-		wxWidgets version is $reqwx or above.
-		])
-fi
- 
-CPPFLAGS="$CPPFLAGS $WX_CPPFLAGS"
-CXXFLAGS="$CXXFLAGS $WX_CXXFLAGS_ONLY"
-CFLAGS="$CFLAGS $WX_CFLAGS_ONLY"
-LIBS="$LIBS $WX_LIBS"
-AC_SUBST(WX_LIBS)
-
 
 OLDCPPFLAGS=$CPPFLAGS
 

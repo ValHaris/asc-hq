@@ -45,7 +45,7 @@ $(top_builddir)/source/libs/paragui/src/libparagui.la $(top_builddir)/source/net
 $(top_builddir)/source/lua/libluainterfacemaped.la \
 $(top_builddir)/source/sdl/libsdl.la \
 $(top_builddir)/source/tasks/libtaskcore.la \
-$(LOKI_LIBS) $(SDL_LIBS) $(FREETYPE_LIBS) $(BOOST_LIBS) $(WX_LIBS)
+$(LOKI_LIBS) $(SDL_LIBS) $(FREETYPE_LIBS) $(BOOST_LIBS)
 
 
 

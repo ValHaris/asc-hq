@@ -166,8 +166,7 @@ asc_pbpedit_DEPENDENCIES =  \
 	$(top_builddir)/source/sdl/libsdl.la \
 	$(top_builddir)/source/tasks/libtaskcore.la \
 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
-	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
-	$(am__DEPENDENCIES_1)
+	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
@@ -400,19 +399,6 @@ VORBISENC_LIBS = @VORBISENC_LIBS@
 VORBISFILE_LIBS = @VORBISFILE_LIBS@
 VORBIS_CFLAGS = @VORBIS_CFLAGS@
 VORBIS_LIBS = @VORBIS_LIBS@
-WX_CFLAGS = @WX_CFLAGS@
-WX_CFLAGS_ONLY = @WX_CFLAGS_ONLY@
-WX_CONFIG_PATH = @WX_CONFIG_PATH@
-WX_CPPFLAGS = @WX_CPPFLAGS@
-WX_CXXFLAGS = @WX_CXXFLAGS@
-WX_CXXFLAGS_ONLY = @WX_CXXFLAGS_ONLY@
-WX_LIBS = @WX_LIBS@
-WX_LIBS_STATIC = @WX_LIBS_STATIC@
-WX_RESCOMP = @WX_RESCOMP@
-WX_VERSION = @WX_VERSION@
-WX_VERSION_MAJOR = @WX_VERSION_MAJOR@
-WX_VERSION_MICRO = @WX_VERSION_MICRO@
-WX_VERSION_MINOR = @WX_VERSION_MINOR@
 abs_builddir = @abs_builddir@
 abs_srcdir = @abs_srcdir@
 abs_top_builddir = @abs_top_builddir@
@@ -519,7 +505,7 @@ $(top_builddir)/source/libs/paragui/src/libparagui.la $(top_builddir)/source/net
 $(top_builddir)/source/lua/libluainterfacemaped.la \
 $(top_builddir)/source/sdl/libsdl.la \
 $(top_builddir)/source/tasks/libtaskcore.la \
-$(LOKI_LIBS) $(SDL_LIBS) $(FREETYPE_LIBS) $(BOOST_LIBS) $(WX_LIBS)
+$(LOKI_LIBS) $(SDL_LIBS) $(FREETYPE_LIBS) $(BOOST_LIBS)
 
 all: all-am
 
