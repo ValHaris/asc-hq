@@ -624,6 +624,36 @@ void PG_MultiLineEdit::InsertChar(const PG_Char& c) {
    InsertText( s );
 }
 
+void PG_MultiLineEdit::CopyTextToClipboard(bool del)
+{
+   if ( my_mark < 0)
+      return;
+
+   int start, len;
+   if( my_mark == my_cursorPosition ) {
+       // No text is marked
+       return;
+   }
+   if(my_mark > my_cursorPosition) {
+       start = my_cursorPosition;
+       len   = my_mark - start;
+   } else {
+       start = my_mark;
+       len   = my_cursorPosition - start;
+   }
+   std::string buffer = my_text.substr(start, len);
+
+   std::string utfText = ISO8859_1toUTF8(buffer);
+   SDL_SetClipboardText(utfText.c_str());
+
+}
+
+
+void PG_MultiLineEdit::PasteFromClipBoard(Uint16 pos)
+{
+   InsertText( GetClipboardContent());
+}
+
 
 void PG_MultiLineEdit::DeleteChar(Uint16 pos) {
 	my_allowHiddenCursor = false;

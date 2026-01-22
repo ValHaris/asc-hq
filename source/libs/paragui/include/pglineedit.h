@@ -163,6 +163,8 @@ class SignalEditUpdate : public sigc::signal<bool> {}
    
 protected:
 
+   virtual std::string GetClipboardContent();
+
 	/** */
 	virtual void InsertChar(const PG_Char& c);
 
@@ -172,11 +174,13 @@ protected:
 	/** */
 	void CopyText(bool del = false);
 
+    virtual void CopyTextToClipboard(bool del = false);
+
 	/** */
 	void PasteText(Uint16 pos);
 
     /** */
-    void PasteFromClipBoard(Uint16 pos);
+    virtual void PasteFromClipBoard(Uint16 pos);
 
 	/** */
 	void StartMark(Uint16 pos);
@@ -259,5 +263,7 @@ private:
    //! in msec
    static int cursorBlinkingTime;
 };
+
+extern std::string ISO8859_1toUTF8(const std::string& str );
 
 #endif // PG_LINEEDIT

@@ -638,7 +638,7 @@ bool PG_FontEngine::GetTextSize(const PG_String& Text, PG_Font* font, Uint16 *Wi
 		int glyph_index;
 		PG_GlyphCacheItem	*Glyph;
 
-		c0 = Text[i];
+		c0 = (Uint8)Text[i];
 
 		//Skip non-printable char
 		if (c0 < 32) {

@@ -25,6 +25,9 @@ public:
 
 protected:
 
+   void PasteFromClipBoard(Uint16 pos);
+   void CopyTextToClipboard(bool del = false);
+
 	void eventBlit(SDL_Surface* surface, const PG_Rect& src, const PG_Rect& dst);
 
 	bool eventKeyDown(const SDL_KeyboardEvent* key);

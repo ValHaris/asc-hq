@@ -172,6 +172,8 @@ void CGameOptions::runTextIO ( PropertyContainer& pc )
    if ( !pc.isReading() || pc.find("VisibleMapLayer" ))
       pc.addStringArray("VisibleMapLayer", visibleMapLayer );
 
+   if ( !pc.isReading() || pc.find("TipsDismissed" ))
+      pc.addStringArray("TipsDismissed", tipsDismissed );
 
    pc.openBracket("PBEMServer");
    pc.addString("hostname", pbemServer.hostname, pbemServer.hostname );
