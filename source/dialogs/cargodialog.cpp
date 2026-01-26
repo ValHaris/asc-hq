@@ -2781,7 +2781,7 @@ Surface& OpenContainer :: getImage( const MapCoordinate& pos, ContainerBase* sub
 
 bool OpenContainer :: checkForKey( const SDL_KeyboardEvent* key, int modifier, int num )
 {
-   return ( key->keysym.sym == '1' );
+   return ( key->keysym.sym == 'l' );
 };
 
 ASCString OpenContainer :: getName( const MapCoordinate& pos, ContainerBase* subject, int num )
