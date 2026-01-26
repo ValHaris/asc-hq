@@ -198,6 +198,8 @@ class EditGameOptions : public ASC_PG_Dialog {
 
          propertyEditor = new ASC_PropertyEditor( this, PG_Rect( 10, GetTitlebarHeight(), Width() - 20, Height() - GetTitlebarHeight() - 50 ), "PropertyEditor", 70 );
 
+         new PG_PropertyField_IntDropDown<int>( propertyEditor, "Display Scaling", &o->displayScalingMode, displayScaling);
+
          new PG_PropertyField_Checkbox<bool>( propertyEditor, "Direct Movement", &o->fastmove );
          new PG_PropertyField_Integer<int>( propertyEditor , "Movement Speed (1/100 sec)", &o->movespeed );
          new PG_PropertyField_Checkbox<bool>( propertyEditor, "Confirm EndOfTurn", &o->endturnquestion );
@@ -223,7 +225,6 @@ class EditGameOptions : public ASC_PG_Dialog {
 
             
          
-         new PG_PropertyField_IntDropDown<int>( propertyEditor, "Scaling", &o->displayScalingMode, displayScaling);
 
          new PG_PropertyField_Checkbox<bool>( propertyEditor, "Automatic Training", &o->automaticTraining );
 

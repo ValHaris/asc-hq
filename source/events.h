@@ -55,8 +55,6 @@ extern void exit_asc( int returnresult );
     extern void starttimer(void); //resets Timer
     extern bool time_elapsed(int time); //check if time msecs are elapsed, since starttimer
     extern int  releasetimeslice( void );
-
-    extern int getTicker();
     
 
 #endif
