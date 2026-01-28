@@ -36,7 +36,7 @@
 #include <iostream>
 #include <map>
 
-/*
+#ifdef debugblits
 std::string describeSurface(SDL_Surface* surf) {
    std::stringstream ss;
    ss << "BytesPerPixel=" << int(surf->format->BytesPerPixel) << " ";
@@ -69,7 +69,7 @@ void PG_Draw::printblit(SDL_Surface* from, SDL_Surface* to, int result ) {
       std::cout << description << " -> " << result << "\n";
    }
 }
-*/
+#endif
 
 SDL_Surface* PG_Draw::CreateGradient(const PG_Rect& r, PG_Gradient& gradient) {
 	return CreateGradient(

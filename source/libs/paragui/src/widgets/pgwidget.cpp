@@ -1574,7 +1574,12 @@ void PG_Widget::eventBlit(SDL_Surface* srf, const PG_Rect& src, const PG_Rect& d
 	if(a != 0) {
 		if ( a != 255 )
 			SDL_SetSurfaceAlphaMod(srf, a);
-		SDL_SetSurfaceBlendMode(srf, SDL_BLENDMODE_BLEND);
+
+		// SDL blit fails with 8 bit blends
+		if ( srf->format->BitsPerPixel > 8)
+		   SDL_SetSurfaceBlendMode(srf, SDL_BLENDMODE_BLEND);
+		else
+           SDL_SetSurfaceBlendMode(srf, SDL_BLENDMODE_NONE);
 
 
 		// Blit widget surface to screen

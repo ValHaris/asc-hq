@@ -265,8 +265,9 @@ DECLSPEC void DrawLine(SDL_Surface* surface, Uint32 x0, Uint32 y0, Uint32 x1, Ui
 */
 DECLSPEC void SetPixel(int x, int y, const PG_Color& c, SDL_Surface * surface);
 
-//extern void printblit(SDL_Surface* from, SDL_Surface* to, int result );
-
+#ifdef debugblits
+extern void printblit(SDL_Surface* from, SDL_Surface* to, int result );
+#endif
 
 /**
 	replacement for SDL_BlitSurface
@@ -279,8 +280,31 @@ DECLSPEC void SetPixel(int x, int y, const PG_Color& c, SDL_Surface * surface);
 */
 inline void BlitSurface(SDL_Surface* srf_src, const PG_Rect& rect_src, SDL_Surface* srf_dst, const PG_Rect& rect_dst) {
    int result =  SDL_BlitSurface(srf_src, const_cast<PG_Rect*>(&rect_src), srf_dst, const_cast<PG_Rect*>(&rect_dst));
-   if ( result < 0)
+	if ( result < 0) {
+
+#ifdef debugblits
+
+       printblit(srf_src, srf_dst, result);
+	   SDL_SetSurfaceBlendMode(srf_src, SDL_BLENDMODE_NONE);
+	   result = SDL_BlitSurface(srf_src, const_cast<PG_Rect*>(&rect_src), srf_dst, const_cast<PG_Rect*>(&rect_dst));
+	   printblit(srf_src, srf_dst, result);
+	   if ( result == 0 )
+	      return;
+
+       SDL_SetSurfaceBlendMode(srf_src, SDL_BLENDMODE_BLEND);
+       result = SDL_BlitSurface(srf_src, const_cast<PG_Rect*>(&rect_src), srf_dst, const_cast<PG_Rect*>(&rect_dst));
+       printblit(srf_src, srf_dst, result);
+       if ( result == 0 )
+          return;
+
+       SDL_SetSurfaceBlendMode(srf_src, SDL_BLENDMODE_ADD);
+       result = SDL_BlitSurface(srf_src, const_cast<PG_Rect*>(&rect_src), srf_dst, const_cast<PG_Rect*>(&rect_dst));
+       printblit(srf_src, srf_dst, result);
+
+	   return;
+#endif
 		throw PG_Exception(SDL_GetError());
+	}
 }
 
 /**
