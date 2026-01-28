@@ -133,7 +133,6 @@ TerrainType::TerrainType()
 
 }
 
-
 void      TerrainType::Weather::paint ( Surface& s, SPoint pos )
 {
    Surface* img;
@@ -143,7 +142,7 @@ void      TerrainType::Weather::paint ( Surface& s, SPoint pos )
       img = &GraphicSetManager::Instance().getPic( bi_pict);
 
    megaBlitter<ColorTransform_None, 
-               ColorMerger_AlphaOverwrite, 
+               ColorMerger_AlphaOverwrite,
                SourcePixelSelector_Plain,
                TargetPixelSelector_All>
             (*img,s,pos,nullParam,nullParam,nullParam,nullParam);
@@ -480,6 +479,7 @@ void TerrainType :: runTextIO ( PropertyContainer& pc )
 void TerrainType::Weather::runTextIO ( PropertyContainer& pc )
 {
    bool bi3pics = false;
+   TerrainImagePreparator imagePreparator;
 
    if ( !pc.isReading() )
       if ( bi_pict >= 0 )
@@ -499,7 +499,7 @@ void TerrainType::Weather::runTextIO ( PropertyContainer& pc )
          s += strrr(terraintype->id);
       }
       s += weatherAbbrev[w];
-      pc.addImage ( "picture", image, s, true );
+      pc.addImage ( "picture", image, s, &imagePreparator );
       
       if ( pc.isReading() ) {
          originalImageFilename = s;

@@ -10,10 +10,27 @@
 #ifndef fieldimageloaderH
 #define fieldimageloaderH
 
+#include <vector>
 #include "graphics/surface.h"
 
-extern vector<Surface> loadASCFieldImageArray ( const ASCString& file, int num );
-extern Surface loadASCFieldImage ( const ASCString& file, bool applyFieldMask = true );
+class ImagePreparation {
+public:
+   virtual void prepareImage( Surface& surface ) = 0;
+   virtual ~ImagePreparation() {};
+};
+
+class TerrainImagePreparator : public ImagePreparation {
+public:
+   virtual void prepareImage( Surface& surface );
+};
+
+class VehicleImagePreparator : public ImagePreparation {
+public:
+   virtual void prepareImage( Surface& surface );
+};
+
+extern vector<Surface> loadASCFieldImageArray ( const ASCString& file, int num, ImagePreparation* imagePreparation = NULL );
+extern Surface loadASCFieldImage ( const ASCString& file, ImagePreparation* imagePreparation = NULL );
 extern void snowify( Surface& s, bool adaptive  = true);
 
 

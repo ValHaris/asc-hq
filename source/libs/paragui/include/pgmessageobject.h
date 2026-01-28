@@ -70,6 +70,8 @@ class SignalMouseButtonDown : public sigc::signal<bool, PG_MessageObject*, const
 	;
 class SignalMouseButtonUp : public sigc::signal<bool, PG_MessageObject*, const SDL_MouseButtonEvent*> {}
 	;
+class SignalMouseWheel : public sigc::signal<bool, PG_MessageObject*, const SDL_MouseWheelEvent*> {}
+    ;
 class SignalQuit : public sigc::signal<bool, PG_MessageObject*> {}
 	;
 class SignalSysWM : public sigc::signal<bool, PG_MessageObject*, const SDL_SysWMEvent*> {}
@@ -150,6 +152,7 @@ class SignalDelete : public sigc::signal<bool, const PG_MessageObject*> {}
 	SignalMouseMotion sigMouseMotion;
 	SignalMouseButtonDown sigMouseButtonDown;
 	SignalMouseButtonUp sigMouseButtonUp;
+	SignalMouseWheel sigMouseWheel;
 	SignalSysWM sigSysWM;
 	SignalQuit sigQuit;
 
@@ -222,6 +225,8 @@ protected:
 	@return Notifies the message pump if this message is processed by this object or it should be routed to the next message receiver.
 	*/
 	virtual bool eventMouseButtonUp(const SDL_MouseButtonEvent* button);
+
+	virtual bool eventMouseWheel( const SDL_MouseWheelEvent* event);
 
 	/**
 	Overridable Eventhandler for a SDL_QuitEvent message.

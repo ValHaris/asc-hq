@@ -106,6 +106,7 @@ class ColorTransform_PlayerTrueCol
 
       PixelType refColor;
       int refr, refg, refb;  // this is NOT RED, GREEN, BLUE, but device dependant. Should be renamed
+      int rshift, gshift, bshift;
    protected:
       ColorTransform_PlayerTrueCol() : refColor(0),refr(0),refg(0),refb(0)
       {}
@@ -113,9 +114,9 @@ class ColorTransform_PlayerTrueCol
 
       PixelType transform( PixelType col)
       {
-         int r = (col >> 16) & 0xff;
-         int g = (col >> 8) & 0xff;
-         int b = (col ) & 0xff;
+         int r = (col >> rshift) & 0xff;
+         int g = (col >> gshift) & 0xff;
+         int b = (col >> bshift) & 0xff;
 
          if ( g==0 && b==0) {
             return ((refr * r / 256) << 16) + ((refg * r / 256) << 8) + (refb * r / 256) + (col & 0xff000000);
@@ -128,6 +129,9 @@ class ColorTransform_PlayerTrueCol
 
       void init( const Surface& src )
       {
+         rshift = src.GetPixelFormat().Rshift();
+         gshift = src.GetPixelFormat().Gshift();
+         bshift = src.GetPixelFormat().Bshift();
          if ( lateConversion ) {
             setColor( src.GetPixelFormat().MapRGB( sourceColor ));
             lateConversion = false;

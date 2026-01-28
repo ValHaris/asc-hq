@@ -1574,6 +1574,8 @@ void PG_Widget::eventBlit(SDL_Surface* srf, const PG_Rect& src, const PG_Rect& d
 	if(a != 0) {
 		if ( a != 255 )
 			SDL_SetSurfaceAlphaMod(srf, a);
+		SDL_SetSurfaceBlendMode(srf, SDL_BLENDMODE_BLEND);
+
 
 		// Blit widget surface to screen
 #ifdef DEBUG

@@ -335,6 +335,17 @@ class TipDialog : public ASC_PG_Dialog {
       return true;
    }
 
+   bool eventKeyDown(const SDL_KeyboardEvent* key)
+   {
+      if ( key->keysym.sym == SDLK_SPACE
+            || key->keysym.sym == SDLK_RETURN
+            || key->keysym.sym == SDLK_ESCAPE) {
+         QuitModal();
+         return true;
+      }
+      return false;
+   }
+
 public:
    TipDialog(const ASCString& text, const ASCString& key) : ASC_PG_Dialog(NULL, PG_Rect(-1,-1, 400, 300), "Tip"), key(key) {
       new TextRenderer(this, PG_Rect(10, 30, Width()-20, Height() - 80), text);

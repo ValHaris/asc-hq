@@ -265,6 +265,9 @@ DECLSPEC void DrawLine(SDL_Surface* surface, Uint32 x0, Uint32 y0, Uint32 x1, Ui
 */
 DECLSPEC void SetPixel(int x, int y, const PG_Color& c, SDL_Surface * surface);
 
+//extern void printblit(SDL_Surface* from, SDL_Surface* to, int result );
+
+
 /**
 	replacement for SDL_BlitSurface
 	@param srf_src	source surface
@@ -275,9 +278,9 @@ DECLSPEC void SetPixel(int x, int y, const PG_Color& c, SDL_Surface * surface);
 	This function simply replaces SDL_BlitSurface and uses PG_Rect instead of SDL_Rect.
 */
 inline void BlitSurface(SDL_Surface* srf_src, const PG_Rect& rect_src, SDL_Surface* srf_dst, const PG_Rect& rect_dst) {
-	if ( SDL_BlitSurface(srf_src, const_cast<PG_Rect*>(&rect_src), srf_dst, const_cast<PG_Rect*>(&rect_dst)) < 0) {
+   int result =  SDL_BlitSurface(srf_src, const_cast<PG_Rect*>(&rect_src), srf_dst, const_cast<PG_Rect*>(&rect_dst));
+   if ( result < 0)
 		throw PG_Exception(SDL_GetError());
-	}
 }
 
 /**

@@ -117,7 +117,52 @@ bool imageEmpty( const Surface&  s )
    return allWhite || allTransparent;
 }
 
-vector<Surface> loadASCFieldImageArray ( const ASCString& file, int num )
+template<
+int BytesPerSourcePixel,
+int BytesPerTargetPixel
+>
+class ColorMaskTransformer
+{
+   public:
+      typedef typename PixelSize2Type<BytesPerTargetPixel>::PixelType SourcePixelType;
+      typedef typename PixelSize2Type<BytesPerTargetPixel>::PixelType TargetPixelType;
+   private:
+      SourcePixelType srcColorKey;
+      TargetPixelType destColorKey;
+      pair<int,int> rshift, gshift, bshift, ashift;  // first: shift left, second: shift right
+      int rmask, gmask, bmask, amask;
+
+      pair<int,int> calcShift(int source, int target) {
+         if ( source > target )
+            return make_pair(0, source-target);
+         else
+            return make_pair(target-source, 0);
+      }
+   public:
+      ColorMaskTransformer( const Surface& sourceSurface, Surface& targetSurface )
+      {
+         rshift = calcShift( sourceSurface.GetPixelFormat().Rshift(), targetSurface.GetPixelFormat().Rshift());
+         gshift = calcShift( sourceSurface.GetPixelFormat().Gshift(), targetSurface.GetPixelFormat().Gshift());
+         bshift = calcShift( sourceSurface.GetPixelFormat().Bshift(), targetSurface.GetPixelFormat().Bshift());
+         ashift = calcShift( sourceSurface.GetPixelFormat().Ashift(), targetSurface.GetPixelFormat().Ashift());
+
+         rmask = sourceSurface.GetPixelFormat().Rmask();
+         gmask = sourceSurface.GetPixelFormat().Gmask();
+         bmask = sourceSurface.GetPixelFormat().Bmask();
+         amask = sourceSurface.GetPixelFormat().Amask();
+      }
+      ;
+      TargetPixelType convert ( SourcePixelType sp )
+      {
+         return ((sp & rmask) << rshift.first >> rshift.second)
+               | ((sp & gmask) << gshift.first >> gshift.second)
+               | ((sp & bmask) << bshift.first >> bshift.second)
+               | ((sp & amask) << ashift.first >> ashift.second);
+      };
+};
+
+
+vector<Surface> loadASCFieldImageArray ( const ASCString& file, int num, ImagePreparation* imagePreparation )
 {
    vector<Surface> images;
 
@@ -133,56 +178,79 @@ vector<Surface> loadASCFieldImageArray ( const ASCString& file, int num )
       
    int depth = s.GetPixelFormat().BitsPerPixel();
    
-   for ( int i = 0; i < num; i++ ) {
-      int x1 = (i % 10) * 100;
-      int y1 = (i / 10) * 100;
-      if ( depth > 8 && depth < 32 )
-         depth = 32;
+   try {
+      for ( int i = 0; i < num; i++ ) {
+         int x1 = (i % 10) * 100;
+         int y1 = (i / 10) * 100;
+         if ( depth > 8 && depth < 32 )
+            depth = 32;
+
+         Surface s2 = Surface::createSurface(fieldsizex,fieldsizey, depth );
          
-      Surface s2 = Surface::createSurface(fieldsizex,fieldsizey, depth );
-      
-      if ( s2.GetPixelFormat().BitsPerPixel() != 8 || s.GetPixelFormat().BitsPerPixel() != 8 ) {
-         
-         bool colorKeyAllowed = false;
-         static boost::regex pcx( ".*\\.pcx$");
-         boost::smatch what;
-         if( boost::regex_match( copytoLower(file) , what, pcx)) {
-            // warningMessage("Truecolor PCX image detected: " + file);
-            colorKeyAllowed = true;
-         }
-         
-         if ( s.GetPixelFormat().BitsPerPixel() == 32 ) {
-            MegaBlitter<4,4,ColorTransform_None,ColorMerger_PlainOverwrite,SourcePixelSelector_Rectangle > blitter;
-            blitter.setSrcRectangle(SDLmm::SRect(SPoint(x1,y1),fieldsizex,fieldsizey));
-            blitter.blit( s, s2, SPoint(0,0)  );
-         } else {
-            s2.Blit( s, SDLmm::SRect(SPoint(x1,y1),fieldsizex,fieldsizey), SPoint(0,0));
-         }
-         applyLegacyFieldMask(s2,0,0, colorKeyAllowed);
-         if ( colorKeyAllowed ) 
-            s2.ColorKey2AlphaChannel();
-         
-         s2.detectColorKey();
-         if ( depth != 32 || imageEmpty(s2))
-            images.push_back( Surface() );
-         else
-            images.push_back ( s2 );
-         
-       } else {
-          // we don't want any transformations from one palette to another; we just assume that all 8-Bit images use the same colorspace
-          MegaBlitter<1,1,ColorTransform_None,ColorMerger_AlphaOverwrite,SourcePixelSelector_Rectangle > blitter;
-          blitter.setSrcRectangle(SDLmm::SRect(SPoint(x1,y1),fieldsizex,fieldsizey));
-          blitter.blit( s, s2, SPoint(0,0)  );
-          applyFieldMask(s2);
-          s2.detectColorKey();
-          images.push_back ( s2 );
-       }
+         if ( s2.GetPixelFormat().BitsPerPixel() != 8 || s.GetPixelFormat().BitsPerPixel() != 8 ) {
+
+            bool colorKeyAllowed = false;
+            static boost::regex pcx( ".*\\.pcx$");
+            boost::smatch what;
+            if( boost::regex_match( copytoLower(file) , what, pcx)) {
+               // warningMessage("Truecolor PCX image detected: " + file);
+               colorKeyAllowed = true;
+            }
+
+            if ( s.GetPixelFormat().BitsPerPixel() == 32 ) {
+               MegaBlitter<4,4,ColorTransform_None,ColorMerger_PlainOverwrite,SourcePixelSelector_Rectangle,TargetPixelSelector_All, ColorMaskTransformer> blitter;
+               blitter.setSrcRectangle(SDLmm::SRect(SPoint(x1,y1),fieldsizex,fieldsizey));
+               blitter.blit( s, s2, SPoint(0,0)  );
+            } else {
+               s2.Blit( s, SDLmm::SRect(SPoint(x1,y1),fieldsizex,fieldsizey), SPoint(0,0));
+            }
+            applyLegacyFieldMask(s2,0,0, colorKeyAllowed);
+            if ( colorKeyAllowed )
+               s2.ColorKey2AlphaChannel();
+
+            if ( s2.GetPixelFormat().BitsPerPixel() == 8 )
+               s2.SetColorKey(SDL_TRUE, 0xff);
+
+            if ( depth != 32 || imageEmpty(s2))
+               images.push_back( Surface() );
+            else
+               images.push_back ( s2 );
+
+
+          } else {
+             // we don't want any transformations from one palette to another; we just assume that all 8-Bit images use the same colorspace
+             MegaBlitter<1,1,ColorTransform_None,ColorMerger_AlphaOverwrite,SourcePixelSelector_Rectangle > blitter;
+             blitter.setSrcRectangle(SDLmm::SRect(SPoint(x1,y1),fieldsizex,fieldsizey));
+             blitter.blit( s, s2, SPoint(0,0)  );
+             applyFieldMask(s2);
+             s2.detectColorKey();
+             images.push_back ( s2 );
+          }
+      }
+   } catch ( const ASCmsgException& ex) {
+      throw ASCmsgException("Error loading " + file + ": " + ex.getMessage());
    }
    return images;
 }
 
-Surface loadASCFieldImage ( const ASCString& file, bool applyFieldMaskToImage )
+
+void TerrainImagePreparator::prepareImage( Surface& surface )
 {
+   if ( surface.w() >= fieldsizex && surface.h() >= fieldsizey )
+      applyFieldMask(surface,0,0,false);
+}
+
+void VehicleImagePreparator::prepareImage( Surface& surface )
+{
+   if ( surface.w() >= fieldsizex && surface.h() >= fieldsizey )
+      applyFieldMask(surface,0,0,false);
+}
+
+
+Surface loadASCFieldImage ( const ASCString& file, ImagePreparation* imagePreparation )
+{
+   bool save = false;
+
    StringTokenizer st ( file, fileNameDelimitter );
    FileName fn = st.getNextToken();
    fn.toLower();
@@ -190,27 +258,35 @@ Surface loadASCFieldImage ( const ASCString& file, bool applyFieldMaskToImage )
    displayLogMessage ( 6, "loading file " + file + "\n" );
 
    if ( fn.suffix() == "png" ) {
-      SDLmm::Surface* s = NULL;
+      Surface* s = NULL;
       do {
          tnfilestream fs ( fn, tnstream::reading );
          RWOPS_Handler rwo( SDL_RWFromStream( &fs ) );
-         SDLmm::Surface s2 ( IMG_LoadPNG_RW ( rwo.Get() ));
+         Surface s2 ( IMG_LoadPNG_RW ( rwo.Get() ));
          rwo.Close();
-         // s2.SetAlpha ( SDL_SRCALPHA, SDL_ALPHA_OPAQUE );
-         if ( !s )
-            s = new SDLmm::Surface ( s2 );
-         else {
-            int res = s->Blit ( s2 );
-            if ( res < 0 )
-               warningMessage ( "ImageProperty::operation_eq - couldn't blit surface "+fn);
+
+         if ( s2.GetPixelFormat().BitsPerPixel() == 8)
+            s2.SetColorKey( SDL_TRUE, 255 );
+
+         if ( !s ) {
+            if ( s2.hasDefaultPixelFormat() ) {
+               s = new Surface ( s2 );
+            } else {
+               s = new Surface( Surface::createSurface(s2.w(),s2.h(), 32 ));
+               if ( SDL_SetSurfaceBlendMode(s2.getBaseSurface(), SDL_BLENDMODE_NONE) < 0 )
+                  throw ASCmsgException(ASCString("loadASCFieldImage :") + SDL_GetError());
+               s->Blit(s2);
+            }
+         } else {
+            megaBlitter<ColorTransform_None,ColorMerger_AlphaMerge,SourcePixelSelector_Plain,TargetPixelSelector_All>( s2, *s, SPoint(0,0), nullParam, nullParam, nullParam, nullParam );
          }
 
          fn = st.getNextToken();
       } while ( !fn.empty() );
       if ( s )  {
          Surface s3( *s );
-         if ( applyFieldMaskToImage )
-            applyFieldMask(s3,0,0,false);
+         if ( imagePreparation )
+            imagePreparation->prepareImage(s3);
 
          delete s;
          return s3;
@@ -255,9 +331,8 @@ Surface loadASCFieldImage ( const ASCString& file, bool applyFieldMaskToImage )
          }
 
 
-         if ( applyFieldMaskToImage )
-            if ( s.w() >= fieldsizex && s.h() >= fieldsizey )
-               applyFieldMask(s,0,0,false);
+         if ( imagePreparation )
+            imagePreparation->prepareImage(s);
 
          return s;
       }
