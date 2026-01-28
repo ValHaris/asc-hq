@@ -92,6 +92,5 @@ ASCString Locale::getLocalizedFile( const ASCString& filename, const ASCString& 
       
 Locale::~Locale()
 {
-   delete data;  
 }
 

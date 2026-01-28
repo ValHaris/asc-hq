@@ -32,6 +32,44 @@
 
 #include <cmath>
 #include <cassert>
+#include <sstream>
+#include <iostream>
+#include <map>
+
+/*
+std::string describeSurface(SDL_Surface* surf) {
+   std::stringstream ss;
+   ss << "BytesPerPixel=" << int(surf->format->BytesPerPixel) << " ";
+   ss << "AMask=" << surf->format->Amask << " ";
+   ss << "AShift=" << int(surf->format->Ashift) << " ";
+
+   Uint8 alpha;
+   if ( SDL_GetSurfaceAlphaMod(surf, &alpha) == 0 )
+      ss << "Alpha=" << int(alpha) << " ";
+   else
+      ss << "NoAlpha ";
+
+   SDL_BlendMode blendMode;
+   if ( SDL_GetSurfaceBlendMode(surf, &blendMode) == 0 )
+      ss << "BlendMode=" << int(blendMode) << " ";
+   else
+      ss << "NoBlendMode ";
+   return ss.str();
+}
+
+std::map<std::string,int> results;
+
+void PG_Draw::printblit(SDL_Surface* from, SDL_Surface* to, int result ) {
+   std::string f = describeSurface(from);
+   std::string t = describeSurface(to);
+   std::string description = f + " " + t;
+
+   if ( results.find(description) == results.end()) {
+      results[description] = result;
+      std::cout << description << " -> " << result << "\n";
+   }
+}
+*/
 
 SDL_Surface* PG_Draw::CreateGradient(const PG_Rect& r, PG_Gradient& gradient) {
 	return CreateGradient(

@@ -86,7 +86,7 @@ Surface Surface::Duplicate() const
 {
    Surface new_surface(CreateSurface(*this));
 
-   megaBlitter<ColorTransform_None, ColorMerger_PlainOverwrite, SourcePixelSelector_Plain, TargetPixelSelector_All>(*this, new_surface, SPoint(0,0), nullParam, nullParam, nullParam, nullParam); 
+   megaBlitter<ColorTransform_None, ColorMerger_PlainOverwrite, SourcePixelSelector_Plain, TargetPixelSelector_All>(*this, new_surface, SPoint(0,0), nullParam, nullParam, nullParam, nullParam);
 
    new_surface.Blit(*this); 
    return new_surface;
@@ -157,7 +157,10 @@ Surface::Surface(const SDLmm::Surface& other) : SDLmm::Surface ( other ), pixelD
       convert();
 }
 
- 
+
+#define SDL_LEGACY_SRCCOLORKEY  0x00001000  /**< Blit uses a source color key */
+#define SDL_LEGACYSRCALPHA  0x00010000  /**< Blit uses source alpha blending */
+
 const int surfaceVersion = 2;
 
 void Surface::write ( tnstream& stream ) const
@@ -181,10 +184,12 @@ void Surface::write ( tnstream& stream ) const
 
    stream.writeUint8 ( pf.BitsPerPixel() );
    stream.writeUint8 ( pf.BytesPerPixel() );
+   int flag = flags();
    Uint32 colorkey = 1;
-   SDL_GetColorKey(const_cast<SDL_Surface*>(getBaseSurface()), &colorkey);
+   if ( SDL_GetColorKey(const_cast<SDL_Surface*>(getBaseSurface()), &colorkey) == 0)
+      flag |= SDL_LEGACY_SRCCOLORKEY;
    stream.writeInt ( colorkey);
-   stream.writeInt( flags() );
+   stream.writeInt( flag );
    if ( pf.BytesPerPixel() == 1 ) {
       for ( int y = 0; y < h(); ++y )
          stream.writedata( ((Uint8*)me->pixels) + y*pitch(), w() );
@@ -208,8 +213,6 @@ void Surface::write ( tnstream& stream ) const
 
 }
 
-#define SDL_LEGACY_SRCCOLORKEY	0x00001000	/**< Blit uses a source color key */
-#define SDL_LEGACYSRCALPHA	0x00010000	/**< Blit uses source alpha blending */
 
  
 void Surface::read ( tnstream& stream )
@@ -355,9 +358,17 @@ Surface Surface::createSurface( int width, int height, int depth, SDLmm::Color c
       int bmask = default32bit->Bmask();
       int amask = ~(rmask | gmask | bmask );
       surf = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, depth, rmask, gmask, bmask, amask );
-   } else
-      surf = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, depth, 0xff, 0xff00, 0xff0000, 0xff000000 );
+   } else {
+      if ( depth == 8 ) {
+         surf = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, depth, 0, 0, 0, 0 );
+      } else {
+         surf = SDL_CreateRGBSurface(SDL_SWSURFACE, width, height, depth, 0xff0000, 0xff00, 0xff, 0xff000000 );
+      }
+   }
    
+   if ( !surf )
+      throw ASCmsgException(ASCString("Surface::createSurface : could not create surface : ") + SDL_GetError());
+
    Surface s ( surf );
    if ( depth == 32 )
       s.Fill(color);
@@ -446,29 +457,36 @@ bool Surface::hasAlpha()
 
 
 
-void Surface::detectColorKey ( bool RLE )
+void Surface::detectColorKey ( )
 {
 
    // detect if image has per pixel alpha - don't use ColorKey then
-   if ( GetPixelFormat().BitsPerPixel() > 8 ) 
-      if ( hasAlpha() ) 
-         return;
+//   if ( GetPixelFormat().BitsPerPixel() > 8 )
+ //     if ( hasAlpha() )
+  //       return;
 
-   SetAlpha ( 0, 0 );
-      
+//   SetAlpha ( 0, 0 );
+
+   int res;
    if ( GetPixelFormat().BitsPerPixel() > 8 ) {
-      SetColorKey( SDL_TRUE, GetPixel(0,0) & ( GetPixelFormat().Rmask() | GetPixelFormat().Gmask() | GetPixelFormat().Bmask()));
+      res = SetColorKey( SDL_TRUE, GetPixel(0,0) & ( GetPixelFormat().Rmask() | GetPixelFormat().Gmask() | GetPixelFormat().Bmask()));
    } else
-      SetColorKey( SDL_TRUE, GetPixel(0,0));
+      res = SetColorKey( SDL_TRUE, GetPixel(0,0));
+
+   if ( res < 0 )
+      throw ASCmsgException(ASCString("Surface::detectColorKey : ") + SDL_GetError());
 }
 
 
 bool Surface::isTransparent( SDLmm::Color col ) const
 {
    Uint32 colorkey;
-   if ( SDL_GetColorKey(const_cast<SDL_Surface*>(getBaseSurface()), &colorkey) == 0 )
-      return (col & (GetPixelFormat().Rmask() | GetPixelFormat().Gmask() | GetPixelFormat().Bmask())) == colorkey;
-   else {
+   if ( SDL_GetColorKey(const_cast<SDL_Surface*>(getBaseSurface()), &colorkey) == 0 ) {
+      if ( GetPixelFormat().BitsPerPixel() == 8 )
+         return colorkey == col;
+      else
+         return (col & (GetPixelFormat().Rmask() | GetPixelFormat().Gmask() | GetPixelFormat().Bmask())) == colorkey;
+   } else {
       if ( GetPixelFormat().BitsPerPixel() == 8 )
          return false;
       else {
@@ -479,6 +497,22 @@ bool Surface::isTransparent( SDLmm::Color col ) const
       }
    }
 }
+
+
+bool Surface::hasDefaultPixelFormat() const
+{
+   if ( GetPixelFormat().BytesPerPixel() == 1 ) {
+      return true;
+   } else {
+      if ( !default32bit )
+         return false;
+      SDLmm::PixelFormat f = GetPixelFormat();
+      return default32bit->Rmask() == f.Rmask() && default32bit->Rshift() == f.Rshift()
+            && default32bit->Gmask() == f.Gmask() && default32bit->Gshift() == f.Gshift()
+            && default32bit->Bmask() == f.Bmask() && default32bit->Bshift() == f.Bshift();
+   }
+}
+
 
 Surface::~Surface()
 {/*

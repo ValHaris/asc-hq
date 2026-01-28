@@ -39,6 +39,7 @@ PG_ScrollBar::PG_ScrollBar(PG_Widget* parent, const PG_Rect& r, ScrollDirection 
 
 	SetID(id);
 
+	wheelSpeed = 30;
 	scroll_min = 0;
 	scroll_max = 4;
 	scroll_current = 0;
@@ -260,6 +261,26 @@ bool PG_ScrollBar::eventMouseButtonUp(const SDL_MouseButtonEvent* button) {
 	}
 
 	return PG_ThemeWidget::eventMouseButtonUp(button);
+}
+
+void PG_ScrollBar::SetMouseWheelSpeed(int wheelSpeed)
+{
+   this->wheelSpeed = wheelSpeed;
+}
+
+
+bool PG_ScrollBar::eventMouseWheel(const SDL_MouseWheelEvent* wheel)
+{
+   if ( sb_direction == VERTICAL && wheel->y != 0 ) {
+      SetPosition(scroll_current - wheel->y*wheelSpeed);
+      sigScrollPos(scroll_current);
+      return true;
+   } else if ( sb_direction == HORIZONTAL && wheel->x != 0 ) {
+      SetPosition(scroll_current - wheel->x*wheelSpeed);
+      sigScrollPos(scroll_current);
+      return true;
+   } else
+      return false;
 }
 
 

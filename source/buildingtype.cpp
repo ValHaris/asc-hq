@@ -619,7 +619,7 @@ void BuildingType :: runTextIO ( PropertyContainer& pc )
                                           SPoint( 500*c + x * fielddistx + (y&1)*fielddisthalfx, y * fielddisty), 
                                           nullParam, nullParam, nullParam, nullParam );
                   ASCString file = extractFileName_withoutSuffix ( filename )+weatherAbbrev[w]+".png";
-                  pc.addImage ( weatherTags[w], s, file, false  );
+                  pc.addImage ( weatherTags[w], s, file );
                   pc.addString( ASCString(weatherTags[w]) + "_OriginalImageFilename", originalImageFilename[w] );
                }
          } else {
@@ -627,7 +627,7 @@ void BuildingType :: runTextIO ( PropertyContainer& pc )
                if ( weatherBits.test(w) ) {
                   ASCString fileName = extractFileName_withoutSuffix ( filename )+weatherAbbrev[w]+".png";
                   Surface s;
-                  pc.addImage ( weatherTags[w], s, fileName, false );
+                  pc.addImage ( weatherTags[w], s, fileName );
                   originalImageFilename[w] = fileName;
 
 //                  if ( s.GetPixelFormat().BitsPerPixel() != 8 )

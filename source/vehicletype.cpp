@@ -966,6 +966,7 @@ UnitWeapon :: UnitWeapon ( void )
 
 void VehicleType::runTextIO ( PropertyContainer& pc )
 {
+   VehicleImagePreparator imagePreparator;
    ContainerBaseType::runTextIO ( pc );
 
    pc.addInteger( "Armor", armor );
@@ -977,7 +978,7 @@ void VehicleType::runTextIO ( PropertyContainer& pc )
    } else
       fn = extractFileName_withoutSuffix( filename );
 
-   pc.addImage( "Picture", image, fn, true );
+   pc.addImage( "Picture", image, fn, &imagePreparator );
    if ( pc.isReading() ) 
       imageFilename = fn;
    else

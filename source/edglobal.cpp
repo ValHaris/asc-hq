@@ -180,6 +180,7 @@
         "Unit Guide Dialog",
         "Run Lua Script",
 	"Run Translation Script",
+    "Dump selected Terrain",
 	"Dump all Terrain",
 	"Dump all Objects",
         "show weapon range"
@@ -906,6 +907,17 @@ void execaction_pg(int code)
             }
          } else
             errorMessage("no object selected");
+         break;
+      case act_dumpTerrain:
+         if ( getactfield()  ) {
+            ASCString filename = selectFile( "*.dump", false );
+            if ( !filename.empty () ) {
+               tn_file_buf_stream stream ( filename, tnstream::writing );
+               PropertyWritingContainer pc ( "TerrainDump", stream );
+               getactfield()->typ->terraintype->runTextIO( pc );
+            }
+         } else
+            errorMessage("no terrain selected");
          break;
     case act_help : help(1000);
        break;

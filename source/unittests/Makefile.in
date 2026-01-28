@@ -108,7 +108,7 @@ am_libunittests_la_OBJECTS = movementtest.lo attacktest.lo \
 	transfercontroltest.lo recyclingtest.lo diplomacytest.lo \
 	researchtest.lo objectconstructiontest.lo actiontest.lo \
 	eventtest.lo jumptest.lo testversionidentifier.lo \
-	streamencoding.lo maptest.lo repairtest.lo
+	streamencoding.lo maptest.lo repairtest.lo imageloadingtest.lo
 libunittests_la_OBJECTS = $(am_libunittests_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -132,9 +132,9 @@ am__maybe_remake_depfiles = depfiles
 am__depfiles_remade = ./$(DEPDIR)/actiontest.Plo \
 	./$(DEPDIR)/ai-move1.Plo ./$(DEPDIR)/ai-service1.Plo \
 	./$(DEPDIR)/attacktest.Plo ./$(DEPDIR)/diplomacytest.Plo \
-	./$(DEPDIR)/eventtest.Plo ./$(DEPDIR)/jumptest.Plo \
-	./$(DEPDIR)/main.Plo ./$(DEPDIR)/maptest.Plo \
-	./$(DEPDIR)/movementtest.Plo \
+	./$(DEPDIR)/eventtest.Plo ./$(DEPDIR)/imageloadingtest.Plo \
+	./$(DEPDIR)/jumptest.Plo ./$(DEPDIR)/main.Plo \
+	./$(DEPDIR)/maptest.Plo ./$(DEPDIR)/movementtest.Plo \
 	./$(DEPDIR)/objectconstructiontest.Plo \
 	./$(DEPDIR)/recyclingtest.Plo ./$(DEPDIR)/repairtest.Plo \
 	./$(DEPDIR)/researchtest.Plo ./$(DEPDIR)/streamencoding.Plo \
@@ -375,7 +375,7 @@ AM_CXXFLAGS = $(SDL_CFLAGS) $(SIGC_CFLAGS)  @LokiInclude@ -I$(top_srcdir)/source
 noinst_LTLIBRARIES = libunittests.la
 libunittests_la_SOURCES = movementtest.cpp attacktest.cpp unittestutil.cpp main.cpp ai-move1.cpp viewtest.cpp ai-service1.cpp transfercontroltest.cpp \
                           recyclingtest.cpp diplomacytest.cpp researchtest.cpp objectconstructiontest.cpp actiontest.cpp eventtest.cpp jumptest.cpp \
-                          testversionidentifier.cpp streamencoding.cpp maptest.cpp repairtest.cpp
+                          testversionidentifier.cpp streamencoding.cpp maptest.cpp repairtest.cpp imageloadingtest.cpp
 
 libunittests_la_LIBADD = @SDL_LIBS@
 EXTRA_DIST = $(srcdir)/*.h
@@ -439,6 +439,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/attacktest.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/diplomacytest.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/eventtest.Plo@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/imageloadingtest.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/jumptest.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/maptest.Plo@am__quote@ # am--include-marker
@@ -617,6 +618,7 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/attacktest.Plo
 	-rm -f ./$(DEPDIR)/diplomacytest.Plo
 	-rm -f ./$(DEPDIR)/eventtest.Plo
+	-rm -f ./$(DEPDIR)/imageloadingtest.Plo
 	-rm -f ./$(DEPDIR)/jumptest.Plo
 	-rm -f ./$(DEPDIR)/main.Plo
 	-rm -f ./$(DEPDIR)/maptest.Plo
@@ -681,6 +683,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/attacktest.Plo
 	-rm -f ./$(DEPDIR)/diplomacytest.Plo
 	-rm -f ./$(DEPDIR)/eventtest.Plo
+	-rm -f ./$(DEPDIR)/imageloadingtest.Plo
 	-rm -f ./$(DEPDIR)/jumptest.Plo
 	-rm -f ./$(DEPDIR)/main.Plo
 	-rm -f ./$(DEPDIR)/maptest.Plo

@@ -133,6 +133,10 @@ bool PG_MessageObject::ProcessEvent(const SDL_Event* event) {
 			rc = eventMouseButtonUp(&event->button) || sigMouseButtonUp(this, &event->button);
 			break;
 
+		case SDL_MOUSEWHEEL:
+		    rc = eventMouseWheel( &event->wheel) || sigMouseWheel(this, &event->wheel);
+		    break;
+
 		case SDL_QUIT:
 			rc = eventQuit(PG_Application::IDAPPLICATION, NULL, (unsigned long)&event->quit) || sigQuit(this);
 			break;
@@ -181,6 +185,9 @@ bool PG_MessageObject::eventMouseButtonUp(const SDL_MouseButtonEvent* button) {
 	return false;
 }
 
+bool PG_MessageObject::eventMouseWheel(const SDL_MouseWheelEvent* wheel) {
+    return false;
+}
 
 bool PG_MessageObject::eventQuit(int id, PG_MessageObject* widget, unsigned long data) {
 	return false;

@@ -195,6 +195,7 @@ void Menu::setup()
     addbutton ( "Dump all Vehicles",       act_dumpAllVehicleDefinitions );
     addbutton ( "Dump ~O~bject",          act_dumpObject );
     addbutton ( "Dump all Objects",       act_dumpAllObjects );
+    addbutton ( "Dump ~Te~rrain",       act_dumpTerrain );
     addbutton ( "Dump all Terrain",       act_dumpAllTerrain );
     addbutton ( "Locate Item by ~I~D",    act_locateItemByID );
    currentMenu->addSeparator();

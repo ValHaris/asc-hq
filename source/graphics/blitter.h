@@ -251,9 +251,10 @@ class ColorConverter<1,4>
             else
                return Surface::transparent << ashift;
          } else {
-            TargetPixelType a = Surface::opaque;
-            a <<= ashift;
-            return TargetPixelType(palette[sp].r << rshift) + TargetPixelType(palette[sp].g << gshift) + TargetPixelType(palette[sp].b << bshift) + a;
+            return TargetPixelType(palette[sp].r << rshift)
+                  + TargetPixelType(palette[sp].g << gshift)
+                  + TargetPixelType(palette[sp].b << bshift)
+                  + TargetPixelType(palette[sp].a << ashift);
          }
       };
 
@@ -382,7 +383,8 @@ void megaBlitter  ( const Surface& src,
                      SourceColorTransform,
                      ColorMerger,
                      SourcePixelSelector,
-                     TargetPixelSelector
+                     TargetPixelSelector,
+                     ColorConverter
                      >  blitter (
                         (SourceColorTransform<1>)( scmp ),
                         (ColorMerger<1>)( cmp ),
@@ -399,7 +401,8 @@ void megaBlitter  ( const Surface& src,
                      SourceColorTransform,
                      ColorMerger,
                      SourcePixelSelector,
-                     TargetPixelSelector
+                     TargetPixelSelector,
+                     ColorConverter
                      >  blitter (
                         (SourceColorTransform<1>)( scmp ),
                         (ColorMerger<4>)( cmp ),
@@ -421,7 +424,8 @@ void megaBlitter  ( const Surface& src,
                      SourceColorTransform,
                      ColorMerger,
                      SourcePixelSelector,
-                     TargetPixelSelector
+                     TargetPixelSelector,
+                     ColorConverter
                      >  blitter (
                         (SourceColorTransform<4>)( scmp ),
                         (ColorMerger<1>)( cmp ),
@@ -438,7 +442,8 @@ void megaBlitter  ( const Surface& src,
                      SourceColorTransform,
                      ColorMerger,
                      SourcePixelSelector,
-                     TargetPixelSelector
+                     TargetPixelSelector,
+                     ColorConverter
                      >  blitter (
                         (SourceColorTransform<4>)( scmp ),
                         (ColorMerger<4>)( cmp ),
@@ -1105,7 +1110,7 @@ class SourcePixelSelector_CacheRotation : public RotationCache
          w = srv.w();
          h = srv.h();
          if ( SDL_GetColorKey(const_cast<SDL_Surface*>(srv.getBaseSurface()), &fully_transparent) != 0 )
-            fully_transparent = 0; //whereever alpha-mask is, 0 is maximum transparency
+            fully_transparent = Surface::transparent; //whereever alpha-mask is, 0 is maximum transparency
       }
 
       PixelType nextPixel()
