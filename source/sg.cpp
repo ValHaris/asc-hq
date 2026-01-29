@@ -1115,7 +1115,7 @@ void executeUserAction ( tuseractions action )
       case ua_writescreentopcx:
          {
             ASCString name = getnextfilenumname ( "screen", "pcx", 0 );
-            Surface s ( PG_Application::GetScreen() );
+            Surface s = Surface::Wrap( PG_Application::GetScreen() );
             writepcx ( name, s);
             displaymessage2( "screen saved to %s", name.c_str() );
          }
