@@ -113,7 +113,7 @@ nodist_asc_demount_OBJECTS = demount.$(OBJEXT) basestrm.$(OBJEXT) \
 asc_demount_OBJECTS = $(nodist_asc_demount_OBJECTS)
 am__DEPENDENCIES_1 =
 asc_demount_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
-	$(am__DEPENDENCIES_1) \
+	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
 	$(top_builddir)/source/tools/lib/libasc_cmd.la
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -124,7 +124,7 @@ nodist_asc_mount_OBJECTS = mount.$(OBJEXT) basestrm.$(OBJEXT) \
 	strtmesg.$(OBJEXT) stringtokenizer.$(OBJEXT)
 asc_mount_OBJECTS = $(nodist_asc_mount_OBJECTS)
 asc_mount_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
-	$(am__DEPENDENCIES_1) \
+	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
 	$(top_builddir)/source/tools/lib/libasc_cmd.la
 nodist_asc_raw2png_OBJECTS = raw2png.$(OBJEXT) basestrm.$(OBJEXT) \
 	simplestream.$(OBJEXT) misc.$(OBJEXT) ascstring.$(OBJEXT) \
@@ -147,7 +147,7 @@ nodist_asc_raw2png_OBJECTS = raw2png.$(OBJEXT) basestrm.$(OBJEXT) \
 	unitcostcalculator-standard.$(OBJEXT) \
 	unitcostcalculator-pbp.$(OBJEXT)
 asc_raw2png_OBJECTS = $(nodist_asc_raw2png_OBJECTS)
-asc_raw2png_DEPENDENCIES = $(am__DEPENDENCIES_1) \
+asc_raw2png_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
 	$(top_builddir)/source/sdl/libsdl.la \
 	$(top_builddir)/source/util/libutil.la $(am__DEPENDENCIES_1) \
 	$(am__DEPENDENCIES_1) \
@@ -177,7 +177,7 @@ nodist_asc_weaponguide_OBJECTS = weaponguide.$(OBJEXT) \
 	unitcostcalculator-standard.$(OBJEXT)
 asc_weaponguide_OBJECTS = $(nodist_asc_weaponguide_OBJECTS)
 asc_weaponguide_DEPENDENCIES = $(am__DEPENDENCIES_1) \
-	$(top_builddir)/source/sdl/libsdl.la \
+	$(am__DEPENDENCIES_1) $(top_builddir)/source/sdl/libsdl.la \
 	$(top_builddir)/source/util/libutil.la $(am__DEPENDENCIES_1) \
 	$(am__DEPENDENCIES_1) \
 	$(top_builddir)/source/tools/lib/libasc_cmd.la \
@@ -479,8 +479,8 @@ asc_demount_LDADD = $(SDL_LIBS) $(SIGC_LIBS) $(BZIP2_LIBS) $(top_builddir)/sourc
 #asc_makegfx_LDADD     = $(SDL_LIBS) $(top_builddir)/source/sdl/libsdl.la @LDADDLIBBZ2@ $(SIGC_LIBS) $(top_builddir)/source/tools/lib/libasc_cmd.la $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la 
 #asc_viewid_LDADD      = $(top_builddir)/source/sdl/libsdl.la @LDADDLIBBZ2@ @SIGC_LIBS@ $(top_builddir)/source/tools/lib/libasc_cmd.la
 #asc_bin2text_LDADD    = $(top_builddir)/source/sdl/libsdl.la @LDADDLIBBZ2@ @SIGC_LIBS@ $(top_builddir)/source/tools/lib/libasc_cmd.la
-asc_weaponguide_LDADD = $(SDL_LIBS) $(top_builddir)/source/sdl/libsdl.la $(top_builddir)/source/util/libutil.la $(BZIP2_LIBS) $(SIGC_LIBS) $(top_builddir)/source/tools/lib/libasc_cmd.la $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la  $(top_builddir)/source/graphics/libgraphics.la $(LOKI_LIBS) $(BOOST_LIBS) $(top_builddir)/source/sdl/libsdl.la
-asc_raw2png_LDADD = $(SDL_LIBS) $(top_builddir)/source/sdl/libsdl.la $(top_builddir)/source/util/libutil.la $(BZIP2_LIBS) $(SIGC_LIBS) $(top_builddir)/source/tools/lib/libasc_cmd.la $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la  $(top_builddir)/source/graphics/libgraphics.la $(LOKI_LIBS) $(BOOST_LIBS) $(top_builddir)/source/sdl/libsdl.la
+asc_weaponguide_LDADD = $(SDL_LIBS) $(BOOST_LIBS) $(top_builddir)/source/sdl/libsdl.la $(top_builddir)/source/util/libutil.la $(BZIP2_LIBS) $(SIGC_LIBS) $(top_builddir)/source/tools/lib/libasc_cmd.la $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la  $(top_builddir)/source/graphics/libgraphics.la $(LOKI_LIBS) $(BOOST_LIBS) $(top_builddir)/source/sdl/libsdl.la
+asc_raw2png_LDADD = $(SDL_LIBS) $(BOOST_LIBS) $(top_builddir)/source/sdl/libsdl.la $(top_builddir)/source/util/libutil.la $(BZIP2_LIBS) $(SIGC_LIBS) $(top_builddir)/source/tools/lib/libasc_cmd.la $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la  $(top_builddir)/source/graphics/libgraphics.la $(LOKI_LIBS) $(BOOST_LIBS) $(top_builddir)/source/sdl/libsdl.la
 all: all-am
 
 .SUFFIXES:

@@ -640,8 +640,6 @@ extern int compressrle ( const void* p, void* q);
 // extern bool patimat (const char *pat, const char *str);
 extern bool patimat (const ASCString& pat, const ASCString& str, bool forceCaseInsensitivity = false) ;
 
-extern int checkforvaliddirectory ( char* dir );
-
 extern ASCString getnextfilenumname ( const ASCString& first, const ASCString& suffix, int num = -1  );
 
 

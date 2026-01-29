@@ -1460,6 +1460,7 @@ if test "$ac_init_help" = "long"; then
   # This message is too long to be a string in the A/UX 3.1 sh.
   cat <<_ACEOF
 \`configure' configures asc 2.6.4.0 to adapt to many kinds of systems.
+\`configure' configures asc 2.8.5.0 to adapt to many kinds of systems.
 
 Usage: $0 [OPTION]... [VAR=VALUE]...
 
@@ -1531,6 +1532,7 @@ fi
 if test -n "$ac_init_help"; then
   case $ac_init_help in
      short | recursive ) echo "Configuration of asc 2.6.4.0:";;
+     short | recursive ) echo "Configuration of asc 2.8.5.0:";;
    esac
   cat <<\_ACEOF
 
@@ -19850,7 +19852,7 @@ fi
 printf "%s\n" "$ac_cv_lib_boost_regex_mt_main" >&6; }
 if test "x$ac_cv_lib_boost_regex_mt_main" = xyes
 then :
-  BOOST_LIBS="-lboost_regex-mt"
+  BOOST_LIBS="-lboost_regex-mt -lboost_filesystem-mt"
 else $as_nop
   BOOSTERR=yes
 fi
@@ -19894,7 +19896,7 @@ fi
 printf "%s\n" "$ac_cv_lib_boost_regex_gcc_mt_main" >&6; }
 if test "x$ac_cv_lib_boost_regex_gcc_mt_main" = xyes
 then :
-  BOOST_LIBS="-lboost_regex-gcc-mt"
+  BOOST_LIBS="-lboost_regex-gcc-mt -lboost_filesystem-gcc-mt"
 else $as_nop
   BOOSTERR=yes
 fi
@@ -19938,7 +19940,7 @@ fi
 printf "%s\n" "$ac_cv_lib_boost_regex_main" >&6; }
 if test "x$ac_cv_lib_boost_regex_main" = xyes
 then :
-  BOOST_LIBS="-lboost_regex"
+  BOOST_LIBS="-lboost_regex -lboost_filesystem"
 else $as_nop
   BOOSTERR=yes
 fi
@@ -19982,7 +19984,7 @@ fi
 printf "%s\n" "$ac_cv_lib_boost_regex_gcc_main" >&6; }
 if test "x$ac_cv_lib_boost_regex_gcc_main" = xyes
 then :
-  BOOST_LIBS="-lboost_regex-gcc"
+  BOOST_LIBS="-lboost_regex-gcc -lboost_filesystem-gcc"
 else $as_nop
   BOOSTERR=yes
 fi
