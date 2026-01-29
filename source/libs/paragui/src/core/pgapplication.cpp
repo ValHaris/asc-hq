@@ -1060,6 +1060,14 @@ bool PG_Application::PumpIntoEventQueue(const SDL_Event* event) {
 			}
 			return true;
 
+		case SDL_MOUSEWHEEL:
+			widget = PG_Widget::FindWidgetFromPos(event->wheel.mouseX, event->wheel.mouseY);
+			if(widget) {
+				widget->ProcessEvent(event);
+				return true;
+			}
+			break;
+
 		case SDL_MOUSEBUTTONUP:
 		case SDL_MOUSEBUTTONDOWN:
 			widget = PG_Widget::FindWidgetFromPos(event->button.x, event->button.y);

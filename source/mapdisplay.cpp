@@ -1004,38 +1004,48 @@ void filterQueuedZoomEvents()
       PG_Application::GetEventSupplier()->PollEvent ( &event );
 }
 
+
+
+void MapDisplayPG::changeZoomAndUpdate(int delta, const SPoint& position)
+{
+   MapCoordinate mc = screenPos2mapPos( position );
+
+   changeZoom( delta );
+
+   MapCoordinate newpos = screenPos2mapPos( position);
+   MapCoordinate newOffset ( offset.x - ( newpos.x - mc.x ), offset.y - ( newpos.y - mc.y ));
+   checkViewPosition( newOffset );
+   offset = newOffset;
+
+   viewChanged();
+   repaintMap();
+   filterQueuedZoomEvents();
+}
+
+
+bool MapDisplayPG::eventMouseWheel (const SDL_MouseWheelEvent *wheel)
+{
+   if ( wheel->y != 0 ) {
+      changeZoomAndUpdate(wheel->y > 0 ? 10 : -10 , SPoint(wheel->x, wheel->y));
+      return true;
+   }
+   return false;
+}
+
 bool MapDisplayPG::eventMouseButtonDown (const SDL_MouseButtonEvent *button)
 {
-   MapCoordinate mc = screenPos2mapPos( SPoint(button->x, button->y));
 
    if ( button->type == SDL_MOUSEBUTTONDOWN && button->button == CGameOptions::Instance()->mouse.zoomoutbutton ) {
-      changeZoom( 10 );
-   
-      MapCoordinate newpos = screenPos2mapPos( SPoint(button->x, button->y));
-      MapCoordinate newOffset ( offset.x - ( newpos.x - mc.x ), offset.y - ( newpos.y - mc.y ));
-      checkViewPosition( newOffset );
-      offset = newOffset;
-
-      viewChanged();
-      repaintMap();
-      filterQueuedZoomEvents();
+      changeZoomAndUpdate(10, SPoint(button->x, button->y));
       return true;
    }
 
    if ( button->type == SDL_MOUSEBUTTONDOWN && button->button == CGameOptions::Instance()->mouse.zoominbutton ) {
-      changeZoom( -10 );
-
-      MapCoordinate newpos = screenPos2mapPos( SPoint(button->x, button->y));
-      MapCoordinate newOffset ( offset.x - ( newpos.x - mc.x ), offset.y - ( newpos.y - mc.y ));
-      checkViewPosition( newOffset );
-      offset = newOffset;
-
-      viewChanged();
-      repaintMap();
-      filterQueuedZoomEvents();
+      changeZoomAndUpdate(-10, SPoint(button->x, button->y));
       return true;
    }
 
+   MapCoordinate mc = screenPos2mapPos( SPoint(button->x, button->y) );
 
    if ( !actmap )
       return false;
