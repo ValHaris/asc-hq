@@ -174,9 +174,10 @@ class MapDisplayPG: public PG_Widget, protected MapRenderer {
       // void eventDraw(SDL_Surface* surface, const PG_Rect& rect);
 
 
-      bool eventMouseButtonDown (const SDL_MouseButtonEvent *button);
-      bool eventMouseMotion (const SDL_MouseMotionEvent *button);
-      bool eventMouseButtonUp (const SDL_MouseButtonEvent *button);
+      bool eventMouseButtonDown (const SDL_MouseButtonEvent *button) override;
+      bool eventMouseWheel (const SDL_MouseWheelEvent *wheel) override;
+      bool eventMouseMotion (const SDL_MouseMotionEvent *button) override;
+      bool eventMouseButtonUp (const SDL_MouseButtonEvent *button) override;
       
       //
    
@@ -184,6 +185,8 @@ class MapDisplayPG: public PG_Widget, protected MapRenderer {
       
       void fillSurface( int playerView );
       void paintBackground( );
+
+      void changeZoomAndUpdate(int delta, const SPoint& position);
 
 
    public:
