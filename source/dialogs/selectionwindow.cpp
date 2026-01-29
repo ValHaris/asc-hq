@@ -229,6 +229,7 @@ class NonEditableLineEdit : public    PG_LineEdit {
          SetTransparency(255);
          SetBorderSize(0);
       };
+      virtual bool   eventTextInput (const SDL_TextInputEvent *key) { return false; };
       virtual bool   eventKeyDown (const SDL_KeyboardEvent *key) { return false; };
       virtual bool   eventFilterKey (const SDL_KeyboardEvent *key) { return true; };
       

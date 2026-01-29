@@ -15,7 +15,7 @@ else()
     # Linux/GCC/Clang settings
     # add_compile_options(-Wall -Wextra -Wpedantic)
     if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-        add_compile_options(-Wno-deprecated-declarations)
+        add_compile_options(-Wno-deprecated-declarations -DSIZE_T_not_identical_to_INT)
     endif()
 endif()
 
