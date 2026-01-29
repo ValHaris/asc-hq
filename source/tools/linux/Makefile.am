@@ -36,13 +36,13 @@ nodist_asc_raw2png_SOURCES     = raw2png.cpp      basestrm.cpp simplestream.cpp 
                                  iconrepository.cpp objects.cpp unitset.cpp fieldimageloader.cpp stdio-errorhandler.cpp playercolor.cpp versionidentifier.cpp \
                                  package.cpp packagerepository.cpp accessconstraints-editor.cpp unitcostcalculator-standard.cpp unitcostcalculator-pbp.cpp
 
-asc_mount_LDADD       = $(SDL_LIBS) $(SIGC_LIBS) $(BZIP2_LIBS) $(top_builddir)/source/tools/lib/libasc_cmd.la
-asc_demount_LDADD     = $(SDL_LIBS) $(SIGC_LIBS) $(BZIP2_LIBS) $(top_builddir)/source/tools/lib/libasc_cmd.la
+asc_mount_LDADD       = $(SDL_LIBS) $(SIGC_LIBS) $(BZIP2_LIBS) $(BOOST_LIBS) $(top_builddir)/source/tools/lib/libasc_cmd.la
+asc_demount_LDADD     = $(SDL_LIBS) $(SIGC_LIBS) $(BZIP2_LIBS) $(BOOST_LIBS) $(top_builddir)/source/tools/lib/libasc_cmd.la
 #asc_makegfx_LDADD     = $(SDL_LIBS) $(top_builddir)/source/sdl/libsdl.la @LDADDLIBBZ2@ $(SIGC_LIBS) $(top_builddir)/source/tools/lib/libasc_cmd.la $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la 
 #asc_viewid_LDADD      = $(top_builddir)/source/sdl/libsdl.la @LDADDLIBBZ2@ @SIGC_LIBS@ $(top_builddir)/source/tools/lib/libasc_cmd.la
 #asc_bin2text_LDADD    = $(top_builddir)/source/sdl/libsdl.la @LDADDLIBBZ2@ @SIGC_LIBS@ $(top_builddir)/source/tools/lib/libasc_cmd.la
-asc_weaponguide_LDADD = $(SDL_LIBS) $(top_builddir)/source/sdl/libsdl.la $(top_builddir)/source/util/libutil.la $(BZIP2_LIBS) $(SIGC_LIBS) $(top_builddir)/source/tools/lib/libasc_cmd.la $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la  $(top_builddir)/source/graphics/libgraphics.la $(LOKI_LIBS) $(BOOST_LIBS) $(top_builddir)/source/sdl/libsdl.la
-asc_raw2png_LDADD     = $(SDL_LIBS) $(top_builddir)/source/sdl/libsdl.la $(top_builddir)/source/util/libutil.la $(BZIP2_LIBS) $(SIGC_LIBS) $(top_builddir)/source/tools/lib/libasc_cmd.la $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la  $(top_builddir)/source/graphics/libgraphics.la $(LOKI_LIBS) $(BOOST_LIBS) $(top_builddir)/source/sdl/libsdl.la
+asc_weaponguide_LDADD = $(SDL_LIBS) $(BOOST_LIBS) $(top_builddir)/source/sdl/libsdl.la $(top_builddir)/source/util/libutil.la $(BZIP2_LIBS) $(SIGC_LIBS) $(top_builddir)/source/tools/lib/libasc_cmd.la $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la  $(top_builddir)/source/graphics/libgraphics.la $(LOKI_LIBS) $(BOOST_LIBS) $(top_builddir)/source/sdl/libsdl.la
+asc_raw2png_LDADD     = $(SDL_LIBS) $(BOOST_LIBS) $(top_builddir)/source/sdl/libsdl.la $(top_builddir)/source/util/libutil.la $(BZIP2_LIBS) $(SIGC_LIBS) $(top_builddir)/source/tools/lib/libasc_cmd.la $(top_builddir)/source/libs/sdlmm/src/libSDLmm.la  $(top_builddir)/source/graphics/libgraphics.la $(LOKI_LIBS) $(BOOST_LIBS) $(top_builddir)/source/sdl/libsdl.la
 
 # vim: noexpandtab ai
 

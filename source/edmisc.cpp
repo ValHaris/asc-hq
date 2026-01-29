@@ -68,6 +68,7 @@
 #include "widgets/textrenderer.h"
 #include "widgets/playerselector.h"
 #include <pgmultilineedit.h>
+#include "pgpropertyfield_integer.h"
 
 bool       mapsaved;
 
@@ -659,8 +660,8 @@ class FieldResourceEditor : public ASC_PG_Dialog {
           editor = new PG_PropertyEditor(this, PG_Rect(20, 40, Width()-40, Height()-60));
 
           // PG_PropertyField_Integer doesn't work on bytes, hence the copy
-          new PG_PropertyField_Integer(editor, "Material", &material);
-          new PG_PropertyField_Integer(editor, "Fuel", &fuel);
+          new PG_PropertyField_Integer<int>(editor, "Material", &material);
+          new PG_PropertyField_Integer<int>(editor, "Fuel", &fuel);
 
           AddStandardButton("Cancel")->sigClick.connect(sigc::hide( sigc::mem_fun( *this, &FieldResourceEditor::QuitModal )));
           AddStandardButton("OK")->sigClick.connect(sigc::hide( sigc::mem_fun( *this, &FieldResourceEditor::ok )));
@@ -691,7 +692,7 @@ class MineStrenghEditor : public ASC_PG_Dialog {
           editor = new PG_PropertyEditor(this, PG_Rect(20, 40, Width()-40, Height()-60));
 
           for ( MapField::MineContainer::iterator i = mapfield->mines.begin(); i != mapfield->mines.end(); ++i )
-              new PG_PropertyField_Integer(editor, MineType(i->type).getName(), &i->strength);
+              new PG_PropertyField_Integer<int>(editor, MineType(i->type).getName(), &i->strength);
 
           AddStandardButton("Cancel")->sigClick.connect(sigc::hide( sigc::mem_fun( *this, &MineStrenghEditor::QuitModal )));
           AddStandardButton("Apply")->sigClick.connect(sigc::hide( sigc::mem_fun( *this, &MineStrenghEditor::ok )));

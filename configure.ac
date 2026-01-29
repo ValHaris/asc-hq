@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT([asc],[2.8.4.2])
+AC_INIT([asc],[2.8.5.0])
 
 AM_CONFIG_HEADER(config.h)
 AM_INIT_AUTOMAKE
@@ -308,19 +308,19 @@ AC_LANG([C++])
 
 AC_CHECK_HEADERS([boost/heap/pairing_heap.hpp],,AC_LIB_MISSING( Boost version >= 1.49, http://www.boost.org/, [(which may be splitted into several distinct libraries)]))
 
-AC_CHECK_LIB( boost_regex-mt, main, BOOST_LIBS="-lboost_regex-mt", BOOSTERR=yes)
+AC_CHECK_LIB( boost_regex-mt, main, BOOST_LIBS="-lboost_regex-mt -lboost_filesystem-mt", BOOSTERR=yes)
 if test x$BOOSTERR = xyes ; then
 
   BOOSTERR=none
-  AC_CHECK_LIB( boost_regex-gcc-mt, main, BOOST_LIBS="-lboost_regex-gcc-mt", BOOSTERR=yes)
+  AC_CHECK_LIB( boost_regex-gcc-mt, main, BOOST_LIBS="-lboost_regex-gcc-mt -lboost_filesystem-gcc-mt", BOOSTERR=yes)
   if test x$BOOSTERR = xyes ; then
 
     BOOSTERR=none
-    AC_CHECK_LIB( boost_regex, main, BOOST_LIBS="-lboost_regex", BOOSTERR=yes)
+    AC_CHECK_LIB( boost_regex, main, BOOST_LIBS="-lboost_regex -lboost_filesystem", BOOSTERR=yes)
     if test x$BOOSTERR = xyes ; then
 
       BOOSTERR=none
-      AC_CHECK_LIB( boost_regex-gcc, main, BOOST_LIBS="-lboost_regex-gcc", BOOSTERR=yes)
+      AC_CHECK_LIB( boost_regex-gcc, main, BOOST_LIBS="-lboost_regex-gcc -lboost_filesystem-gcc", BOOSTERR=yes)
       if test x$BOOSTERR = xyes ; then
          AC_LIB_MISSING( Boost, http://www.boost.org/, [( which may be splitted into several distinct libraries)])
       fi
