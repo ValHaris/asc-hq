@@ -10,7 +10,7 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 if(MSVC)
     # Visual Studio specific settings
     add_compile_options(/W4 /MP)
-    add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+    add_definitions(-D_CRT_SECURE_NO_WARNINGS -D_WIN32 -DWIN32)
 else()
     # Linux/GCC/Clang settings
     # add_compile_options(-Wall -Wextra -Wpedantic)
@@ -21,26 +21,60 @@ endif()
 
 
 # Dependencies
-find_package(PkgConfig REQUIRED)
-
-# Core libs
-pkg_check_modules(SDL2 REQUIRED sdl2>=2.25.0)
-pkg_check_modules(SDL2IMAGE REQUIRED SDL2_image)
-pkg_check_modules(SDL2MIXER REQUIRED SDL2_mixer)
-pkg_check_modules(LUA REQUIRED lua5.1)
-pkg_check_modules(SIGC REQUIRED sigc++-2.0)
-find_package(Freetype REQUIRED)
-find_package(Boost REQUIRED COMPONENTS regex filesystem system)
-find_package(EXPAT REQUIRED)
-find_package(BZip2 REQUIRED)
-find_package(PNG REQUIRED)
-pkg_check_modules(PHYSFS REQUIRED physfs)
+if(WIN32)
+    # Windows: Use find_package (works with vcpkg)
+    find_package(SDL2 CONFIG REQUIRED)
+    find_package(SDL2_image CONFIG REQUIRED)
+    find_package(SDL2_mixer CONFIG REQUIRED)
+    find_package(Lua REQUIRED)
+    find_package(sigc++-2 CONFIG REQUIRED)
+    find_package(Freetype REQUIRED)
+    find_package(Boost REQUIRED COMPONENTS regex filesystem system)
+    find_package(EXPAT REQUIRED)
+    find_package(BZip2 REQUIRED)
+    find_package(PNG REQUIRED)
+    find_package(unofficial-physfs CONFIG REQUIRED)
+    
+    # Set variables for compatibility with Linux pkg-config style
+    set(SDL2_LIBRARIES SDL2::SDL2 SDL2::SDL2main)
+    set(SDL2IMAGE_LIBRARIES $<IF:$<TARGET_EXISTS:SDL2_image::SDL2_image>,SDL2_image::SDL2_image,SDL2_image::SDL2_image-static>)
+    set(SDL2MIXER_LIBRARIES $<IF:$<TARGET_EXISTS:SDL2_mixer::SDL2_mixer>,SDL2_mixer::SDL2_mixer,SDL2_mixer::SDL2_mixer-static>)
+    set(SIGC_LIBRARIES sigc-2.0)
+    set(LUA_LIBRARIES ${LUA_LIBRARIES})
+    set(PHYSFS_LIBRARIES unofficial::physfs::physfs)
+    
+    # Include directories
+    set(SDL2_INCLUDE_DIRS "")
+    set(SDL2IMAGE_INCLUDE_DIRS "")
+    set(SDL2MIXER_INCLUDE_DIRS "")
+    set(SIGC_INCLUDE_DIRS "")
+    set(LUA_INCLUDE_DIRS ${LUA_INCLUDE_DIR})
+else()
+    # Linux/Unix: Use pkg-config
+    find_package(PkgConfig REQUIRED)
+    pkg_check_modules(SDL2 REQUIRED sdl2>=2.25.0)
+    pkg_check_modules(SDL2IMAGE REQUIRED SDL2_image)
+    pkg_check_modules(SDL2MIXER REQUIRED SDL2_mixer)
+    pkg_check_modules(LUA REQUIRED lua5.1)
+    pkg_check_modules(SIGC REQUIRED sigc++-2.0)
+    find_package(Freetype REQUIRED)
+    find_package(Boost REQUIRED COMPONENTS regex filesystem system)
+    find_package(EXPAT REQUIRED)
+    find_package(BZip2 REQUIRED)
+    find_package(PNG REQUIRED)
+    pkg_check_modules(PHYSFS REQUIRED physfs)
+endif()
 
 
 # Installation directories (can be overridden by user)
 include(GNUInstallDirs)
-set(GAME_DATADIR "${CMAKE_INSTALL_FULL_DATADIR}/games/${PROJECT_NAME}"
-    CACHE PATH "Directory where game data files are installed")
+if(WIN32)
+    set(GAME_DATADIR "${CMAKE_INSTALL_PREFIX}/data"
+        CACHE PATH "Directory where game data files are installed")
+else()
+    set(GAME_DATADIR "${CMAKE_INSTALL_FULL_DATADIR}/games/${PROJECT_NAME}"
+        CACHE PATH "Directory where game data files are installed")
+endif()
 
 # Generate config.h from template
 configure_file(
@@ -69,7 +103,11 @@ include_directories(
   ${EXPAT_INCLUDE_DIRS}
 )
 
-add_compile_definitions(_UNIX_ _SDL_)
+if(WIN32)
+    add_compile_definitions(_SDL_)
+else()
+    add_compile_definitions(_UNIX_ _SDL_)
+endif()
 
 
 if(HAVE_SDL_SOUND)
@@ -333,6 +371,11 @@ target_link_libraries(asc PRIVATE
   BZip2::BZip2
   )
 
+# Windows-specific settings
+if(WIN32)
+    set_target_properties(asc PROPERTIES WIN32_EXECUTABLE TRUE)
+endif()
+
 # Map editor (optional)
   set(MAPEDIT_SOURCES
     ${ASC_SRC_DIR}/edgen.cpp
@@ -477,6 +520,11 @@ target_link_libraries(asc PRIVATE
     ${PHYSFS_LIBRARIES}
     BZip2::BZip2
     )
+
+# Windows-specific settings for map editor
+if(WIN32)
+    set_target_properties(asc_mapedit PROPERTIES WIN32_EXECUTABLE TRUE)
+endif()
 
 message(STATUS "\nConfiguration summary:")
 message(STATUS "  SDL2 include: ${SDL2_INCLUDE_DIRS}")

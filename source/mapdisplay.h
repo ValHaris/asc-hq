@@ -144,6 +144,8 @@ class MapDisplayPG: public PG_Widget, protected MapRenderer {
       
             
       int zoom;
+      int zoomChangeTicker;
+      int zoomChangeScrollblock;
       Surface* surface;
       
       GameMap* lastDisplayedMap;

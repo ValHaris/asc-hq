@@ -996,6 +996,10 @@ void print(const SDL_MouseButtonEvent& event) {
 	std::cout << "Mouse Button Event: X=" << (int)event.x << " Y=" << (int)event.y << " State=" << (int)event.state << " Button=" << (int)event.button << "\n";
 }
 
+void print(const SDL_MouseWheelEvent& event) {
+    std::cout << "Mouse Wheel Event: X=" << (int)event.mouseX << " Y=" << (int)event.mouseY << " xscroll=" << (int)event.x<< " yscroll=" << (int)event.y << "\n";
+}
+
 void print(const SDL_MouseMotionEvent& event) {
 //    std::cout << "Mouse Motion Event: X=" << (int)event.x << " Y=" << (int)event.y << "\n";
 }
@@ -1014,8 +1018,11 @@ void print(const SDL_Event* event) {
 		print(event->button);
 		break;
 	case SDL_MOUSEMOTION:
-	   print(event->motion);
-	   break;
+		print(event->motion);
+		break;
+	case SDL_MOUSEWHEEL:
+		print(event->wheel);
+		break;
 	}
 }
 
@@ -1061,12 +1068,16 @@ bool PG_Application::PumpIntoEventQueue(const SDL_Event* event) {
 			return true;
 
 		case SDL_MOUSEWHEEL:
-			widget = PG_Widget::FindWidgetFromPos(event->wheel.mouseX, event->wheel.mouseY);
+		{
+			int x,y;
+			PG_Application::GetEventSupplier()->GetMouseState(x, y);
+			widget = PG_Widget::FindWidgetFromPos(x,y);
 			if(widget) {
 				widget->ProcessEvent(event);
 				return true;
 			}
 			break;
+		}
 
 		case SDL_MOUSEBUTTONUP:
 		case SDL_MOUSEBUTTONDOWN:

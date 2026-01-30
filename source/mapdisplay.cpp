@@ -613,6 +613,8 @@ MapDisplayPG* theGlobalMapDisplay = NULL;
 MapDisplayPG::MapDisplayPG ( MainScreenWidget *parent, const PG_Rect r )
       : PG_Widget ( parent, r, false ) ,
       zoom(-1),
+      zoomChangeTicker(0),
+      zoomChangeScrollblock(0),
       surface(NULL),
       lastDisplayedMap(NULL),
       offset(0,0),
@@ -1000,7 +1002,8 @@ int MapDisplayPG::setSignalPriority( int priority )
 void filterQueuedZoomEvents()
 {
    SDL_Event event;
-   while ( PG_Application::GetEventSupplier()->PeepEvent(&event) && (event.type == SDL_MOUSEBUTTONDOWN || event.type == SDL_MOUSEBUTTONUP) && (event.button.button == CGameOptions::Instance()->mouse.zoomoutbutton || event.button.button == CGameOptions::Instance()->mouse.zoominbutton ))
+   while ( PG_Application::GetEventSupplier()->PeepEvent(&event)
+         && (event.type == SDL_MOUSEWHEEL))
       PG_Application::GetEventSupplier()->PollEvent ( &event );
 }
 
@@ -1023,10 +1026,26 @@ void MapDisplayPG::changeZoomAndUpdate(int delta, const SPoint& position)
 }
 
 
+const int zoomBlockDelay=30;
+const int zoomBlockSteps=3;
+
 bool MapDisplayPG::eventMouseWheel (const SDL_MouseWheelEvent *wheel)
 {
    if ( wheel->y != 0 ) {
-      changeZoomAndUpdate(wheel->y > 0 ? 10 : -10 , SPoint(wheel->x, wheel->y));
+      if ( getZoom() == 100 && ASC_GetTicks() < zoomChangeTicker+zoomBlockDelay && zoomChangeScrollblock > 0 ) {
+         zoomChangeScrollblock--;
+         return true;
+      }
+
+      int x;
+      int y;
+      PG_Application::GetEventSupplier()->GetMouseState(x, y);
+      changeZoomAndUpdate(wheel->y > 0 ? 10 : -10 , SPoint(x,y));
+
+      if ( getZoom() == 100) {
+         zoomChangeTicker = ASC_GetTicks();
+         zoomChangeScrollblock = zoomBlockSteps;
+      }
       return true;
    }
    return false;
