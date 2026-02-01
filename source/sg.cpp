@@ -1352,10 +1352,15 @@ void loadLegacyFonts()
 
 class Cmdline;
 
-const ASCString getScalingExplanation(int scale) {
+const ASCString getScalingExplanation(int scale, bool fullscreen) {
+   ASCString scalemsg;
+   if ( fullscreen )
+       scalemsg = "Currently, the scale is " + ASCString::toString(scale) + "%.";
+   else
+       scalemsg = "Currently, the scale is 100% due to windowed mode, but would be " + ASCString::toString(scale) + "% in fullscreen mode.";
+
    return ASCString("This new version of ASC allows running the entire game at different display scalings to suite the resolution of your monitor."
-         "This will zoom not only the map, but everything on the ASC screen. \nCurrently, the scale is ")
-         + ASCString::toString(scale) + "%. \nYou can change this setting in the global options.";
+         "This will zoom not only the map, but everything on the ASC screen. \n" + scalemsg + "\nYou can change this setting in the global options.");
 }
 
 class ScreenResolutionSetup {
@@ -1369,7 +1374,7 @@ class ScreenResolutionSetup {
       int getScale() const { return int(scale*100);};
       int getWidth() { return x; };
       int getHeight() { return y; };
-      bool isFullscreen() { return fullscreen; };
+      bool isFullscreen() const { return fullscreen; };
 
 };
 
@@ -1489,7 +1494,7 @@ int gamethread ( GameThreadParams* gtp )
             mtl = None;
          } else {
             mainScreenWidget->Show();
-            showTipDialog(getScalingExplanation(gtp->srs.getScale()), "scaling");
+            showTipDialog(getScalingExplanation(gtp->srs.getScale(), gtp->srs.isFullscreen()), "scaling");
             startupScreen.reset();
             
             if ( actmap->actplayer == -1 ) {
@@ -1655,10 +1660,10 @@ ScreenResolutionSetup::ScreenResolutionSetup( Cmdline& commandLine ) : cli( comm
       xr = desktop.w / scale;
       yr = desktop.h / scale;
    } else {
-      if ( xr != -1 )
-         xr = desktop.w / scale - 100;
-      if ( yr != -1 )
-         yr = desktop.h / scale - 100;
+      if ( xr == -1 )
+         xr = desktop.w / scale * 90 / 100;
+      if ( yr == -1 )
+         yr = desktop.h / scale * 90 / 100;
    }
 
    x = xr;

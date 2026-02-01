@@ -1071,7 +1071,7 @@ void ContainerCollector :: init ( const ASCString& wildcard )
    
    for ( int i = 0; i < searchDirNum; i++ ) {
 
-      fs::path dirPath_w_wildcard( constructFileName( i, "", wildcard ) );
+      fs::path dirPath_w_wildcard( std::string(constructFileName( i, "", wildcard ) ));
       fs::path dirPath = dirPath_w_wildcard.parent_path();
       std::string pattern = dirPath_w_wildcard.filename().string();
       
@@ -2134,7 +2134,8 @@ tfindfile :: tfindfile ( ASCString name, SearchPosition searchPosition, SearchTy
       namespace fs = boost::filesystem;
       
       for ( int i = 0; i < dirNum; i++ ) {
-         fs::path dirPath( directory[i] );
+         std::string d = directory[i];
+         fs::path dirPath( d );
          
          boost::system::error_code ec;
          if ( !fs::exists( dirPath, ec ) || !fs::is_directory( dirPath, ec ) ) {
@@ -2476,7 +2477,7 @@ bool directoryExist ( const ASCString& path )
 {
    namespace fs = boost::filesystem;
    boost::system::error_code ec;
-   return fs::exists( path, ec ) && fs::is_directory( path, ec );
+   return fs::exists( std::string(path), ec ) && fs::is_directory( std::string(path), ec );
 }
 
 void addSearchPath ( const ASCString& path )
@@ -2544,14 +2545,16 @@ char* extractFileName ( char* buf, const char* filename )
 ASCString extractFileName ( const ASCString& filename )
 {
    namespace fs = boost::filesystem;
-   fs::path p( filename );
+   std::string f = filename;
+   fs::path p( f );
    return p.filename().string();
 }
 
 ASCString extractFileName_withoutSuffix ( const ASCString& filename )
 {
    namespace fs = boost::filesystem;
-   fs::path p( filename );
+   std::string f = filename;
+   fs::path p( f );
    return p.stem().string();
 }
 

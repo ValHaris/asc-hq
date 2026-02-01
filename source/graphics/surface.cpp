@@ -398,17 +398,20 @@ void Surface::FillTransparent()
 void Surface::assignDefaultPalette()
 {
    if ( me && GetPixelFormat().BytesPerPixel() == 1 ) {
-        SDL_Color spal[256];
-        memset ( spal, 0, 256* sizeof(SDL_Color));
+        SDL_Palette* palette = SDL_AllocPalette(256);
+        if ( !palette )
+            throw ASCmsgException(ASCString("Surface::assignDefaultPalette : Could not allocate Palette ") + SDL_GetError());
+
         for ( int i = 0; i < 256; i++ ) {
-           spal[i].r = pal[i][0] * 4;
-           spal[i].g = pal[i][1] * 4;
-           spal[i].b = pal[i][2] * 4;
-           spal[i].a = 255;
+           palette->colors[i].r = pal[i][0] * 4;
+           palette->colors[i].g = pal[i][1] * 4;
+           palette->colors[i].b = pal[i][2] * 4;
+           palette->colors[i].a = 255;
          }
-        if ( me->format && me->format->palette)
-           if ( SDL_SetPaletteColors ( me->format->palette, spal, 0, 256 ) < 0)
-              throw ASCmsgException(ASCString("Surface::assignDefaultPalette : Error settings Palette") + SDL_GetError());
+        if (me->format) {
+            if (SDL_SetPixelFormatPalette(me->format, palette) < 0)
+                throw ASCmsgException(ASCString("Surface::assignDefaultPalette : Error setting Palette ") + SDL_GetError());
+        }
    }
 }
 

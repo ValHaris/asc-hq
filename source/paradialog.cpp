@@ -183,8 +183,11 @@ StartupScreen::StartupScreen( const ASCString& filename, sigc::signal<void>& tic
    int rt = 0;
    int gt = 0;
    int bt = 0;
-
-   fullscreenImage = Surface( IMG_Load_RW( SDL_RWFromStream( &s ), true ));
+   
+   SDL_Surface* srf = IMG_Load_RW(SDL_RWFromStream(&s), true);
+   if (!srf)
+       throw ASCmsgException(ASCString("Error loading " ) + filename + ": " + SDL_GetError());
+   fullscreenImage = Surface( srf );
    if ( fullscreenImage.valid() ) {
       for ( int y = 0; y < fullscreenImage.h(); ++y ) {
          for ( int x = 0; x < fullscreenImage.w(); ++x ) {

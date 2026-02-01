@@ -184,6 +184,8 @@ bool PG_Application::InitScreen(int w, int h, bool fullscreen) {
 
 
 	screen = SDL_CreateRGBSurfaceWithFormat(0, w, h, 32, SDL_PIXELFORMAT_ARGB8888);
+	if (!screen)
+		throw PG_Exception("Creating screen failed", SDL_GetError());
 	mainWindowTexture = SDL_CreateTexture(mainWindowRenderer,
 	                                            SDL_PIXELFORMAT_ARGB8888,
 	                                            SDL_TEXTUREACCESS_STREAMING,
