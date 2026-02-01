@@ -70,7 +70,7 @@ extern int   choice_dlg(const ASCString& title,
 
 extern void selectgraphicset ( void );
 
-extern int editInt( const ASCString& title, int defaultValue, int minValue = 0, int maxValue = maxint );
+extern int editInt( const ASCString& title, int defaultValue, int minValue = 0, int maxValue = std::numeric_limits<int>::max() );
 
 
 class ActionResult;

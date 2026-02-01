@@ -9,8 +9,9 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 # Platform-specific settings
 if(MSVC)
     # Visual Studio specific settings
-    add_compile_options(/W4 /MP)
+    add_compile_options(/W3 /MP /wd4100 /wd4244)
     add_definitions(-D_CRT_SECURE_NO_WARNINGS -D_WIN32 -DWIN32)
+    set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 else()
     # Linux/GCC/Clang settings
     # add_compile_options(-Wall -Wextra -Wpedantic)
@@ -22,29 +23,37 @@ endif()
 
 # Dependencies
 if(WIN32)
+    find_package(fmt CONFIG REQUIRED)
+    
     # Windows: Use find_package (works with vcpkg)
-    find_package(SDL2 CONFIG REQUIRED)
+    find_package(SDL2 REQUIRED CONFIG REQUIRED COMPONENTS SDL2)
     find_package(SDL2_image CONFIG REQUIRED)
     find_package(SDL2_mixer CONFIG REQUIRED)
     find_package(Lua REQUIRED)
-    find_package(sigc++-2 CONFIG REQUIRED)
+    # find_package(libsigcpp REQUIRED)
+    # find_package(sigc++-2 REQUIRED) 
     find_package(Freetype REQUIRED)
     find_package(Boost REQUIRED COMPONENTS regex filesystem system)
     find_package(EXPAT REQUIRED)
     find_package(BZip2 REQUIRED)
     find_package(PNG REQUIRED)
-    find_package(unofficial-physfs CONFIG REQUIRED)
-    
+    find_package(PhysFS REQUIRED)
+
+    include_directories(SDL2::SDL2)
     # Set variables for compatibility with Linux pkg-config style
     set(SDL2_LIBRARIES SDL2::SDL2 SDL2::SDL2main)
     set(SDL2IMAGE_LIBRARIES $<IF:$<TARGET_EXISTS:SDL2_image::SDL2_image>,SDL2_image::SDL2_image,SDL2_image::SDL2_image-static>)
     set(SDL2MIXER_LIBRARIES $<IF:$<TARGET_EXISTS:SDL2_mixer::SDL2_mixer>,SDL2_mixer::SDL2_mixer,SDL2_mixer::SDL2_mixer-static>)
     set(SIGC_LIBRARIES sigc-2.0)
     set(LUA_LIBRARIES ${LUA_LIBRARIES})
-    set(PHYSFS_LIBRARIES unofficial::physfs::physfs)
+    # set(PHYSFS_LIBRARIES physfs::physfs)
+
+    # libsigcpp library search paths (Windows)
+    set(SIGC_LIB_DIR_DEBUG "$ENV{libsigcpp}/x86-windows-dbg")
+    set(SIGC_LIB_DIR_RELEASE "$ENV{libsigcpp}/x86-windows-rel")
     
     # Include directories
-    set(SDL2_INCLUDE_DIRS "")
+    set(SDL2_INCLUDE_DIRS ${SDL_INCLUDE_DIR})
     set(SDL2IMAGE_INCLUDE_DIRS "")
     set(SDL2MIXER_INCLUDE_DIRS "")
     set(SIGC_INCLUDE_DIRS "")
@@ -104,7 +113,7 @@ include_directories(
 )
 
 if(WIN32)
-    add_compile_definitions(_SDL_)
+    add_compile_definitions(_WIN32_ _SDL_ NOMINMAX HAVE_LIMITS)
 else()
     add_compile_definitions(_UNIX_ _SDL_)
 endif()
@@ -350,13 +359,23 @@ add_executable(asc
   ${ASC_SRC_DIR}/dialogs/unitnaming.cpp
   ${ASC_SRC_DIR}/dialogs/eventinfo.cpp
   ${ASC_SRC_DIR}/dialogs/researchinfo.cpp
+  ${ASC_SRC_DIR}/libs/getopt/getopt.c
+  ${ASC_SRC_DIR}/libs/getopt/getopt1.c
   )
 
+if(WIN32)
+  target_sources(asc PRIVATE
+    ${ASC_SRC_DIR}/win32/msvc/mdump.cpp
+    ${ASC_SRC_DIR}/win32/win32-errormsg.cpp
+    ${ASC_SRC_DIR}/win32/msvc/ASC/ASC.rc
+  )
+endif()
+
 target_compile_definitions(asc PRIVATE ${ASC_COMMON_DEFS})
-target_include_directories(asc PRIVATE ${ASC_SRC_DIR} ${ASC_PARAGUI_INCLUDE} ${ASC_LOKI_INCLUDE})
+target_include_directories(asc PRIVATE ${ASC_SRC_DIR} ${ASC_PARAGUI_INCLUDE} ${ASC_LOKI_INCLUDE} ${ASC_SRC_DIR}/libs/getopt)
 
 target_link_libraries(asc PRIVATE
-  ${SDL2_LIBRARIES}
+  SDL2::SDL2
   ${SDL2IMAGE_LIBRARIES}
   ${SDL2MIXER_LIBRARIES}
   ${SIGC_LIBRARIES}
@@ -369,7 +388,18 @@ target_link_libraries(asc PRIVATE
   PNG::PNG
   ${PHYSFS_LIBRARIES}
   BZip2::BZip2
+  $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main>
   )
+
+
+if(WIN32)
+  target_link_directories(asc PRIVATE
+    $<$<CONFIG:Debug>:${SIGC_LIB_DIR_DEBUG}>
+    $<$<CONFIG:RelWithDebInfo>:${SIGC_LIB_DIR_RELEASE}>
+    $<$<CONFIG:Release>:${SIGC_LIB_DIR_RELEASE}>
+    $<$<CONFIG:MinSizeRel>:${SIGC_LIB_DIR_RELEASE}>
+  )
+endif()
 
 # Windows-specific settings
 if(WIN32)
@@ -498,14 +528,20 @@ endif()
     ${ASC_SRC_DIR}/actions/changeunitmovement.cpp
     ${ASC_SRC_DIR}/actions/registerunitrftarget.cpp
     ${ASC_SRC_DIR}/actions/destructcontainer.cpp
+    ${ASC_SRC_DIR}/libs/getopt/getopt.c
+    ${ASC_SRC_DIR}/libs/getopt/getopt1.c
   )
 
   add_executable(asc_mapedit 
     ${MAPEDIT_SOURCES} 
     ${PARAGUI_SOURCES}
     ${COMMON_SOURCES})
+
+  if(WIN32)
+    target_sources(asc_mapedit PRIVATE ${ASC_SRC_DIR}/win32/msvc/mdump.cpp)
+  endif()
   target_compile_definitions(asc_mapedit PRIVATE karteneditor)
-  target_include_directories(asc_mapedit PRIVATE ${ASC_SRC_DIR} ${ASC_PARAGUI_INCLUDE} ${ASC_LOKI_INCLUDE})
+  target_include_directories(asc_mapedit PRIVATE ${ASC_SRC_DIR} ${ASC_PARAGUI_INCLUDE} ${ASC_LOKI_INCLUDE} ${ASC_SRC_DIR}/libs/getopt)
   target_link_libraries(asc_mapedit PRIVATE
     ${SDL2_LIBRARIES}
     ${SDL2IMAGE_LIBRARIES}
@@ -519,7 +555,22 @@ endif()
     PNG::PNG
     ${PHYSFS_LIBRARIES}
     BZip2::BZip2
+    $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main>
     )
+
+
+  if(WIN32)
+    target_link_directories(asc_mapedit PRIVATE
+      $<$<CONFIG:Debug>:${SIGC_LIB_DIR_DEBUG}>
+      $<$<CONFIG:RelWithDebInfo>:${SIGC_LIB_DIR_RELEASE}>
+      $<$<CONFIG:Release>:${SIGC_LIB_DIR_RELEASE}>
+      $<$<CONFIG:MinSizeRel>:${SIGC_LIB_DIR_RELEASE}>
+      
+    )
+  target_sources(asc_mapedit PRIVATE ${ASC_SRC_DIR}/win32/msvc/mdump.cpp ${ASC_SRC_DIR}/win32/win32-errormsg.cpp)
+endif()
+
+target_link_libraries(asc PRIVATE SDL2::SDL2)
 
 # Windows-specific settings for map editor
 if(WIN32)
