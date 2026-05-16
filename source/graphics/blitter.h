@@ -1312,6 +1312,7 @@ class ZoomCache
       static ZoomMap zoomCache;
 };
 
+const int max_surface_size = 16000;
 
 template<int pixelsize, class SourcePixelSelector = SourcePixelSelector_Plain<pixelsize> >
 class SourcePixelSelector_CacheZoom : private ZoomCache, public SourcePixelSelector
@@ -1331,11 +1332,11 @@ class SourcePixelSelector_CacheZoom : private ZoomCache, public SourcePixelSelec
 
       int getWidth()
       {
-         return int( zoomFactor * SourcePixelSelector::getWidth()  );
+         return min(int( zoomFactor * SourcePixelSelector::getWidth()  ), max_surface_size);
       };
       int getHeight()
       {
-         return int( zoomFactor * SourcePixelSelector::getHeight() );
+         return min(int( zoomFactor * SourcePixelSelector::getHeight() ), max_surface_size);
       };
 
       PixelType getPixel(int x, int y)
@@ -1409,7 +1410,7 @@ class SourcePixelSelector_CacheZoom : private ZoomCache, public SourcePixelSelec
 
          cacheit = zoomCache.find( factor );
          if ( cacheit == zoomCache.end() ) {
-            int size  = max ( SDLmm::Display::GetDisplay().w(), SDLmm::Display::GetDisplay().h() );
+            const int size = max_surface_size;
 
             int* buf = new int[size+1];
             buf[0] = 0;
