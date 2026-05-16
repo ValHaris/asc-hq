@@ -69,7 +69,6 @@ extern void         k_savemap(bool saveas);
 extern void         k_loadmap(void);
 extern void         lines(int      x1,int      y,int      x2,int      y2);
 
-extern void         changeunitvalues(Vehicle* ae);
 extern void         changeresource(void);
 extern void         changebuildingvalues( Building& b);
 extern void         changeminestrength(void);
