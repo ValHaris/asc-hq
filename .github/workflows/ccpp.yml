@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v5
     - name: install libs
       run: sudo apt-get update && scripts/getUbuntuPackages-2026-04
     - name: configure
