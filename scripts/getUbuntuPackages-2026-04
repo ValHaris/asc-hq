@@ -1,0 +1,1 @@
+sudo apt-get install g++ libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev libsdl-sound1.2-dev libbz2-dev libphysfs-dev libexpat1-dev libboost-all-dev libsigc++-2.0-dev libfreetype-dev liblua5.1-0-dev make
