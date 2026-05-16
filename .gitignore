@@ -49,3 +49,4 @@ unittester/unittest-data/asc2.cache
 unittester/unittest-data/asc2_dlg.zip
 asc-full-*.zip
 source/unix/asc/.deps/
+build
