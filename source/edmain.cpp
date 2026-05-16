@@ -254,7 +254,7 @@ int main(int argc, char *argv[] )
 
    ASC_PG_App app ( "asc2_dlg" );
    
-   if ( !app.InitScreen( xr, yr, false ))
+   if ( !app.InitScreen( xr, yr, fullscreen ))
       fatalError( "Could not initialize video mode");
 #ifdef WIN32
    delete win32ErrorDialogGenerator;
