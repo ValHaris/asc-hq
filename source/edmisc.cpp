@@ -674,7 +674,7 @@ void         EditAiParam::buttonpressed(int         id)
     } /* endswitch */
 }
 
-
+#endif
 
 
 
