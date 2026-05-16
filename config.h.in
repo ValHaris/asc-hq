@@ -9,7 +9,7 @@
 /* Define to 1 if you have the <boost/unordered_map.hpp> header file. */
 #undef HAVE_BOOST_UNORDERED_MAP_HPP
 
-/* Define to 1 if you have the <dirent.h> header file, and it defines `DIR'.
+/* Define to 1 if you have the <dirent.h> header file, and it defines 'DIR'.
    */
 #undef HAVE_DIRENT_H
 
@@ -22,37 +22,40 @@
 /* Define to 1 if you have the <inttypes.h> header file. */
 #undef HAVE_INTTYPES_H
 
-/* Define to 1 if you have the `itoa' function. */
+/* Define to 1 if you have the 'itoa' function. */
 #undef HAVE_ITOA
 
-/* Define to 1 if you have the `bz2' library (-lbz2). */
+/* Define to 1 if you have the 'bz2' library (-lbz2). */
 #undef HAVE_LIBBZ2
 
-/* Define to 1 if you have the `physfs' library (-lphysfs). */
+/* Define to 1 if you have the 'jpeg' library (-ljpeg). */
+#undef HAVE_LIBJPEG
+
+/* Define to 1 if you have the 'physfs' library (-lphysfs). */
 #undef HAVE_LIBPHYSFS
 
-/* Define to 1 if you have the `png' library (-lpng). */
+/* Define to 1 if you have the 'png' library (-lpng). */
 #undef HAVE_LIBPNG
 
-/* Define to 1 if you have the `SDL2_image' library (-lSDL2_image). */
+/* Define to 1 if you have the 'SDL2_image' library (-lSDL2_image). */
 #undef HAVE_LIBSDL2_IMAGE
 
-/* Define to 1 if you have the `SDL2_mixer' library (-lSDL2_mixer). */
+/* Define to 1 if you have the 'SDL2_mixer' library (-lSDL2_mixer). */
 #undef HAVE_LIBSDL2_MIXER
 
-/* Define to 1 if you have the `SDL_sound' library (-lSDL_sound). */
+/* Define to 1 if you have the 'SDL_sound' library (-lSDL_sound). */
 #undef HAVE_LIBSDL_SOUND
 
-/* Define to 1 if you have the `xvidcore' library (-lxvidcore). */
+/* Define to 1 if you have the 'xvidcore' library (-lxvidcore). */
 #undef HAVE_LIBXVIDCORE
 
 /* Define to 1 if you have the <limits> header file. */
 #undef HAVE_LIMITS
 
-/* Define to 1 if you have the <ndir.h> header file, and it defines `DIR'. */
+/* Define to 1 if you have the <ndir.h> header file, and it defines 'DIR'. */
 #undef HAVE_NDIR_H
 
-/* Define to 1 if you have the `select' function. */
+/* Define to 1 if you have the 'select' function. */
 #undef HAVE_SELECT
 
 /* Define to 1 if you have the <stdint.h> header file. */
@@ -64,7 +67,7 @@
 /* Define to 1 if you have the <stdlib.h> header file. */
 #undef HAVE_STDLIB_H
 
-/* Define to 1 if you have the `stricmp' function. */
+/* Define to 1 if you have the 'stricmp' function. */
 #undef HAVE_STRICMP
 
 /* Define to 1 if you have the <strings.h> header file. */
@@ -73,11 +76,11 @@
 /* Define to 1 if you have the <string.h> header file. */
 #undef HAVE_STRING_H
 
-/* Define to 1 if you have the <sys/dir.h> header file, and it defines `DIR'.
+/* Define to 1 if you have the <sys/dir.h> header file, and it defines 'DIR'.
    */
 #undef HAVE_SYS_DIR_H
 
-/* Define to 1 if you have the <sys/ndir.h> header file, and it defines `DIR'.
+/* Define to 1 if you have the <sys/ndir.h> header file, and it defines 'DIR'.
    */
 #undef HAVE_SYS_NDIR_H
 
@@ -117,7 +120,7 @@
 /* Define to the version of this package. */
 #undef PACKAGE_VERSION
 
-/* Define to 1 if all of the C90 standard headers exist (not just the ones
+/* Define to 1 if all of the C89 standard headers exist (not just the ones
    required in a freestanding environment). This macro is provided for
    backward compatibility; new code need not use it. */
 #undef STDC_HEADERS
@@ -129,8 +132,8 @@
 /* Version number of package */
 #undef VERSION
 
-/* Define to empty if `const' does not conform to ANSI C. */
+/* Define to empty if 'const' does not conform to ANSI C. */
 #undef const
 
-/* Define to `unsigned int' if <sys/types.h> does not define. */
+/* Define as 'unsigned int' if <stddef.h> doesn't define. */
 #undef size_t
