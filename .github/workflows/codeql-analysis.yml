@@ -55,7 +55,7 @@ jobs:
     #    uses a compiled language
 
     - run: |
-       sudo apt-get update && scripts/getUbuntuPackages-2019-10
+       sudo apt-get update && scripts/getUbuntuPackages-2026-04
        ./configure
        make all
 
