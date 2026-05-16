@@ -362,6 +362,8 @@ bool loadGame( bool mostRecent )
       StatusMessageWindowHolder smw = MessagingHub::Instance().infoMessageWindow( "loading " + s1 );
 
       loadGameFromFile( s1 );
+      if (!actmap )
+         throw NoMapLoaded();
       
       updateFieldInfo();
       positionCursor( actmap->getCurrentPlayer() );
@@ -404,6 +406,9 @@ void saveGame( bool as )
 void loadmap( const ASCString& name, bool campaign )
 {
    GameMap* m = mapLoadingExceptionChecker( name, MapLoadingFunction( tmaploaders::loadmap ));
+   if ( !m )
+      return;
+
    delete actmap;
    actmap = m;
    computeview( actmap );
