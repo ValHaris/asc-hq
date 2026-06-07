@@ -979,12 +979,9 @@ ASCString constructFileName( int directoryLevel, const ASCString& path, ASCStrin
         
         dir.erase( dir.rfind( pathdelimitter ) + 1);
 
-        filename.erase( 0, filename.find( pathdelimitter ) + 1 );
+        filename.erase( 0, filename.rfind( pathdelimitter ) + 1 );
         
-        if ( dir.find( pathdelimitter ) == 0 )
-           dir.erase( 0, 1 );
-           
-        result = dir;   
+        result = dir;
      }
 
      if ( result.length() > 2 && result[0] == '~' && result[1] == pathdelimitter ) {
