@@ -49,6 +49,11 @@ extern void exit_asc( int returnresult );
  *                                                                         *
  ***************************************************************************/
 
+ class FatalError {
+ public:
+	 int code;
+	 FatalError(int code) : code(code){};
+ };
 
     extern void ndelay(int time);
 

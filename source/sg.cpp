@@ -1698,87 +1698,89 @@ int main(int argc, char *argv[] )
       exit(0);
    }
 
-   MessagingHub::Instance().setVerbosity( cl->r() );
-   StdIoErrorHandler stdIoErrorHandler(false);
-   MessagingHub::Instance().exitHandler.connect( sigc::bind( &exit_asc, -1 ));
-
-   // ResourceLogger rl;
-
-#ifdef WIN32
-   Win32IoErrorHandler* win32ErrorDialogGenerator = new Win32IoErrorHandler;
-#endif
-
-
-   displayLogMessage( 1, getstartupmessage() );
-
-   ConfigurationFileLocator::Instance().setExecutableLocation( argv[0] );
-
-   try {
-      initFileIO( cl->c() );  // passing the filename from the command line options
-      checkDataVersion();
-   } catch ( const tfileerror & err ) {
-      displaymessage ( "unable to access file %s \n", 2, err.getFileName().c_str() );
-   }
-   catch ( ... ) {
-      displaymessage ( "loading of game failed during pre graphic initializing", 2 );
-   }
-
-   LoggingOutputHandler logger( getSearchPath( 0 ));
-   
-
-   
-   SoundSystem soundSystem ( CGameOptions::Instance()->sound.muteEffects, CGameOptions::Instance()->sound.muteMusic, cl->q() || CGameOptions::Instance()->sound.off );
-   soundSystem.setMusicVolume ( CGameOptions::Instance()->sound.musicVolume );
-   soundSystem.setEffectVolume ( CGameOptions::Instance()->sound.soundVolume );
-
-   
-   tspfldloaders::mapLoaded.connect( sigc::ptr_fun( &deployMapPlayingHooks ));
-
-   PG_FileArchive archive( argv[0] );
-
-   ASC_PG_App app ( "asc2_dlg" );
-
-   app.sigAppIdle.connect ( sigc::ptr_fun( &mainloopidle ));
-
-   cursorMoved.connect( updateFieldInfo.make_slot() );
-
-   
-   ScreenResolutionSetup screenResolutionSetup ( *cl );
-   int flags = 0;
-
-   bool initialized = false;
-   if ( !app.InitScreen( screenResolutionSetup.getWidth(), screenResolutionSetup.getHeight(), screenResolutionSetup.isFullscreen())) {
-	   return 1;
-   } else
-      initialized = true;
-
-   if ( !initialized )
-     fatalError( "Could not initialize video mode");
-
-
-   app.setIcon( "program-icon.png" );
-
-#ifdef WIN32
-   delete win32ErrorDialogGenerator;
-#endif
-
-   app.SetCaption( "Advanced Strategic Command" );
-      
-   GameThreadParams gtp ( app, screenResolutionSetup );
-   gtp.filename = cl->l();
-
-   if ( cl->next_param() < argc )
-      for ( int i = cl->next_param(); i < argc; i++ )
-         gtp.filename = argv[i];
-
-
    int returncode = 0;
    try {
-      // this starts the gamethread procedure, whichs will run the entire game
+
+      MessagingHub::Instance().setVerbosity( cl->r() );
+      StdIoErrorHandler stdIoErrorHandler(false);
+      MessagingHub::Instance().exitHandler.connect( sigc::bind( &exit_asc, -1 ));
+
+      // ResourceLogger rl;
+
+   #ifdef WIN32
+      Win32IoErrorHandler* win32ErrorDialogGenerator = new Win32IoErrorHandler;
+   #endif
+
+
+      displayLogMessage( 1, getstartupmessage() );
+
+      ConfigurationFileLocator::Instance().setExecutableLocation( argv[0] );
+
+      try {
+         initFileIO( cl->c() );  // passing the filename from the command line options
+         checkDataVersion();
+      } catch ( const tfileerror & err ) {
+         displaymessage ( "unable to access file %s \n", 2, err.getFileName().c_str() );
+      }
+      catch ( ... ) {
+         displaymessage ( "loading of game failed during pre graphic initializing", 2 );
+      }
+
+      LoggingOutputHandler logger( getSearchPath( 0 ));
+
+
+
+      SoundSystem soundSystem ( CGameOptions::Instance()->sound.muteEffects, CGameOptions::Instance()->sound.muteMusic, cl->q() || CGameOptions::Instance()->sound.off );
+      soundSystem.setMusicVolume ( CGameOptions::Instance()->sound.musicVolume );
+      soundSystem.setEffectVolume ( CGameOptions::Instance()->sound.soundVolume );
+
+
+      tspfldloaders::mapLoaded.connect( sigc::ptr_fun( &deployMapPlayingHooks ));
+
+      PG_FileArchive archive( argv[0] );
+   
+      ASC_PG_App app ( "asc2_dlg" );
+   
+      app.sigAppIdle.connect ( sigc::ptr_fun( &mainloopidle ));
+   
+      cursorMoved.connect( updateFieldInfo.make_slot() );
+   
+      
+      ScreenResolutionSetup screenResolutionSetup ( *cl );
+      int flags = 0;
+
+      bool initialized = false;
+      if ( !app.InitScreen( screenResolutionSetup.getWidth(), screenResolutionSetup.getHeight(), screenResolutionSetup.isFullscreen())) {
+         return 1;
+      } else
+         initialized = true;
+
+      if ( !initialized )
+        fatalError( "Could not initialize video mode");
+
+
+      app.setIcon( "program-icon.png" );
+
+   #ifdef WIN32
+      delete win32ErrorDialogGenerator;
+   #endif
+
+      app.SetCaption( "Advanced Strategic Command" );
+
+      GameThreadParams gtp ( app, screenResolutionSetup );
+      gtp.filename = cl->l();
+
+      if ( cl->next_param() < argc )
+         for ( int i = cl->next_param(); i < argc; i++ )
+            gtp.filename = argv[i];
+
       returncode = gamethread ( &gtp );
    }
    catch ( const bad_alloc & ) {
       fatalError ("Out of memory");
+   }
+   catch ( const FatalError& err ) {
+      return err.code;
    }
 
    writegameoptions ( );
