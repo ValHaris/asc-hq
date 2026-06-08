@@ -700,7 +700,7 @@ class ColorMerger_AlphaHandler<4>
       };
 };
 
-
+// Overwrite all all pixels of the target image where the source-image is non-transparent, keeping the transparency of the source image
 template<int pixelsize>
 class ColorMerger_AlphaOverwrite : public ColorMerger_AlphaHandler<pixelsize>
 {
@@ -721,6 +721,7 @@ class ColorMerger_AlphaOverwrite : public ColorMerger_AlphaHandler<pixelsize>
 };
 
 
+// If source pixel is semi-transparent, merge it with the target pixel, keeping the target's transparency
 template<int pixelsize>
 class ColorMerger_AlphaMerge : public ColorMerger_AlphaHandler<pixelsize>
 {
