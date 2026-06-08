@@ -154,6 +154,9 @@ int mapeditorMainThread ( const ASCString& mapname )
    catch ( ASCmsgException& err ) {
       fatalError( "Error loading file " + err.getMessage() );
    }
+   catch ( const FatalError& err ) {
+      return err.code;
+   }
 
    activefontsettings.font = schriften.arial8;
    activefontsettings.color =lightblue ;
@@ -276,12 +279,12 @@ int main(int argc, char *argv[] )
    
    TaskHibernatingContainer::registerHooks();
    
-   mapeditorMainThread(cl->l());
+   int returncode = mapeditorMainThread(cl->l());
 
    writegameoptions ();
    
    mapSwitcher.deleteMaps();
 
-   return 0;
+   return returncode;
 }
 
