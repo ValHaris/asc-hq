@@ -20,6 +20,8 @@
 #include <SDL.h>
 #include <SDL_thread.h>
 
+#include "../events.h"
+
 bool isKeyPressed(SDL_KeyCode key)
 {
    int numkeys;
@@ -41,7 +43,7 @@ int ASC_GetTicks() {
 
 void exit_asc( int returnresult )
 {
-
+	throw FatalError(returnresult);
 }
 
 
