@@ -278,7 +278,14 @@ Surface loadASCFieldImage ( const ASCString& file, ImagePreparation* imagePrepar
                s->Blit(s2);
             }
          } else {
-            megaBlitter<ColorTransform_None,ColorMerger_AlphaMerge,SourcePixelSelector_Plain,TargetPixelSelector_All>( s2, *s, SPoint(0,0), nullParam, nullParam, nullParam, nullParam );
+            if ( !s2.hasDefaultPixelFormat()) {
+               Surface overlay( Surface::createSurface(s2.w(),s2.h(), 32 ));
+               if ( SDL_SetSurfaceBlendMode(s2.getBaseSurface(), SDL_BLENDMODE_NONE) < 0 )
+                  throw ASCmsgException(ASCString("loadASCFieldImage :") + SDL_GetError());
+               overlay.Blit(s2);
+               megaBlitter<ColorTransform_None,ColorMerger_AlphaMerge,SourcePixelSelector_Plain,TargetPixelSelector_All>( overlay, *s, SPoint(0,0), nullParam, nullParam, nullParam, nullParam );
+            } else
+               megaBlitter<ColorTransform_None,ColorMerger_AlphaMerge,SourcePixelSelector_Plain,TargetPixelSelector_All>( s2, *s, SPoint(0,0), nullParam, nullParam, nullParam, nullParam );
          }
 
          fn = st.getNextToken();
