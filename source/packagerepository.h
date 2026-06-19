@@ -24,6 +24,8 @@
 #include "typen.h"
 #include "itemrepository.h"
 
+extern const char* programPackageName;
+
 class PackageData;
 
 class PackageRepository : public TextFileDataLoader, public deallocating_vector<Package*>  {

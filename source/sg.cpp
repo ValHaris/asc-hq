@@ -181,6 +181,7 @@
 #include "autotraining.h"
 #include "spfst-legacy.h"
 #include "dialogs/eventinfo.h"
+#include "dialogs/messagedialog.h"
 
 #include "lua/luarunner.h"
 #include "lua/luastate.h"
@@ -770,7 +771,24 @@ void chooseTechnologyIfAvail( Player& player )
    }
 }
 
+void requireGameVersion(GameMap* game) {
 
+   if ( new_choice_dlg(ASCString("Are you sure you want to require all players to use at least version ")+ getVersionString() + "?", "yes", "no") == 2)
+      return;
+
+   if ( !game->packageData )
+      game->packageData = new PackageData();
+
+   Package::PackageDependency dependency;
+   dependency.name = programPackageName;
+   dependency.version.fromString( getVersionString() );
+
+   Package* pkg = new Package();
+   pkg->name = "GameMap";
+   pkg->dependencies.push_back( dependency );
+
+   game->packageData->forcedRequirements["ASC"] = pkg;
+}
 
 
 
@@ -1140,6 +1158,10 @@ void executeUserAction ( tuseractions action )
       case ua_unitMovementInfo:
           showUnitMovementInfo();
           return;
+
+      case ua_requireThisGameVersion:
+          requireGameVersion(actmap);
+          break;
 
       case ua_toggleunitshading:
          {

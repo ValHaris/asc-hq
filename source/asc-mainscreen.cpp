@@ -269,6 +269,7 @@ void Menu::setup()
    currentMenu->addSeparator();
    addbutton ( "show packages used by map", ua_showUsedPackages );
    addbutton ( "show unit movement info", ua_unitMovementInfo );
+   addbutton ( "set game to require this program version", ua_requireThisGameVersion);
    // addbutton ( "test memory integrity", ua_heapcheck );
 
    addfield ( "~H~elp" );
