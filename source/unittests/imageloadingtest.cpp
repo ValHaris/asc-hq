@@ -16,7 +16,7 @@
 #include "../graphics/surface2png.h"
 
 
-void validateFieldShape( Surface& s ) {
+pair<int,int> validateFieldShape( Surface& s, bool allowTransparentBody = false ) {
    int transparent_on_body = 0;
    int non_transparent_outside = 0;
    for ( int x = 0; x < fieldsizex; x++)
@@ -32,9 +32,12 @@ void validateFieldShape( Surface& s ) {
          }
       }
 
-   assertOrThrow(transparent_on_body == 0);
+   if ( !allowTransparentBody )
+      assertOrThrow(transparent_on_body == 0);
+
    assertOrThrow(non_transparent_outside == 0);
 
+   return make_pair(transparent_on_body,non_transparent_outside);
 }
 
 void testTerrain() {
@@ -50,7 +53,23 @@ void testTerrain() {
    validateFieldShape(s2);
    writePNG("pfuetze.png", s2);
 
+   if ( exist ( "pfuetze-1a_tr.png" )) {
+      Surface s3 = loadASCFieldImage("texture-11.png pfuetze-1a_tr.png", &imagePrepper);
+      validateFieldShape(s3);
+      writePNG("pfuetze_tr.png", s3);
+   }
+
+   VehicleImagePreparator vehiclePrepper;
+   Surface vehicle = loadASCFieldImage( "MK1v_COBRA.pcx", &vehiclePrepper );
+   pair<int,int> cobra_pixels = validateFieldShape(vehicle, true);
+   assertOrThrow(cobra_pixels.first > 0);
+
+   writePNG("cobra.png", vehicle);
+
+
 }
+
+
 
  void testImageLoading()
  {
