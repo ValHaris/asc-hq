@@ -219,17 +219,22 @@ class ColorConverter<1,4>
    private:
       SDL_Color* palette;
       int rshift, gshift, bshift,ashift;
-      bool hasColorKey;
-      TargetPixelType colorKey;
+      bool targetHasColorKey;
+      TargetPixelType targetColorKey;
+      Uint32 sourceColorKey;
    public:
 
       ColorConverter( const Surface& sourceSurface, Surface& targetSurface )
       {
-         if ( SDL_GetColorKey(targetSurface.getBaseSurface(), &colorKey) == 0) {
-            hasColorKey = true;
+         if ( SDL_GetColorKey(targetSurface.getBaseSurface(), &targetColorKey) == 0) {
+            targetHasColorKey = true;
          } else {
-            hasColorKey = false;
-            colorKey = 0;
+            targetHasColorKey = false;
+            targetColorKey = 0;
+         }
+
+         if ( SDL_GetColorKey(const_cast<SDL_Surface*>(sourceSurface.getBaseSurface()), &sourceColorKey) != 0) {
+            sourceColorKey = 0xff;
          }
 
          palette = sourceSurface.GetPixelFormat().palette()->colors;
@@ -245,9 +250,9 @@ class ColorConverter<1,4>
 
       TargetPixelType convert ( SourcePixelType sp )
       {
-         if ( sp == 0xff ) {
-            if ( hasColorKey )
-               return colorKey;
+         if ( sp == sourceColorKey ) {
+            if ( targetHasColorKey )
+               return targetColorKey;
             else
                return Surface::transparent << ashift;
          } else {

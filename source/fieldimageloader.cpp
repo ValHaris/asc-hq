@@ -265,8 +265,10 @@ Surface loadASCFieldImage ( const ASCString& file, ImagePreparation* imagePrepar
          Surface s2 ( IMG_LoadPNG_RW ( rwo.Get() ));
          rwo.Close();
 
-         if ( s2.GetPixelFormat().BitsPerPixel() == 8)
-            s2.SetColorKey( SDL_TRUE, 255 );
+         if ( s2.GetPixelFormat().BitsPerPixel() == 8) {
+            if ( !SDL_HasColorKey( s2.getBaseSurface()))
+               s2.SetColorKey( SDL_TRUE, 255 );
+         }
 
          if ( !s ) {
             if ( s2.hasDefaultPixelFormat() ) {
