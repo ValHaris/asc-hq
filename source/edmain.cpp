@@ -26,6 +26,7 @@
 #include <memory>
 #include <SDL_image.h>
 #include <signal.h>
+#include <iostream>
 
 #include "edmisc.h"
 #include "loadbi3.h"
@@ -146,13 +147,16 @@ int mapeditorMainThread ( const ASCString& mapname )
 
    } /* end try */
    catch ( ParsingError& err ) {
-      fatalError ( "Error parsing text file " + err.getMessage() );
+      std::cerr << "Error parsing text file " + err.getMessage();
+      return 1;
    }
    catch ( tfileerror& err ) {
-      fatalError ( "Error loading file " + err.getFileName() );
+      std::cerr << "Error loading file " + err.getFileName();
+      return 1;
    } /* end catch */
    catch ( ASCmsgException& err ) {
-      fatalError( "Error loading file " + err.getMessage() );
+      std::cerr << "Error loading file " + err.getMessage();
+      return 1;
    }
    catch ( const FatalError& err ) {
       return err.code;
