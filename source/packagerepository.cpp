@@ -23,15 +23,17 @@
 #include "packagemanager.h"            
             
 
+const char* programPackageName = "ASC";
+
 PackageRepository packageRepository;
 
 void PackageRepository ::addProgramPackage(const char* program)
 {
-   Package* prog = _getPackage( "ASC");
+   Package* prog = _getPackage( programPackageName );
    if ( !prog ) {
       prog = new Package();
       packageRepository.push_back( prog );
-      prog->name = "ASC";
+      prog->name = programPackageName;
       if ( program )
          prog->location = program;
    }
@@ -72,14 +74,21 @@ void PackageRepository :: postChecks()
    packgeDescriptionLoaded();
 }
 
+ASCString getLoc(const Package* p ) {
+   if ( p->location.length() > 0 )
+      return ASCString( " (") + p->location + ")";
+   else
+      return "";
+}
+
 void PackageRepository::checkPackageDependency( const Package* pack, const PackageData* packageData )
 {
    for ( Package::Dependencies::const_iterator dep = pack->dependencies.begin(); dep != pack->dependencies.end(); ++dep ) {
       const Package* p = getPackage( dep->name );
       if ( p ) {
          if ( p->version < dep->version ) {
-            ASCString s = "The package " +  dep->name + " (" + p->location + ") on your system is outdated.\n"
-                  + "Package " + pack->name + " (" + pack->location + ") requires at least " + dep->name + " " + dep->version.toString() + "\n";
+            ASCString s = "The package " +  dep->name + getLoc(p) + " on your system is outdated.\n"
+                  + "Package " + pack->name + getLoc(pack) + " requires at least " + dep->name + " " + dep->version.toString() + "\n";
             
             if ( !p->description.empty() )
                 s += "\nPackage Info:\n" + p->description ;
