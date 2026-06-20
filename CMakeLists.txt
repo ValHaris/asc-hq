@@ -537,12 +537,37 @@ endif()
     ${PARAGUI_SOURCES}
     ${COMMON_SOURCES})
 
+  add_executable(asc_pbpedit 
+    ${MAPEDIT_SOURCES} 
+    ${PARAGUI_SOURCES}
+    ${COMMON_SOURCES})
+
   if(WIN32)
-    target_sources(asc_mapedit PRIVATE ${ASC_SRC_DIR}/win32/msvc/mdump.cpp)
+    target_sources(asc_mapedit PRIVATE ${ASC_SRC_DIR}/win32/msvc/mdump.cpp ${ASC_SRC_DIR}/win32/win32-errormsg.cpp)
+    target_sources(asc_pbpedit PRIVATE ${ASC_SRC_DIR}/win32/msvc/mdump.cpp ${ASC_SRC_DIR}/win32/win32-errormsg.cpp)
   endif()
   target_compile_definitions(asc_mapedit PRIVATE karteneditor)
+  target_compile_definitions(asc_pbpedit PRIVATE karteneditor pbpeditor)
+  
   target_include_directories(asc_mapedit PRIVATE ${ASC_SRC_DIR} ${ASC_PARAGUI_INCLUDE} ${ASC_LOKI_INCLUDE} ${ASC_SRC_DIR}/libs/getopt)
+  target_include_directories(asc_pbpedit PRIVATE ${ASC_SRC_DIR} ${ASC_PARAGUI_INCLUDE} ${ASC_LOKI_INCLUDE} ${ASC_SRC_DIR}/libs/getopt)
+  
   target_link_libraries(asc_mapedit PRIVATE
+    ${SDL2_LIBRARIES}
+    ${SDL2IMAGE_LIBRARIES}
+    ${SDL2MIXER_LIBRARIES}
+    ${SIGC_LIBRARIES}
+    Freetype::Freetype
+    ${LUA_LIBRARIES}
+    Boost::regex
+    Boost::filesystem
+    EXPAT::EXPAT
+    PNG::PNG
+    ${PHYSFS_LIBRARIES}
+    BZip2::BZip2
+    $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main>
+    )
+  target_link_libraries(asc_pbpedit PRIVATE
     ${SDL2_LIBRARIES}
     ${SDL2IMAGE_LIBRARIES}
     ${SDL2MIXER_LIBRARIES}
@@ -559,15 +584,19 @@ endif()
     )
 
 
-  if(WIN32)
+if(WIN32)
     target_link_directories(asc_mapedit PRIVATE
       $<$<CONFIG:Debug>:${SIGC_LIB_DIR_DEBUG}>
       $<$<CONFIG:RelWithDebInfo>:${SIGC_LIB_DIR_RELEASE}>
       $<$<CONFIG:Release>:${SIGC_LIB_DIR_RELEASE}>
       $<$<CONFIG:MinSizeRel>:${SIGC_LIB_DIR_RELEASE}>
-      
     )
-  target_sources(asc_mapedit PRIVATE ${ASC_SRC_DIR}/win32/msvc/mdump.cpp ${ASC_SRC_DIR}/win32/win32-errormsg.cpp)
+    target_link_directories(asc_pbpedit PRIVATE
+      $<$<CONFIG:Debug>:${SIGC_LIB_DIR_DEBUG}>
+      $<$<CONFIG:RelWithDebInfo>:${SIGC_LIB_DIR_RELEASE}>
+      $<$<CONFIG:Release>:${SIGC_LIB_DIR_RELEASE}>
+      $<$<CONFIG:MinSizeRel>:${SIGC_LIB_DIR_RELEASE}>
+    )
 endif()
 
 target_link_libraries(asc PRIVATE SDL2::SDL2)
@@ -575,6 +604,7 @@ target_link_libraries(asc PRIVATE SDL2::SDL2)
 # Windows-specific settings for map editor
 if(WIN32)
     set_target_properties(asc_mapedit PROPERTIES WIN32_EXECUTABLE TRUE)
+    set_target_properties(asc_pbpedit PROPERTIES WIN32_EXECUTABLE TRUE)
 endif()
 
 message(STATUS "\nConfiguration summary:")
