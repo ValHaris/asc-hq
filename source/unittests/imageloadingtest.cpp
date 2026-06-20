@@ -58,16 +58,8 @@ void testTerrain() {
       validateFieldShape(s3);
       writePNG("pfuetze_tr.png", s3);
    }
-
-   VehicleImagePreparator vehiclePrepper;
-   Surface vehicle = loadASCFieldImage( "MK1v_COBRA.pcx", &vehiclePrepper );
-   pair<int,int> cobra_pixels = validateFieldShape(vehicle, true);
-   assertOrThrow(cobra_pixels.first > 0);
-
-   writePNG("cobra.png", vehicle);
-
-
 }
+
 
 
 
@@ -124,6 +116,16 @@ void testTerrain() {
        }
 
     assertOrThrow(found == 30);
+
+
+
+    VehicleImagePreparator vehiclePrepper;
+    Surface vehicle = loadASCFieldImage( "MK1v_COBRA.pcx", &vehiclePrepper );
+    pair<int,int> cobra_pixels = validateFieldShape(vehicle, true);
+    assertOrThrow(cobra_pixels.first > 0);
+
+    writePNG("cobra.png", vehicle);
+
  }
 
 
