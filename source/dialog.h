@@ -27,6 +27,7 @@
 
 
 #include <sigc++/sigc++.h>
+#include <limits>
 #include "ascstring.h"
 #include "dlg_box.h"
 #include "password.h"
