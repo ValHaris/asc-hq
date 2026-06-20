@@ -33,7 +33,7 @@ if(WIN32)
     # find_package(libsigcpp REQUIRED)
     # find_package(sigc++-2 REQUIRED) 
     find_package(Freetype REQUIRED)
-    find_package(Boost REQUIRED COMPONENTS regex filesystem system)
+    find_package(Boost CONFIG REQUIRED COMPONENTS regex filesystem system)
     find_package(EXPAT REQUIRED)
     find_package(BZip2 REQUIRED)
     find_package(PNG REQUIRED)
@@ -67,7 +67,7 @@ else()
     pkg_check_modules(LUA REQUIRED lua5.1)
     pkg_check_modules(SIGC REQUIRED sigc++-2.0)
     find_package(Freetype REQUIRED)
-    find_package(Boost REQUIRED COMPONENTS regex filesystem system)
+    find_package(Boost CONFIG REQUIRED COMPONENTS regex filesystem system)
     find_package(EXPAT REQUIRED)
     find_package(BZip2 REQUIRED)
     find_package(PNG REQUIRED)
@@ -122,7 +122,6 @@ endif()
 if(HAVE_SDL_SOUND)
   message(STATUS "Using system SDL_sound")
   set(SDL_SOUND_LIBRARIES ${SDL_SOUND_LIBRARIES})
-  add_library(sdlsnd STATIC ${ASC_SRC_DIR}/sdl/sound.cpp)
   target_link_libraries(sdlsnd PUBLIC ${SDL2_LIBRARIES} ${SDL2MIXER_LIBRARIES} ${SDL_SOUND_LIBRARIES} Boost::regex)
   target_include_directories(sdlsnd PRIVATE ${ASC_SRC_DIR} ${SDL_SOUND_INCLUDE_DIRS})
 else()
@@ -327,7 +326,6 @@ file(GLOB COMMON_SOURCES CONFIGURE_DEPENDS
 # asc executable
 add_executable(asc
   ${COMMON_GAME_SOURCES}
-  ${COMMON_UI_SOURCES}
   ${ASC_EXTRA_SOURCES}
   ${PARAGUI_SOURCES}
   ${COMMON_SOURCES}
@@ -375,7 +373,7 @@ target_compile_definitions(asc PRIVATE ${ASC_COMMON_DEFS})
 target_include_directories(asc PRIVATE ${ASC_SRC_DIR} ${ASC_PARAGUI_INCLUDE} ${ASC_LOKI_INCLUDE} ${ASC_SRC_DIR}/libs/getopt)
 
 target_link_libraries(asc PRIVATE
-  SDL2::SDL2
+  ${SDL2_LIBRARIES}
   ${SDL2IMAGE_LIBRARIES}
   ${SDL2MIXER_LIBRARIES}
   ${SIGC_LIBRARIES}
@@ -407,6 +405,37 @@ if(WIN32)
 endif()
 
 # Map editor (optional)
+function(asc_configure_mapeditor_target target_name)
+  target_include_directories(${target_name} PRIVATE
+    ${ASC_SRC_DIR}
+    ${ASC_PARAGUI_INCLUDE}
+    ${ASC_LOKI_INCLUDE}
+    ${ASC_SRC_DIR}/libs/getopt)
+
+  target_link_libraries(${target_name} PRIVATE
+    ${SDL2_LIBRARIES}
+    ${SDL2IMAGE_LIBRARIES}
+    ${SDL2MIXER_LIBRARIES}
+    ${SIGC_LIBRARIES}
+    Freetype::Freetype
+    ${LUA_LIBRARIES}
+    Boost::regex
+    Boost::filesystem
+    EXPAT::EXPAT
+    PNG::PNG
+    ${PHYSFS_LIBRARIES}
+    BZip2::BZip2
+    $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main>)
+
+  if(WIN32)
+    target_link_directories(${target_name} PRIVATE
+      $<$<CONFIG:Debug>:${SIGC_LIB_DIR_DEBUG}>
+      $<$<CONFIG:RelWithDebInfo>:${SIGC_LIB_DIR_RELEASE}>
+      $<$<CONFIG:Release>:${SIGC_LIB_DIR_RELEASE}>
+      $<$<CONFIG:MinSizeRel>:${SIGC_LIB_DIR_RELEASE}>)
+  endif()
+endfunction()
+
   set(MAPEDIT_SOURCES
     ${ASC_SRC_DIR}/edgen.cpp
     ${ASC_SRC_DIR}/edglobal.cpp
@@ -548,58 +577,12 @@ endif()
   endif()
   target_compile_definitions(asc_mapedit PRIVATE karteneditor)
   target_compile_definitions(asc_pbpedit PRIVATE karteneditor pbpeditor)
-  
-  target_include_directories(asc_mapedit PRIVATE ${ASC_SRC_DIR} ${ASC_PARAGUI_INCLUDE} ${ASC_LOKI_INCLUDE} ${ASC_SRC_DIR}/libs/getopt)
-  target_include_directories(asc_pbpedit PRIVATE ${ASC_SRC_DIR} ${ASC_PARAGUI_INCLUDE} ${ASC_LOKI_INCLUDE} ${ASC_SRC_DIR}/libs/getopt)
-  
-  target_link_libraries(asc_mapedit PRIVATE
-    ${SDL2_LIBRARIES}
-    ${SDL2IMAGE_LIBRARIES}
-    ${SDL2MIXER_LIBRARIES}
-    ${SIGC_LIBRARIES}
-    Freetype::Freetype
-    ${LUA_LIBRARIES}
-    Boost::regex
-    Boost::filesystem
-    EXPAT::EXPAT
-    PNG::PNG
-    ${PHYSFS_LIBRARIES}
-    BZip2::BZip2
-    $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main>
-    )
-  target_link_libraries(asc_pbpedit PRIVATE
-    ${SDL2_LIBRARIES}
-    ${SDL2IMAGE_LIBRARIES}
-    ${SDL2MIXER_LIBRARIES}
-    ${SIGC_LIBRARIES}
-    Freetype::Freetype
-    ${LUA_LIBRARIES}
-    Boost::regex
-    Boost::filesystem
-    EXPAT::EXPAT
-    PNG::PNG
-    ${PHYSFS_LIBRARIES}
-    BZip2::BZip2
-    $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main>
-    )
+  target_sources(asc_pbpedit PRIVATE ${ASC_SRC_DIR}/network/simple_file_transfer.cpp)
 
+  target_include_directories(asc_pbpedit PRIVATE ${ASC_SRC_DIR}/unix/pbpedit)
 
-if(WIN32)
-    target_link_directories(asc_mapedit PRIVATE
-      $<$<CONFIG:Debug>:${SIGC_LIB_DIR_DEBUG}>
-      $<$<CONFIG:RelWithDebInfo>:${SIGC_LIB_DIR_RELEASE}>
-      $<$<CONFIG:Release>:${SIGC_LIB_DIR_RELEASE}>
-      $<$<CONFIG:MinSizeRel>:${SIGC_LIB_DIR_RELEASE}>
-    )
-    target_link_directories(asc_pbpedit PRIVATE
-      $<$<CONFIG:Debug>:${SIGC_LIB_DIR_DEBUG}>
-      $<$<CONFIG:RelWithDebInfo>:${SIGC_LIB_DIR_RELEASE}>
-      $<$<CONFIG:Release>:${SIGC_LIB_DIR_RELEASE}>
-      $<$<CONFIG:MinSizeRel>:${SIGC_LIB_DIR_RELEASE}>
-    )
-endif()
-
-target_link_libraries(asc PRIVATE SDL2::SDL2)
+  asc_configure_mapeditor_target(asc_mapedit)
+  asc_configure_mapeditor_target(asc_pbpedit)
 
 # Windows-specific settings for map editor
 if(WIN32)
