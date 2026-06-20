@@ -239,6 +239,7 @@ void Menu::setup()
    currentMenu->addSeparator();
    addbutton ( "Increase Map Zoom\tKP+", ua_increase_zoom );
    addbutton ( "Decrease Map Zoom\tKP-", ua_decrease_zoom );
+   addbutton ( "Reset Map Zoom", ua_reset_zoom );
 
 
    addfield ( "~D~ebug" );

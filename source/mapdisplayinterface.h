@@ -39,7 +39,7 @@ class MapDisplayInterface {
            virtual void updateDashboard () = 0;
            virtual void repaintDisplay () = 0;
            virtual void setTempView( bool view ) = 0;
-           virtual void showBattle( tfight& battle ) = 0;
+           virtual void showBattle( tfight& battle ) = 0; // this must call battle.calc!
            virtual void playPositionalSound( const MapCoordinate& pos, Sound* snd ) = 0;
            virtual int getUnitMovementDuration() const = 0;
            virtual ~MapDisplayInterface () {};
@@ -47,5 +47,23 @@ class MapDisplayInterface {
 
        extern MapDisplayInterface& getDefaultMapDisplay();
 
+class BlankMapDisplay : public MapDisplayInterface {
+           virtual int displayMovingUnit ( const MapCoordinate3D& start, const MapCoordinate3D& dest, Vehicle* vehicle, int fieldnum, int totalmove, SoundStartCallback startSound, int duration ) { return 0; };
+           virtual void displayMap ( void ) {};
+           virtual void displayMap ( Vehicle* additionalVehicle ) {};
+           virtual void displayPosition ( int x, int y ) {};
+           virtual void resetMovement ( void ) {};
+           virtual void startAction ( void ) {};
+           virtual void stopAction ( void ) {};
+           virtual void cursor_goto ( const MapCoordinate& pos ) {};
+           virtual void displayActionCursor ( int x1, int y1, int x2, int y2 ) {};
+           virtual void removeActionCursor ( void ) {};
+           virtual void updateDashboard () {};
+           virtual void repaintDisplay () {};
+           virtual void setTempView( bool view ) {};
+           virtual void showBattle( tfight& battle ) { battle.calc(); };
+           virtual void playPositionalSound( const MapCoordinate& pos, Sound* snd ) {};
+           virtual int getUnitMovementDuration() const { return 0; };
+       };
        
 #endif

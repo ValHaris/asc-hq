@@ -110,6 +110,9 @@ void GuiButton::callFunc( const MapCoordinate& pos, ContainerBase* subject, int 
 
 bool GuiButton::checkForKey( const SDL_KeyboardEvent* key, int modifier )
 {
+   if ( modifier & (SDLK_LCTRL | SDLK_RCTRL))
+      return false;
+
    if ( func->available( pos, subject, id ))
       if ( func->checkForKey( key, modifier, id)) {
          callFunc( pos, subject, id );

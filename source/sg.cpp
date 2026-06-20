@@ -1216,6 +1216,13 @@ void executeUserAction ( tuseractions action )
             repaintMap();
          }
          return;
+      case ua_reset_zoom:
+         if ( mainScreenWidget && mainScreenWidget->getMapDisplay() ) {
+            mainScreenWidget->getMapDisplay()->setNewZoom( 100 );
+            viewChanged();
+            repaintMap();
+         }
+         return;
       case ua_changepassword:
          changePassword( actmap );
          return;
@@ -1386,7 +1393,7 @@ const ASCString getScalingExplanation(int scale, bool fullscreen) {
    else
        scalemsg = "Currently, the scale is 100% due to windowed mode, but would be " + ASCString::toString(scale) + "% in fullscreen mode.";
 
-   return ASCString("This new version of ASC allows running the entire game at different display scalings to suite the resolution of your monitor."
+   return ASCString("This new version of ASC allows running the entire game at different display scalings, adapting to the resolution of your monitor. "
          "This will zoom not only the map, but everything on the ASC screen. \n" + scalemsg + "\nYou can change this setting in the global options.");
 }
 
