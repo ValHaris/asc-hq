@@ -38,7 +38,9 @@
   #endif
 
   #define HAVE_DIRENT_H 
+#ifndef HAVE_LIMITS
   #define HAVE_LIMITS
+#endif
 //  #define SIZE_T_not_identical_to_INT 1
 
   #define StaticClassVariable

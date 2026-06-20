@@ -9,7 +9,7 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 # Platform-specific settings
 if(MSVC)
     # Visual Studio specific settings
-    add_compile_options(/W3 /MP /wd4100 /wd4244)
+    add_compile_options(/W3 /MP /wd4100 /wd4244 /wd4996)
     add_definitions(-D_CRT_SECURE_NO_WARNINGS -D_WIN32 -DWIN32)
     set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 else()
