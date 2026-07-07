@@ -74,6 +74,15 @@ else()
     pkg_check_modules(PHYSFS REQUIRED physfs)
 endif()
 
+# Expat target name differs between CMake module and vcpkg config package.
+if(TARGET EXPAT::EXPAT)
+  set(ASC_EXPAT_TARGET EXPAT::EXPAT)
+elseif(TARGET expat::expat)
+  set(ASC_EXPAT_TARGET expat::expat)
+else()
+  message(FATAL_ERROR "Expat target not found after find_package(EXPAT REQUIRED)")
+endif()
+
 
 # Installation directories (can be overridden by user)
 include(GNUInstallDirs)
@@ -136,7 +145,7 @@ else()
     ${ASC_SRC_DIR}/libs/SDL_sound-2.0.4/src/SDL_sound_skeleton.c
     )
   add_library(SDL_sound_int STATIC ${SDL_SOUND_INT_SRCS})
-  target_compile_definitions(SDL_sound_int PRIVATE SOUND_SUPPORTS_OGG SOUND_SUPPORTS_WAV)
+  target_compile_definitions(SDL_sound_int PRIVATE SOUND_SUPPORTS_OGG SOUND_SUPPORTS_WAV SOUND_SUPPORTS_MP3)
   target_include_directories(SDL_sound_int PUBLIC ${ASC_SRC_DIR}/libs/SDL_sound-2.0.4 ${SDL2_INCLUDE_DIRS})
   if(TARGET SDL2::SDL2)
     target_include_directories(SDL_sound_int PUBLIC $<TARGET_PROPERTY:SDL2::SDL2,INTERFACE_INCLUDE_DIRECTORIES>)
@@ -385,7 +394,7 @@ target_link_libraries(asc PRIVATE
   Boost::regex
   Boost::filesystem
   Boost::system
-  EXPAT::EXPAT
+  ${ASC_EXPAT_TARGET}
   PNG::PNG
   ${PHYSFS_LIBRARIES}
   BZip2::BZip2
@@ -424,7 +433,7 @@ function(asc_configure_mapeditor_target target_name)
     ${LUA_LIBRARIES}
     Boost::regex
     Boost::filesystem
-    EXPAT::EXPAT
+    ${ASC_EXPAT_TARGET}
     PNG::PNG
     ${PHYSFS_LIBRARIES}
     BZip2::BZip2
