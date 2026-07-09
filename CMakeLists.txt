@@ -25,8 +25,9 @@ endif()
 if(WIN32)
     find_package(fmt CONFIG REQUIRED)
     
-    # Windows: Use find_package (works with vcpkg)
-    find_package(SDL2 REQUIRED CONFIG REQUIRED COMPONENTS SDL2)
+    # Windows: Use vcpkg config package; do not request components here because
+    # static triplets can expose only SDL2::SDL2-static.
+    find_package(SDL2 CONFIG REQUIRED)
     find_package(SDL2_image CONFIG REQUIRED)
     find_package(SDL2_mixer CONFIG REQUIRED)
     find_package(Lua REQUIRED)
@@ -41,7 +42,7 @@ if(WIN32)
 
     include_directories(SDL2::SDL2)
     # Set variables for compatibility with Linux pkg-config style
-    set(SDL2_LIBRARIES SDL2::SDL2 SDL2::SDL2main)
+    set(SDL2_LIBRARIES $<IF:$<TARGET_EXISTS:SDL2::SDL2>,SDL2::SDL2,SDL2::SDL2-static> $<IF:$<TARGET_EXISTS:SDL2::SDL2main>,SDL2::SDL2main,SDL2::SDL2main-static>)
     set(SDL2IMAGE_LIBRARIES $<IF:$<TARGET_EXISTS:SDL2_image::SDL2_image>,SDL2_image::SDL2_image,SDL2_image::SDL2_image-static>)
     set(SDL2MIXER_LIBRARIES $<IF:$<TARGET_EXISTS:SDL2_mixer::SDL2_mixer>,SDL2_mixer::SDL2_mixer,SDL2_mixer::SDL2_mixer-static>)
     set(SIGC_LIBRARIES sigc-2.0)
@@ -155,7 +156,7 @@ else()
 endif()
 
 # Common compile flags for executables
-set(ASC_COMMON_DEFS sgmain)
+set(ASC_COMMON_DEFS sgmain SOUND_SUPPORTS_MP3 SOUND_SUPPORTS_OGG SOUND_SUPPORTS_WAV)
 
 # ParaGUI sources
 file(GLOB PARAGUI_SOURCES CONFIGURE_DEPENDS
