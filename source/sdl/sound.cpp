@@ -57,7 +57,7 @@ class SoundSystem_InternalData {
 SoundSystem* SoundSystem::instance = NULL;
 
 SoundSystem  :: SoundSystem ( bool muteEffects, bool muteMusic, bool _off )
-   : sdl_initialized(false), mix_initialized( false )
+   : sdl_initialized(false), mix_initialized( false ), mix_codecs_initialized(false)
 {
    internalData = new SoundSystem_InternalData;
    
@@ -109,6 +109,14 @@ SoundSystem  :: SoundSystem ( bool muteEffects, bool muteMusic, bool _off )
       return;
    } else {
       mix_initialized = true;
+
+      const int requestedMixerCodecs = MIX_INIT_MP3 | MIX_INIT_OGG;
+      const int initializedMixerCodecs = Mix_Init(requestedMixerCodecs);
+      mix_codecs_initialized = initializedMixerCodecs != 0;
+      if ( (initializedMixerCodecs & MIX_INIT_MP3) == 0 ) {
+         displayLogMessage(1,"SDL_mixer MP3 codec was not initialized: %s\n", Mix_GetError());
+      }
+
       if ( muteMusic )
          musicState = init_paused;
       else
@@ -295,6 +303,9 @@ SoundSystem::~SoundSystem()
 
    if( mix_initialized )
       Mix_CloseAudio();
+
+   if( mix_codecs_initialized )
+      Mix_Quit();
 
    if( sdl_initialized )
       SDL_CloseAudio();
