@@ -40,24 +40,38 @@ if(WIN32)
     find_package(PNG REQUIRED)
     find_package(PhysFS REQUIRED)
 
+    if(NOT DEFINED VCPKG_TARGET_TRIPLET)
+        message(FATAL_ERROR "VCPKG_TARGET_TRIPLET must be set for Windows builds")
+    endif()
+
+    set(ASC_VCPKG_INSTALLED_DIR "${CMAKE_BINARY_DIR}/vcpkg_installed/${VCPKG_TARGET_TRIPLET}")
+    find_library(SIGC_LIBRARY_RELEASE NAMES sigc-2.0
+      PATHS "${ASC_VCPKG_INSTALLED_DIR}/lib"
+      NO_DEFAULT_PATH
+      REQUIRED)
+    find_library(SIGC_LIBRARY_DEBUG NAMES sigc-2.0
+      PATHS "${ASC_VCPKG_INSTALLED_DIR}/debug/lib"
+      NO_DEFAULT_PATH
+      REQUIRED)
+
     include_directories(SDL2::SDL2)
     # Set variables for compatibility with Linux pkg-config style
     set(SDL2_LIBRARIES $<IF:$<TARGET_EXISTS:SDL2::SDL2>,SDL2::SDL2,SDL2::SDL2-static> $<IF:$<TARGET_EXISTS:SDL2::SDL2main>,SDL2::SDL2main,SDL2::SDL2main-static>)
     set(SDL2IMAGE_LIBRARIES $<IF:$<TARGET_EXISTS:SDL2_image::SDL2_image>,SDL2_image::SDL2_image,SDL2_image::SDL2_image-static>)
     set(SDL2MIXER_LIBRARIES $<IF:$<TARGET_EXISTS:SDL2_mixer::SDL2_mixer>,SDL2_mixer::SDL2_mixer,SDL2_mixer::SDL2_mixer-static>)
-    set(SIGC_LIBRARIES sigc-2.0)
+    set(SIGC_LIBRARIES
+      $<$<CONFIG:Debug>:${SIGC_LIBRARY_DEBUG}>
+      $<$<CONFIG:RelWithDebInfo>:${SIGC_LIBRARY_RELEASE}>
+      $<$<CONFIG:Release>:${SIGC_LIBRARY_RELEASE}>
+      $<$<CONFIG:MinSizeRel>:${SIGC_LIBRARY_RELEASE}>)
     set(LUA_LIBRARIES ${LUA_LIBRARIES})
     # set(PHYSFS_LIBRARIES physfs::physfs)
-
-    # libsigcpp library search paths (Windows)
-    set(SIGC_LIB_DIR_DEBUG "$ENV{libsigcpp}/x86-windows-dbg")
-    set(SIGC_LIB_DIR_RELEASE "$ENV{libsigcpp}/x86-windows-rel")
     
     # Include directories
     set(SDL2_INCLUDE_DIRS ${SDL_INCLUDE_DIR})
     set(SDL2IMAGE_INCLUDE_DIRS "")
     set(SDL2MIXER_INCLUDE_DIRS "")
-    set(SIGC_INCLUDE_DIRS "")
+    set(SIGC_INCLUDE_DIRS "${ASC_VCPKG_INSTALLED_DIR}/include")
     set(LUA_INCLUDE_DIRS ${LUA_INCLUDE_DIR})
 else()
     # Linux/Unix: Use pkg-config
@@ -88,6 +102,7 @@ endif()
 # Installation directories (can be overridden by user)
 include(GNUInstallDirs)
 if(WIN32)
+  include(InstallRequiredSystemLibraries)
     set(GAME_DATADIR "${CMAKE_INSTALL_PREFIX}/data"
         CACHE PATH "Directory where game data files are installed")
 else()
@@ -403,15 +418,6 @@ target_link_libraries(asc PRIVATE
   )
 
 
-if(WIN32)
-  target_link_directories(asc PRIVATE
-    $<$<CONFIG:Debug>:${SIGC_LIB_DIR_DEBUG}>
-    $<$<CONFIG:RelWithDebInfo>:${SIGC_LIB_DIR_RELEASE}>
-    $<$<CONFIG:Release>:${SIGC_LIB_DIR_RELEASE}>
-    $<$<CONFIG:MinSizeRel>:${SIGC_LIB_DIR_RELEASE}>
-  )
-endif()
-
 # Windows-specific settings
 if(WIN32)
     set_target_properties(asc PROPERTIES WIN32_EXECUTABLE TRUE)
@@ -440,13 +446,6 @@ function(asc_configure_mapeditor_target target_name)
     BZip2::BZip2
     $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main>)
 
-  if(WIN32)
-    target_link_directories(${target_name} PRIVATE
-      $<$<CONFIG:Debug>:${SIGC_LIB_DIR_DEBUG}>
-      $<$<CONFIG:RelWithDebInfo>:${SIGC_LIB_DIR_RELEASE}>
-      $<$<CONFIG:Release>:${SIGC_LIB_DIR_RELEASE}>
-      $<$<CONFIG:MinSizeRel>:${SIGC_LIB_DIR_RELEASE}>)
-  endif()
 endfunction()
 
   set(MAPEDIT_SOURCES
@@ -601,6 +600,17 @@ endfunction()
 if(WIN32)
     set_target_properties(asc_mapedit PROPERTIES WIN32_EXECUTABLE TRUE)
     set_target_properties(asc_pbpedit PROPERTIES WIN32_EXECUTABLE TRUE)
+endif()
+
+install(TARGETS asc asc_mapedit asc_pbpedit
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)
+
+if(WIN32 AND CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS)
+  install(PROGRAMS ${CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS}
+    DESTINATION ${CMAKE_INSTALL_BINDIR}
+    OPTIONAL
+  )
 endif()
 
 message(STATUS "\nConfiguration summary:")
