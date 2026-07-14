@@ -436,6 +436,9 @@ void NewGuiHost::popIconHandler( )
    if ( !theGuiHost )
       return;
 
+   if ( theGuiHost->iconHandlerStack.empty())
+      return;
+
    theGuiHost->clearSmallIcons();
 
    assert( theGuiHost->handler );
@@ -741,6 +744,7 @@ NewGuiHost::~NewGuiHost()
 
 void resetActiveGuiAction( GameMap* map )
 {
+   NewGuiHost::popIconHandler();
    if ( NewGuiHost::pendingCommand ) {
       delete NewGuiHost::pendingCommand;
       NewGuiHost::pendingCommand = NULL;
