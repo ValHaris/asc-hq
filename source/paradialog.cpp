@@ -280,6 +280,7 @@ StartupScreen::~StartupScreen()
 
 bool ASC_PG_App:: InitScreen ( int w, int h, bool fullscreen )
 {
+   this->fullScreen = fullscreen;
    bool result = PG_Application::InitScreen ( w, h, fullscreen);
    if ( result ) {
       Surface::SetScreen( GetScreen() );
@@ -471,7 +472,7 @@ public:
 
 void ASC_PG_App:: messageDialog( const ASCString& message, MessagingHubBase::MessageType mt )
 {
-   AntiBulkHandler abh;
+  // AntiBulkHandler abh;
    ASCString title;
    ASCString style;
    switch ( mt ) {

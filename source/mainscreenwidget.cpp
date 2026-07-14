@@ -19,9 +19,10 @@
 #include <ctype.h>
 #include <algorithm>
 #include <memory>
+#include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_mixer.h>
-
+#include <pgeventsupplier.h>
 #include "paradialog.h"
 
 #include "mainscreenwidget.h"
@@ -143,12 +144,12 @@ bool MainScreenWidget :: idleHandler( )
 
 void MainScreenWidget :: mouseScrollChecker()
 {
-   if ( getPGApplication().isFullscreen() && IsMouseInside() ) {
+   if ( getPGApplication().isFullscreen() && SDL_GetKeyboardFocus() != NULL && IsMouseInside() ) {
 
       if ( ASC_GetTicks() > lastMouseScrollTime + 30 ) {
          int x,y;
-         SDL_GetMouseState( &x, &y);
-   
+         PG_Application::GetEventSupplier()->GetMouseState(x, y);
+
          if ( y <= 0 ) {
             if ( x <= 0 ) {
                mapDisplay->scrollMap( 7 );
