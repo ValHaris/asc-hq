@@ -35,6 +35,7 @@
 #include "itemrepository.h"
 #include "mapdisplay.h"
 #include "events.h"
+#include "gameoptions.h"
 
 
 
@@ -142,51 +143,58 @@ bool MainScreenWidget :: idleHandler( )
    return true;
 }
 
+void MainScreenWidget::scrollMap(int direction)
+{
+    lastMouseScrollTime = ASC_GetTicks();
+    mapDisplay->scrollMap(direction);
+}
+
+
 void MainScreenWidget :: mouseScrollChecker()
 {
    if ( getPGApplication().isFullscreen() && SDL_GetKeyboardFocus() != NULL && IsMouseInside() ) {
 
-      if ( ASC_GetTicks() > lastMouseScrollTime + 30 ) {
+      if ( ASC_GetTicks() > lastMouseScrollTime + CGameOptions::Instance()->scrollspeed) {
          int x,y;
          PG_Application::GetEventSupplier()->GetMouseState(x, y);
 
          if ( y <= 0 ) {
             if ( x <= 0 ) {
-               mapDisplay->scrollMap( 7 );
+               scrollMap( 7 );
                return;
             }
 
             if ( x >= PG_Application::GetScreenWidth() - 1 ) {
-               mapDisplay->scrollMap( 1 );
+               scrollMap( 1 );
                return;
             } 
 
-            mapDisplay->scrollMap(0);
+            scrollMap(0);
             return;
          }
 
          if ( y >= PG_Application::GetScreenHeight() - 1 ) {
             if ( x <= 0 ) {
-               mapDisplay->scrollMap( 5 );
+               scrollMap( 5 );
                return;
             }
 
             if ( x >= PG_Application::GetScreenWidth() - 1 ) {
-               mapDisplay->scrollMap( 3 );
+               scrollMap( 3 );
                return;
             }
 
-            mapDisplay->scrollMap(4);
+            scrollMap(4);
             return;
          }
 
          if ( x >= PG_Application::GetScreenWidth() - 1 ) {
-            mapDisplay->scrollMap( 2 );
+            scrollMap( 2 );
             return;
          }
 
          if ( x <= 0 ) {
-            mapDisplay->scrollMap( 6 );
+            scrollMap( 6 );
             return;
          }
       }
