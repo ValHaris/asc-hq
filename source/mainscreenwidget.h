@@ -45,6 +45,8 @@ class MainScreenWidget : public PG_Widget {
     OverviewMapPanel* overviewMapPanel;
 
     friend class StandardActionLocker;
+
+    void scrollMap(int direction);
     
 protected:
     int lockOptions;

@@ -258,6 +258,7 @@ void CGameOptions::runTextIO ( PropertyContainer& pc )
 
    pc.addBool("ValidateActions", validateActions, false);
    pc.addInteger("DisplayScalingMode", displayScalingMode, 0 );
+   pc.addInteger("MapScrollSpeed", scrollspeed, 30);
 }
 
 CGameOptions::CGameOptions()
@@ -358,6 +359,9 @@ void CGameOptions::setDefaults ( void )
    
    logKillsToConsole = false;
    
+   validateActions = false;
+   scrollspeed = 30;
+
    setChanged();
 }
 

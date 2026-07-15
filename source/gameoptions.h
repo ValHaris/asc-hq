@@ -265,6 +265,8 @@ class CGameOptions
 
       vector<ASCString> tipsDismissed;
 
+      int scrollspeed;
+
 
    private:
       bool _changed;
