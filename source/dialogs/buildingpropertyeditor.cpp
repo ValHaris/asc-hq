@@ -78,7 +78,7 @@ class BuildingPropertyEditor : public ASC_PG_Dialog {
 
          new PG_PropertyField_String<ASCString>( propertyEditor, "Name", &bld->name );
          new PG_PropertyField_Integer<int>( propertyEditor , "Damage", &bld->damage );
-         new PG_PropertyField_Checkbox( propertyEditor , "Visible", &bld->visible );
+         new PG_PropertyField_Checkbox<bool>( propertyEditor , "Visible", &bld->visible );
 
          new PG_PropertyField_Separator(propertyEditor);
          (new PG_PropertyField_Integer<int>( propertyEditor , "Energy stored", &bld->actstorage.energy ))->SetRange(0, bld->getStorageCapacity().energy);
