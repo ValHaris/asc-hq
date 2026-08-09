@@ -37,6 +37,7 @@
 #include "../spfst.h"
 #include "actionwidget.h"
 #include "loki/Functor.h"
+#include "../guiiconhandler.h"
 
 
 class ActionSelectionWidget: public ActionWidget
@@ -119,6 +120,8 @@ class ActionManager : public ASC_PG_Dialog {
             ActionResult res = gamemap->actions.rerun( createContext( gamemap ));
             if ( !res.successful() )
                displayActionError( res );
+            resetActiveGuiAction( gamemap );
+
             repaintMap();
          } catch ( ActionResult res ) {
             displayActionError( res );

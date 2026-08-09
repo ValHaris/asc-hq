@@ -31,6 +31,7 @@
 
 #ifdef ParserLoadImages
 #include "graphics/surface.h"
+#include "fieldimageloader.h"
 #endif
 
 
@@ -99,9 +100,9 @@ class PropertyContainer {
          void addNamedInteger ( const ASCString& name, int& property, int tagNum, const char** tags, int defaultValue );
          void addBreakpoint();
         #ifdef ParserLoadImages
-         void addImage ( const ASCString& name, Surface& property, ASCString& fileName, bool applyFieldMask );
+         void addImage ( const ASCString& name, Surface& property, ASCString& fileName, ImagePreparation* imagePreparation = NULL);
          // void addImageArray ( const ASCString& name, vector<void*> &property, const ASCString& fileName );
-         void addImageArray ( const ASCString& name, vector<Surface> &property, ASCString& fileName );
+         void addImageArray ( const ASCString& name, vector<Surface> &property, ASCString& fileName, ImagePreparation* imagePreparation = NULL );
         #endif
          void addBool  ( const ASCString& name, bool &property );
          void addBool  ( const ASCString& name, bool &property, bool defaultValue  );

@@ -5,6 +5,7 @@
 *.Po
 *.Plo
 *.la
+*.Tpo
 Makefile
 asc.appdata.xml
 autom4te.cache/*
@@ -49,3 +50,4 @@ unittester/unittest-data/asc2.cache
 unittester/unittest-data/asc2_dlg.zip
 asc-full-*.zip
 source/unix/asc/.deps/
+build

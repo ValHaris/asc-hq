@@ -68,6 +68,7 @@
 #include "widgets/textrenderer.h"
 #include "widgets/playerselector.h"
 #include <pgmultilineedit.h>
+#include "pgpropertyfield_integer.h"
 
 bool       mapsaved;
 

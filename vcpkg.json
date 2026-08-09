@@ -1,0 +1,31 @@
+{
+  "dependencies": [
+    "boost",
+    "expat",
+    "fmt",
+    "freetype",
+    "libpng",
+    "libsigcpp",
+    "lua",
+    "sdl2",
+    {
+      "name": "sdl2-image",
+      "features": [
+        "libjpeg-turbo"
+      ]
+    },
+    {
+      "name": "sdl2-mixer",
+      "features": [
+        "mpg123"
+      ]
+    },
+    "physfs"
+  ],
+  "overrides": [
+    {
+      "name": "libsigcpp",
+      "version": "2.10-3"
+    }
+  ]
+}

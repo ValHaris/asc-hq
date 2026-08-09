@@ -23,32 +23,58 @@
 #include "packagerepository.h"
 
 
-static const int packageDataStreamVersion = 1;
+static const int packageDataStreamVersion = 2;
 
-void PackageData::read ( tnstream& stream )
+void PackageData::readPackages ( tnstream& stream, Packages& pkg )
 {
-   int v = stream.readInt();
-   if ( v != packageDataStreamVersion  )
-      throw tinvalidversion ( "PackageData", packageDataStreamVersion, v );
-   
    int size = stream.readInt();
+   pkg.clear();
    for ( int i = 0; i < size; ++i ) {
       ASCString s = stream.readString();
       Package* p = new Package();
       p->read( stream );
-      packages[s] = p;
+      pkg[s] = p;
    }
 }
 
 
-void PackageData::write ( tnstream& stream ) const
+void PackageData::read ( tnstream& stream )
 {
-   stream.writeInt( packageDataStreamVersion );
-   stream.writeInt( packages.size() );
-   for ( Packages::const_iterator i = packages.begin(); i != packages.end(); ++i ) {
-      stream.writeString( i->first );  
+   int v = stream.readInt();
+   if ( v > packageDataStreamVersion  )
+      throw tinvalidversion ( "PackageData", packageDataStreamVersion, v );
+
+   if ( v >= 2 ) {
+      readPackages( stream, forcedRequirements );
+   }
+
+   readPackages( stream, packages );
+}
+
+void PackageData::writePackages ( tnstream& stream, const Packages& pkg ) const
+{
+   stream.writeInt( pkg.size() );
+   for ( Packages::const_iterator i = pkg.begin(); i != pkg.end(); ++i ) {
+      stream.writeString( i->first );
       i->second->write( stream );
    }
+}
+
+void PackageData::write ( tnstream& stream ) const
+{
+   if ( forcedRequirements.size() ) {
+      stream.writeInt( packageDataStreamVersion);
+      writePackages(stream, forcedRequirements);
+   } else
+      stream.writeInt( 1 );
+
+   writePackages(stream, packages);
+}
+
+PackageData::~PackageData()
+{
+   for ( PackageData::Packages::const_iterator i = forcedRequirements.begin(); i != forcedRequirements.end(); ++i )
+      delete i->second;
 }
 
 
@@ -58,6 +84,9 @@ void PackageManager::checkGame( GameMap* game )
       return;
    
    for ( PackageData::Packages::const_iterator i = game->packageData->packages.begin(); i != game->packageData->packages.end(); ++i ) 
+      packageRepository.checkPackageDependency( i->second, game->packageData );
+
+   for ( PackageData::Packages::const_iterator i = game->packageData->forcedRequirements.begin(); i != game->packageData->forcedRequirements.end(); ++i )
       packageRepository.checkPackageDependency( i->second, game->packageData );
 }
 

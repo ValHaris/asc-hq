@@ -220,12 +220,12 @@
          class ASCImageProperty : public PTIMG2 {
                typedef Surface PropertyType;
                ASCString& fileName;
-               bool fieldMask;
+               ImagePreparation* imagePreparation;
             protected:
                PropertyType operation_eq ( const TextPropertyGroup::Entry& entry ) const ;
                ASCString toString ( ) const;
             public:
-               ASCImageProperty ( Surface &property_, ASCString& fileName_, bool applyFieldMask ) : PTIMG2 ( property_ ), fileName ( fileName_ ), fieldMask( applyFieldMask ) {};
+               ASCImageProperty ( Surface &property_, ASCString& fileName_, ImagePreparation* imagePreparation = NULL ) : PTIMG2 ( property_ ), fileName ( fileName_ ), imagePreparation( imagePreparation ) {};
          };
 /*
          typedef PropertyTemplate< vector<void*> > PTIMGA;
@@ -244,11 +244,12 @@
          class ASCImageArrayProperty : public PTIMGA2 {
                typedef vector<Surface> PropertyType;
                ASCString& fileName;
+               ImagePreparation* imagePreparation;
             protected:
                PropertyType operation_eq ( const TextPropertyGroup::Entry& entry ) const ;
                ASCString toString ( ) const;
             public:
-               ASCImageArrayProperty ( PropertyType &property_, ASCString& fileName_ ) : PTIMGA2 ( property_ ), fileName ( fileName_ ) {};
+               ASCImageArrayProperty ( PropertyType &property_, ASCString& fileName_, ImagePreparation* imagePreparation = NULL ) : PTIMGA2 ( property_ ), fileName ( fileName_ ), imagePreparation( imagePreparation ) {};
          };
 
 
@@ -522,16 +523,16 @@ bool PropertyContainer::restoreContext( const ASCString& label )
 
 #ifdef ParserLoadImages
 
-void PropertyContainer::addImageArray ( const ASCString& name, vector<Surface> &property, ASCString& filename )
+void PropertyContainer::addImageArray ( const ASCString& name, vector<Surface> &property, ASCString& filename, ImagePreparation* imagePreparation )
 {
-   ASCImageArrayProperty* ip = new ASCImageArrayProperty ( property, filename );
+   ASCImageArrayProperty* ip = new ASCImageArrayProperty ( property, filename, imagePreparation );
    setup ( ip, name );
 }
 
 
-void PropertyContainer::addImage ( const ASCString& name, Surface &property, ASCString& filename, bool applyFieldMask )
+void PropertyContainer::addImage ( const ASCString& name, Surface &property, ASCString& filename, ImagePreparation* imagePreparation )
 {
-   ASCImageProperty* ip = new ASCImageProperty ( property, filename, applyFieldMask );
+   ASCImageProperty* ip = new ASCImageProperty ( property, filename, imagePreparation );
    setup ( ip, name );
 }
 
@@ -1180,7 +1181,7 @@ ASCImageProperty::PropertyType ASCImageProperty::operation_eq ( const TextProper
 {
    try {
       fileName = entry.value;
-      return loadASCFieldImage( entry.value, fieldMask );
+      return loadASCFieldImage( entry.value, imagePreparation );
    }
    catch ( ASCexception ){
    }
@@ -1214,6 +1215,9 @@ ASCImageArrayProperty::PropertyType ASCImageArrayProperty::operation_eq ( const 
          return loadASCFieldImageArray ( imgName, imgNum );
       } else 
          propertyContainer->error( name + ": invalid format. Syntax is <ImageName> <ImageNum>" );
+   }
+   catch ( const ASCmsgException& ex) {
+      propertyContainer->error( "error accessing file " + entry.value + ": " + ex.getMessage());
    }
    catch ( ASCexception ){
       propertyContainer->error( "error accessing file " + entry.value );

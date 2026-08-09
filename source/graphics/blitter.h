@@ -126,6 +126,7 @@ class SourcePixelSelector_Plain
       int pitch;
       int linelength;
       const Surface* surface;
+      Uint32 colorkey;
    protected:
       SourcePixelSelector_Plain() : pointer(NULL), surface(NULL)
       {}
@@ -137,6 +138,7 @@ class SourcePixelSelector_Plain
          pointer = (const PixelType*)(srv.pixels());
          linelength = srv.pitch()/sizeof(PixelType);
          pitch = linelength - srv.w();
+         SDL_GetColorKey(const_cast<SDL_Surface*>(surface->getBaseSurface()), &colorkey);
       };
 
       PixelType getPixel(int x, int y)
@@ -144,7 +146,7 @@ class SourcePixelSelector_Plain
          if ( x >= 0 && y >= 0 && x < surface->w() && y < surface->h() )
             return surface->GetPixel(SPoint(x,y));
          else
-            return surface->GetPixelFormat().colorkey();
+            return colorkey;
       };
 
       PixelType nextPixel()
@@ -209,49 +211,6 @@ class ColorConverter
 
 
 template<>
-class ColorConverter<4,1>
-{
-      int rshift, gshift, bshift;
-   public:
-      typedef  PixelSize2Type<4>::PixelType SourcePixelType;
-      typedef  PixelSize2Type<1>::PixelType TargetPixelType;
-   private:
-      SourcePixelType srcColorKey;
-      TargetPixelType destColorKey;
-      bool srcHasColorKey;
-      int srcColorMask;
-   public:
-
-      ColorConverter( const Surface& sourceSurface, Surface& targetSurface )
-      {
-         rshift = sourceSurface.GetPixelFormat().Rshift() + 2;
-         gshift = sourceSurface.GetPixelFormat().Gshift() + 2;
-         bshift = sourceSurface.GetPixelFormat().Bshift() + 2;
-         srcColorMask = ~sourceSurface.GetPixelFormat().Amask();
-         srcColorKey = sourceSurface.GetPixelFormat().colorkey() & srcColorMask;
-
-         srcHasColorKey = sourceSurface.flags() & SDL_SRCCOLORKEY;
-         if ( targetSurface.flags() & SDL_SRCCOLORKEY )
-            destColorKey = targetSurface.GetPixelFormat().colorkey();
-         else
-            destColorKey = 0xff;
-
-
-      };
-      TargetPixelType convert ( SourcePixelType sp )
-      {
-         #ifdef use_truecolor2pal
-         if ( srcHasColorKey && (sp & srcColorMask) == srcColorKey )
-            return destColorKey;
-         else
-            return truecolor2pal_table[ ((sp >> rshift) & 0x3f) + (((sp >> gshift) & 0x3f) << 6) + (((sp >> bshift) & 0x3f) << 12)];
-         #else
-         return destColorKey;
-         #endif
-      };
-};
-
-template<>
 class ColorConverter<1,4>
 {
    public:
@@ -260,18 +219,22 @@ class ColorConverter<1,4>
    private:
       SDL_Color* palette;
       int rshift, gshift, bshift,ashift;
-      bool hasColorKey;
-      TargetPixelType colorKey;
+      bool targetHasColorKey;
+      TargetPixelType targetColorKey;
+      Uint32 sourceColorKey;
    public:
 
       ColorConverter( const Surface& sourceSurface, Surface& targetSurface )
       {
-         if ( targetSurface.flags() & SDL_SRCCOLORKEY ) {
-            hasColorKey = true;
-            colorKey = targetSurface.GetPixelFormat().colorkey();
+         if ( SDL_GetColorKey(targetSurface.getBaseSurface(), &targetColorKey) == 0) {
+            targetHasColorKey = true;
          } else {
-            hasColorKey = false;
-            colorKey = 0;
+            targetHasColorKey = false;
+            targetColorKey = 0;
+         }
+
+         if ( SDL_GetColorKey(const_cast<SDL_Surface*>(sourceSurface.getBaseSurface()), &sourceColorKey) != 0) {
+            sourceColorKey = 0xff;
          }
 
          palette = sourceSurface.GetPixelFormat().palette()->colors;
@@ -287,15 +250,16 @@ class ColorConverter<1,4>
 
       TargetPixelType convert ( SourcePixelType sp )
       {
-         if ( sp == 0xff ) {
-            if ( hasColorKey )
-               return colorKey;
+         if ( sp == sourceColorKey ) {
+            if ( targetHasColorKey )
+               return targetColorKey;
             else
                return Surface::transparent << ashift;
          } else {
-            TargetPixelType a = Surface::opaque;
-            a <<= ashift;
-            return TargetPixelType(palette[sp].r << rshift) + TargetPixelType(palette[sp].g << gshift) + TargetPixelType(palette[sp].b << bshift) + a;
+            return TargetPixelType(palette[sp].r << rshift)
+                  + TargetPixelType(palette[sp].g << gshift)
+                  + TargetPixelType(palette[sp].b << bshift)
+                  + TargetPixelType(palette[sp].a << ashift);
          }
       };
 
@@ -424,7 +388,8 @@ void megaBlitter  ( const Surface& src,
                      SourceColorTransform,
                      ColorMerger,
                      SourcePixelSelector,
-                     TargetPixelSelector
+                     TargetPixelSelector,
+                     ColorConverter
                      >  blitter (
                         (SourceColorTransform<1>)( scmp ),
                         (ColorMerger<1>)( cmp ),
@@ -441,7 +406,8 @@ void megaBlitter  ( const Surface& src,
                      SourceColorTransform,
                      ColorMerger,
                      SourcePixelSelector,
-                     TargetPixelSelector
+                     TargetPixelSelector,
+                     ColorConverter
                      >  blitter (
                         (SourceColorTransform<1>)( scmp ),
                         (ColorMerger<4>)( cmp ),
@@ -463,7 +429,8 @@ void megaBlitter  ( const Surface& src,
                      SourceColorTransform,
                      ColorMerger,
                      SourcePixelSelector,
-                     TargetPixelSelector
+                     TargetPixelSelector,
+                     ColorConverter
                      >  blitter (
                         (SourceColorTransform<4>)( scmp ),
                         (ColorMerger<1>)( cmp ),
@@ -480,7 +447,8 @@ void megaBlitter  ( const Surface& src,
                      SourceColorTransform,
                      ColorMerger,
                      SourcePixelSelector,
-                     TargetPixelSelector
+                     TargetPixelSelector,
+                     ColorConverter
                      >  blitter (
                         (SourceColorTransform<4>)( scmp ),
                         (ColorMerger<4>)( cmp ),
@@ -657,10 +625,9 @@ class ColorMerger_AlphaHandler
 
       void init( const Surface& srf )
       {
-         if ( srf.flags() & SDL_SRCCOLORKEY ) {
-            colorKey = srf.GetPixelFormat().colorkey();
-            if ( pixelsize > 1 )
-               mask = srf.GetPixelFormat().Rmask() | srf.GetPixelFormat().Gmask() | srf.GetPixelFormat().Bmask();
+          if ( SDL_GetColorKey(srf.getBaseSurface(), &colorKey) == 0) {
+               if ( pixelsize > 1 )
+            	   mask = srf.GetPixelFormat().Rmask() | srf.GetPixelFormat().Gmask() | srf.GetPixelFormat().Bmask();
          } else
             if ( pixelsize == 1 )
                colorKey = 0xff;
@@ -688,8 +655,7 @@ class ColorMerger_AlphaHandler<1>
 
       void init( const Surface& srf )
       {
-         if ( srf.flags() & SDL_SRCCOLORKEY ) {
-            colorKey = srf.GetPixelFormat().colorkey();
+          if ( SDL_GetColorKey(const_cast<SDL_Surface*>(srf.getBaseSurface()), (Uint32*)&colorKey) == 0) {
          } else
             colorKey = 0xff;
       };
@@ -716,9 +682,8 @@ class ColorMerger_AlphaHandler<4>
 
       void init( const Surface& srf )
       {
-         if ( srf.flags() & SDL_SRCCOLORKEY ) {
+         if ( SDL_GetColorKey(const_cast<SDL_Surface*>(srf.getBaseSurface()), &colorKey) == 0) {
             hasColorKey = true;
-            colorKey = srf.GetPixelFormat().colorkey();
             ckmask = srf.GetPixelFormat().Rmask() | srf.GetPixelFormat().Gmask() | srf.GetPixelFormat().Bmask();
          } else {
             if ( srf.GetPixelFormat().Amask() ) {
@@ -740,7 +705,7 @@ class ColorMerger_AlphaHandler<4>
       };
 };
 
-
+// Overwrite all all pixels of the target image where the source-image is non-transparent, keeping the transparency of the source image
 template<int pixelsize>
 class ColorMerger_AlphaOverwrite : public ColorMerger_AlphaHandler<pixelsize>
 {
@@ -761,6 +726,7 @@ class ColorMerger_AlphaOverwrite : public ColorMerger_AlphaHandler<pixelsize>
 };
 
 
+// If source pixel is semi-transparent, merge it with the target pixel, keeping the target's transparency
 template<int pixelsize>
 class ColorMerger_AlphaMerge : public ColorMerger_AlphaHandler<pixelsize>
 {
@@ -1134,6 +1100,7 @@ class SourcePixelSelector_CacheRotation : public RotationCache
       int pitch;
       int* cacheIndex;
       int x,y,w,h;
+      Uint32 fully_transparent;
    protected:
 
       void init ( const Surface& srv )
@@ -1148,6 +1115,8 @@ class SourcePixelSelector_CacheRotation : public RotationCache
          pitch = srv.pitch()/sizeof(PixelType) - srv.w();
          w = srv.w();
          h = srv.h();
+         if ( SDL_GetColorKey(const_cast<SDL_Surface*>(srv.getBaseSurface()), &fully_transparent) != 0 )
+            fully_transparent = Surface::transparent; //whereever alpha-mask is, 0 is maximum transparency
       }
 
       PixelType nextPixel()
@@ -1160,7 +1129,7 @@ class SourcePixelSelector_CacheRotation : public RotationCache
             if ( index >= 0 )
                return pixelStart[index];
             else
-               return surface->GetPixelFormat().colorkey();
+               return fully_transparent;
          } else {
             if ( degrees == 0 ) {
                ++tableIndex;
@@ -1206,7 +1175,7 @@ class SourcePixelSelector_CacheRotation : public RotationCache
          if ( x >= 0 && y >= 0 && x < surface->w() && y < surface->h() )
             return surface->GetPixel(SPoint(x,y));
          else
-            return surface->GetPixelFormat().colorkey();
+            return fully_transparent;
       };
 
 
@@ -1652,6 +1621,7 @@ class SourcePixelSelector_DirectRectangle
       int pitch;
       int linelength;
       const Surface* surface;
+      Uint32 colorkey;
    protected:
       SourcePixelSelector_DirectRectangle() : y(0),x1(0),y1(0),w(0),h(0),pointer(NULL), surface(NULL)
       {}
@@ -1675,6 +1645,7 @@ class SourcePixelSelector_DirectRectangle
          pitch = linelength - w -1  ;
          y = y1;
          pointer += x1 + y1 * linelength;
+         SDL_GetColorKey(const_cast<SDL_Surface*>(srv.getBaseSurface()), &colorkey);
       };
 
       PixelType getPixel(int x, int y)
@@ -1684,7 +1655,7 @@ class SourcePixelSelector_DirectRectangle
          if ( x >= 0 && y >= 0 && x < surface->w() && y < surface->h() )
             return surface->GetPixel(SPoint(x,y));
          else
-            return surface->GetPixelFormat().colorkey();
+            return colorkey;
       };
 
 

@@ -32,22 +32,14 @@
 #include "pglog.h"
 
 SDL_Surface* PG_Draw::CreateRGBSurface(Uint16 w, Uint16 h, int flags) {
-	SDL_Surface* screen = SDL_GetVideoSurface();
-
-	// credits to Peter Kasting!
-	if (screen == NULL) {
-		PG_LogWRN("CreateRGBSurface() failed: current display surface invalid or n/a.");
-		return NULL;
-	}
-
 	return SDL_CreateRGBSurface (
 	           flags,
 	           w, h,
-	           screen->format->BitsPerPixel,
-	           screen->format->Rmask,
-	           screen->format->Gmask,
-	           screen->format->Bmask,
-	           0);
+	           32,
+			   0x00FF0000,
+			   0x0000FF00,
+			   0x000000FF,
+			   0xFF000000);
 }
 
 static void Draw3TileH(SDL_Surface* src, const PG_Rect& r, SDL_Surface* dst, Uint8 blend = 0) {
@@ -76,9 +68,9 @@ static void Draw3TileH(SDL_Surface* src, const PG_Rect& r, SDL_Surface* dst, Uin
 
 	// set per surface alpha
 	if(blend > 0) {
-		SDL_SetAlpha(temp, SDL_SRCALPHA, 255-blend);
+		SDL_SetSurfaceAlphaMod(temp, 255-blend);
 	} else {
-		SDL_SetAlpha(temp, 0, 0);
+		SDL_SetSurfaceAlphaMod(temp, 0);
 	}
 
 	// blit part 1 (left)
@@ -140,9 +132,9 @@ static void Draw3TileV(SDL_Surface* src, const PG_Rect& r, SDL_Surface* dst, Uin
 
 	// set per surface alpha
 	if(blend > 0) {
-		SDL_SetAlpha(temp, SDL_SRCALPHA, 255-blend);
+		SDL_SetSurfaceAlphaMod(temp, 255-blend);
 	} else {
-		SDL_SetAlpha(temp, 0, 0);
+		SDL_SetSurfaceAlphaMod(temp, 0);
 	}
 
 	// blit part 1 (top)
@@ -191,11 +183,14 @@ static void DrawTileSurface(SDL_Surface* src, const PG_Rect& r, SDL_Surface* dst
 	int yc = (r.my_height / src->h) +1;
 	int xc = (r.my_width / src->w) +1;
 
-	if(blend > 0) {
-		SDL_SetAlpha(src, SDL_SRCALPHA, 255-blend);
-	} else {
-		SDL_SetAlpha(src, 0, 0);
+	SDL_SetSurfaceAlphaMod(src, 255-blend);
+	if ( src->format->BytesPerPixel == 1 ) {
+	    if(blend > 0)
+	       SDL_SetSurfaceBlendMode(src, SDL_BLENDMODE_BLEND);
+	    else
+	       SDL_SetSurfaceBlendMode(src, SDL_BLENDMODE_NONE);
 	}
+
 
 	srcrect.my_width = src->w;
 	srcrect.my_height = src->h;
@@ -350,11 +345,14 @@ void PG_Draw::DrawThemedSurface(SDL_Surface* surface, const PG_Rect& r, PG_Gradi
 	SDL_Surface* temp;
 	//int w,h;
 
-	bColorKey = (background->flags & SDL_SRCCOLORKEY) != 0;
+	Uint32 colorkey;
+	bColorKey = SDL_GetColorKey(background, &colorkey) == 0;
 	Uint8 rc,gc,bc;
 
-	SDL_GetRGB(background->format->colorkey, background->format, &rc, &gc, &bc);
-	uColorKey = (Uint32)((rc << 16) | (gc << 8) | bc);
+	if(bColorKey) {
+		SDL_GetRGB(colorkey, background->format, &rc, &gc, &bc);
+		uColorKey = (Uint32)((rc << 16) | (gc << 8) | bc);
+	}
 
 	if(((gradient == NULL) || (blend == 0)) && bColorKey) {
 		SDL_SetColorKey(background, 0, 0);
@@ -389,9 +387,7 @@ void PG_Draw::DrawThemedSurface(SDL_Surface* surface, const PG_Rect& r, PG_Gradi
 
 			// set per surface alpha
 			if(blend > 0) {
-				SDL_SetAlpha(temp, SDL_SRCALPHA, 255-blend);
-			} else {
-				SDL_SetAlpha(temp, 0, 0);
+				SDL_SetSurfaceAlphaMod(temp, 255-blend);
 			}
 
 			// blit it
@@ -431,8 +427,8 @@ void PG_Draw::DrawThemedSurface(SDL_Surface* surface, const PG_Rect& r, PG_Gradi
 
 	if((/*(gradient == NULL) ||*/ (blend == 0)) && bColorKey) {
 		c = uColorKey.MapRGB(background->format);
-		SDL_SetColorKey(background, SDL_SRCCOLORKEY, c);
+		SDL_SetColorKey(background, SDL_TRUE, c);
 		c = uColorKey.MapRGB(surface->format);
-		SDL_SetColorKey(surface, SDL_SRCCOLORKEY, c);
+		SDL_SetColorKey(surface, SDL_TRUE, c);
 	}
 }

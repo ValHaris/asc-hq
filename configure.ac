@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 
-AC_INIT([asc],[2.8.4.2])
+AC_INIT([asc],[2.8.6.0])
 
 AM_CONFIG_HEADER(config.h)
 AM_INIT_AUTOMAKE
@@ -161,15 +161,15 @@ fi
 
 
 dnl check for libSDL
-SDL_VERSION=1.2.2
-AM_PATH_SDL($SDL_VERSION,:, AC_LIB_MISSING( SDL, http://www.libsdl.org/, [ (version >= $SDL_VERSION)])) 
+SDL_VERSION=2.25.0
+AM_PATH_SDL2($SDL_VERSION,:, AC_LIB_MISSING( SDL, http://www.libsdl.org/, [ (version >= $SDL_VERSION)])) 
 
 dnl set up new FLAGS
 CXXFLAGS="$CXXFLAGS $SDL_CFLAGS"
 CFLAGS="$CFLAGS $SDL_CFLAGS"
 LIBS="$LIBS $SDL_LIBS"
 
-AC_CHECK_LIB( SDL_image,
+AC_CHECK_LIB( SDL2_image,
               IMG_LoadJPG_RW,,
               AC_LIB_MISSING( SDL_image, http://www.libsdl.org/projects/SDL_image/ )) 
 
@@ -204,44 +204,12 @@ AC_CHECK_LIB(jpeg,
              jpeg_CreateDecompress,,
              AC_LIB_MISSING( jpeg, http://www.ijg.org/,,[ which is VERY unlikely,]))
 
-AC_CHECK_LIB(SDL_mixer, 
+AC_CHECK_LIB(SDL2_mixer, 
              Mix_PlayChannelTimed,, 
-             AC_LIB_MISSING( SDL_mixer, http://www.libsdl.org/projects/SDL_mixer/ ))
+             AC_LIB_MISSING( SDL2_mixer, http://www.libsdl.org/projects/SDL_mixer/ ))
 
 AC_CHECK_LIB( SDL_sound, Sound_Init,,SDLsoundmissing=y)
 
-
-dnl checking for wxwidgets
-
-AM_OPTIONS_WXCONFIG
-reqwx=2.4.0
-AM_PATH_WXCONFIG($reqwx, wxWin=1)
-if test "$wxWin" != 1; then
-	AC_MSG_ERROR([
-		wxWidgets $reqwx or later must be installed on your system.
-		
-		If you have a distribution supplied wxWidgets package installed,
-		perhaps the wxWidgets-devel package is missing. 
-		
-		The wxWidgets packages are sometimes also called wxGTK, if you can't
-		find wxWidgets packages in your distribution, search for wxGTK 
-		
-		If your distribution really does not contain the wxWidgets library,
-		you can download it from www.wxwidgets.org
- 
-		If you have it installed, but it isn't working, check that wx-config is in path, 
-		the directory where wxWidgets libraries are installed (returned by
-		'wx-config --libs' or 'wx-config --static --libs' command)
-		is in LD_LIBRARY_PATH or equivalent variable and
-		wxWidgets version is $reqwx or above.
-		])
-fi
- 
-CPPFLAGS="$CPPFLAGS $WX_CPPFLAGS"
-CXXFLAGS="$CXXFLAGS $WX_CXXFLAGS_ONLY"
-CFLAGS="$CFLAGS $WX_CFLAGS_ONLY"
-LIBS="$LIBS $WX_LIBS"
-AC_SUBST(WX_LIBS)
 
 
 OLDCPPFLAGS=$CPPFLAGS
@@ -340,19 +308,19 @@ AC_LANG([C++])
 
 AC_CHECK_HEADERS([boost/heap/pairing_heap.hpp],,AC_LIB_MISSING( Boost version >= 1.49, http://www.boost.org/, [(which may be splitted into several distinct libraries)]))
 
-AC_CHECK_LIB( boost_regex-mt, main, BOOST_LIBS="-lboost_regex-mt", BOOSTERR=yes)
+AC_CHECK_LIB( boost_regex-mt, main, BOOST_LIBS="-lboost_regex-mt -lboost_filesystem-mt", BOOSTERR=yes)
 if test x$BOOSTERR = xyes ; then
 
   BOOSTERR=none
-  AC_CHECK_LIB( boost_regex-gcc-mt, main, BOOST_LIBS="-lboost_regex-gcc-mt", BOOSTERR=yes)
+  AC_CHECK_LIB( boost_regex-gcc-mt, main, BOOST_LIBS="-lboost_regex-gcc-mt -lboost_filesystem-gcc-mt", BOOSTERR=yes)
   if test x$BOOSTERR = xyes ; then
 
     BOOSTERR=none
-    AC_CHECK_LIB( boost_regex, main, BOOST_LIBS="-lboost_regex", BOOSTERR=yes)
+    AC_CHECK_LIB( boost_regex, main, BOOST_LIBS="-lboost_regex -lboost_filesystem", BOOSTERR=yes)
     if test x$BOOSTERR = xyes ; then
 
       BOOSTERR=none
-      AC_CHECK_LIB( boost_regex-gcc, main, BOOST_LIBS="-lboost_regex-gcc", BOOSTERR=yes)
+      AC_CHECK_LIB( boost_regex-gcc, main, BOOST_LIBS="-lboost_regex-gcc -lboost_filesystem-gcc", BOOSTERR=yes)
       if test x$BOOSTERR = xyes ; then
          AC_LIB_MISSING( Boost, http://www.boost.org/, [( which may be splitted into several distinct libraries)])
       fi

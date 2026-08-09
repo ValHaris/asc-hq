@@ -26,6 +26,7 @@
 #include <memory>
 #include <SDL_image.h>
 #include <signal.h>
+#include <iostream>
 
 #include "edmisc.h"
 #include "loadbi3.h"
@@ -104,9 +105,8 @@ void buildemptymap ( void )
 }
 
 
-int mapeditorMainThread ( void* _mapname )
+int mapeditorMainThread ( const ASCString& mapname )
 {
-   const char* mapname = (const char*) _mapname;
    loadpalette();
 
    try {
@@ -115,7 +115,7 @@ int mapeditorMainThread ( void* _mapname )
       GraphicSetManager::Instance().loadData();
       loadEditordata();
 
-      if ( mapname && mapname[0] ) {
+      if ( !mapname.empty() ) {
          /*
          if( patimat ( savegameextension, mapname )) {
             if( validatesavfile( mapname ) == 0 )
@@ -147,13 +147,19 @@ int mapeditorMainThread ( void* _mapname )
 
    } /* end try */
    catch ( ParsingError& err ) {
-      fatalError ( "Error parsing text file " + err.getMessage() );
+      std::cerr << "Error parsing text file " + err.getMessage();
+      return 1;
    }
    catch ( tfileerror& err ) {
-      fatalError ( "Error loading file " + err.getFileName() );
+      std::cerr << "Error loading file " + err.getFileName();
+      return 1;
    } /* end catch */
    catch ( ASCmsgException& err ) {
-      fatalError( "Error loading file " + err.getMessage() );
+      std::cerr << "Error loading file " + err.getMessage();
+      return 1;
+   }
+   catch ( const FatalError& err ) {
+      return err.code;
    }
 
    activefontsettings.font = schriften.arial8;
@@ -168,8 +174,6 @@ int mapeditorMainThread ( void* _mapname )
    mainScreenWidget = new Maped_MainScreenWidget( getPGApplication());
    mainScreenWidget->Show();
    
-   mousevisible(true);
-
    getPGApplication().Run();
 
    if (mapsaved == false )
@@ -257,26 +261,18 @@ int main(int argc, char *argv[] )
 
    ASC_PG_App app ( "asc2_dlg" );
    
-   int flags = SDL_SWSURFACE;
-   if ( fullscreen )
-      flags |= SDL_FULLSCREEN;
-   
-   #ifdef pbpeditor
-   app.setIcon( "pbpeditor-icon.png" );
-   #else
-   app.setIcon( "mapeditor-icon.png" );
-   #endif
-
-   if ( !app.InitScreen( xr, yr, 32, flags))
+   if ( !app.InitScreen( xr, yr, fullscreen ))
       fatalError( "Could not initialize video mode");
 #ifdef WIN32
    delete win32ErrorDialogGenerator;
 #endif
       
    #ifdef pbpeditor
-   setWindowCaption ( "PBP Editor - Advanced Strategic Command");
+   app.setIcon( "pbpeditor-icon.png" );
+   app.SetCaption ( "PBP Editor - Advanced Strategic Command");
    #else
-   setWindowCaption ( "Map Editor - Advanced Strategic Command");
+   app.setIcon( "mapeditor-icon.png" );
+   app.SetCaption ( "Map Editor - Advanced Strategic Command");
    #endif
 
    virtualscreenbuf.init();
@@ -286,17 +282,13 @@ int main(int argc, char *argv[] )
    mapChanged.connect( sigc::hide( sigc::ptr_fun( &setSaveNotification) ));
    
    TaskHibernatingContainer::registerHooks();
-
    
-   char* buf = new char[cl->l().length()+10];
-   strcpy ( buf, cl->l().c_str() );
-   initializeEventHandling ( mapeditorMainThread, buf  );
-   delete[] buf;
+   int returncode = mapeditorMainThread(cl->l());
 
    writegameoptions ();
    
    mapSwitcher.deleteMaps();
 
-   return 0;
+   return returncode;
 }
 

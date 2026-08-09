@@ -46,7 +46,7 @@ VideoRecorder::VideoRecorder( const ASCString& filename, const SDL_Surface* surf
 {
     data = new VideoRecorderInternals();
     data->framerate = framerate;
-    data->lastTick = getTicker();
+    data->lastTick = ASC_GetTicks();
     data->filename = filename;
     data->ascFramerateLimit = ascFramerateLimit;
    
@@ -144,10 +144,10 @@ void VideoRecorder::storeFrame( const SDL_Surface* surf )
    ++data->frameCounterOut;
    
    // we are limiting the playback to the specified framerate
-   while ( getTicker() < data->lastTick + 100/data->ascFramerateLimit )
+   while ( ASC_GetTicks() < data->lastTick + 100/data->ascFramerateLimit )
       releasetimeslice();
    
-   data->lastTick = getTicker();
+   data->lastTick = ASC_GetTicks();
 }
 
 void VideoRecorder::close()

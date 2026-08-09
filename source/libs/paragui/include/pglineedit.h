@@ -101,6 +101,10 @@ class SignalEditUpdate : public sigc::signal<bool> {}
 	@param	c		the character to insert
 	*/
 	void SendChar(PG_Char c);
+	/**
+	 * @param c  a null terminated string containing a utf-8 character
+	 */
+	void SendChars(const char* c);
 
 	/**
 	Send a 'del' keystroke into the LineEdit widget
@@ -159,6 +163,8 @@ class SignalEditUpdate : public sigc::signal<bool> {}
    
 protected:
 
+   virtual std::string GetClipboardContent();
+
 	/** */
 	virtual void InsertChar(const PG_Char& c);
 
@@ -168,11 +174,13 @@ protected:
 	/** */
 	void CopyText(bool del = false);
 
+    virtual void CopyTextToClipboard(bool del = false);
+
 	/** */
 	void PasteText(Uint16 pos);
 
     /** */
-    void PasteFromClipBoard(Uint16 pos);
+    virtual void PasteFromClipBoard(Uint16 pos);
 
 	/** */
 	void StartMark(Uint16 pos);
@@ -194,6 +202,8 @@ protected:
 
 	/** */
 	bool eventKeyDown(const SDL_KeyboardEvent* key);
+
+	bool eventTextInput(const SDL_TextInputEvent* text);
 
 	/** */
 	bool eventMouseButtonUp(const SDL_MouseButtonEvent* button);
@@ -253,5 +263,7 @@ private:
    //! in msec
    static int cursorBlinkingTime;
 };
+
+extern std::string ISO8859_1toUTF8(const std::string& str );
 
 #endif // PG_LINEEDIT

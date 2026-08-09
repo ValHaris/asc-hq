@@ -341,21 +341,21 @@ SDL_Surface* PG_FileArchive::LoadSurface(const std::string& filename, bool useke
 	}
 
 	if(usekey == true) {
-		SDL_SetColorKey(surface, SDL_SRCCOLORKEY, colorkey);
+		SDL_SetColorKey(surface, SDL_TRUE, colorkey);
 	}
 
-	if(convert) {
-		SDL_Surface* tmpsrf = NULL;
-		if (surface->flags & SDL_SRCALPHA)
-			tmpsrf = SDL_DisplayFormatAlpha(surface);
-		else
-			tmpsrf = SDL_DisplayFormat(surface);
-
-		if(tmpsrf) {
-			SDL_FreeSurface(surface);
-			surface = tmpsrf;
-		}
-	}
+//	if(convert) {
+//		SDL_Surface* tmpsrf = NULL;
+//		if (surface->flags & SDL_SRCALPHA)
+//			tmpsrf = SDL_DisplayFormatAlpha(surface);
+//		else
+//			tmpsrf = SDL_DisplayFormat(surface);
+//
+//		if(tmpsrf) {
+//			SDL_FreeSurface(surface);
+//			surface = tmpsrf;
+//		}
+//	}
 
 	// add the loaded surface to the cache and return result
 	return my_cache.AddSurface(filename, surface);

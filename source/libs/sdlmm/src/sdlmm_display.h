@@ -1,6 +1,6 @@
 /*
  * SDmm - a C++ wrapper for SDL and related libraries
- * Copyright © 2001 David Hedbor <david@hedbor.org>
+ * Copyright ï¿½ 2001 David Hedbor <david@hedbor.org>
  * 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -107,22 +107,6 @@ namespace SDLmm {
     */
     void UpdateRects(int numrects, SDL_Rect *rects);
 
-    //! Swaps screen buffers.
-    /*!
-      On hardware that supports double-buffering, this function sets
-      up a flip and returns. The hardware will wait for vertical
-      retrace, and then swap video buffers before the next video
-      surface Blit or Lock will return. On hardware that doesn't
-      support double-buffering, this is equivalent to calling
-      UpdateRect() (i.e w/o parameters).
-
-      The SDL_DOUBLEBUF flag must have been passed to SetVideoMode,
-      when setting the video mode for this function to perform
-      hardware flipping.
-      \return true for success, false for failure.
-    */
-
-    bool Flip() { return SDL_Flip(me) == 0; }
     //@}
    
     //! Setup the video mode with the specified width, height and
@@ -258,26 +242,6 @@ namespace SDLmm {
     */
     bool ToggleFullScreen();
 
-    //! Grabs mouse and keyboard input.
-    /*!
-
-      Grabbing means that the mouse is confined to the application
-      window, and nearly all keyboard input is passed directly to the
-      application, and not interpreted by a window manager, if any.
-
-      When mode is SDL_GRAB_QUERY the grab mode is not changed, but
-      the current grab mode is returned.
-
-      \param mode one of the following:
-      \code
-      typedef enum {
-        SDL_GRAB_QUERY,   // Query the current mode
-        SDL_GRAB_OFF,     // Ungrab the mouse and keyboard
-        SDL_GRAB_ON       // Grab the mouse and keyboard
-      } SDL_GrabMode;
-      \endcode
-    */
-    SDL_GrabMode GrabInput(SDL_GrabMode mode);
     //@}
 
     // Documented in BaseSurface. Just return true since the display is always

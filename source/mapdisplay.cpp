@@ -562,6 +562,10 @@ void MapRenderer::paintTerrain( Surface& surf, GameMap* actmap, int playerView, 
 
    GraphicSetManager::Instance().setActive ( actmap->graphicset );
 
+   // temporary debugging code, to remove
+   Uint32* pix = (Uint32*)surf.getBaseSurface()->pixels;
+   Uint32* startPixel = pix + 66 * surf.w() + 74;
+
    for (int pass = 0; pass <= 18 ;pass++ ) {
       for (int y= viewPort.y1; y < viewPort.y2; ++y )
          for ( int x=viewPort.x1; x < viewPort.x2; ++x ) {
@@ -609,6 +613,8 @@ MapDisplayPG* theGlobalMapDisplay = NULL;
 MapDisplayPG::MapDisplayPG ( MainScreenWidget *parent, const PG_Rect r )
       : PG_Widget ( parent, r, false ) ,
       zoom(-1),
+      zoomChangeTicker(0),
+      zoomChangeScrollblock(0),
       surface(NULL),
       lastDisplayedMap(NULL),
       offset(0,0),
@@ -996,42 +1002,69 @@ int MapDisplayPG::setSignalPriority( int priority )
 void filterQueuedZoomEvents()
 {
    SDL_Event event;
-   while ( PG_Application::GetEventSupplier()->PeepEvent(&event) && (event.type == SDL_MOUSEBUTTONDOWN || event.type == SDL_MOUSEBUTTONUP) && (event.button.button == CGameOptions::Instance()->mouse.zoomoutbutton || event.button.button == CGameOptions::Instance()->mouse.zoominbutton ))
+   while ( PG_Application::GetEventSupplier()->PeepEvent(&event)
+         && (event.type == SDL_MOUSEWHEEL))
       PG_Application::GetEventSupplier()->PollEvent ( &event );
+}
+
+
+
+void MapDisplayPG::changeZoomAndUpdate(int delta, const SPoint& position)
+{
+   MapCoordinate mc = screenPos2mapPos( position );
+
+   changeZoom( delta );
+
+   MapCoordinate newpos = screenPos2mapPos( position);
+   MapCoordinate newOffset ( offset.x - ( newpos.x - mc.x ), offset.y - ( newpos.y - mc.y ));
+   checkViewPosition( newOffset );
+   offset = newOffset;
+
+   viewChanged();
+   repaintMap();
+   filterQueuedZoomEvents();
+}
+
+
+const int zoomBlockDelay=30;
+const int zoomBlockSteps=3;
+
+bool MapDisplayPG::eventMouseWheel (const SDL_MouseWheelEvent *wheel)
+{
+   if ( wheel->y != 0 ) {
+      if ( getZoom() == 100 && ASC_GetTicks() < zoomChangeTicker+zoomBlockDelay && zoomChangeScrollblock > 0 ) {
+         zoomChangeScrollblock--;
+         return true;
+      }
+
+      int x;
+      int y;
+      PG_Application::GetEventSupplier()->GetMouseState(x, y);
+      changeZoomAndUpdate(wheel->y > 0 ? 10 : -10 , SPoint(x,y));
+
+      if ( getZoom() == 100) {
+         zoomChangeTicker = ASC_GetTicks();
+         zoomChangeScrollblock = zoomBlockSteps;
+      }
+      return true;
+   }
+   return false;
 }
 
 bool MapDisplayPG::eventMouseButtonDown (const SDL_MouseButtonEvent *button)
 {
-   MapCoordinate mc = screenPos2mapPos( SPoint(button->x, button->y));
 
    if ( button->type == SDL_MOUSEBUTTONDOWN && button->button == CGameOptions::Instance()->mouse.zoomoutbutton ) {
-      changeZoom( 10 );
-   
-      MapCoordinate newpos = screenPos2mapPos( SPoint(button->x, button->y));
-      MapCoordinate newOffset ( offset.x - ( newpos.x - mc.x ), offset.y - ( newpos.y - mc.y ));
-      checkViewPosition( newOffset );
-      offset = newOffset;
-
-      viewChanged();
-      repaintMap();
-      filterQueuedZoomEvents();
+      changeZoomAndUpdate(10, SPoint(button->x, button->y));
       return true;
    }
 
    if ( button->type == SDL_MOUSEBUTTONDOWN && button->button == CGameOptions::Instance()->mouse.zoominbutton ) {
-      changeZoom( -10 );
-
-      MapCoordinate newpos = screenPos2mapPos( SPoint(button->x, button->y));
-      MapCoordinate newOffset ( offset.x - ( newpos.x - mc.x ), offset.y - ( newpos.y - mc.y ));
-      checkViewPosition( newOffset );
-      offset = newOffset;
-
-      viewChanged();
-      repaintMap();
-      filterQueuedZoomEvents();
+      changeZoomAndUpdate(-10, SPoint(button->x, button->y));
       return true;
    }
 
+   MapCoordinate mc = screenPos2mapPos( SPoint(button->x, button->y) );
 
    if ( !actmap )
       return false;
@@ -1140,7 +1173,7 @@ bool MapDisplayPG::fieldInView(const MapCoordinate& mc )
 Surface MapDisplayPG::createMovementBufferSurface()
 {
    Surface s = Surface::createSurface( 2*surfaceBorder + effectiveMovementSurfaceWidth, 2*surfaceBorder + effectiveMovementSurfaceHeight, 8*colorDepth, 0x00ffffff ) ;
-   s.SetColorKey( SDL_SRCCOLORKEY, 0xffffff);
+   s.SetColorKey( SDL_TRUE, 0xffffff);
    return s;
 }
 
@@ -1168,7 +1201,7 @@ void MapDisplayPG::initMovementStructure()
 
          pix.x += fieldsizex/2;
          pix.y += fieldsizey/2;
-         movementMask[dir].mask.SetColorKey( SDL_SRCCOLORKEY, movementMask[dir].mask.GetPixel( pix ) & ~movementMask[dir].mask.GetPixelFormat().Amask());
+         movementMask[dir].mask.SetColorKey( SDL_TRUE, movementMask[dir].mask.GetPixel( pix ) & ~movementMask[dir].mask.GetPixelFormat().Amask());
       }
 }
 
@@ -1187,6 +1220,7 @@ class SourcePixelSelector_DirectSubRectangle
    int pitch;
    int linelength;
    const Surface* surface;
+   Uint32 colorkey;
    protected:
       SourcePixelSelector_DirectSubRectangle() : x(0),y(0),x1(0),y1(0),w(0),h(0),outerwidth(0),pointer(NULL), surface(NULL)
       {}
@@ -1212,6 +1246,8 @@ class SourcePixelSelector_DirectSubRectangle
          x = x1;
          pointer += x1 + y1 * linelength;
          outerwidth = getWidth();
+         colorkey = 0;
+         SDL_GetColorKey(const_cast<SDL_Surface*>(srv.getBaseSurface()), &colorkey);
       };
 
       PixelType getPixel(int x, int y)
@@ -1221,7 +1257,7 @@ class SourcePixelSelector_DirectSubRectangle
          if ( x >= 0 && y >= 0 && x < surface->w() && y < surface->h() )
             return surface->GetPixel(SPoint(x,y));
          else
-            return surface->GetPixelFormat().colorkey();
+            return colorkey;
       };
 
 
@@ -1394,7 +1430,7 @@ void MapDisplayPG::displayUnitMovement( GameMap* actmap, Vehicle* veh, const Map
       // we don't animate a descending or ascending submarine without movement
       return;
 
-   int startTime = ticker;
+   int startTime = ASC_GetTicks();
    int endTime = startTime + duration;
    
    // initialisation that is only executed the first time the code runs here
@@ -1483,8 +1519,8 @@ void MapDisplayPG::displayUnitMovement( GameMap* actmap, Vehicle* veh, const Map
    int loopStartTicker = ticker;
 #endif
 
-   while ( ticker < endTime ) {
-      displayMovementStep( movement, (ticker - startTime) * 100 / duration );
+   while ( ASC_GetTicks() < endTime ) {
+      displayMovementStep( movement, (ASC_GetTicks() - startTime) * 100 / duration );
       ++loopCounter;
    }
 
@@ -1661,47 +1697,47 @@ bool MapDisplayPG::keyboardHandler( PG_MessageObject* o, const SDL_KeyboardEvent
       return false;
 
    int keyStateNum;
-   Uint8* keyStates = SDL_GetKeyState ( &keyStateNum );
+   const Uint8* keyStates = SDL_GetKeyboardState( &keyStateNum );
 
    if ( keyEvent->type == SDL_KEYDOWN ) {
       if ( !disableKeyboardCursorMovement ) {
-         if ( keyEvent->keysym.sym == SDLK_RIGHT && keyStates[SDLK_RIGHT] ) {
+         if ( keyEvent->keysym.sym == SDLK_RIGHT && keyStates[SDL_SCANCODE_RIGHT] ) {
             moveCursor(2, 1);
             return true;
          }
-         if ( keyEvent->keysym.sym == SDLK_LEFT  && keyStates[SDLK_LEFT]  ) {
+         if ( keyEvent->keysym.sym == SDLK_LEFT  && keyStates[SDL_SCANCODE_LEFT]  ) {
             moveCursor(6, 1);
             return true;
          }
-         if ( (keyEvent->keysym.sym == SDLK_UP  && keyStates[SDLK_UP] ) || ( keyEvent->keysym.sym == SDLK_KP8  && keyStates[SDLK_KP8] )) {
+         if ( (keyEvent->keysym.sym == SDLK_UP  && keyStates[SDL_SCANCODE_UP] ) || ( keyEvent->keysym.sym == SDLK_KP_8  && keyStates[SDL_SCANCODE_KP_8] )) {
             moveCursor(0, 1);
             return true;
          }
-         if ( (keyEvent->keysym.sym == SDLK_DOWN  && keyStates[SDLK_DOWN]) || (keyEvent->keysym.sym == SDLK_KP2  && keyStates[SDLK_KP2] )) {
+         if ( (keyEvent->keysym.sym == SDLK_DOWN  && keyStates[SDL_SCANCODE_DOWN]) || (keyEvent->keysym.sym == SDLK_KP_2  && keyStates[SDL_SCANCODE_KP_2] )) {
             moveCursor(4, 1);
             return true;
          }
-         if ( keyEvent->keysym.sym == SDLK_KP6  && keyStates[SDLK_KP6] ) {
+         if ( keyEvent->keysym.sym == SDLK_KP_6  && keyStates[SDL_SCANCODE_KP_6] ) {
             moveCursor(2, 2);
             return true;
          }
-         if ( keyEvent->keysym.sym == SDLK_KP4 && keyStates[SDLK_KP4] ) {
+         if ( keyEvent->keysym.sym == SDLK_KP_4 && keyStates[SDL_SCANCODE_KP_4] ) {
             moveCursor(6, 2);
             return true;
          }
-         if ( keyEvent->keysym.sym == SDLK_KP7  && keyStates[SDLK_KP7] ) {
+         if ( keyEvent->keysym.sym == SDLK_KP_7  && keyStates[SDL_SCANCODE_KP_7] ) {
             moveCursor(7, 1);
             return true;
          }
-         if ( keyEvent->keysym.sym == SDLK_KP9  && keyStates[SDLK_KP9]) {
+         if ( keyEvent->keysym.sym == SDLK_KP_9  && keyStates[SDL_SCANCODE_KP_9]) {
             moveCursor(1, 1);
             return true;
          }
-         if ( keyEvent->keysym.sym == SDLK_KP1  && keyStates[SDLK_KP1]) {
+         if ( keyEvent->keysym.sym == SDLK_KP_1  && keyStates[SDL_SCANCODE_KP_1]) {
             moveCursor(5, 1);
             return true;
          }
-         if ( keyEvent->keysym.sym == SDLK_KP3  && keyStates[SDLK_KP3]) {
+         if ( keyEvent->keysym.sym == SDLK_KP_3  && keyStates[SDL_SCANCODE_KP_3]) {
             moveCursor(3, 1);
             return true;
          }

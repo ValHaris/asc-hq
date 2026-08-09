@@ -172,6 +172,8 @@ void CGameOptions::runTextIO ( PropertyContainer& pc )
    if ( !pc.isReading() || pc.find("VisibleMapLayer" ))
       pc.addStringArray("VisibleMapLayer", visibleMapLayer );
 
+   if ( !pc.isReading() || pc.find("TipsDismissed" ))
+      pc.addStringArray("TipsDismissed", tipsDismissed );
 
    pc.openBracket("PBEMServer");
    pc.addString("hostname", pbemServer.hostname, pbemServer.hostname );
@@ -255,6 +257,8 @@ void CGameOptions::runTextIO ( PropertyContainer& pc )
    pc.addBool("LogKillsToConsole", logKillsToConsole, false );
 
    pc.addBool("ValidateActions", validateActions, false);
+   pc.addInteger("DisplayScalingMode", displayScalingMode, 0 );
+   pc.addInteger("MapScrollSpeed", scrollspeed, 30);
 }
 
 CGameOptions::CGameOptions()
@@ -321,6 +325,7 @@ void CGameOptions::setDefaults ( void )
 
    xresolution = -1;
    yresolution = -1;
+   displayScalingMode = 0;
 
    mapeditor_xresolution = 1024;
    mapeditor_yresolution = 740;
@@ -355,8 +360,19 @@ void CGameOptions::setDefaults ( void )
    logKillsToConsole = false;
    
    validateActions = false;
+   scrollspeed = 30;
 
    setChanged();
+}
+
+const int displayScalingValues[] = { -1, 100, 125, 150, 175, 200 };
+
+int CGameOptions::getDisplayScalingPercentage()
+{
+	if ( displayScalingMode >= 0 && displayScalingMode < sizeof(displayScalingValues))
+		return displayScalingValues[displayScalingMode];
+	else
+		return -1;
 }
 
 

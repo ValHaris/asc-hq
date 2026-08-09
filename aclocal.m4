@@ -1,6 +1,6 @@
-# generated automatically by aclocal 1.16.5 -*- Autoconf -*-
+# generated automatically by aclocal 1.17 -*- Autoconf -*-
 
-# Copyright (C) 1996-2021 Free Software Foundation, Inc.
+# Copyright (C) 1996-2024 Free Software Foundation, Inc.
 
 # This file is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
@@ -14,8 +14,8 @@
 m4_ifndef([AC_CONFIG_MACRO_DIRS], [m4_defun([_AM_CONFIG_MACRO_DIRS], [])m4_defun([AC_CONFIG_MACRO_DIRS], [_AM_CONFIG_MACRO_DIRS($@)])])
 m4_ifndef([AC_AUTOCONF_VERSION],
   [m4_copy([m4_PACKAGE_VERSION], [AC_AUTOCONF_VERSION])])dnl
-m4_if(m4_defn([AC_AUTOCONF_VERSION]), [2.71],,
-[m4_warning([this file was generated for autoconf 2.71.
+m4_if(m4_defn([AC_AUTOCONF_VERSION]), [2.72],,
+[m4_warning([this file was generated for autoconf 2.72.
 You have another version of autoconf.  It may work, but is not guaranteed to.
 If you have problems, you may need to regenerate the build system entirely.
 To do so, use the procedure documented by the package, typically 'autoreconf'.])])
@@ -481,6 +481,222 @@ AS_IF([test "$AS_TR_SH([with_]m4_tolower([$1]))" = "yes"],
         [AC_DEFINE([HAVE_][$1], 1, [Enable ]m4_tolower([$1])[ support])])
 ])dnl PKG_HAVE_DEFINE_WITH_MODULES
 
+# Configure paths for SDL
+# Sam Lantinga 9/21/99
+# stolen from Manish Singh
+# stolen back from Frank Belew
+# stolen from Manish Singh
+# Shamelessly stolen from Owen Taylor
+#
+# Changelog:
+# * also look for SDL2.framework under Mac OS X
+# * removed HP/UX 9 support.
+# * updated for newer autoconf.
+# * (v3) use $PKG_CONFIG for pkg-config cross-compiling support
+
+# serial 3
+
+dnl AM_PATH_SDL2([MINIMUM-VERSION, [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]]])
+dnl Test for SDL, and define SDL_CFLAGS and SDL_LIBS
+dnl
+AC_DEFUN([AM_PATH_SDL2],
+[dnl
+dnl Get the cflags and libraries from the sdl2-config script
+dnl
+AC_ARG_WITH(sdl-prefix,[  --with-sdl-prefix=PFX   Prefix where SDL is installed (optional)],
+            sdl_prefix="$withval", sdl_prefix="")
+AC_ARG_WITH(sdl-exec-prefix,[  --with-sdl-exec-prefix=PFX Exec prefix where SDL is installed (optional)],
+            sdl_exec_prefix="$withval", sdl_exec_prefix="")
+AC_ARG_ENABLE(sdltest, [  --disable-sdltest       Do not try to compile and run a test SDL program],
+		    , enable_sdltest=yes)
+AC_ARG_ENABLE(sdlframework, [  --disable-sdlframework Do not search for SDL2.framework],
+        , search_sdl_framework=yes)
+
+AC_ARG_VAR(SDL2_FRAMEWORK, [Path to SDL2.framework])
+
+  min_sdl_version=ifelse([$1], ,2.0.0,$1)
+
+  if test "x$sdl_prefix$sdl_exec_prefix" = x ; then
+    PKG_CHECK_MODULES([SDL], [sdl2 >= $min_sdl_version],
+           [sdl_pc=yes],
+           [sdl_pc=no])
+  else
+    sdl_pc=no
+    if test x$sdl_exec_prefix != x ; then
+      sdl_config_args="$sdl_config_args --exec-prefix=$sdl_exec_prefix"
+      if test x${SDL2_CONFIG+set} != xset ; then
+        SDL2_CONFIG=$sdl_exec_prefix/bin/sdl2-config
+      fi
+    fi
+    if test x$sdl_prefix != x ; then
+      sdl_config_args="$sdl_config_args --prefix=$sdl_prefix"
+      if test x${SDL2_CONFIG+set} != xset ; then
+        SDL2_CONFIG=$sdl_prefix/bin/sdl2-config
+      fi
+    fi
+  fi
+
+  if test "x$sdl_pc" = xyes ; then
+    no_sdl=""
+    SDL2_CONFIG="$PKG_CONFIG sdl2"
+  else
+    as_save_PATH="$PATH"
+    if test "x$prefix" != xNONE && test "$cross_compiling" != yes; then
+      PATH="$prefix/bin:$prefix/usr/bin:$PATH"
+    fi
+    AC_PATH_PROG(SDL2_CONFIG, sdl2-config, no, [$PATH])
+    PATH="$as_save_PATH"
+    no_sdl=""
+
+    if test "$SDL2_CONFIG" = "no" -a "x$search_sdl_framework" = "xyes"; then
+      AC_MSG_CHECKING(for SDL2.framework)
+      if test "x$SDL2_FRAMEWORK" != x; then
+        sdl_framework=$SDL2_FRAMEWORK
+      else
+        for d in / ~/ /System/; do
+          if test -d "${d}Library/Frameworks/SDL2.framework"; then
+            sdl_framework="${d}Library/Frameworks/SDL2.framework"
+          fi
+        done
+      fi
+
+      if test x"$sdl_framework" != x && test -d "$sdl_framework"; then
+        AC_MSG_RESULT($sdl_framework)
+        sdl_framework_dir=`dirname $sdl_framework`
+        SDL_CFLAGS="-F$sdl_framework_dir -Wl,-framework,SDL2 -I$sdl_framework/include"
+        SDL_LIBS="-F$sdl_framework_dir -Wl,-framework,SDL2"
+      else
+        no_sdl=yes
+      fi
+    fi
+
+    if test "$SDL2_CONFIG" != "no"; then
+      if test "x$sdl_pc" = "xno"; then
+        AC_MSG_CHECKING(for SDL - version >= $min_sdl_version)
+        SDL_CFLAGS=`$SDL2_CONFIG $sdl_config_args --cflags`
+        SDL_LIBS=`$SDL2_CONFIG $sdl_config_args --libs`
+      fi
+
+      sdl_major_version=`$SDL2_CONFIG $sdl_config_args --version | \
+             sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\1/'`
+      sdl_minor_version=`$SDL2_CONFIG $sdl_config_args --version | \
+             sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\2/'`
+      sdl_micro_version=`$SDL2_CONFIG $sdl_config_args --version | \
+             sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\3/'`
+      if test "x$enable_sdltest" = "xyes" ; then
+        ac_save_CFLAGS="$CFLAGS"
+        ac_save_CXXFLAGS="$CXXFLAGS"
+        ac_save_LIBS="$LIBS"
+        CFLAGS="$CFLAGS $SDL_CFLAGS"
+        CXXFLAGS="$CXXFLAGS $SDL_CFLAGS"
+        LIBS="$LIBS $SDL_LIBS"
+dnl
+dnl Now check if the installed SDL is sufficiently new. (Also sanity
+dnl checks the results of sdl2-config to some extent
+dnl
+      rm -f conf.sdltest
+      AC_RUN_IFELSE([AC_LANG_SOURCE([[
+#include <stdio.h>
+#include <stdlib.h>
+#include "SDL.h"
+
+int main (int argc, char *argv[])
+{
+  int major, minor, micro;
+  FILE *fp = fopen("conf.sdltest", "w");
+
+  if (fp) fclose(fp);
+
+  if (sscanf("$min_sdl_version", "%d.%d.%d", &major, &minor, &micro) != 3) {
+     printf("%s, bad version string\n", "$min_sdl_version");
+     exit(1);
+   }
+
+   if (($sdl_major_version > major) ||
+      (($sdl_major_version == major) && ($sdl_minor_version > minor)) ||
+      (($sdl_major_version == major) && ($sdl_minor_version == minor) && ($sdl_micro_version >= micro)))
+    {
+      return 0;
+    }
+  else
+    {
+      printf("\n*** 'sdl2-config --version' returned %d.%d.%d, but the minimum version\n", $sdl_major_version, $sdl_minor_version, $sdl_micro_version);
+      printf("*** of SDL required is %d.%d.%d. If sdl2-config is correct, then it is\n", major, minor, micro);
+      printf("*** best to upgrade to the required version.\n");
+      printf("*** If sdl2-config was wrong, set the environment variable SDL2_CONFIG\n");
+      printf("*** to point to the correct copy of sdl2-config, and remove the file\n");
+      printf("*** config.cache before re-running configure\n");
+      return 1;
+    }
+}
+
+]])], [], [no_sdl=yes], [echo $ac_n "cross compiling; assumed OK... $ac_c"])
+        CFLAGS="$ac_save_CFLAGS"
+        CXXFLAGS="$ac_save_CXXFLAGS"
+        LIBS="$ac_save_LIBS"
+
+      fi
+      if test "x$sdl_pc" = "xno"; then
+        if test "x$no_sdl" = "xyes"; then
+          AC_MSG_RESULT(no)
+        else
+          AC_MSG_RESULT(yes)
+        fi
+      fi
+    fi
+  fi
+  if test "x$no_sdl" = x ; then
+     ifelse([$2], , :, [$2])
+  else
+     if test "$SDL2_CONFIG" = "no" ; then
+       echo "*** The sdl2-config script installed by SDL could not be found"
+       echo "*** If SDL was installed in PREFIX, make sure PREFIX/bin is in"
+       echo "*** your path, or set the SDL2_CONFIG environment variable to the"
+       echo "*** full path to sdl2-config."
+     else
+       if test -f conf.sdltest ; then
+        :
+       else
+          echo "*** Could not run SDL test program, checking why..."
+          CFLAGS="$CFLAGS $SDL_CFLAGS"
+          CXXFLAGS="$CXXFLAGS $SDL_CFLAGS"
+          LIBS="$LIBS $SDL_LIBS"
+          AC_LINK_IFELSE([AC_LANG_PROGRAM([[
+#include <stdio.h>
+#include "SDL.h"
+
+int main(int argc, char *argv[])
+{ return 0; }
+#undef  main
+#define main K_and_R_C_main
+]], [[ return 0; ]])],
+        [ echo "*** The test program compiled, but did not run. This usually means"
+          echo "*** that the run-time linker is not finding SDL or finding the wrong"
+          echo "*** version of SDL. If it is not finding SDL, you'll need to set your"
+          echo "*** LD_LIBRARY_PATH environment variable, or edit /etc/ld.so.conf to point"
+          echo "*** to the installed location  Also, make sure you have run ldconfig if that"
+          echo "*** is required on your system"
+	  echo "***"
+          echo "*** If you have an old version installed, it is best to remove it, although"
+          echo "*** you may also be able to get things to work by modifying LD_LIBRARY_PATH"],
+        [ echo "*** The test program failed to compile or link. See the file config.log for the"
+          echo "*** exact error that occurred. This usually means SDL was incorrectly installed"
+          echo "*** or that you have moved SDL since it was installed. In the latter case, you"
+          echo "*** may want to edit the sdl2-config script: $SDL2_CONFIG" ])
+          CFLAGS="$ac_save_CFLAGS"
+          CXXFLAGS="$ac_save_CXXFLAGS"
+          LIBS="$ac_save_LIBS"
+       fi
+     fi
+     SDL_CFLAGS=""
+     SDL_LIBS=""
+     ifelse([$3], , :, [$3])
+  fi
+  AC_SUBST(SDL_CFLAGS)
+  AC_SUBST(SDL_LIBS)
+  rm -f conf.sdltest
+])
+
 # Configure paths for libvorbis
 # Jack Moffitt <jack@icecast.org> 10-21-2000
 # Shamelessly stolen from Owen Taylor and Manish Singh
@@ -618,1066 +834,7 @@ int main ()
   rm -f conf.vorbistest
 ])
 
-dnl ---------------------------------------------------------------------------
-dnl Author:          wxWidgets development team,
-dnl                  Francesco Montorsi,
-dnl                  Bob McCown (Mac-testing)
-dnl Creation date:   24/11/2001
-dnl ---------------------------------------------------------------------------
-
-dnl Increment this when changing this file.
-# serial 42
-
-dnl ===========================================================================
-dnl Table of Contents of this macro file:
-dnl -------------------------------------
-dnl
-dnl SECTION A: wxWidgets main macros
-dnl  - WX_CONFIG_OPTIONS
-dnl  - WX_CONFIG_CHECK
-dnl  - WXRC_CHECK
-dnl  - WX_STANDARD_OPTIONS
-dnl  - WX_CONVERT_STANDARD_OPTIONS_TO_WXCONFIG_FLAGS
-dnl  - WX_DETECT_STANDARD_OPTION_VALUES
-dnl
-dnl SECTION B: wxWidgets-related utilities
-dnl  - WX_LIKE_LIBNAME
-dnl  - WX_ARG_ENABLE_YESNOAUTO
-dnl  - WX_ARG_WITH_YESNOAUTO
-dnl
-dnl SECTION C: messages to the user
-dnl  - WX_STANDARD_OPTIONS_SUMMARY_MSG
-dnl  - WX_STANDARD_OPTIONS_SUMMARY_MSG_BEGIN
-dnl  - WX_STANDARD_OPTIONS_SUMMARY_MSG_END
-dnl  - WX_BOOLOPT_SUMMARY
-dnl
-dnl The special "WX_DEBUG_CONFIGURE" variable can be set to 1 to enable extra
-dnl debug output on stdout from these macros.
-dnl ===========================================================================
-
-
-dnl ---------------------------------------------------------------------------
-dnl Macros for wxWidgets detection. Typically used in configure.in as:
-dnl
-dnl     AC_ARG_ENABLE(...)
-dnl     AC_ARG_WITH(...)
-dnl        ...
-dnl     WX_CONFIG_OPTIONS
-dnl        ...
-dnl        ...
-dnl     WX_CONFIG_CHECK([2.6.0], [wxWin=1])
-dnl     if test "$wxWin" != 1; then
-dnl        AC_MSG_ERROR([
-dnl                wxWidgets must be installed on your system
-dnl                but wx-config script couldn't be found.
-dnl
-dnl                Please check that wx-config is in path, the directory
-dnl                where wxWidgets libraries are installed (returned by
-dnl                'wx-config --libs' command) is in LD_LIBRARY_PATH or
-dnl                equivalent variable and wxWidgets version is 2.3.4 or above.
-dnl        ])
-dnl     fi
-dnl     CPPFLAGS="$CPPFLAGS $WX_CPPFLAGS"
-dnl     CXXFLAGS="$CXXFLAGS $WX_CXXFLAGS_ONLY"
-dnl     CFLAGS="$CFLAGS $WX_CFLAGS_ONLY"
-dnl
-dnl     LIBS="$LIBS $WX_LIBS"
-dnl
-dnl If you want to support standard --enable-debug/unicode/shared options, you
-dnl may do the following:
-dnl
-dnl     ...
-dnl     AC_CANONICAL_TARGET
-dnl
-dnl     # define configure options
-dnl     WX_CONFIG_OPTIONS
-dnl     WX_STANDARD_OPTIONS([debug,unicode,shared,toolkit,wxshared])
-dnl
-dnl     # basic configure checks
-dnl     ...
-dnl
-dnl     # we want to always have DEBUG==WX_DEBUG and UNICODE==WX_UNICODE
-dnl     WX_DEBUG=$DEBUG
-dnl     WX_UNICODE=$UNICODE
-dnl
-dnl     WX_CONVERT_STANDARD_OPTIONS_TO_WXCONFIG_FLAGS
-dnl     WX_CONFIG_CHECK([2.8.0], [wxWin=1],,[html,core,net,base],[$WXCONFIG_FLAGS])
-dnl     WX_DETECT_STANDARD_OPTION_VALUES
-dnl
-dnl     # write the output files
-dnl     AC_CONFIG_FILES([Makefile ...])
-dnl     AC_OUTPUT
-dnl
-dnl     # optional: just to show a message to the user
-dnl     WX_STANDARD_OPTIONS_SUMMARY_MSG
-dnl
-dnl ---------------------------------------------------------------------------
-
-
-dnl ---------------------------------------------------------------------------
-dnl WX_CONFIG_OPTIONS
-dnl
-dnl adds support for --wx-prefix, --wx-exec-prefix, --with-wxdir and
-dnl --wx-config command line options
-dnl ---------------------------------------------------------------------------
-
-AC_DEFUN([WX_CONFIG_OPTIONS],
-[
-    AC_ARG_WITH(wxdir,
-                [  --with-wxdir=PATH       Use uninstalled version of wxWidgets in PATH],
-                [ wx_config_name="$withval/wx-config"
-                  wx_config_args="--inplace"])
-    AC_ARG_WITH(wx-config,
-                [  --with-wx-config=CONFIG wx-config script to use (optional)],
-                wx_config_name="$withval" )
-    AC_ARG_WITH(wx-prefix,
-                [  --with-wx-prefix=PREFIX Prefix where wxWidgets is installed (optional)],
-                wx_config_prefix="$withval", wx_config_prefix="")
-    AC_ARG_WITH(wx-exec-prefix,
-                [  --with-wx-exec-prefix=PREFIX
-                          Exec prefix where wxWidgets is installed (optional)],
-                wx_config_exec_prefix="$withval", wx_config_exec_prefix="")
-])
-
-dnl Helper macro for checking if wx version is at least $1.$2.$3, set's
-dnl wx_ver_ok=yes if it is:
-AC_DEFUN([_WX_PRIVATE_CHECK_VERSION],
-[
-    wx_ver_ok=""
-    if test "x$WX_VERSION" != x ; then
-      if test $wx_config_major_version -gt $1; then
-        wx_ver_ok=yes
-      else
-        if test $wx_config_major_version -eq $1; then
-           if test $wx_config_minor_version -gt $2; then
-              wx_ver_ok=yes
-           else
-              if test $wx_config_minor_version -eq $2; then
-                 if test $wx_config_micro_version -ge $3; then
-                    wx_ver_ok=yes
-                 fi
-              fi
-           fi
-        fi
-      fi
-    fi
-])
-
-dnl ---------------------------------------------------------------------------
-dnl WX_CONFIG_CHECK(VERSION, [ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND
-dnl                  [, WX-LIBS [, ADDITIONAL-WX-CONFIG-FLAGS
-dnl                  [, WX-OPTIONAL-LIBS]]]]])
-dnl
-dnl Test for wxWidgets, and define WX_C*FLAGS, WX_LIBS and WX_LIBS_STATIC
-dnl (the latter is for static linking against wxWidgets). Set WX_CONFIG_NAME
-dnl environment variable to override the default name of the wx-config script
-dnl to use. Set WX_CONFIG_PATH to specify the full path to wx-config - in this
-dnl case the macro won't even waste time on tests for its existence.
-dnl
-dnl Optional WX-LIBS argument contains comma- or space-separated list of
-dnl wxWidgets libraries to link against. If it is not specified then WX_LIBS
-dnl and WX_LIBS_STATIC will contain flags to link with all of the core
-dnl wxWidgets libraries.
-dnl
-dnl Optional ADDITIONAL-WX-CONFIG-FLAGS argument is appended to wx-config
-dnl invocation command in present. It can be used to fine-tune lookup of
-dnl best wxWidgets build available.
-dnl
-dnl Optional WX-OPTIONAL-LIBS argument contains comma- or space-separated list
-dnl of wxWidgets libraries to link against if they are available.
-dnl WX-OPTIONAL-LIBS is supported on version 2.9.0 and later.
-dnl
-dnl Example use:
-dnl   WX_CONFIG_CHECK([2.6.0], [wxWin=1], [wxWin=0], [html,core,net]
-dnl                    [--unicode --debug])
-dnl ---------------------------------------------------------------------------
-
-dnl
-dnl Get the cflags and libraries from the wx-config script
-dnl
-AC_DEFUN([WX_CONFIG_CHECK],
-[
-  dnl do we have wx-config name: it can be wx-config or wxd-config or ...
-  if test x${WX_CONFIG_NAME+set} != xset ; then
-     WX_CONFIG_NAME=wx-config
-  fi
-
-  if test "x$wx_config_name" != x ; then
-     WX_CONFIG_NAME="$wx_config_name"
-  fi
-
-  dnl deal with optional prefixes
-  if test x$wx_config_exec_prefix != x ; then
-     wx_config_args="$wx_config_args --exec-prefix=$wx_config_exec_prefix"
-     WX_LOOKUP_PATH="$wx_config_exec_prefix/bin"
-  fi
-  if test x$wx_config_prefix != x ; then
-     wx_config_args="$wx_config_args --prefix=$wx_config_prefix"
-     WX_LOOKUP_PATH="$WX_LOOKUP_PATH:$wx_config_prefix/bin"
-  fi
-  if test "$cross_compiling" = "yes"; then
-     wx_config_args="$wx_config_args --host=$host_alias"
-  fi
-
-  dnl don't search the PATH if WX_CONFIG_NAME is absolute filename
-  if test -x "$WX_CONFIG_NAME" ; then
-     AC_MSG_CHECKING(for wx-config)
-     WX_CONFIG_PATH="$WX_CONFIG_NAME"
-     AC_MSG_RESULT($WX_CONFIG_PATH)
-  else
-     AC_PATH_PROG(WX_CONFIG_PATH, $WX_CONFIG_NAME, no, "$WX_LOOKUP_PATH:$PATH")
-  fi
-
-  if test "$WX_CONFIG_PATH" != "no" ; then
-    WX_VERSION=""
-
-    min_wx_version=ifelse([$1], ,2.2.1,$1)
-    if test -z "$5" ; then
-      AC_MSG_CHECKING([for wxWidgets version >= $min_wx_version])
-    else
-      AC_MSG_CHECKING([for wxWidgets version >= $min_wx_version ($5)])
-    fi
-
-    dnl don't add the libraries (4th argument) to this variable as this would
-    dnl result in an error when it's used with --version below
-    WX_CONFIG_WITH_ARGS="$WX_CONFIG_PATH $wx_config_args $5"
-
-    WX_VERSION=`$WX_CONFIG_WITH_ARGS --version 2>/dev/null`
-    wx_config_major_version=`echo $WX_VERSION | \
-           sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\1/'`
-    wx_config_minor_version=`echo $WX_VERSION | \
-           sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\2/'`
-    wx_config_micro_version=`echo $WX_VERSION | \
-           sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\3/'`
-
-    wx_requested_major_version=`echo $min_wx_version | \
-           sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\1/'`
-    wx_requested_minor_version=`echo $min_wx_version | \
-           sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\2/'`
-    wx_requested_micro_version=`echo $min_wx_version | \
-           sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\3/'`
-
-    _WX_PRIVATE_CHECK_VERSION([$wx_requested_major_version],
-                              [$wx_requested_minor_version],
-                              [$wx_requested_micro_version])
-
-    if test -n "$wx_ver_ok"; then
-      AC_MSG_RESULT(yes (version $WX_VERSION))
-
-      wx_optional_libs=""
-      _WX_PRIVATE_CHECK_VERSION(2,9,0)
-      if test -n "$wx_ver_ok" -a -n "$6"; then
-        wx_optional_libs="--optional-libs $6"
-      fi
-      WX_LIBS=`$WX_CONFIG_WITH_ARGS --libs $4 $wx_optional_libs`
-
-      dnl is this even still appropriate?  --static is a real option now
-      dnl and WX_CONFIG_WITH_ARGS is likely to contain it if that is
-      dnl what the user actually wants, making this redundant at best.
-      dnl For now keep it in case anyone actually used it in the past.
-      AC_MSG_CHECKING([for wxWidgets static library])
-      WX_LIBS_STATIC=`$WX_CONFIG_WITH_ARGS --static --libs $4 $wx_optional_libs 2>/dev/null`
-      if test "x$WX_LIBS_STATIC" = "x"; then
-        AC_MSG_RESULT(no)
-      else
-        AC_MSG_RESULT(yes)
-      fi
-
-      dnl starting with version 2.2.6 wx-config has --cppflags argument
-      wx_has_cppflags=""
-      if test $wx_config_major_version -gt 2; then
-        wx_has_cppflags=yes
-      else
-        if test $wx_config_major_version -eq 2; then
-           if test $wx_config_minor_version -gt 2; then
-              wx_has_cppflags=yes
-           else
-              if test $wx_config_minor_version -eq 2; then
-                 if test $wx_config_micro_version -ge 6; then
-                    wx_has_cppflags=yes
-                 fi
-              fi
-           fi
-        fi
-      fi
-
-      dnl starting with version 2.7.0 wx-config has --rescomp option
-      wx_has_rescomp=""
-      if test $wx_config_major_version -gt 2; then
-        wx_has_rescomp=yes
-      else
-        if test $wx_config_major_version -eq 2; then
-           if test $wx_config_minor_version -ge 7; then
-              wx_has_rescomp=yes
-           fi
-        fi
-      fi
-      if test "x$wx_has_rescomp" = x ; then
-         dnl cannot give any useful info for resource compiler
-         WX_RESCOMP=
-      else
-         WX_RESCOMP=`$WX_CONFIG_WITH_ARGS --rescomp`
-      fi
-
-      if test "x$wx_has_cppflags" = x ; then
-         dnl no choice but to define all flags like CFLAGS
-         WX_CFLAGS=`$WX_CONFIG_WITH_ARGS --cflags $4`
-         WX_CPPFLAGS=$WX_CFLAGS
-         WX_CXXFLAGS=$WX_CFLAGS
-
-         WX_CFLAGS_ONLY=$WX_CFLAGS
-         WX_CXXFLAGS_ONLY=$WX_CFLAGS
-      else
-         dnl we have CPPFLAGS included in CFLAGS included in CXXFLAGS
-         WX_CPPFLAGS=`$WX_CONFIG_WITH_ARGS --cppflags $4`
-         WX_CXXFLAGS=`$WX_CONFIG_WITH_ARGS --cxxflags $4`
-         WX_CFLAGS=`$WX_CONFIG_WITH_ARGS --cflags $4`
-
-         WX_CFLAGS_ONLY=`echo $WX_CFLAGS | sed "s@^$WX_CPPFLAGS *@@"`
-         WX_CXXFLAGS_ONLY=`echo $WX_CXXFLAGS | sed "s@^$WX_CFLAGS *@@"`
-      fi
-
-      ifelse([$2], , :, [$2])
-
-    else
-
-       if test "x$WX_VERSION" = x; then
-          dnl no wx-config at all
-          AC_MSG_RESULT(no)
-       else
-          AC_MSG_RESULT(no (version $WX_VERSION is not new enough))
-       fi
-
-       WX_CFLAGS=""
-       WX_CPPFLAGS=""
-       WX_CXXFLAGS=""
-       WX_LIBS=""
-       WX_LIBS_STATIC=""
-       WX_RESCOMP=""
-
-       if test ! -z "$5"; then
-
-          wx_error_message="
-    The configuration you asked for $PACKAGE_NAME requires a wxWidgets
-    build with the following settings:
-        $5
-    but such build is not available.
-
-    To see the wxWidgets builds available on this system, please use
-    'wx-config --list' command. To use the default build, returned by
-    'wx-config --selected-config', use the options with their 'auto'
-    default values."
-
-       fi
-
-       wx_error_message="
-    The requested wxWidgets build couldn't be found.
-    $wx_error_message
-
-    If you still get this error, then check that 'wx-config' is
-    in path, the directory where wxWidgets libraries are installed
-    (returned by 'wx-config --libs' command) is in LD_LIBRARY_PATH
-    or equivalent variable and wxWidgets version is $1 or above."
-
-       ifelse([$3], , AC_MSG_ERROR([$wx_error_message]), [$3])
-
-    fi
-  else
-
-    WX_CFLAGS=""
-    WX_CPPFLAGS=""
-    WX_CXXFLAGS=""
-    WX_LIBS=""
-    WX_LIBS_STATIC=""
-    WX_RESCOMP=""
-
-    ifelse([$3], , :, [$3])
-
-  fi
-
-  AC_SUBST(WX_CPPFLAGS)
-  AC_SUBST(WX_CFLAGS)
-  AC_SUBST(WX_CXXFLAGS)
-  AC_SUBST(WX_CFLAGS_ONLY)
-  AC_SUBST(WX_CXXFLAGS_ONLY)
-  AC_SUBST(WX_LIBS)
-  AC_SUBST(WX_LIBS_STATIC)
-  AC_SUBST(WX_VERSION)
-  AC_SUBST(WX_RESCOMP)
-
-  dnl need to export also WX_VERSION_MINOR and WX_VERSION_MAJOR symbols
-  dnl to support wxpresets bakefiles (we export also WX_VERSION_MICRO for completeness):
-  WX_VERSION_MAJOR="$wx_config_major_version"
-  WX_VERSION_MINOR="$wx_config_minor_version"
-  WX_VERSION_MICRO="$wx_config_micro_version"
-  AC_SUBST(WX_VERSION_MAJOR)
-  AC_SUBST(WX_VERSION_MINOR)
-  AC_SUBST(WX_VERSION_MICRO)
-])
-
-dnl ---------------------------------------------------------------------------
-dnl Get information on the wxrc program for making C++, Python and xrs
-dnl resource files.
-dnl
-dnl     AC_ARG_ENABLE(...)
-dnl     AC_ARG_WITH(...)
-dnl        ...
-dnl     WX_CONFIG_OPTIONS
-dnl        ...
-dnl     WX_CONFIG_CHECK(2.6.0, wxWin=1)
-dnl     if test "$wxWin" != 1; then
-dnl        AC_MSG_ERROR([
-dnl                wxWidgets must be installed on your system
-dnl                but wx-config script couldn't be found.
-dnl
-dnl                Please check that wx-config is in path, the directory
-dnl                where wxWidgets libraries are installed (returned by
-dnl                'wx-config --libs' command) is in LD_LIBRARY_PATH or
-dnl                equivalent variable and wxWidgets version is 2.6.0 or above.
-dnl        ])
-dnl     fi
-dnl
-dnl     WXRC_CHECK([HAVE_WXRC=1], [HAVE_WXRC=0])
-dnl     if test "x$HAVE_WXRC" != x1; then
-dnl         AC_MSG_ERROR([
-dnl                The wxrc program was not installed or not found.
-dnl
-dnl                Please check the wxWidgets installation.
-dnl         ])
-dnl     fi
-dnl
-dnl     CPPFLAGS="$CPPFLAGS $WX_CPPFLAGS"
-dnl     CXXFLAGS="$CXXFLAGS $WX_CXXFLAGS_ONLY"
-dnl     CFLAGS="$CFLAGS $WX_CFLAGS_ONLY"
-dnl
-dnl     LDFLAGS="$LDFLAGS $WX_LIBS"
-dnl ---------------------------------------------------------------------------
-
-dnl ---------------------------------------------------------------------------
-dnl WXRC_CHECK([ACTION-IF-FOUND [, ACTION-IF-NOT-FOUND]])
-dnl
-dnl Test for wxWidgets' wxrc program for creating either C++, Python or XRS
-dnl resources.  The variable WXRC will be set and substituted in the configure
-dnl script and Makefiles.
-dnl
-dnl Example use:
-dnl   WXRC_CHECK([wxrc=1], [wxrc=0])
-dnl ---------------------------------------------------------------------------
-
-dnl
-dnl wxrc program from the wx-config script
-dnl
-AC_DEFUN([WXRC_CHECK],
-[
-  AC_ARG_VAR([WXRC], [Path to wxWidget's wxrc resource compiler])
-
-  if test "x$WX_CONFIG_NAME" = x; then
-    AC_MSG_ERROR([The wxrc tests must run after wxWidgets test.])
-  else
-
-    AC_MSG_CHECKING([for wxrc])
-
-    if test "x$WXRC" = x ; then
-      dnl wx-config --utility is a new addition to wxWidgets:
-      _WX_PRIVATE_CHECK_VERSION(2,5,3)
-      if test -n "$wx_ver_ok"; then
-        WXRC=`$WX_CONFIG_WITH_ARGS --utility=wxrc`
-      fi
-    fi
-
-    if test "x$WXRC" = x ; then
-      AC_MSG_RESULT([not found])
-      ifelse([$2], , :, [$2])
-    else
-      AC_MSG_RESULT([$WXRC])
-      ifelse([$1], , :, [$1])
-    fi
-
-    AC_SUBST(WXRC)
-  fi
-])
-
-dnl ---------------------------------------------------------------------------
-dnl WX_LIKE_LIBNAME([output-var] [prefix], [name])
-dnl
-dnl Sets the "output-var" variable to the name of a library named with same
-dnl wxWidgets rule.
-dnl E.g. for output-var=='lib', name=='test', prefix='mine', sets
-dnl      the $lib variable to:
-dnl          'mine_gtk2ud_test-2.8'
-dnl      if WX_PORT=gtk2, WX_UNICODE=1, WX_DEBUG=1 and WX_RELEASE=28
-dnl ---------------------------------------------------------------------------
-AC_DEFUN([WX_LIKE_LIBNAME],
-    [
-        wx_temp="$2""_""$WX_PORT"
-
-        dnl add the [u][d] string
-        if test "$WX_UNICODE" = "1"; then
-            wx_temp="$wx_temp""u"
-        fi
-        if test "$WX_DEBUG" = "1"; then
-            wx_temp="$wx_temp""d"
-        fi
-
-        dnl complete the name of the lib
-        wx_temp="$wx_temp""_""$3""-$WX_VERSION_MAJOR.$WX_VERSION_MINOR"
-
-        dnl save it in the user's variable
-        $1=$wx_temp
-    ])
-
-dnl ---------------------------------------------------------------------------
-dnl WX_ARG_ENABLE_YESNOAUTO/WX_ARG_WITH_YESNOAUTO
-dnl
-dnl Two little custom macros which define the ENABLE/WITH configure arguments.
-dnl Macro arguments:
-dnl $1 = the name of the --enable / --with  feature
-dnl $2 = the name of the variable associated
-dnl $3 = the description of that feature
-dnl $4 = the default value for that feature
-dnl $5 = additional action to do in case option is given with "yes" value
-dnl ---------------------------------------------------------------------------
-AC_DEFUN([WX_ARG_ENABLE_YESNOAUTO],
-         [AC_ARG_ENABLE($1,
-            AS_HELP_STRING([--enable-$1],[$3 (default is $4)]),
-            [], [enableval="$4"])
-
-            dnl Show a message to the user about this option
-            AC_MSG_CHECKING([for the --enable-$1 option])
-            if test "$enableval" = "yes" ; then
-                AC_MSG_RESULT([yes])
-                $2=1
-                $5
-            elif test "$enableval" = "no" ; then
-                AC_MSG_RESULT([no])
-                $2=0
-            elif test "$enableval" = "auto" ; then
-                AC_MSG_RESULT([will be automatically detected])
-                $2=""
-            else
-                AC_MSG_ERROR([
-    Unrecognized option value (allowed values: yes, no, auto)
-                ])
-            fi
-         ])
-
-AC_DEFUN([WX_ARG_WITH_YESNOAUTO],
-         [AC_ARG_WITH($1,
-            AS_HELP_STRING([--with-$1],[$3 (default is $4)]),
-            [], [withval="$4"])
-
-            dnl Show a message to the user about this option
-            AC_MSG_CHECKING([for the --with-$1 option])
-            if test "$withval" = "yes" ; then
-                AC_MSG_RESULT([yes])
-                $2=1
-                $5
-            dnl NB: by default we don't allow --with-$1=no option
-            dnl     since it does not make much sense !
-            elif test "$6" = "1" -a "$withval" = "no" ; then
-                AC_MSG_RESULT([no])
-                $2=0
-            elif test "$withval" = "auto" ; then
-                AC_MSG_RESULT([will be automatically detected])
-                $2=""
-            else
-                AC_MSG_ERROR([
-    Unrecognized option value (allowed values: yes, auto)
-                ])
-            fi
-         ])
-
-
-dnl ---------------------------------------------------------------------------
-dnl WX_STANDARD_OPTIONS([options-to-add])
-dnl
-dnl Adds to the configure script one or more of the following options:
-dnl   --enable-[debug|unicode|shared|wxshared|wxdebug]
-dnl   --with-[gtk|msw|motif|x11|mac|dfb]
-dnl   --with-wxversion
-dnl Then checks for their presence and eventually set the DEBUG, UNICODE, SHARED,
-dnl PORT, WX_SHARED, WX_DEBUG, variables to one of the "yes", "no", "auto" values.
-dnl
-dnl Note that e.g. UNICODE != WX_UNICODE; the first is the value of the
-dnl --enable-unicode option (in boolean format) while the second indicates
-dnl if wxWidgets was built in Unicode mode (and still is in boolean format).
-dnl ---------------------------------------------------------------------------
-AC_DEFUN([WX_STANDARD_OPTIONS],
-        [
-
-        dnl the following lines will expand to WX_ARG_ENABLE_YESNOAUTO calls if and only if
-        dnl the $1 argument contains respectively the debug,unicode or shared options.
-
-        dnl be careful here not to set debug flag if only "wxdebug" was specified
-        ifelse(regexp([$1], [\bdebug]), [-1],,
-               [WX_ARG_ENABLE_YESNOAUTO([debug], [DEBUG], [Build in debug mode], [auto])])
-
-        ifelse(index([$1], [unicode]), [-1],,
-               [WX_ARG_ENABLE_YESNOAUTO([unicode], [UNICODE], [Build in Unicode mode], [auto])])
-
-        ifelse(regexp([$1], [\bshared]), [-1],,
-               [WX_ARG_ENABLE_YESNOAUTO([shared], [SHARED], [Build as shared library], [auto])])
-
-        dnl WX_ARG_WITH_YESNOAUTO cannot be used for --with-toolkit since it's an option
-        dnl which must be able to accept the auto|gtk1|gtk2|msw|... values
-        ifelse(index([$1], [toolkit]), [-1],,
-               [
-                AC_ARG_WITH([toolkit],
-                            AS_HELP_STRING([--with-toolkit],[Build against a specific wxWidgets toolkit (default is auto)]),
-                            [], [withval="auto"])
-
-                dnl Show a message to the user about this option
-                AC_MSG_CHECKING([for the --with-toolkit option])
-                if test "$withval" = "auto" ; then
-                    AC_MSG_RESULT([will be automatically detected])
-                    TOOLKIT=""
-                else
-                    TOOLKIT="$withval"
-
-                    dnl PORT must be one of the allowed values
-                    if test "$TOOLKIT" != "gtk1" -a "$TOOLKIT" != "gtk2" -a "$TOOLKIT" != "gtk3" -a \
-                            "$TOOLKIT" != "msw" -a "$TOOLKIT" != "motif" -a \
-                            "$TOOLKIT" != "osx_carbon" -a "$TOOLKIT" != "osx_cocoa" -a \
-                            "$TOOLKIT" != "dfb" -a "$TOOLKIT" != "x11" -a "$TOOLKIT" != "base"; then
-                        AC_MSG_ERROR([
-    Unrecognized option value (allowed values: auto, gtk1, gtk2, gtk3, msw, motif, osx_carbon, osx_cocoa, dfb, x11, base)
-                        ])
-                    fi
-
-                    AC_MSG_RESULT([$TOOLKIT])
-                fi
-               ])
-
-        dnl ****** IMPORTANT *******
-        dnl   Unlike for the UNICODE setting, you can build your program in
-        dnl   shared mode against a static build of wxWidgets. Thus we have the
-        dnl   following option which allows these mixtures. E.g.
-        dnl
-        dnl      ./configure --disable-shared --with-wxshared
-        dnl
-        dnl   will build your library in static mode against the first available
-        dnl   shared build of wxWidgets.
-        dnl
-        dnl   Note that's not possible to do the viceversa:
-        dnl
-        dnl      ./configure --enable-shared --without-wxshared
-        dnl
-        dnl   Doing so you would try to build your library in shared mode against a static
-        dnl   build of wxWidgets. This is not possible (you would mix PIC and non PIC code) !
-        dnl   A check for this combination of options is in WX_DETECT_STANDARD_OPTION_VALUES
-        dnl   (where we know what 'auto' should be expanded to).
-        dnl
-        dnl   If you try to build something in ANSI mode against a UNICODE build
-        dnl   of wxWidgets or in RELEASE mode against a DEBUG build of wxWidgets,
-        dnl   then at best you'll get ton of linking errors !
-        dnl ************************
-
-        ifelse(index([$1], [wxshared]), [-1],,
-               [
-                WX_ARG_WITH_YESNOAUTO(
-                    [wxshared], [WX_SHARED],
-                    [Force building against a shared build of wxWidgets, even if --disable-shared is given],
-                    [auto], [], [1])
-               ])
-
-        dnl Just like for SHARED and WX_SHARED it may happen that some adventurous
-        dnl peoples will want to mix a wxWidgets release build with a debug build of
-        dnl his app/lib. So, we have both DEBUG and WX_DEBUG variables.
-        ifelse(index([$1], [wxdebug]), [-1],,
-               [
-                WX_ARG_WITH_YESNOAUTO(
-                    [wxdebug], [WX_DEBUG],
-                    [Force building against a debug build of wxWidgets, even if --disable-debug is given],
-                    [auto], [], [1])
-               ])
-
-        dnl WX_ARG_WITH_YESNOAUTO cannot be used for --with-wxversion since it's an option
-        dnl which accepts the "auto|2.6|2.7|2.8|2.9|3.0" etc etc values
-        ifelse(index([$1], [wxversion]), [-1],,
-               [
-                AC_ARG_WITH([wxversion],
-                            AS_HELP_STRING([--with-wxversion],[Build against a specific version of wxWidgets (default is auto)]),
-                            [], [withval="auto"])
-
-                dnl Show a message to the user about this option
-                AC_MSG_CHECKING([for the --with-wxversion option])
-                if test "$withval" = "auto" ; then
-                    AC_MSG_RESULT([will be automatically detected])
-                    WX_RELEASE=""
-                else
-
-                    wx_requested_major_version=`echo $withval | \
-                        sed 's/\([[0-9]]*\).\([[0-9]]*\).*/\1/'`
-                    wx_requested_minor_version=`echo $withval | \
-                        sed 's/\([[0-9]]*\).\([[0-9]]*\).*/\2/'`
-
-                    dnl both vars above must be exactly 1 digit
-                    if test "${#wx_requested_major_version}" != "1" -o \
-                            "${#wx_requested_minor_version}" != "1" ; then
-                        AC_MSG_ERROR([
-    Unrecognized option value (allowed values: auto, 2.6, 2.7, 2.8, 2.9, 3.0)
-                        ])
-                    fi
-
-                    WX_RELEASE="$wx_requested_major_version"".""$wx_requested_minor_version"
-                    AC_MSG_RESULT([$WX_RELEASE])
-                fi
-               ])
-
-        if test "$WX_DEBUG_CONFIGURE" = "1"; then
-            echo "[[dbg]] DEBUG: $DEBUG, WX_DEBUG: $WX_DEBUG"
-            echo "[[dbg]] UNICODE: $UNICODE, WX_UNICODE: $WX_UNICODE"
-            echo "[[dbg]] SHARED: $SHARED, WX_SHARED: $WX_SHARED"
-            echo "[[dbg]] TOOLKIT: $TOOLKIT, WX_TOOLKIT: $WX_TOOLKIT"
-            echo "[[dbg]] VERSION: $VERSION, WX_RELEASE: $WX_RELEASE"
-        fi
-    ])
-
-
-dnl ---------------------------------------------------------------------------
-dnl WX_CONVERT_STANDARD_OPTIONS_TO_WXCONFIG_FLAGS
-dnl
-dnl Sets the WXCONFIG_FLAGS string using the SHARED,DEBUG,UNICODE variable values
-dnl which were specified.
-dnl Thus this macro needs to be called only once all options have been set.
-dnl ---------------------------------------------------------------------------
-AC_DEFUN([WX_CONVERT_STANDARD_OPTIONS_TO_WXCONFIG_FLAGS],
-        [
-        if test "$WX_SHARED" = "1" ; then
-            WXCONFIG_FLAGS="--static=no "
-        elif test "$WX_SHARED" = "0" ; then
-            WXCONFIG_FLAGS="--static=yes "
-        fi
-
-        if test "$WX_DEBUG" = "1" ; then
-            WXCONFIG_FLAGS="$WXCONFIG_FLAGS""--debug=yes "
-        elif test "$WX_DEBUG" = "0" ; then
-            WXCONFIG_FLAGS="$WXCONFIG_FLAGS""--debug=no "
-        fi
-
-        dnl The user should have set WX_UNICODE=UNICODE
-        if test "$WX_UNICODE" = "1" ; then
-            WXCONFIG_FLAGS="$WXCONFIG_FLAGS""--unicode=yes "
-        elif test "$WX_UNICODE" = "0" ; then
-            WXCONFIG_FLAGS="$WXCONFIG_FLAGS""--unicode=no "
-        fi
-
-        if test -n "$TOOLKIT" ; then
-            WXCONFIG_FLAGS="$WXCONFIG_FLAGS""--toolkit=$TOOLKIT "
-        fi
-
-        if test -n "$WX_RELEASE" ; then
-            WXCONFIG_FLAGS="$WXCONFIG_FLAGS""--version=$WX_RELEASE "
-        fi
-
-        dnl strip out the last space of the string
-        WXCONFIG_FLAGS=${WXCONFIG_FLAGS% }
-
-        if test "$WX_DEBUG_CONFIGURE" = "1"; then
-            echo "[[dbg]] WXCONFIG_FLAGS: $WXCONFIG_FLAGS"
-        fi
-    ])
-
-
-dnl ---------------------------------------------------------------------------
-dnl _WX_SELECTEDCONFIG_CHECKFOR([RESULTVAR], [STRING], [MSG])
-dnl
-dnl Sets WX_$RESULTVAR to the value of $RESULTVAR if it's defined. Otherwise,
-dnl auto-detect the value by checking for the presence of STRING in
-dnl $WX_SELECTEDCONFIG (which is supposed to be set by caller) and set
-dnl WX_$RESULTVAR to either 0 or 1, also outputting "yes" or "no" after MSG.
-dnl ---------------------------------------------------------------------------
-AC_DEFUN([_WX_SELECTEDCONFIG_CHECKFOR],
-        [
-        if test -z "$$1" ; then
-
-            dnl The user does not have particular preferences for this option;
-            dnl so we will detect the wxWidgets relative build setting and use it
-            AC_MSG_CHECKING([$3])
-
-            dnl set WX_$1 variable to 1 if the $WX_SELECTEDCONFIG contains the $2
-            dnl string or to 0 otherwise.
-            dnl NOTE: 'expr match STRING REGEXP' cannot be used since on Mac it
-            dnl       doesn't work; we use 'expr STRING : REGEXP' instead
-            WX_$1=$(expr "$WX_SELECTEDCONFIG" : ".*$2.*")
-
-            if test "$WX_$1" != "0"; then
-                WX_$1=1
-                AC_MSG_RESULT([yes])
-            else
-                WX_$1=0
-                AC_MSG_RESULT([no])
-            fi
-        else
-
-            dnl Use the setting given by the user
-            WX_$1=$$1
-        fi
-    ])
-
-dnl ---------------------------------------------------------------------------
-dnl WX_DETECT_STANDARD_OPTION_VALUES
-dnl
-dnl Detects the values of the following variables:
-dnl 1) WX_RELEASE
-dnl 2) WX_UNICODE
-dnl 3) WX_DEBUG
-dnl 4) WX_SHARED    (and also WX_STATIC)
-dnl 5) WX_PORT
-dnl from the previously selected wxWidgets build; this macro in fact must be
-dnl called *after* calling the WX_CONFIG_CHECK macro.
-dnl
-dnl Note that the WX_VERSION_MAJOR, WX_VERSION_MINOR symbols are already set
-dnl by WX_CONFIG_CHECK macro
-dnl ---------------------------------------------------------------------------
-AC_DEFUN([WX_DETECT_STANDARD_OPTION_VALUES],
-        [
-        dnl IMPORTANT: WX_VERSION contains all three major.minor.micro digits,
-        dnl            while WX_RELEASE only the major.minor ones.
-        WX_RELEASE="$WX_VERSION_MAJOR""$WX_VERSION_MINOR"
-        if test $WX_RELEASE -lt 26 ; then
-
-            AC_MSG_ERROR([
-    Cannot detect the wxWidgets configuration for the selected wxWidgets build
-    since its version is $WX_VERSION < 2.6.0; please install a newer
-    version of wxWidgets.
-                         ])
-        fi
-
-        dnl The wx-config we are using understands the "--selected_config"
-        dnl option which returns an easy-parseable string !
-        WX_SELECTEDCONFIG=$($WX_CONFIG_WITH_ARGS --selected_config)
-
-        if test "$WX_DEBUG_CONFIGURE" = "1"; then
-            echo "[[dbg]] Using wx-config --selected-config"
-            echo "[[dbg]] WX_SELECTEDCONFIG: $WX_SELECTEDCONFIG"
-        fi
-
-        dnl we could test directly for WX_SHARED with a line like:
-        dnl    _WX_SELECTEDCONFIG_CHECKFOR([SHARED], [shared],
-        dnl                                [if wxWidgets was built in SHARED mode])
-        dnl but wx-config --selected-config DOES NOT outputs the 'shared'
-        dnl word when wx was built in shared mode; it rather outputs the
-        dnl 'static' word when built in static mode.
-        if test "$WX_SHARED" = "1"; then
-            STATIC=0
-        elif test "$WX_SHARED" = "0"; then
-            STATIC=1
-        fi
-
-        dnl Now set the WX_UNICODE, WX_DEBUG, WX_STATIC variables
-        _WX_SELECTEDCONFIG_CHECKFOR([UNICODE], [unicode],
-                                    [if wxWidgets was built with UNICODE enabled])
-        _WX_SELECTEDCONFIG_CHECKFOR([DEBUG], [debug],
-                                    [if wxWidgets was built in DEBUG mode])
-        _WX_SELECTEDCONFIG_CHECKFOR([STATIC], [static],
-                                    [if wxWidgets was built in STATIC mode])
-
-        dnl init WX_SHARED from WX_STATIC
-        if test "$WX_STATIC" != "0"; then
-            WX_SHARED=0
-        else
-            WX_SHARED=1
-        fi
-
-        AC_SUBST(WX_UNICODE)
-        AC_SUBST(WX_DEBUG)
-        AC_SUBST(WX_SHARED)
-
-        dnl detect the WX_PORT to use
-        if test -z "$TOOLKIT" ; then
-
-            dnl The user does not have particular preferences for this option;
-            dnl so we will detect the wxWidgets relative build setting and use it
-            AC_MSG_CHECKING([which wxWidgets toolkit was selected])
-
-            WX_GTKPORT1=$(expr "$WX_SELECTEDCONFIG" : ".*gtk1.*")
-            WX_GTKPORT2=$(expr "$WX_SELECTEDCONFIG" : ".*gtk2.*")
-            WX_GTKPORT3=$(expr "$WX_SELECTEDCONFIG" : ".*gtk3.*")
-            WX_MSWPORT=$(expr "$WX_SELECTEDCONFIG" : ".*msw.*")
-            WX_MOTIFPORT=$(expr "$WX_SELECTEDCONFIG" : ".*motif.*")
-            WX_OSXCOCOAPORT=$(expr "$WX_SELECTEDCONFIG" : ".*osx_cocoa.*")
-            WX_OSXCARBONPORT=$(expr "$WX_SELECTEDCONFIG" : ".*osx_carbon.*")
-            WX_X11PORT=$(expr "$WX_SELECTEDCONFIG" : ".*x11.*")
-            WX_DFBPORT=$(expr "$WX_SELECTEDCONFIG" : ".*dfb.*")
-            WX_BASEPORT=$(expr "$WX_SELECTEDCONFIG" : ".*base.*")
-
-            WX_PORT="unknown"
-            if test "$WX_GTKPORT1" != "0"; then WX_PORT="gtk1"; fi
-            if test "$WX_GTKPORT2" != "0"; then WX_PORT="gtk2"; fi
-            if test "$WX_GTKPORT3" != "0"; then WX_PORT="gtk3"; fi
-            if test "$WX_MSWPORT" != "0"; then WX_PORT="msw"; fi
-            if test "$WX_MOTIFPORT" != "0"; then WX_PORT="motif"; fi
-            if test "$WX_OSXCOCOAPORT" != "0"; then WX_PORT="osx_cocoa"; fi
-            if test "$WX_OSXCARBONPORT" != "0"; then WX_PORT="osx_carbon"; fi
-            if test "$WX_X11PORT" != "0"; then WX_PORT="x11"; fi
-            if test "$WX_DFBPORT" != "0"; then WX_PORT="dfb"; fi
-            if test "$WX_BASEPORT" != "0"; then WX_PORT="base"; fi
-
-            dnl NOTE: backward-compatible check for wx2.8; in wx2.9 the mac
-            dnl       ports are called 'osx_cocoa' and 'osx_carbon' (see above)
-            WX_MACPORT=$(expr "$WX_SELECTEDCONFIG" : ".*mac.*")
-            if test "$WX_MACPORT" != "0"; then WX_PORT="mac"; fi
-
-            dnl check at least one of the WX_*PORT has been set !
-
-            if test "$WX_PORT" = "unknown" ; then
-                AC_MSG_ERROR([
-        Cannot detect the currently installed wxWidgets port !
-        Please check your 'wx-config --cxxflags'...
-                            ])
-            fi
-
-            AC_MSG_RESULT([$WX_PORT])
-        else
-            dnl Use the setting given by the user
-            WX_PORT=$TOOLKIT
-        fi
-
-        AC_SUBST(WX_PORT)
-
-        if test "$WX_DEBUG_CONFIGURE" = "1"; then
-            echo "[[dbg]] Values of all WX_* options after final detection:"
-            echo "[[dbg]] WX_DEBUG: $WX_DEBUG"
-            echo "[[dbg]] WX_UNICODE: $WX_UNICODE"
-            echo "[[dbg]] WX_SHARED: $WX_SHARED"
-            echo "[[dbg]] WX_RELEASE: $WX_RELEASE"
-            echo "[[dbg]] WX_PORT: $WX_PORT"
-        fi
-
-        dnl Avoid problem described in the WX_STANDARD_OPTIONS which happens when
-        dnl the user gives the options:
-        dnl      ./configure --enable-shared --without-wxshared
-        dnl or just do
-        dnl      ./configure --enable-shared
-        dnl but there is only a static build of wxWidgets available.
-        if test "$WX_SHARED" = "0" -a "$SHARED" = "1"; then
-            AC_MSG_ERROR([
-    Cannot build shared library against a static build of wxWidgets !
-    This error happens because the wxWidgets build which was selected
-    has been detected as static while you asked to build $PACKAGE_NAME
-    as shared library and this is not possible.
-    Use the '--disable-shared' option to build $PACKAGE_NAME
-    as static library or '--with-wxshared' to use wxWidgets as shared library.
-                         ])
-        fi
-
-        dnl now we can finally update the options to their final values if they
-        dnl were not already set
-        if test -z "$UNICODE" ; then
-            UNICODE=$WX_UNICODE
-        fi
-        if test -z "$SHARED" ; then
-            SHARED=$WX_SHARED
-        fi
-        if test -z "$TOOLKIT" ; then
-            TOOLKIT=$WX_PORT
-        fi
-
-        dnl respect the DEBUG variable adding the optimize/debug flags and also
-        dnl define a BUILD variable in case the user wants to use it
-        dnl
-        dnl NOTE: the CXXFLAGS are merged together with the CPPFLAGS so we
-        dnl       don't need to set them, too
-        if test "$DEBUG" = "1"; then
-            BUILD="debug"
-            CXXFLAGS="$CXXFLAGS -g -O0"
-            CFLAGS="$CFLAGS -g -O0"
-        elif test "$DEBUG" = "0"; then
-            BUILD="release"
-            CXXFLAGS="$CXXFLAGS -O2"
-            CFLAGS="$CFLAGS -O2"
-        fi
-    ])
-
-dnl ---------------------------------------------------------------------------
-dnl WX_BOOLOPT_SUMMARY([name of the boolean variable to show summary for],
-dnl                   [what to print when var is 1],
-dnl                   [what to print when var is 0])
-dnl
-dnl Prints $2 when variable $1 == 1 and prints $3 when variable $1 == 0.
-dnl This macro mainly exists just to make configure.ac scripts more readable.
-dnl
-dnl NOTE: you need to use the [" my message"] syntax for 2nd and 3rd arguments
-dnl       if you want that m4 avoid to throw away the spaces prefixed to the
-dnl       argument value.
-dnl ---------------------------------------------------------------------------
-AC_DEFUN([WX_BOOLOPT_SUMMARY],
-        [
-        if test "x$$1" = "x1" ; then
-            echo $2
-        elif test "x$$1" = "x0" ; then
-            echo $3
-        else
-            echo "$1 is $$1"
-        fi
-    ])
-
-dnl ---------------------------------------------------------------------------
-dnl WX_STANDARD_OPTIONS_SUMMARY_MSG
-dnl
-dnl Shows a summary message to the user about the WX_* variable contents.
-dnl This macro is used typically at the end of the configure script.
-dnl ---------------------------------------------------------------------------
-AC_DEFUN([WX_STANDARD_OPTIONS_SUMMARY_MSG],
-        [
-        echo
-        echo "  The wxWidgets build which will be used by $PACKAGE_NAME $PACKAGE_VERSION"
-        echo "  has the following settings:"
-        WX_BOOLOPT_SUMMARY([WX_DEBUG],   ["  - DEBUG build"],  ["  - RELEASE build"])
-        WX_BOOLOPT_SUMMARY([WX_UNICODE], ["  - UNICODE mode"], ["  - ANSI mode"])
-        WX_BOOLOPT_SUMMARY([WX_SHARED],  ["  - SHARED mode"],  ["  - STATIC mode"])
-        echo "  - VERSION: $WX_VERSION"
-        echo "  - PORT: $WX_PORT"
-    ])
-
-
-dnl ---------------------------------------------------------------------------
-dnl WX_STANDARD_OPTIONS_SUMMARY_MSG_BEGIN, WX_STANDARD_OPTIONS_SUMMARY_MSG_END
-dnl
-dnl Like WX_STANDARD_OPTIONS_SUMMARY_MSG macro but these two macros also gives info
-dnl about the configuration of the package which used the wxpresets.
-dnl
-dnl Typical usage:
-dnl    WX_STANDARD_OPTIONS_SUMMARY_MSG_BEGIN
-dnl    echo "   - Package setting 1: $SETTING1"
-dnl    echo "   - Package setting 2: $SETTING1"
-dnl    ...
-dnl    WX_STANDARD_OPTIONS_SUMMARY_MSG_END
-dnl
-dnl ---------------------------------------------------------------------------
-AC_DEFUN([WX_STANDARD_OPTIONS_SUMMARY_MSG_BEGIN],
-        [
-        echo
-        echo " ----------------------------------------------------------------"
-        echo "  Configuration for $PACKAGE_NAME $PACKAGE_VERSION successfully completed."
-        echo "  Summary of main configuration settings for $PACKAGE_NAME:"
-        WX_BOOLOPT_SUMMARY([DEBUG], ["  - DEBUG build"], ["  - RELEASE build"])
-        WX_BOOLOPT_SUMMARY([UNICODE], ["  - UNICODE mode"], ["  - ANSI mode"])
-        WX_BOOLOPT_SUMMARY([SHARED], ["  - SHARED mode"], ["  - STATIC mode"])
-    ])
-
-AC_DEFUN([WX_STANDARD_OPTIONS_SUMMARY_MSG_END],
-        [
-        WX_STANDARD_OPTIONS_SUMMARY_MSG
-        echo
-        echo "  Now, just run make."
-        echo " ----------------------------------------------------------------"
-        echo
-    ])
-
-
-dnl ---------------------------------------------------------------------------
-dnl Deprecated macro wrappers
-dnl ---------------------------------------------------------------------------
-
-AC_DEFUN([AM_OPTIONS_WXCONFIG], [WX_CONFIG_OPTIONS])
-AC_DEFUN([AM_PATH_WXCONFIG], [
-    WX_CONFIG_CHECK([$1],[$2],[$3],[$4],[$5])
-])
-AC_DEFUN([AM_PATH_WXRC], [WXRC_CHECK([$1],[$2])])
-
-# Copyright (C) 2002-2021 Free Software Foundation, Inc.
+# Copyright (C) 2002-2024 Free Software Foundation, Inc.
 #
 # This file is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
@@ -1689,10 +846,10 @@ AC_DEFUN([AM_PATH_WXRC], [WXRC_CHECK([$1],[$2])])
 # generated from the m4 files accompanying Automake X.Y.
 # (This private macro should not be called outside this file.)
 AC_DEFUN([AM_AUTOMAKE_VERSION],
-[am__api_version='1.16'
+[am__api_version='1.17'
 dnl Some users find AM_AUTOMAKE_VERSION and mistake it for a way to
 dnl require some minimum version.  Point them to the right macro.
-m4_if([$1], [1.16.5], [],
+m4_if([$1], [1.17], [],
       [AC_FATAL([Do not call $0, use AM_INIT_AUTOMAKE([$1]).])])dnl
 ])
 
@@ -1708,14 +865,14 @@ m4_define([_AM_AUTOCONF_VERSION], [])
 # Call AM_AUTOMAKE_VERSION and AM_AUTOMAKE_VERSION so they can be traced.
 # This function is AC_REQUIREd by AM_INIT_AUTOMAKE.
 AC_DEFUN([AM_SET_CURRENT_AUTOMAKE_VERSION],
-[AM_AUTOMAKE_VERSION([1.16.5])dnl
+[AM_AUTOMAKE_VERSION([1.17])dnl
 m4_ifndef([AC_AUTOCONF_VERSION],
   [m4_copy([m4_PACKAGE_VERSION], [AC_AUTOCONF_VERSION])])dnl
 _AM_AUTOCONF_VERSION(m4_defn([AC_AUTOCONF_VERSION]))])
 
 # AM_AUX_DIR_EXPAND                                         -*- Autoconf -*-
 
-# Copyright (C) 2001-2021 Free Software Foundation, Inc.
+# Copyright (C) 2001-2024 Free Software Foundation, Inc.
 #
 # This file is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
@@ -1767,7 +924,7 @@ am_aux_dir=`cd "$ac_aux_dir" && pwd`
 
 # AM_CONDITIONAL                                            -*- Autoconf -*-
 
-# Copyright (C) 1997-2021 Free Software Foundation, Inc.
+# Copyright (C) 1997-2024 Free Software Foundation, Inc.
 #
 # This file is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
@@ -1798,7 +955,7 @@ AC_CONFIG_COMMANDS_PRE(
 Usually this means the macro was only invoked conditionally.]])
 fi])])
 
-# Copyright (C) 1999-2021 Free Software Foundation, Inc.
+# Copyright (C) 1999-2024 Free Software Foundation, Inc.
 #
 # This file is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
@@ -1930,7 +1087,7 @@ AC_CACHE_CHECK([dependency style of $depcc],
       # icc doesn't choke on unknown options, it will just issue warnings
       # or remarks (even with -Werror).  So we grep stderr for any message
       # that says an option was ignored or not supported.
-      # When given -MP, icc 7.0 and 7.1 complain thusly:
+      # When given -MP, icc 7.0 and 7.1 complain thus:
       #   icc: Command line warning: ignoring option '-M'; no argument required
       # The diagnosis changed in icc 8.0:
       #   icc: Command line remark: option '-MP' not supported
@@ -1989,7 +1146,7 @@ _AM_SUBST_NOTMAKE([am__nodep])dnl
 
 # Generate code to set up dependency tracking.              -*- Autoconf -*-
 
-# Copyright (C) 1999-2021 Free Software Foundation, Inc.
+# Copyright (C) 1999-2024 Free Software Foundation, Inc.
 #
 # This file is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
@@ -2057,7 +1214,7 @@ AC_DEFUN([AM_OUTPUT_DEPENDENCY_COMMANDS],
 
 # Do all the work for Automake.                             -*- Autoconf -*-
 
-# Copyright (C) 1996-2021 Free Software Foundation, Inc.
+# Copyright (C) 1996-2024 Free Software Foundation, Inc.
 #
 # This file is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
@@ -2191,7 +1348,7 @@ if test -z "$CSCOPE"; then
 fi
 AC_SUBST([CSCOPE])
 
-AC_REQUIRE([AM_SILENT_RULES])dnl
+AC_REQUIRE([_AM_SILENT_RULES])dnl
 dnl The testsuite driver may need to know about EXEEXT, so add the
 dnl 'am__EXEEXT' conditional if _AM_COMPILER_EXEEXT was seen.  This
 dnl macro is hooked onto _AC_COMPILER_EXEEXT early, see below.
@@ -2199,47 +1356,9 @@ AC_CONFIG_COMMANDS_PRE(dnl
 [m4_provide_if([_AM_COMPILER_EXEEXT],
   [AM_CONDITIONAL([am__EXEEXT], [test -n "$EXEEXT"])])])dnl
 
-# POSIX will say in a future version that running "rm -f" with no argument
-# is OK; and we want to be able to make that assumption in our Makefile
-# recipes.  So use an aggressive probe to check that the usage we want is
-# actually supported "in the wild" to an acceptable degree.
-# See automake bug#10828.
-# To make any issue more visible, cause the running configure to be aborted
-# by default if the 'rm' program in use doesn't match our expectations; the
-# user can still override this though.
-if rm -f && rm -fr && rm -rf; then : OK; else
-  cat >&2 <<'END'
-Oops!
+AC_REQUIRE([_AM_PROG_RM_F])
+AC_REQUIRE([_AM_PROG_XARGS_N])
 
-Your 'rm' program seems unable to run without file operands specified
-on the command line, even when the '-f' option is present.  This is contrary
-to the behaviour of most rm programs out there, and not conforming with
-the upcoming POSIX standard: <http://austingroupbugs.net/view.php?id=542>
-
-Please tell bug-automake@gnu.org about your system, including the value
-of your $PATH and any error possibly output before this message.  This
-can help us improve future automake versions.
-
-END
-  if test x"$ACCEPT_INFERIOR_RM_PROGRAM" = x"yes"; then
-    echo 'Configuration will proceed anyway, since you have set the' >&2
-    echo 'ACCEPT_INFERIOR_RM_PROGRAM variable to "yes"' >&2
-    echo >&2
-  else
-    cat >&2 <<'END'
-Aborting the configuration process, to ensure you take notice of the issue.
-
-You can download and install GNU coreutils to get an 'rm' implementation
-that behaves properly: <https://www.gnu.org/software/coreutils/>.
-
-If you want to complete the configuration process using your problematic
-'rm' anyway, export the environment variable ACCEPT_INFERIOR_RM_PROGRAM
-to "yes", and re-run configure.
-
-END
-    AC_MSG_ERROR([Your 'rm' program is bad, sorry.])
-  fi
-fi
 dnl The trailing newline in this macro's definition is deliberate, for
 dnl backward compatibility and to allow trailing 'dnl'-style comments
 dnl after the AM_INIT_AUTOMAKE invocation. See automake bug#16841.
@@ -2272,7 +1391,7 @@ for _am_header in $config_headers :; do
 done
 echo "timestamp for $_am_arg" >`AS_DIRNAME(["$_am_arg"])`/stamp-h[]$_am_stamp_count])
 
-# Copyright (C) 2001-2021 Free Software Foundation, Inc.
+# Copyright (C) 2001-2024 Free Software Foundation, Inc.
 #
 # This file is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
@@ -2293,7 +1412,7 @@ if test x"${install_sh+set}" != xset; then
 fi
 AC_SUBST([install_sh])])
 
-# Copyright (C) 2003-2021 Free Software Foundation, Inc.
+# Copyright (C) 2003-2024 Free Software Foundation, Inc.
 #
 # This file is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
@@ -2315,7 +1434,7 @@ AC_SUBST([am__leading_dot])])
 # Add --enable-maintainer-mode option to configure.         -*- Autoconf -*-
 # From Jim Meyering
 
-# Copyright (C) 1996-2021 Free Software Foundation, Inc.
+# Copyright (C) 1996-2024 Free Software Foundation, Inc.
 #
 # This file is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
@@ -2350,7 +1469,7 @@ AC_MSG_CHECKING([whether to enable maintainer-specific portions of Makefiles])
 
 # Check to see how 'make' treats includes.	            -*- Autoconf -*-
 
-# Copyright (C) 2001-2021 Free Software Foundation, Inc.
+# Copyright (C) 2001-2024 Free Software Foundation, Inc.
 #
 # This file is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
@@ -2393,7 +1512,7 @@ AC_SUBST([am__quote])])
 
 # Fake the existence of programs that GNU maintainers use.  -*- Autoconf -*-
 
-# Copyright (C) 1997-2021 Free Software Foundation, Inc.
+# Copyright (C) 1997-2024 Free Software Foundation, Inc.
 #
 # This file is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
@@ -2429,14 +1548,14 @@ fi
 # Obsolete and "removed" macros, that must however still report explicit
 # error messages when used, to smooth transition.
 #
-# Copyright (C) 1996-2021 Free Software Foundation, Inc.
+# Copyright (C) 1996-2024 Free Software Foundation, Inc.
 #
 # This file is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
 # with or without modifications, as long as this notice is preserved.
 
 AC_DEFUN([AM_CONFIG_HEADER],
-[AC_DIAGNOSE([obsolete],
+[m4_warn([obsolete],
 ['$0': this macro is obsolete.
 You should use the 'AC][_CONFIG_HEADERS' macro instead.])dnl
 AC_CONFIG_HEADERS($@)])
@@ -2444,7 +1563,7 @@ AC_CONFIG_HEADERS($@)])
 AC_DEFUN([AM_PROG_CC_STDC],
 [AC_PROG_CC
 am_cv_prog_cc_stdc=$ac_cv_prog_cc_stdc
-AC_DIAGNOSE([obsolete],
+m4_warn([obsolete],
 ['$0': this macro is obsolete.
 You should simply use the 'AC][_PROG_CC' macro instead.
 Also, your code should no longer depend upon 'am_cv_prog_cc_stdc',
@@ -2456,7 +1575,7 @@ AU_DEFUN([fp_C_PROTOTYPES], [AM_C_PROTOTYPES])
 
 # Helper functions for option handling.                     -*- Autoconf -*-
 
-# Copyright (C) 2001-2021 Free Software Foundation, Inc.
+# Copyright (C) 2001-2024 Free Software Foundation, Inc.
 #
 # This file is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
@@ -2485,7 +1604,7 @@ AC_DEFUN([_AM_SET_OPTIONS],
 AC_DEFUN([_AM_IF_OPTION],
 [m4_ifset(_AM_MANGLE_OPTION([$1]), [$2], [$3])])
 
-# Copyright (C) 1999-2021 Free Software Foundation, Inc.
+# Copyright (C) 1999-2024 Free Software Foundation, Inc.
 #
 # This file is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
@@ -2532,7 +1651,23 @@ AC_LANG_POP([C])])
 # For backward compatibility.
 AC_DEFUN_ONCE([AM_PROG_CC_C_O], [AC_REQUIRE([AC_PROG_CC])])
 
-# Copyright (C) 2001-2021 Free Software Foundation, Inc.
+# Copyright (C) 2022-2024 Free Software Foundation, Inc.
+#
+# This file is free software; the Free Software Foundation
+# gives unlimited permission to copy and/or distribute it,
+# with or without modifications, as long as this notice is preserved.
+
+# _AM_PROG_RM_F
+# ---------------
+# Check whether 'rm -f' without any arguments works.
+# https://bugs.gnu.org/10828
+AC_DEFUN([_AM_PROG_RM_F],
+[am__rm_f_notfound=
+AS_IF([(rm -f && rm -fr && rm -rf) 2>/dev/null], [], [am__rm_f_notfound='""'])
+AC_SUBST(am__rm_f_notfound)
+])
+
+# Copyright (C) 2001-2024 Free Software Foundation, Inc.
 #
 # This file is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
@@ -2551,16 +1686,169 @@ AC_DEFUN([AM_RUN_LOG],
 
 # Check to make sure that the build environment is sane.    -*- Autoconf -*-
 
-# Copyright (C) 1996-2021 Free Software Foundation, Inc.
+# Copyright (C) 1996-2024 Free Software Foundation, Inc.
 #
 # This file is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
 # with or without modifications, as long as this notice is preserved.
 
+# _AM_SLEEP_FRACTIONAL_SECONDS
+# ----------------------------
+AC_DEFUN([_AM_SLEEP_FRACTIONAL_SECONDS], [dnl
+AC_CACHE_CHECK([whether sleep supports fractional seconds],
+               am_cv_sleep_fractional_seconds, [dnl
+AS_IF([sleep 0.001 2>/dev/null], [am_cv_sleep_fractional_seconds=yes],
+                                 [am_cv_sleep_fractional_seconds=no])
+])])
+
+# _AM_FILESYSTEM_TIMESTAMP_RESOLUTION
+# -----------------------------------
+# Determine the filesystem's resolution for file modification
+# timestamps.  The coarsest we know of is FAT, with a resolution
+# of only two seconds, even with the most recent "exFAT" extensions.
+# The finest (e.g. ext4 with large inodes, XFS, ZFS) is one
+# nanosecond, matching clock_gettime.  However, it is probably not
+# possible to delay execution of a shell script for less than one
+# millisecond, due to process creation overhead and scheduling
+# granularity, so we don't check for anything finer than that. (See below.)
+AC_DEFUN([_AM_FILESYSTEM_TIMESTAMP_RESOLUTION], [dnl
+AC_REQUIRE([_AM_SLEEP_FRACTIONAL_SECONDS])
+AC_CACHE_CHECK([filesystem timestamp resolution],
+               am_cv_filesystem_timestamp_resolution, [dnl
+# Default to the worst case.
+am_cv_filesystem_timestamp_resolution=2
+
+# Only try to go finer than 1 sec if sleep can do it.
+# Don't try 1 sec, because if 0.01 sec and 0.1 sec don't work,
+# - 1 sec is not much of a win compared to 2 sec, and
+# - it takes 2 seconds to perform the test whether 1 sec works.
+# 
+# Instead, just use the default 2s on platforms that have 1s resolution,
+# accept the extra 1s delay when using $sleep in the Automake tests, in
+# exchange for not incurring the 2s delay for running the test for all
+# packages.
+#
+am_try_resolutions=
+if test "$am_cv_sleep_fractional_seconds" = yes; then
+  # Even a millisecond often causes a bunch of false positives,
+  # so just try a hundredth of a second. The time saved between .001 and
+  # .01 is not terribly consequential.
+  am_try_resolutions="0.01 0.1 $am_try_resolutions"
+fi
+
+# In order to catch current-generation FAT out, we must *modify* files
+# that already exist; the *creation* timestamp is finer.  Use names
+# that make ls -t sort them differently when they have equal
+# timestamps than when they have distinct timestamps, keeping
+# in mind that ls -t prints the *newest* file first.
+rm -f conftest.ts?
+: > conftest.ts1
+: > conftest.ts2
+: > conftest.ts3
+
+# Make sure ls -t actually works.  Do 'set' in a subshell so we don't
+# clobber the current shell's arguments. (Outer-level square brackets
+# are removed by m4; they're present so that m4 does not expand
+# <dollar><star>; be careful, easy to get confused.)
+if (
+     set X `[ls -t conftest.ts[12]]` &&
+     {
+       test "$[]*" != "X conftest.ts1 conftest.ts2" ||
+       test "$[]*" != "X conftest.ts2 conftest.ts1";
+     }
+); then :; else
+  # If neither matched, then we have a broken ls.  This can happen
+  # if, for instance, CONFIG_SHELL is bash and it inherits a
+  # broken ls alias from the environment.  This has actually
+  # happened.  Such a system could not be considered "sane".
+  _AS_ECHO_UNQUOTED(
+    ["Bad output from ls -t: \"`[ls -t conftest.ts[12]]`\""],
+    [AS_MESSAGE_LOG_FD])
+  AC_MSG_FAILURE([ls -t produces unexpected output.
+Make sure there is not a broken ls alias in your environment.])
+fi
+
+for am_try_res in $am_try_resolutions; do
+  # Any one fine-grained sleep might happen to cross the boundary
+  # between two values of a coarser actual resolution, but if we do
+  # two fine-grained sleeps in a row, at least one of them will fall
+  # entirely within a coarse interval.
+  echo alpha > conftest.ts1
+  sleep $am_try_res
+  echo beta > conftest.ts2
+  sleep $am_try_res
+  echo gamma > conftest.ts3
+
+  # We assume that 'ls -t' will make use of high-resolution
+  # timestamps if the operating system supports them at all.
+  if (set X `ls -t conftest.ts?` &&
+      test "$[]2" = conftest.ts3 &&
+      test "$[]3" = conftest.ts2 &&
+      test "$[]4" = conftest.ts1); then
+    #
+    # Ok, ls -t worked. If we're at a resolution of 1 second, we're done,
+    # because we don't need to test make.
+    make_ok=true
+    if test $am_try_res != 1; then
+      # But if we've succeeded so far with a subsecond resolution, we
+      # have one more thing to check: make. It can happen that
+      # everything else supports the subsecond mtimes, but make doesn't;
+      # notably on macOS, which ships make 3.81 from 2006 (the last one
+      # released under GPLv2). https://bugs.gnu.org/68808
+      # 
+      # We test $MAKE if it is defined in the environment, else "make".
+      # It might get overridden later, but our hope is that in practice
+      # it does not matter: it is the system "make" which is (by far)
+      # the most likely to be broken, whereas if the user overrides it,
+      # probably they did so with a better, or at least not worse, make.
+      # https://lists.gnu.org/archive/html/automake/2024-06/msg00051.html
+      #
+      # Create a Makefile (real tab character here):
+      rm -f conftest.mk
+      echo 'conftest.ts1: conftest.ts2' >conftest.mk
+      echo '	touch conftest.ts2' >>conftest.mk
+      #
+      # Now, running
+      #   touch conftest.ts1; touch conftest.ts2; make
+      # should touch ts1 because ts2 is newer. This could happen by luck,
+      # but most often, it will fail if make's support is insufficient. So
+      # test for several consecutive successes.
+      #
+      # (We reuse conftest.ts[12] because we still want to modify existing
+      # files, not create new ones, per above.)
+      n=0
+      make=${MAKE-make}
+      until test $n -eq 3; do
+        echo one > conftest.ts1
+        sleep $am_try_res
+        echo two > conftest.ts2 # ts2 should now be newer than ts1
+        if $make -f conftest.mk | grep 'up to date' >/dev/null; then
+          make_ok=false
+          break # out of $n loop
+        fi
+        n=`expr $n + 1`
+      done
+    fi
+    #
+    if $make_ok; then
+      # Everything we know to check worked out, so call this resolution good.
+      am_cv_filesystem_timestamp_resolution=$am_try_res
+      break # out of $am_try_res loop
+    fi
+    # Otherwise, we'll go on to check the next resolution.
+  fi
+done
+rm -f conftest.ts?
+# (end _am_filesystem_timestamp_resolution)
+])])
+
 # AM_SANITY_CHECK
 # ---------------
 AC_DEFUN([AM_SANITY_CHECK],
-[AC_MSG_CHECKING([whether build environment is sane])
+[AC_REQUIRE([_AM_FILESYSTEM_TIMESTAMP_RESOLUTION])
+# This check should not be cached, as it may vary across builds of
+# different projects.
+AC_MSG_CHECKING([whether build environment is sane])
 # Reject unsafe characters in $srcdir or the absolute working directory
 # name.  Accept space and tab only in the latter.
 am_lf='
@@ -2579,49 +1867,40 @@ esac
 # symlink; some systems play weird games with the mod time of symlinks
 # (eg FreeBSD returns the mod time of the symlink's containing
 # directory).
-if (
-   am_has_slept=no
-   for am_try in 1 2; do
-     echo "timestamp, slept: $am_has_slept" > conftest.file
-     set X `ls -Lt "$srcdir/configure" conftest.file 2> /dev/null`
-     if test "$[*]" = "X"; then
-	# -L didn't work.
-	set X `ls -t "$srcdir/configure" conftest.file`
-     fi
-     if test "$[*]" != "X $srcdir/configure conftest.file" \
-	&& test "$[*]" != "X conftest.file $srcdir/configure"; then
+am_build_env_is_sane=no
+am_has_slept=no
+rm -f conftest.file
+for am_try in 1 2; do
+  echo "timestamp, slept: $am_has_slept" > conftest.file
+  if (
+    set X `ls -Lt "$srcdir/configure" conftest.file 2> /dev/null`
+    if test "$[]*" = "X"; then
+      # -L didn't work.
+      set X `ls -t "$srcdir/configure" conftest.file`
+    fi
+    test "$[]2" = conftest.file
+  ); then
+    am_build_env_is_sane=yes
+    break
+  fi
+  # Just in case.
+  sleep "$am_cv_filesystem_timestamp_resolution"
+  am_has_slept=yes
+done
 
-	# If neither matched, then we have a broken ls.  This can happen
-	# if, for instance, CONFIG_SHELL is bash and it inherits a
-	# broken ls alias from the environment.  This has actually
-	# happened.  Such a system could not be considered "sane".
-	AC_MSG_ERROR([ls -t appears to fail.  Make sure there is not a broken
-  alias in your environment])
-     fi
-     if test "$[2]" = conftest.file || test $am_try -eq 2; then
-       break
-     fi
-     # Just in case.
-     sleep 1
-     am_has_slept=yes
-   done
-   test "$[2]" = conftest.file
-   )
-then
-   # Ok.
-   :
-else
-   AC_MSG_ERROR([newly created file is older than distributed files!
+AC_MSG_RESULT([$am_build_env_is_sane])
+if test "$am_build_env_is_sane" = no; then
+  AC_MSG_ERROR([newly created file is older than distributed files!
 Check your system clock])
 fi
-AC_MSG_RESULT([yes])
+
 # If we didn't sleep, we still need to ensure time stamps of config.status and
 # generated files are strictly newer.
 am_sleep_pid=
-if grep 'slept: no' conftest.file >/dev/null 2>&1; then
-  ( sleep 1 ) &
+AS_IF([test -e conftest.file || grep 'slept: no' conftest.file >/dev/null 2>&1],, [dnl
+  ( sleep "$am_cv_filesystem_timestamp_resolution" ) &
   am_sleep_pid=$!
-fi
+])
 AC_CONFIG_COMMANDS_PRE(
   [AC_MSG_CHECKING([that generated files are newer than configure])
    if test -n "$am_sleep_pid"; then
@@ -2632,18 +1911,18 @@ AC_CONFIG_COMMANDS_PRE(
 rm -f conftest.file
 ])
 
-# Copyright (C) 2009-2021 Free Software Foundation, Inc.
+# Copyright (C) 2009-2024 Free Software Foundation, Inc.
 #
 # This file is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
 # with or without modifications, as long as this notice is preserved.
 
-# AM_SILENT_RULES([DEFAULT])
-# --------------------------
-# Enable less verbose build rules; with the default set to DEFAULT
-# ("yes" being less verbose, "no" or empty being verbose).
-AC_DEFUN([AM_SILENT_RULES],
-[AC_ARG_ENABLE([silent-rules], [dnl
+# _AM_SILENT_RULES
+# ----------------
+# Enable less verbose build rules support.
+AC_DEFUN([_AM_SILENT_RULES],
+[AM_DEFAULT_VERBOSITY=1
+AC_ARG_ENABLE([silent-rules], [dnl
 AS_HELP_STRING(
   [--enable-silent-rules],
   [less verbose build output (undo: "make V=1")])
@@ -2651,11 +1930,6 @@ AS_HELP_STRING(
   [--disable-silent-rules],
   [verbose build output (undo: "make V=0")])dnl
 ])
-case $enable_silent_rules in @%:@ (((
-  yes) AM_DEFAULT_VERBOSITY=0;;
-   no) AM_DEFAULT_VERBOSITY=1;;
-    *) AM_DEFAULT_VERBOSITY=m4_if([$1], [yes], [0], [1]);;
-esac
 dnl
 dnl A few 'make' implementations (e.g., NonStop OS and NextStep)
 dnl do not support nested variable expansions.
@@ -2674,14 +1948,6 @@ am__doit:
 else
   am_cv_make_support_nested_variables=no
 fi])
-if test $am_cv_make_support_nested_variables = yes; then
-  dnl Using '$V' instead of '$(V)' breaks IRIX make.
-  AM_V='$(V)'
-  AM_DEFAULT_V='$(AM_DEFAULT_VERBOSITY)'
-else
-  AM_V=$AM_DEFAULT_VERBOSITY
-  AM_DEFAULT_V=$AM_DEFAULT_VERBOSITY
-fi
 AC_SUBST([AM_V])dnl
 AM_SUBST_NOTMAKE([AM_V])dnl
 AC_SUBST([AM_DEFAULT_V])dnl
@@ -2690,9 +1956,33 @@ AC_SUBST([AM_DEFAULT_VERBOSITY])dnl
 AM_BACKSLASH='\'
 AC_SUBST([AM_BACKSLASH])dnl
 _AM_SUBST_NOTMAKE([AM_BACKSLASH])dnl
+dnl Delay evaluation of AM_DEFAULT_VERBOSITY to the end to allow multiple calls
+dnl to AM_SILENT_RULES to change the default value.
+AC_CONFIG_COMMANDS_PRE([dnl
+case $enable_silent_rules in @%:@ (((
+  yes) AM_DEFAULT_VERBOSITY=0;;
+   no) AM_DEFAULT_VERBOSITY=1;;
+esac
+if test $am_cv_make_support_nested_variables = yes; then
+  dnl Using '$V' instead of '$(V)' breaks IRIX make.
+  AM_V='$(V)'
+  AM_DEFAULT_V='$(AM_DEFAULT_VERBOSITY)'
+else
+  AM_V=$AM_DEFAULT_VERBOSITY
+  AM_DEFAULT_V=$AM_DEFAULT_VERBOSITY
+fi
+])dnl
 ])
 
-# Copyright (C) 2001-2021 Free Software Foundation, Inc.
+# AM_SILENT_RULES([DEFAULT])
+# --------------------------
+# Set the default verbosity level to DEFAULT ("yes" being less verbose, "no" or
+# empty being verbose).
+AC_DEFUN([AM_SILENT_RULES],
+[AC_REQUIRE([_AM_SILENT_RULES])
+AM_DEFAULT_VERBOSITY=m4_if([$1], [yes], [0], [1])])
+
+# Copyright (C) 2001-2024 Free Software Foundation, Inc.
 #
 # This file is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
@@ -2720,7 +2010,7 @@ fi
 INSTALL_STRIP_PROGRAM="\$(install_sh) -c -s"
 AC_SUBST([INSTALL_STRIP_PROGRAM])])
 
-# Copyright (C) 2006-2021 Free Software Foundation, Inc.
+# Copyright (C) 2006-2024 Free Software Foundation, Inc.
 #
 # This file is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
@@ -2739,7 +2029,7 @@ AC_DEFUN([AM_SUBST_NOTMAKE], [_AM_SUBST_NOTMAKE($@)])
 
 # Check how to create a tarball.                            -*- Autoconf -*-
 
-# Copyright (C) 2004-2021 Free Software Foundation, Inc.
+# Copyright (C) 2004-2024 Free Software Foundation, Inc.
 #
 # This file is free software; the Free Software Foundation
 # gives unlimited permission to copy and/or distribute it,
@@ -2785,15 +2075,19 @@ m4_if([$1], [v7],
       am_uid=`id -u || echo unknown`
       am_gid=`id -g || echo unknown`
       AC_MSG_CHECKING([whether UID '$am_uid' is supported by ustar format])
-      if test $am_uid -le $am_max_uid; then
-         AC_MSG_RESULT([yes])
+      if test x$am_uid = xunknown; then
+        AC_MSG_WARN([ancient id detected; assuming current UID is ok, but dist-ustar might not work])
+      elif test $am_uid -le $am_max_uid; then
+        AC_MSG_RESULT([yes])
       else
-         AC_MSG_RESULT([no])
-         _am_tools=none
+        AC_MSG_RESULT([no])
+        _am_tools=none
       fi
       AC_MSG_CHECKING([whether GID '$am_gid' is supported by ustar format])
-      if test $am_gid -le $am_max_gid; then
-         AC_MSG_RESULT([yes])
+      if test x$gm_gid = xunknown; then
+        AC_MSG_WARN([ancient id detected; assuming current GID is ok, but dist-ustar might not work])
+      elif test $am_gid -le $am_max_gid; then
+        AC_MSG_RESULT([yes])
       else
         AC_MSG_RESULT([no])
         _am_tools=none
@@ -2869,6 +2163,26 @@ m4_if([$1], [v7],
 AC_SUBST([am__tar])
 AC_SUBST([am__untar])
 ]) # _AM_PROG_TAR
+
+# Copyright (C) 2022-2024 Free Software Foundation, Inc.
+#
+# This file is free software; the Free Software Foundation
+# gives unlimited permission to copy and/or distribute it,
+# with or without modifications, as long as this notice is preserved.
+
+# _AM_PROG_XARGS_N
+# ----------------
+# Check whether 'xargs -n' works.  It should work everywhere, so the fallback
+# is not optimized at all as we never expect to use it.
+AC_DEFUN([_AM_PROG_XARGS_N],
+[AC_CACHE_CHECK([xargs -n works], am_cv_xargs_n_works, [dnl
+AS_IF([test "`echo 1 2 3 | xargs -n2 echo`" = "1 2
+3"], [am_cv_xargs_n_works=yes], [am_cv_xargs_n_works=no])])
+AS_IF([test "$am_cv_xargs_n_works" = yes], [am__xargs_n='xargs -n'], [dnl
+  am__xargs_n='am__xargs_n () { shift; sed "s/ /\\n/g" | while read am__xargs_n_arg; do "$@" "$am__xargs_n_arg"; done; }'
+])dnl
+AC_SUBST(am__xargs_n)
+])
 
 m4_include([m4/libtool.m4])
 m4_include([m4/ltoptions.m4])

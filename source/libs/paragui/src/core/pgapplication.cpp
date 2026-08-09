@@ -55,6 +55,9 @@
 SDL_mutex* PG_Application::mutexScreen = NULL;
 PG_Application* PG_Application::pGlobalApp = NULL;
 SDL_Surface* PG_Application::screen = NULL;
+SDL_Window* PG_Application::mainWindow = NULL;
+SDL_Renderer* PG_Application::mainWindowRenderer = NULL;
+SDL_Texture* PG_Application::mainWindowTexture = NULL;
 //std::string PG_Application::app_path = "";
 PG_Theme* PG_Application::my_Theme = NULL;
 bool PG_Application::bulkMode = false;
@@ -73,11 +76,10 @@ PG_Color PG_Application::my_backcolor;
 PG_Draw::BkMode PG_Application::my_backmode = PG_Draw::TILE;
 bool PG_Application::disableDirtyUpdates = false;
 //bool PG_Application::my_quitEventLoop = false;
-PG_EventSupplier* PG_Application::my_eventSupplier = NULL;
-PG_EventSupplier* PG_Application::my_defaultEventSupplier = NULL;
 bool PG_Application::defaultUpdateOverlappingSiblings = true;
 PG_Char PG_Application::highlightingTag = 0;
-PG_ScreenUpdater* PG_Application::my_ScreenUpdater = NULL;
+PG_SDLScreenUpdater defaultScreenUpdater;
+PG_ScreenUpdater* PG_Application::my_ScreenUpdater = &defaultScreenUpdater;
 PG_Application::ScreenInitialization PG_Application::screenInitialized = PG_Application::None;
 
 /**
@@ -100,7 +102,6 @@ PG_Application::ScreenInitialization PG_Application::isScreenInitialized() {
 }
 
 
-PG_SDLScreenUpdater defaultScreenUpdater;
 
 
 PG_Application::PG_Application()
@@ -147,8 +148,6 @@ PG_Application::PG_Application()
 	my_background = NULL;
 	my_freeBackground = false;
 	my_backmode = PG_Draw::TILE;
-	my_defaultEventSupplier = new PG_SDLEventSupplier;
-	my_eventSupplier = my_defaultEventSupplier;
 
 	// add our base dir to the searchpath
 	AddArchive(GetBaseDir());
@@ -162,8 +161,6 @@ PG_Application::~PG_Application() {
 	Shutdown();
 
 	pGlobalApp = NULL;
-	delete my_defaultEventSupplier;
-	my_defaultEventSupplier = NULL;
 
 	// remove all archives from PG_FileArchive
 	PG_FileArchive::RemoveAllArchives();
@@ -172,34 +169,29 @@ PG_Application::~PG_Application() {
 }
 
 /**  */
-bool PG_Application::InitScreen(int w, int h, int depth, Uint32 flags) {
+bool PG_Application::InitScreen(int w, int h, bool fullscreen) {
 
-	if(depth == 0) {
-		const SDL_VideoInfo* info = SDL_GetVideoInfo();
-		if ( info->vfmt->BitsPerPixel > 8 ) {
-			depth = info->vfmt->BitsPerPixel;
-		}
+	if ( fullscreen ) {
+		SDL_CreateWindowAndRenderer(0, 0, SDL_WINDOW_FULLSCREEN_DESKTOP, &mainWindow, &mainWindowRenderer);
+		SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
+		if ( SDL_RenderSetLogicalSize(mainWindowRenderer,w,h) != 0 )
+			throw PG_Exception("PG_Application::InitScreen renderSetLogicalSIze", SDL_GetError());
+	} else {
+		SDL_CreateWindowAndRenderer(w, h, 0, &mainWindow, &mainWindowRenderer);
 	}
+	if ( !mainWindow || !mainWindowRenderer )
+		throw PG_Exception("PG_Application::InitScreen", SDL_GetError());
 
 
+	screen = SDL_CreateRGBSurfaceWithFormat(0, w, h, 32, SDL_PIXELFORMAT_ARGB8888);
+	if (!screen)
+		throw PG_Exception("Creating screen failed", SDL_GetError());
+	mainWindowTexture = SDL_CreateTexture(mainWindowRenderer,
+	                                            SDL_PIXELFORMAT_ARGB8888,
+	                                            SDL_TEXTUREACCESS_STREAMING,
+	                                            w, h);
 
-	//if(SDL_VideoModeOK(w, h, depth, flags) == 0)
-	//	return false;
 
-    screenInitialized = Trying;
-
-	/* Initialize the display */
-	PG_Application::screen = SDL_SetVideoMode(w, h, depth, flags);
-	if (PG_Application::screen == NULL) {
-		PG_LogERR("Could not set video mode: %s", SDL_GetError());
-		return false;
-	}
-
-#ifdef DEBUG
-	PrintVideoTest();
-#endif // DEBUG
-
-	SetScreen(screen);
 
 	screenInitialized = Finished;
 
@@ -210,6 +202,22 @@ bool PG_Application::InitScreen(int w, int h, int depth, Uint32 flags) {
 
 	return true;
 }
+
+void PG_Application::UpdateScreen(const SDL_Rect * srcrect, int numRects)
+{
+	SDL_UpdateTexture(mainWindowTexture, NULL, screen->pixels, screen->pitch);
+	// SDL_RenderClear(mainWindowRenderer);
+	if ( !srcrect || numRects==0
+	      || true // we are currently always updating the entire screen due to artifacts appearing on odd zoom levels, probably due to coordinate rounding errors.
+	      )
+		SDL_RenderCopy(mainWindowRenderer, mainWindowTexture, NULL, NULL);
+	else
+		for (int i = 0; i < numRects; ++i)
+			SDL_RenderCopy(mainWindowRenderer, mainWindowTexture, &srcrect[i], &srcrect[i]);
+
+	SDL_RenderPresent(mainWindowRenderer);
+}
+
 
 /**  */
 void PG_Application::Run() {
@@ -236,13 +244,13 @@ void PG_Application::RunEventLoop() {
 		ClearOldMousePosition();
 
 		if(enableAppIdleCalls) {
-			if ( my_eventSupplier->PollEvent(&event) == 0) {
+			if ( GetEventSupplier()->PollEvent(&event) == 0) {
 				eventIdle();
 			} else {
 				PumpIntoEventQueue(&event);
 			}
 		} else {
-			if(my_eventSupplier->WaitEvent(&event) != 1) {
+			if( GetEventSupplier()->WaitEvent(&event) != 1) {
 				SDL_Delay(10);
 				continue;
 			}
@@ -251,18 +259,6 @@ void PG_Application::RunEventLoop() {
 
 		DrawCursor();
 	}
-}
-
-
-void PG_Application::SetEventSupplier( PG_EventSupplier* eventSupplier ) {
-	if ( eventSupplier )
-		my_eventSupplier = eventSupplier;
-	else
-		my_eventSupplier = my_defaultEventSupplier;
-}
-
-PG_EventSupplier* PG_Application::GetEventSupplier() {
-	return my_eventSupplier;
 }
 
 
@@ -292,7 +288,7 @@ void PG_Application::DrawCursor(bool update) {
 		SDL_ShowCursor(SDL_DISABLE);
 	}
 
-	my_eventSupplier->GetMouseState(x, y);
+	GetEventSupplier()->GetMouseState(x, y);
 
 	Sint16 dx = x - my_mouse_position.my_xpos;
 	Sint16 dy = y - my_mouse_position.my_ypos;
@@ -367,7 +363,7 @@ void PG_Application::Quit() {
 
 /**  */
 bool PG_Application::eventKeyDown(const SDL_KeyboardEvent* key) {
-	SDLKey ckey = PG_LogConsole::GetConsoleKey();
+	SDL_KeyCode ckey = PG_LogConsole::GetConsoleKey();
 
 	if(ckey == 0) {
 		return false;
@@ -390,22 +386,6 @@ bool PG_Application::eventKeyUp(const SDL_KeyboardEvent* key) {
 	}
 
 	return false;
-}
-
-bool PG_Application::eventResize(const SDL_ResizeEvent* event) {
-	if (!event)
-		return false;
-
-	screen = SDL_SetVideoMode(
-	             event->w, event->h,
-	             screen->format->BitsPerPixel,
-	             screen->flags);
-
-	PG_Widget::UpdateRect(PG_Rect(0,0,event->w,event->h));
-	UpdateRect(screen,0,0,event->w,event->h);
-	sigVideoResize(this, event);
-
-	return true;
 }
 
 void PG_Application::SetCursor(SDL_Surface *image) {
@@ -459,38 +439,6 @@ PG_Application::CursorMode PG_Application::ShowCursor(CursorMode mode) {
 	return orig;
 }
 
-
-
-void PG_Application::SetScreenUpdater( PG_ScreenUpdater* screenUpdater )
-{
-   if ( screenUpdater != NULL )
-      my_ScreenUpdater = screenUpdater;
-   else
-      my_ScreenUpdater = &defaultScreenUpdater;
-}
-
-
-
-/**  */
-SDL_Surface* PG_Application::SetScreen(SDL_Surface* surf, bool initialize ) {
-	if (!surf)
-		return PG_Application::screen;
-
-	PG_Application::screen = surf;
-
-   if ( initialize ) {
-
-	//glMode = (surf->flags & SDL_OPENGLBLIT);
-
-      SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
-      SDL_EnableUNICODE(true);
-
-      PG_Widget::UpdateRect(PG_Rect(0,0,screen->w,screen->h));
-      UpdateRect(screen, 0,0,screen->w,screen->h);
-   }
-
-	return PG_Application::screen;
-}
 
 /**  */
 bool PG_Application::SetBackground(const std::string& filename, PG_Draw::BkMode mode) {
@@ -551,20 +499,16 @@ void PG_Application::RedrawBackground(const PG_Rect& rect) {
 			my_scaled_background = NULL;
 		}
 		if(!my_scaled_background) {
-			SDL_Surface* temp = PG_Draw::ScaleSurface(my_background, static_cast<Uint16>(screen->w), static_cast<Uint16>(screen->h));
-			my_scaled_background = SDL_DisplayFormat(temp);
-			UnloadSurface(temp);
-			/*PG_Draw::ScaleSurface(my_background,
-						      static_cast<Uint16>(screen->w), static_cast<Uint16>(screen->h));*/
+			my_scaled_background = PG_Draw::ScaleSurface(my_background, static_cast<Uint16>(screen->w), static_cast<Uint16>(screen->h));
 		}
 		SDL_GetClipRect(screen, const_cast<PG_Rect*>(&fillrect));
 		SDL_SetClipRect(screen, const_cast<PG_Rect*>(&rect));
-		SDL_SetAlpha(my_scaled_background, 0, 0);
+		SDL_SetSurfaceAlphaMod(my_scaled_background, 0);
 		SDL_BlitSurface(my_scaled_background, const_cast<PG_Rect*>(&rect), screen, const_cast<PG_Rect*>(&rect));
 		SDL_SetClipRect(screen, const_cast<PG_Rect*>(&fillrect));
 
 	} else {
-		SDL_SetAlpha(my_background, 0, 0);
+		SDL_SetSurfaceAlphaMod(my_background, 0);
 		PG_Draw::DrawTile(screen, PG_Rect(0,0,screen->w,screen->h), rect, my_background);
 	}
 }
@@ -578,10 +522,6 @@ const std::string& PG_Application::GetRelativePath(const std::string& file) {
 	}
 
 	return buffer;
-}
-
-void PG_Application::FlipPage() {
-	SDL_Flip(screen);
 }
 
 #ifdef DEBUG
@@ -831,57 +771,35 @@ void PG_Application::SetIcon(const std::string& filename) {
 	}
 
 	// Set the colorkey
-	SDL_SetColorKey(icon, SDL_SRCCOLORKEY, *((Uint8 *)icon->pixels));
-
-	// Create the mask
-	pixels = (Uint8 *)icon->pixels;
-	mlen = icon->w*icon->h;
-	mask =  new Uint8[mlen/8];
-
-	if ( mask == NULL ) {
-		PG_LogWRN("Out of memory when allocating mask for icon !");
-		UnloadSurface(icon);
-		return;
-	}
-
-	memset(mask, 0, mlen/8);
-	for ( i=0; i<mlen; ) {
-		if ( pixels[i] != *pixels ) {
-			mask[i/8] |= 0x01;
-		}
-
-		++i;
-		if ( (i%8) != 0 ) {
-			mask[i/8] <<= 1;
-		}
-	}
+	SDL_SetColorKey(icon, SDL_TRUE, *((Uint8 *)icon->pixels));
 
 	//Set icon
 	if ( icon != NULL ) {
-		SDL_WM_SetIcon(icon, mask);
+		SDL_SetWindowIcon(mainWindow, icon);
 	}
-
-	//Clean up
-	delete[] mask;
 }
 
+
+PG_SDLEventSupplier sdleventSupplier;
+
+PG_EventSupplier* PG_Application::GetEventSupplier()
+{
+	return &sdleventSupplier;
+}
+
+
+void PG_Application::SetIcon(SDL_Surface* icon) {
+	if ( icon != NULL ) {
+		SDL_SetWindowIcon(mainWindow, icon);
+	}
+}
+
+
 void PG_Application::SetCaption(const std::string& title, const std::string& icon) {
-	SDL_WM_SetCaption(title.c_str(), NULL);
+	SDL_SetWindowTitle(mainWindow, title.c_str());
 	if (!icon.empty()) {
 		SetIcon(icon);
 	}
-}
-
-void PG_Application::GetCaption(std::string& title, std::string& icon) {
-	char** t = NULL;
-	char** i = NULL;
-	SDL_WM_GetCaption(t, i);
-	title = *t;
-	icon = *i;
-}
-
-int PG_Application::Iconify(void) {
-	return SDL_WM_IconifyWindow();
 }
 
 
@@ -1056,7 +974,7 @@ PG_Application* PG_Application::GetApp() {
 void PG_Application::FlushEventQueue() {
 	SDL_Event event;
 
-	while(my_eventSupplier->PollEvent(&event)) {
+	while(GetEventSupplier()->PollEvent(&event)) {
 		/*if(event.type == SDL_USEREVENT) {
 			delete (MSG_MESSAGE*)(event.user.data1);
 		}*/
@@ -1068,166 +986,55 @@ void PG_Application::eventIdle() {
 	SDL_Delay(1);
 }
 
-void PG_Application::TranslateNumpadKeys(SDL_KeyboardEvent *key) {
-	// note: works on WIN, test this on other platforms
+void print(const SDL_WindowEvent& event) {
+	std::cout << "Window Event: " << (int)event.event << "\n";
+}
 
-	// numeric keypad translation
-	if (key->keysym.unicode==0) {	 // just optimalisation
-		if (key->keysym.mod & KMOD_NUM) {
-			// numeric keypad is enabled
-			switch (key->keysym.sym) {
-				case SDLK_KP0       :
-					key->keysym.sym = SDLK_0;
-					key->keysym.unicode = SDLK_0;
-					break;
-				case SDLK_KP1       :
-					key->keysym.sym = SDLK_1;
-					key->keysym.unicode = SDLK_1;
-					break;
-				case SDLK_KP2       :
-					key->keysym.sym = SDLK_2;
-					key->keysym.unicode = SDLK_2;
-					break;
-				case SDLK_KP3       :
-					key->keysym.sym = SDLK_3;
-					key->keysym.unicode = SDLK_3;
-					break;
-				case SDLK_KP4       :
-					key->keysym.sym = SDLK_4;
-					key->keysym.unicode = SDLK_4;
-					break;
-				case SDLK_KP5       :
-					key->keysym.sym = SDLK_5;
-					key->keysym.unicode = SDLK_5;
-					break;
-				case SDLK_KP6       :
-					key->keysym.sym = SDLK_6;
-					key->keysym.unicode = SDLK_6;
-					break;
-				case SDLK_KP7       :
-					key->keysym.sym = SDLK_7;
-					key->keysym.unicode = SDLK_7;
-					break;
-				case SDLK_KP8       :
-					key->keysym.sym = SDLK_8;
-					key->keysym.unicode = SDLK_8;
-					break;
-				case SDLK_KP9       :
-					key->keysym.sym = SDLK_9;
-					key->keysym.unicode = SDLK_9;
-					break;
-				case SDLK_KP_PERIOD :
-					key->keysym.sym = SDLK_PERIOD;
-					key->keysym.unicode = SDLK_PERIOD;
-					break;
-				case SDLK_KP_DIVIDE :
-					key->keysym.sym = SDLK_BACKSLASH;
-					key->keysym.unicode = SDLK_BACKSLASH;
-					break;
-				case SDLK_KP_MULTIPLY:
-					key->keysym.sym = SDLK_ASTERISK;
-					key->keysym.unicode = SDLK_ASTERISK;
-					break;
-				case SDLK_KP_MINUS  :
-					key->keysym.sym = SDLK_MINUS;
-					key->keysym.unicode = SDLK_MINUS;
-					break;
-				case SDLK_KP_PLUS   :
-					key->keysym.sym = SDLK_PLUS;
-					key->keysym.unicode = SDLK_PLUS;
-					break;
-				case SDLK_KP_ENTER  :
-					key->keysym.sym = SDLK_RETURN;
-					key->keysym.unicode = SDLK_RETURN;
-					break;
-				case SDLK_KP_EQUALS :
-					key->keysym.sym = SDLK_EQUALS;
-					key->keysym.unicode = SDLK_EQUALS;
-					break;
+void print(const SDL_TextInputEvent& event) {
+	std::cout << "Text Input: " << event.text << "\n";
+}
 
-				default:
-					break;
-			}
-		} else {
-			// numeric keypad is disabled
-			switch (key->keysym.sym) {
-				case SDLK_KP0       :
-					key->keysym.sym = SDLK_INSERT;
-					key->keysym.unicode = 0;
-					break;
-				case SDLK_KP1       :
-					key->keysym.sym = SDLK_END;
-					key->keysym.unicode = 0;
-					break;
-				case SDLK_KP2       :
-					key->keysym.sym = SDLK_DOWN;
-					key->keysym.unicode = 0;
-					break;
-				case SDLK_KP3       :
-					key->keysym.sym = SDLK_PAGEDOWN;
-					key->keysym.unicode = 0;
-					break;
-				case SDLK_KP4       :
-					key->keysym.sym = SDLK_LEFT;
-					key->keysym.unicode = 0;
-					break;
-				case SDLK_KP6       :
-					key->keysym.sym = SDLK_RIGHT;
-					key->keysym.unicode = 0;
-					break;
-				case SDLK_KP7       :
-					key->keysym.sym = SDLK_HOME;
-					key->keysym.unicode = 0;
-					break;
-				case SDLK_KP8       :
-					key->keysym.sym = SDLK_UP;
-					key->keysym.unicode = 0;
-					break;
-				case SDLK_KP9       :
-					key->keysym.sym = SDLK_PAGEUP;
-					key->keysym.unicode = 0;
-					break;
-				case SDLK_KP_PERIOD :
-					key->keysym.sym = SDLK_DELETE;
-					key->keysym.unicode = 0;
-					break;
-				case SDLK_KP_DIVIDE :
-					key->keysym.sym = SDLK_BACKSLASH;
-					key->keysym.unicode = SDLK_BACKSLASH;
-					break;
-				case SDLK_KP_MULTIPLY:
-					key->keysym.sym = SDLK_ASTERISK;
-					key->keysym.unicode = SDLK_ASTERISK;
-					break;
-				case SDLK_KP_MINUS  :
-					key->keysym.sym = SDLK_MINUS;
-					key->keysym.unicode = SDLK_MINUS;
-					break;
-				case SDLK_KP_PLUS   :
-					key->keysym.sym = SDLK_PLUS;
-					key->keysym.unicode = SDLK_PLUS;
-					break;
-				case SDLK_KP_ENTER  :
-					key->keysym.sym = SDLK_RETURN;
-					key->keysym.unicode = SDLK_RETURN;
-					break;
-				case SDLK_KP_EQUALS :
-					key->keysym.sym = SDLK_EQUALS;
-					key->keysym.unicode = SDLK_EQUALS;
-					break;
+void print(const SDL_MouseButtonEvent& event) {
+	std::cout << "Mouse Button Event: X=" << (int)event.x << " Y=" << (int)event.y << " State=" << (int)event.state << " Button=" << (int)event.button << "\n";
+}
 
-				default:
-					break;
-			}
-		}
+void print(const SDL_MouseWheelEvent& event) {
+    std::cout << "Mouse Wheel Event: X=" << (int)event.mouseX << " Y=" << (int)event.mouseY << " xscroll=" << (int)event.x<< " yscroll=" << (int)event.y << "\n";
+}
+
+void print(const SDL_MouseMotionEvent& event) {
+//    std::cout << "Mouse Motion Event: X=" << (int)event.x << " Y=" << (int)event.y << "\n";
+}
+
+
+void print(const SDL_Event* event) {
+	switch ( event->type ) {
+	case SDL_WINDOWEVENT:
+		print(event->window);
+		break;
+	case SDL_TEXTINPUT:
+		print(event->text);
+		break;
+	case SDL_MOUSEBUTTONDOWN:
+	case SDL_MOUSEBUTTONUP:
+		print(event->button);
+		break;
+	case SDL_MOUSEMOTION:
+		print(event->motion);
+		break;
+	case SDL_MOUSEWHEEL:
+		print(event->wheel);
+		break;
 	}
 }
 
 bool PG_Application::PumpIntoEventQueue(const SDL_Event* event) {
 	PG_Widget* widget = NULL;
 
+	print(event);
+
 	// do we have a capture hook?
-	if((event->type != SDL_USEREVENT) && (event->type != SDL_VIDEORESIZE)) {
+	if((event->type != SDL_USEREVENT) && (event->type != SDL_WINDOWEVENT)) {
 		if(captureObject) {
 			return captureObject->ProcessEvent(event);
 		}
@@ -1235,6 +1042,7 @@ bool PG_Application::PumpIntoEventQueue(const SDL_Event* event) {
 
 	switch(event->type) {
 
+	    case SDL_TEXTINPUT:
 		case SDL_KEYDOWN:
 		case SDL_KEYUP:
 			if(inputFocusObject) {
@@ -1260,6 +1068,18 @@ bool PG_Application::PumpIntoEventQueue(const SDL_Event* event) {
 				return true;
 			}
 			return true;
+
+		case SDL_MOUSEWHEEL:
+		{
+			int x,y;
+			PG_Application::GetEventSupplier()->GetMouseState(x, y);
+			widget = PG_Widget::FindWidgetFromPos(x,y);
+			if(widget) {
+				widget->ProcessEvent(event);
+				return true;
+			}
+			break;
+		}
 
 		case SDL_MOUSEBUTTONUP:
 		case SDL_MOUSEBUTTONDOWN:
@@ -1297,6 +1117,18 @@ bool PG_Application::PumpIntoEventQueue(const SDL_Event* event) {
 
 	return processed;
 }
+
+
+bool PG_Application::eventWindow(const SDL_WindowEvent* event)
+{
+	if (event->event == SDL_WINDOWEVENT_EXPOSED) {
+		UpdateScreen(NULL, 0);
+		return true;
+	} else
+		return false;
+
+}
+
 
 void PG_Application::SetUpdateOverlappingSiblings(bool update) {
 	defaultUpdateOverlappingSiblings = update;

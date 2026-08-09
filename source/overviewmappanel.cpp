@@ -133,7 +133,7 @@ bool OverviewMapPanel::mouseClick ( SPoint pos )
 
 bool OverviewMapPanel::mouseButtonDown ( PG_MessageObject* o, const SDL_MouseButtonEvent *button)
 {
-   if ( ovmap->IsMouseInside() )
+   if ( ovmap->IsInside(PG_Point(button->x, button->y)) )
       if ( button->type == SDL_MOUSEBUTTONDOWN && button->button == 1 ) {
          PG_Point p = ovmap->ScreenToClient( button->x, button->y );
          return mouseClick( SPoint( p.x, p.y ));
@@ -144,7 +144,7 @@ bool OverviewMapPanel::mouseButtonDown ( PG_MessageObject* o, const SDL_MouseBut
 
 bool OverviewMapPanel::mouseMotion  ( PG_MessageObject* o,  const SDL_MouseMotionEvent *motion)
 {
-   if ( ovmap->IsMouseInside() )
+   if ( ovmap->IsInside(PG_Point(motion->x, motion->y)) )
       if ( motion->type == SDL_MOUSEMOTION && (motion->state & 1 ) ) {
          PG_Point p = ovmap->ScreenToClient( motion->x, motion->y );
          return mouseClick( SPoint( p.x, p.y ));

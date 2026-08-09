@@ -19,9 +19,10 @@
 #include <ctype.h>
 #include <algorithm>
 #include <memory>
+#include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_mixer.h>
-
+#include <pgeventsupplier.h>
 #include "paradialog.h"
 
 #include "mainscreenwidget.h"
@@ -34,6 +35,7 @@
 #include "itemrepository.h"
 #include "mapdisplay.h"
 #include "events.h"
+#include "gameoptions.h"
 
 
 
@@ -132,7 +134,7 @@ void MainScreenWidget :: toggleMapLayer( const ASCString& name )
 
 bool MainScreenWidget :: idleHandler( )
 {
-   if ( ticker > lastMessageTime + 500 ) {
+   if ( ASC_GetTicks() > lastMessageTime + 500 ) {
       displayMessage( "" );
       lastMessageTime = 0xfffffff;
    }
@@ -141,51 +143,58 @@ bool MainScreenWidget :: idleHandler( )
    return true;
 }
 
+void MainScreenWidget::scrollMap(int direction)
+{
+    lastMouseScrollTime = ASC_GetTicks();
+    mapDisplay->scrollMap(direction);
+}
+
+
 void MainScreenWidget :: mouseScrollChecker()
 {
-   if ( getPGApplication().isFullscreen() && IsMouseInside() ) {
+   if ( getPGApplication().isFullscreen() && SDL_GetKeyboardFocus() != NULL && IsMouseInside() ) {
 
-      if ( ticker > lastMouseScrollTime + 30 ) {
+      if ( ASC_GetTicks() > lastMouseScrollTime + CGameOptions::Instance()->scrollspeed) {
          int x,y;
-         SDL_GetMouseState( &x, &y);
-   
+         PG_Application::GetEventSupplier()->GetMouseState(x, y);
+
          if ( y <= 0 ) {
             if ( x <= 0 ) {
-               mapDisplay->scrollMap( 7 );
+               scrollMap( 7 );
                return;
             }
 
             if ( x >= PG_Application::GetScreenWidth() - 1 ) {
-               mapDisplay->scrollMap( 1 );
+               scrollMap( 1 );
                return;
             } 
 
-            mapDisplay->scrollMap(0);
+            scrollMap(0);
             return;
          }
 
          if ( y >= PG_Application::GetScreenHeight() - 1 ) {
             if ( x <= 0 ) {
-               mapDisplay->scrollMap( 5 );
+               scrollMap( 5 );
                return;
             }
 
             if ( x >= PG_Application::GetScreenWidth() - 1 ) {
-               mapDisplay->scrollMap( 3 );
+               scrollMap( 3 );
                return;
             }
 
-            mapDisplay->scrollMap(4);
+            scrollMap(4);
             return;
          }
 
          if ( x >= PG_Application::GetScreenWidth() - 1 ) {
-            mapDisplay->scrollMap( 2 );
+            scrollMap( 2 );
             return;
          }
 
          if ( x <= 0 ) {
-            mapDisplay->scrollMap( 6 );
+            scrollMap( 6 );
             return;
          }
       }
@@ -266,7 +275,7 @@ void MainScreenWidget::displayMessage( const ASCString& message )
 {
    if ( messageLine ) {
       messageLine->SetText( message );
-      lastMessageTime = ticker;
+      lastMessageTime = ASC_GetTicks();
    }   
 }
 
@@ -276,21 +285,29 @@ void MainScreenWidget::eventBlit (SDL_Surface *surface, const PG_Rect &src, cons
 {
    SDL_Rect dstrect;
    Surface s = Surface::Wrap( PG_Application::GetScreen() );
-   dstrect.x = blitRects[0].x;
-   dstrect.y = blitRects[0].y;
-   s.Blit( backgroundImage, blitRects[0], dstrect );
+   if (src.OverlapRect(blitRects[0])) {
+	   dstrect.x = blitRects[0].x;
+	   dstrect.y = blitRects[0].y;
+	   s.Blit( backgroundImage, blitRects[0], dstrect );
+   }
    
-   dstrect.x = blitRects[1].x;
-   dstrect.y = blitRects[1].y;
-   s.Blit( backgroundImage, blitRects[1], dstrect );
+   if (src.OverlapRect(blitRects[1])) {
+	   dstrect.x = blitRects[1].x;
+	   dstrect.y = blitRects[1].y;
+	   s.Blit( backgroundImage, blitRects[1], dstrect );
+   }
    
-   dstrect.x = blitRects[2].x;
-   dstrect.y = blitRects[2].y;
-   s.Blit( backgroundImage, blitRects[2], dstrect );
+   if (src.OverlapRect(blitRects[2])) {
+	   dstrect.x = blitRects[2].x;
+	   dstrect.y = blitRects[2].y;
+	   s.Blit( backgroundImage, blitRects[2], dstrect );
+   }
    
-   dstrect.x = blitRects[3].x;
-   dstrect.y = blitRects[3].y;
-   s.Blit( backgroundImage, blitRects[3], dstrect );
+   if (src.OverlapRect(blitRects[3])) {
+	   dstrect.x = blitRects[3].x;
+	   dstrect.y = blitRects[3].y;
+	   s.Blit( backgroundImage, blitRects[3], dstrect );
+   }
 }
 
 StatusMessageWindowHolder MainScreenWidget::createStatusWindow( const ASCString& msg )

@@ -110,6 +110,9 @@ void GuiButton::callFunc( const MapCoordinate& pos, ContainerBase* subject, int 
 
 bool GuiButton::checkForKey( const SDL_KeyboardEvent* key, int modifier )
 {
+   if ( modifier & (SDLK_LCTRL | SDLK_RCTRL))
+      return false;
+
    if ( func->available( pos, subject, id ))
       if ( func->checkForKey( key, modifier, id)) {
          callFunc( pos, subject, id );
@@ -299,15 +302,11 @@ void NewGuiHost::lockOptionsChanged( int options )
 
 
 class SmallButtonHolder : public SpecialInputWidget {
-      bool locked;
    public:
-      void Lock() { SetCapture(); locked = true; };
-      void Unlock() { ReleaseCapture(); locked = false; };
-
-      SmallButtonHolder (PG_Widget *parent, const PG_Rect &rect ) : SpecialInputWidget( parent, rect ), locked(false) {};
+      SmallButtonHolder (PG_Widget *parent, const PG_Rect &rect ) : SpecialInputWidget( parent, rect ) {};
       bool eventMouseMotion (const SDL_MouseMotionEvent *motion) { return true; };
       bool eventMouseButtonDown (const SDL_MouseButtonEvent *button) { return true; };
-      bool eventMouseButtonUp (const SDL_MouseButtonEvent *button) { Unlock(); return true; };
+      bool eventMouseButtonUp (const SDL_MouseButtonEvent *button) { return true; };
       
       bool ProcessEvent(const SDL_Event * event, bool bModal) { return SpecialInputWidget::ProcessEvent( event, bModal ); };
       bool ProcessEvent ( const SDL_Event *   event  )
@@ -322,18 +321,10 @@ class SmallButtonHolder : public SpecialInputWidget {
         
          bool result = false;
          
-         if ( locked ) 
-            ReleaseCapture();
-         
+        
          if ( SpecialInputWidget::ProcessEvent( event, true )) 
             result = true;
-         
-         if ( locked )
-            SetCapture();
-             
-         if ( !result && event->type == SDL_MOUSEBUTTONUP )
-            Unlock();
-         
+                  
          return result;
       }
 
@@ -431,6 +422,9 @@ GuiIconHandler* NewGuiHost::getIconHandler(  )
 void NewGuiHost::popIconHandler( )
 {
    if ( !theGuiHost )
+      return;
+
+   if ( theGuiHost->iconHandlerStack.empty())
       return;
 
    theGuiHost->clearSmallIcons();
@@ -573,7 +567,6 @@ bool NewGuiHost::showSmallIcons( PG_Widget* parent, const SPoint& pos, bool curs
    if ( smallButtonHolder && count ) {
       smallButtonHolder->BringToFront();
       smallButtonHolder->Show();
-      smallButtonHolder->Lock();
 
       if ( firstSmallButton ) {
          firstSmallButton->press();
@@ -633,18 +626,18 @@ bool NewGuiHost::eventKeyDown(const SDL_KeyboardEvent* key)
    }
 
    if ( enterKeyPressed ) {
-      if ( key->keysym.sym == SDLK_RIGHT  || key->keysym.sym == SDLK_KP6 )
+      if ( key->keysym.sym == SDLK_RIGHT  || key->keysym.sym == SDLK_KP_6 )
          return setNewButtonPressed( keyPressedButton + 1);
 
-      if ( key->keysym.sym == SDLK_LEFT  || key->keysym.sym == SDLK_KP4 )
+      if ( key->keysym.sym == SDLK_LEFT  || key->keysym.sym == SDLK_KP_4 )
          if  ( keyPressedButton > 0 )
             return setNewButtonPressed( keyPressedButton - 1);
 
-      if ( key->keysym.sym == SDLK_UP || key->keysym.sym == SDLK_KP8 )
+      if ( key->keysym.sym == SDLK_UP || key->keysym.sym == SDLK_KP_8 )
          if ( keyPressedButton >= guiIconColumnNum )
             return setNewButtonPressed( keyPressedButton - guiIconColumnNum );
 
-      if ( key->keysym.sym == SDLK_DOWN || key->keysym.sym == SDLK_KP2 )
+      if ( key->keysym.sym == SDLK_DOWN || key->keysym.sym == SDLK_KP_2 )
          return setNewButtonPressed( keyPressedButton + guiIconColumnNum );
          
       if ( key->keysym.sym == SDLK_ESCAPE || key->keysym.sym == SDLK_END ) {
@@ -722,7 +715,6 @@ bool NewGuiHost::clearSmallIcons()
 bool NewGuiHost::clearSmallIcons()
 {
    if ( smallButtonHolder && smallButtonHolder->IsVisible() ) {
-      smallButtonHolder->Unlock();
       smallButtonHolder->Hide();
    }
    return true;
@@ -738,6 +730,7 @@ NewGuiHost::~NewGuiHost()
 
 void resetActiveGuiAction( GameMap* map )
 {
+   NewGuiHost::popIconHandler();
    if ( NewGuiHost::pendingCommand ) {
       delete NewGuiHost::pendingCommand;
       NewGuiHost::pendingCommand = NULL;

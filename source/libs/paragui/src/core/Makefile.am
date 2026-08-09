@@ -6,7 +6,6 @@ libpgcore_la_SOURCES = \
 	pgdatacontainer.cpp \
 	pgapplication.cpp \
 	pgcolors.cpp \
-	pgfilearchive.cpp \
 	pgfile.cpp \
 	pglog.cpp \
 	pgmain.cpp \
@@ -14,10 +13,10 @@ libpgcore_la_SOURCES = \
 	pgnavigator.cpp \
 	pgrectlist.cpp \
 	pgsurfacecache.cpp \
-	pgtimerobject.cpp \
 	pgcolor.cpp \
 	pgsdleventsupplier.cpp \
-	pgsdlscreenupdater.cpp 
+	pgsdlscreenupdater.cpp \
+	pgfilearchive.cpp
 
 libpgcore_la_LIBADD = \
 	$(SDL_LIBS) \

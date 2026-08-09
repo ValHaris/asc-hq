@@ -27,6 +27,7 @@
 
 
 #include <sigc++/sigc++.h>
+#include <limits>
 #include "ascstring.h"
 #include "dlg_box.h"
 #include "password.h"
@@ -70,10 +71,13 @@ extern int   choice_dlg(const ASCString& title,
 
 extern void selectgraphicset ( void );
 
-extern int editInt( const ASCString& title, int defaultValue, int minValue = 0, int maxValue = maxint );
+extern int editInt( const ASCString& title, int defaultValue, int minValue = 0, int maxValue = std::numeric_limits<int>::max() );
 
 
 class ActionResult;
 extern void displayActionError( const ActionResult& result, const ASCString& additionalInfo = "" );
+
+extern void showTipDialog(const ASCString& text, const ASCString& key);
+
 
 #endif

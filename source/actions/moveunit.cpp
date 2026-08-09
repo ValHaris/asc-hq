@@ -47,10 +47,10 @@ void printTimer( int i )
 #if 0
    static int lastTimer = 0;
    if ( i == 1 )
-      lastTimer = SDL_GetTicks();
+      lastTimer = ASC_GetTicks();
    else {
-      printf("%d - %d : %d \n", i-1, i, SDL_GetTicks() - lastTimer);
-      lastTimer = SDL_GetTicks();
+      printf("%d - %d : %d \n", i-1, i, ASC_GetTicks() - lastTimer);
+      lastTimer = ASC_GetTicks();
    }
 #endif
 }

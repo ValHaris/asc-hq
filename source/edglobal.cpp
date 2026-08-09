@@ -180,6 +180,7 @@
         "Unit Guide Dialog",
         "Run Lua Script",
 	"Run Translation Script",
+    "Dump selected Terrain",
 	"Dump all Terrain",
 	"Dump all Objects",
         "show weapon range"
@@ -279,7 +280,7 @@ int infomessage( char* formatstring, ... )
    if ( formatstring == NULL  ||  formatstring[0] == 0 )
       lastdisplayedmessageticker = 0xffffff;
    else
-      lastdisplayedmessageticker = ticker;
+      lastdisplayedmessageticker = ASC_GetTicks();
 
    return ++actdisplayedmessage;
 }
@@ -339,7 +340,7 @@ class PlayerColorPanel : public PG_Widget {
 
       void Show( bool fade = false )
       {
-         openTime = ticker;
+         openTime = ASC_GetTicks();
          PG_Widget::Show(fade);
       }
 
@@ -368,7 +369,7 @@ class PlayerColorPanel : public PG_Widget {
          if ( !openTime )
             return false;
 
-         if ( ticker > openTime + 200 ) {
+         if ( ASC_GetTicks() > openTime + 200 ) {
             Hide();
             return true;
          } else
@@ -467,9 +468,6 @@ void execaction( int code)
        */
     case act_viewmap :  
              {
-             while (mouseparams.taste != 0)
-                releasetimeslice();
-             // showmap ();
              displaymap();
              }
        break;
@@ -909,6 +907,17 @@ void execaction_pg(int code)
             }
          } else
             errorMessage("no object selected");
+         break;
+      case act_dumpTerrain:
+         if ( getactfield()  ) {
+            ASCString filename = selectFile( "*.dump", false );
+            if ( !filename.empty () ) {
+               tn_file_buf_stream stream ( filename, tnstream::writing );
+               PropertyWritingContainer pc ( "TerrainDump", stream );
+               getactfield()->typ->terraintype->runTextIO( pc );
+            }
+         } else
+            errorMessage("no terrain selected");
          break;
     case act_help : help(1000);
        break;

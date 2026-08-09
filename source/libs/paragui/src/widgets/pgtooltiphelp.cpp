@@ -37,7 +37,6 @@
 
 
 PG_LineEdit* PG_ToolTipHelp::toolTipLabel = NULL;
-PG_ToolTipHelp::Ticker* PG_ToolTipHelp::ticker = NULL;
 
 std::map<const PG_Widget*,PG_ToolTipHelp*> PG_ToolTipHelp::tooltips;
 
@@ -65,9 +64,6 @@ void PG_ToolTipHelp :: SetText( const std::string& text ) {
 }
 
 bool PG_ToolTipHelp :: onIdle() {
-	if ( !ticker )
-		return false;
-
 	if ( status != counting )
 		return false;
 
@@ -76,7 +72,7 @@ bool PG_ToolTipHelp :: onIdle() {
 		return false;
 	}
 
-	if ( ticker->getTicker() > lastTick + 10 ) {
+	if ( SDL_GetTicks64() > lastTick + 100 ) {
 		if ( status < shown ) {
 			int x, y;
 			PG_Application::GetEventSupplier()->GetMouseState( x,y );
@@ -90,12 +86,9 @@ bool PG_ToolTipHelp :: onIdle() {
 
 
 bool PG_ToolTipHelp :: onParentEnter( ) {
-	if ( !ticker )
-		ticker = new Ticker(100);
-
 	status = counting;
 
-	lastTick = ticker->getTicker();
+	lastTick = SDL_GetTicks64();
 	return true;
 }
 
@@ -119,8 +112,7 @@ bool PG_ToolTipHelp :: onParentDelete( const PG_MessageObject* object ) {
 }
 
 bool PG_ToolTipHelp :: onMouseMotion( const PG_MessageObject* object, const SDL_MouseMotionEvent *motion ) {
-	if ( ticker )
-		lastTick = ticker->getTicker();
+	lastTick = SDL_GetTicks64();
 
 	status = counting;
 

@@ -196,7 +196,7 @@ void parseObjectProps(PARSE_INFO* info, const XML_Char* prop, const XML_Char** a
 		if(filename->hasColorKey && filename->surface) {
 			PG_Color c = filename->colorkey;
 			Uint32 key = c.MapRGB(filename->surface->format);
-			SDL_SetColorKey(filename->surface, SDL_SRCCOLORKEY, key);
+			SDL_SetColorKey(filename->surface, SDL_TRUE, key);
 		}
 		object->filename[filename->name] = filename;
 	}

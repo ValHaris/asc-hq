@@ -138,8 +138,6 @@ namespace SDLmm {
     */
     const void *pixels() const { return GetSurface()->pixels; }
 
-    //! Returns the hardware-specific surface info.
-    struct private_hwdata *hwdata() const { return GetSurface()->hwdata; }
     //@}
 
     //! Set the pixel to the color
@@ -506,7 +504,7 @@ namespace SDLmm {
 
       \sa SetDisplayFormatAlpha(), SetAlpha(), SetColorKey()
     */
-    virtual bool SetDisplayFormat() = 0;
+    // virtual bool SetDisplayFormat() = 0;
 
     //! Convert the surface to the display format.
     /*!
@@ -528,7 +526,7 @@ namespace SDLmm {
 
       \sa SetDisplayFormat(), SetAlpha(), SetColorKey()
     */
-    virtual bool SetDisplayFormatAlpha() = 0;
+    // virtual bool SetDisplayFormatAlpha() = 0;
 
     //! Save a BaseSurface object as a Windows bitmap file
     /*!

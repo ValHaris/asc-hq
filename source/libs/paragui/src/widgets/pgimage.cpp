@@ -104,7 +104,7 @@ void PG_Image::eventBlit(SDL_Surface* srf, const PG_Rect& src, const PG_Rect& ds
 }
 
 void PG_Image::SetColorKey(const PG_Color& key) {
-	SDL_SetColorKey(my_image, SDL_SRCCOLORKEY, key);
+	SDL_SetColorKey(my_image, SDL_TRUE, key);
 	DeleteThemedSurface(my_cachedSrf);
 	my_cachedSrf = NULL;
 }

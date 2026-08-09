@@ -13,6 +13,7 @@
 # include<direct.h> 
 #endif
 
+#include <SDL_version.h>
 #include "../loadbi3.h"
 #include "../unitset.h"
 #include "../statistics.h"
@@ -73,8 +74,6 @@ ASCString showSurfaceInfo( Surface& surface ) {
    s += "Gmask: " + ASCString::toString(  surface.getBaseSurface()->format->Gmask ) + "\n";
    s += "Bmask: " + ASCString::toString(  surface.getBaseSurface()->format->Bmask ) + "\n";
    s += "Amask: " + ASCString::toString(  surface.getBaseSurface()->format->Amask ) + "\n";
-   s += "colorkey: " + ASCString::toString( surface.getBaseSurface()->format->colorkey ) + "\n";
-   s += "Alpha: " + ASCString::toString( surface.getBaseSurface()->format->alpha ) + "\n";
    
    return s;
 }
@@ -89,7 +88,10 @@ void showSDLInfo()
    sprintf(buf, "\nCompiled with SDL version: %d.%d.%d\n", compiled.major, compiled.minor, compiled.patch);
    s += buf;
 
-   sprintf(buf, "Linked with SDL version: %d.%d.%d\n", SDL_Linked_Version()->major, SDL_Linked_Version()->minor, SDL_Linked_Version()->patch);
+   SDL_version sdl_version;
+   SDL_GetVersion(&sdl_version);
+
+   sprintf(buf, "Linked with SDL version: %d.%d.%d\n", sdl_version.major, sdl_version.minor, sdl_version.patch);
    s += buf;
 
    s += "Byte order is ";
@@ -103,48 +105,6 @@ void showSDLInfo()
 #endif
 #endif
   
-   s += "Graphics backend: ";
-   s += SDL_VideoDriverName( buf, 1000 );
-   s += "\n";
-
-
-   const SDL_VideoInfo* videoInfo = SDL_GetVideoInfo();
-   s += "VideoInfo: \n";
-
-   s += "Hardware surfaces available: ";
-   s += videoInfo->hw_available ? "yes" : "no";
-
-
-   s += "\nScreen uses hardware surface: ";
-   s += PG_Application::GetScreen()->flags & SDL_HWSURFACE ? "yes" : "no";
-
-   s += "\nWindow manager available: ";
-   s += videoInfo->wm_available ? "yes" : "no";
-
-   s += "\nhardware to hardware blits accelerated: ";
-   s += videoInfo->blit_hw ? "yes" : "no";
-
-   s += "\nhardware to hardware colorkey blits accelerated: ";
-   s += videoInfo->blit_hw_CC ? "yes" : "no";
-
-   s += "\nhardware to hardware alpha blits accelerated: ";
-   s += videoInfo->blit_hw_A ? "yes" : "no";
-
-   s += "\nsoftware to hardware blits accelerated: ";
-   s += videoInfo->blit_sw ? "yes" : "no";
-
-   s += "\nsoftware to hardware colorkey blits accelerated: ";
-   s += videoInfo->blit_sw_CC ? "yes" : "no";
-
-   s += "\nsoftware to hardware alpha blits accelerated: ";
-   s += videoInfo->blit_sw_A ? "yes" : "no";
-
-   s += "\ncolor fills accelerated: ";
-   s += videoInfo->blit_fill ? "yes" : "no";
-
-   s += "\nVideo memory: ";
-   s += ASCString::toString( int(videoInfo->video_mem ));
-
    s += "\n\nLanguage: ";
    Locale locale;
    s += locale.getLang();

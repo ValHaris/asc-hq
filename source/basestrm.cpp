@@ -40,6 +40,8 @@
 
 #include <bzlib.h>
 
+#include <boost/filesystem.hpp>
+
 #include "global.h"
 #include "basestrm.h"
 
@@ -55,7 +57,6 @@
  #endif
 #endif
 
-//#include sdlheader
 #include <SDL_endian.h>
 
 
@@ -335,13 +336,10 @@ float tnstream::readFloat ( void )
    return c;
 }
 
-#if SIZE_T_not_identical_to_INT
+#ifdef SIZE_T_not_identical_to_INT
 
 void tnstream::writeInt  ( size_t i )
 {
-#ifdef HAVE_LIMITS
-   // assert( i <=  numeric_limits<int>::max());
-#endif
    writeInt( int(i) );
 }
 
@@ -653,7 +651,7 @@ void MemoryStreamCopy :: seek ( int newpos )
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-static int stream_seek( struct SDL_RWops *context, int offset, int whence)
+static Sint64 stream_seek( struct SDL_RWops *context, Sint64 offset, int whence)
 {
 	MemoryStreamCopy* stream = (MemoryStreamCopy*) context->hidden.unknown.data1;
 	if ( whence == SEEK_SET )
@@ -668,7 +666,7 @@ static int stream_seek( struct SDL_RWops *context, int offset, int whence)
 }
 
 
-static int stream_read(SDL_RWops *context, void *ptr, int size, int maxnum)
+static size_t stream_read(SDL_RWops *context, void *ptr, size_t size, size_t maxnum)
 
 {
 	MemoryStreamCopy* stream = (MemoryStreamCopy*) context->hidden.unknown.data1;
@@ -689,6 +687,15 @@ static int stream_close(SDL_RWops *context)
 	return(0);
 }
 
+static Sint64 stream_size(SDL_RWops *context)
+{
+    if ( context && context->hidden.unknown.data1 ) {
+       MemoryStreamCopy* stream = (MemoryStreamCopy*) context->hidden.unknown.data1;
+       return stream->getSize();
+    }
+    return -1;
+}
+
 
 SDL_RWops *SDL_RWFromStream( tnstream* stream )
 {
@@ -703,6 +710,7 @@ SDL_RWops *SDL_RWFromStream( tnstream* stream )
 	   rwops->write = NULL;
 	   rwops->close = stream_close;
 	   rwops->hidden.unknown.data1 = msb;
+	   rwops->size = stream_size;
 	}
 	return(rwops);
 }
@@ -857,7 +865,7 @@ class ContainerCollector : public ContainerIndexer {
       } namesearch;       // next entry to return
    public:
       ContainerCollector ( void );
-      void init ( const char* wildcard );
+      void init ( const ASCString& wildcard );
       void addfile ( const char* filename, const pncontainerstream stream, int directoryLevel );
            // pncontainerstream getfile ( const char* filename );
       FileIndex* getfile ( const ASCString& filename );
@@ -971,12 +979,9 @@ ASCString constructFileName( int directoryLevel, const ASCString& path, ASCStrin
         
         dir.erase( dir.rfind( pathdelimitter ) + 1);
 
-        filename.erase( 0, filename.find( pathdelimitter ) + 1 );
+        filename.erase( 0, filename.rfind( pathdelimitter ) + 1 );
         
-        if ( dir.find( pathdelimitter ) == 0 )
-           dir.erase( 0, 1 );
-           
-        result = dir;   
+        result = dir;
      }
 
      if ( result.length() > 2 && result[0] == '~' && result[1] == pathdelimitter ) {
@@ -989,11 +994,8 @@ ASCString constructFileName( int directoryLevel, const ASCString& path, ASCStrin
         }
      }
 
-
      appendbackslash ( result );
-
      result += filename;
-
      return result;
 }
 
@@ -1060,31 +1062,35 @@ ContainerCollector :: ContainerCollector ( void )
   containernum = 0;
 }
 
-void ContainerCollector :: init ( const char* wildcard )
+void ContainerCollector :: init ( const ASCString& wildcard )
 {
+   namespace fs = boost::filesystem;
+   
    for ( int i = 0; i < searchDirNum; i++ ) {
-      DIR *dirp; 
-      struct ASC_direct *direntp;
 
-      char buf[ maxFileStringSize ];
-      char buf2[ maxFileStringSize ];
-      char buf3 [ maxFileStringSize ];
-      dirp = opendir( extractPath ( buf2, constructFileName ( buf, i, NULL, wildcard )));
-      extractFileName ( buf3, buf );
-      if( dirp != NULL ) { 
-         for(;;) { 
-            direntp = readdir( dirp ); 
-            if ( direntp == NULL ) {
-               break; 
-            }
-            if ( patimat ( buf3, direntp->d_name )) {
-               container[containernum++] = new tncontainerstream( constructFileName ( buf, i, buf2, direntp->d_name), this, i);
-               if ( MessagingHub::Instance().getVerbosity() >= 2 )
-                  printf("container %s mounted\n", buf );
-            }
-         } 
-         closedir( dirp ); 
-      } 
+      fs::path dirPath_w_wildcard( std::string(constructFileName( i, "", wildcard ) ));
+      fs::path dirPath = dirPath_w_wildcard.parent_path();
+      std::string pattern = dirPath_w_wildcard.filename().string();
+      
+      boost::system::error_code ec;
+      if ( !fs::exists( dirPath, ec ) || !fs::is_directory( dirPath, ec ) ) {
+         continue;
+      }
+      
+      for ( fs::directory_iterator it( dirPath, ec ); it != fs::directory_iterator(); ++it ) {
+         if ( ec ) {
+            break;
+         }
+         
+         std::string filename = it->path().filename().string();
+         
+         if ( patimat( pattern.c_str(), filename.c_str() ) ) {
+            fs::path containerPath = dirPath / filename;
+            container[containernum++] = new tncontainerstream( containerPath.string().c_str(), this, i );
+            
+            MessagingHub::Instance().logMessage(ASCString("container ") + containerPath.string() + " mounted", 2 );
+         }
+      }
    }
 }
 
@@ -2121,56 +2127,58 @@ tfindfile :: tfindfile ( ASCString name, SearchPosition searchPosition, SearchTy
       wildcard = name;
    }
 
-   if ( searchTypes == All || searchTypes == OutsideContainer )
+   if ( searchTypes == All || searchTypes == OutsideContainer ) {
+      namespace fs = boost::filesystem;
+      
       for ( int i = 0; i < dirNum; i++ ) {
-         DIR *dirp;
-         struct ASC_direct *direntp;
+         std::string d = directory[i];
+         fs::path dirPath( d );
+         
+         boost::system::error_code ec;
+         if ( !fs::exists( dirPath, ec ) || !fs::is_directory( dirPath, ec ) ) {
+            continue;
+         }
+         
+         for ( fs::directory_iterator it( dirPath, ec ); it != fs::directory_iterator(); ++it ) {
+            if ( ec ) {
+               break;
+            }
+            
+            std::string filename = it->path().filename().string();
+            
+            if ( patimat( wildcard.c_str(), filename.c_str() ) ) {
+               int localfound = 0;
+               for ( int j = 0; j < found; j++ )
+                  if ( strcmpi( fileInfo[j].name.c_str(), filename.c_str() ) == 0 )
+                     localfound++;
 
-         dirp = opendir( directory[i].c_str() );
-         if( dirp != NULL ) {
-           for(;;) {
-             direntp = readdir( dirp );
-             if ( direntp == NULL )
-                break;
- 
-             if ( patimat ( wildcard.c_str(), direntp->d_name )) {
-                int localfound = 0;
-                for ( int j = 0; j < found; j++ )
-                   if ( strcmpi ( fileInfo[j].name.c_str(), direntp->d_name ) == 0 )
-                      localfound++;
+               if ( !localfound ) {
+                  FileInfo fi;
+                  fi.name = filename;
+                  fi.directoryLevel = i;
+                  fi.isInContainer = false;
+                  fi.location = directory[i];
 
-                if ( !localfound ) {
-                   FileInfo fi;
-                   fi.name = direntp->d_name;
-                   fi.directoryLevel = i ;
-                   fi.isInContainer = false ;
-                   fi.location = directory[i];
+                  fs::path fullPath = it->path();
+                  
+                  boost::system::error_code statEc;
+                  fi.size = fs::file_size( fullPath, statEc );
+                  fi.date = fs::last_write_time( fullPath, statEc );
 
-                   char buf[1000];
-                   ASCString fullName = constructFileName( buf, i, NULL, direntp->d_name );
-
-                   struct stat statbuf;
-                   stat( fullName.c_str(), &statbuf);
-
-                   fi.size = statbuf.st_size ;
-                   fi.date = statbuf.st_mtime;
-
-                   fileInfo.push_back ( fi );
-
-                   found++;
-                }
-             }
-           }
-           closedir( dirp );
+                  fileInfo.push_back( fi );
+                  found++;
+               }
+            }
          }
       }
+   }
 
 
 
    if ( searchTypes == All || searchTypes == InsideContainer ) {
       const ContainerCollector::FileIndex* c = containercollector.getfirstname();
       while ( c ) {
-          if ( patimat ( name.c_str(), c->name ) ) {
+          if ( patimat ( name.c_str(), c->name, true ) ) {
              int f = 0;
              for ( int i = 0; i < found; i++ )
                 if ( stricmp ( c->name.c_str(), fileInfo[i].name.c_str() ) == 0 ) {
@@ -2246,41 +2254,6 @@ bool tfindfile :: getnextname ( FileInfo& fi )
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-
-
-int checkforvaliddirectory ( char* dir )
-{
-   int stat = 0;
-
-      DIR *dirp; 
-      struct ASC_direct *direntp; 
-  
-/*      char temp[200];
-      int l = strlen(dir) - 1;
-      for (int i = 0; i < l; i++) {
-         temp[i] = dir[i];
-      } 
-      temp[i] = 0;
-*/
-      dirp = opendir( dir ); 
-      if( dirp != NULL ) { 
-        for(;;) { 
-          direntp = readdir( dirp ); 
-          if ( direntp == NULL ) 
-             break;
-
-          if ( strcmp ( direntp -> d_name, ".") == 0 )
-             stat = 1;
-        } 
-        closedir( dirp ); 
-      } 
-
-   return stat;
-}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -2499,19 +2472,9 @@ int filesize( const char *name)
 
 bool directoryExist ( const ASCString& path )
 {
-   bool existence = false;
-
-   DIR *dirp = opendir( path.c_str() );
-
-   if( dirp ) {
-      if ( readdir( dirp ) )
-         existence = true;
-      else
-         existence = false;
-
-      closedir( dirp );
-   }
-   return existence;
+   namespace fs = boost::filesystem;
+   boost::system::error_code ec;
+   return fs::exists( std::string(path), ec ) && fs::is_directory( std::string(path), ec );
 }
 
 void addSearchPath ( const ASCString& path )
@@ -2578,18 +2541,18 @@ char* extractFileName ( char* buf, const char* filename )
 
 ASCString extractFileName ( const ASCString& filename )
 {
-   char buf[10000];
-   return extractFileName( buf, filename.c_str() );
+   namespace fs = boost::filesystem;
+   std::string f = filename;
+   fs::path p( f );
+   return p.filename().string();
 }
 
 ASCString extractFileName_withoutSuffix ( const ASCString& filename )
 {
-   char buf[10000];
-   extractFileName( buf, filename.c_str() );
-   char* c = strchr ( buf, '.' );
-   if ( c )
-      *c = 0;
-   return ASCString(buf);
+   namespace fs = boost::filesystem;
+   std::string f = filename;
+   fs::path p( f );
+   return p.stem().string();
 }
 
 
@@ -2608,23 +2571,13 @@ void appendbackslash ( ASCString& string )
 
 int createDirectory ( const char* name )
 {
-   #ifdef _UNIX_
-    char *nname;
-    int i;
-
-    if (name == NULL || (nname=strdup(name)) == NULL)
-	return -1;
-    i = strlen(nname);
-    /* leave one '/' */
-    while (i>1 && nname[i-1] == '/')
-		nname[--i] = '\0';
-    i = mkdir ( nname, 0700 );
-    free(nname);
-
-    return i;
-   #else
-    return mkdir ( name );
-   #endif
+   namespace fs = boost::filesystem;
+   if ( name == NULL )
+      return -1;
+   
+   boost::system::error_code ec;
+   fs::create_directory( fs::path( name ), ec );
+   return ec ? -1 : 0;
 }
 
 

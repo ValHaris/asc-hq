@@ -43,6 +43,7 @@
 #include "tasks/taskcontainer.h"
 #include "maptest.h"
 #include "repairtest.h"
+#include "imageloadingtest.h"
 
 
 void viewcomp( Player& player )
@@ -76,6 +77,7 @@ bool loadGameFromFile( const ASCString& filename )
 
 void runUnitTests()
 {
+   testImageLoading();
    testView();
    // testMaps();
    testAttack();
@@ -122,10 +124,6 @@ int runTester ( )
    }
    catch ( ASCexception& ) {
       errorMessage ( "loading of game failed" );
-      return -1;
-   }
-   catch ( ThreadExitException& ) {
-      displayLogMessage(0, "caught thread exiting exception, shutting down");
       return -1;
    }
 
@@ -224,6 +222,10 @@ int main(int argc, char *argv[] )
    }
    catch ( ActionResult& ar ) {
       cerr << "ActionResult failed:" << ar.getCode() << " : " << ar.getMessage() << "\n";
+      return 2;
+   }
+   catch ( const tfileerror& err ) {
+      cerr << "Error accessing file: " << err.getFileName() << "\n";
       return 2;
    }
    catch ( ... ) {

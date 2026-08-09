@@ -82,8 +82,10 @@ class ScrollButton : public PG_Button {
 	};
 #endif		// DOXYGEN_SKIP
 
-
+    int wheelSpeed;
 public:
+
+    void SetMouseWheelSpeed(int wheelSpeed);
 
 	//! ScrollbarType
 	typedef enum {
@@ -152,6 +154,9 @@ protected:
 
 	/**  */
 	bool eventMouseButtonDown(const SDL_MouseButtonEvent* button);
+
+    /**  */
+    bool eventMouseWheel(const SDL_MouseWheelEvent* wheel);
 
 	/**  */
 	virtual bool handleButtonClick(PG_Button* button);

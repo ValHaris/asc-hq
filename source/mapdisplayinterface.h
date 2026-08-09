@@ -39,7 +39,7 @@ class MapDisplayInterface {
            virtual void updateDashboard () = 0;
            virtual void repaintDisplay () = 0;
            virtual void setTempView( bool view ) = 0;
-           virtual void showBattle( tfight& battle ) = 0;
+           virtual void showBattle( tfight& battle ) = 0; // this must call battle.calc!
            virtual void playPositionalSound( const MapCoordinate& pos, Sound* snd ) = 0;
            virtual int getUnitMovementDuration() const = 0;
            virtual ~MapDisplayInterface () {};
@@ -61,7 +61,7 @@ class BlankMapDisplay : public MapDisplayInterface {
            virtual void updateDashboard () {};
            virtual void repaintDisplay () {};
            virtual void setTempView( bool view ) {};
-           virtual void showBattle( tfight& battle ) {};
+           virtual void showBattle( tfight& battle ) { battle.calc(); };
            virtual void playPositionalSound( const MapCoordinate& pos, Sound* snd ) {};
            virtual int getUnitMovementDuration() const { return 0; };
        };

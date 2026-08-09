@@ -32,6 +32,44 @@
 
 #include <cmath>
 #include <cassert>
+#include <sstream>
+#include <iostream>
+#include <map>
+
+#ifdef debugblits
+std::string describeSurface(SDL_Surface* surf) {
+   std::stringstream ss;
+   ss << "BytesPerPixel=" << int(surf->format->BytesPerPixel) << " ";
+   ss << "AMask=" << surf->format->Amask << " ";
+   ss << "AShift=" << int(surf->format->Ashift) << " ";
+
+   Uint8 alpha;
+   if ( SDL_GetSurfaceAlphaMod(surf, &alpha) == 0 )
+      ss << "Alpha=" << int(alpha) << " ";
+   else
+      ss << "NoAlpha ";
+
+   SDL_BlendMode blendMode;
+   if ( SDL_GetSurfaceBlendMode(surf, &blendMode) == 0 )
+      ss << "BlendMode=" << int(blendMode) << " ";
+   else
+      ss << "NoBlendMode ";
+   return ss.str();
+}
+
+std::map<std::string,int> results;
+
+void PG_Draw::printblit(SDL_Surface* from, SDL_Surface* to, int result ) {
+   std::string f = describeSurface(from);
+   std::string t = describeSurface(to);
+   std::string description = f + " " + t;
+
+   if ( results.find(description) == results.end()) {
+      results[description] = result;
+      std::cout << description << " -> " << result << "\n";
+   }
+}
+#endif
 
 SDL_Surface* PG_Draw::CreateGradient(const PG_Rect& r, PG_Gradient& gradient) {
 	return CreateGradient(
@@ -148,9 +186,9 @@ void PG_Draw::DrawGradient(SDL_Surface * surface, const PG_Rect& rect, const PG_
 	Uint32 pitch = surface->pitch;
 	Uint8* bits = ((Uint8 *) surface->pixels) + (rect.y + oy)* pitch + (rect.x + ox)* bpp;
 	Uint32 y_pitch = pitch*drawrect.h - bpp;
-	register Uint32 pixel = 0;
+	Uint32 pixel = 0;
 
-	for (register Sint32 x = 0; x < drawrect.w; x++) {
+	for (Sint32 x = 0; x < drawrect.w; x++) {
 
 		yr = (r2 - r1) / h;
 		yg = (g2 - g1) / h;
@@ -163,7 +201,7 @@ void PG_Draw::DrawGradient(SDL_Surface * surface, const PG_Rect& rect, const PG_
 		g += yg * oy;
 		b += yb * oy;
 
-		for (register Sint32 y = 0; y < drawrect.h; y++) {
+		for (Sint32 y = 0; y < drawrect.h; y++) {
 
 			/* Set the pixel */
 			switch (bpp) {

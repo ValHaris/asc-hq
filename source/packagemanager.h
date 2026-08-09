@@ -39,10 +39,15 @@ class PackageManager {
 
 class PackageData {
    public:
-      typedef std::map<ASCString,Package*> Packages;
-      Packages packages;   
+      typedef std::map<ASCString,const Package*> Packages;
+      Packages packages;  // the package inside here are references to the PackageRepository
+      Packages forcedRequirements;  // the packages here are owned by this PackageData
       void read ( tnstream& stream );
       void write ( tnstream& stream ) const;
+      ~PackageData();
+   private:
+      void readPackages ( tnstream& stream, Packages& pkg );
+      void writePackages ( tnstream& stream, const Packages& pkg ) const;
 };
 
 

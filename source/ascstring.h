@@ -7,6 +7,9 @@
 #include <stdexcept>      // for range_error
 #include <stdarg.h>
 #include <boost/scoped_array.hpp>
+#if HAVE_CONFIG_H
+#  include <config.h>
+#endif
 
 using std::range_error;
 

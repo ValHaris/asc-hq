@@ -88,6 +88,7 @@
 #include <boost/algorithm/string/classification.hpp>
 
 #include "paradialog.h"
+#include "pgexception.h"
 
 #include "vehicletype.h"
 #include "buildingtype.h"
@@ -180,6 +181,7 @@
 #include "autotraining.h"
 #include "spfst-legacy.h"
 #include "dialogs/eventinfo.h"
+#include "dialogs/messagedialog.h"
 
 #include "lua/luarunner.h"
 #include "lua/luastate.h"
@@ -361,6 +363,8 @@ bool loadGame( bool mostRecent )
       StatusMessageWindowHolder smw = MessagingHub::Instance().infoMessageWindow( "loading " + s1 );
 
       loadGameFromFile( s1 );
+      if (!actmap )
+         throw NoMapLoaded();
       
       updateFieldInfo();
       positionCursor( actmap->getCurrentPlayer() );
@@ -403,6 +407,9 @@ void saveGame( bool as )
 void loadmap( const ASCString& name, bool campaign )
 {
    GameMap* m = mapLoadingExceptionChecker( name, MapLoadingFunction( tmaploaders::loadmap ));
+   if ( !m )
+      return;
+
    delete actmap;
    actmap = m;
    computeview( actmap );
@@ -531,7 +538,7 @@ void         startnextcampaignmap( int id)
 void benchgame ( bool withViewCalc )
 {
    int t2;
-   int t = ticker;
+   int t = ASC_GetTicks();
    int n = 0;
    do {
       if ( withViewCalc ) 
@@ -540,7 +547,7 @@ void benchgame ( bool withViewCalc )
       repaintMap();
             
       n++;
-      t2 = ticker;
+      t2 = ASC_GetTicks();
    } while ( t + 1000 > t2 ); /* enddo */
    double d = 100 * n;
    d /= (t2-t);
@@ -764,7 +771,24 @@ void chooseTechnologyIfAvail( Player& player )
    }
 }
 
+void requireGameVersion(GameMap* game) {
 
+   if ( new_choice_dlg(ASCString("Are you sure you want to require all players to use at least version ")+ getVersionString() + "?", "yes", "no") == 2)
+      return;
+
+   if ( !game->packageData )
+      game->packageData = new PackageData();
+
+   Package::PackageDependency dependency;
+   dependency.name = programPackageName;
+   dependency.version.fromString( getVersionString() );
+
+   Package* pkg = new Package();
+   pkg->name = "GameMap";
+   pkg->dependencies.push_back( dependency );
+
+   game->packageData->forcedRequirements["ASC"] = pkg;
+}
 
 
 
@@ -772,22 +796,6 @@ void chooseTechnologyIfAvail( Player& player )
 void executeUserAction ( tuseractions action )
 {
    switch ( action ) {
-      case ua_repainthard  :
-      case ua_repaint      :
-         repaintDisplay();
-         break;
-
-      case ua_help         :
-         help(20);
-         break;
-
-      case ua_howtostartpbem :
-         help(21);
-         break;
-
-      case ua_howtocontinuepbem :
-         help(22);
-         break;
 
 /*
       case ua_mntnc_morefog:
@@ -797,7 +805,7 @@ void executeUserAction ( tuseractions action )
             displaymessage2("fog intensity set to %d ", actmap->weather.fog);
             displaymap();
          }
-         break;
+         return;
 
       case ua_mntnc_lessfog:
          if (actmap->weather.fog  && maintainencecheck()) {
@@ -806,7 +814,7 @@ void executeUserAction ( tuseractions action )
             displaymessage2("fog intensity set to %d ", actmap->weather.fog);
             displaymap();
          }
-         break;
+         return;
 
       case ua_mntnc_morewind:
          if ((actmap->weather.windSpeed < 254) &&  maintainencecheck()) {
@@ -814,7 +822,7 @@ void executeUserAction ( tuseractions action )
             displaywindspeed (  );
             updateFieldInfo();
          }
-         break;
+         return;
 
       case ua_mntnc_lesswind:
          if ((actmap->weather.windSpeed > 1)  && maintainencecheck() ) {
@@ -822,7 +830,7 @@ void executeUserAction ( tuseractions action )
             displaywindspeed (  );
             updateFieldInfo();
          }
-         break;
+         return;
 
       case ua_mntnc_rotatewind:
          if ( maintainencecheck() ) {
@@ -834,109 +842,35 @@ void executeUserAction ( tuseractions action )
             updateFieldInfo();
             displaymap();
          }
-         break;
+         return;
 */
-      case ua_changeresourceview:
-         if ( mainScreenWidget ) 
-            mainScreenWidget->toggleMapLayer( "resources");
-         displaymap();
-         break;
-
-      case ua_visibilityInfo:
-         if ( mainScreenWidget ) 
-            mainScreenWidget->toggleMapLayer( "visibilityvalue");
-         displaymap();
-         break;
-
-      case ua_showCargoLayer:
-         if ( mainScreenWidget ) 
-            mainScreenWidget->toggleMapLayer( "container");
-         displaymap();
-         break;
-
-      case ua_benchgamewov:
-         benchgame( false );
-         break;
-
-      case ua_benchgamewv :
-         benchgame( true );
-         break;
-
-      case ua_writescreentopcx:
-         {
-            ASCString name = getnextfilenumname ( "screen", "pcx", 0 );
-            Surface s ( PG_Application::GetScreen() );
-            writepcx ( name, s);
-            displaymessage2( "screen saved to %s", name.c_str() );
-         }
-         break;
 
       case ua_settribute :
          settributepayments ();
-         break;
+         return;
 
       case ua_giveunitaway:
          if ( actmap && actmap->getgameparameter( cgp_disableUnitTransfer ) == 0 )
             giveunitaway ( actmap->getField( actmap->getCursor() ), createContext( actmap ));
          else
             infoMessage("Sorry, this function has been disabled when starting the map!");
-         break;
+         return;
 
       case ua_newmessage:
          newmessage();
-         break;
+         return;
 
       case ua_viewqueuedmessages:
          viewmessages( "queued messages", actmap->unsentmessage, 1 );
-         break;
+         return;
 
       case ua_viewsentmessages:
          viewmessages( "sent messages", actmap->player[ actmap->actplayer ].sentmessage, 0);
-         break;
+         return;
 
       case ua_viewreceivedmessages:
          viewmessages( "received messages", actmap->player[ actmap->actplayer ].oldmessage, 0 );
-         break;
-
-      case ua_viewjournal:
-         viewjournal( true );
-         break;
-
-      case ua_editjournal:
-         editjournal();
-         break;
-
-      case ua_viewaboutmessage:
-         helpAbout();
-         break;
-
-      case ua_viewlayerhelp:
-         help(49);
-         break;
-
-      case ua_SDLinfo:
-         showSDLInfo();
-         break;
-
-      case ua_unitMovementInfo:
-    	  showUnitMovementInfo();
-    	  break;
-
-      case ua_toggleunitshading: 
-         {
-            CGameOptions::Instance()->units_gray_after_move += 1;
-            if ( CGameOptions::Instance()->units_gray_after_move > 2 )
-            	CGameOptions::Instance()->units_gray_after_move = 0;
-            CGameOptions::Instance()->setChanged();
-
-            displaymap();
-            while ( mouseparams.taste )
-               releasetimeslice();
-
-            infoMessage (ASCString("units will be displayed shaded:\n") + unitShadingStates[CGameOptions::Instance()->units_gray_after_move]);
-         }
-
-         break;
+         return;
 
       case ua_computerturn:
          if ( maintainencecheck() ) {
@@ -952,7 +886,7 @@ void executeUserAction ( tuseractions action )
                actmap->player[ actmap->actplayer ].ai->run( &getDefaultMapDisplay() );
             }
          }
-         break;
+         return;
       case ua_setupnetwork:
       /*
          if ( actmap->network )
@@ -961,20 +895,7 @@ void executeUserAction ( tuseractions action )
             displaymessage("This map is not played across a network",3 );
             */
             displaymessage("Not implemented yet",3 );
-         break;
-      case ua_UnitSetInfo:
-         viewUnitSetinfo();
-         break;
-      case ua_GameParameterInfo:
-         showGameParameters();
-         break;
-      case ua_viewunitweaponrange:
-         mainScreenWidget->showWeaponRange( actmap, actmap->getCursor() );
-         break;
-
-      case ua_viewunitmovementrange:
-         mainScreenWidget->showMovementRange( actmap, actmap->getCursor() );
-         break;
+         return;
 
       case ua_aibench:
          if ( maintainencecheck() && 0 ) {
@@ -986,11 +907,7 @@ void executeUserAction ( tuseractions action )
                ai->run( true, &getDefaultMapDisplay() );
             }
          }
-         break;
-
-      case ua_statisticdialog:
-         statisticDialog();
-         break;
+         return;
 
       case ua_togglesound:
          if ( !SoundSystem::getInstance()->isOff() ) {
@@ -1001,10 +918,7 @@ void executeUserAction ( tuseractions action )
             else
                SoundSystem::getInstance()->resumeMusic();
          }
-         break;
-      case ua_showPlayerSpeed:
-         showPlayerTime();
-         break;
+         return;
       case  ua_cancelResearch:
          if ( actmap->player[actmap->actplayer].research.activetechnology ) {
             ASCString s = "do you really want to cancel the current research project ?\n";
@@ -1022,7 +936,123 @@ void executeUserAction ( tuseractions action )
             
          } else
             displaymessage("you are not researching anything", 3);
-         break;
+         return;
+      case ua_exportUnitToFile:
+         warningMessage("this function is not supported any longer");
+         return;
+      case ua_undo:
+         undo();
+         return;
+      case ua_redo:
+         redo();
+         return;
+
+
+      case ua_reloadDlgTheme:
+             getPGApplication().reloadTheme();
+             MessagingHub::Instance().message( MessagingHubBase::InfoMessage, "Theme reloaded" );
+             // soundSettings( NULL );
+         return;
+#ifdef WEATHERGENERATOR
+      case ua_weathercast: weathercast();
+         return;
+#endif
+      case ua_newGame:
+         startMultiplayerGame();
+         return;
+
+      case ua_continuerecentnetworkgame:
+         continueAndStartMultiplayerGame( true );
+         return;
+
+      case ua_continuenetworkgame:
+         continueAndStartMultiplayerGame();
+         return;
+      case ua_loadgame: loadGame( false);
+         return;
+      case ua_loadrecentgame: loadGame ( true );
+         return;
+      case ua_savegame: saveGame( true );
+         return;
+      case ua_setupalliances:
+         editAlliances();
+         updateFieldInfo();
+         return;
+      case ua_mainmenu:
+         /*
+         if (choice_dlg("do you really want to close the current game ?","~y~es","~n~o") == 1) {
+            delete actmap;
+            actmap = NULL;
+            throw NoMapLoaded();
+         }
+         */
+         GameDialog::gameDialog();
+         return;
+      case ua_exitgame:
+         if (choiceDialog("do you really want to quit ?","~y~es","~n~o", "quitasc") == 1)
+            getPGApplication().Quit();
+         return;
+      case ua_cargosummary:
+         showCargoSummary( getSelectedField() );
+         return;
+      case ua_networksupervisor:
+         networksupervisor();
+         displaymap();
+         return;
+      case ua_editPlayerData:
+         editPlayerData( actmap );
+         return;
+
+      case ua_createReminder: newreminder();
+         return;
+
+      case ua_recompteview:
+         computeview(actmap);
+         displaymap();
+         return;
+
+      case ua_chooseTechnology: chooseTechnologyIfAvail( actmap->getCurrentPlayer() );
+         return;
+
+      case ua_actionManager: actionManager( actmap );
+         return;
+
+      case ua_runLuaCommands: selectAndRunLuaScript();
+         return;
+
+      case ua_unitAiOptions: showUnitAiProperties();
+         return;
+
+      case ua_runOpenTasks: runOpenTasks();
+         return;
+
+      case ua_taskManager: taskManager( actmap );
+         return;
+      };
+
+   /* the following actions are either
+    * - informational only so they don't modify the map
+    * - or sufficiently atomic not to cause any corruption
+    * Any exception here should thus not corrupt the current map, so we can continue playing on it...
+    */
+   try {
+      switch ( action ) {
+      case ua_showPlayerSpeed:
+         showPlayerTime();
+         return;
+      case ua_UnitSetInfo:
+         viewUnitSetinfo();
+         return;
+      case ua_GameParameterInfo:
+         showGameParameters();
+         return;
+      case ua_viewunitweaponrange:
+         mainScreenWidget->showWeaponRange( actmap, actmap->getCursor() );
+         return;
+
+      case ua_viewunitmovementrange:
+         mainScreenWidget->showMovementRange( actmap, actmap->getCursor() );
+         return;
       case ua_showResearchStatus: {
             ASCString s;
             s += "Current technology:\n";
@@ -1055,241 +1085,254 @@ void executeUserAction ( tuseractions action )
             vat.Show();
             vat.RunModal();
          }
-         break;
-      case ua_exportUnitToFile:
-         warningMessage("this function is not supported any longer");
-         break;
-      case ua_undo:
-         undo();
-         break;
-      case ua_redo:
-         redo();
-         break;
+         return;
+      case ua_viewButtonPanel:  mainScreenWidget->spawnPanel( ASC_MainScreenWidget::ButtonPanel );
+         return;
+      case ua_viewWindPanel:     mainScreenWidget->spawnPanel( ASC_MainScreenWidget::WindInfo );
+         return;
+      case ua_clearImageCache:  IconRepository::clear();
+         return;
+      case ua_viewUnitInfoPanel: mainScreenWidget->spawnPanel( ASC_MainScreenWidget::UnitInfo );
+         return;
+      case ua_viewOverviewMapPanel: mainScreenWidget->spawnPanel( ASC_MainScreenWidget::OverviewMap );
+         return;
+      case ua_viewMapControlPanel: mainScreenWidget->spawnPanel( ASC_MainScreenWidget::MapControl );
+         return;
+//      case ua_viewActionPanel: mainScreenWidget->spawnPanel( ASC_MainScreenWidget::ActionInfo );
+//         return;
+      case ua_vehicleinfo: unitInfoDialog();
+         return;
+      case ua_viewjournal:
+         viewjournal( true );
+         return;
 
-         
+      case ua_editjournal:
+         editjournal();
+         return;
+      case ua_changeresourceview:
+         if ( mainScreenWidget )
+            mainScreenWidget->toggleMapLayer( "resources");
+         displaymap();
+         return;
+
+      case ua_visibilityInfo:
+         if ( mainScreenWidget )
+            mainScreenWidget->toggleMapLayer( "visibilityvalue");
+         displaymap();
+         return;
+
+      case ua_showCargoLayer:
+         if ( mainScreenWidget )
+            mainScreenWidget->toggleMapLayer( "container");
+         displaymap();
+         return;
+
+      case ua_benchgamewov:
+         benchgame( false );
+         return;
+
+      case ua_benchgamewv :
+         benchgame( true );
+         return;
+
+      case ua_writescreentopcx:
+         {
+            ASCString name = getnextfilenumname ( "screen", "pcx", 0 );
+            Surface s = Surface::Wrap( PG_Application::GetScreen() );
+            writepcx ( name, s);
+            displaymessage2( "screen saved to %s", name.c_str() );
+         }
+         return;
+      case ua_viewaboutmessage:
+         helpAbout();
+         return;
+
+      case ua_viewlayerhelp:
+         help(49);
+         return;
+
+      case ua_SDLinfo:
+         showSDLInfo();
+         return;
+
+      case ua_unitMovementInfo:
+          showUnitMovementInfo();
+          return;
+
+      case ua_requireThisGameVersion:
+          requireGameVersion(actmap);
+          break;
+
+      case ua_toggleunitshading:
+         {
+            CGameOptions::Instance()->units_gray_after_move += 1;
+            if ( CGameOptions::Instance()->units_gray_after_move > 2 )
+                CGameOptions::Instance()->units_gray_after_move = 0;
+            CGameOptions::Instance()->setChanged();
+
+            displaymap();
+
+            infoMessage (ASCString("units will be displayed shaded:\n") + unitShadingStates[CGameOptions::Instance()->units_gray_after_move]);
+         }
+
+         return;
+      case ua_statisticdialog:
+         statisticDialog();
+         return;
+
+      case ua_repainthard  :
+      case ua_repaint      :
+         repaintDisplay();
+         return;
+
+      case ua_help         :
+         help(20);
+         return;
+
+      case ua_howtostartpbem :
+         help(21);
+         return;
+
+      case ua_howtocontinuepbem :
+         help(22);
+         return;
       case ua_unitweightinfo:
          if ( fieldvisiblenow  ( getSelectedField() )) {
             Vehicle* eht = getSelectedField()->vehicle;
             if ( eht && actmap->player[actmap->actplayer].diplomacy.getState( eht->getOwner()) >= PEACE_SV )
                infoMessage(" weight of unit: \n basic: " + ASCString::toString(eht->typ->weight) + "\n+cargo: " + ASCString::toString(eht->cargoWeight()) + "\n= " + ASCString::toString( eht->weight() ));
          }
-         break;
+         return;
       case ua_GameStatus:
          infoMessage ( "Current game time is:\n turn " + ASCString::toString( actmap->time.turn() ) + " , move " + ASCString::toString( actmap->time.move() ));
-         break;
+         return;
       case ua_soundDialog:
           soundSettings( NULL );
-         break;
-      case ua_reloadDlgTheme:
-             getPGApplication().reloadTheme();
-             MessagingHub::Instance().message( MessagingHubBase::InfoMessage, "Theme reloaded" );
-             // soundSettings( NULL );
-         break;
-      case ua_viewButtonPanel:  mainScreenWidget->spawnPanel( ASC_MainScreenWidget::ButtonPanel );
-         break;
-      case ua_viewWindPanel:     mainScreenWidget->spawnPanel( ASC_MainScreenWidget::WindInfo );
-         break;
-      case ua_clearImageCache:  IconRepository::clear();
-         break;
-      case ua_viewUnitInfoPanel: mainScreenWidget->spawnPanel( ASC_MainScreenWidget::UnitInfo );
-         break;
-      case ua_viewOverviewMapPanel: mainScreenWidget->spawnPanel( ASC_MainScreenWidget::OverviewMap );
-         break;
-      case ua_viewMapControlPanel: mainScreenWidget->spawnPanel( ASC_MainScreenWidget::MapControl );
-         break;
-//      case ua_viewActionPanel: mainScreenWidget->spawnPanel( ASC_MainScreenWidget::ActionInfo );
-//         break;
-      case ua_vehicleinfo: unitInfoDialog();
-         break;
-#ifdef WEATHERGENERATOR
-      case ua_weathercast: weathercast();
-         break;
-#endif
-      case ua_newGame: 
-         startMultiplayerGame();
-         break;
-
-      case ua_continuerecentnetworkgame:
-         continueAndStartMultiplayerGame( true );
-         break;
-
-      case ua_continuenetworkgame:
-         continueAndStartMultiplayerGame();
-         break;
-      case ua_loadgame: loadGame( false);
-         break;
-      case ua_loadrecentgame: loadGame ( true );
-         break;
-      case ua_savegame: saveGame( true );
-         break;
-      case ua_setupalliances:
-         editAlliances();
-         updateFieldInfo();
-         break;
-      case ua_mainmenu:
-         /*
-         if (choice_dlg("do you really want to close the current game ?","~y~es","~n~o") == 1) {
-            delete actmap;
-            actmap = NULL;
-            throw NoMapLoaded();
-         }
-         */
-         GameDialog::gameDialog();
-         break;
-      case ua_viewterraininfo:
-         if ( fieldvisiblenow( actmap->getField( actmap->getCursor())))
-            viewterraininfo( actmap, actmap->getCursor(), fieldVisibility( actmap->getField( actmap->getCursor())) == visible_all );
-         break;
-      case ua_testMessages:
-         MessagingHub::Instance().message( MessagingHubBase::InfoMessage, "This is an informational message" );
-         MessagingHub::Instance().message( MessagingHubBase::Warning,     "This is an warning message" );
-         MessagingHub::Instance().message( MessagingHubBase::Error,       "This is an error message" );
-         MessagingHub::Instance().message( MessagingHubBase::FatalError,  "This is an fatal error message. Game will be exited." );
-         break;
-      case ua_writemaptopcx :
-         writemaptopcx ( actmap, choice_dlg("Include View ?","~y~es","~n~o")==1  );
-         break;
-      case ua_exitgame:
-         if (choiceDialog("do you really want to quit ?","~y~es","~n~o", "quitasc") == 1)
-            getPGApplication().Quit();
-         break;
-      case ua_cargosummary: 
-         showCargoSummary( getSelectedField() );
-         break;
+         return;
       case ua_unitsummary: showUnitSummary( actmap );
-         break;
+         return;
       case ua_gamepreferences:
          editGameOptions();
-         break;
+         return;
       case ua_increase_zoom:
          if ( mainScreenWidget && mainScreenWidget->getMapDisplay() ) {
             mainScreenWidget->getMapDisplay()->changeZoom( 10 );
             viewChanged();
             repaintMap();
          }
-         break;
+         return;
       case ua_decrease_zoom:
          if ( mainScreenWidget && mainScreenWidget->getMapDisplay() ) {
             mainScreenWidget->getMapDisplay()->changeZoom( -10 );
             viewChanged();
             repaintMap();
          }
-         break;
+         return;
+      case ua_reset_zoom:
+         if ( mainScreenWidget && mainScreenWidget->getMapDisplay() ) {
+            mainScreenWidget->getMapDisplay()->setNewZoom( 100 );
+            viewChanged();
+            repaintMap();
+         }
+         return;
+      case ua_changepassword:
+         changePassword( actmap );
+         return;
+      case ua_viewterraininfo:
+         if ( fieldvisiblenow( actmap->getField( actmap->getCursor())))
+            viewterraininfo( actmap, actmap->getCursor(), fieldVisibility( actmap->getField( actmap->getCursor())) == visible_all );
+         return;
+      case ua_testMessages:
+         MessagingHub::Instance().message( MessagingHubBase::InfoMessage, "This is an informational message" );
+         MessagingHub::Instance().message( MessagingHubBase::Warning,     "This is an warning message" );
+         MessagingHub::Instance().message( MessagingHubBase::Error,       "This is an error message" );
+         MessagingHub::Instance().message( MessagingHubBase::FatalError,  "This is an fatal error message. Game will be exited." );
+         return;
+      case ua_writemaptopcx :
+         writemaptopcx ( actmap, choice_dlg("Include View ?","~y~es","~n~o")==1  );
+         return;
       case ua_selectgraphicset:
          selectgraphicset();
-         break;
-      case ua_networksupervisor:
-         networksupervisor();
-         displaymap();
-         break;
+         return;
       case ua_researchinfo:
          researchinfo (actmap->getCurrentPlayer());
-         break;
+         return;
       case ua_viewPipeNet:
          mainScreenWidget->getMapDisplay()->toggleMapLayer("pipes");
          repaintMap();
-         break;
+         return;
       case ua_viewReactionfireOverlay:
          mainScreenWidget->getMapDisplay()->toggleMapLayer("reactionfire");
          repaintMap();
-         break;
+         return;
       case ua_viewUnitinfoOverlay:
          mainScreenWidget->getMapDisplay()->toggleMapLayer("unitinfo");
          repaintMap();
-         break;
+         return;
       case ua_viewUnitexperienceOverlay:
          mainScreenWidget->getMapDisplay()->toggleMapLayer("unittraining");
          repaintMap();
-         break;
+         return;
       case ua_showsearchdirs: showSearchPath();
-         break;
-      case ua_changepassword:
-         changePassword( actmap );
-         break;
-      case ua_editPlayerData:
-         editPlayerData( actmap );
-         break;
+         return;
       case ua_locatefile:
          locateFile();
-         break;
+         return;
       case ua_viewfont:
          viewFont();
-         break;
+         return;
       case ua_resourceAnalysis:
          resourceAnalysis();
-         break;
+         return;
+
+      case ua_unitGuideDialog:
+         unitGuideWindow( 2);
+         return;
+
       case ua_unitproductionanalysis:
          unitProductionAnalysis( actmap );
-         break;
-      case ua_gotoPosition: { 
+         return;
+      case ua_gotoPosition: {
          GotoPosition gp( actmap );
          gp.Show();
          gp.RunModal();
-      	 };
-      	 break;
+         };
+         return;
       case ua_showTechAdapter: {
                ViewFormattedText vft("TechAdapter", actmap->getCurrentPlayer().research.listTriggeredTechAdapter(), PG_Rect( -1,-1,300,500));
                vft.Show();
                vft.RunModal();
                                };
-         break;
-      case ua_showUnitEndurance:  showUnitEndurance(); 
-         break;
-         
+         return;
+      case ua_showUnitEndurance:  showUnitEndurance();
+         return;
+
       case ua_getMemoryFootprint: showMemoryFootprint();
-         break;
+         return;
 
       case ua_showMiningPower: viewMiningPower();
-         break;
+         return;
 
       case ua_emailOptions: editEmailOptions();
-         break;
-      
-      case ua_createReminder: newreminder(); 
-         break;
+         return;
 
-      case ua_recompteview: 
-         computeview(actmap);
-         displaymap();
-         break;
-         
-      case ua_unitGuideDialog:
-         unitGuideWindow( 2);
-         break;
-         
-      case ua_writeLuaCommands: writeLuaCommands();
-         break;
-         
-      case ua_chooseTechnology: chooseTechnologyIfAvail( actmap->getCurrentPlayer() );
-         break;
-      
-      case ua_actionManager: actionManager( actmap );
-         break;
-         
-      case ua_runLuaCommands: selectAndRunLuaScript();
-         break;
-                  
-      case ua_unitAiOptions: showUnitAiProperties();
-         break;
-      
-      case ua_showUsedPackages: showUsedPackages();
-         break;
-         
-      case ua_runOpenTasks: runOpenTasks();
-         break;
-         
-      case ua_taskManager: taskManager( actmap );
-         break;
-         
       case ua_createUnitCostList: createUnitCostList();
-         break;
+         return;
          
       case ua_eventInfo: viewEventInfo( actmap );
-         break;
+         return;
 
-      default:
-    	 break;
-      };
+      case ua_showUsedPackages: showUsedPackages();
+         return;
+
+      case ua_writeLuaCommands: writeLuaCommands();
+         return;
+
+      }
+
+   } catch ( const ASCmsgException& ex ) {
+      errorMessage(ex.getMessage());
+   }
 }
 
 
@@ -1351,19 +1394,47 @@ void loadLegacyFonts()
    
 }
 
+class Cmdline;
 
+const ASCString getScalingExplanation(int scale, bool fullscreen) {
+   ASCString scalemsg;
+   if ( fullscreen )
+       scalemsg = "Currently, the scale is " + ASCString::toString(scale) + "%.";
+   else
+       scalemsg = "Currently, the scale is 100% due to windowed mode, but would be " + ASCString::toString(scale) + "% in fullscreen mode.";
 
+   return ASCString("This new version of ASC allows running the entire game at different display scalings, adapting to the resolution of your monitor. "
+         "This will zoom not only the map, but everything on the ASC screen. \n" + scalemsg + "\nYou can change this setting in the global options.");
+}
+
+class ScreenResolutionSetup {
+      Cmdline& cli;
+      int x,y;
+      bool fullscreen;
+      float scale;
+   public:
+      ScreenResolutionSetup( Cmdline& commandLine );
+
+      int getScale() const { return int(scale*100);};
+      int getWidth() { return x; };
+      int getHeight() { return y; };
+      bool isFullscreen() const { return fullscreen; };
+
+};
 
 
 class GameThreadParams: public sigc::trackable
 {
    private:
-      bool exit() { exitMainloop = true; return true; };
+      bool exit() {
+    	  exitMainloop = true; return true;
+      };
    public:   
       ASCString filename;
       ASC_PG_App& application;
       bool exitMainloop;
-      GameThreadParams( ASC_PG_App& app ) : application ( app ), exitMainloop(false) 
+      const ScreenResolutionSetup& srs;
+      GameThreadParams( ASC_PG_App& app, const ScreenResolutionSetup& srs ) : application ( app ), exitMainloop(false), srs(srs)
       {
          app.sigQuit.connect( sigc::hide( sigc::mem_fun( *this, &GameThreadParams::exit )));
       };
@@ -1376,7 +1447,7 @@ void checkGameEvents( GameMap* map,const Command& command )
    checkevents( map, &getDefaultMapDisplay() );
 }
 
-int gamethread ( void* data )
+int gamethread ( GameThreadParams* gtp )
 {
    GameMap::sigMapDeletion.connect( sigc::ptr_fun( &resetActions ));
    GameMap::sigMapDeletion.connect( sigc::ptr_fun( &resetActmap ));
@@ -1384,8 +1455,6 @@ int gamethread ( void* data )
    
    TaskContainer::registerHooks();
    
-   GameThreadParams* gtp = (GameThreadParams*) data;
-
    std::auto_ptr<StartupScreen> startupScreen;
 
    MapTypeLoaded mtl = None;
@@ -1418,8 +1487,8 @@ int gamethread ( void* data )
       errorMessage ( "loading of game failed" );
       return -1;
    }
-   catch ( const ThreadExitException & ) {
-      displayLogMessage(0, "caught thread exiting exception, shutting down");
+   catch ( const PG_Exception & ex ) {
+      errorMessage ( ex.getMessage() );
       return -1;
    }
 
@@ -1469,6 +1538,7 @@ int gamethread ( void* data )
             mtl = None;
          } else {
             mainScreenWidget->Show();
+            showTipDialog(getScalingExplanation(gtp->srs.getScale(), gtp->srs.isFullscreen()), "scaling");
             startupScreen.reset();
             
             if ( actmap->actplayer == -1 ) {
@@ -1519,6 +1589,11 @@ int gamethread ( void* data )
               }
            }
          }
+      }
+      catch ( const PG_Exception& ex ) {
+          errorMessage(ex.getMessage());
+          delete actmap;
+          actmap = NULL;
       }
    } while ( !gtp->exitMainloop );
    
@@ -1572,18 +1647,6 @@ class ResourceLogger: public sigc::trackable {
 };
 
 
-class ScreenResolutionSetup {
-      Cmdline& cli;
-      int x,y;
-      bool fullscreen;
-   public:
-      ScreenResolutionSetup( Cmdline& commandLine );
-      
-      int getWidth() { return x; };
-      int getHeight() { return y; };
-      bool isFullscreen() { return fullscreen; };
-   
-};
 
 ScreenResolutionSetup::ScreenResolutionSetup( Cmdline& commandLine ) : cli( commandLine )
 {
@@ -1618,38 +1681,35 @@ ScreenResolutionSetup::ScreenResolutionSetup( Cmdline& commandLine ) : cli( comm
       yr = cli.y();
 
    
-   GetVideoModes gvm;
    
-   GetVideoModes::ModeRes best = gvm.getBest();
-   if ( xr == -1 ) {
-      if ( fullscreen )
-         xr = best.first;
+   SDL_DisplayMode desktop;
+   if ( SDL_GetDesktopDisplayMode(0, &desktop) < 0 )
+	   throw PG_Exception("ScreenResolutionSetup::ScreenResolutionSetup : SDL_GetDesktopDisplayMode", SDL_GetError());
+   
+   int scalingSettings = CGameOptions::Instance()->getDisplayScalingPercentage();
+
+   if ( scalingSettings == -1 ) {
+      if ( desktop.h < 1080 )
+         scale = 1;
+      else if (desktop.h <= 1200)
+         scale = 1.25;
+      else if (desktop.h <= 1600)
+         scale = 1.5;
       else
-         xr = best.first - 100;
-   }
-   
-   if ( yr == -1 ) {
-      if ( fullscreen ) 
-         yr = best.second;
-      else
-         yr = best.second - 100;
-   }
-   
-   
-   if ( CGameOptions::Instance()->graphicsDriver.compare_ci("default") != 0 ) {
-      static char buf[100];
-      strcpy(buf, "SDL_VIDEODRIVER=" );
-      strncat( buf, CGameOptions::Instance()->graphicsDriver.c_str(), 100 - strlen(buf));
-      buf[99] = 0;
-      putenv( buf );
+         scale = 2;
+   } else
+      scale = float(scalingSettings)/100.0;
+
+   if ( fullscreen ) {
+      xr = desktop.w / scale;
+      yr = desktop.h / scale;
+   } else {
+      if ( xr == -1 )
+         xr = desktop.w / scale * 90 / 100;
+      if ( yr == -1 )
+         yr = desktop.h / scale * 90 / 100;
    }
 
-   if ( xr == -1 )
-      xr = 1024;
-   
-   if ( yr == -1 )
-      yr = 768;
-   
    x = xr;
    y = yr;
 }
@@ -1677,101 +1737,90 @@ int main(int argc, char *argv[] )
       exit(0);
    }
 
-   MessagingHub::Instance().setVerbosity( cl->r() );
-   StdIoErrorHandler stdIoErrorHandler(false);
-   MessagingHub::Instance().exitHandler.connect( sigc::bind( &exit_asc, -1 ));
-
-   // ResourceLogger rl;
-
-#ifdef WIN32
-   Win32IoErrorHandler* win32ErrorDialogGenerator = new Win32IoErrorHandler;
-#endif
-
-
-   displayLogMessage( 1, getstartupmessage() );
-
-   ConfigurationFileLocator::Instance().setExecutableLocation( argv[0] );
-
-   try {
-      initFileIO( cl->c() );  // passing the filename from the command line options
-      checkDataVersion();
-   } catch ( const tfileerror & err ) {
-      displaymessage ( "unable to access file %s \n", 2, err.getFileName().c_str() );
-   }
-   catch ( ... ) {
-      displaymessage ( "loading of game failed during pre graphic initializing", 2 );
-   }
-
-   LoggingOutputHandler logger( getSearchPath( 0 ));
-   
-
-   
-   SoundSystem soundSystem ( CGameOptions::Instance()->sound.muteEffects, CGameOptions::Instance()->sound.muteMusic, cl->q() || CGameOptions::Instance()->sound.off );
-   soundSystem.setMusicVolume ( CGameOptions::Instance()->sound.musicVolume );
-   soundSystem.setEffectVolume ( CGameOptions::Instance()->sound.soundVolume );
-
-   
-   tspfldloaders::mapLoaded.connect( sigc::ptr_fun( &deployMapPlayingHooks ));
-
-   PG_FileArchive archive( argv[0] );
-
-   ASC_PG_App app ( "asc2_dlg" );
-
-   app.sigAppIdle.connect ( sigc::ptr_fun( &mainloopidle ));
-
-   cursorMoved.connect( updateFieldInfo.make_slot() );
-   registerActionValidator();
-
-   
-   ScreenResolutionSetup screenResolutionSetup ( *cl );
-   int flags = 0;
-
-   if ( CGameOptions::Instance()->hardwareSurface )
-      flags |= SDL_HWSURFACE;
-   else
-      flags |= SDL_SWSURFACE;
-
-   if ( screenResolutionSetup.isFullscreen() )
-      flags |= SDL_FULLSCREEN;
-
-   app.setIcon( "program-icon.png" );
-   bool initialized = false;
-   if ( !app.InitScreen( screenResolutionSetup.getWidth(), screenResolutionSetup.getHeight(), 32, flags)) {
-      if ( flags & SDL_FULLSCREEN ) {
-         GetVideoModes gvm;
-         if ( gvm.getList().size() > 0 ) {
-            if ( app.InitScreen( gvm.getx(0), gvm.gety(0), 32, flags)) 
-               initialized = true;
-         }
-      }
-   } else
-      initialized = true;
-
-   if ( !initialized )
-     fatalError( "Could not initialize video mode");
-
-
-#ifdef WIN32
-   delete win32ErrorDialogGenerator;
-#endif
-
-   setWindowCaption ( "Advanced Strategic Command" );
-      
-   GameThreadParams gtp ( app );
-   gtp.filename = cl->l();
-
-   if ( cl->next_param() < argc )
-      for ( int i = cl->next_param(); i < argc; i++ )
-         gtp.filename = argv[i];
-
-
    int returncode = 0;
    try {
-      // this starts the gamethread procedure, whichs will run the entire game
-      returncode = initializeEventHandling ( gamethread, &gtp );
+
+      MessagingHub::Instance().setVerbosity( cl->r() );
+      StdIoErrorHandler stdIoErrorHandler(false);
+      MessagingHub::Instance().exitHandler.connect( sigc::bind( &exit_asc, -1 ));
+
+      // ResourceLogger rl;
+
+   #ifdef WIN32
+      Win32IoErrorHandler* win32ErrorDialogGenerator = new Win32IoErrorHandler;
+   #endif
+
+
+      displayLogMessage( 1, getstartupmessage() );
+
+      ConfigurationFileLocator::Instance().setExecutableLocation( argv[0] );
+
+      try {
+         initFileIO( cl->c() );  // passing the filename from the command line options
+         checkDataVersion();
+      } catch ( const tfileerror & err ) {
+         displaymessage ( "unable to access file %s \n", 2, err.getFileName().c_str() );
+      }
+      catch ( ... ) {
+         displaymessage ( "loading of game failed during pre graphic initializing", 2 );
+      }
+
+      LoggingOutputHandler logger( getSearchPath( 0 ));
+
+
+
+      SoundSystem soundSystem ( CGameOptions::Instance()->sound.muteEffects, CGameOptions::Instance()->sound.muteMusic, cl->q() || CGameOptions::Instance()->sound.off );
+      soundSystem.setMusicVolume ( CGameOptions::Instance()->sound.musicVolume );
+      soundSystem.setEffectVolume ( CGameOptions::Instance()->sound.soundVolume );
+
+
+      tspfldloaders::mapLoaded.connect( sigc::ptr_fun( &deployMapPlayingHooks ));
+
+      PG_FileArchive archive( argv[0] );
+   
+      ASC_PG_App app ( "asc2_dlg" );
+   
+      app.sigAppIdle.connect ( sigc::ptr_fun( &mainloopidle ));
+   
+      cursorMoved.connect( updateFieldInfo.make_slot() );
+      registerActionValidator();
+   
+      
+      ScreenResolutionSetup screenResolutionSetup ( *cl );
+      int flags = 0;
+
+      bool initialized = false;
+      if ( !app.InitScreen( screenResolutionSetup.getWidth(), screenResolutionSetup.getHeight(), screenResolutionSetup.isFullscreen())) {
+         return 1;
+      } else
+         initialized = true;
+
+      if ( !initialized )
+        fatalError( "Could not initialize video mode");
+
+
+      app.setIcon( "program-icon.png" );
+
+   #ifdef WIN32
+      delete win32ErrorDialogGenerator;
+   #endif
+
+      app.SetCaption( "Advanced Strategic Command" );
+
+      GameThreadParams gtp ( app, screenResolutionSetup );
+      gtp.filename = cl->l();
+
+      if ( cl->next_param() < argc )
+         for ( int i = cl->next_param(); i < argc; i++ )
+            gtp.filename = argv[i];
+
+      returncode = gamethread ( &gtp );
    }
    catch ( const bad_alloc & ) {
       fatalError ("Out of memory");
+   }
+   catch ( const FatalError& err ) {
+      return err.code;
    }
 
    writegameoptions ( );

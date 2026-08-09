@@ -65,6 +65,7 @@ class SoundSystem {
       bool off;
       bool sdl_initialized;
       bool mix_initialized;
+   bool mix_codecs_initialized;
       int musicVolume;
       int effectVolume;
 

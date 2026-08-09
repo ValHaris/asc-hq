@@ -90,66 +90,14 @@ bool GetVideoModes::comparator( const ModeRes& a, const ModeRes& b )
 
 GetVideoModes::GetVideoModes() 
 {
-   int i;
+   SDL_DisplayMode mode;
+   if ( SDL_GetDisplayMode(0,0,&mode) != 0 )
+	   throw new ASCString("Couldn't get display modes");
 
-
-   SDL_PixelFormat format;
-   format.palette = NULL;
-   format.BitsPerPixel = 32;
-   format.BytesPerPixel = 4;
-   format.Rloss = format.Gloss = format.Bloss = format.Aloss = 0;
-   format.Rshift = 0;
-   format.Gshift = 8;
-   format.Bshift = 16;
-   format.Ashift = 24;
-   format.Rmask = 0xff;
-   format.Gmask = 0xff00;
-   format.Bmask = 0xff0000;
-   format.Amask = 0xff000000;
-   format.colorkey = 0;
-   format.alpha = 0;
    
-   
-   /* Get available fullscreen/hardware modes */
-   modes=SDL_ListModes(&format, SDL_FULLSCREEN);
-
-
-   listedmodes.push_back( make_pair( 0, 0));
-   
-   /* Check is there are any modes available */
-   if(modes == (SDL_Rect **)0){
-      return;
-   }
-   
-   /* Check if our resolution is restricted */
-   if(modes == (SDL_Rect **)-1){
-      warningMessage("All resolutions available.\n");
-      return;
-   }
-   else{
-      for(i=0;modes[i];++i) {
-
-         if ( find ( listedmodes.begin(), listedmodes.end(), make_pair( int(modes[i]->w), int(modes[i]->h ))) != listedmodes.end() )
-            continue;
-         
-         if ( modes[i]->w >= 800 && modes[i]->h >= 600 ) {
-            listedmodes.push_back( make_pair( int(modes[i]->w), int(modes[i]->h )));
-         }
-      }
-      sort ( listedmodes.begin(), listedmodes.end(), &GetVideoModes::comparator );
-
-      for ( vector <ModeRes > ::iterator i = listedmodes.begin(); i != listedmodes.end(); ++i ) {
-         ASCString s;
-         if (  i->first )
-            s.format( "%d*%d", i->first, i->second );
-         else 
-            s = "graphic mode not listed"; 
-         
-         list.push_back ( s );
-      }
-
-   }
-   return;
+   ASCString s;
+   s.format( "%d*%d", mode.w, mode.h);
+   list.push_back(s);
 };
 
 int GetVideoModes::getx( int index ) {
@@ -179,7 +127,7 @@ GetVideoModes::ModeRes GetVideoModes::getBest()
    return res;
 }      
 
-
+const char* displayScaling[] = { "Auto", "100%", "125%", "150%", "175%", "200%", NULL };
 
 const char* mouseButtonNames[] = { "None", "Left", "Center", "Right", "4", "5", NULL };
 
@@ -189,48 +137,41 @@ class EditGameOptions : public ASC_PG_Dialog {
    private:
       PG_PropertyEditor* propertyEditor;
       
-      GetVideoModes vmodes;
       ASCString defaultPassword;
       
       int videoMode;
       bool ascmain;
+      int old_scaling;
       
       bool ok()
       {
          if ( propertyEditor->Apply() ) {
 
-            int x = vmodes.getx( videoMode );
-            int y = vmodes.gety( videoMode );
-
             bool warn = false;
             bool fullscreen;
             
+
+            if ( old_scaling != CGameOptions::Instance()->displayScalingMode )
+               warn = true;
             
             if ( ascmain ) {
-               if ( (x != CGameOptions::Instance()->xresolution || y != CGameOptions::Instance()->yresolution) && x && y  ) {
-                  warn = true;
-                  CGameOptions::Instance()->xresolution = x;
-                  CGameOptions::Instance()->yresolution = y;
-               }
 
                fullscreen = !CGameOptions::Instance()->forceWindowedMode;
 
             } else {
+               /*
                if ( (x != CGameOptions::Instance()->mapeditor_xresolution || y != CGameOptions::Instance()->mapeditor_yresolution) && x && y ) {
                   warn = true;
                   CGameOptions::Instance()->mapeditor_xresolution = x;
                   CGameOptions::Instance()->mapeditor_yresolution = y;
                }
+               */
                fullscreen = !CGameOptions::Instance()->mapeditWindowedMode;
             }
 
             if ( warn )
                infoMessage( "The new graphic settings will be active after you restart ASC");
 
-            if ( getPGApplication().isFullscreen() != fullscreen ) 
-               getPGApplication().toggleFullscreen();
-            
-            
             CGameOptions::Instance()->setChanged();
             if ( !defaultPassword.empty() && defaultPassword.find_first_not_of('*') != ASCString::npos ) {
                Password p;
@@ -246,20 +187,19 @@ class EditGameOptions : public ASC_PG_Dialog {
       }
 
    public:
-      EditGameOptions( PG_Widget* parent, bool mainApp ) : ASC_PG_Dialog( parent, PG_Rect( 50, 50, 500, 550 ), "Edit Map Parameters"), videoMode(0), ascmain( mainApp )
+      EditGameOptions( PG_Widget* parent, bool mainApp ) : ASC_PG_Dialog( parent, PG_Rect( 50, 50, 500, 550 ), "Edit Preferences"), videoMode(0), ascmain( mainApp )
       {
          CGameOptions* o = CGameOptions::Instance();
 
          if ( !o->defaultPassword.empty() )
             defaultPassword = "******";
 
-         
-         if ( mainApp ) 
-            videoMode = vmodes.findmodenum( CGameOptions::Instance()->xresolution, CGameOptions::Instance()->yresolution );
-         else
-            videoMode = vmodes.findmodenum( CGameOptions::Instance()->mapeditor_xresolution, CGameOptions::Instance()->mapeditor_yresolution );
-            
+         old_scaling = o->displayScalingMode;
+
          propertyEditor = new ASC_PropertyEditor( this, PG_Rect( 10, GetTitlebarHeight(), Width() - 20, Height() - GetTitlebarHeight() - 50 ), "PropertyEditor", 70 );
+
+         new PG_PropertyField_IntDropDown<int>( propertyEditor, "Display Scaling", &o->displayScalingMode, displayScaling);
+         new PG_PropertyField_Integer<int>(propertyEditor, "map scrolling speed (1/100 sec)", &o->scrollspeed);
 
          new PG_PropertyField_Checkbox<bool>( propertyEditor, "Direct Movement", &o->fastmove );
          new PG_PropertyField_Integer<int>( propertyEditor , "Movement Speed (1/100 sec)", &o->movespeed );
@@ -285,8 +225,8 @@ class EditGameOptions : public ASC_PG_Dialog {
 
 
             
-         new PG_PropertyField_IntDropDown<int, GetVideoModes::VList::iterator>( propertyEditor, "Video Mode", &videoMode, vmodes.getList().begin(), vmodes.getList().end() );
          
+
          new PG_PropertyField_Checkbox<bool>( propertyEditor, "Automatic Training", &o->automaticTraining );
 
          new PG_PropertyField_IntDropDown<int>( propertyEditor, "Mouse: Field Select", &o->mouse.fieldmarkbutton, mouseButtonNames );

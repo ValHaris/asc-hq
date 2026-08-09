@@ -149,7 +149,9 @@ void SDL_StretchSurface(SDL_Surface* src_surface, int xs1, int ys1, int xs2, int
         int dst_bpp = dst_surface->format->BytesPerPixel;
 
         if(dst_surface->format->BytesPerPixel == 1){
-            SDL_SetColors(dst_surface, src_surface->format->palette->colors, 0, 256);
+            if ( dst_surface->format && dst_surface->format->palette
+            	&& src_surface->format && src_surface->format->palette )
+            	SDL_SetPaletteColors ( dst_surface->format->palette, src_surface->format->palette->colors, 0, 256 );
         }
 
         switch(dst_bpp){

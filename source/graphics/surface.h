@@ -90,16 +90,13 @@ public:
       void write ( tnstream& stream ) const;
       void strech ( int width, int height );
 
-      void writeDefaultPixelFormat ( tnstream& stream ) ;
-      static void readDefaultPixelFormat ( tnstream& stream );
-
       //! assigns the default ASC palette to the surface (only for 8 Bit surfaces)
       void assignDefaultPalette();
 
       void assignPalette(SDL_Color* colors, int startColor = 0, int colorNum = 256 );
 
       //! tries to automatically detect the color key of the surface
-      void detectColorKey( bool RLE = false );
+      void detectColorKey();
 
       bool isTransparent( SDLmm::Color col ) const;
 
@@ -110,6 +107,8 @@ public:
       SDLmm::ColorRGB GetRGB(SDLmm::Color pixel) const;
       SDLmm::ColorRGBA GetRGBA(SDLmm::Color pixel) const;
       */
+
+      bool hasDefaultPixelFormat() const;
 
       int getMemoryFootprint() const;
       
@@ -161,6 +160,8 @@ public:
  
  
  void applyFieldMask( Surface& s, int x = 0, int y = 0, bool detectColorKey = true );
+ extern Surface& getFieldMask();
+
  
  //! applies a field mask that uses FEFEFE Color as Colorkey to load old images
  void applyLegacyFieldMask( Surface& s, int x = 0, int y = 0, bool detectColorKey = false );
