@@ -2178,7 +2178,7 @@ tfindfile :: tfindfile ( ASCString name, SearchPosition searchPosition, SearchTy
    if ( searchTypes == All || searchTypes == InsideContainer ) {
       const ContainerCollector::FileIndex* c = containercollector.getfirstname();
       while ( c ) {
-          if ( patimat ( name.c_str(), c->name ) ) {
+          if ( patimat ( name.c_str(), c->name, true ) ) {
              int f = 0;
              for ( int i = 0; i < found; i++ )
                 if ( stricmp ( c->name.c_str(), fileInfo[i].name.c_str() ) == 0 ) {

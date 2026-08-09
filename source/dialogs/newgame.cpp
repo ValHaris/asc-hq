@@ -469,12 +469,16 @@ bool StartMultiplayerGame::Apply()
       case CampaignChooser: {
          Campaign* c =getSelectedCampaign();
          if ( c ) {
-            if ( c->file.empty() )
+            if ( c->file.empty() ) {
+               warningMessage("The campaign description file did not configure a start map");
                return false;
+            }
             
             tfindfile ff ( c->file );
-            if ( ff.getFoundFileNum() < 1 )
+            if ( ff.getFoundFileNum() < 1 ) {
+               warningMessage("Could not find the start map " + c->file );
                return false;
+            }
             
             if ( ff.getFoundFileNum() == 1 ) {
                tfindfile::FileInfo fi;
