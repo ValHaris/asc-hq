@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(ASC VERSION 2.8.4.2 LANGUAGES C CXX)
+project(ASC VERSION 2.8.6.5 LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -598,8 +598,13 @@ endfunction()
 
 # Windows-specific settings for map editor
 if(WIN32)
-    set_target_properties(asc_mapedit PROPERTIES WIN32_EXECUTABLE TRUE)
-    set_target_properties(asc_pbpedit PROPERTIES WIN32_EXECUTABLE TRUE)
+  set_target_properties(asc PROPERTIES OUTPUT_NAME "asc2")
+  set_target_properties(asc_mapedit PROPERTIES WIN32_EXECUTABLE TRUE OUTPUT_NAME "mapeditor2")
+  set_target_properties(asc_pbpedit PROPERTIES WIN32_EXECUTABLE TRUE OUTPUT_NAME "pbpeditor2")
+else()
+  set_target_properties(asc PROPERTIES OUTPUT_NAME "asc")
+  set_target_properties(asc_mapedit PROPERTIES OUTPUT_NAME "asc_mapedit")
+  set_target_properties(asc_pbpedit PROPERTIES OUTPUT_NAME "asc_pbpedit")
 endif()
 
 install(TARGETS asc asc_mapedit asc_pbpedit
