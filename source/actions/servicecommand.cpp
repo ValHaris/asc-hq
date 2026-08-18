@@ -44,6 +44,9 @@ bool ServiceCommand :: availExternally ( ContainerBase* eht )
 
 bool ServiceCommand :: avail ( ContainerBase* source, ContainerBase* target )
 {
+   if ( !target )
+      return false;
+
    if ( target->getCarrier() == source ) {
       ServiceCommand sc( source );
       const ServiceTargetSearcher::Targets& dest  = sc.getDestinations();
@@ -136,8 +139,12 @@ ActionResult ServiceCommand::go ( const Context& context )
       return ActionResult(22000);
 
    
-   if ( !avail(getContainer(), getDestination()))
-       return ActionResult( 22005, getDestination()->getName() );
+   if ( !avail(getContainer(), getDestination())) {
+       if ( getDestination() )
+          return ActionResult( 22005, getDestination()->getName() );
+       else
+          return ActionResult( 22006 );
+   }
 
    TransferHandler& handler = getTransferHandler();
    
