@@ -300,6 +300,8 @@ Unit already there
 Unit cannot move
 22005
 Target cannot be serviced
+22006
+Target does not exist
 22100
 Unit for destruction not available
 22101
