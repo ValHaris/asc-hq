@@ -40,8 +40,11 @@
 
 bool ConstructUnitCommand :: externalConstructionAvail ( const ContainerBase* eht )
 {
-   const Vehicle* vehicle = dynamic_cast<const Vehicle*>(eht);
    if ( !eht )
+      return false;
+
+   const Vehicle* vehicle = dynamic_cast<const Vehicle*>(eht);
+   if ( !vehicle )
       return false;
    
    MapField* fld = vehicle->getMap()->getField ( vehicle->getPosition() );
