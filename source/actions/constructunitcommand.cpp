@@ -281,7 +281,7 @@ ActionResult ConstructUnitCommand::go ( const Context& context )
          int expDef = vehicle->getExperience_defensive() + cnt * getMap()->getgameparameter(cgp_bi3_training);
          if ( expDef > maxunitexperience )
             expDef = maxunitexperience;
-         vehicle->setExperience_offensive( expDef );
+         vehicle->setExperience_defensive( expDef );
                   
       }
    }
