@@ -190,9 +190,6 @@ class CGameOptions
          bool fillAmmo;
       } unitProduction;
 
-      //! produce required ammo upon refuelling
-      bool autoproduceammunition;
-
       // int onlinehelptime;
       // int smallguiiconopenaftermove;
 

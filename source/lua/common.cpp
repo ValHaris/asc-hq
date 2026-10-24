@@ -217,6 +217,6 @@ void setCursorPosition( const GameMap* gamemap, const MapCoordinate& pos )
 
 void assertSuccess( const ActionResult& result )
 {
-   if ( result.successful() ) 
+   if ( !result.successful() )
       throw ASCmsgException(result.getMessage() );
 }

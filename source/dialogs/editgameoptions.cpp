@@ -210,7 +210,6 @@ class EditGameOptions : public ASC_PG_Dialog {
          new PG_PropertyField_Integer<int>( propertyEditor , "Attack Dialog PostWait 3 (1/100 sec)", &o->attackspeed3 );
          if ( mainApp ) {
             new PG_PropertyField_Checkbox<bool>( propertyEditor, "Game running Fullscreen", &o->forceWindowedMode, true );
-            new PG_PropertyField_Checkbox<bool>( propertyEditor, "Produce Ammo when refuelling", &o->autoproduceammunition );
             new PG_PropertyField_IntDropDown<int>( propertyEditor, "InfoPanels", &o->panelColumns, infoPanelNames );
             new PG_PropertyField_Integer<int>( propertyEditor, "Aircraft Crash Warning Time", &o->aircraftCrashWarningTime );
          } else {
