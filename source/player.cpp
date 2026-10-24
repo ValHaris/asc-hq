@@ -198,6 +198,7 @@ Player :: Player()
    ASCversion = 0;
    color = 0;
    serverPlayerID = 0;
+   existanceAtBeginOfTurn = false;
 }
 
 void Player :: setParentMap( GameMap* map, int pos )
