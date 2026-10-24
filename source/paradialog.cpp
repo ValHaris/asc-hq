@@ -472,7 +472,7 @@ public:
 
 void ASC_PG_App:: messageDialog( const ASCString& message, MessagingHubBase::MessageType mt )
 {
-  // AntiBulkHandler abh;
+   AntiBulkHandler abh;
    ASCString title;
    ASCString style;
    switch ( mt ) {
