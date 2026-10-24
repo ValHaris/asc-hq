@@ -183,7 +183,6 @@ class TransferHandler : public sigc::trackable, protected ServiceChecker {
       bool commit( const Context& context );
 
       sigc::signal<bool> updateRanges;
-      ~TransferHandler();
 };
 
 

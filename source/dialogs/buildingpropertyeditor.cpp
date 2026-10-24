@@ -52,6 +52,12 @@ class BuildingPropertyEditor : public ASC_PG_Dialog {
 
       bool ok()
       {
+         if ( !propertyEditor->Valid(true) ) {
+             ASCString msg = propertyEditor->getValidationMessage();
+             if ( msg.size() > 0 )
+                 warningMessage(msg);
+             return false;
+         }
          if ( propertyEditor->Apply() ) {
             mapsaved = false;
 
@@ -67,8 +73,10 @@ class BuildingPropertyEditor : public ASC_PG_Dialog {
             mapChanged(bld->getMap());
             quitModalLoop(0);
             return true;
-         } else
+         } else {
+            warningMessage("Some property is invalid");
             return false;
+         }
       }
 
    public:

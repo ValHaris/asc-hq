@@ -48,21 +48,30 @@ void PG_PropertyEditor :: Reload() {
 
 bool PG_PropertyEditor :: Valid( bool focus ) {
 	for ( PropertyFieldsType::iterator i = propertyFields.begin(); i != propertyFields.end(); ++i )
-      if ( ! (*i)->Valid() ) {
-         if ( focus )
-            (*i)->Focus();
-         return false;
-      }
+		if ( ! (*i)->Valid() ) {
+			if ( focus )
+				(*i)->Focus();
+			return false;
+		}
 	return true;
 };
 
+std::string PG_PropertyEditor :: getValidationMessage() {
+	for ( PropertyFieldsType::iterator i = propertyFields.begin(); i != propertyFields.end(); ++i )
+		if ( ! (*i)->Valid() )
+			return (*i)->getValidationMessage();
+
+	return "";
+};
+
+
 bool PG_PropertyEditor :: Apply() {
-   for ( PropertyFieldsType::iterator i = propertyFields.begin(); i != propertyFields.end(); ++i ) {
-      if ( ! (*i)->Valid() ) {
-         (*i)->Focus();
-		    return false;
-      }
-   }
+	for ( PropertyFieldsType::iterator i = propertyFields.begin(); i != propertyFields.end(); ++i ) {
+		if ( ! (*i)->Valid() ) {
+			(*i)->Focus();
+			return false;
+		}
+	}
 
 	for ( PropertyFieldsType::iterator i = propertyFields.begin(); i != propertyFields.end(); ++i )
 		(*i)->Apply();
@@ -73,17 +82,17 @@ bool PG_PropertyEditor :: Apply() {
 PG_Rect PG_PropertyEditor :: RegisterProperty( const std::string& name, PG_PropertyEditorField* propertyEditorField, int height ) {
 	propertyFields.push_back( propertyEditorField );
 
-   if ( height <= 0 )
-      height = lineHeight;
-   
+	if ( height <= 0 )
+		height = lineHeight;
+
 	int w = Width() - my_widthScrollbar - 2 * lineSpacing;
 
 	if ( name.length()) {
-	    PG_Label* label = new PG_Label( this, PG_Rect( 0, ypos, w * labelWidth / 100 - 1, height), name );
-	    label->LoadThemeStyle( styleName, "Label" );
+		PG_Label* label = new PG_Label( this, PG_Rect( 0, ypos, w * labelWidth / 100 - 1, height), name );
+		label->LoadThemeStyle( styleName, "Label" );
 	}
-    PG_Rect r  ( w * labelWidth / 100 , ypos, w * ( 100 - labelWidth ) / 100  - 1, height );
-    ypos += height + lineSpacing;
+	PG_Rect r  ( w * labelWidth / 100 , ypos, w * ( 100 - labelWidth ) / 100  - 1, height );
+	ypos += height + lineSpacing;
 	return r;
 };
 

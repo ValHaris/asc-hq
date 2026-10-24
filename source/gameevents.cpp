@@ -940,7 +940,7 @@ void ChangeGameParameter::setup()
     if ( (nr >= 0) && ( nr < gameparameternum) ) {
        if ( gameParameterSettings[nr].changeableByEvent ) {
           int org = parameterValue;
-          if ( org < gameParameterSettings[nr].minValue && org > gameParameterSettings[nr].maxValue )
+          if ( org < gameParameterSettings[nr].minValue || org > gameParameterSettings[nr].maxValue )
              org = gameParameterSettings[nr].defaultValue;
           parameterValue = getid("Parameter Val", org, gameParameterSettings[nr].minValue, gameParameterSettings[nr].maxValue);
           parameterNum = nr;

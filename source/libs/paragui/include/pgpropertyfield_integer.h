@@ -95,8 +95,7 @@ public:
 	PG_PropertyField_Integer( PG_PropertyEditor* propertyEditor, const std::string& name, IntegerType myInteger ) : PG_PropertyEditor_LineField( propertyEditor, name ), myProperty( NULL ) {
 		minValue = std::numeric_limits<IntegerType>::min();
 		maxValue = std::numeric_limits<IntegerType>::max();
-		set
-			( myInteger );
+		set( myInteger );
 	};
 
 	void SetRange( IntegerType min, IntegerType max ) {
@@ -120,6 +119,20 @@ public:
 
 		return true;
 	};
+
+	std::string getValidationMessage() {
+		IntegerType i;
+		if ( !convert(i) )
+			return "value is not a valid number";
+
+		if ( !CheckValue( i )) {
+			std::ostringstream message;
+			message << "value is out of range (" << minValue << " - " << maxValue << ")";
+			return message.str();
+		}
+
+		return "";
+	}
 
 	bool Apply() {
 		IntegerType i;

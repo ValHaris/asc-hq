@@ -156,7 +156,6 @@
         "Fill map with resources",
         "setup weather generation",
         "Primary action",
-        "Reset Player Data...",
         "View Player Strength",
         "Increase Zoom",
         "Decrease Zoom",
@@ -172,6 +171,7 @@
         "Dump all vehicle definitions",
         "Clear Selection",
         "Dump all building definitions",
+        "Locate item by ID",
         "Mirror map",
         "Copy Area",
         "Paste Area",
@@ -179,10 +179,10 @@
         "Test Debug Function",
         "Unit Guide Dialog",
         "Run Lua Script",
-	"Run Translation Script",
-    "Dump selected Terrain",
-	"Dump all Terrain",
-	"Dump all Objects",
+        "Run Translation Script",
+        "Dump selected Terrain",
+        "Dump all Terrain",
+        "Dump all Objects",
         "show weapon range"
 	 };
 
@@ -867,14 +867,14 @@ void execaction_pg(int code)
          break;
       case act_newmap :   newmap();
          break;
-      case act_clearresources: {
+      case act_clearresources:
          for ( int y = 0; y < actmap->ysize; ++y)
             for ( int x = 0; x < actmap->xsize; ++x ) {
                actmap->getField(x,y)->fuel = 0;
                actmap->getField(x,y)->material = 0;
             }
          repaintMap();
-      }
+         break;
       case act_dumpBuilding: 
          if ( getactfield() && getactfield()->building ) {
             ASCString filename = selectFile( "*.dump", false );

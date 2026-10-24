@@ -801,7 +801,7 @@ void TransferHandler::resource( ContainerBase* dest, int type, bool active )
 
 TransferHandler::TransferHandler( ContainerBase* src, ContainerBase* dst, int flags ) : ServiceChecker( src, flags ), sourceRes( src ), destRes( dst ), source(src), dest(dst)
 {
-   allowProduction = CGameOptions::Instance()->autoproduceammunition ;
+   allowProduction = true;
 
    if ( dest->getMap()->player[dest->getMap()->actplayer].diplomacy.getState( dest->getOwner() ) <= TRUCE )
       return;
@@ -820,13 +820,6 @@ bool TransferHandler::allowAmmoProduction( bool allow )
 }
 
 
-TransferHandler::~TransferHandler()
-{
-   if ( allowProduction != CGameOptions::Instance()->autoproduceammunition  ) {
-      CGameOptions::Instance()->autoproduceammunition = allowProduction ;
-      CGameOptions::Instance()->setChanged();
-   }
-}
 
 bool TransferHandler::ammoProductionPossible()
 {

@@ -64,6 +64,9 @@ public:
 		//! checks if the entered value is valid
 		virtual bool Valid() = 0;
 
+		//! return the message about the validation error
+		virtual std::string getValidationMessage() { return ""; };
+
 		/** Write the entered value back into the referenced variable (if it exists), provided the value is valid.
 		\returns false if the value is not valid
 		*/
@@ -91,6 +94,9 @@ public:
 
 	//! Writes the PropertyFields' values to their original variables, provided they are valid
 	bool Apply();
+
+
+    std::string getValidationMessage();
 
 	/** Adds a PropertyField to the widget.
 

@@ -143,7 +143,6 @@ void CGameOptions::runTextIO ( PropertyContainer& pc )
    pc.addBool("HideOnScreenUpdates",hideMouseOnScreenUpdates, hideMouseOnScreenUpdates );
    pc.closeBracket();
 
-   pc.addBool("AmmoProductionOnRefuelling", autoproduceammunition, autoproduceammunition );
    // pc.addInteger("FillUnitsAutomatically", container.filleverything, container.filleverything );
 
    // pc.addInteger("ToolTipHelpDelay", onlinehelptime, onlinehelptime );
@@ -307,7 +306,6 @@ void CGameOptions::setDefaults ( void )
    replayspeed=0;
    debugReplay = 0;
 
-   autoproduceammunition = true;
 /*
    bi3.dir.setName( NULL );
    bi3.interpolate.terrain=0;
